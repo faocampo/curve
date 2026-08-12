@@ -37,13 +37,43 @@ Every write requires a short-lived token delegated by the signed-in developer, `
 
 Prohibited operations include gate decisions, waivers, finding reclassification, plan or budget changes, executable artifact upload, repository mutation, MR/PR approval or merge, provider/flag administration, deployment, and production access.
 
+### Protocol and transport profile
+
+- Proposed protocol revision is the stable [MCP `2026-07-28` specification](https://modelcontextprotocol.io/specification/2026-07-28/basic) over authenticated Streamable HTTP. The endpoint is workspace-neutral; `workspace_id` is always a validated tool argument, never inferred from host or a caller-controlled header.
+- Version and capability negotiation must prove that the named supported Orca client implements this revision and the exact v1.1 tool schemas. If it does not, the write profile remains disabled; Curve does not silently downgrade or accept a wider schema. A separately tested prior-revision compatibility profile requires an ADR update.
+- HTTPS is mandatory outside local synthetic testing. The server validates `Origin` and allowed client identity, returns `403` for an invalid origin, prevents DNS rebinding, limits request/body/concurrency rates, and never accepts credentials in URL query parameters.
+- Tool schemas are application payloads inside the negotiated MCP/JSON-RPC envelope. Protocol errors are reserved for malformed MCP/JSON-RPC. Authenticated application validation, stale version, denied transition, and policy outcomes are typed tool execution errors with safe correlation IDs.
+- Server-to-client sampling, roots, elicitation, arbitrary URL fetch, executable resource upload, and MCP task extensions are not advertised. The client cannot add a capability by prompt text or initialization metadata.
+
+### Delegated authentication proposal
+
+- Use X3M's authorization server with OAuth 2.1 Authorization Code plus PKCE and [OAuth Protected Resource Metadata](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization). Device flow, client registration, and token exchange remain disabled unless Security explicitly adds and proves them.
+- The protected-resource audience is the exact Curve MCP service. Proposed scopes are `curve:mcp:read` and `curve:mcp:orca-workflow-write`; the write scope never implies a read or administrative scope outside the effective developer's object permissions.
+- Access tokens are short-lived, proposed maximum ten minutes, and held in client memory only. Curve validates issuer, audience/resource, subject, authorized client, scope, expiry/not-before, token identifier or equivalent revocation handle, and current user/workspace status on every call.
+- Online revocation/introspection or a signed-token denylist must make explicit revocation effective before the next write. If X3M identity cannot provide this property, the write profile fails its proof. Expiry or identity-service uncertainty never falls back to a service account or cached creator identity.
+- The server derives immutable `actor_id`, effective principal, issuer, client, and delegation reference from validated identity. No tool argument or context content can supply or override attribution.
+
+The identity mechanism, ten-minute ceiling, client registration, issuer/audience, and revocation method are proposals pending the named D-007 proof; they are not production defaults.
+
+### Tool-schema and state contract
+
+The normative application payloads are `orca-tools-v1.schema.json` and `orca-tool-result-v1.schema.json`, both schema version `1.1`. Every tool uses a closed argument/result object. Reads return only the authorized projection named by the tool. Writes additionally require `idempotency_key`, `expected_version`, and `client_event_time`; the server uses its own receipt time for authorization, lease, and ordering decisions.
+
+The idempotency scope is `(workspace_id, effective_subject, tool, idempotency_key)`. A byte-equivalent canonical command returns its original mutation receipt; a different command under the same key is rejected. `expected_version` is the target slice/manual-attempt aggregate version. Stale versions and duplicate client progress sequence numbers have no side effect. Idempotency retention follows D-009 and cannot expire while the related attempt or audit obligation remains live.
+
+`complete_manual_attempt` records only `COMPLETION_DECLARED`. It may occur before or after a VCS reference is linked, but the attempt cannot become `CANDIDATE_AVAILABLE` until the trusted controller validates an approved repository binding and exact head SHA. A branch validation may enqueue automatic draft creation under a separately approved plan; this tool does not push or create the draft itself.
+
+### Trust-registry record
+
+Each enabled connection pins workspace, owner, environment, endpoint/origin, server certificate/identity, MCP revision, client allowlist, tool and result schema digests, read/write scopes, risk per tool, allowed classifications, rate/body/concurrency limits, token issuer/audience/revocation profile, creation/expiry/review dates, and kill switch. Missing, expired, stale, or digest-mismatched fields deny connection use.
+
 ## Security, privacy, licensing, and operational impact
 
 The registry pins server identity, protocol/version, tool schemas, origin, scopes, classifications, network destination, owner, and enabled environments. Retrieved content is untrusted data and cannot grant capabilities. Rate limits, request limits, CSRF/origin protections where applicable, audit redaction, token revocation, and stale-version tests are mandatory.
 
 ## Data/API/event/migration compatibility impact
 
-The normative tool schemas live under `contracts/mcp`. Tool names are stable within v1; incompatible input/output changes create a new tool/schema version. MCP writes call the same application services and policy kernel as REST commands.
+The normative tool schemas live under `contracts/mcp`. Tool names are stable within v1; incompatible input/output changes create a new tool/schema version. MCP writes call the same application services and policy kernel as REST commands. The v1.1 contract replaces the initial wildcard-argument v1.0 draft before implementation; no deployed client or stored payload requires migration.
 
 ## Failure, rollback, and exit strategy
 
@@ -55,4 +85,10 @@ D-007 supplies the generic registry contract for M0-09 and the Orca profile for 
 
 ## Validation and review date
 
-Pending identity mechanism proof, threat fixtures, exact protocol/version pins, and named Security/Platform approval.
+The transport, tool schema, transition, and proposed identity profile are ready for proof review. This ADR remains `PROPOSED` pending:
+
+- named Security and Platform approval of the MCP revision, OAuth issuer/audience/scopes, client registration, token lifetime, and revocation method;
+- D-006 evidence that the named supported Orca client/version can negotiate the profile without extra tools;
+- conformance fixtures for every allowed read/write, unknown tool/field, forged actor, wrong audience/client/workspace, expired/revoked token, origin failure, injection attempt, idempotent replay/conflict, stale version, invalid transition, sequence replay, and VCS-reference rejection;
+- rate/body/concurrency limit values plus audit/redaction evidence; and
+- decision/review dates and named connection/support owners.

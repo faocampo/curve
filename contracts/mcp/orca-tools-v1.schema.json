@@ -1,13 +1,36 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://curve.x3m.internal/contracts/mcp/orca-tools-v1.schema.json",
-  "title": "Curve Orca MCP v1 invocation",
+  "title": "Curve Orca MCP v1.1 tool invocation payload",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "tool", "workspace_id", "arguments"],
   "properties": {
-    "schema_version": { "const": "1.0" },
-    "tool": {
+    "schema_version": { "const": "1.1" },
+    "tool": { "$ref": "#/$defs/ToolName" },
+    "workspace_id": { "$ref": "../schemas/common.schema.json#/$defs/WorkspaceId" },
+    "arguments": { "type": "object" },
+    "idempotency_key": { "type": "string", "minLength": 16, "maxLength": 255 },
+    "expected_version": { "$ref": "../schemas/common.schema.json#/$defs/AggregateVersion" },
+    "client_event_time": { "$ref": "../schemas/common.schema.json#/$defs/Instant" }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/ListAssignedSlicesInvocation" },
+    { "$ref": "#/$defs/GetTaskPacketInvocation" },
+    { "$ref": "#/$defs/GetAcceptanceCriteriaInvocation" },
+    { "$ref": "#/$defs/GetContextManifestInvocation" },
+    { "$ref": "#/$defs/ListQuestionsInvocation" },
+    { "$ref": "#/$defs/GetWorkflowStateInvocation" },
+    { "$ref": "#/$defs/ClaimSliceInvocation" },
+    { "$ref": "#/$defs/ReleaseSliceInvocation" },
+    { "$ref": "#/$defs/HeartbeatAttemptInvocation" },
+    { "$ref": "#/$defs/ReportProgressInvocation" },
+    { "$ref": "#/$defs/AskQuestionInvocation" },
+    { "$ref": "#/$defs/CompleteManualAttemptInvocation" },
+    { "$ref": "#/$defs/LinkVcsReferenceInvocation" }
+  ],
+  "$defs": {
+    "ToolName": {
       "type": "string",
       "enum": [
         "list_assigned_slices",
@@ -25,27 +48,269 @@
         "link_vcs_reference"
       ]
     },
-    "workspace_id": { "$ref": "../schemas/common.schema.json#/$defs/WorkspaceId" },
-    "arguments": {
+    "PaginationArguments": {
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": false,
+      "properties": {
+        "cursor": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "page_size": { "type": "integer", "minimum": 1, "maximum": 100 }
+      }
     },
-    "idempotency_key": { "type": "string", "minLength": 16, "maxLength": 255 },
-    "expected_version": { "$ref": "../schemas/common.schema.json#/$defs/AggregateVersion" },
-    "client_event_time": { "$ref": "../schemas/common.schema.json#/$defs/Instant" }
-  },
-  "allOf": [
-    {
-      "if": {
-        "properties": {
-          "tool": {
-            "enum": ["claim_slice", "release_slice", "heartbeat_attempt", "report_progress", "ask_question", "complete_manual_attempt", "link_vcs_reference"]
+    "SliceArguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slice_id"],
+      "properties": {
+        "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" }
+      }
+    },
+    "AttemptArguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slice_id", "attempt_id"],
+      "properties": {
+        "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+        "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" }
+      }
+    },
+    "WriteEnvelope": {
+      "required": ["idempotency_key", "expected_version", "client_event_time"]
+    },
+    "ListAssignedSlicesInvocation": {
+      "properties": {
+        "tool": { "const": "list_assigned_slices" },
+        "arguments": { "$ref": "#/$defs/PaginationArguments" }
+      }
+    },
+    "GetTaskPacketInvocation": {
+      "properties": {
+        "tool": { "const": "get_task_packet" },
+        "arguments": { "$ref": "#/$defs/SliceArguments" }
+      }
+    },
+    "GetAcceptanceCriteriaInvocation": {
+      "properties": {
+        "tool": { "const": "get_acceptance_criteria" },
+        "arguments": { "$ref": "#/$defs/SliceArguments" }
+      }
+    },
+    "GetContextManifestInvocation": {
+      "properties": {
+        "tool": { "const": "get_context_manifest" },
+        "arguments": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slice_id", "manifest_digest"],
+          "properties": {
+            "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "manifest_digest": { "$ref": "../schemas/common.schema.json#/$defs/Digest" }
           }
         }
-      },
-      "then": {
-        "required": ["idempotency_key", "expected_version", "client_event_time"]
       }
+    },
+    "ListQuestionsInvocation": {
+      "properties": {
+        "tool": { "const": "list_questions" },
+        "arguments": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["attempt_id"],
+          "properties": {
+            "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "status": { "type": "string", "enum": ["OPEN", "ANSWERED", "CANCELLED"] },
+            "cursor": { "type": "string", "minLength": 1, "maxLength": 2048 },
+            "page_size": { "type": "integer", "minimum": 1, "maximum": 100 }
+          }
+        }
+      }
+    },
+    "GetWorkflowStateInvocation": {
+      "properties": {
+        "tool": { "const": "get_workflow_state" },
+        "arguments": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slice_id"],
+          "properties": {
+            "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" }
+          }
+        }
+      }
+    },
+    "ClaimSliceInvocation": {
+      "allOf": [
+        { "$ref": "#/$defs/WriteEnvelope" },
+        {
+          "properties": {
+            "tool": { "const": "claim_slice" },
+            "arguments": { "$ref": "#/$defs/SliceArguments" }
+          }
+        }
+      ]
+    },
+    "ReleaseSliceInvocation": {
+      "allOf": [
+        { "$ref": "#/$defs/WriteEnvelope" },
+        {
+          "properties": {
+            "tool": { "const": "release_slice" },
+            "arguments": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["slice_id", "attempt_id", "reason"],
+              "properties": {
+                "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "reason": {
+                  "type": "string",
+                  "enum": ["DEVELOPER_REQUEST", "HANDOFF", "BLOCKED", "CANCELLED"]
+                },
+                "note": { "type": "string", "minLength": 1, "maxLength": 2000 }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "HeartbeatAttemptInvocation": {
+      "allOf": [
+        { "$ref": "#/$defs/WriteEnvelope" },
+        {
+          "properties": {
+            "tool": { "const": "heartbeat_attempt" },
+            "arguments": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["slice_id", "attempt_id", "lease_id"],
+              "properties": {
+                "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "lease_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ReportProgressInvocation": {
+      "allOf": [
+        { "$ref": "#/$defs/WriteEnvelope" },
+        {
+          "properties": {
+            "tool": { "const": "report_progress" },
+            "arguments": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["slice_id", "attempt_id", "client_sequence", "progress_percent", "summary"],
+              "properties": {
+                "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "client_sequence": { "type": "integer", "minimum": 1 },
+                "progress_percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+                "summary": { "type": "string", "minLength": 1, "maxLength": 2000 }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "AskQuestionInvocation": {
+      "allOf": [
+        { "$ref": "#/$defs/WriteEnvelope" },
+        {
+          "properties": {
+            "tool": { "const": "ask_question" },
+            "arguments": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["slice_id", "attempt_id", "audience", "question"],
+              "properties": {
+                "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "audience": {
+                  "type": "string",
+                  "enum": ["PRODUCT_APPROVER", "TECHNICAL_APPROVER", "SLICE_OWNER"]
+                },
+                "question": { "type": "string", "minLength": 1, "maxLength": 4000 }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CompleteManualAttemptInvocation": {
+      "allOf": [
+        { "$ref": "#/$defs/WriteEnvelope" },
+        {
+          "properties": {
+            "tool": { "const": "complete_manual_attempt" },
+            "arguments": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["slice_id", "attempt_id", "summary"],
+              "properties": {
+                "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "summary": { "type": "string", "minLength": 1, "maxLength": 4000 }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "LinkVcsReferenceInvocation": {
+      "allOf": [
+        { "$ref": "#/$defs/WriteEnvelope" },
+        {
+          "properties": {
+            "tool": { "const": "link_vcs_reference" },
+            "arguments": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "slice_id",
+                "attempt_id",
+                "repository_binding_id",
+                "reference_type",
+                "head_sha"
+              ],
+              "properties": {
+                "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "repository_binding_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                "reference_type": {
+                  "type": "string",
+                  "enum": ["BRANCH", "MERGE_REQUEST", "PULL_REQUEST"]
+                },
+                "branch_name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "^[^\\u0000-\\u0020~^:?*\\\\]+$"
+                },
+                "external_number": { "type": "integer", "minimum": 1 },
+                "reference_url": { "type": "string", "format": "uri", "maxLength": 2048 },
+                "head_sha": { "type": "string", "pattern": "^[0-9a-f]{40}([0-9a-f]{24})?$" }
+              },
+              "allOf": [
+                {
+                  "if": { "properties": { "reference_type": { "const": "BRANCH" } } },
+                  "then": { "required": ["branch_name"] }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "reference_type": { "enum": ["MERGE_REQUEST", "PULL_REQUEST"] }
+                    }
+                  },
+                  "then": { "required": ["external_number", "reference_url"] }
+                }
+              ]
+            }
+          }
+        }
+      ]
     }
-  ]
+  }
 }

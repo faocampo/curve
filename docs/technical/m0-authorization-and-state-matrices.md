@@ -36,14 +36,19 @@ The foundation probe is absent outside local development. Role overlap and separ
 
 ## Orca manual-attempt transitions
 
-| Tool | Allowed transition/effect | Required checks |
-| --- | --- | --- |
-| `claim_slice` | Approved unclaimed slice to developer-claimed manual attempt | Assignment, Gate 2, dependency readiness, one active lease, version/idempotency. |
-| `release_slice` | Active developer claim to released/available | Claim owner or authorized coordinator; no terminal attempt. |
-| `heartbeat_attempt` | Refreshes lease observation only | Claim owner, active attempt, bounded rate. |
-| `report_progress` | Appends safe progress observation | Claim owner, active attempt, no lifecycle inference. |
-| `ask_question` | Creates attributed pending question | Claim owner, active attempt, permitted audience and safe content. |
-| `complete_manual_attempt` | Marks developer work ready for VCS-reference validation | Claim owner; does not imply code, quality, draft, or readiness success. |
-| `link_vcs_reference` | Adds a pending branch/head or MR/PR reference | Approved repository; trusted controller re-read; no direct VCS mutation. |
+| Tool/event | From | To/effect | Required checks |
+| --- | --- | --- | --- |
+| `claim_slice` | `READY` | `CLAIMED_ACTIVE`; create manual attempt and bounded lease | Assignment, current Gate 2/plan, dependencies, one repository, one active lease, version/idempotency. |
+| `release_slice` | `CLAIMED_ACTIVE` | Attempt `RELEASED`; slice returns to `READY` if still eligible | Claim owner or authorized coordinator; current lease; no completion declaration or controller mutation in flight. |
+| Lease expiry | `CLAIMED_ACTIVE` | Attempt `EXPIRED`; slice returns to `READY` if still eligible | Trusted clock/controller; no client-supplied time; audit and notification. |
+| `heartbeat_attempt` | `CLAIMED_ACTIVE` | State unchanged; extend bounded lease | Claim owner, matching lease ID, active attempt, monotonic aggregate version, bounded rate. |
+| `report_progress` | `CLAIMED_ACTIVE` | State unchanged; append safe progress observation | Claim owner, active lease, monotonic client sequence, no lifecycle inference. |
+| `ask_question` | `CLAIMED_ACTIVE` | State unchanged; create attributed `OPEN` question | Claim owner, active lease, permitted audience, bounded/redacted content. |
+| `complete_manual_attempt` | `CLAIMED_ACTIVE` | `COMPLETION_DECLARED` | Claim owner, active lease, no open blocking question; does not imply code, quality, draft, or readiness success. |
+| `link_vcs_reference` | `CLAIMED_ACTIVE` or `COMPLETION_DECLARED` | `REFERENCE_VALIDATING` while trusted validation runs | Approved repository binding; exact branch/MR/PR plus head SHA; controller re-read; no MCP VCS mutation. |
+| Trusted validation succeeds | `REFERENCE_VALIDATING` with completion declared | `CANDIDATE_AVAILABLE` | Repository/reference/head all match the approved slice; controller evidence is current and attributable. |
+| Trusted validation succeeds before completion | `REFERENCE_VALIDATING` | Return to `CLAIMED_ACTIVE` with valid reference recorded | Developer must still declare completion; no quality/readiness inference. |
+| Trusted validation rejects | `REFERENCE_VALIDATING` | Return to previous active/declaration state with safe rejection | No draft or quality dispatch; developer may submit a new version-checked reference. |
+| Authorized cancellation | Any nonterminal manual state | `CANCELLED` | Existing Curve cancellation authority, not an Orca-only capability; revoke lease and fence late writes. |
 
-All other MCP writes are denied even if a client advertises them.
+`CANDIDATE_AVAILABLE`, `RELEASED`, `EXPIRED`, and `CANCELLED` are terminal for the manual attempt. A new attempt is required after release, expiry, or cancellation. All other MCP writes and all late writes to terminal attempts are denied even if a client advertises them.

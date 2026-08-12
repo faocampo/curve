@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/mcp/orca-tool-result-v1.schema.json",
+  "title": "Curve Orca MCP v1.1 tool result payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "tool", "workspace_id", "server_event_time", "result"],
+  "properties": {
+    "schema_version": { "const": "1.1" },
+    "tool": { "$ref": "orca-tools-v1.schema.json#/$defs/ToolName" },
+    "workspace_id": { "$ref": "../schemas/common.schema.json#/$defs/WorkspaceId" },
+    "server_event_time": { "$ref": "../schemas/common.schema.json#/$defs/Instant" },
+    "result": { "type": "object" },
+    "next_cursor": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 2048 },
+        { "type": "null" }
+      ]
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/ListAssignedSlicesResult" },
+    { "$ref": "#/$defs/GetTaskPacketResult" },
+    { "$ref": "#/$defs/GetAcceptanceCriteriaResult" },
+    { "$ref": "#/$defs/GetContextManifestResult" },
+    { "$ref": "#/$defs/ListQuestionsResult" },
+    { "$ref": "#/$defs/GetWorkflowStateResult" },
+    { "$ref": "#/$defs/MutationResult" }
+  ],
+  "$defs": {
+    "SliceSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slice_id", "initiative_id", "title", "state", "version"],
+      "properties": {
+        "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+        "initiative_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "state": {
+          "type": "string",
+          "enum": [
+            "BLOCKED",
+            "READY",
+            "CLAIMED_ACTIVE",
+            "COMPLETION_DECLARED",
+            "REFERENCE_VALIDATING",
+            "CANDIDATE_AVAILABLE",
+            "RELEASED",
+            "EXPIRED",
+            "CANCELLED"
+          ]
+        },
+        "version": { "$ref": "../schemas/common.schema.json#/$defs/AggregateVersion" }
+      }
+    },
+    "ListAssignedSlicesResult": {
+      "properties": {
+        "tool": { "const": "list_assigned_slices" },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["items"],
+          "properties": {
+            "items": { "type": "array", "items": { "$ref": "#/$defs/SliceSummary" } }
+          }
+        }
+      }
+    },
+    "GetTaskPacketResult": {
+      "properties": {
+        "tool": { "const": "get_task_packet" },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "slice_id",
+            "artifact_version_id",
+            "digest",
+            "repository_binding_id",
+            "base_sha",
+            "context_manifest_digest"
+          ],
+          "properties": {
+            "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "artifact_version_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "digest": { "$ref": "../schemas/common.schema.json#/$defs/Digest" },
+            "repository_binding_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "base_sha": { "type": "string", "pattern": "^[0-9a-f]{40}([0-9a-f]{24})?$" },
+            "context_manifest_digest": { "$ref": "../schemas/common.schema.json#/$defs/Digest" }
+          }
+        }
+      }
+    },
+    "GetAcceptanceCriteriaResult": {
+      "properties": {
+        "tool": { "const": "get_acceptance_criteria" },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slice_id", "artifact_version_id", "digest", "items"],
+          "properties": {
+            "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "artifact_version_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "digest": { "$ref": "../schemas/common.schema.json#/$defs/Digest" },
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["criterion_id", "text"],
+                "properties": {
+                  "criterion_id": { "type": "string", "minLength": 1, "maxLength": 100 },
+                  "text": { "type": "string", "minLength": 1, "maxLength": 4000 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetContextManifestResult": {
+      "properties": {
+        "tool": { "const": "get_context_manifest" },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slice_id", "artifact_version_id", "digest", "classification", "entries"],
+          "properties": {
+            "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "artifact_version_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "digest": { "$ref": "../schemas/common.schema.json#/$defs/Digest" },
+            "classification": { "$ref": "../schemas/common.schema.json#/$defs/DataClassification" },
+            "entries": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["entry_id", "title", "source_type", "digest"],
+                "properties": {
+                  "entry_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                  "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+                  "source_type": { "type": "string", "minLength": 1, "maxLength": 100 },
+                  "digest": { "$ref": "../schemas/common.schema.json#/$defs/Digest" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ListQuestionsResult": {
+      "properties": {
+        "tool": { "const": "list_questions" },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["items"],
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["question_id", "attempt_id", "question", "status", "created_at"],
+                "properties": {
+                  "question_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                  "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+                  "question": { "type": "string", "minLength": 1, "maxLength": 4000 },
+                  "status": { "type": "string", "enum": ["OPEN", "ANSWERED", "CANCELLED"] },
+                  "created_at": { "$ref": "../schemas/common.schema.json#/$defs/Instant" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetWorkflowStateResult": {
+      "properties": {
+        "tool": { "const": "get_workflow_state" },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slice_id", "initiative_id", "title", "state", "version"],
+          "properties": {
+            "slice_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "initiative_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+            "state": {
+              "type": "string",
+              "enum": [
+                "BLOCKED",
+                "READY",
+                "CLAIMED_ACTIVE",
+                "COMPLETION_DECLARED",
+                "REFERENCE_VALIDATING",
+                "CANDIDATE_AVAILABLE",
+                "RELEASED",
+                "EXPIRED",
+                "CANCELLED"
+              ]
+            },
+            "version": { "$ref": "../schemas/common.schema.json#/$defs/AggregateVersion" },
+            "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "lease_expires_at": { "$ref": "../schemas/common.schema.json#/$defs/Instant" }
+          }
+        }
+      }
+    },
+    "MutationResult": {
+      "properties": {
+        "tool": {
+          "enum": [
+            "claim_slice",
+            "release_slice",
+            "heartbeat_attempt",
+            "report_progress",
+            "ask_question",
+            "complete_manual_attempt",
+            "link_vcs_reference"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["operation_id", "aggregate_version", "state", "audit_event_id"],
+          "properties": {
+            "operation_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "aggregate_version": { "$ref": "../schemas/common.schema.json#/$defs/AggregateVersion" },
+            "state": { "type": "string", "minLength": 1, "maxLength": 100 },
+            "audit_event_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "attempt_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "lease_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "lease_expires_at": { "$ref": "../schemas/common.schema.json#/$defs/Instant" },
+            "question_id": { "$ref": "../schemas/common.schema.json#/$defs/OpaqueId" },
+            "reference_validation": {
+              "type": "string",
+              "enum": ["NOT_LINKED", "PENDING", "VALID", "REJECTED"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

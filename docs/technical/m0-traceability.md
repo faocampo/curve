@@ -9,6 +9,6 @@
 | M0-06 Temporal skeleton | FR-015, FR-022; NFR-004; AC-17-AC-21, AC-58 | [M0 workflow contract](../../contracts/temporal/m0-workflow-contract.md) | Start/signal/query/cancel, worker restart, activity retry, replay corpus, no protected payload tests. |
 | M0-07 API/SSE | FR-023; NFR-002-NFR-005, NFR-013; AC-35 | [Curve OpenAPI](../../contracts/openapi/curve-v1.openapi.yaml), SSE schema | Contract tests, ETag/If-Match, Problem Details, cursor and SSE resume/expiry tests. |
 | M0-08 audit/observability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 | Event envelope, audit/redaction rules | Audit completeness, correlation, metric/trace fixtures, secret/protected-content leakage tests. |
-| M0-09 provider registry | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; AC-33, AC-57 | Provider capability and Orca MCP schemas | Fake provider capability, revoked connection, callback/inbox, reconciliation and denied-tool tests. |
+| M0-09 provider registry | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; AC-33, AC-57 | Provider capability plus Orca MCP v1.1 invocation/result schemas and D-007 trust record | Fake provider capability, revoked connection, callback/inbox, reconciliation, unknown-tool/field, wrong-workspace, stale-version and denied-transition tests. |
 
 M0-04 protected storage remains outside the local skeleton and blocked by D-009. Its trace remains FR-004, FR-021, NFR-010-NFR-011, NFR-018, NFR-020, AC-53, and AC-56.

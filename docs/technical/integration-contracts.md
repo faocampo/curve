@@ -267,11 +267,13 @@ OpenHands is the first implementation of this interface. Orca does not implement
 
 ### Developer-operated Orca MCP
 
-Orca acts as an MCP client under a short-lived token delegated by the signed-in developer. Reads are limited to the developer's assigned slices, approved task packets, acceptance criteria, sanitized Context Manifests, questions, and current workflow state. The only write tools are `claim_slice`, `release_slice`, `heartbeat_attempt`, `report_progress`, `ask_question`, `complete_manual_attempt`, and `link_vcs_reference`.
+Orca acts as an MCP client under a short-lived token delegated by the signed-in developer. The proposed profile uses MCP revision `2026-07-28` over authenticated Streamable HTTP and the D-007 OAuth protected-resource flow; unsupported clients fail closed rather than silently broadening or downgrading the write contract. Reads are limited to the developer's assigned slices, approved task packets, acceptance criteria, sanitized Context Manifests, questions, and current workflow state. The only write tools are `claim_slice`, `release_slice`, `heartbeat_attempt`, `report_progress`, `ask_question`, `complete_manual_attempt`, and `link_vcs_reference`.
 
-Every write supplies `workspace_id`, target ID, expected aggregate version, idempotency key, and client event time. Curve derives the actor from the delegated token, rechecks workspace/object authorization before loading the target, validates the transition, and appends an audit event. Orca cannot upload code or executable artifacts, approve a gate, grant or request a waiver as an approver, change a plan, mutate VCS, register a provider, or deploy.
+The normative v1.1 invocation and result schemas use closed per-tool objects. Every write supplies `workspace_id`, target ID, expected aggregate version, idempotency key, and client event time. Curve derives the actor from the delegated token, rechecks workspace/object authorization before loading the target, validates the transition, and appends an audit event. The client timestamp is evidence only; server time controls leases and ordering. Orca cannot upload code or executable artifacts, approve a gate, grant or request a waiver as an approver, change a plan, mutate VCS, register a provider, or deploy.
 
 The developer pushes through normal VCS access outside Curve. `link_vcs_reference` accepts only an approved repository plus branch/head SHA or MR/PR reference. The trusted VCS controller re-reads and validates the reference. If a valid branch has no active draft, the controller may create one under the approved plan; Orca never creates it directly.
+
+`complete_manual_attempt` produces only `COMPLETION_DECLARED`. The normalized attempt becomes `CANDIDATE_AVAILABLE` only after the trusted VCS controller validates the exact approved binding and head. The state matrix defines claim, release, lease expiry, completion, reference validation, rejection, cancellation, and terminal late-write behavior.
 
 ### VCS
 

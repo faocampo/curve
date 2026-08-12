@@ -10,6 +10,9 @@ This directory is the normative machine-readable interface source for Curve. Imp
 | Domain event envelope | [`schemas/event-envelope.schema.json`](schemas/event-envelope.schema.json) | Stable envelope; payload schemas are versioned separately. |
 | Provider capabilities | [`schemas/provider-capability.schema.json`](schemas/provider-capability.schema.json) | Additive capability evolution only within v1. |
 | SSE event | [`schemas/sse-event.schema.json`](schemas/sse-event.schema.json) | Stable resumable stream envelope. |
-| Orca MCP tools | [`mcp/orca-tools-v1.schema.json`](mcp/orca-tools-v1.schema.json) | Exact v1 read/write allowlist; unspecified tools are denied. |
+| Orca MCP tool invocations | [`mcp/orca-tools-v1.schema.json`](mcp/orca-tools-v1.schema.json) | Exact v1.1 read/write allowlist and per-tool arguments; unspecified tools and fields are denied. |
+| Orca MCP tool results | [`mcp/orca-tool-result-v1.schema.json`](mcp/orca-tool-result-v1.schema.json) | Typed v1.1 safe projections and mutation receipts; protected bodies and caller-supplied attribution are absent. |
 
 JSON Schema uses draft 2020-12. OpenAPI is 3.1 so schemas share the same dialect. Every example uses synthetic identifiers and contains no X3M data.
+
+Executable positive and negative MCP fixtures live under [`mcp/examples/`](mcp/examples/). The contract gate must fail if a valid fixture is rejected or if a prohibited tool/field fixture is accepted.

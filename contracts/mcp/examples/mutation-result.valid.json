@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.1",
+  "tool": "claim_slice",
+  "workspace_id": "00000000-0000-4000-8000-000000000001",
+  "server_event_time": "2026-08-12T12:00:01Z",
+  "result": {
+    "operation_id": "00000000-0000-4000-8000-000000000005",
+    "aggregate_version": 2,
+    "state": "CLAIMED_ACTIVE",
+    "audit_event_id": "00000000-0000-4000-8000-000000000006",
+    "attempt_id": "00000000-0000-4000-8000-000000000003",
+    "lease_id": "00000000-0000-4000-8000-000000000007",
+    "lease_expires_at": "2026-08-12T12:10:01Z"
+  }
+}
