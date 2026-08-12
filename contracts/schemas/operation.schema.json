@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/operation.schema.json",
+  "title": "Curve Operation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "workspace_id",
+    "operation_type",
+    "status",
+    "version",
+    "created_at",
+    "updated_at",
+    "created_by"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+    "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
+    "operation_type": {
+      "type": "string",
+      "enum": ["FOUNDATION_PROBE", "WORKFLOW_COMMAND", "PROVIDER_RECONCILIATION"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PENDING", "QUEUED", "RUNNING", "CANCEL_REQUESTED", "SUCCEEDED", "FAILED", "CANCELLED"]
+    },
+    "version": { "$ref": "common.schema.json#/$defs/AggregateVersion" },
+    "progress_percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "result": { "type": ["object", "null"], "additionalProperties": true },
+    "error_code": { "type": ["string", "null"] },
+    "created_at": { "$ref": "common.schema.json#/$defs/Instant" },
+    "updated_at": { "$ref": "common.schema.json#/$defs/Instant" },
+    "completed_at": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Instant" },
+        { "type": "null" }
+      ]
+    },
+    "created_by": { "$ref": "common.schema.json#/$defs/ActorRef" },
+    "correlation_id": { "type": "string", "minLength": 1, "maxLength": 255 }
+  }
+}

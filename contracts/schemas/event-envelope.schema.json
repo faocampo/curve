@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/event-envelope.schema.json",
+  "title": "Curve domain event envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "workspace_id",
+    "aggregate_type",
+    "aggregate_id",
+    "aggregate_version",
+    "occurred_at",
+    "actor",
+    "correlation_id",
+    "payload"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "event_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+    "event_type": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]+$" },
+    "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
+    "aggregate_type": { "type": "string", "minLength": 1 },
+    "aggregate_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+    "aggregate_version": { "$ref": "common.schema.json#/$defs/AggregateVersion" },
+    "occurred_at": { "$ref": "common.schema.json#/$defs/Instant" },
+    "actor": { "$ref": "common.schema.json#/$defs/ActorRef" },
+    "effective_principal": { "$ref": "common.schema.json#/$defs/ActorRef" },
+    "correlation_id": { "type": "string", "minLength": 1 },
+    "causation_id": { "type": ["string", "null"] },
+    "payload_schema": { "type": ["string", "null"], "format": "uri-reference" },
+    "payload": { "type": "object", "additionalProperties": true }
+  }
+}

@@ -1,0 +1,14 @@
+# M0 Requirement, Contract, and Test Traceability
+
+| Package | Product trace | Normative contract | Required verification |
+| --- | --- | --- | --- |
+| M0-01 module shell | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 | API namespace; workspace-scoped base rules; feature-disabled behavior | Existing Plane regression, disabled route/navigation, workspace isolation, migration smoke. |
+| M0-02 core persistence | FR-007, FR-021; NFR-004, NFR-018; AC-08, AC-34, AC-56 | Common/Operation/Event schemas; optimistic version matrix | Model/constraint tests, forward/backward migration, concurrent update and immutable audit tests. |
+| M0-03 core policy | FR-043; NFR-009-NFR-012; AC-09, AC-35, AC-52 | [Authorization matrix](m0-authorization-and-state-matrices.md) | Cross-workspace IDOR matrix, role/action matrix, object lookup ordering, safe denial audit. |
+| M0-05 delivery kernel | FR-021, FR-023, FR-044; NFR-004-NFR-005; AC-26, AC-33 | Event envelope, operation state matrix, idempotency conventions | Duplicate/lost/out-of-order delivery, idempotency conflict, relay concurrency, dead-letter tests. |
+| M0-06 Temporal skeleton | FR-015, FR-022; NFR-004; AC-17-AC-21, AC-58 | [M0 workflow contract](../../contracts/temporal/m0-workflow-contract.md) | Start/signal/query/cancel, worker restart, activity retry, replay corpus, no protected payload tests. |
+| M0-07 API/SSE | FR-023; NFR-002-NFR-005, NFR-013; AC-35 | [Curve OpenAPI](../../contracts/openapi/curve-v1.openapi.yaml), SSE schema | Contract tests, ETag/If-Match, Problem Details, cursor and SSE resume/expiry tests. |
+| M0-08 audit/observability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 | Event envelope, audit/redaction rules | Audit completeness, correlation, metric/trace fixtures, secret/protected-content leakage tests. |
+| M0-09 provider registry | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; AC-33, AC-57 | Provider capability and Orca MCP schemas | Fake provider capability, revoked connection, callback/inbox, reconciliation and denied-tool tests. |
+
+M0-04 protected storage remains outside the local skeleton and blocked by D-009. Its trace remains FR-004, FR-021, NFR-010-NFR-011, NFR-018, NFR-020, AC-53, and AC-56.

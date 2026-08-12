@@ -1,0 +1,21 @@
+{
+  "name": "curve-governance-docs",
+  "version": "0.1.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "packageManager": "pnpm@11.3.0",
+  "scripts": {
+    "check": "pnpm run check:markdown && pnpm run check:contracts && pnpm run check:structure",
+    "check:markdown": "markdownlint-cli2 \"docs/**/*.md\" \"contracts/**/*.md\"",
+    "check:contracts": "redocly lint contracts/openapi/curve-v1.openapi.yaml && node scripts/validate-contracts.mjs",
+    "check:structure": "node scripts/validate-docs.mjs",
+    "check:external": "node scripts/validate-external-links.mjs"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "11.16.0",
+    "@redocly/cli": "2.46.1",
+    "ajv-cli": "5.0.0",
+    "ajv-formats": "3.0.1",
+    "markdownlint-cli2": "0.23.2"
+  }
+}

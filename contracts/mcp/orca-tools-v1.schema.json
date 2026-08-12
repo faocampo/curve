@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/mcp/orca-tools-v1.schema.json",
+  "title": "Curve Orca MCP v1 invocation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "tool", "workspace_id", "arguments"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "tool": {
+      "type": "string",
+      "enum": [
+        "list_assigned_slices",
+        "get_task_packet",
+        "get_acceptance_criteria",
+        "get_context_manifest",
+        "list_questions",
+        "get_workflow_state",
+        "claim_slice",
+        "release_slice",
+        "heartbeat_attempt",
+        "report_progress",
+        "ask_question",
+        "complete_manual_attempt",
+        "link_vcs_reference"
+      ]
+    },
+    "workspace_id": { "$ref": "../schemas/common.schema.json#/$defs/WorkspaceId" },
+    "arguments": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "idempotency_key": { "type": "string", "minLength": 16, "maxLength": 255 },
+    "expected_version": { "$ref": "../schemas/common.schema.json#/$defs/AggregateVersion" },
+    "client_event_time": { "$ref": "../schemas/common.schema.json#/$defs/Instant" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "tool": {
+            "enum": ["claim_slice", "release_slice", "heartbeat_attempt", "report_progress", "ask_question", "complete_manual_attempt", "link_vcs_reference"]
+          }
+        }
+      },
+      "then": {
+        "required": ["idempotency_key", "expected_version", "client_event_time"]
+      }
+    }
+  ]
+}
