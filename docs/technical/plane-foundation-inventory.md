@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | D-001 direction selected; candidate foundation evidence with remaining acceptance gates |
-| Version | 0.3 |
+| Version | 0.4 |
 | Review date | 2026-08-12 |
 | Plane fork | `git@github.com:faocampo/plane.git` |
 | Inspected branch and commit | `preview` at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` |
@@ -20,7 +20,7 @@ The inspected Plane community fork is a suitable additive foundation for Curve. 
 
 The product sponsor approved using official Plane upstream as the updateable code baseline for Curve while implementing Curve in the fork. The `upstream` remote is configured as fetch-only, shared `preview` remains unchanged, and the candidate integration branch starts from the exact upstream `preview` commit. The fork baseline is its ancestor, so this update has no fork-only conflict: the fork was zero commits ahead and one commit behind.
 
-D-001 is not yet `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the verified candidate foundation is now pinned at `d380678912e9b46805ef852d2e05411f1fea6d8b`. Full repository checks and the approved local deployment smoke have passed. Complete community/commercial capability proof, license acceptance, and named support/upgrade ownership remain. No merge or push has been performed.
+D-001 is not yet `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the verified candidate foundation is now pinned at `d380678912e9b46805ef852d2e05411f1fea6d8b`. Full repository checks and the approved local deployment smoke have passed. The repository-level community/commercial audit and reuse/build recommendation are complete; legal acceptance, named support/upgrade ownership, reviewed publication, and feature-disabled migration/rollback proof remain. No merge or push has been performed.
 
 ## Repository and integration state
 
@@ -52,11 +52,11 @@ D-001 is not yet `DECIDED`. The verification run exposed and corrected an i18n t
 | Comments, activities and notifications | Work-item comments/activity plus notification models/tasks/UI | **Reuse for human coordination and notification.** Comments cannot grant approvals; gate decisions remain typed Curve records. |
 | Assets/object storage patterns | Asset endpoints/models/tasks and storage metadata jobs | **Reuse implementation conventions only after security review.** Permissioned evidence uses Curve Access Envelopes, protected object paths, retention, and erasure policy rather than ordinary project assets. |
 | Webhooks and API tokens | Webhook models/logs/tasks, developer token UI/services, API schema generation | **Reuse patterns, not ambient credentials.** Curve provider connections, signed callbacks, controller credentials, idempotency, and reconciliation are workspace-scoped Curve boundaries. |
-| API conventions | DRF base endpoints/pagination/middleware, URL modules, schema endpoint and tests | **Reuse framework conventions.** Curve remains versioned under `/api/curve/v1/` with its stronger ETag, idempotency, Problem Details, SSE, and authorization contract. |
+| API conventions | DRF base endpoints/pagination/middleware, URL modules, schema endpoint and tests | **Reuse framework conventions.** Curve remains versioned under `/api/v1/workspaces/{workspace_slug}/curve/` with its stronger ETag, idempotency, Problem Details, SSE, and authorization contract. |
 | Background processing | Celery tasks for notification, export, cleanup, webhooks and bounded synchronization | **Reuse for bounded Plane work only.** Temporal exclusively owns durable Curve lifecycle waits/orchestration; Celery never advances Curve initiative state. |
 | Deployment examples | AIO, CLI, Kubernetes and Swarm manifests | **Reference only.** X3M's approved Kubernetes/AWS topology and D-003 determine actual Curve deployment. |
 | Frontend extension seams | Workspace route tables, services packages, shared state, UI/editor/constants/hooks packages | **Reuse additive patterns.** Curve entry points are disabled by default and removable without changing unrelated Plane navigation. |
-| Gantt/scheduling | Planning types/routes may exist, but community availability and commercial separation were not proven in this pass | **Do not assume.** D-001 proof must exercise the pinned community build and identify whether Curve must implement or project the required Roadmap/Gantt behavior. |
+| Gantt/scheduling | Public source contains work-item/module Gantt components, stores, layout roots, constants, types, and project-view wiring under `apps/web/core` and `packages`; the candidate production build passed | **Reuse only as a presentation primitive after an M2 integration proof.** It does not supply Curve Roadmap, Milestone, Feature, immutable snapshot, approval, or dependency truth. Curve owns those semantics and may project them into the public Gantt UI. |
 
 ## Curve-owned capabilities
 
@@ -67,14 +67,24 @@ Plane primitives do not satisfy these contracts and must be additive Curve domai
 - EvidenceItem/Snapshot, AccessEnvelope, ContextPack/Manifest, classification, retention, legal hold, and cryptographic-erasure controls.
 - ExecutionPlan, repository-local VerticalSlice DAG, provider-neutral AgentRun/Attempt, questions, leases, candidate artifacts, and budgets.
 - Temporal orchestration, outbox/inbox delivery, idempotency, reconciliation, cancellation fencing, and replay/versioning.
-- Onyx/MCP/model/OpenHands/Orca/GitHub/GitLab/quality/flag/documentation/monitoring provider boundaries.
+- Onyx/MCP/model/OpenHands/GitHub/GitLab/quality/flag/documentation/monitoring provider boundaries. Orca is a developer-operated MCP client, not an automated execution provider.
 - Trusted sandbox, runner, VCS and quality controllers; agents receive no mutation credentials.
 - Commit-bound quality evidence, findings/dispositions, automatic draft eligibility, Code Readiness, and draft-to-ready mutation.
 - Immutable audit, safe telemetry, KPI events, AGPL release manifest, source link, SBOM, and provenance.
 
 ## Commercial and license boundary
 
-The inspected repository contains AGPL-3.0 source and also contains product-tier constants, license-related modules, extended route/service seams, and comments indicating that some implementations live in an enterprise repository. Their presence is not proof that a capability is available or permitted in the community build.
+The inspected repository contains the complete GNU AGPL v3 license in `LICENSE.txt`; its README labels the project AGPL v3; inspected source headers use `SPDX-License-Identifier: AGPL-3.0-only`. It also contains product-tier constants, `plane.license` instance-administration routes, empty extension seams, and comments indicating that some implementations live in a separate enterprise repository. In particular, `apps/web/app/routes/extended.ts` exports an empty route list, `apps/api/plane/utils/instance_config_variables/extended.py` exports an empty configuration list, and the public page extended service says its additional implementation is in the enterprise repository. The `packages/editor/src/ee` files inspected merely re-export community (`ce`) types and extensions. These names and placeholders neither grant access to non-public implementation nor prove a commercial capability exists in this checkout.
+
+### Reuse/build boundary
+
+| Boundary | Verified public-source result | M0/M1 consequence |
+| --- | --- | --- |
+| Identity, workspace membership, projects, work items, comments, notifications, pages, estimates, relations, webhooks, API and UI conventions | Models, APIs, services, routes, and/or UI are present in the pinned public tree and the full candidate checks pass | Reuse through existing public interfaces; Curve adds workspace-scoped authorization and immutable lifecycle records without replacing Plane authority. |
+| Work-item and module Gantt presentation | Public components, stores, types, and layout wiring are present and included in the successful production build | Candidate for an M2 projection adapter; do not equate it with Curve roadmap truth. |
+| `extended` routes/config/services and `ee` paths | Empty, abstract, pass-through, or explicitly refer to implementation in another repository | Treat as unavailable. Curve must not depend on them unless a later legal and technical review proves a public implementation. |
+| `plane.license` application | Public instance configuration/administration namespace mounted at `/api/instances/`; its name is not a declaration that Curve may use separate commercial code | Do not use module naming as licensing evidence. Legal review relies on file licenses, dependency licenses, provenance, and release obligations. |
+| Curve lifecycle, immutable artifacts/evidence, gates, delivery kernel, Temporal orchestration, providers, quality truth, budgets and audit | No equivalent public aggregate with the required invariants was found | Build additively in `plane.curve`; integrate with Plane through explicit projections/adapters. |
 
 The Curve implementation MUST:
 
@@ -149,8 +159,8 @@ The local stack remains running for developer use. No `down -v`, volume deletion
 
 - [x] Product sponsor selects official Plane upstream, fork-based development, and the non-destructive integration-branch strategy.
 - [x] Fork baseline and selected upstream commit are pinned with an ancestry/divergence report.
-- [ ] Community-versus-commercial capability proof covers work items, pages, estimates, relations, Gantt, APIs, webhooks, auth, notifications, UI conventions, and deployment.
-- [ ] Reuse/build matrix is approved and mapped to Curve logical components.
+- [x] Repository-level community-versus-commercial capability proof covers work items, pages, estimates, relations, Gantt, APIs, webhooks, auth, notifications, UI conventions, deployment, and public extension seams.
+- [ ] Reuse/build matrix is technically prepared and mapped to Curve logical components; named engineering and licensing approval remains.
 - [x] Full frontend checks, production build, and backend tests pass on the candidate tree.
 - [x] The i18n generator correction is committed and the resulting candidate foundation SHA is pinned.
 - [x] Deployment smoke test passes on that exact candidate foundation commit in the approved local non-production topology.

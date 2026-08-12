@@ -42,7 +42,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 
 | Package | State | Allowed scope or blocker |
 | --- | --- | --- |
-| P0-01 Plane inventory | IN_REVIEW | Technical proof is present; D-001 owner/licensing approval remains. |
+| P0-01 Plane inventory | IN_REVIEW | Repository-level capability/license-boundary proof and reuse/build recommendation are present; D-001 named engineering/licensing approval, support ownership, reviewed branch publication, and migration/rollback proof remain. |
 | P0-02 topology | IN_REVIEW | Proposed local/staging/production topology is documented; D-003 approval remains. |
 | P0-03 ADR set | IN_PROGRESS | D-001-D-016 are indexed; named approvals remain. |
 | P0-04 documentation/contracts validation | READY_FOR_IMPLEMENTATION | May proceed on the documentation branch. |

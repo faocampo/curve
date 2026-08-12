@@ -49,6 +49,9 @@ The product sponsor confirmed that the intended model is to use the original Pla
 | Local deployment smoke | PASS at exact candidate SHA using the existing local Plane Compose project and persistent development volumes: migrator `0`/no pending migrations, API health `200`, `check --deploy` exit `0` with five expected local-profile warnings, worker and Beat initialized, and safe nonexistent-asset task consumed. An unrelated X3M HR container required temporary Plane host-port remapping; it was untouched. |
 | Candidate correction | `packages/i18n/scripts/generate-types.ts` emits the type-union semicolon on the final member so the generated ignored file satisfies pinned `oxfmt`; commit hooks also changed two `.sort()` calls to `.toSorted()` under repository lint policy |
 | Cleanup | Test containers, network, and disposable volumes removed without `--remove-orphans` |
+| Public-source license evidence | Root `LICENSE.txt` contains GNU AGPL v3; README identifies AGPL v3; inspected source uses `SPDX-License-Identifier: AGPL-3.0-only` |
+| Community/commercial boundary | Core models/APIs/UI and Gantt implementation are present in public source; public `extended` route and instance-config lists are empty, the page extension points to an enterprise repository, and inspected `packages/editor/src/ee` files only re-export `ce` code |
+| Reuse/build recommendation | Reuse public Plane authority and presentation primitives; implement Curve lifecycle truth additively in `plane.curve`; treat empty/abstract/enterprise-reference seams as unavailable pending separate proof and legal approval |
 
 The full command/result narrative and capability matrix are in the [Plane foundation inventory](plane-foundation-inventory.md).
 
@@ -56,7 +59,7 @@ The full command/result narrative and capability matrix are in the [Plane founda
 
 Use the official public Plane repository as Curve's upstream code baseline and Federico Ocampo's public fork as the Curve implementation and release repository. Fetch official changes through a remote named `upstream` whose push URL is disabled. Prepare every update on a new `curve/plane-upstream-sync-<date>` integration branch, compare exact ancestry/delta, and never force-rebase or force-push shared `preview`.
 
-An accepted integration commit becomes the only base for Curve implementation task packets. This ADR does not yet accept the current candidate commit because commercial/community boundary, licensing, and ownership gates remain incomplete.
+An accepted integration commit becomes the only base for Curve implementation task packets. The local repository-level commercial/community audit and reuse/build recommendation are complete. This ADR does not yet accept the current candidate commit because named engineering/licensing approval, support ownership, reviewed publication, and feature-disabled migration/rollback proof remain incomplete.
 
 ## Security, privacy, licensing, and operational impact
 
@@ -93,7 +96,8 @@ Before this ADR becomes `DECIDED`, all of the following must be complete:
 - [x] Full frontend check, production build, and backend test suite pass on the candidate tree.
 - [x] The i18n generator correction is committed at an exact candidate foundation SHA and the full frontend check passes at that SHA.
 - [x] Deployment smoke passes on that exact SHA in the approved local non-production topology.
-- [ ] Community-versus-commercial capability proof and reuse/build matrix are accepted.
+- [x] Repository-level community-versus-commercial capability proof and reuse/build recommendation are documented.
+- [ ] Named engineering and licensing reviewers accept the reuse/build boundary.
 - [ ] Legal/release owners accept AGPL, notices, dependency, and corresponding-source consequences.
 - [ ] A support/upgrade owner and review cadence are recorded.
 - [ ] Required reviewers approve this ADR and set its decision/review date.
