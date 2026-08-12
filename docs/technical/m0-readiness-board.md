@@ -22,7 +22,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | Decision | Status | Accountable role | Named approver | Evidence owner | Blocks now | Evidence and next action |
 | --- | --- | --- | --- | --- | --- | --- |
 | [D-001](adr-001-plane-upstream-foundation.md) | PROPOSED | Curve engineering lead; licensing reviewer | **Required** | Curve engineering | Plane baseline merge; M0-01 | Accept community/commercial inventory, AGPL obligations, upstream support/rebase ownership, and verified candidate evidence. |
-| [D-003](adr-003-runtime-topology.md) | PROPOSED | Platform Operations | **Required** | Curve platform engineering | Local Temporal M0-06 beyond an approved proof; every non-local activation | Reproduce local profile; select Temporal versions and staging topology; attach operations approval. |
+| [D-003](adr-003-runtime-topology.md) | PROPOSED | Platform Operations | **Required** | Curve platform engineering | Local Temporal M0-06 beyond an approved proof; every non-local activation | Local stack inventory, immutable dev-image pin, SDK pin, profile contract, and non-local decision matrix are prepared. Approve/authorize local proof; complete non-local cells before staging/production. |
 | [D-007](adr-007-mcp-trust-and-orca-profile.md) | PROPOSED | Security; Platform Administration | **Required** | Curve security engineering | MCP-enabled M0-09/M1/M4 | Approve protocol/auth profile, trust registry, Orca allowlist, revocation, state and threat fixtures. |
 | [D-009](adr-009-retention-and-erasure.md) | OPEN | Security; Privacy; Legal | **Required** | Data governance | M0-04; staging/production | Complete and approve the class-by-asset retention/hold/backup/erasure matrix. No period is inferred. |
 
@@ -43,7 +43,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | Package | State | Allowed scope or blocker |
 | --- | --- | --- |
 | P0-01 Plane inventory | IN_REVIEW | Repository-level capability/license-boundary proof and reuse/build recommendation are present; D-001 named engineering/licensing approval, support ownership, reviewed branch publication, and migration/rollback proof remain. |
-| P0-02 topology | IN_REVIEW | Proposed local/staging/production topology is documented; D-003 approval remains. |
+| P0-02 topology | IN_REVIEW | Exact local Temporal candidate pins/profile and a fail-closed staging/production matrix are documented; named D-003 approval and proof execution remain. |
 | P0-03 ADR set | IN_PROGRESS | D-001-D-016 are indexed; named approvals remain. |
 | P0-04 documentation/contracts validation | READY_FOR_IMPLEMENTATION | May proceed on the documentation branch. |
 | P0-05 test strategy | READY_FOR_IMPLEMENTATION | May proceed using synthetic fixtures. |

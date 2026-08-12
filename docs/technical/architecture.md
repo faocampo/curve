@@ -473,7 +473,7 @@ Curve is an additive bounded domain inside the Plane product surface, with expli
 
 - Add Curve-owned relational schemas and APIs; do not rename, overload, or repurpose Plane tables or status fields.
 - Reference Plane workspace, user, project, work-item, estimate, and relationship identifiers through bindings. Plane remains authoritative for those native fields.
-- Expose new APIs under `/api/curve/v1/`; do not make provider adapters or Temporal workflows depend on Plane's internal HTTP endpoints when a Curve application service can provide a stable contract.
+- Expose new APIs under `/api/v1/workspaces/{workspace_slug}/curve/`; do not make provider adapters or Temporal workflows depend on Plane's internal HTTP endpoints when a Curve application service can provide a stable contract.
 - Add Curve UI routes and navigation behind workspace feature enablement. Reuse accessible Plane components only after the D-001 inventory proves they are present and license-compatible.
 - Use Plane notifications and comments through a narrow integration service. Notification delivery never becomes lifecycle truth.
 - Keep Celery jobs bounded and idempotent. Temporal exclusively owns durable lifecycle waits and orchestration.
