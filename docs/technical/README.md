@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This directory is the architecture and implementation handoff derived from the [Curve PRD v0.6](../curve-ai-native-sdlc-prd.md). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
+This directory is the architecture and implementation handoff derived from the [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
 
 The suite is implementation-oriented and records agreed planning directions as `PROPOSED`, but intentionally does not convert them into owner approval. A coding work package remains blocked until its required decisions and ADRs are `DECIDED`.
 
@@ -54,7 +54,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 
 ```mermaid
 flowchart TD
-    prd["Curve PRD v0.6"] --> decisions["D-001 through D-016 and ADRs"]
+    prd["Curve PRD v0.7"] --> decisions["D-001 through D-016 and ADRs"]
     prd --> architecture[Architecture]
     prd --> domain[Domain model]
     architecture --> workflows[Workflows and sequences]

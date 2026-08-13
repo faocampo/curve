@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "event_id": "18000000-0000-4000-8000-000000000001",
+  "event_type": "curve.operation.created",
+  "workspace_id": "10000000-0000-4000-8000-000000000002",
+  "aggregate_type": "OPERATION",
+  "aggregate_id": "18000000-0000-4000-8000-000000000002",
+  "aggregate_version": 1,
+  "occurred_at": "2026-08-13T10:00:00Z",
+  "actor": { "actor_type": "HUMAN", "actor_id": "developer-1" },
+  "correlation_id": "synthetic-correlation-1",
+  "payload": { "operation_type": "FOUNDATION_PROBE" }
+}

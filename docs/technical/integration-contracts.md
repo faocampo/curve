@@ -6,7 +6,7 @@
 | ----- | ----- |
 | Status | Architecture baseline; implementation is subject to the PRD decision register |
 | Version | 0.1 |
-| Source | [Curve PRD v0.6](../curve-ai-native-sdlc-prd.md) |
+| Source | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
 | Audience | API, workflow, integration, platform, security, and test engineers; AI coding agents |
 | Scope | Curve public API, internal commands/events, provider adapters, webhooks, SSE, idempotency, and reconciliation |
 
@@ -31,7 +31,7 @@ The generated OpenAPI, JSON Schema, and provider conformance suites are executab
 
 ### Base and media types
 
-- Base path: `/api/curve/v1/`.
+- Base path: `/api/v1/workspaces/{workspace_slug}/curve/`.
 - Request and response media type: `application/json` unless an endpoint explicitly streams or returns an artifact.
 - Timestamps: RFC 3339 UTC with sub-second precision.
 - IDs: opaque strings; clients must not infer type, ordering, or tenancy from their shape.
@@ -69,7 +69,7 @@ Errors use [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) with `application/
   "title": "Candidate head is stale",
   "status": 409,
   "detail": "The requested decision targets a head SHA that is no longer current.",
-  "instance": "/api/curve/v1/operations/op_...",
+  "instance": "/api/v1/workspaces/example/curve/operations/00000000-0000-4000-8000-000000000001",
   "code": "STALE_HEAD",
   "correlation_id": "...",
   "workspace_id": "...",
@@ -140,7 +140,7 @@ No provider call occurs inside the command transaction. An activity that receive
 
 ## Operation resource
 
-`Operation.state` is `PENDING`, `RUNNING`, `WAITING_FOR_HUMAN`, `SUCCEEDED`, `FAILED`, or `CANCELLED`. The resource contains:
+`Operation.status` is `PENDING`, `QUEUED`, `RUNNING`, `WAITING_FOR_HUMAN`, `CANCEL_REQUESTED`, `SUCCEEDED`, `FAILED`, or `CANCELLED`. The synthetic M0 foundation probe uses `PENDING`, `QUEUED`, `RUNNING`, `CANCEL_REQUESTED`, and terminal states; later long-running operations may use `WAITING_FOR_HUMAN`. The resource contains:
 
 - `workspace_id`, `operation_id`, command type, target type/ID, and actor.
 - Correlation, causation, idempotency, workflow, and policy identifiers.

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/provider-connection.schema.json",
+  "title": "Curve workspace-scoped provider connection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "workspace_id",
+    "aggregate_version",
+    "provider_type",
+    "display_name",
+    "configuration_digest",
+    "capability_document_ref",
+    "allowed_classifications",
+    "status",
+    "created_at",
+    "created_by",
+    "updated_at",
+    "updated_by"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+    "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
+    "aggregate_version": { "$ref": "common.schema.json#/$defs/AggregateVersion" },
+    "provider_type": {
+      "type": "string",
+      "enum": ["ONYX", "MCP", "ORCA_HUMAN_ASSISTANCE", "MODEL_GATEWAY", "OPENHANDS", "GITHUB", "GITLAB", "QUALITY", "FEATURE_FLAG", "DOCUMENTATION", "MONITORING", "PROTOTYPE"]
+    },
+    "display_name": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "external_tenant_ref": { "type": ["string", "null"], "maxLength": 1000 },
+    "configuration_ref": { "$ref": "common.schema.json#/$defs/ObjectRef" },
+    "configuration_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+    "secret_reference": { "type": ["string", "null"], "maxLength": 1000 },
+    "capability_document_ref": { "$ref": "common.schema.json#/$defs/ResourceRef" },
+    "allowed_classifications": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/DataClassification" },
+      "uniqueItems": true
+    },
+    "status": { "type": "string", "enum": ["PENDING_VALIDATION", "ACTIVE", "DEGRADED", "DISABLED", "REVOKED"] },
+    "validated_at": {
+      "oneOf": [{ "$ref": "common.schema.json#/$defs/Instant" }, { "type": "null" }]
+    },
+    "validation_result_ref": { "$ref": "common.schema.json#/$defs/ObjectRef" },
+    "created_at": { "$ref": "common.schema.json#/$defs/Instant" },
+    "created_by": { "$ref": "common.schema.json#/$defs/ActorRef" },
+    "updated_at": { "$ref": "common.schema.json#/$defs/Instant" },
+    "updated_by": { "$ref": "common.schema.json#/$defs/ActorRef" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "enum": ["ACTIVE", "DEGRADED"] } } },
+      "then": { "required": ["validated_at", "validation_result_ref"] }
+    }
+  ]
+}

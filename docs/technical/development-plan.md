@@ -6,7 +6,7 @@
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
 | Version | 0.2 |
-| Source | [Curve PRD v0.6](../curve-ai-native-sdlc-prd.md) |
+| Source | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package that becomes one or more approved vertical slices only after D-001 identifies the implementation repositories |
 

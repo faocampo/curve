@@ -8,7 +8,7 @@
 | Target branch | `preview` after reviewed upstream-sync merge |
 | Candidate base | `d380678912e9b46805ef852d2e05411f1fea6d8b`; replace with the reviewed merge SHA before any packet becomes `READY` |
 | Feature branch prefix | `curve/m0-` |
-| Normative docs | Curve PRD v0.6 and the exact committed Curve documentation revision |
+| Normative docs | Curve PRD v0.7 and the exact committed Curve documentation revision |
 | Data | Synthetic local data only; no protected object bodies |
 | Feature posture | Curve disabled by default; foundation probe local-only |
 | Human review | Named Curve engineering reviewer required for every packet |

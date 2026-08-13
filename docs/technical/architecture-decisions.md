@@ -6,7 +6,7 @@
 | ----- | ----- |
 | Status | Decision index; `PROPOSED` directions remain blocked until owner approval and required proof |
 | Version | 0.3 |
-| Source | [Curve PRD v0.6 decision register](../curve-ai-native-sdlc-prd.md#decision-register) |
+| Source | [Curve PRD v0.7 decision register](../curve-ai-native-sdlc-prd.md#decision-register) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
 ## Purpose

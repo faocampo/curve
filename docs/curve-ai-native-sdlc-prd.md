@@ -7,8 +7,8 @@
 | Status       | Remediation in progress; R0B contract defined; implementation blocked by applicable non-decided decisions |
 | Owner        | X3M                                                                        |
 | Audience     | Product, engineering, design, security, operations, and company leadership |
-| Version      | 0.6                                                                        |
-| Last updated | 2026-08-12                                                                 |
+| Version      | 0.7                                                                        |
+| Last updated | 2026-08-13                                                                 |
 | Product      | Curve                                                                      |
 | Foundation   | Plane open-source project management platform                              |
 
@@ -16,6 +16,7 @@
 
 | Version | Date | Summary |
 | ------- | ---- | ------- |
+| 0.7 | 2026-08-13 | Reconciled the public API namespace with the versioned OpenAPI contract and completed the initial M0 persistence, delivery, audit, provider-connection, and Access Envelope schema inventory without changing milestone scope or owner-gated decisions. |
 | 0.6 | 2026-08-12 | Made M0 progressively codeable: selected OpenHands as the sole automated execution provider; redefined Orca as a developer-operated MCP client with delegated workflow write-back; separated foundation-readiness from just-in-time integration proofs; moved model and VCS provider decisions to their consuming milestones; and made D-009 gate protected storage and non-local activation without blocking independent local M0 work. |
 | 0.5 | 2026-08-12 | Recorded planning choices as owner-gated proposals; aligned GitLab/OpenHands R0B versus full R1; selected the thin Curve/OpenRouter gateway boundary; defined the Loomit pilot contract, external CIA prerequisite, quality/waiver rules, budget ledger, package credentials, AGPL release gate, proof packages, and remediation ledger. |
 | 0.4 | 2026-08-11 | Made the PRD architecture-planning ready: resolved lifecycle and gate contradictions; added release baselines, normative state/cardinality/API/event contracts, two-phase quality, trusted-controller and evidence controls, measurable NFRs, traceable acceptance scenarios, decision ownership, and architecture handoff criteria. |
@@ -748,7 +749,7 @@ Every adapter declares capabilities and supported protocol/API versions, authent
 
 ### Public API and integration contract
 
-The public Curve API is versioned under `/api/curve/v1/`. Plane authentication plus workspace-scoped authorization applies to every endpoint. Cursor pagination and stable filtering apply to collections; errors use [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) Problem Details; mutations require `If-Match` or an aggregate version; externally effectful commands require `Idempotency-Key`; asynchronous commands return `202 Accepted` with an operation resource. Server-sent events are the R1 transport for initiative and run updates, with cursor-based resumption; WebSocket support is not required.
+The public Curve API is versioned under `/api/v1/workspaces/{workspace_slug}/curve/`. Plane authentication plus workspace-scoped authorization applies to every endpoint. Cursor pagination and stable filtering apply to collections; errors use [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) Problem Details; mutations require `If-Match` or an aggregate version; externally effectful commands require `Idempotency-Key`; asynchronous commands return `202 Accepted` with an operation resource. Server-sent events are the R1 transport for initiative and run updates, with cursor-based resumption; WebSocket support is not required.
 
 | Command or query family | Minimum contract |
 | ----------------------- | ---------------- |

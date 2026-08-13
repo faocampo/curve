@@ -29,7 +29,7 @@
       "properties": {
         "actor_type": {
           "type": "string",
-          "enum": ["HUMAN", "SERVICE", "AGENT"]
+          "enum": ["HUMAN", "SERVICE", "AGENT", "SYSTEM"]
         },
         "actor_id": {
           "type": "string",
@@ -41,6 +41,37 @@
     "DataClassification": {
       "type": "string",
       "enum": ["INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+    },
+    "ResourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource_type", "resource_id"],
+      "properties": {
+        "resource_type": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,99}$" },
+        "resource_id": { "$ref": "#/$defs/OpaqueId" },
+        "resource_version": { "$ref": "#/$defs/AggregateVersion" }
+      }
+    },
+    "ObjectRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["object_id", "digest", "size_bytes", "media_type"],
+      "properties": {
+        "object_id": { "$ref": "#/$defs/OpaqueId" },
+        "digest": { "$ref": "#/$defs/Digest" },
+        "size_bytes": { "type": "integer", "minimum": 0 },
+        "media_type": { "type": "string", "minLength": 1, "maxLength": 255 }
+      }
+    },
+    "SafeError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "retryable"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,99}$" },
+        "retryable": { "type": "boolean" },
+        "detail_ref": { "$ref": "#/$defs/ObjectRef" }
+      }
     },
     "ProblemDetails": {
       "type": "object",

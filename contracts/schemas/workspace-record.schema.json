@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/workspace-record.schema.json",
+  "title": "Curve workspace-scoped mutable record fields",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "workspace_id", "aggregate_version", "created_at", "created_by", "updated_at", "updated_by"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+    "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
+    "aggregate_version": { "$ref": "common.schema.json#/$defs/AggregateVersion" },
+    "created_at": { "$ref": "common.schema.json#/$defs/Instant" },
+    "created_by": { "$ref": "common.schema.json#/$defs/ActorRef" },
+    "updated_at": { "$ref": "common.schema.json#/$defs/Instant" },
+    "updated_by": { "$ref": "common.schema.json#/$defs/ActorRef" },
+    "tombstoned_at": {
+      "oneOf": [{ "$ref": "common.schema.json#/$defs/Instant" }, { "type": "null" }]
+    },
+    "tombstoned_by": {
+      "oneOf": [{ "$ref": "common.schema.json#/$defs/ActorRef" }, { "type": "null" }]
+    },
+    "tombstone_reason": { "type": ["string", "null"], "minLength": 1, "maxLength": 2000 }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["tombstoned_at"], "properties": { "tombstoned_at": { "type": "string" } } },
+      "then": { "required": ["tombstoned_by", "tombstone_reason"] }
+    }
+  ]
+}

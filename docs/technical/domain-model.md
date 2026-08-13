@@ -12,7 +12,7 @@
 
 ## 1. Purpose and precedence
 
-This document derives the logical domain model required by PRD v0.6. It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests, but it does not select a database topology, object-storage product, identity mechanism, provider version, retention period, or other owner-gated decision that the PRD reserves for D-001 through D-016.
+This document derives the logical domain model required by PRD v0.7. It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests, but it does not select a database topology, object-storage product, identity mechanism, provider version, retention period, or other owner-gated decision that the PRD reserves for D-001 through D-016.
 
 The PRD remains authoritative. Its scope invariants, lifecycle transitions, numbered functional requirements (FR), non-functional requirements (NFR), acceptance criteria (AC), and decision register take precedence over this document. If this document cannot be implemented without changing one of those contracts, the implementation MUST stop and propose a PRD revision; it MUST NOT silently reinterpret the requirement.
 
@@ -41,7 +41,7 @@ Normative terms use RFC 2119 meanings. The models below are logical types. A der
 | `ExternalRef` | `{provider_type, provider_connection_id, resource_type, external_id, canonical_url?}`. It is not a database foreign key to a provider. |
 | `Instant` | UTC timestamp with sufficient precision to establish ordering. UI rendering uses the viewer timezone. |
 | `LocalDate` | Inclusive calendar date interpreted with the owning Product's IANA timezone. |
-| `Digest` | Algorithm-qualified content digest, initially represented as `{algorithm, value}`. The canonical serialization and digest algorithm are versioned Context Pack/Object schema inputs before M3; they cannot change silently. Signing/key-management controls remain governed by D-003. |
+| `Digest` | Algorithm-qualified lowercase string, initially `sha256:<64 lowercase hexadecimal characters>`. Canonical serialization is versioned by the owning artifact/object schema. A new digest algorithm requires an additive union or new schema version and cannot replace SHA-256 silently. Signing/key-management controls remain governed by D-003. |
 | `Money` | `{amount_decimal, currency}`; never a binary floating-point number. |
 | `ObjectRef` | `{object_id, digest, size_bytes, media_type}` referring to immutable workspace-scoped object metadata. |
 | `VersionRef` | `{entity_id, version}` or `{entity_id, digest}` for immutable subjects. |

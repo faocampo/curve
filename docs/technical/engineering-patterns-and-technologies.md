@@ -9,7 +9,7 @@
 | Audience | Engineers, reviewers, security and platform teams, and AI coding agents |
 | Version | 0.2 |
 | Last updated | 2026-08-12 |
-| Normative source | [Curve PRD v0.6](../curve-ai-native-sdlc-prd.md) |
+| Normative source | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
 | Architecture | [Curve Technical Architecture](./architecture.md) |
 
 ## Purpose
@@ -301,7 +301,7 @@ Each projection documents its formula, inputs, freshness, and unavailable state 
 
 ### HTTP API
 
-- Root path: `/api/curve/v1/`.
+- Root path: `/api/v1/workspaces/{workspace_slug}/curve/`.
 - Authentication: Plane session/identity plus workspace/object authorization.
 - Errors: RFC 9457 Problem Details with a stable Curve error code, correlation ID, and safe field violations.
 - Collections: cursor pagination and stable filters; never expose cross-workspace counts.

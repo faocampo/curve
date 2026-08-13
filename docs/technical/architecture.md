@@ -9,12 +9,12 @@
 | Audience | Architecture, engineering, security, platform operations, product, and AI coding agents |
 | Version | 0.2 |
 | Last updated | 2026-08-12 |
-| Normative source | [Curve PRD v0.6](../curve-ai-native-sdlc-prd.md) |
+| Normative source | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
 | Companion | [Engineering Patterns and Technologies](./engineering-patterns-and-technologies.md) |
 
 ## Purpose and authority
 
-This document translates the product contract in the [Curve PRD v0.6](../curve-ai-native-sdlc-prd.md) into a logical architecture that can be refined into component, data, API, workflow, deployment, and implementation plans. It is not a replacement for the PRD.
+This document translates the product contract in the [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) into a logical architecture that can be refined into component, data, API, workflow, deployment, and implementation plans. It is not a replacement for the PRD.
 
 The PRD's invariants, numbered requirements, lifecycle states, authorization rules, service objectives, acceptance criteria, and decision register are normative. If this document conflicts with the PRD, the PRD wins. In particular, this document:
 

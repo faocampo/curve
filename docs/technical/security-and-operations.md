@@ -9,7 +9,7 @@
 | Audience | Security, identity, platform, SRE, backend, provider-adapter, and AI coding-agent teams |
 | Version | 0.2 |
 | Last updated | 2026-08-12 |
-| Normative source | [Curve PRD v0.6](../curve-ai-native-sdlc-prd.md) |
+| Normative source | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
 | Companion documents | [Architecture](architecture.md), [Domain model](domain-model.md), [Workflows and sequences](workflows-and-sequences.md), and [Integration contracts](integration-contracts.md) |
 
 ## Purpose and authority

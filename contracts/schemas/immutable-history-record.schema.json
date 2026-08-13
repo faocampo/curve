@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/immutable-history-record.schema.json",
+  "title": "Curve workspace-scoped immutable history record fields",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "workspace_id", "parent", "sequence", "recorded_at", "recorded_by"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+    "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
+    "parent": { "$ref": "common.schema.json#/$defs/ResourceRef" },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "recorded_at": { "$ref": "common.schema.json#/$defs/Instant" },
+    "recorded_by": { "$ref": "common.schema.json#/$defs/ActorRef" },
+    "classification": { "$ref": "common.schema.json#/$defs/DataClassification" },
+    "body_ref": { "$ref": "common.schema.json#/$defs/ObjectRef" },
+    "body_erased_at": {
+      "oneOf": [{ "$ref": "common.schema.json#/$defs/Instant" }, { "type": "null" }]
+    },
+    "erasure_receipt_ref": { "$ref": "common.schema.json#/$defs/ObjectRef" }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["body_erased_at"], "properties": { "body_erased_at": { "type": "string" } } },
+      "then": { "required": ["erasure_receipt_ref"] }
+    }
+  ]
+}

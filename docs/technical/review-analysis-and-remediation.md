@@ -7,7 +7,7 @@
 | Status | Remediation in progress; implementation is not yet authorized |
 | Version | 0.1 |
 | Review date | 2026-08-12 |
-| Reviewed baseline | Curve PRD v0.4; remediation target advanced through Curve PRD v0.6 and technical documentation v0.3 |
+| Reviewed baseline | Curve PRD v0.4; remediation target advanced through Curve PRD v0.7 and technical documentation v0.3 |
 | Audience | Product, engineering, architecture, security, platform operations, legal, and AI coding agents |
 | Authority | Records gaps and closure evidence; it does not override the PRD or approve an ADR |
 
