@@ -5,8 +5,8 @@
 | Field | Value |
 | ----- | ----- |
 | Status | D-001 direction selected; candidate foundation evidence with remaining acceptance gates |
-| Version | 0.4 |
-| Review date | 2026-08-12 |
+| Version | 0.5 |
+| Review date | 2026-08-13 |
 | Plane fork | `git@github.com:faocampo/plane.git` |
 | Inspected branch and commit | `preview` at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` |
 | Official upstream | `https://github.com/makeplane/plane.git`, `preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` |
@@ -20,19 +20,19 @@ The inspected Plane community fork is a suitable additive foundation for Curve. 
 
 The product sponsor approved using official Plane upstream as the updateable code baseline for Curve while implementing Curve in the fork. The `upstream` remote is configured as fetch-only, shared `preview` remains unchanged, and the candidate integration branch starts from the exact upstream `preview` commit. The fork baseline is its ancestor, so this update has no fork-only conflict: the fork was zero commits ahead and one commit behind.
 
-D-001 is not yet `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the verified candidate foundation is now pinned at `d380678912e9b46805ef852d2e05411f1fea6d8b`. Full repository checks and the approved local deployment smoke have passed. The repository-level community/commercial audit and reuse/build recommendation are complete; legal acceptance, named support/upgrade ownership, reviewed publication, and feature-disabled migration/rollback proof remain. No merge or push has been performed.
+D-001 is not yet `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the verified candidate foundation is pinned at `d380678912e9b46805ef852d2e05411f1fea6d8b`. Full repository checks and the approved local deployment smoke have passed. The candidate is published in the fork, and current `origin/preview` plus `upstream/preview` both resolve to its parent `1c8a60f858d8472aa56e29994ec1c7926da2c6ce`. The repository-level community/commercial audit and reuse/build recommendation are complete; legal acceptance, named support/upgrade ownership, human review/CI, merge, and feature-disabled migration/rollback proof remain.
 
 ## Repository and integration state
 
 | Property | Observation | Consequence |
 | -------- | ----------- | ----------- |
-| Fork branch | `preview`, still at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` and tracking `origin/preview` | Shared/current baseline was not rebased, reset, committed, or pushed. |
+| Fork branch | `origin/preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce`, matching `upstream/preview` on 2026-08-13 | The fork has incorporated the selected upstream base without rewriting it; the candidate remains separate and unmerged. |
 | Official upstream | Remote `upstream` fetches `https://github.com/makeplane/plane.git`; its push URL is disabled; `upstream/HEAD` and the selected ref are `preview` | Upstream changes are inspectable and fetchable without creating an accidental upstream push path. |
 | Upstream pin | `upstream/preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` | Candidate foundation base is reproducible and exact. |
-| Ancestry/divergence | Merge base is fork commit `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47`; fork is `0` ahead and `1` behind upstream | A fast-forward-equivalent candidate requires no fork conflict resolution. |
+| Historical ancestry/divergence | Before fork synchronization, merge base was `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47`; fork was `0` ahead and `1` behind upstream | Explains the selected integration path without asserting the historical state is current. |
 | Upstream delta | One commit, `[WEB-8632] fix(web): auto-reload on stale chunk load failure during navigation (#9579)`, changing three web files | No schema, dependency-lock, deployment, or license-file delta was introduced by this upstream update. |
-| Candidate branch | `curve/plane-upstream-sync-2026-08-12` at candidate commit `d380678912e9b46805ef852d2e05411f1fea6d8b`, one commit ahead of the read-only `upstream/preview` ref | All validation occurred away from shared `preview`; publication to the fork requires a later explicit push decision. |
-| Candidate commit and working tree | `d380678912e9b46805ef852d2e05411f1fea6d8b`; clean; one commit ahead of `upstream/preview` | Exact candidate is reproducible but is local only and has not been pushed, merged, or accepted as D-001. |
+| Candidate branch | Published `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`, one commit ahead of `origin/preview` and `upstream/preview` | Exact candidate is remotely reviewable; publication is not approval or merge. |
+| Candidate commit and working tree | `d380678912e9b46805ef852d2e05411f1fea6d8b`; clean and identical locally/remotely | Exact candidate is reproducible but remains unmerged and not accepted as D-001. |
 | Original working tree | Clean when first inspected | No pre-existing user change was overwritten or incorporated. |
 | Package manager | Pinned pnpm 11.3.0 in root package metadata | Use the repository-pinned package manager; do not substitute a global version. |
 | Backend | Django/DRF, PostgreSQL, Celery, pytest/Docker test stack | Add Curve Django/API modules and a separate Temporal worker boundary; do not replace Plane/Celery jobs. |
@@ -134,7 +134,7 @@ Targeted checks may provide fast feedback, but do not replace the full exit suit
 | `git diff --check` | PASS | The candidate correction has no whitespace errors. |
 | Local deployment smoke | PASS at exact candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` | Existing local Plane Compose project recreated from the candidate using its persistent development volumes. Migrator exited `0` with no pending migrations; API health returned `200 {"status":"OK"}`; worker and Beat initialized; a safe nonexistent-asset task was consumed. `check --deploy` exited `0` with five expected local-profile hardening warnings. See the detailed evidence below. |
 
-The candidate correction is committed locally but not pushed or merged. Its exact SHA and command results are foundation evidence, not a release or D-001 acceptance.
+The candidate correction is committed and published but not reviewed or merged. Its exact SHA and command results are foundation evidence, not a release or D-001 acceptance.
 
 ### Local deployment-smoke evidence
 

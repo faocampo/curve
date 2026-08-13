@@ -5,11 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Status | Active readiness control; approvals pending |
-| Version | 1.0 |
-| Date | 2026-08-12 |
+| Version | 1.1 |
+| Date | 2026-08-13 |
 | Normative product baseline | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Candidate Plane baseline | `d380678912e9b46805ef852d2e05411f1fea6d8b` pending reviewed merge to fork `preview` |
+| Published Curve baseline | `docs/m0-code-readiness-2026-08-12` at `e1f814af6142286d718e5551cbb0ce48a5c1ae25`; review pending |
+| Published Plane candidate | `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`; review and merge pending |
 
 ## Readiness rule
 
@@ -42,10 +44,10 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 
 | Package | State | Allowed scope or blocker |
 | --- | --- | --- |
-| P0-01 Plane inventory | IN_REVIEW | Repository-level capability/license-boundary proof and reuse/build recommendation are present; D-001 named engineering/licensing approval, support ownership, reviewed branch publication, and migration/rollback proof remain. |
+| P0-01 Plane inventory | IN_REVIEW | Repository-level capability/license-boundary proof and reuse/build recommendation are present and the candidate branch is published; D-001 named engineering/licensing approval, support ownership, branch review/CI, merge, and migration/rollback proof remain. |
 | P0-02 topology | IN_REVIEW | Exact local Temporal candidate pins/profile and a fail-closed staging/production matrix are documented; named D-003 approval and proof execution remain. |
 | P0-03 ADR set | IN_PROGRESS | M0-priority D-001/D-003/D-007/D-009 packets are decision-ready; named approvals and authorized proofs remain. D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
-| P0-04 documentation/contracts validation | READY_FOR_REVIEW | PRD v0.7, OpenAPI, 16 M0 JSON Schemas, positive/negative fixtures, Temporal/MCP contracts, traceability and validators are committed locally; publish/review remains. |
+| P0-04 documentation/contracts validation | READY_FOR_REVIEW | PRD v0.7, OpenAPI, 16 M0 JSON Schemas, positive/negative fixtures, Temporal/MCP contracts, traceability, validators, and dispatch packets are published at the pinned Curve SHA; human review remains. |
 | P0-05 test strategy | READY_FOR_IMPLEMENTATION | May proceed using synthetic fixtures. |
 | P0-06 local Temporal proof | BLOCKED | Requires named D-003 proof authorization and a pinned Temporal version/image. |
 | M0-01 module shell | BLOCKED | Requires D-001 and P0A documentation baseline approval. |

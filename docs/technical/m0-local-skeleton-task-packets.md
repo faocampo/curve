@@ -47,7 +47,8 @@ overwrite an existing environment file.
 
 | Blocker | Required resolution |
 | --- | --- |
-| `B-PUBLISH` | Curve baseline and Plane upstream-sync branches are published and reviewed. |
+| `B-PUBLISH` | Satisfied on 2026-08-13: Curve baseline `e1f814a...` and Plane candidate `d380678...` are published at their exact SHAs. |
+| `B-REVIEW` | Curve documentation baseline and Plane upstream-sync branch pass human review and required CI; publication alone does not satisfy this blocker. |
 | `B-BASE` | The reviewed upstream-sync is merged into fork `preview`; its exact merge SHA is recorded. |
 | `B-D001` | D-001 is `DECIDED` by named engineering and licensing owners. |
 | `B-D003` | Required only for M0-S3 and later: the local Temporal profile and proof authorization are `DECIDED`. |
@@ -62,7 +63,7 @@ No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S1-MODULE-SHELL` |
-| Status | `BLOCKED`: `B-PUBLISH`, `B-BASE`, `B-D001`, `B-PEOPLE`, `B-CONTEXT` |
+| Status | `BLOCKED`: `B-REVIEW`, `B-BASE`, `B-D001`, `B-PEOPLE`, `B-CONTEXT` |
 | Risk | `STANDARD`; new workspace authorization and application route boundary |
 | Outcome | Add a dedicated `plane.curve` Django app and an additive workspace UI shell, both disabled by default, without changing unrelated Plane behavior. |
 | Traceability | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 |

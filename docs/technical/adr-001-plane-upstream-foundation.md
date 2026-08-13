@@ -38,12 +38,13 @@ The product sponsor confirmed that the intended model is to use the original Pla
 
 | Evidence | Result |
 | -------- | ------ |
-| Fork baseline | `origin/preview` and local `preview` at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` |
+| Historical fork baseline | Fork `preview` was `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` before upstream synchronization |
 | Official upstream | `https://github.com/makeplane/plane.git`; fetch remote named `upstream`; push URL disabled |
 | Selected upstream pin | `upstream/preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` |
 | Divergence | Fork baseline is the merge base; fork `0` ahead and `1` behind |
 | Upstream delta | One web stale-chunk recovery commit; three web files; no migration, lockfile, deployment, or license-file change |
-| Candidate branch and commit | `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`; shared `preview` unchanged; candidate not pushed |
+| Current fork/upstream base | `origin/preview` and `upstream/preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` as verified on 2026-08-13 |
+| Candidate branch and commit | Published `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`; exactly one commit ahead; review/merge pending |
 | Frontend verification | `pnpm check`: 60/60 successful at the exact candidate SHA; `pnpm build`: 16/16 successful on the pre-commit-equivalent candidate tree |
 | Backend verification | Repository Compose suite: 516 passed, 92 warnings, 84.10 seconds; exit code 0 |
 | Local deployment smoke | PASS at exact candidate SHA using the existing local Plane Compose project and persistent development volumes: migrator `0`/no pending migrations, API health `200`, `check --deploy` exit `0` with five expected local-profile warnings, worker and Beat initialized, and safe nonexistent-asset task consumed. An unrelated X3M HR container required temporary Plane host-port remapping; it was untouched. |
@@ -59,7 +60,9 @@ The full command/result narrative and capability matrix are in the [Plane founda
 
 Use the official public Plane repository as Curve's upstream code baseline and Federico Ocampo's public fork as the Curve implementation and release repository. Fetch official changes through a remote named `upstream` whose push URL is disabled. Prepare every update on a new `curve/plane-upstream-sync-<date>` integration branch, compare exact ancestry/delta, and never force-rebase or force-push shared `preview`.
 
-An accepted integration commit becomes the only base for Curve implementation task packets. The local repository-level commercial/community audit and reuse/build recommendation are complete. This ADR does not yet accept the current candidate commit because named engineering/licensing approval, support ownership, reviewed publication, and feature-disabled migration/rollback proof remain incomplete.
+Keep the Curve and Plane repositories separate. The Curve repository is the governance and normative-contract source for PRDs, ADRs, security decisions, architecture, and immutable task packets. The public Plane fork owns deployable Curve code, migrations, UI, worker/runtime configuration, generated clients, and a pinned implementation snapshot or reference to the approved Curve contracts. This avoids a combined monorepo while allowing code and generated artifacts to change atomically in Plane. This boundary remains part of the `PROPOSED` D-001 decision until named owners approve it.
+
+An accepted integration commit becomes the only base for Curve implementation task packets. The local repository-level commercial/community audit and reuse/build recommendation are complete. Publishing the candidate supplies reviewable evidence but does not accept it. This ADR remains `PROPOSED` because named engineering/licensing approval, support ownership, human review/CI, and feature-disabled migration/rollback proof remain incomplete.
 
 ## Security, privacy, licensing, and operational impact
 
