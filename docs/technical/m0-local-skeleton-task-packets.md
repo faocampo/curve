@@ -1,76 +1,288 @@
 # M0 Local Skeleton Task Packets
 
-## Shared dispatch context
+## Document control
 
 | Field | Value |
 | --- | --- |
-| Repository | `git@github.com:faocampo/plane.git` |
-| Target branch | `preview` after reviewed upstream-sync merge |
-| Candidate base | `d380678912e9b46805ef852d2e05411f1fea6d8b`; replace with the reviewed merge SHA before any packet becomes `READY` |
-| Feature branch prefix | `curve/m0-` |
-| Normative docs | Curve PRD v0.7 and the exact committed Curve documentation revision |
-| Data | Synthetic local data only; no protected object bodies |
-| Feature posture | Curve disabled by default; foundation probe local-only |
-| Human review | Named Curve engineering reviewer required for every packet |
-| Global commands | `pnpm check`, `pnpm build`, complete Docker backend suite, local Compose smoke |
+| Status | Dispatch specifications complete; every packet remains `BLOCKED` pending its recorded prerequisites |
+| Version | 1.1 |
+| Date | 2026-08-13 |
+| Product baseline | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
+| Contract baseline floor | Curve commit `f72fe631244c0fa33d3a06ba2c61134f95fe1802` |
+| Plane candidate | `d380678912e9b46805ef852d2e05411f1fea6d8b` |
 
-Every packet begins `BLOCKED`. It becomes `READY` only after its named decision/dependency fields are satisfied and its pinned Curve/Plane commits and human owner/reviewer are recorded.
+## Purpose
+
+This document defines five repository-local implementation packets for the first
+Curve vertical proof. It is not an approval record. The dispatcher materializes
+one immutable packet at a time and records the exact Curve revision containing
+this specification. A packet is `READY` only after every placeholder and
+dependency below is resolved; otherwise the coding agent stops before mutation.
+
+## Shared dispatch context
+
+| Field | Required value |
+| --- | --- |
+| Repository | `git@github.com:faocampo/plane.git` |
+| Base branch | Fork `preview`, after reviewed upstream-sync merge |
+| Base SHA | Exact reviewed `preview` merge SHA; `d380678...` is a candidate and MUST NOT be dispatched as the final base |
+| Curve revision | Exact published Curve commit containing the approved PRD, contracts, ADRs, and this packet |
+| Branch | One feature branch per packet: `curve/m0-s1-module-shell` through `curve/m0-s5-observability` |
+| Human owner | Named person, recorded at dispatch; role-only values are invalid |
+| Human reviewer | Named person distinct from the coding agent, recorded at dispatch |
+| Data | Synthetic `INTERNAL` local fixtures only; no protected object bodies, repository secrets, customer data, or production data |
+| Model policy | Dispatcher-approved coding model; no Curve Model Gateway or runtime model call; no silent model/provider substitution |
+| Tool policy | Repository read/write, `git` read-only status/diff, `pnpm`, Docker Compose, and test tools only; no push, PR, deploy, cloud console, or external-system mutation |
+| Sandbox | Repository-scoped writes; no production credential; default-deny external egress except approved dependency retrieval; one active attempt; 2 vCPU, 8 GiB, two-hour limit when automated execution is used |
+| Cost budget | US$25 maximum automated attempt; dependency and local compute cost only; pause on exhaustion |
+| Global checks | `git diff --check`; `pnpm check`; `pnpm build`; `docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests` |
+| Cleanup | `docker compose -f docker-compose-test.yml down -v`; stop the Curve local profile; retain only source diff and sanitized test evidence |
+
+The repository instructions at `AGENTS.md`, `apps/api/tests/RUNNING_TESTS.md`,
+and `apps/api/tests/TESTING_GUIDE.md` are binding. `./setup.sh` is a human-run
+one-time prerequisite when local `.env` files do not exist; an agent MUST NOT
+overwrite an existing environment file.
+
+## Shared readiness blockers
+
+| Blocker | Required resolution |
+| --- | --- |
+| `B-PUBLISH` | Curve baseline and Plane upstream-sync branches are published and reviewed. |
+| `B-BASE` | The reviewed upstream-sync is merged into fork `preview`; its exact merge SHA is recorded. |
+| `B-D001` | D-001 is `DECIDED` by named engineering and licensing owners. |
+| `B-D003` | Required only for M0-S3 and later: the local Temporal profile and proof authorization are `DECIDED`. |
+| `B-PEOPLE` | The packet records named human owner and reviewer. |
+| `B-CONTEXT` | The materialized packet records its Curve revision and context-pack digest. |
+
+No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
+`DECIDED`.
 
 ## Packet M0-S1: Module shell
 
-| Field | Decision-complete content |
+| Field | Dispatch specification |
 | --- | --- |
-| Outcome | Add a dedicated `plane.curve` Django app, additive Curve UI route/navigation, and disabled-by-default configuration without changing unrelated Plane behavior. |
-| Dependencies | P0A documentation baseline; D-001 `DECIDED`; reviewed Plane base SHA. |
-| Scope | Django app/config/URL seam, workspace-scoped abstract model conventions, initial empty migration, TypeScript Curve namespace/client seam, workspace route and disabled state. |
-| Non-scope | Operation behavior, Temporal, providers, object storage, models/LLMs, production flags. |
-| Acceptance | Disabled mode exposes no Curve navigation/API; enabled local mode renders an authorized empty shell; cross-workspace URL attempts fail safely; migrations apply/reverse in disposable DB. |
-| Rollback | Disable Curve configuration and revert additive migration/code; existing Plane paths remain unchanged. |
+| Task ID | `CURVE-M0-S1-MODULE-SHELL` |
+| Status | `BLOCKED`: `B-PUBLISH`, `B-BASE`, `B-D001`, `B-PEOPLE`, `B-CONTEXT` |
+| Risk | `STANDARD`; new workspace authorization and application route boundary |
+| Outcome | Add a dedicated `plane.curve` Django app and an additive workspace UI shell, both disabled by default, without changing unrelated Plane behavior. |
+| Traceability | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 |
+| In scope | `apps/api/plane/curve/`; `apps/api/plane/settings/common.py`; `apps/api/plane/urls.py`; Curve-only tests; `apps/web/app/routes/`; Curve UI namespace; `packages/types/`; `packages/services/`; minimal configuration seam; minimal `apps/web` Vitest and React Testing Library harness for Curve tests |
+| Out of scope | Persisted Operation behavior, Temporal, providers, protected storage, policy engine, models/LLMs, production flags, and existing Plane route refactors |
+| Contracts | Public API prefix in `contracts/openapi/curve-v1.openapi.yaml`; `workspace-record.schema.json`; authorization lookup ordering in `m0-authorization-and-state-matrices.md` |
+| Migration | Add the Curve app and its initial additive migration; do not modify Plane migrations or existing tables. |
+| Rollback | Disable Curve configuration and routes; reverse the Curve migration only in the disposable test database; revert the packet commit. |
+
+### M0-S1 executable acceptance
+
+1. Given Curve is disabled, when an existing workspace is opened, then no Curve
+   navigation, UI route, or API route is exposed and existing Plane tests pass.
+2. Given Curve is enabled locally for workspace A, when an authorized member
+   opens the Curve route, then the empty shell renders without provider calls.
+3. Given a member of workspace A requests a Curve URL for workspace B, when the
+   request is authorized, then it is denied before any workspace-B object lookup.
+4. Given a disposable database, when Curve migrations run forward, backward to
+   zero, and forward again, then all three commands succeed without changing an
+   existing Plane table.
+
+### M0-S1 required commands
+
+```text
+git diff --check
+pnpm --filter=web check:lint
+pnpm --filter=web check:types
+pnpm --filter=web test
+pnpm --filter=web build
+pnpm --filter=@plane/types check:types
+pnpm --filter=@plane/services check:types
+docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -m "unit or contract"
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py makemigrations --check --dry-run
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve zero
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve
+pnpm check
+pnpm build
+```
 
 ## Packet M0-S2: Operation and delivery kernel
 
-| Field | Decision-complete content |
+| Field | Dispatch specification |
 | --- | --- |
-| Outcome | Persist workspace-scoped `Operation`, outbox/inbox, idempotency, and append-only audit records atomically. |
-| Dependencies | M0-S1 merged; schema/state contracts validated. |
-| Scope | Models, constraints, services, transaction boundaries, relay claim/ack/dead-letter primitives, optimistic versions, safe audit metadata. |
-| Non-scope | Temporal SDK, provider callbacks, protected body/object storage. |
-| Acceptance | Duplicate identical request returns original result; changed request under reused key returns `409`; concurrent relay claims have one effect; stale version returns `412`; cross-workspace access fails. |
-| Rollback | Disable relay and Curve APIs; reverse additive migrations only in disposable/local environments according to migration test. |
+| Task ID | `CURVE-M0-S2-DELIVERY-KERNEL` |
+| Status | `BLOCKED`: M0-S1 merged plus `B-PEOPLE`, `B-CONTEXT` |
+| Risk | `STANDARD`; transactional and immutable control-plane state |
+| Outcome | Persist workspace-scoped Operation, outbox, inbox, idempotency, and append-only audit records atomically. |
+| Traceability | FR-007, FR-021, FR-023, FR-044; NFR-004-NFR-005, NFR-018; AC-08, AC-26, AC-33-AC-34, AC-56 |
+| In scope | Curve models/migrations, uniqueness/check constraints, command service, transaction boundaries, optimistic concurrency, relay claim/ack/retry/dead-letter primitives, safe audit metadata, unit/contract/concurrency tests |
+| Out of scope | Temporal SDK, network relay, provider callbacks, protected bodies/object storage, general authorization policy adapters |
+| Contracts | `operation.schema.json`; `operation-event-v1.schema.json`; `event-envelope.schema.json`; `outbox-event.schema.json`; `inbox-message.schema.json`; `idempotency-record.schema.json`; `audit-event.schema.json`; state matrix |
+| Migration | Add only Curve-owned tables and indexes. Prove forward/backward/forward on a disposable database and retain generated SQL for review. |
+| Rollback | Stop relay/API writers, preserve inspection access, reverse only unshipped local Curve migrations, and revert the packet commit. |
+
+### M0-S2 executable acceptance
+
+1. Given the same workspace, principal, command, idempotency key, and request
+   digest, when submitted twice, then the second call returns the first result
+   and creates no second domain effect.
+2. Given an existing idempotency key, when its request digest changes, then the
+   command fails with `409` and records a safe no-effect audit event.
+3. Given two relay claimers, when both contend for one pending outbox row, then
+   only one claim can produce an external-delivery attempt.
+4. Given an aggregate version is stale, when a mutation is attempted, then it
+   fails with `412` and no outbox event is committed.
+5. Given a workspace-A identity and workspace-B identifiers, when any kernel
+   query or mutation runs, then no workspace-B row or existence detail is exposed.
+
+### M0-S2 required commands
+
+```text
+git diff --check
+docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -m "unit or contract"
+docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/curve/tests -k "idempotency or outbox or inbox or audit or concurrency"
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py makemigrations --check --dry-run
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve zero
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve
+pnpm check
+pnpm build
+docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
+```
 
 ## Packet M0-S3: Temporal round trip
 
-| Field | Decision-complete content |
+| Field | Dispatch specification |
 | --- | --- |
-| Outcome | Deliver one harmless operation through outbox, dedicated Temporal worker, idempotent application activities, cancellation, and terminal audit state. |
-| Dependencies | M0-S2 merged; D-003 local profile `DECIDED`; Temporal server/SDK/image pinned; proof authorization. |
-| Scope | Python SDK, worker entrypoint, local Compose `curve` profile, namespace/task queue, workflow/activity contracts, relay-to-Temporal dispatch, replay corpus. |
-| Non-scope | Staging/production Temporal, OpenHands, gVisor, protected payloads, Celery replacement. |
-| Acceptance | Exactly one workflow per operation under duplicate delivery; restart/retry produces no duplicate mutation; cancellation terminates; history replay passes; payload inspection contains no protected data. |
-| Rollback | Disable Curve worker/profile and relay dispatch; operations remain inspectable and can be failed/cancelled by an authorized local recovery command. |
+| Task ID | `CURVE-M0-S3-TEMPORAL-ROUND-TRIP` |
+| Status | `BLOCKED`: M0-S2 merged, `B-D003`, pinned server/SDK/image, proof authorization, `B-PEOPLE`, `B-CONTEXT` |
+| Risk | `STANDARD`; durable asynchronous control flow, local synthetic data only |
+| Outcome | Deliver one harmless Operation through the outbox, a dedicated Temporal worker, idempotent application activities, cancellation, and terminal audit state. |
+| Traceability | FR-015, FR-022; NFR-004; AC-17-AC-21, AC-58 |
+| In scope | Pinned Python SDK; separate Curve worker entrypoint built from the API image; additive `curve` Compose profile; namespace/task queue; workflow/activity contracts; relay dispatch; cancellation; replay corpus; local health checks |
+| Out of scope | Staging/production Temporal, OpenHands, gVisor, protected payloads, Celery replacement, business workflows |
+| Contracts | `contracts/temporal/m0-workflow-contract.md`; Operation/Event/Outbox/Inbox/Audit schemas; D-003 decided record |
+| Migration | Additive Operation workflow fields/indexes only if the reviewed contract requires them; otherwise no migration. |
+| Rollback | Disable relay dispatch and the `curve` profile; stop the Curve worker/Temporal services; retain inspectable terminal/cancelled operations; revert the packet commit. |
+
+### M0-S3 executable acceptance
+
+1. Given duplicate outbox delivery for one Operation, when the relay starts the
+   workflow twice, then Temporal and the application record one workflow effect.
+2. Given the worker stops after an activity effect but before acknowledgement,
+   when it restarts, then retry completes without a duplicate mutation.
+3. Given an authorized cancellation, when the workflow is running, then the
+   Operation reaches `CANCELLED` without an orphaned activity or resource.
+4. Given every committed replay fixture, when replayed with the new worker, then
+   no nondeterminism error occurs.
+5. Given Temporal payloads and histories are inspected, then they contain only
+   identifiers, digests, classifications, and approved references—never protected bodies.
+
+### M0-S3 required commands
+
+```text
+git diff --check
+docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -k "workflow or temporal or replay or cancellation"
+docker compose -f docker-compose-local.yml --profile curve config
+docker compose -f docker-compose-local.yml --profile curve up -d
+docker compose -f docker-compose-local.yml --profile curve ps
+docker compose -f docker-compose-local.yml --profile curve down
+pnpm check
+pnpm build
+docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
+```
 
 ## Packet M0-S4: API, SSE, and minimal UI
 
-| Field | Decision-complete content |
+| Field | Dispatch specification |
 | --- | --- |
-| Outcome | Expose authorized operation reads/cancellation, resumable workspace events, and a minimal local foundation-probe experience. |
-| Dependencies | M0-S1-M0-S3 merged; OpenAPI/SSE contracts validated. |
-| Scope | DRF endpoints, Problem Details, ETag/If-Match, cursor pagination, local-only probe command, SSE resume, TypeScript types/services, workspace page. |
-| Non-scope | General initiative UI, evidence, provider configuration UI, production probe endpoint. |
-| Acceptance | OpenAPI contract tests; 202/Location/ETag behavior; SSE reconnect resumes without duplication; expired cursor returns `410`; unauthorized workspace access fails before object disclosure; accessible loading/error/terminal states. |
-| Rollback | Disable Curve route/API; no change to existing Plane routes or state. |
+| Task ID | `CURVE-M0-S4-API-SSE-UI` |
+| Status | `BLOCKED`: M0-S1-M0-S3 merged plus `B-PEOPLE`, `B-CONTEXT` |
+| Risk | `STANDARD`; authenticated user-visible API and workspace boundary |
+| Outcome | Expose authorized Operation create/read/cancel behavior, resumable workspace events, and a minimal local foundation-probe UI. |
+| Traceability | FR-023; NFR-002-NFR-005, NFR-013; AC-01, AC-20, AC-35 |
+| In scope | DRF endpoints; RFC 9457 errors; ETag/If-Match; idempotency; cursor pagination; local-only probe command; SSE resume; generated/checked TypeScript types/services; workspace page; API and state-view tests extending the M0-S1 frontend harness |
+| Out of scope | General initiative UI, evidence, provider configuration UI, WebSockets, production probe endpoint, broad frontend test-platform refactor |
+| Contracts | `curve-v1.openapi.yaml`; `operation.schema.json`; `sse-event.schema.json`; error/idempotency/pagination conventions; authorization/state matrices |
+| Migration | None unless an approved contract defect requires an additive Curve migration; stop for contract review before adding it. |
+| Rollback | Disable the Curve UI and API routes, stop SSE publication, retain operation/audit records, and revert the packet commit. |
+
+### M0-S4 executable acceptance
+
+1. Given an authorized request with a new idempotency key, when the probe is
+   created, then the API returns `202`, `Location`, ETag, and a contract-valid Operation.
+2. Given an incorrect or absent `If-Match`, when cancellation is requested, then
+   the API returns safe `412` or `428` Problem Details and commits no mutation.
+3. Given an SSE client reconnects with its last acknowledged event ID, when newer
+   events exist, then only later events stream in order without duplication.
+4. Given a cursor older than the supported replay window, when SSE reconnects,
+   then the server returns `410` with a recoverable resync instruction.
+5. Given a workspace-A identity probes workspace B, when the endpoint resolves,
+   then authorization fails before object disclosure.
+6. Given disabled, loading, running, failed, cancelled, and succeeded states, when
+   rendered, then the page is keyboard-accessible and exposes no raw server error.
+
+### M0-S4 required commands
+
+```text
+git diff --check
+pnpm --filter=web test
+pnpm --filter=web check:lint
+pnpm --filter=web check:types
+pnpm --filter=web build
+pnpm --filter=@plane/types check:types
+pnpm --filter=@plane/services check:types
+docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -m contract
+docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/curve/tests -k "operation or sse or idempotency or workspace"
+pnpm check
+pnpm build
+docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
+```
 
 ## Packet M0-S5: Audit and observability
 
-| Field | Decision-complete content |
+| Field | Dispatch specification |
 | --- | --- |
-| Outcome | Correlate the local operation across HTTP, database, relay, workflow, and UI without leaking protected data. |
-| Dependencies | M0-S2-M0-S4 merged; X3M telemetry conventions documented. |
-| Scope | Structured safe logs, OpenTelemetry spans, Prometheus metrics, audit completeness checks, redaction tests, local Grafana dashboard definition and alerts for stuck/failed operations. |
-| Non-scope | Raw prompt/code/evidence telemetry, Langfuse model traces, production SLO approval. |
-| Acceptance | One correlation chain is queryable; actor/effective principal recorded; secrets and fixture sentinel strings absent from logs/traces/metrics; dashboard shows throughput, latency, failures, retries, backlog, and worker health. |
-| Rollback | Disable Curve exporters/dashboard while retaining minimum application audit records. |
+| Task ID | `CURVE-M0-S5-OBSERVABILITY` |
+| Status | `BLOCKED`: M0-S2-M0-S4 merged, documented X3M telemetry conventions, `B-PEOPLE`, `B-CONTEXT` |
+| Risk | `STANDARD`; telemetry is a potential data-exfiltration boundary |
+| Outcome | Correlate the local Operation across HTTP, database, relay, workflow, and UI without leaking protected or credential data. |
+| Traceability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 |
+| In scope | Structured safe logs; OpenTelemetry spans; Prometheus metrics; audit completeness; redaction tests; local Grafana dashboard definition; stuck/failed Operation and worker-health alerts |
+| Out of scope | Raw prompt/code/evidence telemetry, Langfuse model traces, production SLO approval, production dashboard deployment |
+| Contracts | `audit-event.schema.json`; `access-envelope.schema.json`; Event/Operation schemas; `security-and-operations.md` telemetry and redaction rules |
+| Migration | No migration expected. Stop for contract review if new persisted telemetry fields are proposed. |
+| Rollback | Disable Curve exporters and remove the dashboard definition while retaining minimum application audit records; revert the packet commit. |
+
+### M0-S5 executable acceptance
+
+1. Given one synthetic probe, when it completes, then one correlation chain links
+   HTTP, outbox, workflow, activity, Operation history, audit, and SSE evidence.
+2. Given human and service activity, when audited, then authenticated actor and
+   effective principal are attributable and workspace scoped.
+3. Given sentinel secrets and protected-body strings in negative fixtures, when
+   all paths run, then none appears in logs, traces, metric labels, or errors.
+4. Given the local dashboard, when successful, failed, retried, and stuck fixtures
+   run, then it displays throughput, latency, failures, retries, backlog, and worker health.
+
+### M0-S5 required commands
+
+```text
+git diff --check
+docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -k "audit or telemetry or redaction or correlation"
+docker compose -f docker-compose-local.yml --profile curve config
+docker compose -f docker-compose-local.yml --profile curve up -d
+docker compose -f docker-compose-local.yml --profile curve ps
+pnpm check
+pnpm build
+docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
+docker compose -f docker-compose-local.yml --profile curve down
+```
 
 ## Local vertical checkpoint
 
-The checkpoint passes when an authorized user enables Curve locally, starts one synthetic probe, observes `PENDING` through a terminal state over SSE, and can trace exactly one outbox delivery, workflow, activity result, operation history, and audit chain. The same idempotency key and a worker restart produce no duplicate effect. Disabling Curve restores the original Plane experience.
+The checkpoint passes only when all five packet branches have been reviewed and
+merged in dependency order. An authorized user enables Curve locally, starts one
+synthetic probe, observes `PENDING` through a terminal state over SSE, and traces
+exactly one outbox delivery, workflow, activity result, Operation history, and
+audit chain. Reusing the idempotency key and restarting the worker produce no
+duplicate effect. Cancellation leaves no orphaned work. Disabling Curve restores
+the original Plane experience, and the complete Plane frontend/backend suites pass.
+
+Protected storage, staging/production activation, OpenHands, Orca, GitLab/GitHub
+mutation, Onyx, model calls, and customer data are outside this checkpoint.

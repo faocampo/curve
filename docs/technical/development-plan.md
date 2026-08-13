@@ -265,7 +265,7 @@ objective: <one demonstrable repository-local outcome>
 repository: <approved repository>
 base_branch: <approved target>
 base_sha: <exact SHA>
-prd_version: "0.5"
+prd_version: "0.7"
 technical_doc_versions: {}
 requirements: [FR-000, NFR-000, AC-00]
 decisions_and_adrs: []
@@ -274,11 +274,15 @@ out_of_scope: []
 dependencies: []
 contracts: []
 data_classification: INTERNAL
+risk_tier: STANDARD
 context_pack_digest: sha256:...
 required_commands: []
 acceptance_tests: []
 migration_and_rollback: <explicit behavior>
-budgets: {}
+model_policy: <approved model and no-substitution rule>
+tool_policy: <explicit allowlist and prohibited side effects>
+sandbox_policy: <limits, egress, credentials, timeout, and cleanup>
+budgets: <cost, duration, CPU, memory, and attempt limits>
 human_owner: <identity>
 human_reviewer: <identity>
 ```
