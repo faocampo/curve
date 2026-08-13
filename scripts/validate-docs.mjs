@@ -69,14 +69,22 @@ for (const file of markdownFiles) {
 
 const temporary = mkdtempSync(join(tmpdir(), "curve-mermaid-"));
 try {
+  const puppeteerConfig = join(temporary, "puppeteer-config.json");
+  if (process.env.CI === "true") {
+    writeFileSync(
+      puppeteerConfig,
+      `${JSON.stringify({ args: ["--no-sandbox", "--disable-setuid-sandbox"] }, null, 2)}\n`,
+    );
+  }
+
   diagrams.forEach((diagram, index) => {
     const input = join(temporary, `${index}.mmd`);
     const output = join(temporary, `${index}.svg`);
     writeFileSync(input, `${diagram.source}\n`);
     try {
-      execFileSync(join(root, "node_modules/.bin/mmdc"), ["--quiet", "--input", input, "--output", output], {
-        stdio: "pipe"
-      });
+      const args = ["--quiet", "--input", input, "--output", output];
+      if (process.env.CI === "true") args.push("--puppeteerConfigFile", puppeteerConfig);
+      execFileSync(join(root, "node_modules/.bin/mmdc"), args, { stdio: "pipe" });
     } catch (error) {
       const detail = error.stderr?.toString().trim() || error.message;
       failures.push(`${relative(root, diagram.file)}:${diagram.line}: invalid Mermaid: ${detail}`);
