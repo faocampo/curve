@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 0.3 |
+| Version | 0.4 |
 | Last updated | 2026-08-15 |
 | Source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
@@ -29,6 +29,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 8. New head commits invalidate commit-bound validation. Human readiness remains a separate gate.
 9. No package may introduce a second general knowledge index, a second lifecycle authority, or a provider-specific domain model.
 10. R0A and R0B are validation configurations. Only completion of M0-M6 and AC-01-AC-60 constitutes R1.
+11. A package that creates or materially changes a user-facing flow may begin implementation only after its [Curve Experience Blueprint](curve-experience-blueprint.md) record is approved. The record supplies the intended user outcome, information-architecture placement, role and permission model, screen/state flow, progressive-disclosure rules, and task-based prototype review evidence.
 
 ## Planning assumptions
 
@@ -73,6 +74,7 @@ A work package is `READY` only when it has:
 - Repository instructions and required build/lint/type/test/security commands.
 - Model/tool/sandbox budgets and data classification.
 - Rollback or disablement behavior.
+- For a user-facing flow, an approved [Curve Experience Blueprint](curve-experience-blueprint.md) record linked from the work package. The record includes the target role/job, primary task flow, normal/loading/empty/error/permission-limited states, primary actions, accessibility behavior, and prototype-review outcome.
 - A unique item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) whose stable ID matches the package and whose status is `Ready`.
 
 If any item is absent, the coding agent stops before mutation and reports the missing prerequisite.
@@ -315,6 +317,7 @@ A slice is done only when:
 - Migrations are forward/backward tested and rollback/disable behavior is demonstrated.
 - Authorization, workspace isolation, audit, metrics, logs, traces, redaction, budgets, and error behavior are implemented.
 - User-facing flows pass accessibility and failure/recovery scenarios.
+- User-facing flows conform to their approved Curve Experience Blueprint; material interaction changes include an updated screen/state flow and prototype-review disposition.
 - Documentation and ADRs are updated without restricted evidence.
 - The implementation report maps every changed behavior to requirement/test IDs.
 - The trusted controller, not the agent, created the draft; Code Readiness remains a human decision.

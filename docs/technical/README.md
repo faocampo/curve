@@ -11,6 +11,7 @@ The suite is implementation-oriented. D-001 is owner-approved and recorded as `D
 | Document | Purpose | Primary authority |
 | -------- | ------- | ----------------- |
 | [Architecture](architecture.md) | Logical components, deployment profiles, trust zones, data/control flow, storage, orchestration, and operability | Component ownership and boundaries |
+| [C4 architecture views](c4-architecture.md) | System context, containers, module components, actors, and relationships | Navigational diagrams derived from the Architecture and component contracts |
 | [Domain model](domain-model.md) | Aggregates, entities, fields, cardinalities, invariants, persistence, versioning, and deletion | Curve data semantics |
 | [Workflows and sequences](workflows-and-sequences.md) | Initiative, slice, agent, quality, VCS, contract, recovery, and Temporal execution flows | State-transition and orchestration behavior |
 | [Integration contracts](integration-contracts.md) | Public API, commands, events, SSE, webhooks, adapters, idempotency, and reconciliation | Wire and provider boundaries |
@@ -45,7 +46,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 ## Reading order
 
 1. Read the PRD and its decision register.
-2. Read Architecture and Domain Model to understand boundaries and truth ownership.
+2. Read Architecture, C4 Architecture Views, and Domain Model to understand boundaries and truth ownership.
 3. Read Workflows and Sequences with Integration Contracts to understand commands, states, events, and failure behavior.
 4. Read Security and Operations before selecting credentials, providers, destinations, runners, or deployment topology.
 5. Read Engineering Patterns and Technologies before creating component designs or code conventions.
@@ -57,6 +58,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 flowchart TD
     prd["Curve PRD v0.8"] --> decisions["D-001 through D-016 and ADRs"]
     prd --> architecture[Architecture]
+    architecture --> c4["C4 architecture views"]
     prd --> domain[Domain model]
     architecture --> workflows[Workflows and sequences]
     domain --> workflows
