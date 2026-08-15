@@ -10,7 +10,7 @@
 | Normative product baseline | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Candidate Plane baseline | `d380678912e9b46805ef852d2e05411f1fea6d8b` pending reviewed merge to fork `preview` |
-| Published Curve baseline | `docs/m0-code-readiness-2026-08-12` at `e55c0fb948801a1c2a50e31bab5cebb4a8a5e412`; review pending |
+| Published Curve baseline | `docs/m0-code-readiness-2026-08-12` at `2b39e89bcf0a46bd5feff3ffc6e56c1cc00b0bd0`; review pending; `validate` passed |
 | Published Plane candidate | `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`; review and merge pending |
 
 ## Readiness rule
@@ -47,7 +47,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | P0-01 Plane inventory | IN_REVIEW | Repository-level capability/license-boundary proof and reuse/build recommendation are present and the candidate branch is published. Federico Ocampo is assigned as engineering approver, licensing reviewer, support/upgrade owner, and interim human reviewer for both PRs. Formal D-001 approval, review disposition, merge, and migration/rollback proof remain. |
 | P0-02 topology | IN_REVIEW | Exact local Temporal candidate pins/profile and a fail-closed staging/production matrix are documented; named D-003 approval and proof execution remain. |
 | P0-03 ADR set | IN_PROGRESS | M0-priority D-001/D-003/D-007/D-009 packets are decision-ready; named approvals and authorized proofs remain. D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
-| P0-04 documentation/contracts validation | IN_REVIEW | PRD v0.7, OpenAPI, 16 M0 JSON Schemas, positive/negative fixtures, Temporal/MCP contracts, traceability, validators, and dispatch packets are published at `e55c0fb...`. Ownership commit `9ae80c8...` and the GitHub Project governance changes remain local because the active all-branch ruleset rejects updates to the existing PR branch. |
+| P0-04 documentation/contracts validation | IN_REVIEW | PRD v0.7, OpenAPI, 16 M0 JSON Schemas, positive/negative fixtures, Temporal/MCP contracts, traceability, validators, dispatch packets, ownership assignments, and GitHub Project governance are published at `2b39e89...`; required `validate` passed in [run 31856435020](https://github.com/faocampo/curve/actions/runs/31856435020). Federico's exact-head review disposition remains. |
 | P0-05 test strategy | READY_FOR_IMPLEMENTATION | May proceed using synthetic fixtures. |
 | P0-06 local Temporal proof | BLOCKED | Requires named D-003 proof authorization and a pinned Temporal version/image. |
 | M0-01 module shell | BLOCKED | Requires D-001 and P0A documentation baseline approval. |
@@ -60,11 +60,11 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | M0-08 audit/observability | BLOCKED | Requires the implemented M0 foundation packages. |
 | M0-09 provider registry | BLOCKED | Requires M0-03, M0-05, M0-07, and D-007 before MCP enablement. |
 
-## Repository-governance blocker
+## Interim repository-governance configuration
 
-[Curve ruleset 20824868](https://github.com/faocampo/curve/rules/20824868) applies to `~ALL` branches with no bypass actor. It enforces branch creation restrictions, pull requests with one approval, linear history, `validate`, CodeQL, code quality, and 90% coverage. On 2026-08-14 it rejected a fast-forward update of the existing documentation PR branch at local commit `9ae80c8...`. The Plane fork currently reports no repository rulesets.
+[Curve ruleset 20824868](https://github.com/faocampo/curve/rules/20824868) originally applied to `~ALL` branches with no bypass actor. It enforced branch creation restrictions, pull requests with one approval, linear history, `validate`, CodeQL, code quality, and 90% coverage. On 2026-08-14 it rejected a fast-forward update of the existing documentation PR branch at local commit `9ae80c8...`. The Plane fork reported no repository rulesets.
 
-Before the Curve baseline can advance, the repository owner must approve a ruleset scope/check configuration that permits feature-branch creation and update while retaining required review on the protected default branch. The agent does not disable or bypass repository protection.
+Federico Ocampo authorized an interim bootstrap configuration on 2026-08-14. The ruleset now targets `~DEFAULT_BRANCH`, retains creation/deletion/non-fast-forward protection, linear history, pull-request enforcement, and strict `validate`, and sets the approval count to zero because the current PR author and interim reviewer are both `faocampo`. CodeQL, code-quality, and coverage rules are deferred until applicable workflows exist. The existing branch then advanced to `2b39e89...` and `validate` passed. Curve retains an exact-head human disposition as a procedural gate, and the approval count returns to one when PRs use a separate trusted-controller or service author identity.
 
 ## Approval record
 

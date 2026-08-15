@@ -10,7 +10,7 @@
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) |
 | Interim human reviewer | Federico Ocampo (`faocampo`) |
-| Last reconciliation | 2026-08-14: 70 total items, 70 unique IDs, zero duplicates, all Size values set |
+| Last reconciliation | 2026-08-14 at Curve revision `2b39e89...`: 70 total items, 70 unique IDs, zero duplicates, all Size values set |
 
 ## Purpose
 
