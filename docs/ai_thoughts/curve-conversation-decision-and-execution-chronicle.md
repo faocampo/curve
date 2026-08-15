@@ -28,7 +28,7 @@ The principal architecture is now:
 - Onyx supplies permission-aware internal knowledge under the initiating user's identity.
 - A read-only MCP registry exposes approved tools and contextual sources.
 - A thin Curve Model Gateway enforces model, provider, classification, policy, and budget decisions above X3M's OpenRouter access.
-- OpenHands is the first coding execution provider; Orca remains behind the provider interface until its official contract is proven.
+- OpenHands is the first automated coding execution provider; Orca is a developer-operated MCP client with bounded, attributed workflow write-back and no automated-provider authority.
 - gVisor-isolated Kubernetes runners execute coding and quality jobs.
 - A trusted Curve controller, never an agent, owns commits, pushes, and draft MR creation.
 - GitLab is the R0B pilot VCS; GitHub and GitLab remain R1 targets.
@@ -643,4 +643,276 @@ Federico approved the final Curve decision-record head `24a66ef1c642f91b29648c7f
 
 Curve PR #1 was marked ready and squash-merged under the active linear-history rule. Curve `main` now resolves to `1529b8b7f04f226ac8be151f89104b6582650b42`. Required validation passed both on exact PR head `24a66ef...` in run 31884924454 and on the merged `main` commit in run 31887095811. The interim ruleset remains active and continues to require strict `validate` on the default branch.
 
-These outcomes satisfy the D-001 publication, review, and base-pin blockers. P0-01 and P0-04 can therefore move to `Done`; R-005 and R-026 can close. M0-01 remains blocked because P0-02, named-person assignment, context pinning, and its GitHub Project `Ready` transition are still incomplete. The GitHub Project synchronizer now uses merged `origin/main` as the normative source ref so future body refreshes do not point at an obsolete feature branch.
+These outcomes satisfy the D-001 publication, review, and base-pin blockers. P0-01 and P0-04 can therefore move to `Done`; R-005 and R-026 can close. At this historical point, M0-01 remained blocked by P0-02, named-person assignment, context pinning, and a GitHub Project `Ready` transition. Federico's later visual-tracking clarification superseded that Project-status dependency. The GitHub Project synchronizer now uses merged `origin/main` as the normative source ref so future body refreshes do not point at an obsolete feature branch.
+
+## 2026-08-15: post-foundation reconciliation and local proof authorization
+
+Federico approved Curve PR #2 at exact head
+`e525848ec6e98bd0590f2feee07260a92104f3ff` and authorized its squash merge.
+The PR was verified clean and mergeable with `validate` successful, then merged
+to Curve `main` at `fe8664a1fd58d34bb10273d3da2d39804659bbfc`.
+Post-merge Documentation contracts run 31888595658 passed. The GitHub Project
+synchronizer refreshed all 70 governed items to that exact source revision and
+independent verification found 70 ownership markers, 70 matching source
+revisions, and the preserved status distribution.
+
+The next dispatch audit separated topology approval from proof acceptance.
+ADR-003 proposal content digest
+`sha256:cac4dcac2a03156faf21b0deffdc22bec611da1b070a421b4d5b631bfec8a142`
+already fixed an off-by-default Temporal development profile, exact local
+image/server/SDK pins, synthetic payload rules, loopback ports, a dedicated
+worker, replay and cancellation evidence, and rollback without disturbing
+Plane. It had never been executed. Treating the profile as fully decided would
+therefore have overstated the evidence.
+
+Federico explicitly acted as the Platform Operations decision owner for the
+`LOCAL_ONLY` scope, approved the local sections at that revision as a proof basis,
+authorized planning for P0-06 (two-stage local Temporal proof), named OpenAI
+Codex as technical operator under his oversight, and assigned himself as human
+owner and reviewer for M0-S1 (module-shell implementation packet). That approval binds
+the named local scope, revision, owner, operator, synthetic proof purpose, and
+non-local exclusions. It does not approve the revision's staging/production
+candidate content.
+
+Independent proof review then found a security/validity conflict. The original
+local proposal placed `curve-worker` on Plane's shared `dev_env` with Plane
+application environment, making local PostgreSQL, RabbitMQ, Valkey, MinIO, and
+development credentials reachable. The hardened draft isolated the proof, but
+that meant its result could not validate the proposal or decide D-003. The same
+review required committed executable harness sources, protected single-use
+claims, credential-safe evidence capture, a local-daemon identity check,
+crash/expiry handling, applied resource inspection, and complete sanitized
+evidence.
+
+Federico approved the recommended two-stage response. P0-06A is an isolated,
+credential-free primitive feasibility proof and cannot decide D-003 or unblock
+M0-S3. Accepted P0-06A evidence returns P0-06 to `Backlog`. P0-06B will later
+define and prove a least-privilege Plane integration topology under its own
+packet and exact-head approval; only accepted P0-06B evidence may support the
+local decision. The publication packet proposes a unique P0-06A attempt ID,
+fixed UTC window, two-hour/2 vCPU/8 GiB/US$25 limits, immutable reviewed harness
+image, protected claim tag, canonical evidence, fail-fast conditions, and
+label/ID-checked cleanup. Those mechanics become binding only through exact-head
+publication, harness, and immutable per-attempt-manifest approvals. A versioned
+stage record links the exact readiness/claim/review projection into Project #2,
+and a separately named trusted controller owns every GitHub mutation while
+Codex is limited to the approved local harness and candidate sanitized
+evidence. Until all gates pass, P0-06 (two-stage local Temporal proof) remains
+`Backlog/BLOCKED` and P0-06B (least-privilege Plane integration proof) remains
+unauthorized.
+
+This decision also exposed a monolithic dispatch rule that contradicted the
+approved incremental task packets. The development plan previously required
+P0-01 through P0-05 and every M0 decision before the first coding task even
+though M0-S1 has no Temporal, MCP, provider, protected-storage, or non-local
+behavior. Federico approved packet-scoped readiness: each task waits for the P0
+packages, decisions, contracts, people, repository base, context digest,
+commands, and Project state named by its immutable packet. Future decisions
+remain fail-closed at their consumers.
+
+The same audit identified a possible D-006/D-007 dependency cycle and missing
+trust/error contracts. Federico's approval did not decide that security
+architecture. D-007 remains gated for MCP-enabled packages and its ordering
+with D-006 requires named Security, Platform Administration, and Agent Platform
+review. D-009 continues to block protected-object persistence, retention-dependent
+capabilities, and every operational staging or production activation; bounded
+local work may use only synthetic data and minimum non-sensitive metadata.
+
+The final authorization audit then closed several second-order execution gaps
+before publication. Three execution-authority approvals remain required for
+P0-06A: documentation, harness, and per-attempt authorization. Their approval
+comments use exact machine-validated contracts, bind distinct merged PR heads,
+and require app-identified successful checks. A later projection-only PR records
+the already-known heads, URLs, timestamps, checks, and digests because a tracked
+file cannot contain the future SHA or approval URL of its own commit. That PR
+adds no execution authority and still receives ordinary repository review.
+
+Artifact validation now hashes only a dedicated harness subtree with a
+domain-separated, mode-sensitive algorithm; symlinks, submodules, LFS pointers,
+invalid paths, empty trees, and content drift fail closed. Canonical supply-chain
+and attempt manifests bind the selected image/platform, SBOM, provenance,
+controller, claim, ticket/start-grant, lease, preflight, runtime, and cleanup
+inputs. Their exact bytes must remain identical across the immutable manifest
+revision, approved attempt head, and merged source.
+
+The controller boundary was initially split into three non-overlapping leases.
+Execution owns claim/start, reconciliation owns bounded cleanup and transition
+to review, and a later review-disposition lease owns only the attributable
+exact-evidence-head disposition and `In review` to `Backlog` transition. A
+versioned runtime marker prevents routine Project synchronization from erasing
+terminal controller evidence before the corresponding stage-record update
+merges. Ready-state mutation is single-item, rejects that marker, validates
+merged approvals/artifacts/checks, and refreshes GitHub trusted time immediately
+before the write. These are governance/tooling changes only: no harness, Docker
+resource, GitHub Project status, ruleset, Plane application code, or
+infrastructure was changed during this step. The later visual-tracking authority
+clarification superseded this Project marker and status-transition design.
+
+### P0-06A authorization-contract hardening
+
+An independent post-patch audit found that several statements above were still
+stronger than their mechanical evidence. The Project `Ready` path repeated only
+its time-window check immediately before writing; body and status were separate
+unreconciled operations. Controller, preflight, schema, lease, and policy
+digests were copied between records rather than recomputed from named bytes.
+The projection-only PR was described but not bound to an exact diff or CI. The
+terminal marker could be released for a revoked or expired disposition lease,
+without proving lease consumption, non-overlap, exact terminal state, or a link
+to the prior marker.
+
+The contract was consequently revised to
+`curve.proof-stage-projection/v2`. The harness keeps its dedicated tree digest;
+all authorization inputs now occupy a second fixed, mode-sensitive subtree at
+`docs/technical/proofs/p0-06a/authorization/`. Its external digest and every
+artifact path/raw-byte digest are checked at the immutable bundle revision,
+attempt-approved head, and merged source. The bundle includes the attempt and
+supply-chain manifests, SBOM, provenance, preflight, executable controller and
+per-attempt config/conformance/allowlist, ticket/grant schemas, public key,
+four lease profiles, and reconciliation policy. The authorization comment
+binds the bundle digest without placing a self-digest inside the bundle.
+
+The claim ledger now uses a live, active ruleset over the one exact tag. The
+ruleset permits the atomic initial creation, prevents update and deletion, has
+no bypass actor, and is normalized into an attempt-approved digest. Any live
+ruleset drift, omitted bypass visibility, or pre-existing claim ref invalidates
+readiness. This removes standing controller bypass authority while retaining a
+single create-ref claim attempt whose every result consumes the authorization.
+
+The three documentation, harness, and attempt PRs remain the only execution-
+authority approvals. A fourth one-file stage-projection PR receives a separate
+`curve.projection-review/v1` repository-integrity disposition; its exact bytes,
+file list, merge ancestry, and app-bound checks are derived and validated live.
+The dependency graph is enforced as documentation completion, harness review/
+completion, preflight, attempt review/completion, projection review/completion,
+then trusted readiness time.
+
+At that intermediate revision, Project readiness wrote the deterministic body
+while the item remained `Backlog`, read it back, reran the complete live
+validation, set `Ready`, and read back exact identity/body/status before
+returning success. Lost responses were reconciled only from exact intended
+state. Ambiguous state received no compensating mutation or controller success
+receipt.
+
+That intermediate terminal-release design required `P0-06A_REVIEWED`, consumed
+authorization and
+claim, consumed non-overlapping execution/reconciliation/disposition/
+terminal-projection-publication leases,
+an allowed claim outcome, immutable reviewed evidence, app-bound evidence and
+terminal-projection checks, four projected operation records, exact Project
+identity/status, and `prior_stage_record_digest` equal to the live runtime
+marker. The disposition lease was issued only after Federico's review and
+evidence merge checks. Its authority window ended before a separate JIT
+terminal-projection publication lease was issued. A revoked or expired lease
+could not release the marker. At that revision the terminal projection changed
+exactly the v2 stage
+record, disposition-operation record, and terminal-projection-publication
+operation record and received a separate integrity review.
+
+### P0-06A (isolated Temporal feasibility proof) final documentation audit
+
+The final documentation audit identified that the three-lease design ended
+before publication of the terminal-projection PR, even though controller-only
+GitHub mutation remained a fixed security boundary. The contract therefore adds
+a fourth non-overlapping JIT terminal-projection publication lease. It binds one
+exact branch, base, three-file diff, draft PR, final non-force update, operation
+evidence, expiry, and controller principal; it grants no approval, merge,
+Project, ruleset, workflow, deployment, or unrelated-ref authority. GitHub live
+reads, app-bound checks, Federico's exact-head review, merge, and byte equality
+prove the submitted publication. At that revision, ambiguity consumed the lease
+and left the runtime marker fenced; the later visual-tracking clarification
+removed the Project marker from the proof contract.
+
+The same audit required an executable vocabulary rather than isolated enum
+lists. The proof packet now defines every P0-06A authorization, claim outcome,
+evidence-branch, ticket, lease, review, and stage value, together with its only
+valid predecessor, trigger, write-once timestamps, evidence, and terminal
+behavior. The stage projection carries the fourth profile, lease, branch, and
+operation-evidence fields in their initial unavailable/null state.
+
+ADR-003 (runtime topology and trust-zone decision) now classifies the shared
+`dev_env`/Plane-environment topology as historical and superseded. P0-06B
+(least-privilege Plane integration proof) network and worker topology remain
+explicitly unresolved until their own packet, design, and exact-head approval.
+Affected governance sections also introduce catalog identifiers as
+`ID (short description)` on first use so status reports remain readable without
+memorizing the catalog.
+
+These changes remain documentation and governance-tooling work. They preserve
+P0-06A (isolated Temporal feasibility proof) as `Backlog/BLOCKED`, keep D-003
+(runtime topology and trust-zone decision) `PROPOSED`, and leave P0-06B
+(least-privilege Plane integration proof) unplanned and unauthorized. No
+Docker, GitHub Project, ruleset, Plane application, or infrastructure mutation
+occurred while hardening the contract.
+
+### P0-06A (isolated Temporal feasibility proof) activation and attestation correction
+
+A final security review superseded the immediately preceding terminal-
+publication description in two places. First, GitHub Project `Ready` is only a
+non-authoritative routing projection. An independently deployed broker must pass
+its pinned conformance suite, recheck the live exact-tag ruleset and every
+authorization input at claim time, and issue a signed, short-lived start grant.
+The wrapper verifies and consumes that grant before any Docker operation; no
+Project mutation activates execution. The current catalog synchronizer cannot
+move P0-06 (two-stage local Temporal proof) to `Ready` or release its terminal
+marker until broker and attestation verification are implemented and
+conformant.
+
+Second, a claim can fail before a ticket exists or can return an ambiguous or
+non-exact create result. The contract now assigns those dispatched outcomes to
+a fixed reconciliation evidence branch and the dedicated
+`create-reconciliation-evidence-ref` operation. Exactly one normal or
+reconciliation evidence branch must reach `EVIDENCE_MERGED`, while ticket,
+start-grant, and execution-lease terminal requirements are selected by the
+actual outcome. The four approved profiles can therefore issue up to four
+non-overlapping leases rather than requiring all four leases for every outcome.
+
+The terminal three-file pull request now carries precomputable publication
+intent: base SHA, branch, returned pull-request number, exact paths, publication
+lease issued data, operation IDs, and idempotency keys. It makes no claim about
+its own digest, final head, final file digests, success, or lease consumption.
+After GitHub publication, the pinned broker/GitHub App produces a signed
+`curve.p0-06a-publication-attestation/v1` object outside the pull request. That
+object binds the exact final terminal-projection PR head before merge, all three
+file digests, GitHub request and response IDs, application/installation/
+controller principal, operation results, and lease consumption with trusted
+times. Merge SHA, ancestry, app-bound checks, and merged-byte equality are later
+post-merge observations. Federico Ocampo's exact-head review binds the
+attestation URI, digest, key ID, and signature. The authoritative terminal
+evidence categories are consequently three operation-evidence records, the
+checked three-file publication intent, and the signed external attestation.
+
+This correction preserves D-003 (runtime topology and trust-zone decision) as
+`PROPOSED`, P0-06A in `P0-06A_DESIGN` with authorization `PROPOSED` and Project
+status `Backlog`, and P0-06B (least-privilege Plane integration proof) as
+`NOT_AUTHORIZED`.
+
+### GitHub Project visual-tracking authority clarification
+
+Federico Ocampo clarified that GitHub Project #2 is only a medium for following
+development visually. He authorized direct status updates at any time and
+removed project-management status decisions from the approval process. This
+supersedes every earlier statement that treated `Backlog`, `Ready`, `In
+progress`, `In review`, or `Done` as an execution prerequisite or as part of a
+proof lease.
+
+The resulting boundary is explicit:
+
+- Federico Ocampo or authorized automation may update any of the 70 Project
+  items for visual accuracy without a separate lease or approval artifact.
+- Project status does not mutate a Curve initiative, slice, attempt, gate,
+  quality run, or Temporal workflow.
+- Product decisions, architecture decisions, human gates, evidence review,
+  sandbox policy, and signed broker start grants retain their own authority.
+- P0-06A (isolated Temporal feasibility proof) board updates use the same
+  administrative synchronizer path as every other work package.
+- GitHub Project item/status/body identifiers were removed from the P0-06A
+  attempt operation bindings. The remaining eight bindings cover only execution
+  and VCS operations.
+- The review-disposition lease remains because it protects Federico's exact
+  evidence decision. It produces a signed immutable disposition receipt and has
+  no GitHub Project mutation authority.
+
+The technical state remains D-003 (runtime topology and trust-zone decision)
+`PROPOSED`, P0-06A at `P0-06A_DESIGN` with authorization `PROPOSED`, and P0-06B
+(least-privilege Plane integration proof) `NOT_AUTHORIZED`. The current Project
+column may change independently because it is informational metadata.

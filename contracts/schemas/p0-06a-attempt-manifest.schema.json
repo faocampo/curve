@@ -1,0 +1,587 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/p0-06a-attempt-manifest.schema.json",
+  "title": "Curve P0-06A isolated Temporal proof attempt manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "authorization_id",
+    "attempt_id",
+    "evidence_base_sha",
+    "documentation",
+    "supply_chain",
+    "plane",
+    "controller",
+    "broker",
+    "claim",
+    "handshake",
+    "leases",
+    "preflight",
+    "window",
+    "runtime_limits",
+    "host_artifacts",
+    "required_checks",
+    "security_incident_owner"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.p0-06a-attempt/v1" },
+    "authorization_id": { "const": "D003-LOCAL-PROOF-A-2026-08-15-01" },
+    "attempt_id": {
+      "type": "string",
+      "pattern": "^d003-local-p0-06a-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}$"
+    },
+    "evidence_base_sha": { "$ref": "#/$defs/sha" },
+    "documentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approved_head", "context_digest"],
+      "properties": {
+        "approved_head": { "$ref": "#/$defs/sha" },
+        "context_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "supply_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest",
+        "harness_source_revision",
+        "harness_bundle",
+        "image_repository",
+        "image_index_digest",
+        "image_platform",
+        "image_platform_manifest_digest",
+        "image_platform_config_digest",
+        "sbom",
+        "provenance"
+      ],
+      "properties": {
+        "manifest": { "$ref": "#/$defs/pathDigest" },
+        "harness_source_revision": { "$ref": "#/$defs/sha" },
+        "harness_bundle": { "$ref": "#/$defs/pathDigest" },
+        "image_repository": {
+          "type": "string",
+          "pattern": "^ghcr\\.io/[a-z0-9._/-]+$",
+          "maxLength": 255
+        },
+        "image_index_digest": { "$ref": "#/$defs/digest" },
+        "image_platform": { "type": "string", "enum": ["linux/amd64", "linux/arm64"] },
+        "image_platform_manifest_digest": { "$ref": "#/$defs/digest" },
+        "image_platform_config_digest": { "$ref": "#/$defs/digest" },
+        "sbom": { "$ref": "#/$defs/pathDigest" },
+        "provenance": { "$ref": "#/$defs/pathDigest" }
+      }
+    },
+    "plane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision"],
+      "properties": {
+        "repository": { "const": "git@github.com:faocampo/plane.git" },
+        "revision": { "const": "549db1aea8f3307b337b3686dbb844a87549cd95" }
+      }
+    },
+    "controller": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal",
+        "source_revision",
+        "executable",
+        "configuration",
+        "conformance_report",
+        "operation_allowlist",
+        "operation_bindings_digest",
+        "operation_bindings"
+      ],
+      "properties": {
+        "principal": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "source_revision": { "$ref": "#/$defs/sha" },
+        "executable": { "$ref": "#/$defs/pathDigest" },
+        "configuration": { "$ref": "#/$defs/pathDigest" },
+        "conformance_report": { "$ref": "#/$defs/pathDigest" },
+        "operation_allowlist": { "$ref": "#/$defs/pathDigest" },
+        "operation_bindings_digest": { "$ref": "#/$defs/digest" },
+        "operation_bindings": { "$ref": "#/$defs/operationBindings" }
+      }
+    },
+    "broker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal",
+        "source_revision",
+        "conformance_report",
+        "claim_ruleset_recheck_policy",
+        "operation_receipt_schema",
+        "publication_attestation_schema",
+        "publication_attestation_verification_key",
+        "publication_attestation_key_id",
+        "publication_attestation_store_uri_template",
+        "issuer",
+        "audience",
+        "credential_boundary"
+      ],
+      "properties": {
+        "principal": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "source_revision": { "$ref": "#/$defs/sha" },
+        "conformance_report": { "$ref": "#/$defs/pathDigest" },
+        "claim_ruleset_recheck_policy": { "$ref": "#/$defs/pathDigest" },
+        "operation_receipt_schema": { "$ref": "#/$defs/pathDigest" },
+        "publication_attestation_schema": { "$ref": "#/$defs/pathDigest" },
+        "publication_attestation_verification_key": { "$ref": "#/$defs/pathDigest" },
+        "publication_attestation_key_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "publication_attestation_store_uri_template": {
+          "type": "string",
+          "pattern": "^https://",
+          "maxLength": 2000
+        },
+        "issuer": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "audience": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "credential_boundary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["execution_mode", "controller_receives", "raw_github_credential_exposure"],
+          "properties": {
+            "execution_mode": { "const": "BROKER_EXECUTES_OR_SIGNS_EXACT_OPERATION" },
+            "controller_receives": { "const": "OPAQUE_LEASE_HANDLE_AND_SIGNED_RECEIPT_ONLY" },
+            "raw_github_credential_exposure": { "const": "NONE_INCLUDING_PROCESS_MEMORY" }
+          }
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "ruleset_id",
+        "ruleset_url",
+        "ruleset_snapshot_digest",
+        "execution_evidence_ref",
+        "reconciliation_evidence_ref"
+      ],
+      "properties": {
+        "ref": {
+          "const": "refs/tags/curve-proof-claims/d003-local-p0-06a-2026-08-15-01"
+        },
+        "ruleset_id": { "type": "integer", "minimum": 1 },
+        "ruleset_url": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "ruleset_snapshot_digest": { "$ref": "#/$defs/digest" },
+        "execution_evidence_ref": {
+          "const": "refs/heads/agent/p0-06a-isolated-temporal-proof-d003-2026-08-15-01"
+        },
+        "reconciliation_evidence_ref": {
+          "const": "refs/heads/agent/p0-06a-reconciliation-evidence-d003-2026-08-15-01"
+        }
+      }
+    },
+    "handshake": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ticket_schema", "start_grant_schema", "verification_key", "key_id"],
+      "properties": {
+        "ticket_schema": { "$ref": "#/$defs/pathDigest" },
+        "start_grant_schema": { "$ref": "#/$defs/pathDigest" },
+        "verification_key": { "$ref": "#/$defs/pathDigest" },
+        "key_id": { "type": "string", "minLength": 1, "maxLength": 255 }
+      }
+    },
+    "leases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution", "reconciliation", "disposition", "terminal_projection"],
+      "properties": {
+        "execution": { "$ref": "#/$defs/pathDigest" },
+        "reconciliation": { "$ref": "#/$defs/pathDigest" },
+        "disposition": { "$ref": "#/$defs/pathDigest" },
+        "terminal_projection": { "$ref": "#/$defs/pathDigest" }
+      }
+    },
+    "preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report", "completed_at", "expires_at"],
+      "properties": {
+        "report": { "$ref": "#/$defs/pathDigest" },
+        "completed_at": { "$ref": "#/$defs/instant" },
+        "expires_at": { "$ref": "#/$defs/instant" }
+      }
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "not_before",
+        "claim_by",
+        "active_fixed_expiry",
+        "reconciliation_fixed_expiry",
+        "review_deadline"
+      ],
+      "properties": {
+        "not_before": { "$ref": "#/$defs/instant" },
+        "claim_by": { "$ref": "#/$defs/instant" },
+        "active_fixed_expiry": { "$ref": "#/$defs/instant" },
+        "reconciliation_fixed_expiry": { "$ref": "#/$defs/instant" },
+        "review_deadline": { "$ref": "#/$defs/instant" }
+      }
+    },
+    "runtime_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cpu_nanos", "memory_bytes", "memory_swap_bytes", "pids", "duration_seconds", "cost_usd"],
+      "properties": {
+        "cpu_nanos": { "const": 2000000000 },
+        "memory_bytes": { "const": 8589934592 },
+        "memory_swap_bytes": { "const": 8589934592 },
+        "pids": { "const": 256 },
+        "duration_seconds": { "const": 7200 },
+        "cost_usd": { "const": 25 }
+      }
+    },
+    "host_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["purpose", "path", "cleanup"],
+        "properties": {
+          "purpose": {
+            "type": "string",
+            "enum": ["WORKTREE", "CANDIDATE_EVIDENCE", "RAW_OUTPUT", "QUARANTINE", "TEMPORARY_STATE"]
+          },
+          "path": { "$ref": "#/$defs/absolutePath" },
+          "cleanup": { "type": "string", "enum": ["DELETE", "QUARANTINE", "PRESERVE_FOR_REVIEW"] }
+        }
+      }
+    },
+    "required_checks": { "$ref": "#/$defs/requiredChecks" },
+    "security_incident_owner": { "type": "string", "minLength": 1, "maxLength": 255 }
+  },
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "instant": { "type": "string", "format": "date-time" },
+    "relativePath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9._/-]+$",
+      "maxLength": 1000
+    },
+    "absolutePath": {
+      "type": "string",
+      "pattern": "^/private/tmp/[A-Za-z0-9._/-]+$",
+      "maxLength": 1000
+    },
+    "pathDigest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "nullableSha": {
+      "oneOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }]
+    },
+    "nullableProjectId": {
+      "oneOf": [
+        { "type": "string", "pattern": "^(?:PVTI|DI|PVTSSF)_[A-Za-z0-9_-]+$" },
+        { "type": "null" }
+      ]
+    },
+    "nullableOptionId": {
+      "oneOf": [
+        { "type": "string", "pattern": "^[A-Za-z0-9_-]+$", "minLength": 1 },
+        { "type": "null" }
+      ]
+    },
+    "operationBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lease_type",
+        "operation_id",
+        "action",
+        "method",
+        "repository_resource",
+        "project_resource",
+        "ref",
+        "sha",
+        "force",
+        "project_item_id",
+        "project_content_id",
+        "project_field_id",
+        "project_option_id",
+        "expected_before_state",
+        "expected_after_state",
+        "max_calls",
+        "idempotency_key"
+      ],
+      "properties": {
+        "lease_type": {
+          "type": "string",
+          "enum": ["execution", "reconciliation", "disposition", "terminal_projection"]
+        },
+        "operation_id": {
+          "type": "string",
+          "enum": [
+            "create-claim-ref",
+            "create-evidence-ref",
+            "create-reconciliation-evidence-ref",
+            "update-evidence-ref",
+            "write-evidence-objects",
+            "create-terminal-projection-ref",
+            "finalize-terminal-projection-ref",
+            "create-terminal-projection-draft-pr"
+          ]
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "CREATE_REF",
+            "UPDATE_REF",
+            "WRITE_GIT_OBJECTS",
+            "CREATE_DRAFT_PULL_REQUEST"
+          ]
+        },
+        "method": { "type": "string", "enum": ["POST", "PATCH"] },
+        "repository_resource": {
+          "oneOf": [{ "const": "repos/faocampo/curve" }, { "type": "null" }]
+        },
+        "project_resource": {
+          "oneOf": [{ "const": "users/faocampo/projects/2" }, { "type": "null" }]
+        },
+        "ref": {
+          "oneOf": [
+            { "type": "string", "pattern": "^refs/(?:heads|tags)/[A-Za-z0-9._/-]+$" },
+            { "type": "null" }
+          ]
+        },
+        "sha": { "$ref": "#/$defs/nullableSha" },
+        "force": { "const": false },
+        "project_item_id": { "$ref": "#/$defs/nullableProjectId" },
+        "project_content_id": { "$ref": "#/$defs/nullableProjectId" },
+        "project_field_id": { "$ref": "#/$defs/nullableProjectId" },
+        "project_option_id": { "$ref": "#/$defs/nullableOptionId" },
+        "expected_before_state": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "expected_after_state": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "max_calls": { "const": 1 },
+        "idempotency_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{16,255}$"
+        }
+      }
+    },
+    "repositoryBinding": {
+      "allOf": [
+        { "$ref": "#/$defs/operationBinding" },
+        {
+          "properties": {
+            "repository_resource": { "const": "repos/faocampo/curve" },
+            "project_resource": { "type": "null" },
+            "ref": { "type": "string", "pattern": "^refs/(?:heads|tags)/[A-Za-z0-9._/-]+$" },
+            "sha": { "$ref": "#/$defs/sha" },
+            "project_item_id": { "type": "null" },
+            "project_content_id": { "type": "null" },
+            "project_field_id": { "type": "null" },
+            "project_option_id": { "type": "null" }
+          }
+        }
+      ]
+    },
+    "operationBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "create-claim-ref",
+        "create-evidence-ref",
+        "create-reconciliation-evidence-ref",
+        "update-evidence-ref",
+        "write-evidence-objects",
+        "create-terminal-projection-ref",
+        "finalize-terminal-projection-ref",
+        "create-terminal-projection-draft-pr"
+      ],
+      "properties": {
+        "create-claim-ref": {
+          "allOf": [
+            { "$ref": "#/$defs/repositoryBinding" },
+            {
+              "properties": {
+                "lease_type": { "const": "execution" },
+                "operation_id": { "const": "create-claim-ref" },
+                "action": { "const": "CREATE_REF" },
+                "method": { "const": "POST" },
+                "ref": { "const": "refs/tags/curve-proof-claims/d003-local-p0-06a-2026-08-15-01" },
+                "expected_before_state": { "const": "REF_ABSENT" },
+                "expected_after_state": { "const": "REF_AT_BOUND_SHA" }
+              }
+            }
+          ]
+        },
+        "create-evidence-ref": {
+          "allOf": [
+            { "$ref": "#/$defs/repositoryBinding" },
+            {
+              "properties": {
+                "lease_type": { "const": "execution" },
+                "operation_id": { "const": "create-evidence-ref" },
+                "action": { "const": "CREATE_REF" },
+                "method": { "const": "POST" },
+                "ref": { "const": "refs/heads/agent/p0-06a-isolated-temporal-proof-d003-2026-08-15-01" },
+                "expected_before_state": { "const": "REF_ABSENT" },
+                "expected_after_state": { "const": "REF_AT_BOUND_SHA" }
+              }
+            }
+          ]
+        },
+        "create-reconciliation-evidence-ref": {
+          "allOf": [
+            { "$ref": "#/$defs/repositoryBinding" },
+            {
+              "properties": {
+                "lease_type": { "const": "reconciliation" },
+                "operation_id": { "const": "create-reconciliation-evidence-ref" },
+                "action": { "const": "CREATE_REF" },
+                "method": { "const": "POST" },
+                "ref": { "const": "refs/heads/agent/p0-06a-reconciliation-evidence-d003-2026-08-15-01" },
+                "expected_before_state": { "const": "REF_ABSENT" },
+                "expected_after_state": { "const": "REF_AT_BOUND_SHA" }
+              }
+            }
+          ]
+        },
+        "update-evidence-ref": {
+          "allOf": [
+            { "$ref": "#/$defs/repositoryBinding" },
+            {
+              "properties": {
+                "lease_type": { "const": "reconciliation" },
+                "operation_id": { "const": "update-evidence-ref" },
+                "action": { "const": "UPDATE_REF" },
+                "method": { "const": "PATCH" },
+                "ref": { "const": "refs/heads/agent/p0-06a-isolated-temporal-proof-d003-2026-08-15-01" },
+                "expected_before_state": { "const": "REF_AT_EVIDENCE_BASE_SHA" },
+                "expected_after_state": { "const": "REF_AT_BOUND_SHA" }
+              }
+            }
+          ]
+        },
+        "write-evidence-objects": {
+          "allOf": [
+            { "$ref": "#/$defs/repositoryBinding" },
+            {
+              "properties": {
+                "lease_type": { "const": "reconciliation" },
+                "operation_id": { "const": "write-evidence-objects" },
+                "action": { "const": "WRITE_GIT_OBJECTS" },
+                "method": { "const": "POST" },
+                "expected_before_state": { "const": "SANITIZED_EVIDENCE_READY" },
+                "expected_after_state": { "const": "OBJECTS_PRESENT_AT_BOUND_SHA" }
+              }
+            }
+          ]
+        },
+        "create-terminal-projection-ref": {
+          "allOf": [
+            { "$ref": "#/$defs/repositoryBinding" },
+            {
+              "properties": {
+                "lease_type": { "const": "terminal_projection" },
+                "operation_id": { "const": "create-terminal-projection-ref" },
+                "action": { "const": "CREATE_REF" },
+                "method": { "const": "POST" },
+                "ref": { "const": "refs/heads/agent/p0-06a-terminal-projection-d003-2026-08-15-01" },
+                "expected_before_state": { "const": "REF_ABSENT" },
+                "expected_after_state": { "const": "REF_AT_BOUND_SHA" }
+              }
+            }
+          ]
+        },
+        "finalize-terminal-projection-ref": {
+          "allOf": [
+            { "$ref": "#/$defs/repositoryBinding" },
+            {
+              "properties": {
+                "lease_type": { "const": "terminal_projection" },
+                "operation_id": { "const": "finalize-terminal-projection-ref" },
+                "action": { "const": "UPDATE_REF" },
+                "method": { "const": "PATCH" },
+                "ref": { "const": "refs/heads/agent/p0-06a-terminal-projection-d003-2026-08-15-01" },
+                "expected_before_state": { "const": "REF_AT_BOOTSTRAP_SHA" },
+                "expected_after_state": { "const": "REF_AT_BOUND_SHA" }
+              }
+            }
+          ]
+        },
+        "create-terminal-projection-draft-pr": {
+          "allOf": [
+            { "$ref": "#/$defs/repositoryBinding" },
+            {
+              "properties": {
+                "lease_type": { "const": "terminal_projection" },
+                "operation_id": { "const": "create-terminal-projection-draft-pr" },
+                "action": { "const": "CREATE_DRAFT_PULL_REQUEST" },
+                "method": { "const": "POST" },
+                "ref": { "const": "refs/heads/agent/p0-06a-terminal-projection-d003-2026-08-15-01" },
+                "expected_before_state": { "const": "DRAFT_PR_ABSENT" },
+                "expected_after_state": { "const": "DRAFT_PR_OPEN_AT_BOUND_REF" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "checkBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "app_id"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "app_id": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "requiredChecks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentation_head",
+        "documentation_merge",
+        "harness_head",
+        "harness_merge",
+        "attempt_head",
+        "attempt_merge",
+        "projection_head",
+        "projection_merge",
+        "evidence_head",
+        "evidence_merge",
+        "terminal_projection_head",
+        "terminal_projection_merge"
+      ],
+      "properties": {
+        "documentation_head": { "$ref": "#/$defs/checkList" },
+        "documentation_merge": { "$ref": "#/$defs/checkList" },
+        "harness_head": { "$ref": "#/$defs/checkList" },
+        "harness_merge": { "$ref": "#/$defs/checkList" },
+        "attempt_head": { "$ref": "#/$defs/checkList" },
+        "attempt_merge": { "$ref": "#/$defs/checkList" },
+        "projection_head": { "$ref": "#/$defs/checkList" },
+        "projection_merge": { "$ref": "#/$defs/checkList" },
+        "evidence_head": { "$ref": "#/$defs/checkList" },
+        "evidence_merge": { "$ref": "#/$defs/checkList" },
+        "terminal_projection_head": { "$ref": "#/$defs/checkList" },
+        "terminal_projection_merge": { "$ref": "#/$defs/checkList" }
+      }
+    },
+    "checkList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/checkBinding" }
+    }
+  }
+}

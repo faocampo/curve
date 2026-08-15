@@ -5,10 +5,10 @@
 | Field | Value |
 | --- | --- |
 | Status | Dispatch specifications complete; every packet remains `BLOCKED` pending its recorded prerequisites |
-| Version | 1.4 |
+| Version | 1.5 |
 | Date | 2026-08-15 |
 | Product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
-| Contract baseline floor | Accepted Curve `main` commit `1529b8b7f04f226ac8be151f89104b6582650b42` |
+| Contract baseline floor | Accepted Curve `main` commit `fe8664a1fd58d34bb10273d3da2d39804659bbfc` |
 | Plane foundation base | Accepted fork `preview` commit `549db1aea8f3307b337b3686dbb844a87549cd95` |
 
 ## Purpose
@@ -26,10 +26,10 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | Repository | `git@github.com:faocampo/plane.git` |
 | Base branch | Fork `preview` |
 | Base SHA | `549db1aea8f3307b337b3686dbb844a87549cd95`; every materialized packet must verify the live base still matches or use a separately reviewed descendant |
-| Curve revision | At least accepted governance baseline `1529b8b7f04f226ac8be151f89104b6582650b42`; materialization records the exact current approved Curve revision and context digest |
-| GitHub Project item | Exact item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and set to `Ready` before dispatch |
+| Curve revision | At least accepted governance baseline `fe8664a1fd58d34bb10273d3da2d39804659bbfc`; materialization records the exact merged Curve revision containing the packet and its context digest |
+| GitHub Project item | Exact visual-tracking item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and maintained during delivery |
 | Branch | One feature branch per packet: `curve/m0-s1-module-shell` through `curve/m0-s5-observability` |
-| Human owner | Named person, recorded at dispatch; role-only values are invalid |
+| Human owner | Federico Ocampo for M0-S1; every later packet records its own named person at dispatch; role-only values are invalid |
 | Human reviewer | Federico Ocampo (`faocampo`) for the current phase, distinct from the coding agent; any replacement must be named at dispatch |
 | Data | Synthetic `INTERNAL` local fixtures only; no protected object bodies, repository secrets, customer data, or production data |
 | Model policy | Dispatcher-approved coding model; no Curve Model Gateway or runtime model call; no silent model/provider substitution |
@@ -48,15 +48,15 @@ overwrite an existing environment file.
 
 | Blocker | Required resolution |
 | --- | --- |
-| `B-PUBLISH` | Satisfied: Curve PR #1 merged at `1529b8b7f04f226ac8be151f89104b6582650b42`; Plane PR #1 merged at `549db1aea8f3307b337b3686dbb844a87549cd95`. |
-| `B-REVIEW` | Satisfied for the foundation: Federico approved Curve head `24a66ef...` and Plane head `d380678...`; both PRs merged and Curve head/post-merge CI passed. Each later implementation packet still requires its own exact-head review. |
+| `B-PUBLISH` | Satisfied: Curve PR #2 merged at `fe8664a1fd58d34bb10273d3da2d39804659bbfc`; Plane PR #1 merged at `549db1aea8f3307b337b3686dbb844a87549cd95`. |
+| `B-REVIEW` | Satisfied for the foundation and post-merge reconciliation: Federico approved the applicable exact Curve and Plane heads; both repositories merged and exact-main CI passed. Each later proof or implementation output still requires its own exact-head review. |
 | `B-BASE` | Satisfied: reviewed upstream-sync is merged into fork `preview` at `549db1aea8f3307b337b3686dbb844a87549cd95`. |
 | `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Federico Ocampo against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
-| `B-P002` | P0-02 topology reaches `Done` with an approved local development boundary; its unresolved environment decisions remain explicit. |
-| `B-D003` | Required only for M0-S3 and later: the local Temporal profile and proof authorization are `DECIDED`. |
-| `B-PEOPLE` | The packet records a named human owner and Federico Ocampo (`faocampo`) as reviewer, or a named replacement reviewer. |
+| `B-P002` | Pending: the local topology boundary and two-stage proof direction are owner-approved, but the exact-head record must merge. The P0-02 Project status is visual metadata and may be updated independently. No proof result, shared-network decision, or non-local authority is implied. |
+| `B-D003` | Required only for M0-S3 (local Temporal round trip) and later: P0-06B (least-privilege Plane integration proof) evidence is accepted and the D-003 (runtime topology and trust-zone decision) `LOCAL_ONLY` profile is formally `DECIDED`. P0-06A (isolated Temporal feasibility proof) acceptance alone does not satisfy this blocker. |
+| `B-PEOPLE` | Satisfied for M0-S1: Federico Ocampo is its named human owner and reviewer. Every later packet records a named human owner plus Federico Ocampo (`faocampo`) or a named replacement reviewer. |
 | `B-CONTEXT` | The materialized packet records its Curve revision and context-pack digest. |
-| `B-PROJECT` | The owning M0 package exists exactly once in GitHub Project #2 and is `Ready`; execution updates it under the project status contract. |
+| `B-PROJECT` | The owning M0 package exists exactly once in GitHub Project #2 for visual tracking. Its status is informational and does not gate dispatch. |
 
 No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 `DECIDED`.
@@ -66,8 +66,9 @@ No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S1-MODULE-SHELL` |
-| Status | `BLOCKED`: `B-P002`, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT`; `B-PUBLISH`, `B-REVIEW`, `B-BASE`, and `B-D001` are satisfied |
+| Status | `BLOCKED`: `B-P002`, `B-CONTEXT`, and `B-PROJECT`; `B-PUBLISH`, `B-REVIEW`, `B-BASE`, `B-D001`, and `B-PEOPLE` are satisfied |
 | Risk | `STANDARD`; new workspace authorization and application route boundary |
+| Human owner and reviewer | Federico Ocampo (`faocampo`); the AI coding agent is the separate implementer |
 | Outcome | Add a dedicated `plane.curve` Django app and an additive workspace UI shell, both disabled by default, without changing unrelated Plane behavior. |
 | Traceability | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 |
 | In scope | `apps/api/plane/curve/`; `apps/api/plane/settings/common.py`; `apps/api/plane/urls.py`; Curve-only tests; `apps/web/app/routes/`; Curve UI namespace; `packages/types/`; `packages/services/`; minimal configuration seam; minimal `apps/web` Vitest and React Testing Library harness for Curve tests |
@@ -160,13 +161,13 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S3-TEMPORAL-ROUND-TRIP` |
-| Status | `BLOCKED`: M0-S2 merged, `B-D003`, pinned server/SDK/image, proof authorization, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
+| Status | `BLOCKED`: M0-S2 merged, accepted P0-06B evidence and `B-D003`, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
 | Risk | `STANDARD`; durable asynchronous control flow, local synthetic data only |
 | Outcome | Deliver one harmless Operation through the outbox, a dedicated Temporal worker, idempotent application activities, cancellation, and terminal audit state. |
 | Traceability | FR-015, FR-022; NFR-004; AC-17-AC-21, AC-58 |
 | In scope | Pinned Python SDK; separate Curve worker entrypoint built from the API image; additive `curve` Compose profile; namespace/task queue; workflow/activity contracts; relay dispatch; cancellation; replay corpus; local health checks |
 | Out of scope | Staging/production Temporal, OpenHands, gVisor, protected payloads, Celery replacement, business workflows |
-| Contracts | `contracts/temporal/m0-workflow-contract.md`; Operation/Event/Outbox/Inbox/Audit schemas; D-003 decided record |
+| Contracts | `contracts/temporal/m0-workflow-contract.md`; Operation/Event/Outbox/Inbox/Audit schemas; accepted P0-06A feasibility report; accepted P0-06B integration report; D-003 `LOCAL_ONLY` decided record |
 | Migration | Additive Operation workflow fields/indexes only if the reviewed contract requires them; otherwise no migration. |
 | Rollback | Disable relay dispatch and the `curve` profile; stop the Curve worker/Temporal services; retain inspectable terminal/cancelled operations; revert the packet commit. |
 

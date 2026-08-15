@@ -19,9 +19,11 @@ This directory is the normative machine-readable interface source for Curve. Imp
 | Provider connection | [`schemas/provider-connection.schema.json`](schemas/provider-connection.schema.json) | Workspace-scoped configuration/secret references, capability binding, status, and validation. |
 | Provider capabilities | [`schemas/provider-capability.schema.json`](schemas/provider-capability.schema.json) | Additive capability evolution only within v1. |
 | SSE event | [`schemas/sse-event.schema.json`](schemas/sse-event.schema.json) | Stable resumable stream envelope. |
+| P0-06A attempt manifest | [`schemas/p0-06a-attempt-manifest.schema.json`](schemas/p0-06a-attempt-manifest.schema.json) | Exact `curve.p0-06a-attempt/v1` authorization inputs, broker-only credential boundary, and eight-operation execution/VCS allowlist; administrative GitHub Project statuses are excluded. |
+| P0-06 proof-stage projection | [`schemas/p0-06-stage-projection-v2.schema.json`](schemas/p0-06-stage-projection-v2.schema.json) | Strict v2 state/readiness projection; the live stage record is a required valid fixture and P0-06B remains unavailable. |
 | Orca MCP tool invocations | [`mcp/orca-tools-v1.schema.json`](mcp/orca-tools-v1.schema.json) | Exact v1.1 read/write allowlist and per-tool arguments; unspecified tools and fields are denied. |
 | Orca MCP tool results | [`mcp/orca-tool-result-v1.schema.json`](mcp/orca-tool-result-v1.schema.json) | Typed v1.1 safe projections and mutation receipts; protected bodies and caller-supplied attribution are absent. |
 
 JSON Schema uses draft 2020-12. OpenAPI is 3.1 so schemas share the same dialect. Every example uses synthetic identifiers and contains no X3M data.
 
-Executable positive and negative fixtures live under [`mcp/examples/`](mcp/examples/) and [`schemas/examples/`](schemas/examples/). The contract gate must fail if a valid fixture is rejected or if an invalid lifecycle, missing evidence, protected inline field, secret, prohibited tool, or forged actor fixture is accepted.
+Executable positive and negative fixtures live under [`mcp/examples/`](mcp/examples/) and [`schemas/examples/`](schemas/examples/). The live [`P0-06 stage record`](../docs/technical/proofs/p0-06-stage-record.json) is also validated directly against the v2 projection schema. The contract gate must fail if a valid fixture is rejected or if an invalid lifecycle, missing evidence, protected inline field, secret, prohibited tool, forged actor, unapproved proof operation, or unavailable-stage mutation fixture is accepted.

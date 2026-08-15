@@ -7,14 +7,14 @@
 | Status | Derived security and operations baseline; production enablement is blocked by applicable non-decided ADRs |
 | Owner | X3M security, platform operations, and Curve engineering |
 | Audience | Security, identity, platform, SRE, backend, provider-adapter, and AI coding-agent teams |
-| Version | 0.2 |
-| Last updated | 2026-08-12 |
+| Version | 0.3 |
+| Last updated | 2026-08-15 |
 | Normative source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Companion documents | [Architecture](architecture.md), [Domain model](domain-model.md), [Workflows and sequences](workflows-and-sequences.md), and [Integration contracts](integration-contracts.md) |
 
 ## Purpose and authority
 
-This document makes the PRD security, privacy, operational, and recovery requirements executable. It is deliberately specific about enforcement points and evidence, but it does not select unresolved infrastructure, identity, retention, model, quality-tool, or provider options. Those selections remain blocked by D-002 through D-012 and D-014.
+This document makes the PRD security, privacy, operational, and recovery requirements executable. It is deliberately specific about enforcement points and evidence, but it does not select unresolved infrastructure, identity, retention, model, quality-tool, or provider options. Those selections remain blocked by D-002 through D-012 (delegation through documentation-provider decisions) and D-014 (budget-policy decision).
 
 The PRD prevails on any conflict. In particular, this document cannot relax `FR-003`, `FR-004`, `FR-012`, `FR-018`-`FR-020`, `FR-042`-`FR-044`, `NFR-001`-`NFR-020`, or `AC-20`-`AC-60`. The capitalized terms **MUST**, **MUST NOT**, **SHOULD**, and **MAY** are normative.
 
@@ -131,7 +131,7 @@ The decision produces `ALLOW`, `DENY`, or `REQUIRE_HUMAN_CONFIRMATION`, plus a p
 
 ### Effective-principal delegation and revocation
 
-D-002 controls the final Onyx delegation protocol. Until it is decided, permissioned retrieval is disabled rather than simulated. The selected implementation MUST satisfy this protocol:
+D-002 (Onyx delegated-identity decision) controls the final Onyx delegation protocol. Until it is decided, permissioned retrieval is disabled rather than simulated. The selected implementation MUST satisfy this protocol:
 
 1. At the protected operation boundary, Curve obtains a short-lived, audience- and scope-bound delegation for the authenticated person, workspace, provider connection, and declared action.
 2. Curve stores only opaque token handles or encrypted transient material as approved by D-002; it never stores a user personal access token as a reusable integration credential.
@@ -166,7 +166,12 @@ An `AccessEnvelope` is immutable, versioned metadata recording sources, classifi
 
 ### Retention, legal hold, and erasure
 
-D-009 must decide a class-by-asset retention matrix before production. The implementation is required now to support policy configuration, not to embed a retention duration. Each protected object has a retention policy version, deletion eligibility time, legal-hold state, encryption-key reference, tombstone state, and corresponding audit entries.
+D-009 (retention, deletion, backup, and legal-hold decision) must decide a class-by-asset retention matrix before protected-object
+persistence or any staging or production activation. Local synthetic packages
+may implement policy seams and minimum non-sensitive metadata without embedding
+a retention duration. Each later protected object has a retention policy
+version, deletion eligibility time, legal-hold state, encryption-key reference,
+tombstone state, and corresponding audit entries.
 
 The erasure workflow is: authorize request → evaluate legal/operational hold → fence new reads/derivatives → tombstone metadata → cryptographically erase or physically delete body as policy requires → verify non-retrievability → retain only lawful non-sensitive audit metadata. Backups and replicas are governed by the same matrix and report their disposal status. If the system cannot prove required erasure, it reports failure; it does not silently mark the request complete (`AC-56`).
 
@@ -210,7 +215,7 @@ stateDiagram-v2
     Cleaned --> [*]
 ```
 
-The final runtime choice is D-003; R1 requires Kubernetes plus [gVisor](https://gvisor.dev/) or a reviewed equivalent, while [Firecracker](https://firecracker-microvm.github.io/) remains a future isolation option. This is a policy requirement, not a deployment selection.
+The final runtime choice is D-003 (runtime topology and trust-zone decision); R1 requires Kubernetes plus [gVisor](https://gvisor.dev/) or a reviewed equivalent, while [Firecracker](https://firecracker-microvm.github.io/) remains a future isolation option. This is a policy requirement, not a deployment selection.
 
 Each sandbox/quality runner MUST have:
 
@@ -306,7 +311,7 @@ All operational signals carry safe correlation identifiers for workspace, initia
 
 ### SLOs, error budgets, and safe degradation
 
-R1 targets are 99.9% monthly control-plane availability, p95 cached/read responses ≤500 ms, p95 command acknowledgment ≤1 second, accepted event visibility ≤5 seconds, webhook processing ≤60 seconds, RPO ≤5 minutes, and RTO ≤60 minutes. D-003 selects the concrete measurement source, calculation, on-call ownership, backup/restore topology, and escalation policy.
+R1 (controlled release qualification) targets are 99.9% monthly control-plane availability, p95 cached/read responses ≤500 ms, p95 command acknowledgment ≤1 second, accepted event visibility ≤5 seconds, webhook processing ≤60 seconds, RPO ≤5 minutes, and RTO ≤60 minutes. D-003 (runtime topology and trust-zone decision) selects the concrete measurement source, calculation, on-call ownership, backup/restore topology, and escalation policy.
 
 When a prerequisite fails, Curve degrades safely:
 
@@ -347,13 +352,13 @@ Every release candidate needs a signed evidence index that pins the policy/ADR/d
 
 | Decision | Required security/operations output | Fail-closed behavior until decided |
 | --- | --- | --- |
-| D-002 | Delegation, token exchange, revocation, storage and audit proof | Protected Onyx/MCP retrieval disabled. |
-| D-003 | Environments, residency, networking, cluster/runtime, managed services, backups, secrets, HA, RPO/RTO owners | Internal staging only; no production data/SLA. |
+| D-002 | Delegation, token exchange, revocation, storage and audit proof | Protected Onyx retrieval remains disabled unless a separately D-002-approved connection profile exists. |
+| D-003 (runtime topology and trust-zone decision) | Environments, residency, networking, cluster/runtime, managed services, backups, secrets, HA, RPO/RTO owners | Only P0-06A (isolated Temporal feasibility proof) may run after its packet, harness/image, immutable authorization bundle, ordered app-bound checks, byte-recomputed artifacts, active exact-tag ruleset with approved digest/no bypass, absent claim, trusted controller, conformant independent broker, and preflight pass. The broker must recheck the live ruleset and authorization inputs at claim time and issue the signed start grant that activates the wrapper. The broker/GitHub App executes or signs and dispatches exact execution and VCS operations; the controller receives only opaque lease handles and signed receipts and never receives a GitHub token, private key, installation credential, or reusable credential, including in process memory. GitHub Project statuses are direct administrative tracking writes and are outside the execution authorization and evidence model. P0-06A cannot decide local topology. P0-06B (least-privilege Plane integration proof) and all staging/production activation remain disabled until separately approved. |
 | D-004/D-005 | Gateway image/routing and approved model/data-class/destination matrix | Direct model calls disabled outside development stub; restricted input blocked. |
 | D-006 | Orca client/version, developer-delegation, capability, ownership/support/license proof | OpenHands automation may proceed; Orca MCP remains disabled. |
-| D-007 | MCP registry, transport, read/write risk, delegated auth, idempotency and pre-authorized actions | Existing approved read path only; all MCP writes remain disabled until the exact profile is approved. |
+| D-007 | MCP registry, transport, read/write risk, delegated auth, idempotency and pre-authorized actions | Only a separately approved read-only MCP profile may operate; the generic registry implementation and all writes remain disabled until their exact D-007 scope is approved. |
 | D-008 | GitHub/GitLab identities, scopes, signing, rotation, repository allowlists | Read-only repository inspection; no push/draft/ready mutation. |
-| D-009 | Retention, backup, legal hold, tombstone and erasure matrix | Restricted raw data ephemeral; production launch blocked. |
+| D-009 | Retention, backup, legal hold, tombstone and erasure matrix | Protected-body persistence, retention-dependent capabilities, and every staging or production activation remain disabled. Only authorized disposable synthetic proofs and minimum non-sensitive local metadata are allowed. |
 | D-010 | Pinned quality/security/license policy, thresholds, waiver/non-waivable rules | Critical/Major and unknown-license findings block. |
 | D-011/D-012 | Flag and docs provider security/ownership/build contracts | Applicable delivery-contract checks cannot pass. |
 | D-014 | Budget limits/reservations/escalation authority | Minimal development limits; exhaustion pauses. |

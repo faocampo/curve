@@ -7,8 +7,8 @@
 | Status | Derived architecture baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Architecture, engineering, security, platform operations, product, and AI coding agents |
-| Version | 0.2 |
-| Last updated | 2026-08-12 |
+| Version | 0.3 |
+| Last updated | 2026-08-15 |
 | Normative source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Companion | [Engineering Patterns and Technologies](./engineering-patterns-and-technologies.md) |
 
@@ -328,7 +328,7 @@ flowchart TB
 - Immutable bodies are content-addressed. PostgreSQL records digest, size, media type, schema version, classification, Access Envelope, retention class, and lineage.
 - Object keys are workspace-scoped and must not expose source titles, user input, secrets, or predictable cross-workspace identifiers.
 - Submitted artifacts, decisions, histories, events, findings, and provider observations are append-only. Supersession adds a record rather than rewriting history.
-- Logical deletion creates a tombstone. D-009 defines physical deletion, legal hold, and cryptographic erasure; production remains blocked while it is open.
+- Logical deletion creates a tombstone. D-009 defines physical deletion, legal hold, and cryptographic erasure. Protected-object persistence and every staging or production activation remain disabled while it is open; authorized local work uses synthetic data and minimum non-sensitive metadata only.
 - Context Packs are mounted read-only outside the repository working tree. Context Manifests are separately generated, reviewed, digest-pinned, and sanitized.
 - Quality and readiness records include repository, base SHA, head SHA, plan version, policy version, context digest, tools, rulepacks, and log/report digests.
 
@@ -405,7 +405,7 @@ D-003 owns the concrete topology. Until it is decided, the following are capabil
 | Profile | Required logical services | Permitted data and integrations | Availability posture |
 | --- | --- | --- | --- |
 | Local development | Plane/Curve app, relational store, object-store substitute, Temporal development service, outbox relay, stub adapters, fake webhook receiver | Synthetic/unrestricted fixtures only; no production delegation or mutation identity | Developer convenience; no R1 SLA claim |
-| Internal staging | Full control plane, durable Temporal, object storage, policy engine, provider test connections, isolated runner/preview fleet, reconciliation, sanitized telemetry | Non-production repositories and approved non-production evidence; conservative defaults from all open decisions | Required recovery and security-test environment; no production data while D-003/D-009 remain open |
+| Internal staging | Full control plane, durable Temporal, object storage, policy engine, provider test connections, isolated runner/preview fleet, reconciliation, sanitized telemetry | Operational activation requires approved D-003 non-local scope and D-009. Before those decisions, only separately authorized disposable P0 proofs may use synthetic data with mandatory cleanup; they do not constitute staging activation. | Required recovery and security-test environment after its activation gates pass |
 | R0A | Production-like definition/control-plane subset through Gate 1 | Approved Onyx path only after D-002/D-005; no VCS mutation | Must meet M0/M1 exit tests for enabled components |
 | R0B pilot | Selected GitLab/OpenHands path with repository-local slices or an approved external prerequisite | Named pilot only after its blocking decisions and Gate 2 authorization | Pilot SLO measured, not advertised as R1 |
 | R1 production | Full M0-M6 logical topology, both VCS and agent adapters, HA/persistence/backups, isolated execution, audited secrets and telemetry | Data and providers allowed by decided classification, residency, retention, and model policies | `NFR-001` through `NFR-020` and AC-01 through AC-60 |
@@ -581,13 +581,13 @@ The PRD records agreed planning directions as `PROPOSED` and leaves genuinely un
 | --- | --- | --- |
 | D-001 | Pinned Plane commit, reuse/build inventory, extension seams, supported upgrade/rebase baseline | M0 architecture sign-off |
 | D-002 | Onyx per-operation delegation protocol, token lifecycle, revocation, audit, failure proof | M1 |
-| D-003 | Dev/staging/prod topology, region/residency, trust zones, data services, HA, backups, secrets, Langfuse, ownership | M0 implementation / production topology |
+| D-003 | Dev/staging/prod topology, region/residency, trust zones, data services, HA, backups, secrets, Langfuse, ownership | P0-06A isolated feasibility; separately approved P0-06B Plane integration; M0-S3/M0-06 local orchestration; every non-local M0/M4/M6 profile |
 | D-004 | In-process Curve Model Gateway and OpenRouter contract, allowlists, routing/fallback constraints, operations, security, license, and replacement evaluation | Model-enabled M1/M3/M5 |
 | D-005 | Task/data-class model allowlist, residency/training/retention terms, fallback equivalence, evaluation baseline | M1 |
 | D-006 | Orca supported MCP client/version, delegated auth, bounded capability profile, ownership, support and license | Orca-enabled M4 / R1 human-assistance completeness |
-| D-007 | MCP version/transports, trust registry, delegated auth, read/write risk, idempotency, transitions, and pre-authorized action allowlist | M0/M1/M4 |
+| D-007 | MCP version/transports, trust registry, delegated auth, read/write risk, idempotency, transitions, and pre-authorized action allowlist | MCP-enabled M0/M1/M4 |
 | D-008 | GitHub/GitLab controller identities, scopes, signing, rotation, repository allowlist, reconciliation permissions | M3 |
-| D-009 | Retention/backup/legal hold/tombstone/erasure matrix and evidence of recoverability | M0 production enablement |
+| D-009 | Retention/backup/legal hold/tombstone/erasure matrix and evidence of recoverability | M0-04 protected storage; protected M1/M4/M6 capabilities; every staging/production activation |
 | D-010 | Pinned quality/security/license toolchain, images, rulepacks, thresholds, suppressions, non-waivable classes | M5 |
 | D-011 | OpenFeature backend and flag naming, ownership, rollout, audit, expiry and cleanup conventions | M5 |
 | D-012 | Docusaurus repository, branch, ownership, build/link/navigation/preview and release relationship | M5 |

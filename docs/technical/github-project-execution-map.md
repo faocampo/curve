@@ -1,95 +1,161 @@
-# Curve GitHub Project Execution Map
+# Curve GitHub Project Tracking Map
 
 ## Document control
 
 | Field | Value |
 | --- | --- |
-| Status | Active execution-control contract |
-| Version | 1.1 |
+| Status | Active visual-tracking contract |
+| Version | 1.4 |
 | Date | 2026-08-15 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) |
-| Interim human reviewer | Federico Ocampo (`faocampo`) |
-| Last reconciliation | 2026-08-15 against merged Curve baseline `1529b8b7f04f226ac8be151f89104b6582650b42`: 70 total items, 70 unique IDs, zero duplicates; P0-01/P0-04 completion transitions authorized |
+| Project administrator | Federico Ocampo (`faocampo`) |
+| Human reviewer | Federico Ocampo |
+| Last reconciliation | 2026-08-15 against merged Curve baseline `fe8664a1fd58d34bb10273d3da2d39804659bbfc`: 70 total items, 70 owned markers, 70 matching source revisions, zero duplicates |
 
-## Purpose
+## Purpose and authority boundary
 
-GitHub Project #2 is Curve's execution index. Every P0, M0-M6, and R1 package in the development plan has exactly one project item whose title begins with the stable work-package ID. The development plan remains normative for scope, dependencies, traceability, and acceptance. The project shows current execution state and routes humans to that source.
+GitHub Project #2 is a visual index for Curve development. It helps the team see
+the current phase, locate the normative task packet, and follow progress across
+the 70 planned work packages.
 
-No Curve application coding begins until the target package exists in Project #2, its dependencies and decision gates are satisfied, its immutable task packet is complete, and its project status is `Ready`.
+The development plan, approved product decisions, architecture decisions, task
+packets, repository state, test evidence, and Curve runtime records remain the
+authoritative sources for implementation. A GitHub Project status is
+informational metadata. Changing it does not:
+
+- approve a product or architecture decision;
+- authorize a coding agent, Temporal workflow, sandbox, or deployment;
+- satisfy a human product, technical, or code gate;
+- waive a security, quality, licensing, budget, or data-policy control; or
+- change the state of a future Curve project, initiative, slice, attempt, gate,
+  or quality run.
+
+Federico Ocampo and authorized automation may update Project statuses whenever
+needed to keep the visual board useful. These administrative writes require no
+separate governance approval, lease, task-packet authorization, or signed start
+grant. Execution systems evaluate their own authoritative inputs independently.
 
 ## Source inventory
 
-| Phase | ID range | Item count | Initial status policy |
+| Phase | ID range | Item count | Default visual status |
 | --- | --- | ---: | --- |
-| P0A foundation readiness | P0-01-P0-06 | 6 | Current readiness-board projection |
-| P0B just-in-time proofs | P0-07-P0-12 | 6 | Backlog until proof authorization |
-| M0 foundation/control plane | M0-01-M0-09 | 9 | Backlog until dependencies and ADRs close |
-| M1 alignment/evidence/PRD | M1-01-M1-07 | 7 | Backlog |
-| M2 roadmap/schedule | M2-01-M2-06 | 6 | Backlog |
-| M3 repository/planning | M3-01-M3-06 | 6 | Backlog |
-| M4 agents/runners | M4-01-M4-06 | 6 | Backlog |
-| M5 quality/VCS/readiness | M5-01-M5-14 | 14 | Backlog |
-| M6 prototypes/KPIs | M6-01-M6-05 | 5 | Backlog |
-| R1 qualification/rollout | R1-01-R1-05 | 5 | Backlog |
+| P0A foundation readiness | P0-01 through P0-06 (foundation-readiness packages) | 6 | Current working projection |
+| P0B just-in-time proofs | P0-07 through P0-12 (integration-readiness packages) | 6 | Backlog |
+| M0 foundation/control plane | M0-01 through M0-09 | 9 | Backlog |
+| M1 alignment/evidence/PRD | M1-01 through M1-07 | 7 | Backlog |
+| M2 roadmap/schedule | M2-01 through M2-06 | 6 | Backlog |
+| M3 repository/planning | M3-01 through M3-06 | 6 | Backlog |
+| M4 agents/runners | M4-01 through M4-06 | 6 | Backlog |
+| M5 quality/VCS/readiness | M5-01 through M5-14 | 14 | Backlog |
+| M6 prototypes/KPIs | M6-01 through M6-05 | 5 | Backlog |
+| R1 qualification/rollout | R1-01 through R1-05 | 5 | Backlog |
 | **Total** |  | **70** |  |
 
 ## Field mapping
 
-| GitHub Project field | Curve source | Rule |
+| GitHub Project field | Source | Administrative rule |
 | --- | --- | --- |
-| Title | Work-package ID plus deliverable | Stable ID prefix is the deduplication key. |
-| Status | Readiness/execution projection | Managed by the transition rules below. |
-| Size | Development-plan size | `S`, `M`, or `L` from the normative catalog. |
-| Priority | Unassigned | Product and engineering approvers must decide it; the sync does not infer priority from phase. |
-| Estimate | Unassigned | Set only by an approved estimation method. |
-| Iteration | Unassigned | Set only after capacity and sequencing approval. |
-| Assignees | Unassigned until dispatch | A named owner is required before execution. |
-| Reviewers | Federico Ocampo for the current phase | Exact-head disposition remains required. |
+| Title | Work-package ID plus deliverable | The stable ID prefix is the synchronization key. |
+| Status | Team's current visual progress assessment | Federico or authorized automation may update it directly. |
+| Size | Development-plan size | `S`, `M`, or `L`; the current synchronizer leaves this Project field unchanged. |
+| Priority | Product planning | Set when useful for planning; it is not inferred from phase. |
+| Estimate | Delivery planning | Set when an estimate exists. |
+| Iteration | Delivery planning | Set when the package is scheduled. |
+| Assignees | Delivery ownership | Set when an owner is known. |
+| Reviewers | Review ownership | Federico Ocampo is the interim reviewer. |
 
-## Status contract
+## Visual status convention
 
-| Project status | Curve meaning | Allowed transition evidence |
-| --- | --- | --- |
-| Backlog | Blocked, dependency-unsatisfied, or not yet prepared | The body retains dependencies and the normative source. |
-| Ready | Complete codeability definition satisfied | Pinned baseline/task packet, named owner/reviewer, ADRs, commands, budget, policy, and rollback are complete. |
-| In progress | An authorized proof or implementation step is active | The executor records purpose, repository, exact scope, evidence, risk, and rollback before mutation. |
-| In review | Output is complete and awaiting required human/CI/gate disposition | Exact artifact or commit head plus validation evidence is linked. |
-| Done | Acceptance evidence is complete and required merge/gate outcome is recorded | Dependencies, tests, review, and immutable evidence all pass. |
+| Project status | Suggested visual meaning |
+| --- | --- |
+| Backlog | Work is not currently being executed. It may be unprepared, blocked, deferred, or simply unscheduled. |
+| Ready | The team expects the package can be picked up soon. |
+| In progress | Work is actively being performed. |
+| In review | An output, decision, or change is being reviewed or validated. |
+| Done | The tracked package is complete according to its authoritative acceptance evidence. |
 
-Blocked work remains `Backlog`; blockers are represented in the item body and normative readiness board. `Done` never means merely "code generated" or "draft PR opened."
+The convention keeps the board understandable; it is not a transition state
+machine. Direct corrections, backward transitions, and skipped columns are
+allowed when they better represent current work.
 
 ## Synchronization commands
 
-The idempotent sync reads the development-plan tables directly and fails unless it finds exactly 70 unique package IDs.
+The synchronizer supports read-only inspection and one explicit existing-item
+status update:
 
 ```text
 pnpm project:check
-pnpm project:sync
+CURVE_PROJECT_SOURCE_REF=HEAD node scripts/sync-github-project.mjs --context P0-06
+node scripts/sync-github-project.mjs --validate-status P0-06=Ready
+pnpm project:sync -- --status P0-06="Ready"
 pnpm project:sync -- --status M0-01="In progress"
 pnpm project:sync -- --status M0-01="In review"
 pnpm project:sync -- --status M0-01="Done"
 ```
 
-`project:check` is read-only and validates the local catalog. `project:sync` is an explicit GitHub write. A full sync creates missing items and preserves the current status of existing items. A targeted `--status` update changes only the named item and refreshes its governed body.
+`project:check` parses the 70-row local catalog and reports its default visual
+projection. It performs no GitHub request. `--context` computes registered
+context and stage-record digests for a selected task and remains read-only.
+`--validate-status` validates a task ID and Project status locally and explicitly
+reports that the result is informational.
 
-The synchronizer pins item source links to merged `origin/main`, not an unmerged feature branch. Its bootstrap/default projection records P0-01 and P0-04 as `Done`, P0-02 as `In review`, P0-03 as `In progress`, and P0-05 as `Ready`; existing item state remains authoritative unless a targeted transition is supplied.
+`project:sync` performs one GitHub write operation for one explicit
+`--status TASK-ID=STATUS` assignment. It applies to every catalog work package,
+including P0-06 (two-stage local Temporal proof). It updates the deterministic
+body and selected status of the existing synchronizer-owned draft item. It does
+not create items or mutate the full catalog.
 
-Project #2 is private. The unauthenticated external-link checker excludes this one exact URL because GitHub returns 404 to anonymous callers; authenticated validation uses `gh project view 2 --owner faocampo` and the 70-item reconciliation instead.
+For write safety, apply mode requires:
 
-The executor updates the project immediately before starting a package, after opening its review artifact, when a newly discovered blocker changes readiness, and after final acceptance. Every status update is reported before execution under the Curve execution protocol.
+- a clean checkout whose `HEAD`, freshly fetched `origin/main`, and live GitHub
+  `main` SHA are identical;
+- exactly one Project item matching the stable task ID or ownership marker;
+- the expected Project, draft-content, field, and status-option identities;
+- an item body that is either the canonical prior merged projection, the exact
+  current projection, or the exact body-first intermediate state; and
+- read-back confirmation after each write, including recovery from a lost API
+  response when the intended state is observable exactly.
 
-## Fail-closed rules
+These safeguards prevent accidental edits to the wrong item or overwriting
+unrecognized content. They are operational integrity checks rather than approval
+gates. The command may change a Project status regardless of the corresponding
+Curve execution, product, or architecture state.
 
-- Duplicate stable IDs stop synchronization before the affected item is changed.
-- Missing `Status` or `Size` fields/options stop synchronization.
-- Unknown task IDs or statuses stop synchronization.
-- Priority, estimate, iteration, assignee, or milestone values are never invented.
-- Project status never overrides an ADR, task packet, acceptance test, repository check, or human gate.
-- Application coding stops if the project item is missing or is not `Ready` at dispatch.
+## P0-06 tracking rule
+
+P0-06 (two-stage local Temporal proof) is tracked on the board like every other
+work package. Its technical state remains in the versioned
+[stage record](proofs/p0-06-stage-record.json), D-003 (runtime topology and
+trust-zone decision), and the
+[task packet](p0-06-local-temporal-proof-task-packet.md).
+
+Changing the P0-06 Project status does not change those records and does not
+activate the proof. A proof attempt begins only when its separately defined
+execution controls are satisfied. Status updates before, during, and after the
+proof are direct visual-tracking writes; they do not belong in execution leases,
+VCS operation allowlists, signed start grants, or terminal evidence contracts.
+
+The current governed technical state remains:
+
+- D-003 (runtime topology and trust-zone decision): `PROPOSED`;
+- P0-06A (isolated Temporal feasibility proof): `P0-06A_DESIGN`, authorization
+  `PROPOSED`; and
+- P0-06B (least-privilege Plane integration proof): `NOT_AUTHORIZED`.
+
+## Reconciliation cadence
+
+The executor or project administrator updates the board when work starts, enters
+review, completes, becomes blocked, or materially changes direction. Exact timing
+is administrative. The synchronizer records the normative source revision and
+links back to the development plan so every visual item remains traceable.
+
+GitHub Project #2 is private. The unauthenticated external-link checker excludes
+this exact URL because anonymous access returns 404. Authenticated verification
+uses `gh project view 2 --owner faocampo` and the 70-item reconciliation.
 
 ## References
 
-- GitHub CLI project manual: [GitHub CLI project](https://cli.github.com/manual/gh_project)
-- GitHub Projects documentation: [GitHub Docs - About Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects)
-- GitHub Projects filtering: [GitHub Docs - Filtering Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/customizing-views-in-your-project/filtering-projects)
+- GitHub CLI project manual: [GitHub CLI — gh project](https://cli.github.com/manual/gh_project)
+- GitHub Projects documentation: [GitHub Docs — About Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects)
+- GitHub Projects filtering: [GitHub Docs — Filtering Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/customizing-views-in-your-project/filtering-projects)

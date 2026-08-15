@@ -1,0 +1,13 @@
+{
+  "schema_version": "curve.p0-06a-attempt/v1",
+  "authorization_id": "D003-LOCAL-PROOF-A-2026-08-15-01",
+  "attempt_id": "d003-local-p0-06a-2026-08-15-01",
+  "github_token": "forbidden-raw-credential",
+  "controller": {
+    "operation_bindings": {
+      "unapproved-operation": {
+        "operation_id": "unapproved-operation"
+      }
+    }
+  }
+}

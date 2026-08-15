@@ -4,7 +4,32 @@
 
 This directory is the architecture and implementation handoff derived from the [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
 
-The suite is implementation-oriented. D-001 is owner-approved and recorded as `DECIDED`; other agreed planning directions remain `PROPOSED` until their named owners approve them. A coding work package remains blocked until all of its required decisions and ADRs are `DECIDED` and its remaining entry criteria pass.
+The suite is implementation-oriented. D-001 (Plane foundation, licensing, and
+upgrade-boundary decision) is owner-approved and recorded as `DECIDED`; D-003
+(runtime topology and trust-zone decision) has a digest-bound `LOCAL_ONLY` proof basis and approved
+two-stage direction while both executions and the decision remain gated; other agreed planning directions remain
+`PROPOSED` until their named owners approve them. An implementation package
+remains blocked until every decision scope named by its exact packet is
+`DECIDED` and its remaining entry criteria pass. A separately authorized P0
+proof may collect decision evidence under its bounded packet.
+
+## Identifier readability convention
+
+Every requirement, decision, work-package, or task-packet identifier is paired
+with a short parenthetical description on first use in a section or compact
+status update. Dense tables may use the identifier as the key when their
+adjacent subject/deliverable cell supplies the same description. Common active
+identifiers are:
+
+- D-001 (Plane foundation, licensing, and upgrade-boundary decision).
+- D-003 (runtime topology and trust-zone decision).
+- D-007 (MCP trust and authorization decision).
+- D-009 (retention, legal-hold, backup, and erasure decision).
+- P0-06 (two-stage local Temporal proof work package).
+- P0-06A (isolated Temporal feasibility proof).
+- P0-06B (least-privilege Plane integration proof).
+- M0-S1 (Curve module-shell implementation packet).
+- M0-S3 (local Temporal round-trip implementation packet).
 
 ## Document set
 
@@ -21,7 +46,7 @@ The suite is implementation-oriented. D-001 is owner-approved and recorded as `D
 | [Implementation-readiness review](review-analysis-and-remediation.md) | Prioritized gaps, closure evidence, owners, dependencies, and remediation status | Review record; never overrides the PRD or approved ADRs |
 | [Plane foundation inventory](plane-foundation-inventory.md) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; fork `preview` pinned at `549db1a...` |
 | [ADR-001: Plane upstream foundation](adr-001-plane-upstream-foundation.md) | Decided updateable upstream baseline, fork workflow, proof results, consequences, rollback, approval, and review triggers | D-001 decision record; `DECIDED` on 2026-08-15 |
-| [ADR-003: Runtime topology](adr-003-runtime-topology.md) | Proposed local/non-local Temporal and Curve runtime boundary | D-003 decision packet; owner approval pending |
+| [ADR-003: Runtime topology](adr-003-runtime-topology.md) | Local/non-local Temporal and Curve runtime boundary | D-003 (runtime topology and trust-zone decision) has an approved P0-06A (isolated Temporal feasibility proof)/P0-06B (least-privilege Plane integration proof) direction; both executions, the local decision, and every non-local decision remain gated |
 | [ADR-006: Orca human assistance](adr-006-orca-human-assistance.md) | Proposed developer-operated Orca MCP integration boundary | D-006 decision packet; owner/licensing approval pending |
 | [ADR-007: MCP and Orca profile](adr-007-mcp-trust-and-orca-profile.md) | Proposed MCP trust registry and developer-operated Orca write-back allowlist | D-007 decision packet; security/platform approval pending |
 | [ADR-009: Retention and erasure](adr-009-retention-and-erasure.md) | Required data-class/asset retention, hold, backup, and erasure decision | D-009 remains open and blocks protected storage/non-local activation |
@@ -29,7 +54,9 @@ The suite is implementation-oriented. D-001 is owner-approved and recorded as `D
 | [M0 authorization/state matrices](m0-authorization-and-state-matrices.md) | Core roles, authorization inputs, operation transitions, and Orca tool effects | M0 policy/state contract |
 | [M0 traceability](m0-traceability.md) | Requirement-to-contract-to-test ownership | M0 verification control |
 | [M0 local task packets](m0-local-skeleton-task-packets.md) | Independently reviewable Plane-fork implementation packages | Dispatch specification; blocked until entry criteria pass |
-| [GitHub Project execution map](github-project-execution-map.md) | One-to-one mapping and status synchronization for all 70 development-plan packages in Curve GitHub Project #2 | Mandatory execution index before package dispatch |
+| [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | P0-06A (isolated Temporal feasibility proof), three execution approvals, checked projections, recomputed bundles/artifacts/ruleset, broker-issued signed start grant, bounded execution/VCS leases, normal/reconciliation evidence branches, immutable review disposition, external signed publication attestation, limits, cleanup, transitions, and the P0-06B (least-privilege Plane integration proof) design gate | P0-06A remains blocked pending publication, harness, authorization bundle/attempt approval, integrity projection, broker conformance, preflight, claim-time recheck, and claim; GitHub Project status is administrative; P0-06B is unplanned and unauthorized |
+| [P0-06 stage record](proofs/p0-06-stage-record.json) | `curve.proof-stage-projection/v2` P0-06A/P0-06B authorization, readiness, broker, claim, outcome-specific branch/ticket, lease, operation-evidence, publication-intent, external-attestation, and review state linked from GitHub Project #2 | Machine-readable fail-closed proof-state projection; runtime transitions still require trusted-controller reconciliation and independently verified broker/attestation evidence |
+| [GitHub Project tracking map](github-project-execution-map.md) | One-to-one 70-package visual index, read-only catalog/context inspection, and bounded single-existing-item status reconciliation | Administrative status tracking for all packages; status is informational, while task packets and execution controls remain authoritative |
 | [Machine-readable contracts](../../contracts/README.md) | OpenAPI, JSON Schema, MCP, SSE, provider, operation, and Temporal contracts | Normative wire/schema source |
 
 ## Authority and conflict order

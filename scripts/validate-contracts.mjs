@@ -1,9 +1,18 @@
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 
 const root = process.cwd();
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return value.map(canonicalJson);
+  if (value !== null && typeof value === "object") {
+    return Object.fromEntries(Object.keys(value).sort().map((key) => [key, canonicalJson(value[key])]));
+  }
+  return value;
+}
 
 function filesUnder(directory, suffix) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -38,12 +47,14 @@ for (const file of schemaFiles) {
 
 const invocationSchema = join(root, "contracts/mcp/orca-tools-v1.schema.json");
 const resultSchema = join(root, "contracts/mcp/orca-tool-result-v1.schema.json");
+const p0_06StageProjectionSchema = join(root, "contracts/schemas/p0-06-stage-projection-v2.schema.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/mutation-result.valid.json", resultSchema, true],
   ["contracts/mcp/examples/forbidden-tool.invalid.json", invocationSchema, false],
   ["contracts/mcp/examples/forged-actor.invalid.json", invocationSchema, false],
+  ["docs/technical/proofs/p0-06-stage-record.json", p0_06StageProjectionSchema, true],
 ];
 
 for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".json").sort()) {
@@ -69,6 +80,21 @@ for (const [fixtureName, schema, shouldBeValid] of fixtureSpecs) {
   if (valid !== shouldBeValid) {
     throw new Error(`${relative(root, fixture)} was expected to be ${shouldBeValid ? "valid" : "invalid"}`);
   }
+}
+
+const p0_06AttemptFixturePath = join(
+  root,
+  "contracts/schemas/examples/p0-06a-attempt-manifest.valid.json",
+);
+const p0_06AttemptFixture = JSON.parse(readFileSync(p0_06AttemptFixturePath, "utf8"));
+const operationBindingsDigest = `sha256:${createHash("sha256")
+  .update("curve-p0-06a-operation-bindings:v1\0")
+  .update(JSON.stringify(canonicalJson(p0_06AttemptFixture.controller.operation_bindings)))
+  .digest("hex")}`;
+if (p0_06AttemptFixture.controller.operation_bindings_digest !== operationBindingsDigest) {
+  throw new Error(
+    `${relative(root, p0_06AttemptFixturePath)} has an invalid operation_bindings_digest`,
+  );
 }
 
 const validEventFixture = join(root, "contracts/schemas/examples/event-envelope.valid.json");

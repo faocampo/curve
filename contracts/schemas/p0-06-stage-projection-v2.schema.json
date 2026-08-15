@@ -1,0 +1,593 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/p0-06-stage-projection-v2.schema.json",
+  "title": "Curve P0-06 two-stage local Temporal proof projection v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "current_stage", "updated_on", "stages"],
+  "properties": {
+    "schema_version": { "const": "curve.proof-stage-projection/v2" },
+    "task_id": { "const": "P0-06" },
+    "current_stage": {
+      "type": "string",
+      "enum": ["P0-06A_DESIGN", "P0-06A_READY", "P0-06A_REVIEWED"]
+    },
+    "updated_on": { "type": "string", "format": "date" },
+    "stages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P0-06A", "P0-06B"],
+      "properties": {
+        "P0-06A": { "$ref": "#/$defs/stageA" },
+        "P0-06B": { "$ref": "#/$defs/stageBUnavailable" }
+      }
+    }
+  },
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "instant": { "type": "string", "format": "date-time" },
+    "nullableSha": {
+      "oneOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }]
+    },
+    "nullableDigest": {
+      "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+    },
+    "nullableInstant": {
+      "oneOf": [{ "$ref": "#/$defs/instant" }, { "type": "null" }]
+    },
+    "nullableString": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "nullableHttpsUri": {
+      "oneOf": [
+        { "type": "string", "format": "uri", "pattern": "^https://", "maxLength": 2000 },
+        { "type": "null" }
+      ]
+    },
+    "checkBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "app_id"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "app_id": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "checkList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/checkBinding" }
+    },
+    "requiredChecks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentation_head",
+        "documentation_merge",
+        "harness_head",
+        "harness_merge",
+        "attempt_head",
+        "attempt_merge",
+        "projection_head",
+        "projection_merge",
+        "evidence_head",
+        "evidence_merge",
+        "terminal_projection_head",
+        "terminal_projection_merge"
+      ],
+      "properties": {
+        "documentation_head": { "$ref": "#/$defs/checkList" },
+        "documentation_merge": { "$ref": "#/$defs/checkList" },
+        "harness_head": { "$ref": "#/$defs/checkList" },
+        "harness_merge": { "$ref": "#/$defs/checkList" },
+        "attempt_head": { "$ref": "#/$defs/checkList" },
+        "attempt_merge": { "$ref": "#/$defs/checkList" },
+        "projection_head": { "$ref": "#/$defs/checkList" },
+        "projection_merge": { "$ref": "#/$defs/checkList" },
+        "evidence_head": { "$ref": "#/$defs/checkList" },
+        "evidence_merge": { "$ref": "#/$defs/checkList" },
+        "terminal_projection_head": { "$ref": "#/$defs/checkList" },
+        "terminal_projection_merge": { "$ref": "#/$defs/checkList" }
+      }
+    },
+    "authorizationA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "state", "approval_url", "approved_head", "approved_at"],
+      "properties": {
+        "id": { "const": "D003-LOCAL-PROOF-A-2026-08-15-01" },
+        "state": {
+          "type": "string",
+          "enum": ["PROPOSED", "APPROVED", "CONSUMED", "REVOKED", "EXPIRED"]
+        },
+        "approval_url": { "$ref": "#/$defs/nullableHttpsUri" },
+        "approved_head": { "$ref": "#/$defs/nullableSha" },
+        "approved_at": { "$ref": "#/$defs/nullableInstant" }
+      }
+    },
+    "windowA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "not_before",
+        "claim_by",
+        "active_fixed_expiry",
+        "reconciliation_fixed_expiry",
+        "review_deadline"
+      ],
+      "properties": {
+        "not_before": { "$ref": "#/$defs/nullableInstant" },
+        "claim_by": { "$ref": "#/$defs/instant" },
+        "active_fixed_expiry": { "$ref": "#/$defs/instant" },
+        "reconciliation_fixed_expiry": { "$ref": "#/$defs/instant" },
+        "review_deadline": { "$ref": "#/$defs/instant" }
+      }
+    },
+    "readinessA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentation_approved_head",
+        "documentation_approval_url",
+        "documentation_context_digest",
+        "harness_source_revision",
+        "harness_bundle_path",
+        "harness_bundle_digest",
+        "image_repository",
+        "image_index_digest",
+        "image_platform",
+        "image_platform_manifest_digest",
+        "image_platform_config_digest",
+        "sbom_digest",
+        "provenance_digest",
+        "harness_approval_url",
+        "authorization_bundle_path",
+        "authorization_bundle_digest",
+        "supply_chain_manifest_path",
+        "supply_chain_manifest_digest",
+        "sbom_path",
+        "provenance_path",
+        "claim_ruleset_id",
+        "claim_ruleset_url",
+        "claim_ruleset_snapshot_digest",
+        "claim_ruleset_include_ref",
+        "attempt_manifest_revision",
+        "attempt_manifest_path",
+        "attempt_manifest_digest",
+        "attempt_manifest_schema_path",
+        "attempt_manifest_schema_digest",
+        "operation_bindings_digest",
+        "operation_binding_claim_sha",
+        "operation_binding_evidence_sha",
+        "operation_binding_reconciliation_evidence_ref",
+        "operation_binding_reconciliation_evidence_sha",
+        "operation_binding_terminal_projection_bootstrap_sha",
+        "operation_binding_terminal_projection_final_sha",
+        "attempt_approval_url",
+        "preflight_report_path",
+        "preflight_digest",
+        "preflight_completed_at",
+        "preflight_expires_at",
+        "trusted_controller_principal",
+        "controller_source_revision",
+        "controller_executable_path",
+        "controller_executable_digest",
+        "controller_config_path",
+        "controller_config_digest",
+        "controller_conformance_report_path",
+        "controller_conformance_digest",
+        "controller_operation_allowlist_path",
+        "controller_operation_allowlist_digest",
+        "broker_conformance_report_path",
+        "broker_conformance_report_digest",
+        "broker_claim_ruleset_recheck_policy_path",
+        "broker_claim_ruleset_recheck_policy_digest",
+        "publication_attestation_schema_path",
+        "publication_attestation_schema_digest",
+        "publication_attestation_verification_key_path",
+        "publication_attestation_verification_key_digest",
+        "publication_attestation_key_id",
+        "publication_attestation_store_uri_template",
+        "ticket_schema_path",
+        "ticket_schema_digest",
+        "start_grant_schema_path",
+        "start_grant_schema_digest",
+        "ticket_verification_key_path",
+        "ticket_verification_key_digest",
+        "controller_key_id",
+        "execution_lease_profile_path",
+        "execution_lease_profile_digest",
+        "reconciliation_lease_profile_path",
+        "reconciliation_lease_profile_digest",
+        "disposition_lease_profile_path",
+        "disposition_lease_profile_digest",
+        "terminal_projection_lease_profile_path",
+        "terminal_projection_lease_profile_digest",
+        "reconciliation_policy_path",
+        "reconciliation_policy_digest",
+        "security_incident_owner",
+        "projection_pr_number",
+        "required_checks"
+      ],
+      "properties": {
+        "documentation_approved_head": { "$ref": "#/$defs/nullableSha" },
+        "documentation_approval_url": { "$ref": "#/$defs/nullableHttpsUri" },
+        "documentation_context_digest": { "$ref": "#/$defs/nullableDigest" },
+        "harness_source_revision": { "$ref": "#/$defs/nullableSha" },
+        "harness_bundle_path": { "const": "docs/technical/proofs/p0-06a/harness" },
+        "harness_bundle_digest": { "$ref": "#/$defs/nullableDigest" },
+        "image_repository": { "$ref": "#/$defs/nullableString" },
+        "image_index_digest": { "$ref": "#/$defs/nullableDigest" },
+        "image_platform": {
+          "oneOf": [{ "type": "string", "enum": ["linux/amd64", "linux/arm64"] }, { "type": "null" }]
+        },
+        "image_platform_manifest_digest": { "$ref": "#/$defs/nullableDigest" },
+        "image_platform_config_digest": { "$ref": "#/$defs/nullableDigest" },
+        "sbom_digest": { "$ref": "#/$defs/nullableDigest" },
+        "provenance_digest": { "$ref": "#/$defs/nullableDigest" },
+        "harness_approval_url": { "$ref": "#/$defs/nullableHttpsUri" },
+        "authorization_bundle_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization"
+        },
+        "authorization_bundle_digest": { "$ref": "#/$defs/nullableDigest" },
+        "supply_chain_manifest_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/supply-chain-manifest.json"
+        },
+        "supply_chain_manifest_digest": { "$ref": "#/$defs/nullableDigest" },
+        "sbom_path": { "const": "docs/technical/proofs/p0-06a/authorization/sbom.spdx.json" },
+        "provenance_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/provenance.intoto.jsonl"
+        },
+        "claim_ruleset_id": {
+          "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }]
+        },
+        "claim_ruleset_url": { "$ref": "#/$defs/nullableHttpsUri" },
+        "claim_ruleset_snapshot_digest": { "$ref": "#/$defs/nullableDigest" },
+        "claim_ruleset_include_ref": {
+          "const": "refs/tags/curve-proof-claims/d003-local-p0-06a-2026-08-15-01"
+        },
+        "attempt_manifest_revision": { "$ref": "#/$defs/nullableSha" },
+        "attempt_manifest_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/attempt-manifest.json"
+        },
+        "attempt_manifest_digest": { "$ref": "#/$defs/nullableDigest" },
+        "attempt_manifest_schema_path": {
+          "const": "contracts/schemas/p0-06a-attempt-manifest.schema.json"
+        },
+        "attempt_manifest_schema_digest": { "$ref": "#/$defs/nullableDigest" },
+        "operation_bindings_digest": { "$ref": "#/$defs/nullableDigest" },
+        "operation_binding_claim_sha": { "$ref": "#/$defs/nullableSha" },
+        "operation_binding_evidence_sha": { "$ref": "#/$defs/nullableSha" },
+        "operation_binding_reconciliation_evidence_ref": {
+          "oneOf": [
+            {
+              "const": "refs/heads/agent/p0-06a-reconciliation-evidence-d003-2026-08-15-01"
+            },
+            { "type": "null" }
+          ]
+        },
+        "operation_binding_reconciliation_evidence_sha": { "$ref": "#/$defs/nullableSha" },
+        "operation_binding_terminal_projection_bootstrap_sha": { "$ref": "#/$defs/nullableSha" },
+        "operation_binding_terminal_projection_final_sha": { "$ref": "#/$defs/nullableSha" },
+        "attempt_approval_url": { "$ref": "#/$defs/nullableHttpsUri" },
+        "preflight_report_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/preflight-report.json"
+        },
+        "preflight_digest": { "$ref": "#/$defs/nullableDigest" },
+        "preflight_completed_at": { "$ref": "#/$defs/nullableInstant" },
+        "preflight_expires_at": { "$ref": "#/$defs/nullableInstant" },
+        "trusted_controller_principal": { "$ref": "#/$defs/nullableString" },
+        "controller_source_revision": { "$ref": "#/$defs/nullableSha" },
+        "controller_executable_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/controller-executable.mjs"
+        },
+        "controller_executable_digest": { "$ref": "#/$defs/nullableDigest" },
+        "controller_config_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/controller-config.json"
+        },
+        "controller_config_digest": { "$ref": "#/$defs/nullableDigest" },
+        "controller_conformance_report_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/controller-conformance-report.json"
+        },
+        "controller_conformance_digest": { "$ref": "#/$defs/nullableDigest" },
+        "controller_operation_allowlist_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/controller-operation-allowlist.json"
+        },
+        "controller_operation_allowlist_digest": { "$ref": "#/$defs/nullableDigest" },
+        "broker_conformance_report_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/broker-conformance-report.json"
+        },
+        "broker_conformance_report_digest": { "$ref": "#/$defs/nullableDigest" },
+        "broker_claim_ruleset_recheck_policy_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/broker-claim-ruleset-recheck-policy.json"
+        },
+        "broker_claim_ruleset_recheck_policy_digest": { "$ref": "#/$defs/nullableDigest" },
+        "publication_attestation_schema_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/publication-attestation.schema.json"
+        },
+        "publication_attestation_schema_digest": { "$ref": "#/$defs/nullableDigest" },
+        "publication_attestation_verification_key_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/publication-attestation-verification-key.pem"
+        },
+        "publication_attestation_verification_key_digest": { "$ref": "#/$defs/nullableDigest" },
+        "publication_attestation_key_id": { "$ref": "#/$defs/nullableString" },
+        "publication_attestation_store_uri_template": { "$ref": "#/$defs/nullableHttpsUri" },
+        "ticket_schema_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/ticket.schema.json"
+        },
+        "ticket_schema_digest": { "$ref": "#/$defs/nullableDigest" },
+        "start_grant_schema_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/start-grant.schema.json"
+        },
+        "start_grant_schema_digest": { "$ref": "#/$defs/nullableDigest" },
+        "ticket_verification_key_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/ticket-verification-key.pem"
+        },
+        "ticket_verification_key_digest": { "$ref": "#/$defs/nullableDigest" },
+        "controller_key_id": { "$ref": "#/$defs/nullableString" },
+        "execution_lease_profile_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/execution-lease-profile.json"
+        },
+        "execution_lease_profile_digest": { "$ref": "#/$defs/nullableDigest" },
+        "reconciliation_lease_profile_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/reconciliation-lease-profile.json"
+        },
+        "reconciliation_lease_profile_digest": { "$ref": "#/$defs/nullableDigest" },
+        "disposition_lease_profile_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/disposition-lease-profile.json"
+        },
+        "disposition_lease_profile_digest": { "$ref": "#/$defs/nullableDigest" },
+        "terminal_projection_lease_profile_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/terminal-projection-lease-profile.json"
+        },
+        "terminal_projection_lease_profile_digest": { "$ref": "#/$defs/nullableDigest" },
+        "reconciliation_policy_path": {
+          "const": "docs/technical/proofs/p0-06a/authorization/reconciliation-policy.json"
+        },
+        "reconciliation_policy_digest": { "$ref": "#/$defs/nullableDigest" },
+        "security_incident_owner": { "$ref": "#/$defs/nullableString" },
+        "projection_pr_number": {
+          "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }]
+        },
+        "required_checks": { "$ref": "#/$defs/requiredChecks" }
+      }
+    },
+    "claimA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "ref",
+        "request_id",
+        "claimed_at",
+        "outcome",
+        "branch_state",
+        "branch_ref",
+        "reconciliation_branch_state",
+        "reconciliation_branch_ref",
+        "reconciliation_branch_request_id",
+        "ticket_state",
+        "ticket_id",
+        "ticket_digest",
+        "ticket_acknowledged_at",
+        "start_grant_digest",
+        "start_grant_consumed_at",
+        "execution_lease_id",
+        "execution_lease_state",
+        "execution_lease_issued_at",
+        "execution_lease_consumed_at",
+        "execution_lease_expires_at",
+        "execution_operation_evidence_path",
+        "execution_operation_evidence_digest",
+        "reconciliation_lease_id",
+        "reconciliation_lease_state",
+        "reconciliation_lease_issued_at",
+        "reconciliation_lease_consumed_at",
+        "reconciliation_lease_expires_at",
+        "reconciliation_operation_evidence_path",
+        "reconciliation_operation_evidence_digest"
+      ],
+      "properties": {
+        "state": { "type": "string", "enum": ["UNAVAILABLE", "UNCLAIMED", "CONSUMED"] },
+        "ref": { "const": "refs/tags/curve-proof-claims/d003-local-p0-06a-2026-08-15-01" },
+        "request_id": { "$ref": "#/$defs/nullableString" },
+        "claimed_at": { "$ref": "#/$defs/nullableInstant" },
+        "outcome": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": ["CLAIMED_EXACT", "CLAIMED_OTHER", "PREEXISTING", "ABSENT_AMBIGUOUS", "FAILED_AMBIGUOUS"]
+            },
+            { "type": "null" }
+          ]
+        },
+        "branch_state": {
+          "type": "string",
+          "enum": ["UNAVAILABLE", "UNCREATED", "CREATED_EXACT", "CREATED_OTHER", "PREEXISTING", "AMBIGUOUS", "EVIDENCE_MERGED"]
+        },
+        "branch_ref": {
+          "const": "refs/heads/agent/p0-06a-isolated-temporal-proof-d003-2026-08-15-01"
+        },
+        "reconciliation_branch_state": {
+          "type": "string",
+          "enum": ["UNAVAILABLE", "UNCREATED", "CREATED_EXACT", "CREATED_OTHER", "PREEXISTING", "AMBIGUOUS", "EVIDENCE_MERGED"]
+        },
+        "reconciliation_branch_ref": {
+          "const": "refs/heads/agent/p0-06a-reconciliation-evidence-d003-2026-08-15-01"
+        },
+        "reconciliation_branch_request_id": { "$ref": "#/$defs/nullableString" },
+        "ticket_state": {
+          "type": "string",
+          "enum": ["UNAVAILABLE", "UNISSUED", "ISSUED", "ACKNOWLEDGED", "START_GRANTED", "CONSUMED", "REJECTED", "REPLAYED", "AMBIGUOUS"]
+        },
+        "ticket_id": { "$ref": "#/$defs/nullableString" },
+        "ticket_digest": { "$ref": "#/$defs/nullableDigest" },
+        "ticket_acknowledged_at": { "$ref": "#/$defs/nullableInstant" },
+        "start_grant_digest": { "$ref": "#/$defs/nullableDigest" },
+        "start_grant_consumed_at": { "$ref": "#/$defs/nullableInstant" },
+        "execution_lease_id": { "$ref": "#/$defs/nullableString" },
+        "execution_lease_state": {
+          "type": "string",
+          "enum": ["UNISSUED", "ISSUED", "CONSUMED", "REVOKED", "EXPIRED"]
+        },
+        "execution_lease_issued_at": { "$ref": "#/$defs/nullableInstant" },
+        "execution_lease_consumed_at": { "$ref": "#/$defs/nullableInstant" },
+        "execution_lease_expires_at": { "$ref": "#/$defs/nullableInstant" },
+        "execution_operation_evidence_path": {
+          "const": "docs/technical/proofs/p0-06a/evidence/execution-operation.json"
+        },
+        "execution_operation_evidence_digest": { "$ref": "#/$defs/nullableDigest" },
+        "reconciliation_lease_id": { "$ref": "#/$defs/nullableString" },
+        "reconciliation_lease_state": {
+          "type": "string",
+          "enum": ["UNAVAILABLE", "ISSUED", "CONSUMED", "REVOKED", "EXPIRED"]
+        },
+        "reconciliation_lease_issued_at": { "$ref": "#/$defs/nullableInstant" },
+        "reconciliation_lease_consumed_at": { "$ref": "#/$defs/nullableInstant" },
+        "reconciliation_lease_expires_at": { "$ref": "#/$defs/nullableInstant" },
+        "reconciliation_operation_evidence_path": {
+          "const": "docs/technical/proofs/p0-06a/evidence/reconciliation-operation.json"
+        },
+        "reconciliation_operation_evidence_digest": { "$ref": "#/$defs/nullableDigest" }
+      }
+    },
+    "reviewA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disposition",
+        "evidence_revision",
+        "review_url",
+        "reviewed_at",
+        "disposition_lease_state",
+        "disposition_lease_id",
+        "disposition_lease_issued_at",
+        "disposition_lease_consumed_at",
+        "disposition_lease_expires_at",
+        "disposition_controller_principal",
+        "prior_stage_record_digest",
+        "operation_evidence_path",
+        "operation_evidence_digest",
+        "terminal_projection_lease_projected_state",
+        "terminal_projection_lease_id",
+        "terminal_projection_lease_issued_at",
+        "terminal_projection_lease_expires_at",
+        "terminal_projection_controller_principal",
+        "terminal_projection_branch_ref",
+        "terminal_projection_publication_intent_path",
+        "terminal_projection_publication_intent_digest",
+        "terminal_projection_pr_number"
+      ],
+      "properties": {
+        "disposition": {
+          "type": "string",
+          "enum": ["PENDING", "ACCEPT_STAGE_A", "REJECT_STAGE_A", "NEW_AUTHORIZATION_REQUIRED"]
+        },
+        "evidence_revision": { "$ref": "#/$defs/nullableSha" },
+        "review_url": { "$ref": "#/$defs/nullableHttpsUri" },
+        "reviewed_at": { "$ref": "#/$defs/nullableInstant" },
+        "disposition_lease_state": {
+          "type": "string",
+          "enum": ["UNAVAILABLE", "ISSUED", "CONSUMED", "REVOKED", "EXPIRED"]
+        },
+        "disposition_lease_id": { "$ref": "#/$defs/nullableString" },
+        "disposition_lease_issued_at": { "$ref": "#/$defs/nullableInstant" },
+        "disposition_lease_consumed_at": { "$ref": "#/$defs/nullableInstant" },
+        "disposition_lease_expires_at": { "$ref": "#/$defs/nullableInstant" },
+        "disposition_controller_principal": { "$ref": "#/$defs/nullableString" },
+        "prior_stage_record_digest": { "$ref": "#/$defs/nullableDigest" },
+        "operation_evidence_path": {
+          "const": "docs/technical/proofs/p0-06a/evidence/review-disposition-operation.json"
+        },
+        "operation_evidence_digest": { "$ref": "#/$defs/nullableDigest" },
+        "terminal_projection_lease_projected_state": {
+          "type": "string",
+          "enum": ["UNAVAILABLE", "ISSUED", "REVOKED", "EXPIRED"]
+        },
+        "terminal_projection_lease_id": { "$ref": "#/$defs/nullableString" },
+        "terminal_projection_lease_issued_at": { "$ref": "#/$defs/nullableInstant" },
+        "terminal_projection_lease_expires_at": { "$ref": "#/$defs/nullableInstant" },
+        "terminal_projection_controller_principal": { "$ref": "#/$defs/nullableString" },
+        "terminal_projection_branch_ref": {
+          "const": "refs/heads/agent/p0-06a-terminal-projection-d003-2026-08-15-01"
+        },
+        "terminal_projection_publication_intent_path": {
+          "const": "docs/technical/proofs/p0-06a/evidence/terminal-projection-publication-intent.json"
+        },
+        "terminal_projection_publication_intent_digest": { "$ref": "#/$defs/nullableDigest" },
+        "terminal_projection_pr_number": {
+          "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }]
+        }
+      }
+    },
+    "stageA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "authorization", "window", "readiness", "claim", "review"],
+      "properties": {
+        "description": { "const": "Isolated Temporal feasibility proof" },
+        "authorization": { "$ref": "#/$defs/authorizationA" },
+        "window": { "$ref": "#/$defs/windowA" },
+        "readiness": { "$ref": "#/$defs/readinessA" },
+        "claim": { "$ref": "#/$defs/claimA" },
+        "review": { "$ref": "#/$defs/reviewA" }
+      }
+    },
+    "stageBUnavailable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "authorization", "window", "readiness", "claim", "review"],
+      "properties": {
+        "description": { "const": "Least-privilege Plane integration proof" },
+        "authorization": {
+          "const": {
+            "id": null,
+            "state": "NOT_AUTHORIZED",
+            "approval_url": null,
+            "approved_head": null,
+            "approved_at": null
+          }
+        },
+        "window": {
+          "const": {
+            "not_before": null,
+            "claim_by": null,
+            "active_fixed_expiry": null,
+            "reconciliation_fixed_expiry": null,
+            "review_deadline": null
+          }
+        },
+        "readiness": { "const": {} },
+        "claim": {
+          "const": {
+            "state": "UNAVAILABLE",
+            "ref": null,
+            "request_id": null,
+            "claimed_at": null,
+            "branch_state": "UNAVAILABLE",
+            "branch_ref": null,
+            "ticket_state": "UNAVAILABLE",
+            "ticket_id": null,
+            "ticket_digest": null,
+            "ticket_acknowledged_at": null,
+            "start_grant_digest": null,
+            "start_grant_consumed_at": null
+          }
+        },
+        "review": {
+          "const": {
+            "disposition": "UNAVAILABLE",
+            "evidence_revision": null,
+            "review_url": null,
+            "reviewed_at": null,
+            "disposition_lease_state": "UNAVAILABLE",
+            "disposition_lease_expires_at": null
+          }
+        }
+      }
+    }
+  }
+}
