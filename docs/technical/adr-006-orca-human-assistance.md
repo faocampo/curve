@@ -35,7 +35,7 @@ Orca never receives a Curve-managed VCS, sandbox, gate, waiver, provider-adminis
 
 ## Evidence and proof results
 
-The product boundary is approved in PRD v0.7. Remaining evidence is the supported Orca client/version, ownership and support process, license classification, MCP compatibility, delegated-auth proof, revocation behavior, and the D-007 conformance suite.
+The product boundary is approved in PRD v0.8. Remaining evidence is the supported Orca client/version, ownership and support process, license classification, MCP compatibility, delegated-auth proof, revocation behavior, and the D-007 conformance suite.
 
 ## Security, privacy, licensing, and operational impact
 

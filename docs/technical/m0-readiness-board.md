@@ -4,14 +4,14 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Active readiness control; approvals pending |
-| Version | 1.3 |
-| Date | 2026-08-14 |
-| Normative product baseline | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
+| Status | Active readiness control; D-001 decided, remaining approvals pending |
+| Version | 1.4 |
+| Date | 2026-08-15 |
+| Normative product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Candidate Plane baseline | `d380678912e9b46805ef852d2e05411f1fea6d8b` pending reviewed merge to fork `preview` |
-| Published Curve baseline | `docs/m0-code-readiness-2026-08-12` at `2b39e89bcf0a46bd5feff3ffc6e56c1cc00b0bd0`; review pending; `validate` passed |
-| Published Plane candidate | `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`; review and merge pending |
+| Candidate Plane baseline | Approved `d380678912e9b46805ef852d2e05411f1fea6d8b`; merge to fork `preview` and resulting-base pin pending |
+| Published Curve baseline | `docs/m0-code-readiness-2026-08-12` approved at `62e144f37d4fea3064ae7cd21868117b9eb78edb`; decision-record update pending final exact-head disposition; `validate` passed |
+| Published Plane candidate | `curve/plane-upstream-sync-2026-08-12` at approved head `d380678912e9b46805ef852d2e05411f1fea6d8b`; merge pending |
 
 ## Readiness rule
 
@@ -23,7 +23,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 
 | Decision | Status | Accountable role | Named approver | Evidence owner | Blocks now | Evidence and next action |
 | --- | --- | --- | --- | --- | --- | --- |
-| [D-001](adr-001-plane-upstream-foundation.md) | PROPOSED | Curve engineering approver; licensing reviewer | Federico Ocampo, CTO at X3M (both roles assigned; formal decision pending) | Federico Ocampo, Plane support/upgrade owner | Plane baseline merge; M0-01 | Federico's review of both exact PR heads, formal ADR approval record, branch merge, and additive migration/rollback proof remain. |
+| [D-001](adr-001-plane-upstream-foundation.md) | DECIDED | Curve engineering approver; licensing reviewer | Federico Ocampo, CTO at X3M | Federico Ocampo, Plane support/upgrade owner | Plane baseline merge before M0-01 dispatch | Owner approval, exact-head dispositions, licensing acceptance, repository boundary, and review triggers are recorded. Merge and pin the approved Plane base; M0-01 separately proves additive migration, disabled-state, and rollback behavior. |
 | [D-003](adr-003-runtime-topology.md) | PROPOSED | Platform Operations | **Required** | Curve platform engineering | Local Temporal M0-06 beyond an approved proof; every non-local activation | Local stack inventory, immutable dev-image pin, SDK pin, profile contract, and non-local decision matrix are prepared. Approve/authorize local proof; complete non-local cells before staging/production. |
 | [D-007](adr-007-mcp-trust-and-orca-profile.md) | PROPOSED | Security; Platform Administration | **Required** | Curve security engineering | MCP-enabled M0-09/M1/M4 | MCP revision, proposed OAuth profile, closed v1.1 tool/result schemas, trust record, transition matrix, and conformance list are prepared. Approve identity/limits and authorize proof. |
 | [D-009](adr-009-retention-and-erasure.md) | OPEN | Security; Privacy; Legal | **Required** | Data governance | M0-04; staging/production | Asset inventory, owner-fillable period/backup/hold matrix, erasure state machine, policy precedence and acceptance proof are prepared. Named owners must resolve every `TBD`; no period is inferred. |
@@ -44,13 +44,13 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 
 | Package | State | Allowed scope or blocker |
 | --- | --- | --- |
-| P0-01 Plane inventory | IN_REVIEW | Repository-level capability/license-boundary proof and reuse/build recommendation are present and the candidate branch is published. Federico Ocampo is assigned as engineering approver, licensing reviewer, support/upgrade owner, and interim human reviewer for both PRs. Formal D-001 approval, review disposition, merge, and migration/rollback proof remain. |
+| P0-01 Plane inventory | IN_REVIEW | Repository-level capability/license-boundary proof and reuse/build recommendation are approved under D-001. The candidate Plane branch remains to be merged and its resulting `preview` base SHA pinned. M0-01 owns migration/disabled-state/rollback implementation evidence. |
 | P0-02 topology | IN_REVIEW | Exact local Temporal candidate pins/profile and a fail-closed staging/production matrix are documented; named D-003 approval and proof execution remain. |
-| P0-03 ADR set | IN_PROGRESS | M0-priority D-001/D-003/D-007/D-009 packets are decision-ready; named approvals and authorized proofs remain. D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
-| P0-04 documentation/contracts validation | IN_REVIEW | PRD v0.7, OpenAPI, 16 M0 JSON Schemas, positive/negative fixtures, Temporal/MCP contracts, traceability, validators, dispatch packets, ownership assignments, and GitHub Project governance are published at `2b39e89...`; required `validate` passed in [run 31856435020](https://github.com/faocampo/curve/actions/runs/31856435020). Federico's exact-head review disposition remains. |
+| P0-03 ADR set | IN_PROGRESS | D-001 is decided. D-003, D-007, and D-009 still require their named decisions/proofs; D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
+| P0-04 documentation/contracts validation | IN_REVIEW | The PRD v0.7 baseline and accompanying contract/governance suite were approved through `62e144f...`; required `validate` passed in [run 31856579059](https://github.com/faocampo/curve/actions/runs/31856579059). This PRD v0.8 decision-record revision has passed local validation and still requires GitHub CI, final exact-head disposition, and merge. |
 | P0-05 test strategy | READY_FOR_IMPLEMENTATION | May proceed using synthetic fixtures. |
 | P0-06 local Temporal proof | BLOCKED | Requires named D-003 proof authorization and a pinned Temporal version/image. |
-| M0-01 module shell | BLOCKED | Requires D-001 and P0A documentation baseline approval. |
+| M0-01 module shell | BLOCKED | D-001 is decided. Requires the Curve baseline merge, approved Plane candidate merge/resulting base pin, and all remaining task-packet blockers. It owns additive migration, disabled-state, and rollback proof. |
 | M0-02 core persistence | BLOCKED | Requires M0-01. |
 | M0-03 core policy | BLOCKED | Requires M0-01. |
 | M0-04 protected storage | BLOCKED | Requires M0-02, M0-03, and D-009. |
@@ -71,6 +71,8 @@ Federico Ocampo authorized an interim bootstrap configuration on 2026-08-14. The
 An approval entry must contain decision ID, ADR version/digest, approver name and role, decision time, scope/environment, evidence references, exceptions, and review/expiry date. Repository approval or a chat message without these fields is not sufficient.
 
 Federico Ocampo is the interim human reviewer for every Curve and Plane PR. Each materialized packet records his name and GitHub username `faocampo` unless he assigns another named reviewer. Assignment alone does not satisfy `B-REVIEW`; the exact PR head requires a recorded disposition.
+
+D-001 approval is recorded in [ADR-001](adr-001-plane-upstream-foundation.md#approval-record) and the [GitHub owner approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). It binds the approved ADR content digest and both exact PR heads; it allocates implementation proof to M0-01 without authorizing packages that have other unresolved blockers.
 
 ## Exit criteria
 

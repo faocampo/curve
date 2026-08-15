@@ -7,9 +7,9 @@
 | Status | Engineering baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Engineers, reviewers, security and platform teams, and AI coding agents |
-| Version | 0.2 |
-| Last updated | 2026-08-12 |
-| Normative source | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
+| Version | 0.3 |
+| Last updated | 2026-08-15 |
+| Normative source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Architecture | [Curve Technical Architecture](./architecture.md) |
 
 ## Purpose
@@ -69,7 +69,7 @@ The core domain does not import provider SDK models. Adapters translate provider
 - Plane workspace, user, project, work-item, estimate, relation, comment, and notification identifiers are referenced through explicit bindings.
 - No Curve state is stored by reinterpreting a Plane status, label, custom field, or commercial-only feature.
 - An anti-corruption service translates between Plane native records and Curve projections. It prevents bidirectional status loops.
-- Reusable Plane UI and API capabilities may be adopted only after D-001 records that they exist in the pinned community commit.
+- Reusable Plane UI and API capabilities are limited to those proven by D-001 in the pinned community inventory; unproven or commercial-only seams require a later approved compatibility decision.
 
 This pattern implements `NFR-016` and the PRD Plane compatibility and migration rules.
 
@@ -354,7 +354,7 @@ The table distinguishes a fixed contract from an unresolved production selection
 
 | Capability | Technology or boundary | Status | Decision / implementation constraint |
 | --- | --- | --- | --- |
-| Work-management foundation | Plane community edition | `PRD_SELECTED` with pin unresolved | D-001 must pin the commit and prove reusable community capabilities |
+| Work-management foundation | Plane community edition | `ADR_DECIDED`; approved candidate merge/base pin pending | D-001 approves candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`, the reuse boundary, and upstream process; M0-01 waits for the resulting `preview` base SHA |
 | Curve relational state | PostgreSQL category used by Plane/Curve | `FIXED_CONTRACT`; topology open | D-003 selects topology, persistence, HA, backup, and operations |
 | Large immutable bodies | Workspace-scoped immutable object storage | `FIXED_CONTRACT`; product open | D-003/D-009 select product, topology, retention, erasure, and backup |
 | Durable orchestration | Temporal | `PRD_SELECTED`; deployment open | D-003 selects service/persistence/HA; workflow version/replay rules are fixed |
@@ -402,7 +402,7 @@ The table distinguishes a fixed contract from an unresolved production selection
 
 ### Module boundaries
 
-Detailed design should preserve these logical modules even if D-001 proves they are initially co-deployed in one Plane backend or frontend:
+D-001 establishes the public Plane fork as the implementation repository. Detailed design preserves these logical modules when they are initially co-deployed in the Plane backend or frontend:
 
 - `curve_identity_policy`: workspace, role, risk, effective-principal, Access Envelope, side-effect and budget decisions.
 - `curve_roadmap`: Product, Roadmap, Milestone, Feature, Roadmap Item, history, snapshot, schedule projections.
@@ -414,7 +414,7 @@ Detailed design should preserve these logical modules even if D-001 proves they 
 - `curve_integrations`: ports, connections, adapters, controllers, webhooks and reconciliation.
 - `curve_audit`: append-only mutation history, lineage and controlled exports.
 
-These are domain seams, not prescribed directory names. A code plan may map them to the pinned Plane repository only after D-001.
+These are domain seams, not prescribed directory names. A code plan maps them additively to the approved Plane fork after the candidate is merged and the resulting `preview` base SHA is pinned.
 
 ### Database and migration rules
 
@@ -528,7 +528,7 @@ Before writing implementation code in the affected milestone, link the approved 
 
 | Decision | Engineering artifact required before implementation |
 | --- | --- |
-| D-001 | Plane pin/reuse inventory, module mapping, migration and upstream-rebase rules |
+| D-001 | Approved Plane pin/reuse inventory, module mapping, upstream-rebase rules, and M0-01 ownership of additive migration/disabled-state/rollback proof |
 | D-002 | Delegation sequence, token storage/revocation, SDK/protocol proof and access-failure tests |
 | D-003 | Deployment diagrams, concrete state services, trust/network policy, HA, backup/restore, RPO/RTO and owners |
 | D-004 | Gateway adapter profile, selected image/digest, routes/fallback, operations and license record |

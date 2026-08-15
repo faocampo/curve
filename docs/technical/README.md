@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This directory is the architecture and implementation handoff derived from the [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
+This directory is the architecture and implementation handoff derived from the [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
 
-The suite is implementation-oriented and records agreed planning directions as `PROPOSED`, but intentionally does not convert them into owner approval. A coding work package remains blocked until its required decisions and ADRs are `DECIDED`.
+The suite is implementation-oriented. D-001 is owner-approved and recorded as `DECIDED`; other agreed planning directions remain `PROPOSED` until their named owners approve them. A coding work package remains blocked until all of its required decisions and ADRs are `DECIDED` and its remaining entry criteria pass.
 
 ## Document set
 
@@ -19,8 +19,8 @@ The suite is implementation-oriented and records agreed planning directions as `
 | [Architecture decisions](architecture-decisions.md) | D-001-D-016 evidence, ownership, decision, and supersession process | ADR prerequisites and decision governance |
 | [Development plan](development-plan.md) | Milestones, work packages, dependencies, traceability, tests, task packets, and AI-agent protocol | Delivery sequencing and Definition of Done |
 | [Implementation-readiness review](review-analysis-and-remediation.md) | Prioritized gaps, closure evidence, owners, dependencies, and remediation status | Review record; never overrides the PRD or approved ADRs |
-| [Plane foundation inventory](plane-foundation-inventory.md) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | D-001 evidence; candidate is not yet merge-ready |
-| [ADR-001: Plane upstream foundation](adr-001-plane-upstream-foundation.md) | Proposed decision record for the updateable upstream baseline, fork workflow, proof results, consequences, rollback, and remaining acceptance gates | D-001 decision record; `PROPOSED` until accepted |
+| [Plane foundation inventory](plane-foundation-inventory.md) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; candidate merge/base pin pending |
+| [ADR-001: Plane upstream foundation](adr-001-plane-upstream-foundation.md) | Decided updateable upstream baseline, fork workflow, proof results, consequences, rollback, approval, and review triggers | D-001 decision record; `DECIDED` on 2026-08-15 |
 | [ADR-003: Runtime topology](adr-003-runtime-topology.md) | Proposed local/non-local Temporal and Curve runtime boundary | D-003 decision packet; owner approval pending |
 | [ADR-006: Orca human assistance](adr-006-orca-human-assistance.md) | Proposed developer-operated Orca MCP integration boundary | D-006 decision packet; owner/licensing approval pending |
 | [ADR-007: MCP and Orca profile](adr-007-mcp-trust-and-orca-profile.md) | Proposed MCP trust registry and developer-operated Orca write-back allowlist | D-007 decision packet; security/platform approval pending |
@@ -55,7 +55,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 
 ```mermaid
 flowchart TD
-    prd["Curve PRD v0.7"] --> decisions["D-001 through D-016 and ADRs"]
+    prd["Curve PRD v0.8"] --> decisions["D-001 through D-016 and ADRs"]
     prd --> architecture[Architecture]
     prd --> domain[Domain model]
     architecture --> workflows[Workflows and sequences]

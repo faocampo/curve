@@ -5,10 +5,11 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 0.2 |
-| Source | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
+| Version | 0.3 |
+| Last updated | 2026-08-15 |
+| Source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
-| Planning unit | Repository-local work package that becomes one or more approved vertical slices only after D-001 identifies the implementation repositories |
+| Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 |
 
 ## Purpose and authority
 
@@ -31,7 +32,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 
 ## Planning assumptions
 
-- The current Curve repository is documentation-only. D-001 must pin the target Plane community baseline and implementation repository topology before code packages are materialized.
+- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001. Candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is accepted; its merge and the resulting `preview` base SHA pin remain operational prerequisites before code packets are materialized.
 - Component names in this plan are logical. The architecture may co-deploy compatible components, but ownership, contracts, trust boundaries, and failure isolation remain distinct.
 - Relative sizes are planning signals: `S` is a bounded adapter/schema/UI slice, `M` is a component with several contracts, and `L` must be decomposed before dispatch. They are not calendar estimates.
 - Every milestone has a production-like demonstration environment even when the capability is not production-enabled.
@@ -116,7 +117,7 @@ The final proof report contains exact versions/digests, topology/configuration, 
 
 | ID | Size | Deliverable | Dependencies | PRD trace | Completion evidence |
 | -- | ---- | ----------- | ------------ | --------- | ------------------- |
-| M0-01 | M | Curve module boundary integrated with Plane identity/workspace references and feature-flagged navigation/API exposure | P0-01, P0-02 | FR-001, FR-022, NFR-015-NFR-016, AC-01, AC-35 | Workspace isolation tests, disabled rollback path, supported Plane upgrade test. |
+| M0-01 | M | Curve module boundary integrated with Plane identity/workspace references and feature-flagged navigation/API exposure | P0-01, P0-02 | FR-001, FR-022, NFR-015-NFR-016, AC-01, AC-35 | Workspace isolation tests, disabled behavior with unchanged Plane routes/navigation, forward/backward/forward additive Curve migration proof, rollback path, and supported Plane upgrade test. This package owns the implementation proof allocated by D-001. |
 | M0-02 | M | Core aggregate persistence, opaque IDs, UTC timestamps, aggregate versions, tombstones, append-only histories, and migrations | M0-01 | FR-007, FR-021, NFR-004, NFR-018, AC-08, AC-34, AC-56 | Forward/backward migration and optimistic-concurrency suites. |
 | M0-03 | M | Core authorization/policy kernel for roles, object ACLs, risk tier, assignments, separation of duties, classification, and deny-by-default generic allowlists | M0-01 | FR-043, NFR-009-NFR-012, AC-09, AC-35, AC-52 | Cross-workspace IDOR matrix, separation-of-duty fixtures, empty-allowlist denial, and policy decision audit. Provider-specific policy is added by the consuming adapter after its ADR is decided. |
 | M0-04 | M | Workspace-scoped object storage, AccessEnvelope, digest service, retention hooks, upload/download intents, and cryptographic-erasure workflow | M0-02, M0-03, D-009 | FR-004, FR-021, NFR-010-NFR-011, NFR-018, NFR-020, AC-53, AC-56 | Classification, ACL, integrity, size, tombstone, erasure, and backup tests. |

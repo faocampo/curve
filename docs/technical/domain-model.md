@@ -5,14 +5,14 @@
 | Field | Value |
 | --- | --- |
 | Status | Architecture input; implementation remains gated by the PRD decision register |
-| Source | [`curve-ai-native-sdlc-prd.md`](../curve-ai-native-sdlc-prd.md), version 0.5 |
+| Source | [`curve-ai-native-sdlc-prd.md`](../curve-ai-native-sdlc-prd.md), version 0.8 |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
-| Last updated | 2026-08-12 |
+| Last updated | 2026-08-15 |
 | Scope | Logical domain and persistence model for Curve R1 |
 
 ## 1. Purpose and precedence
 
-This document derives the logical domain model required by PRD v0.7. It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests, but it does not select a database topology, object-storage product, identity mechanism, provider version, retention period, or other owner-gated decision that the PRD reserves for D-001 through D-016.
+This document derives the logical domain model required by PRD v0.8. It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests. D-001 fixes the Plane/Curve repository and authority boundary; the document does not select the remaining database topology, object-storage product, identity mechanism, provider version, retention period, or other owner-gated decisions D-002 through D-016.
 
 The PRD remains authoritative. Its scope invariants, lifecycle transitions, numbered functional requirements (FR), non-functional requirements (NFR), acceptance criteria (AC), and decision register take precedence over this document. If this document cannot be implemented without changing one of those contracts, the implementation MUST stop and propose a PRD revision; it MUST NOT silently reinterpret the requirement.
 
@@ -158,7 +158,7 @@ All mutable roots include the common fields in section 3.1.
 | `RoadmapItemHistory.rationale` | text | CONDITIONAL | Required for Milestone movement and policy-defined material changes. |
 | `RoadmapItemHistory.expected_schedule_impact` | text | CONDITIONAL | Required for Milestone movement. |
 | `WorkItemBinding.roadmap_item_id` | `OpaqueId` | NO | Same-workspace item. |
-| `WorkItemBinding.plane_project_id`, `plane_work_item_id` | external opaque IDs | NO | Plane is authoritative; no Curve FK to Plane tables is assumed until D-001. |
+| `WorkItemBinding.plane_project_id`, `plane_work_item_id` | external opaque IDs | NO | Plane is authoritative and the logical binding treats these as provider-scoped opaque IDs. The applicable migration/compatibility design must decide physical referential enforcement without transferring Plane lifecycle authority to Curve. |
 | `WorkItemBinding.observed_version`, `observed_state`, `estimate` | provider projection | YES | Used to calculate Execution Completion with source timestamp and method. |
 | `WorkItemBinding.cancelled`, `is_leaf` | boolean projection | NO | Cancelled entries are excluded; parents with linked children are not double counted. |
 | `RoadmapSnapshot.roadmap_id` | `OpaqueId` | NO | Same-workspace Roadmap. |

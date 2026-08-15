@@ -5,9 +5,9 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Remediation in progress; implementation is not yet authorized |
-| Version | 0.1 |
-| Review date | 2026-08-12 |
-| Reviewed baseline | Curve PRD v0.4; remediation target advanced through Curve PRD v0.7 and technical documentation v0.3 |
+| Version | 0.2 |
+| Review date | 2026-08-15 |
+| Reviewed baseline | Curve PRD v0.4; remediation target advanced through Curve PRD v0.8 and the governed technical suite |
 | Audience | Product, engineering, architecture, security, platform operations, legal, and AI coding agents |
 | Authority | Records gaps and closure evidence; it does not override the PRD or approve an ADR |
 
@@ -15,7 +15,7 @@
 
 The Curve direction is technically coherent: Plane remains the work-management foundation, Temporal owns durable Curve workflows, Onyx supplies permission-aware knowledge, OpenHands is the first execution provider, and trusted Curve controllers retain all VCS mutation authority. The proposed Loomit SDK Compatibility pilot is a suitable bounded validation scenario.
 
-The current package is **not implementation-ready**, however. The proposed execution plan mixes an R0B pilot with selected R1 capabilities while no decision D-001-D-016 is yet `DECIDED`; agreed planning directions are now recorded as `PROPOSED`. Remaining conflicts and missing proof would still force an AI coding agent to choose infrastructure, security, provider, retention, quality, and pilot-contract behavior that the PRD explicitly prohibits it from inventing.
+The current package is **not implementation-ready**. D-001 is now `DECIDED`, with the Plane foundation, repository boundary, licensing obligations, ownership, and exact-head dispositions accepted. Its approved Plane candidate still requires merge and resulting-base pinning. Other package-specific decisions and proofs remain unresolved and would force an AI coding agent to choose infrastructure, security, provider, retention, quality, or pilot-contract behavior that the PRD reserves for named owners.
 
 The remediation objective is therefore:
 
@@ -52,11 +52,11 @@ Repository SHAs above are review evidence, not approved Gate 2 base SHAs. Gate 2
 
 | ID | Priority | Finding | Affected decisions or milestones | Required closure evidence | Owner | State |
 | -- | -------- | ------- | -------------------------------- | ------------------------- | ----- | ----- |
-| R-001 | P0 | D-001-D-016 had all remained `OPEN`, although the execution plan treated several as selected. | D-001-D-016; M0-M6 | Agreed planning directions are recorded as `PROPOSED`; closure still requires owner-approved ADR status/evidence for every decision required by a package. | Named PRD decision owners | IN PROGRESS |
+| R-001 | P0 | D-001-D-016 had all remained `OPEN`, although the execution plan treated several as selected. | D-001-D-016; M0-M6 | D-001 is decided with an attributable approval record. Other directions remain `PROPOSED` or `OPEN`; each consuming package still requires its owner-approved ADR status/evidence. | Named PRD decision owners | IN PROGRESS |
 | R-002 | P0 | The planned pilot was GitLab + OpenHands, while the early normative R0B text named GitHub + Orca. | Release baseline; D-006-D-008; D-015 | R0B now identifies GitLab/OpenHands as the validation configuration. R1 separately requires both VCS providers, OpenHands automation, and the developer-operated Orca MCP profile. | Product owner and engineering lead | CLOSED |
 | R-003 | P0 | The plan treated Orca as an automated provider without an authoritative API while developers actually operate it manually. | D-006-D-007; M4; AC-16 | PRD v0.6 makes OpenHands the sole automated provider and defines Orca as a developer-operated MCP client with delegated, bounded workflow write-back and a separate conformance suite. Owner approval and proof remain required. | Agent platform owner; security and platform administration | IN PROGRESS |
 | R-004 | P0 | D-004 selected Portkey or Envoy, while planning selected a thin Curve gateway over OpenRouter and only three new infrastructure services. | D-004; model-enabled M1/M3/M5 | The PRD and technology baseline now consistently specify the in-process Curve Model Gateway and no longer block the model-free M0 skeleton; closure still requires the approved ADR, OpenRouter contract proof, failure behavior, policy, telemetry, ownership, and exit strategy before model use. | AI platform and operations | IN PROGRESS |
-| R-005 | P0 | The Plane fork lacked an authoritative `upstream` remote/ref, and rebasing shared `preview` could have rewritten published history. | D-001; M0 | Product sponsor approved official upstream plus fork-based development. The fetch-only upstream, exact fork/upstream pins, 0-ahead/1-behind report, isolated candidate branch, candidate SHA `d380678912e9b46805ef852d2e05411f1fea6d8b`, passing 60-task frontend check, 16-task build, 516-test backend suite, and local deployment smoke are recorded. Federico Ocampo is assigned as engineering approver, licensing reviewer, support/upgrade owner, and interim PR reviewer. Closure requires formal acceptance and review dispositions, merge, and migration/rollback proof. | Federico Ocampo, CTO at X3M | IN PROGRESS |
+| R-005 | P0 | The Plane fork lacked an authoritative `upstream` remote/ref, and rebasing shared `preview` could have rewritten published history. | D-001; M0 | D-001 is decided: the fetch-only upstream, exact pins, ancestry report, isolated candidate, checks, local smoke, community/commercial boundary, licensing obligations, ownership, and exact-head dispositions are approved. Closure requires merging candidate `d380678...` and pinning the resulting `preview` SHA. M0-01 owns migration/disabled-state/rollback proof. | Federico Ocampo, CTO at X3M | IN PROGRESS |
 | R-006 | P0 | The supplied General Config repository does not implement the target `/mm/organizations/{orgId}/apps/{appId}` route. | D-015; pilot Gate 2 | R0B now models CIA as an external versioned-contract/staging prerequisite; closure requires the authoritative OpenAPI artifact, deployed version, staging probe, and owner approval. | CIA TL and Product owner | IN PROGRESS |
 | R-007 | P0 | The proposed SDK compatibility wire shape used camel case, while inspected Sachiel wire representations use snake case. | Pilot contract; M3; M5 | The reference contract now specifies snake-case wire fields and a camel-case mapper; closure requires CIA/Sachiel approval, authoritative OpenAPI, and consumer contract tests. | CIA TL and Sachiel TL | IN PROGRESS |
 | R-008 | P0 | The four-state UI requirement did not distinguish missing compatibility data from failure of the App endpoint itself. | Pilot acceptance; Gate 2; Gate 3 | The reference contract now separates omitted compatibility on a successful App response from full App failure and defines unknown/invalid behavior; closure requires owner approval and fixtures. | Product approver and both TLs | IN PROGRESS |

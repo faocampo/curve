@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Status | Derived architecture specification |
-| Source | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
+| Source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Audience | Architecture, backend, workflow, provider-adapter, QA, and operations engineers |
 | Scope | R0A, R0B, and R1 lifecycle orchestration |
 
@@ -58,7 +58,7 @@ Failures use RFC 9457 Problem Details. Authentication, authorization, validation
 
 ### 3.2 Event envelope
 
-Every emitted event MUST contain the PRD v0.7 envelope:
+Every emitted event MUST contain the PRD v0.8 envelope:
 
 `event_id`, `schema_version`, `workspace_id`, `aggregate_type`, `aggregate_id`, `aggregate_version`, per-aggregate `sequence`, optional `initiative_id`, `workflow_version`, `actor_type`, `actor_id`, `occurred_at`, `recorded_at`, `correlation_id`, `causation_id`, `idempotency_key`, `classification`, and a schema-versioned payload.
 

@@ -2,7 +2,7 @@
 
 | Package | Product trace | Normative contract | Required verification |
 | --- | --- | --- | --- |
-| M0-01 module shell | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 | API namespace; workspace-scoped base rules; feature-disabled behavior | Existing Plane regression, disabled route/navigation, workspace isolation, migration smoke. |
+| M0-01 module shell | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 | API namespace; workspace-scoped base rules; feature-disabled behavior | Existing Plane regression, disabled route/navigation after migration and restart, workspace isolation, and forward/backward/forward additive migration proof. |
 | M0-02 core persistence | FR-007, FR-021; NFR-004, NFR-018; AC-08, AC-34, AC-56 | Common, workspace-record, immutable-history, Operation, Event and Audit schemas; optimistic version matrix | Schema fixtures, model/constraint tests, forward/backward migration, concurrent update and immutable audit tests. |
 | M0-03 core policy | FR-043; NFR-009-NFR-012; AC-09, AC-35, AC-52 | [Authorization matrix](m0-authorization-and-state-matrices.md) | Cross-workspace IDOR matrix, role/action matrix, object lookup ordering, safe denial audit. |
 | M0-05 delivery kernel | FR-021, FR-023, FR-044; NFR-004-NFR-005; AC-26, AC-33 | Event, Outbox, Inbox, Idempotency and Operation schemas plus operation state matrix | Schema fixtures, duplicate/lost/out-of-order delivery, idempotency conflict, relay concurrency, dead-letter tests. |

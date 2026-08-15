@@ -4,9 +4,9 @@
 
 | Field | Value |
 | ----- | ----- |
-| Status | D-001 direction selected; candidate foundation evidence with remaining acceptance gates |
-| Version | 0.6 |
-| Review date | 2026-08-14 |
+| Status | D-001 decided; approved candidate awaiting merge and resulting-base pin |
+| Version | 0.7 |
+| Review date | 2026-08-15 |
 | Plane fork | `git@github.com:faocampo/plane.git` |
 | Inspected branch and commit | `preview` at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` |
 | Official upstream | `https://github.com/makeplane/plane.git`, `preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` |
@@ -20,7 +20,7 @@ The inspected Plane community fork is a suitable additive foundation for Curve. 
 
 The product sponsor approved using official Plane upstream as the updateable code baseline for Curve while implementing Curve in the fork. The `upstream` remote is configured as fetch-only, shared `preview` remains unchanged, and the candidate integration branch starts from the exact upstream `preview` commit. The fork baseline is its ancestor, so this update has no fork-only conflict: the fork was zero commits ahead and one commit behind.
 
-D-001 is not yet `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the verified candidate foundation is pinned at `d380678912e9b46805ef852d2e05411f1fea6d8b`. Full repository checks and the approved local deployment smoke have passed. The candidate is published in the fork, and current `origin/preview` plus `upstream/preview` both resolve to its parent `1c8a60f858d8472aa56e29994ec1c7926da2c6ce`. The repository-level community/commercial audit and reuse/build recommendation are complete. Federico Ocampo, CTO at X3M, is assigned as engineering approver, licensing reviewer, Plane support/upgrade owner, and interim human reviewer for both PRs. Formal acceptance and review dispositions, merge, and feature-disabled migration/rollback proof remain.
+D-001 is `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the approved candidate foundation is pinned at `d380678912e9b46805ef852d2e05411f1fea6d8b`. Full repository checks and the approved local deployment smoke passed. The candidate is published in the fork, and current `origin/preview` plus `upstream/preview` both resolve to its parent `1c8a60f858d8472aa56e29994ec1c7926da2c6ce`. The repository-level community/commercial audit, reuse/build recommendation, license obligations, repository boundary, and both exact-head dispositions are accepted in [ADR-001](adr-001-plane-upstream-foundation.md#approval-record). Merge and resulting-base pinning remain. M0-01 owns the feature-disabled migration and rollback implementation proof.
 
 ## Repository and integration state
 
@@ -31,8 +31,8 @@ D-001 is not yet `DECIDED`. The verification run exposed and corrected an i18n t
 | Upstream pin | `upstream/preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` | Candidate foundation base is reproducible and exact. |
 | Historical ancestry/divergence | Before fork synchronization, merge base was `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47`; fork was `0` ahead and `1` behind upstream | Explains the selected integration path without asserting the historical state is current. |
 | Upstream delta | One commit, `[WEB-8632] fix(web): auto-reload on stale chunk load failure during navigation (#9579)`, changing three web files | No schema, dependency-lock, deployment, or license-file delta was introduced by this upstream update. |
-| Candidate branch | Published `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`, one commit ahead of `origin/preview` and `upstream/preview` | Exact candidate is remotely reviewable; publication is not approval or merge. |
-| Candidate commit and working tree | `d380678912e9b46805ef852d2e05411f1fea6d8b`; clean and identical locally/remotely | Exact candidate is reproducible but remains unmerged and not accepted as D-001. |
+| Candidate branch | Published `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`, one commit ahead of `origin/preview` and `upstream/preview` | Exact candidate is approved under D-001 and remains unmerged. |
+| Candidate commit and working tree | `d380678912e9b46805ef852d2e05411f1fea6d8b`; clean and identical locally/remotely | Exact candidate is reproducible and approved; its resulting `preview` base must be pinned after merge. |
 | Original working tree | Clean when first inspected | No pre-existing user change was overwritten or incorporated. |
 | Package manager | Pinned pnpm 11.3.0 in root package metadata | Use the repository-pinned package manager; do not substitute a global version. |
 | Backend | Django/DRF, PostgreSQL, Celery, pytest/Docker test stack | Add Curve Django/API modules and a separate Temporal worker boundary; do not replace Plane/Celery jobs. |
@@ -94,11 +94,11 @@ The Curve implementation MUST:
 4. Preserve AGPL license/notices and the exact-version corresponding-source release procedure.
 5. Record every reused Plane primitive and every new dependency in the dependency/license manifest.
 
-Qualified counsel and the D-001 owner decide final reuse/license conclusions; directory names alone are not legal evidence.
+Federico Ocampo accepted the documented D-001 reuse/license boundary in his engineering and licensing-review roles. Qualified counsel remains the escalation authority for newly discovered licensing ambiguity and the release-qualification work tracked by R-020; directory names alone are not legal evidence.
 
 ## Safe upstream-integration procedure
 
-The product sponsor authorized the official-upstream baseline and isolated-branch preparation on 2026-08-12. Steps 1-5 below are complete for the pinned candidate; step 6 is partially complete and step 7 remains blocked on acceptance of the candidate correction and remaining evidence.
+The product sponsor authorized the official-upstream baseline and isolated-branch preparation on 2026-08-12. Steps 1-7 are complete for the approved candidate. Its merge and the resulting `preview` base pin are the remaining release-engineering actions before M0-01 dispatch.
 
 1. Confirm the fork working tree is clean and preserve the current `preview` commit as an immutable baseline reference.
 2. Add a remote named `upstream` for the approved official repository and fetch refs/tags without changing a branch.
@@ -134,7 +134,7 @@ Targeted checks may provide fast feedback, but do not replace the full exit suit
 | `git diff --check` | PASS | The candidate correction has no whitespace errors. |
 | Local deployment smoke | PASS at exact candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` | Existing local Plane Compose project recreated from the candidate using its persistent development volumes. Migrator exited `0` with no pending migrations; API health returned `200 {"status":"OK"}`; worker and Beat initialized; a safe nonexistent-asset task was consumed. `check --deploy` exited `0` with five expected local-profile hardening warnings. See the detailed evidence below. |
 
-The candidate correction is committed and published but not reviewed or merged. Its exact SHA and command results are foundation evidence, not a release or D-001 acceptance.
+The candidate correction is committed, published, reviewed, and accepted under D-001 at exact SHA `d380678912e9b46805ef852d2e05411f1fea6d8b`. It remains unmerged and is not a release; the resulting `preview` base must be pinned after merge.
 
 ### Local deployment-smoke evidence
 
@@ -164,7 +164,8 @@ The local stack remains running for developer use. No `down -v`, volume deletion
 - [x] Full frontend checks, production build, and backend tests pass on the candidate tree.
 - [x] The i18n generator correction is committed and the resulting candidate foundation SHA is pinned.
 - [x] Deployment smoke test passes on that exact candidate foundation commit in the approved local non-production topology.
-- [ ] Additive migration/rollback and feature-disabled behavior are proven.
-- [ ] Federico Ocampo formally accepts the license/notices/corresponding-source impact against the exact ADR version/digest.
+- [x] D-001 allocates additive migration/rollback and feature-disabled behavior proof to the M0-01 acceptance contract.
+- [x] Federico Ocampo formally accepts the license/notices/corresponding-source impact against the exact ADR version/digest.
 - [x] Federico Ocampo is recorded as the Plane support/upgrade owner with review at every Plane foundation upgrade, material licensing change, or ownership change.
-- [ ] Federico Ocampo reviews the exact head of both draft PRs and [ADR-001](adr-001-plane-upstream-foundation.md) receives a complete approval record.
+- [x] Federico Ocampo reviews the exact head of both draft PRs and [ADR-001](adr-001-plane-upstream-foundation.md) receives a complete approval record.
+- [ ] Merge the approved candidate and pin the resulting fork `preview` SHA before M0-01 dispatch.

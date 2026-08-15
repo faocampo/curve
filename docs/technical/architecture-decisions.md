@@ -4,14 +4,14 @@
 
 | Field | Value |
 | ----- | ----- |
-| Status | Decision index; `PROPOSED` directions remain blocked until owner approval and required proof |
-| Version | 0.4 |
-| Source | [Curve PRD v0.7 decision register](../curve-ai-native-sdlc-prd.md#decision-register) |
+| Status | Decision index; D-001 decided, remaining `PROPOSED` directions blocked until owner approval and required proof |
+| Version | 0.5 |
+| Source | [Curve PRD v0.8 decision register](../curve-ai-native-sdlc-prd.md#decision-register) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
 ## Purpose
 
-The PRD leaves D-001-D-016 to named X3M owners and records planning-session directions as `PROPOSED` where applicable. The product sponsor has selected the D-001 upstream-baseline direction, but D-001 remains `PROPOSED` until its engineering, deployment, commercial-boundary, licensing, and ownership evidence is accepted. This document defines how an architecture agent researches and proves proposals without silently approving them, and how an approved decision becomes an implementation prerequisite.
+The PRD leaves D-001-D-016 to named X3M owners and records planning-session directions as `PROPOSED` where applicable. Federico Ocampo decided D-001 on 2026-08-15 after accepting its engineering, community/commercial boundary, licensing, ownership, and exact-head evidence. This document defines how an architecture agent researches and proves proposals without silently approving them, and how an approved decision becomes an implementation prerequisite.
 
 An AI agent may draft an ADR, gather evidence, run non-destructive proofs, and recommend an option. Only the PRD owner for that decision can change status from `OPEN` or `PROPOSED` to `DECIDED`.
 
@@ -19,7 +19,7 @@ An AI agent may draft an ADR, gather evidence, run non-destructive proofs, and r
 
 | PRD ID | Status | ADR subject | Blocks | Minimum evidence before decision |
 | ------ | ------ | ----------- | ------ | -------------------------------- |
-| D-001 | PROPOSED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) | P0/M0 | Official upstream strategy, pins, ancestry, community/commercial proof, checks, and local smoke are recorded. Federico Ocampo is assigned as engineering approver, licensing reviewer, support/upgrade owner, and interim PR reviewer. Formal approval and review dispositions, merge, and migration/rollback proof remain. |
+| D-001 | DECIDED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) | P0/M0 | Federico Ocampo approved ADR digest `0c780a...`, both exact PR heads, the reuse/license boundary, and the repository/upgrade strategy. The approved Plane candidate still requires merge and resulting-base pinning before M0-01 dispatch. M0-01 owns additive migration, disabled-state, and rollback proof. |
 | D-002 | PROPOSED | Onyx per-operation delegated identity | M1 | Supported OAuth mechanism, issuer/audience/scopes, token lifetime/revocation, source ACL behavior, durable-wait reauthorization, audit, threat model, proof. |
 | D-003 | PROPOSED | Development/staging/production topology and trust zones | M0/M4/M6 | Capacity, residency, HA, RPO/RTO, Kubernetes/gVisor, databases/object storage/Temporal, secrets, backup/restore, cost, ownership. |
 | D-004 | PROPOSED | Thin Curve Model Gateway over approved OpenRouter access | Model-enabled M1/M3/M5 | Versioned contract, failure behavior, policy enforcement, telemetry, HA impact, license/supply chain, operations proof, replacement strategy. |

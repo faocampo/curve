@@ -5,9 +5,9 @@
 | Field | Value |
 | --- | --- |
 | Status | Dispatch specifications complete; every packet remains `BLOCKED` pending its recorded prerequisites |
-| Version | 1.2 |
-| Date | 2026-08-14 |
-| Product baseline | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
+| Version | 1.3 |
+| Date | 2026-08-15 |
+| Product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Contract baseline floor | Curve commit `f72fe631244c0fa33d3a06ba2c61134f95fe1802` |
 | Plane candidate | `d380678912e9b46805ef852d2e05411f1fea6d8b` |
 
@@ -48,10 +48,10 @@ overwrite an existing environment file.
 
 | Blocker | Required resolution |
 | --- | --- |
-| `B-PUBLISH` | Satisfied on 2026-08-13: Curve baseline `e1f814a...` and Plane candidate `d380678...` are published at their exact SHAs. |
-| `B-REVIEW` | Federico Ocampo records a disposition for the exact Curve documentation and Plane upstream-sync PR heads, and required CI passes; reviewer assignment alone does not satisfy this blocker. |
+| `B-PUBLISH` | Satisfied through the approved Curve baseline `62e144f37d4fea3064ae7cd21868117b9eb78edb` and Plane candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`; the final Curve decision-record revision must also be published before dispatch. |
+| `B-REVIEW` | Plane exact-head disposition is satisfied at `d380678...`. Curve disposition and CI are satisfied through `62e144f...`; the decision-record commit creates a new Curve head that requires validation and a fresh exact-head disposition before merge/dispatch. |
 | `B-BASE` | The reviewed upstream-sync is merged into fork `preview`; its exact merge SHA is recorded. |
-| `B-D001` | D-001 is `DECIDED` by named engineering and licensing owners. |
+| `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Federico Ocampo against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
 | `B-D003` | Required only for M0-S3 and later: the local Temporal profile and proof authorization are `DECIDED`. |
 | `B-PEOPLE` | The packet records a named human owner and Federico Ocampo (`faocampo`) as reviewer, or a named replacement reviewer. |
 | `B-CONTEXT` | The materialized packet records its Curve revision and context-pack digest. |
@@ -65,7 +65,7 @@ No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S1-MODULE-SHELL` |
-| Status | `BLOCKED`: `B-REVIEW`, `B-BASE`, `B-D001`, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
+| Status | `BLOCKED`: `B-REVIEW`, `B-BASE`, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT`; `B-D001` is satisfied |
 | Risk | `STANDARD`; new workspace authorization and application route boundary |
 | Outcome | Add a dedicated `plane.curve` Django app and an additive workspace UI shell, both disabled by default, without changing unrelated Plane behavior. |
 | Traceability | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 |
@@ -74,6 +74,7 @@ No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 | Contracts | Public API prefix in `contracts/openapi/curve-v1.openapi.yaml`; `workspace-record.schema.json`; authorization lookup ordering in `m0-authorization-and-state-matrices.md` |
 | Migration | Add the Curve app and its initial additive migration; do not modify Plane migrations or existing tables. |
 | Rollback | Disable Curve configuration and routes; reverse the Curve migration only in the disposable test database; revert the packet commit. |
+| D-001 proof ownership | This packet must produce the accepted additive migration, feature-disabled behavior, and rollback evidence allocated by ADR-001. It cannot satisfy this field with design text alone. |
 
 ### M0-S1 executable acceptance
 
@@ -86,6 +87,11 @@ No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 4. Given a disposable database, when Curve migrations run forward, backward to
    zero, and forward again, then all three commands succeed without changing an
    existing Plane table.
+5. Given the additive Curve migration is applied in the persistent local Plane
+   stack, when Curve is disabled and the services restart, then existing Plane
+   routes, navigation, APIs, and repository-native tests remain unchanged,
+   Curve entry points remain inaccessible, and no destructive down-migration is
+   applied to the persistent stack.
 
 ### M0-S1 required commands
 
@@ -97,7 +103,7 @@ pnpm --filter=web test
 pnpm --filter=web build
 pnpm --filter=@plane/types check:types
 pnpm --filter=@plane/services check:types
-docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -m "unit or contract"
+docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -m "unit or contract or migration or rollback"
 docker compose -f docker-compose-test.yml run --rm api-tests python manage.py makemigrations --check --dry-run
 docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve zero
 docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve

@@ -6,8 +6,8 @@
 | ----- | ----- |
 | Status | Living retrospective and engineering rationale |
 | Product | Curve |
-| Period covered | From the initial Plane license question through 2026-08-12 |
-| Last updated | 2026-08-12 |
+| Period covered | From the initial Plane license question through 2026-08-15 |
+| Last updated | 2026-08-15 |
 | Audience | X3M product, engineering, architecture, security, operations, legal, and AI agents |
 | Normative authority | Informational only; the PRD and approved ADRs take precedence |
 
@@ -626,3 +626,13 @@ The same step exposed a repository-governance conflict. Curve ruleset 20824868 a
 Federico subsequently authorized the exact interim bootstrap policy. Ruleset 20824868 was scoped to the default branch; creation/deletion/non-fast-forward protection, linear history, pull-request enforcement, and strict `validate` were retained. Required approvals were set to zero because GitHub does not allow `faocampo` to approve a PR authored by the same account. CodeQL, code-quality, and coverage requirements were removed until the documentation repository has applicable producers. The previously rejected commits then pushed successfully at `2b39e89bcf0a46bd5feff3ffc6e56c1cc00b0bd0`, and Documentation contracts run 31856435020 passed. A procedural exact-head review remains required, and the ruleset returns to one required approval when a separate trusted-controller or service identity authors PRs.
 
 The Project synchronizer then refreshed all 70 item bodies to source revision `2b39e89...` while preserving every status. Reconciliation again proved 70 total and unique IDs, no stale source bodies, status counts of 65 Backlog/one Ready/one In progress/three In review, and size counts of five S/55 M/ten L.
+
+## 2026-08-15: D-001 decision and executable gate allocation
+
+The final foundation review bound approval to concrete artifacts instead of treating an ownership assignment as a decision. Curve PR #1 was verified at `62e144f37d4fea3064ae7cd21868117b9eb78edb` with required `validate` run 31856579059 successful, a clean merge state, and the authorized default-branch ruleset active. Plane PR #1 was independently verified at `d380678912e9b46805ef852d2e05411f1fea6d8b`, clean and mergeable into `preview`. The pre-decision ADR-001 content digest was `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`.
+
+Federico Ocampo explicitly approved both exact heads, the ADR content digest, the community/commercial reuse boundary, AGPL/notices/dependency/corresponding-source obligations, the separate Curve-governance and Plane-implementation repository boundary, and the event-driven foundation review cadence. Codex then published the approved fields as an attributable GitHub approval record, including scope, exceptions, and review triggers. ADR-001 and D-001 can therefore become `DECIDED` without inferring authority from a role assignment.
+
+The review also resolved a circular dependency. D-001 had required proof of additive Curve migration, disabled behavior, and rollback while M0-01—the package capable of producing that proof—was blocked by D-001. Federico approved moving that evidence to M0-01 acceptance. D-001 now decides the foundation and licensing strategy; M0-01 must demonstrate the implementation behavior with executable forward/backward/forward migration and disabled-route/navigation tests. This preserves the control while placing it at the first point where it can be proven.
+
+Decision approval does not itself create an implementation base. The approved Plane candidate still needs merge and resulting `preview` SHA pinning, the Curve decision-record update needs its own final exact-head disposition, and every M0 packet retains its other decision, project-status, owner, context, command, and review blockers.
