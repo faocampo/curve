@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.1",
+  "tool": "approve_gate",
+  "workspace_id": "00000000-0000-4000-8000-000000000001",
+  "arguments": {
+    "gate_id": "00000000-0000-4000-8000-000000000008"
+  },
+  "idempotency_key": "synthetic-forbidden-0001",
+  "expected_version": 1,
+  "client_event_time": "2026-08-12T12:10:00Z"
+}

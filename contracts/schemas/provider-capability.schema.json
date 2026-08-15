@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/provider-capability.schema.json",
+  "title": "Curve provider capability document",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "workspace_id", "connection_id", "provider_type", "adapter_version", "capabilities", "validated_at"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
+    "connection_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+    "provider_type": {
+      "type": "string",
+      "enum": ["ONYX", "MCP", "ORCA_HUMAN_ASSISTANCE", "MODEL_GATEWAY", "OPENHANDS", "GITHUB", "GITLAB", "QUALITY", "FEATURE_FLAG", "DOCUMENTATION", "MONITORING", "PROTOTYPE"]
+    },
+    "adapter_version": { "type": "string", "minLength": 1 },
+    "protocol_versions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "risk", "enabled"],
+        "properties": {
+          "name": { "type": "string" },
+          "risk": { "type": "string", "enum": ["READ", "WORKFLOW_WRITE", "EXTERNAL_MUTATION"] },
+          "enabled": { "type": "boolean" },
+          "schema_uri": { "type": "string", "format": "uri-reference" }
+        }
+      }
+    },
+    "allowed_classifications": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/DataClassification" },
+      "uniqueItems": true
+    },
+    "validated_at": { "$ref": "common.schema.json#/$defs/Instant" },
+    "expires_at": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Instant" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

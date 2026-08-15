@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "id": "17000000-0000-4000-8000-000000000001",
+  "workspace_id": "10000000-0000-4000-8000-000000000002",
+  "sequence": 1,
+  "action": "FOUNDATION_PROBE.CREATE",
+  "target_ref": {
+    "resource_type": "OPERATION",
+    "resource_id": "17000000-0000-4000-8000-000000000002",
+    "resource_version": 1
+  },
+  "outcome": "SUCCEEDED",
+  "actor": { "actor_type": "HUMAN", "actor_id": "developer-1" },
+  "classification": "INTERNAL",
+  "occurred_at": "2026-08-13T10:00:00Z",
+  "recorded_at": "2026-08-13T10:00:00Z",
+  "correlation_id": "synthetic-correlation-1"
+}

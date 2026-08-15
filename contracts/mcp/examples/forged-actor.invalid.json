@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.1",
+  "tool": "claim_slice",
+  "workspace_id": "00000000-0000-4000-8000-000000000001",
+  "arguments": {
+    "slice_id": "00000000-0000-4000-8000-000000000002",
+    "actor_id": "forged-developer"
+  },
+  "idempotency_key": "synthetic-forged-0001",
+  "expected_version": 1,
+  "client_event_time": "2026-08-12T12:15:00Z"
+}

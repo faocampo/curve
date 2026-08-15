@@ -1,0 +1,12 @@
+{
+  "id": "11000000-0000-4000-8000-000000000001",
+  "workspace_id": "10000000-0000-4000-8000-000000000002",
+  "parent": {
+    "resource_type": "OPERATION",
+    "resource_id": "11000000-0000-4000-8000-000000000002"
+  },
+  "sequence": 2,
+  "recorded_at": "2026-08-13T10:00:00Z",
+  "recorded_by": { "actor_type": "SYSTEM", "actor_id": "erasure-controller" },
+  "body_erased_at": "2026-08-13T12:00:00Z"
+}

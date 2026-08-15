@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.1",
+  "tool": "link_vcs_reference",
+  "workspace_id": "00000000-0000-4000-8000-000000000001",
+  "arguments": {
+    "slice_id": "00000000-0000-4000-8000-000000000002",
+    "attempt_id": "00000000-0000-4000-8000-000000000003",
+    "repository_binding_id": "00000000-0000-4000-8000-000000000004",
+    "reference_type": "BRANCH",
+    "branch_name": "curve/synthetic-slice",
+    "head_sha": "0123456789abcdef0123456789abcdef01234567"
+  },
+  "idempotency_key": "synthetic-vcs-link-0001",
+  "expected_version": 2,
+  "client_event_time": "2026-08-12T12:05:00Z"
+}

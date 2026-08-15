@@ -1,0 +1,13 @@
+{
+  "id": "11000000-0000-4000-8000-000000000001",
+  "workspace_id": "10000000-0000-4000-8000-000000000002",
+  "parent": {
+    "resource_type": "OPERATION",
+    "resource_id": "11000000-0000-4000-8000-000000000002",
+    "resource_version": 1
+  },
+  "sequence": 1,
+  "recorded_at": "2026-08-13T10:00:00Z",
+  "recorded_by": { "actor_type": "SYSTEM", "actor_id": "curve-command-service" },
+  "classification": "INTERNAL"
+}
