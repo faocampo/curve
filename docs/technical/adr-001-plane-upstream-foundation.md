@@ -47,8 +47,10 @@ The product sponsor confirmed that the intended model is to use the original Pla
 | Selected upstream pin | `upstream/preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` |
 | Divergence | Fork baseline is the merge base; fork `0` ahead and `1` behind |
 | Upstream delta | One web stale-chunk recovery commit; three web files; no migration, lockfile, deployment, or license-file change |
-| Current fork/upstream base | `origin/preview` and `upstream/preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` as verified on 2026-08-13 |
-| Candidate branch and commit | Published and approved `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`; exactly one commit ahead; merge pending |
+| Pre-merge fork/upstream base | `origin/preview` and `upstream/preview` were both at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` as verified on 2026-08-13 |
+| Candidate branch and commit | Approved `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`; merged by Plane PR #1 |
+| Accepted fork `preview` base | `549db1aea8f3307b337b3686dbb844a87549cd95`; merge parents are prior base `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` and approved candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` |
+| Accepted Curve governance baseline | Curve PR #1 squash-merged to `main` at `1529b8b7f04f226ac8be151f89104b6582650b42`; post-merge validation run 31887095811 passed |
 | Frontend verification | `pnpm check`: 60/60 successful at the exact candidate SHA; `pnpm build`: 16/16 successful on the pre-commit-equivalent candidate tree |
 | Backend verification | Repository Compose suite: 516 passed, 92 warnings, 84.10 seconds; exit code 0 |
 | Local deployment smoke | PASS at exact candidate SHA using the existing local Plane Compose project and persistent development volumes: migrator `0`/no pending migrations, API health `200`, `check --deploy` exit `0` with five expected local-profile warnings, worker and Beat initialized, and safe nonexistent-asset task consumed. An unrelated X3M HR container required temporary Plane host-port remapping; it was untouched. |
@@ -66,7 +68,7 @@ Use the official public Plane repository as Curve's upstream code baseline and F
 
 Keep the Curve and Plane repositories separate. The Curve repository is the governance and normative-contract source for PRDs, ADRs, security decisions, architecture, and immutable task packets. The public Plane fork owns deployable Curve code, migrations, UI, worker/runtime configuration, generated clients, and a pinned implementation snapshot or reference to the approved Curve contracts. This avoids a combined monorepo while allowing code and generated artifacts to change atomically in Plane. This repository boundary is approved by D-001.
 
-An accepted integration commit becomes the only base for Curve implementation task packets. The local repository-level commercial/community audit and reuse/build recommendation are complete. Federico Ocampo approved the decision content, the Curve documentation head, and the Plane candidate head on 2026-08-15. Merge and resulting-base pinning remain release-engineering actions; they do not change the decided foundation strategy. M0-01 owns the implementation proof for additive migration, feature-disabled behavior, and rollback.
+The accepted Plane `preview` merge commit `549db1aea8f3307b337b3686dbb844a87549cd95` is the foundation base for the first Curve implementation task packets. The local repository-level commercial/community audit and reuse/build recommendation are complete. Federico Ocampo approved the decision content, the Curve documentation head, and the Plane candidate head on 2026-08-15; both PRs then merged through their authorized methods. M0-01 owns the implementation proof for additive migration, feature-disabled behavior, and rollback.
 
 ## Approval record
 
@@ -127,7 +129,7 @@ The D-001 decision evidence is complete. Merge/pin actions and M0-01 implementat
 - [x] Plane support/upgrade ownership and event-driven review cadence are recorded: Federico Ocampo; review at every Plane foundation upgrade, material licensing change, or change of support owner.
 - [x] Federico Ocampo records a disposition for the exact head of both draft PRs.
 - [x] The ADR approval record contains decision time, scope/environment, evidence, exceptions, and review/expiry date.
-- [ ] Merge the approved Plane candidate and pin the resulting `preview` merge/base SHA before dispatching M0-01.
+- [x] Merge the approved Plane candidate and pin resulting fork `preview` SHA `549db1aea8f3307b337b3686dbb844a87549cd95` before dispatching M0-01.
 - [ ] M0-01 proves additive migration, feature-disabled behavior, and rollback before that package is accepted.
 
 Review this decision at every Plane foundation upgrade, material licensing change, repository-boundary change, or change of support owner.
