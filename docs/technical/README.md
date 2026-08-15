@@ -36,6 +36,7 @@ identifiers are:
 | Document | Purpose | Primary authority |
 | -------- | ------- | ----------------- |
 | [Architecture](architecture.md) | Logical components, deployment profiles, trust zones, data/control flow, storage, orchestration, and operability | Component ownership and boundaries |
+| [C4 architecture views](c4-architecture.md) | System context, containers, module components, actors, and relationships | Navigational diagrams derived from the Architecture and component contracts |
 | [Domain model](domain-model.md) | Aggregates, entities, fields, cardinalities, invariants, persistence, versioning, and deletion | Curve data semantics |
 | [Workflows and sequences](workflows-and-sequences.md) | Initiative, slice, agent, quality, VCS, contract, recovery, and Temporal execution flows | State-transition and orchestration behavior |
 | [Integration contracts](integration-contracts.md) | Public API, commands, events, SSE, webhooks, adapters, idempotency, and reconciliation | Wire and provider boundaries |
@@ -43,6 +44,8 @@ identifiers are:
 | [Engineering patterns and technologies](engineering-patterns-and-technologies.md) | Required implementation patterns, Plane extension strategy, technology baseline/candidates, and ADR rules | Engineering conventions and technology use |
 | [Architecture decisions](architecture-decisions.md) | D-001-D-016 evidence, ownership, decision, and supersession process | ADR prerequisites and decision governance |
 | [Development plan](development-plan.md) | Milestones, work packages, dependencies, traceability, tests, task packets, and AI-agent protocol | Delivery sequencing and Definition of Done |
+| [Kanban delivery lifecycle](kanban-delivery-lifecycle.md) | User-facing delivery-board statuses from definition through monitored customer use and closure | Kanban projection and state-transition evidence |
+| [M7 intelligence and automation extension](m7-intelligence-and-automation-extension.md) | Post-R1 charter for AI-expense governance, Gmail/Slack attention intake, and scheduled AI-agent jobs | Future-extension scope and entry gates; does not expand the active 70-item catalog |
 | [Implementation-readiness review](review-analysis-and-remediation.md) | Prioritized gaps, closure evidence, owners, dependencies, and remediation status | Review record; never overrides the PRD or approved ADRs |
 | [Plane foundation inventory](plane-foundation-inventory.md) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; fork `preview` pinned at `549db1a...` |
 | [ADR-001: Plane upstream foundation](adr-001-plane-upstream-foundation.md) | Decided updateable upstream baseline, fork workflow, proof results, consequences, rollback, approval, and review triggers | D-001 decision record; `DECIDED` on 2026-08-15 |
@@ -72,7 +75,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 ## Reading order
 
 1. Read the PRD and its decision register.
-2. Read Architecture and Domain Model to understand boundaries and truth ownership.
+2. Read Architecture, C4 Architecture Views, and Domain Model to understand boundaries and truth ownership.
 3. Read Workflows and Sequences with Integration Contracts to understand commands, states, events, and failure behavior.
 4. Read Security and Operations before selecting credentials, providers, destinations, runners, or deployment topology.
 5. Read Engineering Patterns and Technologies before creating component designs or code conventions.
@@ -84,6 +87,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 flowchart TD
     prd["Curve PRD v0.8"] --> decisions["D-001 through D-016 and ADRs"]
     prd --> architecture[Architecture]
+    architecture --> c4["C4 architecture views"]
     prd --> domain[Domain model]
     architecture --> workflows[Workflows and sequences]
     domain --> workflows

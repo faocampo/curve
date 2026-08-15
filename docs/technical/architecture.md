@@ -122,7 +122,7 @@ flowchart TB
     quarantine --> controllers
 ```
 
-The boxes are logical components. D-003 decides their production placement, HA, persistence products, network topology, and operational ownership. D-004, D-006, D-008, and D-011 select unresolved provider details. The diagram does not decide them.
+The boxes are logical components. D-003 decides their production placement, HA, persistence products, network topology, and operational ownership. D-004, D-006, D-008, and D-011 select unresolved provider details. The diagram does not decide them. The companion [C4 Architecture Views](c4-architecture.md) provides focused context, container, and component representations of these boundaries.
 
 ## Component ownership and contracts
 
@@ -603,7 +603,7 @@ Each ADR must include options, evidence, selection criteria, consequences, threa
 Before implementation, the architecture package must add the following without weakening this baseline:
 
 1. Requirement traceability matrix covering every goal, `FR-001`-`FR-044`, `NFR-001`-`NFR-020`, `AC-01`-`AC-60`, risk, decision, component, command, entity, test, and milestone.
-2. C4 context/container/component views and an ERD with workspace-scoped indexes, uniqueness, object layout, deletion, and migration semantics.
+2. An ERD with workspace-scoped indexes, uniqueness, object layout, deletion, and migration semantics. The C4 context/container/component views are maintained in [C4 Architecture Views](c4-architecture.md).
 3. Versioned OpenAPI, event, webhook, SSE, provider, and object schemas.
 4. Temporal sequence diagrams for every happy, rework, cancellation, loss, stale-state, supersession, and reconciliation path.
 5. Threat model, data-flow inventory, Access Envelope rules, and security-test fixtures.

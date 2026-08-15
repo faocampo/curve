@@ -29,6 +29,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 8. New head commits invalidate commit-bound validation. Human readiness remains a separate gate.
 9. No package may introduce a second general knowledge index, a second lifecycle authority, or a provider-specific domain model.
 10. R0A and R0B are validation configurations. Only completion of M0-M6 and AC-01-AC-60 constitutes R1.
+11. A package that creates or materially changes a user-facing flow may begin implementation only after its [Curve Experience Blueprint](curve-experience-blueprint.md) record is approved. The record supplies the intended user outcome, information-architecture placement, role and permission model, screen/state flow, progressive-disclosure rules, and task-based prototype review evidence.
 
 ## Planning assumptions
 
@@ -82,6 +83,7 @@ A work package is `READY` only when it has:
 - Model/tool/sandbox budgets and data classification.
 - Rollback or disablement behavior.
 - A unique item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) whose stable ID matches the package and whose status is maintained as visual progress metadata.
+- For a user-facing flow, an approved [Curve Experience Blueprint](curve-experience-blueprint.md) record linked from the work package. The record includes the target role/job, primary task flow, normal/loading/empty/error/permission-limited states, primary actions, accessibility behavior, and prototype-review outcome.
 
 If any item is absent, the coding agent stops before mutation and reports the missing prerequisite.
 
@@ -251,6 +253,12 @@ M5 exit proves the entire supported flow through both VCS providers, both agent 
 | R1-04 | M | AGPL corresponding-source workflow, third-party notices, dependency manifest, SBOMs, provenance, generated-code IP checks, and release-owner sign-off | P0-01, all build artifacts | AC-59 passes and counsel-approved process is documented. |
 | R1-05 | S | R0A/R0B pilot comparison, KPI baseline/targets, operating ownership, support/runbooks, training, and gradual workspace enablement | R1-01-R1-04, D-015-D-016 | Product, engineering, security, operations, and licensing sign-off. |
 
+### M7: Future integration expansion
+
+M7 is post-R1 scope and is intentionally outside the current 70-item GitHub Project catalog. Its product charter is [M7 intelligence and automation extension](m7-intelligence-and-automation-extension.md). It adds three controlled capabilities: AI-execution expense governance; attention intake from user-authorized Gmail and selected Slack channels; and scheduled AI-agent jobs.
+
+Each M7 capability requires a separately approved scope/decision record, repository-local work packages, policy and data-classification review, provider contracts, rollback/disablement behavior, and a catalog revision before it is materialized in GitHub Project #2. M7 preserves Curve’s existing human gates, workspace isolation, immutable audit trail, and trusted-controller boundaries.
+
 ## Cross-cutting implementation patterns
 
 Each package uses the patterns defined in [engineering-patterns-and-technologies.md](engineering-patterns-and-technologies.md): aggregate command handlers, transactional outbox/inbox, idempotent activities, ports/adapters, append-only evidence and decisions, content-addressed objects, trusted mutation controllers, policy-as-versioned-data, projections, and reconciliation.
@@ -343,6 +351,7 @@ A slice is done only when:
 - Migrations are forward/backward tested and rollback/disable behavior is demonstrated.
 - Authorization, workspace isolation, audit, metrics, logs, traces, redaction, budgets, and error behavior are implemented.
 - User-facing flows pass accessibility and failure/recovery scenarios.
+- User-facing flows conform to their approved Curve Experience Blueprint; material interaction changes include an updated screen/state flow and prototype-review disposition.
 - Documentation and ADRs are updated without restricted evidence.
 - The implementation report maps every changed behavior to requirement/test IDs.
 - The trusted controller, not the agent, created the draft; Code Readiness remains a human decision.
