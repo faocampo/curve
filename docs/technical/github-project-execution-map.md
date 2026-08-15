@@ -5,12 +5,12 @@
 | Field | Value |
 | --- | --- |
 | Status | Active execution-control contract |
-| Version | 1.0 |
-| Date | 2026-08-14 |
+| Version | 1.1 |
+| Date | 2026-08-15 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) |
 | Interim human reviewer | Federico Ocampo (`faocampo`) |
-| Last reconciliation | 2026-08-14 at Curve revision `2b39e89...`: 70 total items, 70 unique IDs, zero duplicates, all Size values set |
+| Last reconciliation | 2026-08-15 against merged Curve baseline `1529b8b7f04f226ac8be151f89104b6582650b42`: 70 total items, 70 unique IDs, zero duplicates; P0-01/P0-04 completion transitions authorized |
 
 ## Purpose
 
@@ -72,6 +72,8 @@ pnpm project:sync -- --status M0-01="Done"
 ```
 
 `project:check` is read-only and validates the local catalog. `project:sync` is an explicit GitHub write. A full sync creates missing items and preserves the current status of existing items. A targeted `--status` update changes only the named item and refreshes its governed body.
+
+The synchronizer pins item source links to merged `origin/main`, not an unmerged feature branch. Its bootstrap/default projection records P0-01 and P0-04 as `Done`, P0-02 as `In review`, P0-03 as `In progress`, and P0-05 as `Ready`; existing item state remains authoritative unless a targeted transition is supplied.
 
 Project #2 is private. The unauthenticated external-link checker excludes this one exact URL because GitHub returns 404 to anonymous callers; authenticated validation uses `gh project view 2 --owner faocampo` and the 70-item reconciliation instead.
 

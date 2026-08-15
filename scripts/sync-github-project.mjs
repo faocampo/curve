@@ -6,14 +6,14 @@ const OWNER = "faocampo";
 const PROJECT_NUMBER = "2";
 const EXPECTED_TASK_COUNT = 70;
 const DEVELOPMENT_PLAN = resolve("docs/technical/development-plan.md");
-const SOURCE_BRANCH = "docs/m0-code-readiness-2026-08-12";
+const SOURCE_REF = "origin/main";
 const VALID_STATUSES = new Set(["Backlog", "Ready", "In progress", "In review", "Done"]);
 
 const initialStatus = new Map([
-  ["P0-01", "In review"],
+  ["P0-01", "Done"],
   ["P0-02", "In review"],
   ["P0-03", "In progress"],
-  ["P0-04", "In review"],
+  ["P0-04", "Done"],
   ["P0-05", "Ready"],
 ]);
 
@@ -199,7 +199,7 @@ for (const item of listed.items) {
   }
 }
 
-const sourceRevision = git(["rev-parse", `origin/${SOURCE_BRANCH}`]);
+const sourceRevision = git(["rev-parse", SOURCE_REF]);
 const selectedTasks = args.statuses.size > 0 ? tasks.filter((task) => args.statuses.has(task.id)) : tasks;
 let created = 0;
 let updated = 0;

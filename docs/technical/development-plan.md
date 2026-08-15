@@ -32,7 +32,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 
 ## Planning assumptions
 
-- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001. Candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is accepted; its merge and the resulting `preview` base SHA pin remain operational prerequisites before code packets are materialized.
+- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001. Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` is the initial materialization base unless a separately reviewed descendant replaces it.
 - Component names in this plan are logical. The architecture may co-deploy compatible components, but ownership, contracts, trust boundaries, and failure isolation remain distinct.
 - Relative sizes are planning signals: `S` is a bounded adapter/schema/UI slice, `M` is a component with several contracts, and `L` must be decomposed before dispatch. They are not calendar estimates.
 - Every milestone has a production-like demonstration environment even when the capability is not production-enabled.

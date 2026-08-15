@@ -5,11 +5,11 @@
 | Field | Value |
 | --- | --- |
 | Status | Dispatch specifications complete; every packet remains `BLOCKED` pending its recorded prerequisites |
-| Version | 1.3 |
+| Version | 1.4 |
 | Date | 2026-08-15 |
 | Product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
-| Contract baseline floor | Curve commit `f72fe631244c0fa33d3a06ba2c61134f95fe1802` |
-| Plane candidate | `d380678912e9b46805ef852d2e05411f1fea6d8b` |
+| Contract baseline floor | Accepted Curve `main` commit `1529b8b7f04f226ac8be151f89104b6582650b42` |
+| Plane foundation base | Accepted fork `preview` commit `549db1aea8f3307b337b3686dbb844a87549cd95` |
 
 ## Purpose
 
@@ -24,9 +24,9 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | Field | Required value |
 | --- | --- |
 | Repository | `git@github.com:faocampo/plane.git` |
-| Base branch | Fork `preview`, after reviewed upstream-sync merge |
-| Base SHA | Exact reviewed `preview` merge SHA; `d380678...` is a candidate and MUST NOT be dispatched as the final base |
-| Curve revision | Exact published Curve commit containing the approved PRD, contracts, ADRs, and this packet |
+| Base branch | Fork `preview` |
+| Base SHA | `549db1aea8f3307b337b3686dbb844a87549cd95`; every materialized packet must verify the live base still matches or use a separately reviewed descendant |
+| Curve revision | At least accepted governance baseline `1529b8b7f04f226ac8be151f89104b6582650b42`; materialization records the exact current approved Curve revision and context digest |
 | GitHub Project item | Exact item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and set to `Ready` before dispatch |
 | Branch | One feature branch per packet: `curve/m0-s1-module-shell` through `curve/m0-s5-observability` |
 | Human owner | Named person, recorded at dispatch; role-only values are invalid |
@@ -48,10 +48,11 @@ overwrite an existing environment file.
 
 | Blocker | Required resolution |
 | --- | --- |
-| `B-PUBLISH` | Satisfied through the approved Curve baseline `62e144f37d4fea3064ae7cd21868117b9eb78edb` and Plane candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`; the final Curve decision-record revision must also be published before dispatch. |
-| `B-REVIEW` | Plane exact-head disposition is satisfied at `d380678...`. Curve disposition and CI are satisfied through `62e144f...`; the decision-record commit creates a new Curve head that requires validation and a fresh exact-head disposition before merge/dispatch. |
-| `B-BASE` | The reviewed upstream-sync is merged into fork `preview`; its exact merge SHA is recorded. |
+| `B-PUBLISH` | Satisfied: Curve PR #1 merged at `1529b8b7f04f226ac8be151f89104b6582650b42`; Plane PR #1 merged at `549db1aea8f3307b337b3686dbb844a87549cd95`. |
+| `B-REVIEW` | Satisfied for the foundation: Federico approved Curve head `24a66ef...` and Plane head `d380678...`; both PRs merged and Curve head/post-merge CI passed. Each later implementation packet still requires its own exact-head review. |
+| `B-BASE` | Satisfied: reviewed upstream-sync is merged into fork `preview` at `549db1aea8f3307b337b3686dbb844a87549cd95`. |
 | `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Federico Ocampo against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
+| `B-P002` | P0-02 topology reaches `Done` with an approved local development boundary; its unresolved environment decisions remain explicit. |
 | `B-D003` | Required only for M0-S3 and later: the local Temporal profile and proof authorization are `DECIDED`. |
 | `B-PEOPLE` | The packet records a named human owner and Federico Ocampo (`faocampo`) as reviewer, or a named replacement reviewer. |
 | `B-CONTEXT` | The materialized packet records its Curve revision and context-pack digest. |
@@ -65,7 +66,7 @@ No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S1-MODULE-SHELL` |
-| Status | `BLOCKED`: `B-REVIEW`, `B-BASE`, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT`; `B-D001` is satisfied |
+| Status | `BLOCKED`: `B-P002`, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT`; `B-PUBLISH`, `B-REVIEW`, `B-BASE`, and `B-D001` are satisfied |
 | Risk | `STANDARD`; new workspace authorization and application route boundary |
 | Outcome | Add a dedicated `plane.curve` Django app and an additive workspace UI shell, both disabled by default, without changing unrelated Plane behavior. |
 | Traceability | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 |

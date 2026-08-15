@@ -4,8 +4,8 @@
 
 | Field | Value |
 | ----- | ----- |
-| Status | D-001 decided; approved candidate awaiting merge and resulting-base pin |
-| Version | 0.7 |
+| Status | D-001 decided; accepted Plane foundation merged and pinned |
+| Version | 0.8 |
 | Review date | 2026-08-15 |
 | Plane fork | `git@github.com:faocampo/plane.git` |
 | Inspected branch and commit | `preview` at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` |
@@ -18,21 +18,21 @@
 
 The inspected Plane community fork is a suitable additive foundation for Curve. It already provides workspace identity and membership, project/work-item coordination, pages, comments, estimates, relations, views, webhooks, notifications, API conventions, a Django/PostgreSQL backend, Celery bounded jobs, and a React/TypeScript workspace UI. Curve should reuse those primitives through their supported models/services/UI patterns while keeping its lifecycle, immutable evidence, gates, provider state, budgets, quality truth, and Temporal workflows in new Curve-owned domain boundaries.
 
-The product sponsor approved using official Plane upstream as the updateable code baseline for Curve while implementing Curve in the fork. The `upstream` remote is configured as fetch-only, shared `preview` remains unchanged, and the candidate integration branch starts from the exact upstream `preview` commit. The fork baseline is its ancestor, so this update has no fork-only conflict: the fork was zero commits ahead and one commit behind.
+The product sponsor approved using official Plane upstream as the updateable code baseline for Curve while implementing Curve in the fork. The `upstream` remote is configured as fetch-only. During candidate preparation, shared `preview` remained unchanged and the integration branch started from the exact upstream `preview` commit. After review, `preview` advanced only through Plane PR #1 to accepted merge `549db1aea8f3307b337b3686dbb844a87549cd95`. The historical fork baseline is an ancestor, so the update had no fork-only conflict: the fork was zero commits ahead and one commit behind before integration.
 
-D-001 is `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the approved candidate foundation is pinned at `d380678912e9b46805ef852d2e05411f1fea6d8b`. Full repository checks and the approved local deployment smoke passed. The candidate is published in the fork, and current `origin/preview` plus `upstream/preview` both resolve to its parent `1c8a60f858d8472aa56e29994ec1c7926da2c6ce`. The repository-level community/commercial audit, reuse/build recommendation, license obligations, repository boundary, and both exact-head dispositions are accepted in [ADR-001](adr-001-plane-upstream-foundation.md#approval-record). Merge and resulting-base pinning remain. M0-01 owns the feature-disabled migration and rollback implementation proof.
+D-001 is `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the approved candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is preserved as a parent of accepted fork `preview` merge `549db1aea8f3307b337b3686dbb844a87549cd95`. Full repository checks and the approved local deployment smoke passed on the candidate tree; the merge adds history metadata without changing that reviewed tree. The repository-level community/commercial audit, reuse/build recommendation, license obligations, repository boundary, exact-head dispositions, merge, and resulting base are accepted in [ADR-001](adr-001-plane-upstream-foundation.md#approval-record). M0-01 owns the feature-disabled migration and rollback implementation proof.
 
 ## Repository and integration state
 
 | Property | Observation | Consequence |
 | -------- | ----------- | ----------- |
-| Fork branch | `origin/preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce`, matching `upstream/preview` on 2026-08-13 | The fork has incorporated the selected upstream base without rewriting it; the candidate remains separate and unmerged. |
+| Fork branch | `origin/preview` at accepted merge `549db1aea8f3307b337b3686dbb844a87549cd95` | The merge preserves prior fork/upstream base `1c8a60f...` and approved candidate `d380678...` as parents without rewriting shared history. |
 | Official upstream | Remote `upstream` fetches `https://github.com/makeplane/plane.git`; its push URL is disabled; `upstream/HEAD` and the selected ref are `preview` | Upstream changes are inspectable and fetchable without creating an accidental upstream push path. |
 | Upstream pin | `upstream/preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` | Candidate foundation base is reproducible and exact. |
 | Historical ancestry/divergence | Before fork synchronization, merge base was `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47`; fork was `0` ahead and `1` behind upstream | Explains the selected integration path without asserting the historical state is current. |
 | Upstream delta | One commit, `[WEB-8632] fix(web): auto-reload on stale chunk load failure during navigation (#9579)`, changing three web files | No schema, dependency-lock, deployment, or license-file delta was introduced by this upstream update. |
-| Candidate branch | Published `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`, one commit ahead of `origin/preview` and `upstream/preview` | Exact candidate is approved under D-001 and remains unmerged. |
-| Candidate commit and working tree | `d380678912e9b46805ef852d2e05411f1fea6d8b`; clean and identical locally/remotely | Exact candidate is reproducible and approved; its resulting `preview` base must be pinned after merge. |
+| Candidate branch | Published `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b` | Exact candidate is approved under D-001 and merged by Plane PR #1. |
+| Accepted merge and working tree | `origin/preview` at `549db1aea8f3307b337b3686dbb844a87549cd95`; candidate `d380678...` is its second parent | Exact reviewed tree is reproducible and the resulting implementation base is pinned. |
 | Original working tree | Clean when first inspected | No pre-existing user change was overwritten or incorporated. |
 | Package manager | Pinned pnpm 11.3.0 in root package metadata | Use the repository-pinned package manager; do not substitute a global version. |
 | Backend | Django/DRF, PostgreSQL, Celery, pytest/Docker test stack | Add Curve Django/API modules and a separate Temporal worker boundary; do not replace Plane/Celery jobs. |
@@ -134,7 +134,7 @@ Targeted checks may provide fast feedback, but do not replace the full exit suit
 | `git diff --check` | PASS | The candidate correction has no whitespace errors. |
 | Local deployment smoke | PASS at exact candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` | Existing local Plane Compose project recreated from the candidate using its persistent development volumes. Migrator exited `0` with no pending migrations; API health returned `200 {"status":"OK"}`; worker and Beat initialized; a safe nonexistent-asset task was consumed. `check --deploy` exited `0` with five expected local-profile hardening warnings. See the detailed evidence below. |
 
-The candidate correction is committed, published, reviewed, and accepted under D-001 at exact SHA `d380678912e9b46805ef852d2e05411f1fea6d8b`. It remains unmerged and is not a release; the resulting `preview` base must be pinned after merge.
+The candidate correction was committed, published, reviewed, and accepted under D-001 at exact SHA `d380678912e9b46805ef852d2e05411f1fea6d8b`. Plane PR #1 merged it into `preview` at `549db1aea8f3307b337b3686dbb844a87549cd95`. This pins an implementation foundation; it is not a Curve product release.
 
 ### Local deployment-smoke evidence
 
@@ -168,4 +168,4 @@ The local stack remains running for developer use. No `down -v`, volume deletion
 - [x] Federico Ocampo formally accepts the license/notices/corresponding-source impact against the exact ADR version/digest.
 - [x] Federico Ocampo is recorded as the Plane support/upgrade owner with review at every Plane foundation upgrade, material licensing change, or ownership change.
 - [x] Federico Ocampo reviews the exact head of both draft PRs and [ADR-001](adr-001-plane-upstream-foundation.md) receives a complete approval record.
-- [ ] Merge the approved candidate and pin the resulting fork `preview` SHA before M0-01 dispatch.
+- [x] Merge the approved candidate and pin resulting fork `preview` SHA `549db1aea8f3307b337b3686dbb844a87549cd95` before M0-01 dispatch.
