@@ -5,8 +5,8 @@
 | Field | Value |
 | --- | --- |
 | Status | Dispatch specifications complete; every packet remains `BLOCKED` pending its recorded prerequisites |
-| Version | 1.1 |
-| Date | 2026-08-13 |
+| Version | 1.2 |
+| Date | 2026-08-14 |
 | Product baseline | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
 | Contract baseline floor | Curve commit `f72fe631244c0fa33d3a06ba2c61134f95fe1802` |
 | Plane candidate | `d380678912e9b46805ef852d2e05411f1fea6d8b` |
@@ -29,7 +29,7 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | Curve revision | Exact published Curve commit containing the approved PRD, contracts, ADRs, and this packet |
 | Branch | One feature branch per packet: `curve/m0-s1-module-shell` through `curve/m0-s5-observability` |
 | Human owner | Named person, recorded at dispatch; role-only values are invalid |
-| Human reviewer | Named person distinct from the coding agent, recorded at dispatch |
+| Human reviewer | Federico Ocampo (`faocampo`) for the current phase, distinct from the coding agent; any replacement must be named at dispatch |
 | Data | Synthetic `INTERNAL` local fixtures only; no protected object bodies, repository secrets, customer data, or production data |
 | Model policy | Dispatcher-approved coding model; no Curve Model Gateway or runtime model call; no silent model/provider substitution |
 | Tool policy | Repository read/write, `git` read-only status/diff, `pnpm`, Docker Compose, and test tools only; no push, PR, deploy, cloud console, or external-system mutation |
@@ -48,11 +48,11 @@ overwrite an existing environment file.
 | Blocker | Required resolution |
 | --- | --- |
 | `B-PUBLISH` | Satisfied on 2026-08-13: Curve baseline `e1f814a...` and Plane candidate `d380678...` are published at their exact SHAs. |
-| `B-REVIEW` | Curve documentation baseline and Plane upstream-sync branch pass human review and required CI; publication alone does not satisfy this blocker. |
+| `B-REVIEW` | Federico Ocampo records a disposition for the exact Curve documentation and Plane upstream-sync PR heads, and required CI passes; reviewer assignment alone does not satisfy this blocker. |
 | `B-BASE` | The reviewed upstream-sync is merged into fork `preview`; its exact merge SHA is recorded. |
 | `B-D001` | D-001 is `DECIDED` by named engineering and licensing owners. |
 | `B-D003` | Required only for M0-S3 and later: the local Temporal profile and proof authorization are `DECIDED`. |
-| `B-PEOPLE` | The packet records named human owner and reviewer. |
+| `B-PEOPLE` | The packet records a named human owner and Federico Ocampo (`faocampo`) as reviewer, or a named replacement reviewer. |
 | `B-CONTEXT` | The materialized packet records its Curve revision and context-pack digest. |
 
 No coding agent may resolve these blockers or change an ADR from `PROPOSED` to

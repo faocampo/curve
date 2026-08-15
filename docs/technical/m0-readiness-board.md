@@ -5,8 +5,8 @@
 | Field | Value |
 | --- | --- |
 | Status | Active readiness control; approvals pending |
-| Version | 1.1 |
-| Date | 2026-08-13 |
+| Version | 1.2 |
+| Date | 2026-08-14 |
 | Normative product baseline | [Curve PRD v0.7](../curve-ai-native-sdlc-prd.md) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Candidate Plane baseline | `d380678912e9b46805ef852d2e05411f1fea6d8b` pending reviewed merge to fork `preview` |
@@ -23,7 +23,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 
 | Decision | Status | Accountable role | Named approver | Evidence owner | Blocks now | Evidence and next action |
 | --- | --- | --- | --- | --- | --- | --- |
-| [D-001](adr-001-plane-upstream-foundation.md) | PROPOSED | Curve engineering lead; licensing reviewer | **Required** | Curve engineering | Plane baseline merge; M0-01 | Accept community/commercial inventory, AGPL obligations, upstream support/rebase ownership, and verified candidate evidence. |
+| [D-001](adr-001-plane-upstream-foundation.md) | PROPOSED | Curve engineering approver; licensing reviewer | Federico Ocampo, CTO at X3M (both roles assigned; formal decision pending) | Federico Ocampo, Plane support/upgrade owner | Plane baseline merge; M0-01 | Federico's review of both exact PR heads, formal ADR approval record, branch merge, and additive migration/rollback proof remain. |
 | [D-003](adr-003-runtime-topology.md) | PROPOSED | Platform Operations | **Required** | Curve platform engineering | Local Temporal M0-06 beyond an approved proof; every non-local activation | Local stack inventory, immutable dev-image pin, SDK pin, profile contract, and non-local decision matrix are prepared. Approve/authorize local proof; complete non-local cells before staging/production. |
 | [D-007](adr-007-mcp-trust-and-orca-profile.md) | PROPOSED | Security; Platform Administration | **Required** | Curve security engineering | MCP-enabled M0-09/M1/M4 | MCP revision, proposed OAuth profile, closed v1.1 tool/result schemas, trust record, transition matrix, and conformance list are prepared. Approve identity/limits and authorize proof. |
 | [D-009](adr-009-retention-and-erasure.md) | OPEN | Security; Privacy; Legal | **Required** | Data governance | M0-04; staging/production | Asset inventory, owner-fillable period/backup/hold matrix, erasure state machine, policy precedence and acceptance proof are prepared. Named owners must resolve every `TBD`; no period is inferred. |
@@ -44,7 +44,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 
 | Package | State | Allowed scope or blocker |
 | --- | --- | --- |
-| P0-01 Plane inventory | IN_REVIEW | Repository-level capability/license-boundary proof and reuse/build recommendation are present and the candidate branch is published; D-001 named engineering/licensing approval, support ownership, branch review/CI, merge, and migration/rollback proof remain. |
+| P0-01 Plane inventory | IN_REVIEW | Repository-level capability/license-boundary proof and reuse/build recommendation are present and the candidate branch is published. Federico Ocampo is assigned as engineering approver, licensing reviewer, support/upgrade owner, and interim human reviewer for both PRs. Formal D-001 approval, review disposition, merge, and migration/rollback proof remain. |
 | P0-02 topology | IN_REVIEW | Exact local Temporal candidate pins/profile and a fail-closed staging/production matrix are documented; named D-003 approval and proof execution remain. |
 | P0-03 ADR set | IN_PROGRESS | M0-priority D-001/D-003/D-007/D-009 packets are decision-ready; named approvals and authorized proofs remain. D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
 | P0-04 documentation/contracts validation | READY_FOR_REVIEW | PRD v0.7, OpenAPI, 16 M0 JSON Schemas, positive/negative fixtures, Temporal/MCP contracts, traceability, validators, and dispatch packets are published at the pinned Curve SHA; human review remains. |
@@ -63,6 +63,8 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 ## Approval record
 
 An approval entry must contain decision ID, ADR version/digest, approver name and role, decision time, scope/environment, evidence references, exceptions, and review/expiry date. Repository approval or a chat message without these fields is not sufficient.
+
+Federico Ocampo is the interim human reviewer for every Curve and Plane PR. Each materialized packet records his name and GitHub username `faocampo` unless he assigns another named reviewer. Assignment alone does not satisfy `B-REVIEW`; the exact PR head requires a recorded disposition.
 
 ## Exit criteria
 

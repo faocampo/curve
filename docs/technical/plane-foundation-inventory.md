@@ -5,8 +5,8 @@
 | Field | Value |
 | ----- | ----- |
 | Status | D-001 direction selected; candidate foundation evidence with remaining acceptance gates |
-| Version | 0.5 |
-| Review date | 2026-08-13 |
+| Version | 0.6 |
+| Review date | 2026-08-14 |
 | Plane fork | `git@github.com:faocampo/plane.git` |
 | Inspected branch and commit | `preview` at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` |
 | Official upstream | `https://github.com/makeplane/plane.git`, `preview` at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` |
@@ -20,7 +20,7 @@ The inspected Plane community fork is a suitable additive foundation for Curve. 
 
 The product sponsor approved using official Plane upstream as the updateable code baseline for Curve while implementing Curve in the fork. The `upstream` remote is configured as fetch-only, shared `preview` remains unchanged, and the candidate integration branch starts from the exact upstream `preview` commit. The fork baseline is its ancestor, so this update has no fork-only conflict: the fork was zero commits ahead and one commit behind.
 
-D-001 is not yet `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the verified candidate foundation is pinned at `d380678912e9b46805ef852d2e05411f1fea6d8b`. Full repository checks and the approved local deployment smoke have passed. The candidate is published in the fork, and current `origin/preview` plus `upstream/preview` both resolve to its parent `1c8a60f858d8472aa56e29994ec1c7926da2c6ce`. The repository-level community/commercial audit and reuse/build recommendation are complete; legal acceptance, named support/upgrade ownership, human review/CI, merge, and feature-disabled migration/rollback proof remain.
+D-001 is not yet `DECIDED`. The verification run exposed and corrected an i18n type-generator formatting defect, and the verified candidate foundation is pinned at `d380678912e9b46805ef852d2e05411f1fea6d8b`. Full repository checks and the approved local deployment smoke have passed. The candidate is published in the fork, and current `origin/preview` plus `upstream/preview` both resolve to its parent `1c8a60f858d8472aa56e29994ec1c7926da2c6ce`. The repository-level community/commercial audit and reuse/build recommendation are complete. Federico Ocampo, CTO at X3M, is assigned as engineering approver, licensing reviewer, Plane support/upgrade owner, and interim human reviewer for both PRs. Formal acceptance and review dispositions, merge, and feature-disabled migration/rollback proof remain.
 
 ## Repository and integration state
 
@@ -160,10 +160,11 @@ The local stack remains running for developer use. No `down -v`, volume deletion
 - [x] Product sponsor selects official Plane upstream, fork-based development, and the non-destructive integration-branch strategy.
 - [x] Fork baseline and selected upstream commit are pinned with an ancestry/divergence report.
 - [x] Repository-level community-versus-commercial capability proof covers work items, pages, estimates, relations, Gantt, APIs, webhooks, auth, notifications, UI conventions, deployment, and public extension seams.
-- [ ] Reuse/build matrix is technically prepared and mapped to Curve logical components; named engineering and licensing approval remains.
+- [x] Reuse/build matrix is technically prepared and mapped to Curve logical components; Federico Ocampo is the named engineering approver and licensing reviewer.
 - [x] Full frontend checks, production build, and backend tests pass on the candidate tree.
 - [x] The i18n generator correction is committed and the resulting candidate foundation SHA is pinned.
 - [x] Deployment smoke test passes on that exact candidate foundation commit in the approved local non-production topology.
 - [ ] Additive migration/rollback and feature-disabled behavior are proven.
-- [ ] License/notices/corresponding-source impact is approved.
-- [ ] Curve engineering lead accepts [ADR-001](adr-001-plane-upstream-foundation.md), and the support/upgrade owner is recorded.
+- [ ] Federico Ocampo formally accepts the license/notices/corresponding-source impact against the exact ADR version/digest.
+- [x] Federico Ocampo is recorded as the Plane support/upgrade owner with review at every Plane foundation upgrade, material licensing change, or ownership change.
+- [ ] Federico Ocampo reviews the exact head of both draft PRs and [ADR-001](adr-001-plane-upstream-foundation.md) receives a complete approval record.

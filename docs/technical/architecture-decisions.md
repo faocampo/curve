@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Decision index; `PROPOSED` directions remain blocked until owner approval and required proof |
-| Version | 0.3 |
+| Version | 0.4 |
 | Source | [Curve PRD v0.7 decision register](../curve-ai-native-sdlc-prd.md#decision-register) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
@@ -19,7 +19,7 @@ An AI agent may draft an ADR, gather evidence, run non-destructive proofs, and r
 
 | PRD ID | Status | ADR subject | Blocks | Minimum evidence before decision |
 | ------ | ------ | ----------- | ------ | -------------------------------- |
-| D-001 | PROPOSED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) | P0/M0 | Selected official upstream and safe branch strategy; pinned fork/upstream/candidate commits; 0-ahead/1-behind ancestry; frontend/backend checks and local deployment smoke pass. Still required: full community/commercial proof, license acceptance, and support/upgrade owner. |
+| D-001 | PROPOSED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) | P0/M0 | Official upstream strategy, pins, ancestry, community/commercial proof, checks, and local smoke are recorded. Federico Ocampo is assigned as engineering approver, licensing reviewer, support/upgrade owner, and interim PR reviewer. Formal approval and review dispositions, merge, and migration/rollback proof remain. |
 | D-002 | PROPOSED | Onyx per-operation delegated identity | M1 | Supported OAuth mechanism, issuer/audience/scopes, token lifetime/revocation, source ACL behavior, durable-wait reauthorization, audit, threat model, proof. |
 | D-003 | PROPOSED | Development/staging/production topology and trust zones | M0/M4/M6 | Capacity, residency, HA, RPO/RTO, Kubernetes/gVisor, databases/object storage/Temporal, secrets, backup/restore, cost, ownership. |
 | D-004 | PROPOSED | Thin Curve Model Gateway over approved OpenRouter access | Model-enabled M1/M3/M5 | Versioned contract, failure behavior, policy enforcement, telemetry, HA impact, license/supply chain, operations proof, replacement strategy. |

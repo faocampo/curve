@@ -2,9 +2,12 @@
 
 - Status: PROPOSED
 - PRD decision: D-001
-- Owner: Curve engineering lead
+- Owner and engineering approver: Federico Ocampo, CTO at X3M
+- Licensing reviewer: Federico Ocampo, CTO at X3M
+- Plane support/upgrade owner: Federico Ocampo, CTO at X3M
 - Product sponsor approval: Upstream-baseline direction approved on 2026-08-12
-- Reviewers: Release owner, application security, legal/licensing, platform operations
+- Interim human reviewer for both PRs: Federico Ocampo, CTO at X3M (`faocampo`)
+- Specialist reviewers: Release owner, application security, and platform operations
 - Decision date: Pending owner acceptance
 - Required by: M0 architecture sign-off
 - Supersedes: None
@@ -62,7 +65,7 @@ Use the official public Plane repository as Curve's upstream code baseline and F
 
 Keep the Curve and Plane repositories separate. The Curve repository is the governance and normative-contract source for PRDs, ADRs, security decisions, architecture, and immutable task packets. The public Plane fork owns deployable Curve code, migrations, UI, worker/runtime configuration, generated clients, and a pinned implementation snapshot or reference to the approved Curve contracts. This avoids a combined monorepo while allowing code and generated artifacts to change atomically in Plane. This boundary remains part of the `PROPOSED` D-001 decision until named owners approve it.
 
-An accepted integration commit becomes the only base for Curve implementation task packets. The local repository-level commercial/community audit and reuse/build recommendation are complete. Publishing the candidate supplies reviewable evidence but does not accept it. This ADR remains `PROPOSED` because named engineering/licensing approval, support ownership, human review/CI, and feature-disabled migration/rollback proof remain incomplete.
+An accepted integration commit becomes the only base for Curve implementation task packets. The local repository-level commercial/community audit and reuse/build recommendation are complete. Publishing the candidate supplies reviewable evidence but does not accept it. Federico Ocampo is assigned as engineering approver, licensing reviewer, Plane support/upgrade owner, and interim human reviewer for both PRs. This ADR remains `PROPOSED` because his formal approval and exact-head review dispositions plus the feature-disabled migration/rollback proof remain incomplete.
 
 ## Security, privacy, licensing, and operational impact
 
@@ -100,9 +103,10 @@ Before this ADR becomes `DECIDED`, all of the following must be complete:
 - [x] The i18n generator correction is committed at an exact candidate foundation SHA and the full frontend check passes at that SHA.
 - [x] Deployment smoke passes on that exact SHA in the approved local non-production topology.
 - [x] Repository-level community-versus-commercial capability proof and reuse/build recommendation are documented.
-- [ ] Named engineering and licensing reviewers accept the reuse/build boundary.
-- [ ] Legal/release owners accept AGPL, notices, dependency, and corresponding-source consequences.
-- [ ] A support/upgrade owner and review cadence are recorded.
-- [ ] Required reviewers approve this ADR and set its decision/review date.
+- [x] Named engineering approver and licensing reviewer are assigned: Federico Ocampo, CTO at X3M.
+- [ ] Federico Ocampo records formal acceptance of the reuse/build boundary and AGPL, notices, dependency, and corresponding-source consequences against an exact ADR version/digest.
+- [x] Plane support/upgrade ownership and event-driven review cadence are recorded: Federico Ocampo; review at every Plane foundation upgrade, material licensing change, or change of support owner.
+- [ ] Federico Ocampo records a disposition for the exact head of both draft PRs.
+- [ ] Required reviewers complete the ADR approval record with decision time, scope/environment, evidence, exceptions, and review/expiry date.
 
 Review this decision at every Plane foundation upgrade, material licensing change, or change of support owner.
