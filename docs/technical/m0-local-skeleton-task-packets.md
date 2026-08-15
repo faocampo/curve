@@ -27,6 +27,7 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | Base branch | Fork `preview`, after reviewed upstream-sync merge |
 | Base SHA | Exact reviewed `preview` merge SHA; `d380678...` is a candidate and MUST NOT be dispatched as the final base |
 | Curve revision | Exact published Curve commit containing the approved PRD, contracts, ADRs, and this packet |
+| GitHub Project item | Exact item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and set to `Ready` before dispatch |
 | Branch | One feature branch per packet: `curve/m0-s1-module-shell` through `curve/m0-s5-observability` |
 | Human owner | Named person, recorded at dispatch; role-only values are invalid |
 | Human reviewer | Federico Ocampo (`faocampo`) for the current phase, distinct from the coding agent; any replacement must be named at dispatch |
@@ -54,6 +55,7 @@ overwrite an existing environment file.
 | `B-D003` | Required only for M0-S3 and later: the local Temporal profile and proof authorization are `DECIDED`. |
 | `B-PEOPLE` | The packet records a named human owner and Federico Ocampo (`faocampo`) as reviewer, or a named replacement reviewer. |
 | `B-CONTEXT` | The materialized packet records its Curve revision and context-pack digest. |
+| `B-PROJECT` | The owning M0 package exists exactly once in GitHub Project #2 and is `Ready`; execution updates it under the project status contract. |
 
 No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 `DECIDED`.
@@ -63,7 +65,7 @@ No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S1-MODULE-SHELL` |
-| Status | `BLOCKED`: `B-REVIEW`, `B-BASE`, `B-D001`, `B-PEOPLE`, `B-CONTEXT` |
+| Status | `BLOCKED`: `B-REVIEW`, `B-BASE`, `B-D001`, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
 | Risk | `STANDARD`; new workspace authorization and application route boundary |
 | Outcome | Add a dedicated `plane.curve` Django app and an additive workspace UI shell, both disabled by default, without changing unrelated Plane behavior. |
 | Traceability | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 |
@@ -108,7 +110,7 @@ pnpm build
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S2-DELIVERY-KERNEL` |
-| Status | `BLOCKED`: M0-S1 merged plus `B-PEOPLE`, `B-CONTEXT` |
+| Status | `BLOCKED`: M0-S1 merged plus `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
 | Risk | `STANDARD`; transactional and immutable control-plane state |
 | Outcome | Persist workspace-scoped Operation, outbox, inbox, idempotency, and append-only audit records atomically. |
 | Traceability | FR-007, FR-021, FR-023, FR-044; NFR-004-NFR-005, NFR-018; AC-08, AC-26, AC-33-AC-34, AC-56 |
@@ -151,7 +153,7 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S3-TEMPORAL-ROUND-TRIP` |
-| Status | `BLOCKED`: M0-S2 merged, `B-D003`, pinned server/SDK/image, proof authorization, `B-PEOPLE`, `B-CONTEXT` |
+| Status | `BLOCKED`: M0-S2 merged, `B-D003`, pinned server/SDK/image, proof authorization, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
 | Risk | `STANDARD`; durable asynchronous control flow, local synthetic data only |
 | Outcome | Deliver one harmless Operation through the outbox, a dedicated Temporal worker, idempotent application activities, cancellation, and terminal audit state. |
 | Traceability | FR-015, FR-022; NFR-004; AC-17-AC-21, AC-58 |
@@ -193,7 +195,7 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S4-API-SSE-UI` |
-| Status | `BLOCKED`: M0-S1-M0-S3 merged plus `B-PEOPLE`, `B-CONTEXT` |
+| Status | `BLOCKED`: M0-S1-M0-S3 merged plus `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
 | Risk | `STANDARD`; authenticated user-visible API and workspace boundary |
 | Outcome | Expose authorized Operation create/read/cancel behavior, resumable workspace events, and a minimal local foundation-probe UI. |
 | Traceability | FR-023; NFR-002-NFR-005, NFR-013; AC-01, AC-20, AC-35 |
@@ -240,7 +242,7 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S5-OBSERVABILITY` |
-| Status | `BLOCKED`: M0-S2-M0-S4 merged, documented X3M telemetry conventions, `B-PEOPLE`, `B-CONTEXT` |
+| Status | `BLOCKED`: M0-S2-M0-S4 merged, documented X3M telemetry conventions, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
 | Risk | `STANDARD`; telemetry is a potential data-exfiltration boundary |
 | Outcome | Correlate the local Operation across HTTP, database, relay, workflow, and UI without leaking protected or credential data. |
 | Traceability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 |

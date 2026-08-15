@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 
 const root = process.cwd();
+const authenticatedUrls = new Set(["https://github.com/users/faocampo/projects/2"]);
 
 function filesUnder(directory, suffix) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -46,7 +47,8 @@ async function check(url) {
   }
 }
 
-const urls = [...locations.keys()].sort();
+const skippedAuthenticated = [...locations.keys()].filter((url) => authenticatedUrls.has(url)).sort();
+const urls = [...locations.keys()].filter((url) => !authenticatedUrls.has(url)).sort();
 const results = [];
 const concurrency = 8;
 for (let index = 0; index < urls.length; index += concurrency) {
@@ -61,4 +63,6 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Validated ${results.length} external Markdown links.`);
+console.log(
+  `Validated ${results.length} public external Markdown links; skipped ${skippedAuthenticated.length} explicitly authenticated link.`,
+);

@@ -72,8 +72,11 @@ A work package is `READY` only when it has:
 - Repository instructions and required build/lint/type/test/security commands.
 - Model/tool/sandbox budgets and data classification.
 - Rollback or disablement behavior.
+- A unique item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) whose stable ID matches the package and whose status is `Ready`.
 
 If any item is absent, the coding agent stops before mutation and reports the missing prerequisite.
+
+Project status follows the [GitHub Project execution map](github-project-execution-map.md). The executor moves the exact item to `In progress` immediately before authorized work, to `In review` when its exact output is awaiting disposition, and to `Done` only after package acceptance. The project is an execution projection; this plan, approved ADRs, contracts, and immutable task packets remain normative.
 
 ## Work-package catalog
 

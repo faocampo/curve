@@ -29,6 +29,7 @@ The suite is implementation-oriented and records agreed planning directions as `
 | [M0 authorization/state matrices](m0-authorization-and-state-matrices.md) | Core roles, authorization inputs, operation transitions, and Orca tool effects | M0 policy/state contract |
 | [M0 traceability](m0-traceability.md) | Requirement-to-contract-to-test ownership | M0 verification control |
 | [M0 local task packets](m0-local-skeleton-task-packets.md) | Independently reviewable Plane-fork implementation packages | Dispatch specification; blocked until entry criteria pass |
+| [GitHub Project execution map](github-project-execution-map.md) | One-to-one mapping and status synchronization for all 70 development-plan packages in Curve GitHub Project #2 | Mandatory execution index before package dispatch |
 | [Machine-readable contracts](../../contracts/README.md) | OpenAPI, JSON Schema, MCP, SSE, provider, operation, and Temporal contracts | Normative wire/schema source |
 
 ## Authority and conflict order
