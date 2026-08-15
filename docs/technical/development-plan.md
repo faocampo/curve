@@ -225,6 +225,12 @@ M5 exit proves the entire supported flow through both VCS providers, both agent 
 | R1-04 | M | AGPL corresponding-source workflow, third-party notices, dependency manifest, SBOMs, provenance, generated-code IP checks, and release-owner sign-off | P0-01, all build artifacts | AC-59 passes and counsel-approved process is documented. |
 | R1-05 | S | R0A/R0B pilot comparison, KPI baseline/targets, operating ownership, support/runbooks, training, and gradual workspace enablement | R1-01-R1-04, D-015-D-016 | Product, engineering, security, operations, and licensing sign-off. |
 
+### M7: Future integration expansion
+
+M7 is post-R1 scope and is intentionally outside the current 70-item GitHub Project catalog. Its product charter is [M7 intelligence and automation extension](m7-intelligence-and-automation-extension.md). It adds three controlled capabilities: AI-execution expense governance; attention intake from user-authorized Gmail and selected Slack channels; and scheduled AI-agent jobs.
+
+Each M7 capability requires a separately approved scope/decision record, repository-local work packages, policy and data-classification review, provider contracts, rollback/disablement behavior, and a catalog revision before it is materialized in GitHub Project #2. M7 preserves Curve’s existing human gates, workspace isolation, immutable audit trail, and trusted-controller boundaries.
+
 ## Cross-cutting implementation patterns
 
 Each package uses the patterns defined in [engineering-patterns-and-technologies.md](engineering-patterns-and-technologies.md): aggregate command handlers, transactional outbox/inbox, idempotent activities, ports/adapters, append-only evidence and decisions, content-addressed objects, trusted mutation controllers, policy-as-versioned-data, projections, and reconciliation.

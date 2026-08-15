@@ -92,3 +92,18 @@ Select or create initiative
 ```
 
 This flow must be prototyped and reviewed before its related user-facing packages enter implementation. Subsequent roadmap, execution-console, quality/readiness, and prototype-feedback flows inherit the same gate and are specified as their work packages become ready.
+
+## Concept mockup set
+
+The following v1 mockups establish a shared visual direction for the first Curve surfaces. They are concept artifacts for UX-001 through UX-003. The accountable product owner records the UX-004/UX-005 review outcome in the relevant work-package record before implementation begins.
+
+| Surface | Concept artifact | Primary user decision |
+| --- | --- | --- |
+| Main dashboard | [Dashboard](../design/mockups/curve-dashboard-v1.png) | Select the next initiative-level decision. |
+| Projects, roadmaps, and tasks | [Product planning](../design/mockups/curve-planning-v1.png) | Sequence work, identify dependencies, and act on the critical path. |
+| Kanban board | [Delivery board lifecycle](../design/mockups/curve-kanban-delivery-lifecycle-v2.png) | Move work from definition through pre-production, monitored customer rollout, verified use, and closure. |
+| Task details and coding-agent execution | [Task execution](../design/mockups/curve-task-execution-v1.png) | Review progress and evidence, answer a scoped question, and control the run. |
+
+The set uses a compact, Plane-integrated navigation model: Home, Initiatives, Roadmaps, Execution, Quality, and Evidence. It keeps policy, audit, provider, and runtime detail available in the governing decision context rather than exposing the control-plane topology as primary navigation.
+
+The [Kanban delivery lifecycle](kanban-delivery-lifecycle.md) defines the board columns, status meaning, and progression evidence for this surface.
