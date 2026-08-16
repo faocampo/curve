@@ -4,28 +4,39 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Active readiness control; D-001 foundation merged, remaining approvals pending |
-| Version | 1.5 |
+| Status | Active readiness control; D-001 (Plane upstream foundation decision) merged; D-003 (runtime topology and trust-zone decision) two-stage local proof direction approved and both executions gated; remaining scoped approvals pending |
+| Version | 1.6 |
 | Date | 2026-08-15 |
 | Normative product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Accepted Plane baseline | Fork `preview` at `549db1aea8f3307b337b3686dbb844a87549cd95`; includes approved candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` as the second merge parent |
-| Published Curve baseline | PR #1 squash-merged to `main` at `1529b8b7f04f226ac8be151f89104b6582650b42`; post-merge `validate` passed in [run 31887095811](https://github.com/faocampo/curve/actions/runs/31887095811) |
+| Published Curve baseline | PR #2 squash-merged to `main` at `fe8664a1fd58d34bb10273d3da2d39804659bbfc`; post-merge `validate` passed in [run 31888595658](https://github.com/faocampo/curve/actions/runs/31888595658) |
 | Published Plane candidate | PR #1 merge-completed into fork `preview` at `549db1aea8f3307b337b3686dbb844a87549cd95` |
 
 ## Readiness rule
 
 A role may prepare evidence, but a named person must approve an ADR before its state becomes `DECIDED`. A coding agent checks this board and the linked ADR before mutation. `PROPOSED`, `OPEN`, or a blank named approver means the dependent package is `BLOCKED`.
 
-The local M0 skeleton uses synthetic data and excludes protected-object storage. D-009 therefore blocks M0-04 and all staging/production activation, but does not block the independent local module, operation, outbox, Temporal, API, UI, or audit packages.
+A named owner may separately authorize a bounded P0 decision-proof while its
+ADR remains `PROPOSED`. Each stage of a multi-stage proof requires its own
+complete authorization, immutable packet and harness, merged context, preflight,
+claim, bounded execution and VCS authority, signed broker start grant, immutable
+evidence, and exact-evidence-head review. GitHub Project status is visual
+tracking metadata and is outside these controls. Only a conformant broker's
+signed start grant, issued after claim-time ruleset and authorization
+revalidation, activates execution.
+A consuming implementation package remains blocked until every required stage
+is accepted and its decision scope is formally `DECIDED`.
+
+The local M0 skeleton uses synthetic data and excludes protected-object storage. D-009 (retention, deletion, backup, and legal-hold decision) therefore blocks M0-04 (protected-storage work package) and all staging/production activation, but does not block the independent local module, operation, outbox, Temporal, API, UI, or audit packages.
 
 ## M0-priority decisions
 
 | Decision | Status | Accountable role | Named approver | Evidence owner | Blocks now | Evidence and next action |
 | --- | --- | --- | --- | --- | --- | --- |
 | [D-001](adr-001-plane-upstream-foundation.md) | DECIDED | Curve engineering approver; licensing reviewer | Federico Ocampo, CTO at X3M | Federico Ocampo, Plane support/upgrade owner | No unresolved D-001 action | Owner approval, exact-head dispositions, licensing acceptance, repository boundary, review triggers, Curve merge, and Plane base `549db1a...` are recorded. M0-01 separately proves additive migration, disabled-state, and rollback behavior. |
-| [D-003](adr-003-runtime-topology.md) | PROPOSED | Platform Operations | **Required** | Curve platform engineering | Local Temporal M0-06 beyond an approved proof; every non-local activation | Local stack inventory, immutable dev-image pin, SDK pin, profile contract, and non-local decision matrix are prepared. Approve/authorize local proof; complete non-local cells before staging/production. |
-| [D-007](adr-007-mcp-trust-and-orca-profile.md) | PROPOSED | Security; Platform Administration | **Required** | Curve security engineering | MCP-enabled M0-09/M1/M4 | MCP revision, proposed OAuth profile, closed v1.1 tool/result schemas, trust record, transition matrix, and conformance list are prepared. Approve identity/limits and authorize proof. |
+| [D-003](adr-003-runtime-topology.md) | PROPOSED; two-stage `LOCAL_ONLY` proof direction approved | Platform Operations | Federico Ocampo, CTO at X3M, for `LOCAL_ONLY` | OpenAI Codex under Federico Ocampo's oversight | P0-06A and P0-06B remain gated; M0-S3/M0-06 and every non-local activation remain blocked | The local sections at proposal revision `cac4dcac...`, exact upstream pins, synthetic-only boundary, owner/operator, and two-stage response are approved. P0-06A cannot decide D-003. P0-06B requires a separate least-privilege design and approval; only accepted P0-06B evidence can support the local decision. |
+| [D-007](adr-007-mcp-trust-and-orca-profile.md) | PROPOSED | Security; Platform Administration | **Required** | Curve security engineering | MCP-enabled M0-09/M1/M4 | Trust-record and typed-error contracts, identity/limit decisions, complete conformance fixtures, and dependency ordering with D-006 remain unresolved. No MCP package may proceed until the named owners decide the applicable scope. |
 | [D-009](adr-009-retention-and-erasure.md) | OPEN | Security; Privacy; Legal | **Required** | Data governance | M0-04; staging/production | Asset inventory, owner-fillable period/backup/hold matrix, erasure state machine, policy precedence and acceptance proof are prepared. Named owners must resolve every `TBD`; no period is inferred. |
 
 ## Just-in-time decisions
@@ -45,17 +56,17 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | Package | State | Allowed scope or blocker |
 | --- | --- | --- |
 | P0-01 Plane inventory | DONE | Repository-level capability/license-boundary proof and reuse/build recommendation are approved under D-001; Plane PR #1 is merged and fork `preview` is pinned at `549db1a...`. M0-01 owns migration/disabled-state/rollback implementation evidence. |
-| P0-02 topology | IN_REVIEW | Exact local Temporal candidate pins/profile and a fail-closed staging/production matrix are documented; named D-003 approval and proof execution remain. |
-| P0-03 ADR set | IN_PROGRESS | D-001 is decided. D-003, D-007, and D-009 still require their named decisions/proofs; D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
-| P0-04 documentation/contracts validation | DONE | PRD v0.8 and the accompanying contract/governance suite merged through Curve PR #1 at `1529b8b...`; head `validate` passed in [run 31884924454](https://github.com/faocampo/curve/actions/runs/31884924454) and post-merge `validate` passed in [run 31887095811](https://github.com/faocampo/curve/actions/runs/31887095811). |
+| P0-02 topology | IN_REVIEW | Federico Ocampo approved the local sections and two-stage proof direction. Publication and exact-head approval evidence remain before closure. Completion will not claim that Temporal works, decide the shared-network proposal, or authorize non-local activation. |
+| P0-03 ADR set | IN_PROGRESS | D-001 is decided and D-003 has a two-stage local proof direction. Exact P0-06A/P0-06B authorization and evidence, D-007, and D-009 still require their named decisions/proofs; D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
+| P0-04 documentation/contracts validation | DONE | PRD v0.8 and the accompanying contract/governance suite are merged through Curve PR #2 at `fe8664a...`; post-merge `validate` passed in [run 31888595658](https://github.com/faocampo/curve/actions/runs/31888595658). |
 | P0-05 test strategy | READY_FOR_IMPLEMENTATION | May proceed using synthetic fixtures. |
-| P0-06 local Temporal proof | BLOCKED | Requires named D-003 proof authorization and a pinned Temporal version/image. |
-| M0-01 module shell | BLOCKED | D-001, the Curve baseline merge, and Plane base pin are satisfied. P0-02 plus the named-person, context, and GitHub Project readiness fields remain. M0-01 owns additive migration, disabled-state, and rollback proof. |
+| P0-06 (two-stage local Temporal proof) | BLOCKED | P0-06A (isolated Temporal feasibility proof) awaits exact-head packet publication, committed/reviewed harness and immutable image, a complete immutable authorization bundle, recomputed artifacts and app-bound ordered CI, trusted controller, conformant independent start-grant and operation broker, Security incident owner, active exact-tag ruleset with approved live digest/no bypass, workstation preflight, claim-time ruleset recheck, and atomic claim. The broker/GitHub App must execute or sign and dispatch every exact VCS or execution operation while exposing only opaque lease handles and signed receipts to the controller. A dispatched claim requires its outcome-specific ticket/start-grant terminal state and reviewed evidence. GitHub Project status may be updated independently for visual tracking and is not part of the proof authorization or evidence contract. P0-06B (least-privilege Plane integration proof) is unplanned and unauthorized. |
+| M0-01 module shell | BLOCKED | D-001, the Curve baseline merge, Plane base pin, and Federico's owner/reviewer assignments are satisfied. P0-02 closure and the merged Curve context digest remain. M0-01 owns additive migration, disabled-state, and rollback proof. |
 | M0-02 core persistence | BLOCKED | Requires M0-01. |
 | M0-03 core policy | BLOCKED | Requires M0-01. |
 | M0-04 protected storage | BLOCKED | Requires M0-02, M0-03, and D-009. |
 | M0-05 delivery kernel | BLOCKED | Requires M0-02. |
-| M0-06 Temporal skeleton | BLOCKED | Requires M0-05 and approved D-003 local profile. |
+| M0-06 Temporal skeleton | BLOCKED | Requires M0-05, accepted P0-06B integration evidence, and a decided D-003 local profile. |
 | M0-07 API/SSE | BLOCKED | Requires M0-02, M0-03, and M0-05. |
 | M0-08 audit/observability | BLOCKED | Requires the implemented M0 foundation packages. |
 | M0-09 provider registry | BLOCKED | Requires M0-03, M0-05, M0-07, and D-007 before MCP enablement. |
@@ -74,6 +85,25 @@ Federico Ocampo is the interim human reviewer for every Curve and Plane PR. Each
 
 D-001 approval is recorded in [ADR-001](adr-001-plane-upstream-foundation.md#approval-record) and the [GitHub owner approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). It binds the approved ADR content digest and both exact PR heads; it allocates implementation proof to M0-01 without authorizing packages that have other unresolved blockers.
 
+D-003 `LOCAL_ONLY` proof direction is recorded in
+[ADR-003](adr-003-runtime-topology.md#local-proof-scope-and-two-stage-approval-record)
+and the [P0-06 task packet](p0-06-local-temporal-proof-task-packet.md). It binds
+Federico Ocampo as scoped decision owner, OpenAI Codex as operator, the local
+sections at revision `cac4dcac...`, exact upstream pins, synthetic-only data,
+and the P0-06A (isolated Temporal feasibility proof)/P0-06B (least-privilege
+Plane integration proof) separation. Three exact heads carry execution approval
+before Stage A: this publication PR, the immutable harness PR, and the immutable
+authorization-bundle/attempt-authorization PR. A fourth one-file PR receives
+repository-integrity review and projects their non-self-referential evidence.
+Together they bind the proposed authorization ID, dates, limits,
+controller/ticket/start-grant contract, bounded execution and VCS lease profiles,
+exclusions, claim, fixed evidence branches, cleanup, immutable evidence review,
+and publication evidence. GitHub Project statuses are administrative visual
+tracking and are outside those leases. The conformant broker's signed start grant
+activates execution only after its claim-time ruleset and authorization recheck.
+P0-06B has no authorization.
+All execution and decision effects remain pending.
+
 ## Exit criteria
 
 The first coding task may be dispatched only after:
@@ -83,4 +113,4 @@ The first coding task may be dispatched only after:
 - D-001 has named engineering and licensing approval.
 - The exact package's other decision dependencies are `DECIDED`.
 - Its task packet is `READY` under [development-plan.md](development-plan.md#entry-criteria-for-coding).
-- Its unique [GitHub Project #2](https://github.com/users/faocampo/projects/2) item is `Ready` under the [project execution map](github-project-execution-map.md).
+- Its unique [GitHub Project #2](https://github.com/users/faocampo/projects/2) visual-tracking item exists under the [project tracking map](github-project-execution-map.md); its current status does not gate dispatch.

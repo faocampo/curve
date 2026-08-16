@@ -5,11 +5,12 @@
   "license": "AGPL-3.0-only",
   "packageManager": "pnpm@11.3.0",
   "scripts": {
-    "check": "pnpm run check:markdown && pnpm run check:contracts && pnpm run check:structure",
+    "check": "pnpm run check:markdown && pnpm run check:contracts && pnpm run check:structure && pnpm run check:project",
     "check:markdown": "markdownlint-cli2 \"docs/**/*.md\" \"contracts/**/*.md\"",
     "check:contracts": "redocly lint contracts/openapi/curve-v1.openapi.yaml && node scripts/validate-contracts.mjs",
     "check:structure": "node scripts/validate-docs.mjs",
     "check:external": "node scripts/validate-external-links.mjs",
+    "check:project": "node --check scripts/sync-github-project.mjs && node --check scripts/lib/p0-06-policy.mjs && node --test scripts/tests/*.test.mjs && node scripts/sync-github-project.mjs",
     "project:check": "node scripts/sync-github-project.mjs",
     "project:sync": "node scripts/sync-github-project.mjs --apply"
   },

@@ -4,14 +4,14 @@
 
 | Field | Value |
 | ----- | ----- |
-| Status | Decision index; D-001 decided, remaining `PROPOSED` directions blocked until owner approval and required proof |
-| Version | 0.5 |
+| Status | Decision index; D-001 (Plane upstream foundation decision) decided; D-003 (runtime topology and trust-zone decision) two-stage `LOCAL_ONLY` proof direction approved and both executions gated; remaining decision scopes blocked until owner approval and required proof |
+| Version | 0.6 |
 | Source | [Curve PRD v0.8 decision register](../curve-ai-native-sdlc-prd.md#decision-register) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
 ## Purpose
 
-The PRD leaves D-001-D-016 to named X3M owners and records planning-session directions as `PROPOSED` where applicable. Federico Ocampo decided D-001 on 2026-08-15 after accepting its engineering, community/commercial boundary, licensing, ownership, and exact-head evidence. This document defines how an architecture agent researches and proves proposals without silently approving them, and how an approved decision becomes an implementation prerequisite.
+The PRD leaves D-001 through D-016 (controlled architecture and product decisions) to named X3M owners and records planning-session directions as `PROPOSED` where applicable. Federico Ocampo decided D-001 (Plane upstream foundation decision) on 2026-08-15 after accepting its engineering, community/commercial boundary, licensing, ownership, and exact-head evidence. On the same date he approved the local sections at D-003 (runtime topology and trust-zone decision) revision `cac4dcac...` as a proof basis and then approved a two-stage response: P0-06A (isolated Temporal feasibility proof) followed by separately designed and approved P0-06B (least-privilege Plane integration proof). Both executions and the decision remain gated. This document defines how an architecture agent researches and proves proposals without silently approving them, and how an approved decision becomes an implementation prerequisite.
 
 An AI agent may draft an ADR, gather evidence, run non-destructive proofs, and recommend an option. Only the PRD owner for that decision can change status from `OPEN` or `PROPOSED` to `DECIDED`.
 
@@ -19,15 +19,15 @@ An AI agent may draft an ADR, gather evidence, run non-destructive proofs, and r
 
 | PRD ID | Status | ADR subject | Blocks | Minimum evidence before decision |
 | ------ | ------ | ----------- | ------ | -------------------------------- |
-| D-001 | DECIDED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) | P0/M0 | Federico Ocampo approved ADR digest `0c780a...`, both exact PR heads, the reuse/license boundary, and the repository/upgrade strategy. Plane `preview` is pinned at accepted merge `549db1a...`; Curve governance baseline is merged at `1529b8b...`. M0-01 owns additive migration, disabled-state, and rollback proof. |
+| D-001 | DECIDED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) | P0/M0 | Federico Ocampo approved ADR digest `0c780a...`, both exact PR heads, the reuse/license boundary, and the repository/upgrade strategy. Plane `preview` is pinned at accepted merge `549db1a...`; Curve governance baseline is merged through `fe8664a...`. M0-01 owns additive migration, disabled-state, and rollback proof. |
 | D-002 | PROPOSED | Onyx per-operation delegated identity | M1 | Supported OAuth mechanism, issuer/audience/scopes, token lifetime/revocation, source ACL behavior, durable-wait reauthorization, audit, threat model, proof. |
-| D-003 | PROPOSED | Development/staging/production topology and trust zones | M0/M4/M6 | Capacity, residency, HA, RPO/RTO, Kubernetes/gVisor, databases/object storage/Temporal, secrets, backup/restore, cost, ownership. |
+| D-003 | PROPOSED | Development/staging/production topology and trust zones | P0-06A (isolated Temporal feasibility proof)/P0-06B (least-privilege Plane integration proof); M0-S3 (local Temporal round trip)/M0-06 (Temporal workflow skeleton); non-local M0/M4/M6 | Federico Ocampo approved the local proof basis and two-stage response. P0-06A awaits its packet, harness/image, immutable authorization bundle, ordered app-bound checks, recomputed artifacts, live exact-tag ruleset, trusted controller, conformant independent start-grant broker, preflight, and claim-time recheck. GitHub Project status is visual metadata; the signed broker grant is activation authority. Terminal evidence is outcome-specific and binds the reviewed VCS and execution evidence. P0-06A cannot decide D-003. P0-06B is unplanned and unauthorized. Staging/production capacity, residency, HA, RPO/RTO, Kubernetes/gVisor, persistence, secrets, backup/restore, cost, and ownership remain unresolved. |
 | D-004 | PROPOSED | Thin Curve Model Gateway over approved OpenRouter access | Model-enabled M1/M3/M5 | Versioned contract, failure behavior, policy enforcement, telemetry, HA impact, license/supply chain, operations proof, replacement strategy. |
 | D-005 | PROPOSED | Approved models/providers and data policy | M1/M3/M5 | Task evaluations, classification/residency/training/retention terms, ZDR proof, fallback equivalence, costs, red-team results, owner. |
 | D-006 | PROPOSED | Orca developer-operated MCP profile, support, and license | Orca-enabled M4/R1 | Supported client/version, delegated auth, bounded read/write capabilities, ownership, support and license classification, conformance proof. |
-| D-007 | PROPOSED | MCP registry, Streamable HTTP, trust, delegation, and pre-authorization | M0/M1/M4 | Protocol/version/transport, server identity, delegated auth, tool risk model, scopes, idempotency, state transitions, injection controls, and allowlist proof. |
+| D-007 | PROPOSED | MCP registry, Streamable HTTP, trust, delegation, and pre-authorization | M0/M1/M4 | Protocol/version/transport, server identity, delegated auth, tool risk model, scopes, idempotency, state transitions, injection controls, allowlist proof, and dependency ordering with D-006. |
 | D-008 | PROPOSED | GitHub App and GitLab project-token controller identities and scopes | M3/M5 | Repository scopes, signing/attribution, rotation/revocation, webhook model, allowlists, proof. |
-| D-009 | OPEN | Retention, deletion, backup, and legal hold | M0 production | Data inventory/classes, regulatory/legal input, periods, erasure feasibility, immutable audit split, backup expiry, cost. |
+| D-009 | OPEN | Retention, deletion, backup, and legal hold | M0-04 protected storage; protected M1/M4/M6 capabilities; every staging/production activation | Data inventory/classes, regulatory/legal input, periods, erasure feasibility, immutable audit split, backup expiry, cost. |
 | D-010 | PROPOSED | X3M quality, security, and license baseline | M5 | Licensed tool selection, pinned images/rules, normalized thresholds, non-waivable matrix, suppressions, false-positive baseline, prohibited licenses, update owner. |
 | D-011 | OPEN | OpenFeature backend and conventions | M5 | Existing X3M backend inventory, OpenFeature support, environments, audit, targeting/rollout, HA, license, operations proof; Sachiel Flipt profile. |
 | D-012 | PROPOSED | Docusaurus integration conventions | M5 | Default branch/owners, auth, build/link/navigation rules, preview/release relationship, failure handling, proof MR. |
@@ -75,6 +75,26 @@ An ADR is `DECIDED` only when:
 - It identifies affected schemas, provider capabilities, work packages, acceptance tests, runbooks, and documentation.
 - It does not weaken a PRD invariant. A desired conflict requires a PRD revision first.
 
+### Bounded proof authorization and scoped decisions
+
+A named decision owner may approve the scope for a bounded P0 proof while its
+ADR remains `OPEN` or `PROPOSED`. Complete execution authorization must bind the proposal digest, named
+owner and operator, exact environment, allowed data and mutations, limits,
+evidence, stop conditions, cleanup, expiry, and exclusions. Authorization is
+permission to collect decision evidence; it is neither proof acceptance nor an
+implementation decision.
+
+A scope-only approval does not make the proof `Ready`. Every additional
+guardrail or execution field must be approved against the publication PR's
+exact head before the proof can pass its remaining packet gates.
+
+An ADR spanning several environments or activation profiles may record
+scope-specific states. A package may consume only an exact scope that has met
+all ADR acceptance rules and is recorded as `DECIDED`. An accepted local scope
+does not decide staging, production, protected-data, provider, or SLA scopes.
+The ADR header remains `PROPOSED` while the currently evaluated scope has only
+proof authorization.
+
 ## Supersession
 
 A changed decision creates a new ADR or a new approved version, never an in-place historical rewrite. The impact assessment identifies active plans, workflows, contexts, stored data, provider connections, deployments, and task packets. Active work remains pinned until an authorized continue, pause, cancel, or re-plan decision.
@@ -93,4 +113,4 @@ An AI architecture or coding agent must:
 
 P0 is split into two readiness lanes. `P0A` closes the Plane baseline, repository/runtime topology, documentation/contracts, test strategy, and local Temporal proof required for M0. `P0B` contains integration proofs for gVisor, OpenHands, Onyx, VCS, and quality and must close immediately before the consuming milestone. This split does not waive a decision: a package remains blocked by every decision listed in its own entry criteria.
 
-D-009 gates protected-object storage, backup/hold/erasure behavior, and every staging or production activation. Independent local M0 packages may proceed without persisting protected bodies, using synthetic data only. D-004 and D-005 gate model-enabled M1/M3/M5 work, not the model-free local M0 skeleton. D-008 gates VCS-specific work beginning in M3; generic deny-by-default allowlist primitives belong to M0.
+D-009 (retention, deletion, backup, and legal-hold decision) gates protected-object storage, backup/hold/erasure behavior, and every staging or production activation. Independent local M0 packages may proceed without persisting protected bodies, using synthetic data only. D-004 (model-gateway decision) and D-005 (model/provider data-policy decision) gate model-enabled M1/M3/M5 work, not the model-free local M0 skeleton. D-007 (MCP trust-model decision) remains required by MCP-enabled packages but does not gate M0-S1 through M0-S5 (local skeleton packets) because they expose no MCP capability. D-008 (VCS controller-identity decision) gates VCS-specific work beginning in M3; generic deny-by-default allowlist primitives belong to M0.

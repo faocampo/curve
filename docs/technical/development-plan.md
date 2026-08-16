@@ -9,7 +9,7 @@
 | Last updated | 2026-08-15 |
 | Source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
-| Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 |
+| Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
 
 ## Purpose and authority
 
@@ -19,7 +19,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 
 ## Non-negotiable delivery rules
 
-1. No application implementation begins until the package's blocking D-001-D-016 decisions are `DECIDED` and linked ADRs are approved. A bounded P0 decision-proof package may run while its decision is `OPEN` or `PROPOSED` only because its sole output is decision evidence; it receives separate proof authorization, cannot use production data, and cannot enable production behavior.
+1. No application implementation begins until the package's blocking D-001 through D-016 (controlled architecture and product decisions) are `DECIDED` and linked ADRs are approved. A bounded P0 decision-proof package may run while its decision is `OPEN` or `PROPOSED` only because its sole output is decision evidence; it receives separate proof authorization, cannot use production data, and cannot enable production behavior.
 2. Every implementation slice affects one repository and has at most one active PR or MR. A work package spanning repositories is decomposed into a typed DAG of repository-local slices.
 3. Every slice is linked to PRD FR/NFR/AC IDs and to the exact approved technical-document versions.
 4. Database and event changes are additive and backward compatible until the rollback window closes.
@@ -33,7 +33,8 @@ The PRD is authoritative for product behavior. The technical documents are autho
 
 ## Planning assumptions
 
-- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001. Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` is the initial materialization base unless a separately reviewed descendant replaces it.
+- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` is the initial materialization base unless a separately reviewed descendant replaces it.
+- Federico Ocampo approved the D-003 (runtime topology and trust-zone decision) `LOCAL_ONLY` sections at proposal revision `cac4dcac...` as the bounded basis for P0-06 (two-stage local Temporal proof) and approved two stages: P0-06A (isolated Temporal feasibility proof) followed by a separately designed and approved P0-06B (least-privilege Plane integration proof). D-003 remains `PROPOSED` until P0-06B evidence is accepted and the owner decides the exact local scope; staging and production remain fail-closed.
 - Component names in this plan are logical. The architecture may co-deploy compatible components, but ownership, contracts, trust boundaries, and failure isolation remain distinct.
 - Relative sizes are planning signals: `S` is a bounded adapter/schema/UI slice, `M` is a component with several contracts, and `L` must be decomposed before dispatch. They are not calendar estimates.
 - Every milestone has a production-like demonstration environment even when the capability is not production-enabled.
@@ -42,16 +43,23 @@ The PRD is authoritative for product behavior. The technical documents are autho
 
 ```mermaid
 flowchart LR
-    decisions["P0 decisions and Plane baseline"] --> m0["M0 Foundation"]
-    m0 --> m1["M1 Definition and PRD"]
-    m0 --> m2["M2 Product roadmaps"]
+    foundation["Applicable package-scoped P0 gates and Plane baseline"] --> s1["M0-S1 (module shell)"]
+    s1 --> s2["M0-S2 (operation and delivery kernel)"]
+    s2 --> m0_independent["Independent non-Temporal M0 foundation work"]
+    p006b["Accepted P0-06B (least-privilege Plane integration proof) evidence"] --> d003["D-003 (runtime topology and trust-zone decision) LOCAL_ONLY decided"]
+    d003 --> s3["M0-S3 (local Temporal round trip)"]
+    s2 --> s3
+    s3 --> m0_temporal["Temporal-dependent M0 foundation work"]
+    m0_independent --> m1["M1 Definition and PRD"]
+    m0_temporal --> m1
+    m0_independent --> m2["M2 Product roadmaps"]
     m1 --> m3["M3 Architecture and planning"]
-    m0 --> m3
+    m0_temporal --> m3
     m3 --> m4["M4 Agent execution"]
     m2 --> m5["M5 Quality, VCS, and delivery contract"]
     m4 --> m5
     m1 --> m6["M6 Prototype and optimization"]
-    m0 --> m6
+    m0_independent --> m6
     m5 --> r1["R1 qualification"]
     m6 --> r1
     r1 --> m7["M7 integration expansion"]
@@ -74,12 +82,12 @@ A work package is `READY` only when it has:
 - Repository instructions and required build/lint/type/test/security commands.
 - Model/tool/sandbox budgets and data classification.
 - Rollback or disablement behavior.
+- A unique item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) whose stable ID matches the package and whose status is maintained as visual progress metadata.
 - For a user-facing flow, an approved [Curve Experience Blueprint](curve-experience-blueprint.md) record linked from the work package. The record includes the target role/job, primary task flow, normal/loading/empty/error/permission-limited states, primary actions, accessibility behavior, and prototype-review outcome.
-- A unique item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) whose stable ID matches the package and whose status is `Ready`.
 
 If any item is absent, the coding agent stops before mutation and reports the missing prerequisite.
 
-Project status follows the [GitHub Project execution map](github-project-execution-map.md). The executor moves the exact item to `In progress` immediately before authorized work, to `In review` when its exact output is awaiting disposition, and to `Done` only after package acceptance. The project is an execution projection; this plan, approved ADRs, contracts, and immutable task packets remain normative.
+Project status follows the [GitHub Project tracking map](github-project-execution-map.md). Federico Ocampo or authorized automation may update any package status directly to keep the board visually useful. Project status is informational and is not a dispatch prerequisite, execution authority, gate, waiver, or lifecycle state for Curve itself. This plan, approved ADRs, contracts, and immutable task packets remain normative. For P0-06A (isolated Temporal feasibility proof), only the conformant independent broker's signed start grant, issued after its claim-time ruleset and authorization recheck, activates the wrapper.
 
 ## Work-package catalog
 
@@ -88,13 +96,21 @@ Project status follows the [GitHub Project execution map](github-project-executi
 | ID | Size | Deliverable | Dependencies | Completion evidence |
 | -- | ---- | ----------- | ------------ | ------------------- |
 | P0-01 | M | Plane community baseline and reuse/build inventory covering backend, web, auth, work items, pages, estimates, relationships, Gantt, notifications, APIs, webhooks, licensing, and extension points | D-001 | Approved inventory and compatibility ADR; no commercial-only assumption. |
-| P0-02 | M | Repository and deployment topology: logical component-to-repository mapping, local development profile, dev/staging/prod views, trust zones, persistence, backup, and ownership | D-003 | Approved C4/deployment views and repository map. |
+| P0-02 | M | Repository and deployment topology: logical component-to-repository mapping, owner-reviewed local topology proposal, and fail-closed staging/production decision matrix covering trust zones, persistence, backup, security, and ownership | D-003 `LOCAL_ONLY` proof-basis approval | Named owner approval of the local C4/deployment views, repository map, two-stage proof basis, shared-network risk, and explicit non-local blockers; the final least-privilege local integration profile remains a P0-06B/D-003 deliverable, and selected staging/production topology remains just-in-time before activation. |
 | P0-03 | M | Decision ADR set for D-002-D-016 with selected versions, licenses, owners, security/data policy, and milestone block status | P0-01, P0-02 | Every D item is approved or explicitly blocks its package; no implicit default in code. |
 | P0-04 | S | Documentation, schema, ADR, and generated-contract conventions plus CI validation for Markdown, Mermaid, OpenAPI, JSON Schema, and architecture links | P0-01 | CI fails on invalid docs/contracts and produces rendered artifacts. |
 | P0-05 | M | Test harness strategy: unit, database, contract, fake providers, Temporal replay, browser, security fixtures, migration, load, and recovery | P0-02 | Test matrix maps every AC to an owning suite and environment. |
-| P0-06 | M | Temporal topology proof using the existing local Plane Docker stack first and an isolated X3M staging namespace only after D-003 authorization | D-003 development-profile proposal; proof authorization | Local version/image pins, namespace/task queue, payload policy, worker version/replay test and service-failure recovery. The later staging proof adds persistence/visibility schemas, TLS/auth, backup/restore, RPO/RTO, capacity/cost, and owner recommendation. No production enablement. |
+| P0-06 | M | Two-stage local Temporal proof: P0-06A (isolated Temporal feasibility proof) proves isolated primitives; P0-06B (least-privilege Plane integration proof) separately proves the approved Plane topology | D-003 (runtime topology and trust-zone decision) `LOCAL_ONLY` proposal revision; [two-stage proof packet](p0-06-local-temporal-proof-task-packet.md); v2 stage record; separate exact-head packet, harness, authorization bundle, controller, broker, readiness projection, and authorization gates | P0-06A: immutable harness/image/authorization bundle, isolated start/signal/query/cancel/retry/restart/replay, exact resources/expiry/cleanup, ordered app-bound CI, byte-recomputed artifacts, claim-time broker/ruleset revalidation and start grant, outcome-specific normal or reconciliation evidence, execution and VCS leases, immutable evidence-head review, precomputable publication intent, signed external publication attestation, and owner disposition. GitHub Project status remains informational and outside those leases. P0-06B: final Compose profile, Plane-worker compatibility, minimum data/network/credential access, disabled/enabled behavior, rollback, and owner disposition. No non-local enablement. |
 
-`P0A` exit authorizes bounded local M0 implementation only. It requires P0-01 through P0-06, the architecture Definition of Done for the enabled subset, and named-owner approval of every decision listed by the target M0 package.
+`P0A` is complete only when P0-01 through P0-06, the architecture Definition
+of Done for the enabled subset, and the applicable named-owner decisions are
+complete. This phase-exit criterion is not a blanket entry gate for every local
+M0 packet. A bounded local M0 packet may be dispatched earlier only when every
+dependency and decision scope named by its immutable task packet is satisfied
+and every `READY` field passes. Under the current local-skeleton packets, M0-S1
+and M0-S2 do not depend on P0-06; M0-S3 and its downstream packets require
+accepted P0-06B evidence and a decided D-003 `LOCAL_ONLY` profile. P0-06A
+acceptance alone does not satisfy that dependency.
 
 ### P0B: Just-in-time integration proofs
 
@@ -129,7 +145,19 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07 | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | Audit completeness fixture, telemetry leakage test, SLO dashboard. |
 | M0-09 | M | Provider registry, connection lifecycle, capability documents, common error taxonomy, callback ingress, outgoing webhooks, and reconciliation scheduler | M0-03, M0-05, M0-07, D-007 | FR-003, FR-023, FR-044, NFR-005, NFR-008, NFR-013, AC-33, AC-57 | Fake-provider conformance suite and 15-minute reconciliation proof. |
 
-The first local M0 checkpoint requires D-001 plus approved local profiles for D-003 and D-007. It uses synthetic data and excludes protected-object storage. Full M0 requires D-009 before M0-04 and before staging/production activation. D-004/D-005 are required before model-enabled M1 work; D-008 is required before VCS-specific M3 work. M0 exit also requires control-plane SLOs, the applicable recovery proof, replay safety, and no cross-workspace or telemetry leakage.
+The five-packet local M0 checkpoint is packet-scoped. M0-S1 and M0-S2 require
+D-001 and the approved P0-02 local boundary; M0-S3 and its downstream packets
+additionally require accepted P0-06B evidence and a decided D-003 `LOCAL_ONLY`
+profile. P0-06A proves isolated primitives only. D-007 does not gate M0-S1 through M0-S5 because those packets expose no
+MCP capability. D-007 remains required by M0-09 and later MCP-enabled
+capabilities under its current proposal; its dependency ordering with D-006
+requires Security and Platform approval before either is implemented. D-009 gates M0-04,
+protected-body or retention-dependent capabilities, and every staging or
+production activation. Until D-009 is decided, local packets may persist only
+synthetic data and the minimum non-sensitive operation and audit metadata
+defined by their contracts. M0 exit also requires control-plane SLOs, the
+applicable recovery proof, replay safety, and no cross-workspace or telemetry
+leakage.
 
 ### M1: Alignment, evidence, and PRD
 
@@ -340,16 +368,17 @@ A slice is done only when:
 
 Milestone dashboards report packages by `NOT_READY`, `READY`, `IN_PROGRESS`, `BLOCKED`, `IN_REVIEW`, `DONE`, or `SUPERSEDED`, with blocker type, decision IDs, current repository/head, test evidence, residual risk, and owner. Percent complete is derived from package weights only for engineering reporting and never overwrites Roadmap declared progress.
 
-## Handoff checklist
+## Per-packet dispatch checklist
 
-Before dispatching the first coding task:
+Before dispatching each coding task:
 
-- [ ] P0-01 through P0-05 are approved.
-- [ ] All M0-blocking decisions are `DECIDED`.
-- [ ] Companion technical documents are versioned and mutually consistent.
-- [ ] OpenAPI, event envelope, provider SDK, and persistence conventions are approved.
-- [ ] Fake providers and required local dependencies can run in the agent sandbox.
+- [ ] Every P0 dependency explicitly named by the exact task packet is approved or complete.
+- [ ] Every decision scope explicitly named by the exact task packet is `DECIDED`; unrelated just-in-time decisions remain gated at their consuming packages.
+- [ ] The companion technical documents referenced by the packet are versioned and mutually consistent.
+- [ ] The API, event, provider, persistence, and migration contracts consumed by the packet are approved.
+- [ ] Fake providers and local dependencies required by the packet can run in the agent sandbox.
 - [ ] Repository instructions and exact verification commands are captured.
-- [ ] Trusted-controller paths exist before any task needs an external mutation.
-- [ ] Security, retention, licensing, and model-destination policy fail closed.
-- [ ] Every dispatched slice has an immutable task packet and human owner/reviewer.
+- [ ] Trusted-controller paths exist before a packet is permitted to cause an external mutation.
+- [ ] The packet uses only data and environments allowed by decided policy; D-009-dependent protected storage and non-local activation remain excluded while D-009 is open.
+- [ ] Security, licensing, model-destination, and unresolved retention behavior fail closed.
+- [ ] The dispatched slice has an immutable task packet, named human owner, named reviewer, pinned repository base, and pinned Curve context; its GitHub Project item exists for visual tracking and its current status is informational.

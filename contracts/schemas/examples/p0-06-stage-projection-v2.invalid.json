@@ -1,0 +1,15 @@
+{
+  "schema_version": "curve.proof-stage-projection/v2",
+  "task_id": "P0-06",
+  "current_stage": "P0-06A_EXECUTING",
+  "updated_on": "2026-08-15",
+  "stages": {
+    "P0-06A": {},
+    "P0-06B": {
+      "authorization": {
+        "state": "PROPOSED"
+      }
+    },
+    "P0-06C": {}
+  }
+}

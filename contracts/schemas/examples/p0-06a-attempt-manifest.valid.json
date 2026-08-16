@@ -1,0 +1,332 @@
+{
+  "schema_version": "curve.p0-06a-attempt/v1",
+  "authorization_id": "D003-LOCAL-PROOF-A-2026-08-15-01",
+  "attempt_id": "d003-local-p0-06a-2026-08-15-01",
+  "evidence_base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "documentation": {
+    "approved_head": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "context_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "supply_chain": {
+    "manifest": {
+      "path": "docs/technical/proofs/p0-06a/authorization/supply-chain-manifest.json",
+      "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "harness_source_revision": "cccccccccccccccccccccccccccccccccccccccc",
+    "harness_bundle": {
+      "path": "docs/technical/proofs/p0-06a/harness",
+      "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "image_repository": "ghcr.io/faocampo/curve-p0-06a-proof",
+    "image_index_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+    "image_platform": "linux/arm64",
+    "image_platform_manifest_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+    "image_platform_config_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+    "sbom": {
+      "path": "docs/technical/proofs/p0-06a/authorization/sbom.spdx.json",
+      "digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    "provenance": {
+      "path": "docs/technical/proofs/p0-06a/authorization/provenance.intoto.jsonl",
+      "digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+    }
+  },
+  "plane": {
+    "repository": "git@github.com:faocampo/plane.git",
+    "revision": "549db1aea8f3307b337b3686dbb844a87549cd95"
+  },
+  "controller": {
+    "principal": "github-app:curve-proof-controller",
+    "source_revision": "dddddddddddddddddddddddddddddddddddddddd",
+    "executable": {
+      "path": "docs/technical/proofs/p0-06a/authorization/controller-executable.mjs",
+      "digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+    },
+    "configuration": {
+      "path": "docs/technical/proofs/p0-06a/authorization/controller-config.json",
+      "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "conformance_report": {
+      "path": "docs/technical/proofs/p0-06a/authorization/controller-conformance-report.json",
+      "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "operation_allowlist": {
+      "path": "docs/technical/proofs/p0-06a/authorization/controller-operation-allowlist.json",
+      "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "operation_bindings_digest": "sha256:ee86048d028ed31c1b93b9629613793d3cc037e4c6139fbe76292b391d7209a9",
+    "operation_bindings": {
+      "create-claim-ref": {
+        "lease_type": "execution",
+        "operation_id": "create-claim-ref",
+        "action": "CREATE_REF",
+        "method": "POST",
+        "repository_resource": "repos/faocampo/curve",
+        "project_resource": null,
+        "ref": "refs/tags/curve-proof-claims/d003-local-p0-06a-2026-08-15-01",
+        "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "force": false,
+        "project_item_id": null,
+        "project_content_id": null,
+        "project_field_id": null,
+        "project_option_id": null,
+        "expected_before_state": "REF_ABSENT",
+        "expected_after_state": "REF_AT_BOUND_SHA",
+        "max_calls": 1,
+        "idempotency_key": "p0-06a:create-claim-ref:0001"
+      },
+      "create-evidence-ref": {
+        "lease_type": "execution",
+        "operation_id": "create-evidence-ref",
+        "action": "CREATE_REF",
+        "method": "POST",
+        "repository_resource": "repos/faocampo/curve",
+        "project_resource": null,
+        "ref": "refs/heads/agent/p0-06a-isolated-temporal-proof-d003-2026-08-15-01",
+        "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "force": false,
+        "project_item_id": null,
+        "project_content_id": null,
+        "project_field_id": null,
+        "project_option_id": null,
+        "expected_before_state": "REF_ABSENT",
+        "expected_after_state": "REF_AT_BOUND_SHA",
+        "max_calls": 1,
+        "idempotency_key": "p0-06a:create-evidence-ref:0001"
+      },
+      "create-reconciliation-evidence-ref": {
+        "lease_type": "reconciliation",
+        "operation_id": "create-reconciliation-evidence-ref",
+        "action": "CREATE_REF",
+        "method": "POST",
+        "repository_resource": "repos/faocampo/curve",
+        "project_resource": null,
+        "ref": "refs/heads/agent/p0-06a-reconciliation-evidence-d003-2026-08-15-01",
+        "sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "force": false,
+        "project_item_id": null,
+        "project_content_id": null,
+        "project_field_id": null,
+        "project_option_id": null,
+        "expected_before_state": "REF_ABSENT",
+        "expected_after_state": "REF_AT_BOUND_SHA",
+        "max_calls": 1,
+        "idempotency_key": "p0-06a:create-reconciliation-evidence-ref:0001"
+      },
+      "update-evidence-ref": {
+        "lease_type": "reconciliation",
+        "operation_id": "update-evidence-ref",
+        "action": "UPDATE_REF",
+        "method": "PATCH",
+        "repository_resource": "repos/faocampo/curve",
+        "project_resource": null,
+        "ref": "refs/heads/agent/p0-06a-isolated-temporal-proof-d003-2026-08-15-01",
+        "sha": "ffffffffffffffffffffffffffffffffffffffff",
+        "force": false,
+        "project_item_id": null,
+        "project_content_id": null,
+        "project_field_id": null,
+        "project_option_id": null,
+        "expected_before_state": "REF_AT_EVIDENCE_BASE_SHA",
+        "expected_after_state": "REF_AT_BOUND_SHA",
+        "max_calls": 1,
+        "idempotency_key": "p0-06a:update-evidence-ref:0001"
+      },
+      "write-evidence-objects": {
+        "lease_type": "reconciliation",
+        "operation_id": "write-evidence-objects",
+        "action": "WRITE_GIT_OBJECTS",
+        "method": "POST",
+        "repository_resource": "repos/faocampo/curve",
+        "project_resource": null,
+        "ref": "refs/heads/agent/p0-06a-isolated-temporal-proof-d003-2026-08-15-01",
+        "sha": "ffffffffffffffffffffffffffffffffffffffff",
+        "force": false,
+        "project_item_id": null,
+        "project_content_id": null,
+        "project_field_id": null,
+        "project_option_id": null,
+        "expected_before_state": "SANITIZED_EVIDENCE_READY",
+        "expected_after_state": "OBJECTS_PRESENT_AT_BOUND_SHA",
+        "max_calls": 1,
+        "idempotency_key": "p0-06a:write-evidence-objects:0001"
+      },
+      "create-terminal-projection-ref": {
+        "lease_type": "terminal_projection",
+        "operation_id": "create-terminal-projection-ref",
+        "action": "CREATE_REF",
+        "method": "POST",
+        "repository_resource": "repos/faocampo/curve",
+        "project_resource": null,
+        "ref": "refs/heads/agent/p0-06a-terminal-projection-d003-2026-08-15-01",
+        "sha": "1111111111111111111111111111111111111111",
+        "force": false,
+        "project_item_id": null,
+        "project_content_id": null,
+        "project_field_id": null,
+        "project_option_id": null,
+        "expected_before_state": "REF_ABSENT",
+        "expected_after_state": "REF_AT_BOUND_SHA",
+        "max_calls": 1,
+        "idempotency_key": "p0-06a:create-terminal-projection-ref:0001"
+      },
+      "finalize-terminal-projection-ref": {
+        "lease_type": "terminal_projection",
+        "operation_id": "finalize-terminal-projection-ref",
+        "action": "UPDATE_REF",
+        "method": "PATCH",
+        "repository_resource": "repos/faocampo/curve",
+        "project_resource": null,
+        "ref": "refs/heads/agent/p0-06a-terminal-projection-d003-2026-08-15-01",
+        "sha": "2222222222222222222222222222222222222222",
+        "force": false,
+        "project_item_id": null,
+        "project_content_id": null,
+        "project_field_id": null,
+        "project_option_id": null,
+        "expected_before_state": "REF_AT_BOOTSTRAP_SHA",
+        "expected_after_state": "REF_AT_BOUND_SHA",
+        "max_calls": 1,
+        "idempotency_key": "p0-06a:finalize-terminal-projection-ref:0001"
+      },
+      "create-terminal-projection-draft-pr": {
+        "lease_type": "terminal_projection",
+        "operation_id": "create-terminal-projection-draft-pr",
+        "action": "CREATE_DRAFT_PULL_REQUEST",
+        "method": "POST",
+        "repository_resource": "repos/faocampo/curve",
+        "project_resource": null,
+        "ref": "refs/heads/agent/p0-06a-terminal-projection-d003-2026-08-15-01",
+        "sha": "1111111111111111111111111111111111111111",
+        "force": false,
+        "project_item_id": null,
+        "project_content_id": null,
+        "project_field_id": null,
+        "project_option_id": null,
+        "expected_before_state": "DRAFT_PR_ABSENT",
+        "expected_after_state": "DRAFT_PR_OPEN_AT_BOUND_REF",
+        "max_calls": 1,
+        "idempotency_key": "p0-06a:create-terminal-projection-draft-pr:0001"
+      }
+    }
+  },
+  "broker": {
+    "principal": "github-app:curve-proof-operation-broker",
+    "source_revision": "3333333333333333333333333333333333333333",
+    "conformance_report": {
+      "path": "docs/technical/proofs/p0-06a/authorization/broker-conformance-report.json",
+      "digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    "claim_ruleset_recheck_policy": {
+      "path": "docs/technical/proofs/p0-06a/authorization/broker-claim-ruleset-recheck-policy.json",
+      "digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    "operation_receipt_schema": {
+      "path": "docs/technical/proofs/p0-06a/authorization/operation-receipt.schema.json",
+      "digest": "sha256:1212121212121212121212121212121212121212121212121212121212121212"
+    },
+    "publication_attestation_schema": {
+      "path": "docs/technical/proofs/p0-06a/authorization/publication-attestation.schema.json",
+      "digest": "sha256:1313131313131313131313131313131313131313131313131313131313131313"
+    },
+    "publication_attestation_verification_key": {
+      "path": "docs/technical/proofs/p0-06a/authorization/publication-attestation-verification-key.pem",
+      "digest": "sha256:1414141414141414141414141414141414141414141414141414141414141414"
+    },
+    "publication_attestation_key_id": "curve-proof-attestation-key-1",
+    "publication_attestation_store_uri_template": "https://evidence.example.invalid/p0-06a/{authorization_id}/{attempt_id}.json",
+    "issuer": "curve-proof-operation-broker",
+    "audience": "curve-p0-06a-controller",
+    "credential_boundary": {
+      "execution_mode": "BROKER_EXECUTES_OR_SIGNS_EXACT_OPERATION",
+      "controller_receives": "OPAQUE_LEASE_HANDLE_AND_SIGNED_RECEIPT_ONLY",
+      "raw_github_credential_exposure": "NONE_INCLUDING_PROCESS_MEMORY"
+    }
+  },
+  "claim": {
+    "ref": "refs/tags/curve-proof-claims/d003-local-p0-06a-2026-08-15-01",
+    "ruleset_id": 123456,
+    "ruleset_url": "https://api.github.com/repos/faocampo/curve/rulesets/123456",
+    "ruleset_snapshot_digest": "sha256:1515151515151515151515151515151515151515151515151515151515151515",
+    "execution_evidence_ref": "refs/heads/agent/p0-06a-isolated-temporal-proof-d003-2026-08-15-01",
+    "reconciliation_evidence_ref": "refs/heads/agent/p0-06a-reconciliation-evidence-d003-2026-08-15-01"
+  },
+  "handshake": {
+    "ticket_schema": {
+      "path": "docs/technical/proofs/p0-06a/authorization/ticket.schema.json",
+      "digest": "sha256:1616161616161616161616161616161616161616161616161616161616161616"
+    },
+    "start_grant_schema": {
+      "path": "docs/technical/proofs/p0-06a/authorization/start-grant.schema.json",
+      "digest": "sha256:1717171717171717171717171717171717171717171717171717171717171717"
+    },
+    "verification_key": {
+      "path": "docs/technical/proofs/p0-06a/authorization/ticket-verification-key.pem",
+      "digest": "sha256:1818181818181818181818181818181818181818181818181818181818181818"
+    },
+    "key_id": "curve-proof-ticket-key-1"
+  },
+  "leases": {
+    "execution": {
+      "path": "docs/technical/proofs/p0-06a/authorization/execution-lease-profile.json",
+      "digest": "sha256:1919191919191919191919191919191919191919191919191919191919191919"
+    },
+    "reconciliation": {
+      "path": "docs/technical/proofs/p0-06a/authorization/reconciliation-lease-profile.json",
+      "digest": "sha256:2020202020202020202020202020202020202020202020202020202020202020"
+    },
+    "disposition": {
+      "path": "docs/technical/proofs/p0-06a/authorization/disposition-lease-profile.json",
+      "digest": "sha256:2121212121212121212121212121212121212121212121212121212121212121"
+    },
+    "terminal_projection": {
+      "path": "docs/technical/proofs/p0-06a/authorization/terminal-projection-lease-profile.json",
+      "digest": "sha256:2323232323232323232323232323232323232323232323232323232323232323"
+    }
+  },
+  "preflight": {
+    "report": {
+      "path": "docs/technical/proofs/p0-06a/authorization/preflight-report.json",
+      "digest": "sha256:2424242424242424242424242424242424242424242424242424242424242424"
+    },
+    "completed_at": "2026-08-21T20:00:00Z",
+    "expires_at": "2026-08-22T22:00:00Z"
+  },
+  "window": {
+    "not_before": "2026-08-22T20:00:00Z",
+    "claim_by": "2026-08-22T23:00:00Z",
+    "active_fixed_expiry": "2026-08-23T01:00:00Z",
+    "reconciliation_fixed_expiry": "2026-08-23T01:15:00Z",
+    "review_deadline": "2026-08-26T02:59:59Z"
+  },
+  "runtime_limits": {
+    "cpu_nanos": 2000000000,
+    "memory_bytes": 8589934592,
+    "memory_swap_bytes": 8589934592,
+    "pids": 256,
+    "duration_seconds": 7200,
+    "cost_usd": 25
+  },
+  "host_artifacts": [
+    {
+      "purpose": "WORKTREE",
+      "path": "/private/tmp/plane-p0-06a-runtime",
+      "cleanup": "DELETE"
+    }
+  ],
+  "required_checks": {
+    "documentation_head": [{ "name": "validate", "app_id": 1 }],
+    "documentation_merge": [{ "name": "validate", "app_id": 1 }],
+    "harness_head": [{ "name": "validate", "app_id": 1 }],
+    "harness_merge": [{ "name": "validate", "app_id": 1 }],
+    "attempt_head": [{ "name": "validate", "app_id": 1 }],
+    "attempt_merge": [{ "name": "validate", "app_id": 1 }],
+    "projection_head": [{ "name": "validate", "app_id": 1 }],
+    "projection_merge": [{ "name": "validate", "app_id": 1 }],
+    "evidence_head": [{ "name": "validate", "app_id": 1 }],
+    "evidence_merge": [{ "name": "validate", "app_id": 1 }],
+    "terminal_projection_head": [{ "name": "validate", "app_id": 1 }],
+    "terminal_projection_merge": [{ "name": "validate", "app_id": 1 }]
+  },
+  "security_incident_owner": "Federico Ocampo"
+}
