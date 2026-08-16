@@ -4,7 +4,7 @@
   "workspace_id": "10000000-0000-4000-8000-000000000002",
   "principal_scope": "HUMAN:developer-1",
   "command_scope": "FOUNDATION_PROBE:workspace",
-  "key": "synthetic-operation-0001",
+  "key_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "request_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
   "state": "COMPLETED",
   "external_effect_refs": [],

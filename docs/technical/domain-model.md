@@ -4,7 +4,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Architecture input; implementation remains gated by the PRD decision register |
+| Status | Architecture input; M0-S2 relational decisions approved; remaining capabilities stay gated by the PRD decision register |
 | Source | [`curve-ai-native-sdlc-prd.md`](../curve-ai-native-sdlc-prd.md), version 0.8 |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
 | Last updated | 2026-08-15 |
@@ -566,24 +566,29 @@ VCS is authoritative for branch, commit, check, review, PR/MR, close, and merge 
 | `DomainEvent.workflow_version_id` | `OpaqueId` | YES | Required for lifecycle/workflow events. |
 | `DomainEvent.actor`, `effective_principal` | `ActorRef` | NO, YES | Effective principal required for protected human-delegated operations. |
 | `DomainEvent.occurred_at`, `recorded_at` | `Instant` | NO | Preserve business and persistence times. |
-| `DomainEvent.correlation_id`, `causation_id`, `idempotency_key` | opaque text/ID | NO, YES, YES | Causation absent only for root commands. Effectful commands require idempotency key. |
+| `DomainEvent.correlation_id`, `causation_id`, `idempotency_key_digest` | opaque text/ID, `Digest` | NO, YES, YES | Causation is absent only for root commands. Effectful commands persist only the key digest; raw idempotency keys never enter an event. |
 | `DomainEvent.classification` | `DataClassification` | NO | Payload cannot be less restrictive. |
 | `DomainEvent.payload` | validated JSON or `ObjectRef` | NO | Ordinary event bus payload excludes raw prompts/code/evidence/secrets/tool output. |
-| `OutboxRecord.event_id`, `destination` | `OpaqueId`, stable code | NO | Written in same transaction as aggregate state/event. |
-| `OutboxRecord.state`, `attempt_count`, `next_attempt_at` | stable code, integer, `Instant` | NO, NO, YES | At-least-once relay state; terminal delivery failure is visible. |
-| `OutboxRecord.delivered_at`, `last_error` | `Instant`, protected error detail | YES | Error is redacted/classified. |
-| `InboxRecord.consumer_id`, `event_id` | text, `OpaqueId` | NO | Composite unique deduplication key. |
-| `InboxRecord.received_at`, `processed_at`, `result_digest` | `Instant`, `Instant`, `Digest` | NO, YES, YES | Processing is idempotent and replay-safe. |
-| `IdempotencyRecord.principal_scope`, `command_scope`, `key` | stable compound values | NO | Workspace included; unique for retention window. |
-| `IdempotencyRecord.request_digest`, `response_status`, `response_ref` | `Digest`, integer/stable code, `ObjectRef` | NO, YES, YES | Reuse with a different request digest fails. |
+| `OutboxEvent.event_id`, `destination` | `OpaqueId`, stable code | NO | Written in the same transaction as aggregate state and the durable `DomainEvent`; unique with workspace. |
+| `OutboxEvent.state`, `attempt_count`, `next_attempt_at` | stable code, integer, `Instant` | NO, NO, YES | At-least-once relay state; state-dependent timestamps/errors follow the M0-S2 relational contract. |
+| `OutboxEvent.delivered_at`, `last_error` | `Instant`, safe error | YES | `DELIVERED` requires non-null time; retry/dead-letter requires a redacted error. |
+| `InboxMessage.consumer_id`, `event_id` | text, `OpaqueId` | NO | Unique with workspace; one consumer applies one event once. |
+| `InboxMessage.received_at`, `processed_at`, `result_digest` | `Instant`, `Instant`, `Digest` | NO, YES, YES | Terminal states require their result/error fields and non-null processing time. |
+| `IdempotencyRecord.principal_scope`, `command_scope`, `key_digest` | stable compound values, `Digest` | NO | Unique with workspace for the retention window. The raw key is never persisted or logged. |
+| `IdempotencyRecord.request_digest`, `response_status`, `response_digest`, `response_resource_ref` | `Digest`, integer, `Digest`, `ResourceRef` | NO, YES, YES, YES | Same key/digest replays the original safe PostgreSQL resource; a changed request digest fails. |
 | `IdempotencyRecord.external_effect_refs`, `expires_at` | list of typed refs, `Instant` | NO | Covers provider replay/reconciliation window per NFR-005; D-009 sets period. |
-| `AuditEntry.action`, `target_ref`, `outcome` | stable code, typed reference, stable code | NO | Append-only security/product audit. |
-| `AuditEntry.actor`, `effective_principal`, `policy_decision_ref` | `ActorRef`, `ActorRef`, typed ref | NO, YES, YES | Includes denied commands and cross-workspace probes. |
-| `AuditEntry.before_digest`, `after_digest`, `details` | `Digest`, `Digest`, protected `ObjectRef` | YES | Details obey classification and minimization. |
-| `AuditEntry.occurred_at`, `correlation_id` | `Instant`, opaque ID | NO | Supports lineage and export. |
+| `AuditEvent.action`, `target_ref`, `outcome` | stable code, typed reference, stable code | NO | Append-only security/product audit. Normalized target type/id support sequence uniqueness. |
+| `AuditEvent.actor`, `effective_principal`, `policy_decision_ref` | `ActorRef`, `ActorRef`, typed ref | NO, YES, YES | Includes denied commands and cross-workspace probes. |
+| `AuditEvent.before_digest`, `after_digest`, `details_ref` | `Digest`, `Digest`, protected `ObjectRef` | YES | M0-S2 leaves `details_ref` absent because protected storage is disabled. |
+| `AuditEvent.occurred_at`, `correlation_id` | `Instant`, opaque ID | NO | Supports lineage and export. |
 | `ProjectionCheckpoint.projection_name`, `partition_key` | text | NO | Workspace is part of partition key. |
 | `ProjectionCheckpoint.last_event_sequence`, `last_event_id`, `updated_at` | integer, `OpaqueId`, `Instant` | NO | Rebuildable projection cursor. |
 | `ReconciliationCase.provider_connection_id`, `resource_ref` | `OpaqueId`, `ExternalRef` | NO | Created for persistent or ambiguous divergence. |
 | `ReconciliationCase.state`, `reason`, `last_attempt_at` | `ReconciliationCaseState`, protected detail, `Instant` | NO, NO, YES | State is `OPEN`, `RETRY_SCHEDULED`, `RECONCILING`, `RESOLVED`, `ESCALATED`, or `CLOSED_UNRESOLVED`. Unresolved states remain visible and fail closed for dependent mutations. |
 
-The DomainEvent envelope fields are fixed by the PRD. The exact event payload schemas, topic/stream layout, and broker are architecture choices. Celery may produce notifications or refresh projections but MUST NOT become a second lifecycle authority.
+The M0-S2 physical keys, state checks, transactions, and relay primitives are
+normative in the [M0-S2 relational contract](../../contracts/database/m0-s2-relational-contract.md).
+The DomainEvent envelope fields are fixed by the PRD. The exact later
+topic/stream layout and network broker remain architecture choices. Celery may
+produce notifications or refresh projections but MUST NOT become a second
+lifecycle authority.

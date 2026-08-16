@@ -4,12 +4,12 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Dispatch specifications complete; every packet remains `BLOCKED` pending its recorded prerequisites |
-| Version | 1.5 |
+| Status | M0-S1 completed; M0-S2 contract reconciliation in review; later packets remain blocked by their recorded prerequisites |
+| Version | 1.6 |
 | Date | 2026-08-15 |
 | Product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
-| Contract baseline floor | Accepted Curve `main` commit `fe8664a1fd58d34bb10273d3da2d39804659bbfc` |
-| Plane foundation base | Accepted fork `preview` commit `549db1aea8f3307b337b3686dbb844a87549cd95` |
+| Contract baseline floor | Accepted Curve `main` commit `41373e8597056e1411a206894a16c74521d149da` |
+| Plane implementation base | M0-S1 merge commit `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a` on fork `preview` |
 
 ## Purpose
 
@@ -25,11 +25,11 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | --- | --- |
 | Repository | `git@github.com:faocampo/plane.git` |
 | Base branch | Fork `preview` |
-| Base SHA | `549db1aea8f3307b337b3686dbb844a87549cd95`; every materialized packet must verify the live base still matches or use a separately reviewed descendant |
-| Curve revision | At least accepted governance baseline `fe8664a1fd58d34bb10273d3da2d39804659bbfc`; materialization records the exact merged Curve revision containing the packet and its context digest |
+| Base SHA | `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`; every materialized packet must verify the live base still matches or use a separately reviewed descendant |
+| Curve revision | At least accepted governance baseline `41373e8597056e1411a206894a16c74521d149da`; materialization records the exact merged Curve revision containing the packet and its context digest |
 | GitHub Project item | Exact visual-tracking item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and maintained during delivery |
 | Branch | One feature branch per packet: `curve/m0-s1-module-shell` through `curve/m0-s5-observability` |
-| Human owner | Federico Ocampo for M0-S1; every later packet records its own named person at dispatch; role-only values are invalid |
+| Human owner | Federico Ocampo for M0-S1 and M0-S2; every later M0 packet records its own named person at dispatch; role-only values are invalid |
 | Human reviewer | Federico Ocampo (`faocampo`) for the current phase, distinct from the coding agent; any replacement must be named at dispatch |
 | Data | Synthetic `INTERNAL` local fixtures only; no protected object bodies, repository secrets, customer data, or production data |
 | Model policy | Dispatcher-approved coding model; no Curve Model Gateway or runtime model call; no silent model/provider substitution |
@@ -48,13 +48,13 @@ overwrite an existing environment file.
 
 | Blocker | Required resolution |
 | --- | --- |
-| `B-PUBLISH` | Satisfied: Curve PR #2 merged at `fe8664a1fd58d34bb10273d3da2d39804659bbfc`; Plane PR #1 merged at `549db1aea8f3307b337b3686dbb844a87549cd95`. |
+| `B-PUBLISH` | Satisfied through the current accepted baselines: Curve PR #3 merged at `41373e8597056e1411a206894a16c74521d149da`; Plane PR #2 merged M0-S1 at `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`. The M0-S2 contract revision and its context digest remain pending until this change merges. |
 | `B-REVIEW` | Satisfied for the foundation and post-merge reconciliation: Federico approved the applicable exact Curve and Plane heads; both repositories merged and exact-main CI passed. Each later proof or implementation output still requires its own exact-head review. |
-| `B-BASE` | Satisfied: reviewed upstream-sync is merged into fork `preview` at `549db1aea8f3307b337b3686dbb844a87549cd95`. |
+| `B-BASE` | Satisfied: reviewed upstream-sync is preserved in fork history and M0-S1 is merged into `preview` at `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`. |
 | `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Federico Ocampo against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
-| `B-P002` | Pending: the local topology boundary and two-stage proof direction are owner-approved, but the exact-head record must merge. The P0-02 Project status is visual metadata and may be updated independently. No proof result, shared-network decision, or non-local authority is implied. |
+| `B-P002` | Satisfied: the owner-reviewed local topology boundary and two-stage proof direction merged through Curve PR #3 at `41373e8597056e1411a206894a16c74521d149da`. This closes the proposal artifact only; it does not prove Temporal, decide D-003, select a shared-network topology, or authorize non-local activation. |
 | `B-D003` | Required only for M0-S3 (local Temporal round trip) and later: P0-06B (least-privilege Plane integration proof) evidence is accepted and the D-003 (runtime topology and trust-zone decision) `LOCAL_ONLY` profile is formally `DECIDED`. P0-06A (isolated Temporal feasibility proof) acceptance alone does not satisfy this blocker. |
-| `B-PEOPLE` | Satisfied for M0-S1: Federico Ocampo is its named human owner and reviewer. Every later packet records a named human owner plus Federico Ocampo (`faocampo`) or a named replacement reviewer. |
+| `B-PEOPLE` | Satisfied for M0-S1 and M0-S2: Federico Ocampo is the named human owner and reviewer; the AI coding agent remains the separate implementer. Every later M0 packet records a named human owner plus Federico Ocampo (`faocampo`) or a named replacement reviewer. |
 | `B-CONTEXT` | The materialized packet records its Curve revision and context-pack digest. |
 | `B-PROJECT` | The owning M0 package exists exactly once in GitHub Project #2 for visual tracking. Its status is informational and does not gate dispatch. |
 
@@ -66,7 +66,7 @@ No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S1-MODULE-SHELL` |
-| Status | `BLOCKED`: `B-P002`, `B-CONTEXT`, and `B-PROJECT`; `B-PUBLISH`, `B-REVIEW`, `B-BASE`, `B-D001`, and `B-PEOPLE` are satisfied |
+| Status | `COMPLETED`: merged through Plane PR #2 at exact implementation head `81712b66e22f1a60883a619c5db63a2101dc365d` and merge commit `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`; Project item M0-01 is `Done` |
 | Risk | `STANDARD`; new workspace authorization and application route boundary |
 | Human owner and reviewer | Federico Ocampo (`faocampo`); the AI coding agent is the separate implementer |
 | Outcome | Add a dedicated `plane.curve` Django app and an additive workspace UI shell, both disabled by default, without changing unrelated Plane behavior. |
@@ -118,13 +118,14 @@ pnpm build
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S2-DELIVERY-KERNEL` |
-| Status | `BLOCKED`: M0-S1 merged plus `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
+| Status | `IN_REVIEW`: M0-S1, `B-PEOPLE`, and `B-PROJECT` are satisfied; the approved relational/schema revision must merge and supply `B-CONTEXT` before implementation dispatch |
 | Risk | `STANDARD`; transactional and immutable control-plane state |
-| Outcome | Persist workspace-scoped Operation, outbox, inbox, idempotency, and append-only audit records atomically. |
+| Human owner and reviewer | Federico Ocampo (`faocampo`); the AI coding agent is the separate implementer |
+| Outcome | Persist workspace-scoped Operation, durable DomainEvent, outbox, inbox, digest-only idempotency, and append-only audit records atomically. |
 | Traceability | FR-007, FR-021, FR-023, FR-044; NFR-004-NFR-005, NFR-018; AC-08, AC-26, AC-33-AC-34, AC-56 |
 | In scope | Curve models/migrations, uniqueness/check constraints, command service, transaction boundaries, optimistic concurrency, relay claim/ack/retry/dead-letter primitives, safe audit metadata, unit/contract/concurrency tests |
 | Out of scope | Temporal SDK, network relay, provider callbacks, protected bodies/object storage, general authorization policy adapters |
-| Contracts | `operation.schema.json`; `operation-event-v1.schema.json`; `event-envelope.schema.json`; `outbox-event.schema.json`; `inbox-message.schema.json`; `idempotency-record.schema.json`; `audit-event.schema.json`; state matrix |
+| Contracts | `operation.schema.json`; `operation-event-v1.schema.json`; `event-envelope.schema.json`; `outbox-event.schema.json`; `inbox-message.schema.json`; `idempotency-record.schema.json`; `audit-event.schema.json`; [M0-S2 relational contract](../../contracts/database/m0-s2-relational-contract.md); state matrix |
 | Migration | Add only Curve-owned tables and indexes. Prove forward/backward/forward on a disposable database and retain generated SQL for review. |
 | Rollback | Stop relay/API writers, preserve inspection access, reverse only unshipped local Curve migrations, and revert the packet commit. |
 
@@ -141,11 +142,21 @@ pnpm build
    fails with `412` and no outbox event is committed.
 5. Given a workspace-A identity and workspace-B identifiers, when any kernel
    query or mutation runs, then no workspace-B row or existence detail is exposed.
+6. Given any accepted command, when its idempotency key crosses the command
+   boundary, then only its SHA-256 digest is persisted or logged and the raw key
+   is absent from every database record, event, audit field, and error.
+7. Given a terminal, claimed, retry-scheduled, delivered, or processed state,
+   when a state-required field is null, then both JSON Schema validation and the
+   PostgreSQL check constraint reject the record.
+8. Given concurrent event, audit, outbox, inbox, or idempotency writes, when
+   their approved workspace-scoped uniqueness key collides, then exactly one
+   record commits and no cross-workspace collision occurs.
 
 ### M0-S2 required commands
 
 ```text
 git diff --check
+pnpm check:contracts
 docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -m "unit or contract"
 docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/curve/tests -k "idempotency or outbox or inbox or audit or concurrency"
 docker compose -f docker-compose-test.yml run --rm api-tests python manage.py makemigrations --check --dry-run

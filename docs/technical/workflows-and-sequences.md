@@ -60,7 +60,7 @@ Failures use RFC 9457 Problem Details. Authentication, authorization, validation
 
 Every emitted event MUST contain the PRD v0.8 envelope:
 
-`event_id`, `schema_version`, `workspace_id`, `aggregate_type`, `aggregate_id`, `aggregate_version`, per-aggregate `sequence`, optional `initiative_id`, `workflow_version`, `actor_type`, `actor_id`, `occurred_at`, `recorded_at`, `correlation_id`, `causation_id`, `idempotency_key`, `classification`, and a schema-versioned payload.
+`event_id`, `schema_version`, `workspace_id`, `aggregate_type`, `aggregate_id`, `aggregate_version`, per-aggregate `sequence`, optional `initiative_id`, `workflow_version`, `actor_type`, `actor_id`, `occurred_at`, `recorded_at`, `correlation_id`, `causation_id`, `idempotency_key_digest`, `classification`, and a schema-versioned payload. A raw idempotency key never enters an event, log, audit record, or persisted command record.
 
 Consumers MUST deduplicate `event_id`, reject cross-workspace references, and buffer or reconcile an out-of-order aggregate sequence. Incompatible payload changes require a new schema version and a dual-publish migration.
 

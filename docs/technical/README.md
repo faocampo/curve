@@ -29,6 +29,7 @@ identifiers are:
 - P0-06A (isolated Temporal feasibility proof).
 - P0-06B (least-privilege Plane integration proof).
 - M0-S1 (Curve module-shell implementation packet).
+- M0-S2 (operation and delivery kernel implementation packet).
 - M0-S3 (local Temporal round-trip implementation packet).
 
 ## Document set
@@ -47,7 +48,7 @@ identifiers are:
 | [Kanban delivery lifecycle](kanban-delivery-lifecycle.md) | User-facing delivery-board statuses from definition through monitored customer use and closure | Kanban projection and state-transition evidence |
 | [M7 intelligence and automation extension](m7-intelligence-and-automation-extension.md) | Post-R1 charter for AI-expense governance, Gmail/Slack attention intake, and scheduled AI-agent jobs | Future-extension scope and entry gates; does not expand the active 70-item catalog |
 | [Implementation-readiness review](review-analysis-and-remediation.md) | Prioritized gaps, closure evidence, owners, dependencies, and remediation status | Review record; never overrides the PRD or approved ADRs |
-| [Plane foundation inventory](plane-foundation-inventory.md) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; fork `preview` pinned at `549db1a...` |
+| [Plane foundation inventory](plane-foundation-inventory.md) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; foundation `549db1a...`; current post-M0-S1 `preview` base `7685bbc...` |
 | [ADR-001: Plane upstream foundation](adr-001-plane-upstream-foundation.md) | Decided updateable upstream baseline, fork workflow, proof results, consequences, rollback, approval, and review triggers | D-001 decision record; `DECIDED` on 2026-08-15 |
 | [ADR-003: Runtime topology](adr-003-runtime-topology.md) | Local/non-local Temporal and Curve runtime boundary | D-003 (runtime topology and trust-zone decision) has an approved P0-06A (isolated Temporal feasibility proof)/P0-06B (least-privilege Plane integration proof) direction; both executions, the local decision, and every non-local decision remain gated |
 | [ADR-006: Orca human assistance](adr-006-orca-human-assistance.md) | Proposed developer-operated Orca MCP integration boundary | D-006 decision packet; owner/licensing approval pending |
@@ -56,7 +57,9 @@ identifiers are:
 | [M0 readiness board](m0-readiness-board.md) | Decision, package, owner, evidence, and blocking-state control | Operational coding-readiness source |
 | [M0 authorization/state matrices](m0-authorization-and-state-matrices.md) | Core roles, authorization inputs, operation transitions, and Orca tool effects | M0 policy/state contract |
 | [M0 traceability](m0-traceability.md) | Requirement-to-contract-to-test ownership | M0 verification control |
-| [M0 local task packets](m0-local-skeleton-task-packets.md) | Independently reviewable Plane-fork implementation packages | Dispatch specification; blocked until entry criteria pass |
+| [M0 local task packets](m0-local-skeleton-task-packets.md) | Independently reviewable Plane-fork implementation packages | M0-S1 complete; M0-S2 contract reconciliation in review; each later packet follows its own entry criteria |
+| [M0-S2 relational contract](../../contracts/database/m0-s2-relational-contract.md) | Physical persistence, uniqueness, lifecycle checks, transaction boundaries, relay recovery, and migration obligations for the operation and delivery kernel | Normative M0-S2 database contract |
+| [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
 | [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | P0-06A (isolated Temporal feasibility proof), three execution approvals, checked projections, recomputed bundles/artifacts/ruleset, broker-issued signed start grant, bounded execution/VCS leases, normal/reconciliation evidence branches, immutable review disposition, external signed publication attestation, limits, cleanup, transitions, and the P0-06B (least-privilege Plane integration proof) design gate | P0-06A remains blocked pending publication, harness, authorization bundle/attempt approval, integrity projection, broker conformance, preflight, claim-time recheck, and claim; GitHub Project status is administrative; P0-06B is unplanned and unauthorized |
 | [P0-06 stage record](proofs/p0-06-stage-record.json) | `curve.proof-stage-projection/v2` P0-06A/P0-06B authorization, readiness, broker, claim, outcome-specific branch/ticket, lease, operation-evidence, publication-intent, external-attestation, and review state linked from GitHub Project #2 | Machine-readable fail-closed proof-state projection; runtime transitions still require trusted-controller reconciliation and independently verified broker/attestation evidence |
 | [GitHub Project tracking map](github-project-execution-map.md) | One-to-one 70-package visual index, read-only catalog/context inspection, and bounded single-existing-item status reconciliation | Administrative status tracking for all packages; status is informational, while task packets and execution controls remain authoritative |

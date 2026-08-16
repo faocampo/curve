@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "id": "15000000-0000-4000-8000-000000000011",
+  "workspace_id": "10000000-0000-4000-8000-000000000002",
+  "consumer_id": "curve-operation-projector-v1",
+  "event_id": "14000000-0000-4000-8000-000000000012",
+  "state": "PROCESSED",
+  "received_at": "2026-08-13T10:00:01Z",
+  "processed_at": null,
+  "result_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}
