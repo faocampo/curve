@@ -38,15 +38,31 @@
   "allOf": [
     {
       "if": { "properties": { "state": { "const": "CLAIMED" } } },
-      "then": { "required": ["claimed_by", "claimed_until"] }
+      "then": {
+        "properties": {
+          "claimed_by": { "type": "string", "minLength": 1, "maxLength": 255 },
+          "claimed_until": { "$ref": "common.schema.json#/$defs/Instant" }
+        },
+        "required": ["claimed_by", "claimed_until"]
+      }
     },
     {
       "if": { "properties": { "state": { "const": "RETRY_SCHEDULED" } } },
-      "then": { "required": ["next_attempt_at", "last_error"] }
+      "then": {
+        "properties": {
+          "next_attempt_at": { "$ref": "common.schema.json#/$defs/Instant" }
+        },
+        "required": ["next_attempt_at", "last_error"]
+      }
     },
     {
       "if": { "properties": { "state": { "const": "DELIVERED" } } },
-      "then": { "required": ["delivered_at"] }
+      "then": {
+        "properties": {
+          "delivered_at": { "$ref": "common.schema.json#/$defs/Instant" }
+        },
+        "required": ["delivered_at"]
+      }
     },
     {
       "if": { "properties": { "state": { "const": "DEAD_LETTER" } } },

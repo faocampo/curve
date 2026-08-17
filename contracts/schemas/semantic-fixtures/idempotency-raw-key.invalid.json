@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
-  "id": "16000000-0000-4000-8000-000000000001",
+  "id": "16000000-0000-4000-8000-000000000011",
   "workspace_id": "10000000-0000-4000-8000-000000000002",
   "principal_scope": "HUMAN:developer-1",
   "command_scope": "FOUNDATION_PROBE:workspace",
-  "key_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "key": "synthetic-operation-raw-key",
   "request_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
   "state": "IN_PROGRESS",
   "external_effect_refs": [],

@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "id": "14000000-0000-4000-8000-000000000011",
+  "workspace_id": "10000000-0000-4000-8000-000000000002",
+  "event_id": "14000000-0000-4000-8000-000000000012",
+  "destination": "TEMPORAL_CONTROL_PLANE",
+  "state": "CLAIMED",
+  "attempt_count": 1,
+  "claimed_by": null,
+  "claimed_until": null,
+  "created_at": "2026-08-13T10:00:00Z"
+}

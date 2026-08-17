@@ -30,11 +30,21 @@
   "allOf": [
     {
       "if": { "properties": { "state": { "const": "PROCESSED" } } },
-      "then": { "required": ["processed_at", "result_digest"] }
+      "then": {
+        "properties": {
+          "processed_at": { "$ref": "common.schema.json#/$defs/Instant" }
+        },
+        "required": ["processed_at", "result_digest"]
+      }
     },
     {
       "if": { "properties": { "state": { "const": "FAILED_TERMINAL" } } },
-      "then": { "required": ["processed_at", "last_error"] }
+      "then": {
+        "properties": {
+          "processed_at": { "$ref": "common.schema.json#/$defs/Instant" }
+        },
+        "required": ["processed_at", "last_error"]
+      }
     }
   ]
 }

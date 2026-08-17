@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "id": "19000000-0000-4000-8000-000000000010",
+  "workspace_id": "10000000-0000-4000-8000-000000000002",
+  "operation_type": "FOUNDATION_PROBE",
+  "status": "SUCCEEDED",
+  "version": 2,
+  "command_type": "CREATE_FOUNDATION_PROBE",
+  "target": {
+    "resource_type": "WORKSPACE",
+    "resource_id": "10000000-0000-4000-8000-000000000002"
+  },
+  "idempotency_key_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "created_at": "2026-08-13T10:00:00Z",
+  "updated_at": "2026-08-13T10:01:00Z",
+  "completed_at": "2026-08-13T10:01:00Z",
+  "created_by": { "actor_type": "HUMAN", "actor_id": "developer-1" },
+  "correlation_id": "synthetic-correlation-terminal"
+}

@@ -87,6 +87,14 @@ A work package is `READY` only when it has:
 
 If any item is absent, the coding agent stops before mutation and reports the missing prerequisite.
 
+Preparing a task packet and maintaining its GitHub Project status require no
+separate project-management approval. A packet blocks implementation only for a
+missing dependency or a material unresolved product, architecture, security,
+data-policy, licensing, infrastructure, or external-side-effect decision. Build
+commands, test decomposition, visual status, and other routine delivery details
+are owned by Federico Ocampo as the current package owner/reviewer and may be
+updated without an additional governance gate.
+
 Project status follows the [GitHub Project tracking map](github-project-execution-map.md). Federico Ocampo or authorized automation may update any package status directly to keep the board visually useful. Project status is informational and is not a dispatch prerequisite, execution authority, gate, waiver, or lifecycle state for Curve itself. This plan, approved ADRs, contracts, and immutable task packets remain normative. For P0-06A (isolated Temporal feasibility proof), only the conformant independent broker's signed start grant, issued after its claim-time ruleset and authorization recheck, activates the wrapper.
 
 ## Work-package catalog
@@ -145,7 +153,9 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07 | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | Audit completeness fixture, telemetry leakage test, SLO dashboard. |
 | M0-09 | M | Provider registry, connection lifecycle, capability documents, common error taxonomy, callback ingress, outgoing webhooks, and reconciliation scheduler | M0-03, M0-05, M0-07, D-007 | FR-003, FR-023, FR-044, NFR-005, NFR-008, NFR-013, AC-33, AC-57 | Fake-provider conformance suite and 15-minute reconciliation proof. |
 
-The five-packet local M0 checkpoint is packet-scoped. M0-S1 and M0-S2 require
+The current Plane implementation base is M0-S1 merge
+`7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`; M0-S1 is complete. The five-packet
+local M0 checkpoint is packet-scoped. M0-S2 requires
 D-001 and the approved P0-02 local boundary; M0-S3 and its downstream packets
 additionally require accepted P0-06B evidence and a decided D-003 `LOCAL_ONLY`
 profile. P0-06A proves isolated primitives only. D-007 does not gate M0-S1 through M0-S5 because those packets expose no
@@ -160,6 +170,12 @@ applicable recovery proof, replay safety, and no cross-workspace or telemetry
 leakage.
 
 ### M1: Alignment, evidence, and PRD
+
+The implementation-oriented packet catalog for M1-M7 is
+[M1-M7 coding-agent task packets](m1-m7-task-packets.md). Federico Ocampo is the
+default owner and reviewer until explicitly reassigned. GitHub Project status
+is visual metadata; only the material decision classes defined by that catalog
+can gate packet materialization.
 
 | ID | Size | Deliverable | Dependencies | PRD trace | Completion evidence |
 | -- | ---- | ----------- | ------------ | --------- | ------------------- |

@@ -48,6 +48,10 @@ for (const file of schemaFiles) {
 const invocationSchema = join(root, "contracts/mcp/orca-tools-v1.schema.json");
 const resultSchema = join(root, "contracts/mcp/orca-tool-result-v1.schema.json");
 const p0_06StageProjectionSchema = join(root, "contracts/schemas/p0-06-stage-projection-v2.schema.json");
+const operationSchema = join(root, "contracts/schemas/operation.schema.json");
+const outboxSchema = join(root, "contracts/schemas/outbox-event.schema.json");
+const inboxSchema = join(root, "contracts/schemas/inbox-message.schema.json");
+const idempotencySchema = join(root, "contracts/schemas/idempotency-record.schema.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -55,6 +59,18 @@ const fixtureSpecs = [
   ["contracts/mcp/examples/forbidden-tool.invalid.json", invocationSchema, false],
   ["contracts/mcp/examples/forged-actor.invalid.json", invocationSchema, false],
   ["docs/technical/proofs/p0-06-stage-record.json", p0_06StageProjectionSchema, true],
+  ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
+  ["contracts/schemas/semantic-fixtures/operation-terminal-null.invalid.json", operationSchema, false],
+  ["contracts/schemas/semantic-fixtures/outbox-claim.valid.json", outboxSchema, true],
+  ["contracts/schemas/semantic-fixtures/outbox-claim-null.invalid.json", outboxSchema, false],
+  ["contracts/schemas/semantic-fixtures/outbox-delivery.valid.json", outboxSchema, true],
+  ["contracts/schemas/semantic-fixtures/outbox-delivery-null.invalid.json", outboxSchema, false],
+  ["contracts/schemas/semantic-fixtures/outbox-retry.valid.json", outboxSchema, true],
+  ["contracts/schemas/semantic-fixtures/outbox-retry-null.invalid.json", outboxSchema, false],
+  ["contracts/schemas/semantic-fixtures/inbox-processed-null.invalid.json", inboxSchema, false],
+  ["contracts/schemas/semantic-fixtures/idempotency-completed.valid.json", idempotencySchema, true],
+  ["contracts/schemas/semantic-fixtures/idempotency-raw-key.invalid.json", idempotencySchema, false],
+  ["contracts/schemas/semantic-fixtures/idempotency-terminal-null.invalid.json", idempotencySchema, false],
 ];
 
 for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".json").sort()) {

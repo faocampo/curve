@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "id": "14000000-0000-4000-8000-000000000030",
+  "workspace_id": "10000000-0000-4000-8000-000000000002",
+  "event_id": "14000000-0000-4000-8000-000000000032",
+  "destination": "TEMPORAL_CONTROL_PLANE",
+  "state": "RETRY_SCHEDULED",
+  "attempt_count": 1,
+  "next_attempt_at": "2026-08-13T10:02:00Z",
+  "last_error": { "code": "TEMPORARY_DELIVERY_FAILURE", "retryable": true },
+  "created_at": "2026-08-13T10:00:00Z"
+}

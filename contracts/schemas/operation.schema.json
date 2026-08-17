@@ -65,9 +65,7 @@
       "if": { "properties": { "status": { "enum": ["SUCCEEDED", "FAILED", "CANCELLED"] } } },
       "then": {
         "properties": {
-          "completed_at": {
-            "oneOf": [{ "$ref": "common.schema.json#/$defs/Instant" }, { "type": "null" }]
-          }
+          "completed_at": { "$ref": "common.schema.json#/$defs/Instant" }
         },
         "required": ["completed_at"]
       }

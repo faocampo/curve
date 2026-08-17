@@ -10,7 +10,7 @@
     "workspace_id",
     "principal_scope",
     "command_scope",
-    "key",
+    "key_digest",
     "request_digest",
     "state",
     "external_effect_refs",
@@ -23,12 +23,12 @@
     "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
     "principal_scope": { "type": "string", "minLength": 1, "maxLength": 500 },
     "command_scope": { "type": "string", "minLength": 1, "maxLength": 500 },
-    "key": { "type": "string", "minLength": 16, "maxLength": 255 },
+    "key_digest": { "$ref": "common.schema.json#/$defs/Digest" },
     "request_digest": { "$ref": "common.schema.json#/$defs/Digest" },
     "state": { "type": "string", "enum": ["IN_PROGRESS", "COMPLETED", "FAILED_TERMINAL", "RECONCILIATION_REQUIRED"] },
     "response_status": { "type": "integer", "minimum": 100, "maximum": 599 },
     "response_digest": { "$ref": "common.schema.json#/$defs/Digest" },
-    "response_ref": { "$ref": "common.schema.json#/$defs/ObjectRef" },
+    "response_resource_ref": { "$ref": "common.schema.json#/$defs/ResourceRef" },
     "external_effect_refs": {
       "type": "array",
       "items": { "$ref": "common.schema.json#/$defs/ResourceRef" }
@@ -42,7 +42,12 @@
   "allOf": [
     {
       "if": { "properties": { "state": { "enum": ["COMPLETED", "FAILED_TERMINAL"] } } },
-      "then": { "required": ["response_status", "response_digest", "completed_at"] }
+      "then": {
+        "properties": {
+          "completed_at": { "$ref": "common.schema.json#/$defs/Instant" }
+        },
+        "required": ["response_status", "response_digest", "response_resource_ref", "completed_at"]
+      }
     }
   ]
 }
