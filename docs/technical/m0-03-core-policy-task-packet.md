@@ -74,15 +74,18 @@ The implementation pins the exact merged Curve revision containing:
 - [Core policy manifest schema](../../contracts/schemas/core-policy-manifest.schema.json) (machine-valid manifest structure and required action fields);
 - [Policy evaluation schema](../../contracts/schemas/policy-evaluation.schema.json) (safe evaluator input);
 - [Policy decision schema](../../contracts/schemas/policy-decision.schema.json) (immutable evaluator output);
+- [Policy schema examples](../../contracts/schemas/examples/) (accepted and rejected core-manifest, evaluation, and decision examples);
 - [Policy semantic fixtures](../../contracts/schemas/semantic-fixtures/) (accepted and rejected M0-03 evaluation and decision examples matching `policy-*.json`);
+- [Context-pack module](../../scripts/lib/context-pack.mjs) (ordered governed paths and deterministic `curve-context-pack:v1` digest algorithm);
 - [Contract validator](../../scripts/validate-contracts.mjs) (schema compilation, fixture expectations, and immutable v1 policy assertions);
 - [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) (accepted Plane base, operation/delivery kernel, tests, and merge binding).
 
 The context digest uses the repository's existing `curve-context-pack:v1`
-algorithm over those paths at the exact merged Curve revision. The semantic
-fixture input expands every path matching
-`contracts/schemas/semantic-fixtures/policy-*.json` at that revision and sorts
-the paths lexicographically before hashing. Before code
+algorithm over those paths at the exact merged Curve revision. The fixture
+input contains every core-manifest/policy-evaluation/policy-decision example and
+every path matching `contracts/schemas/semantic-fixtures/policy-*.json` at that
+revision. The context-pack module stores the explicit sorted path list and the
+test suite proves that it covers the complete matching fixture corpus. Before code
 dispatch, the coding agent records the revision, ordered paths, per-file byte
 digests, aggregate context digest, owner, reviewer, Plane base, and packet ID in
 `apps/api/plane/curve/contracts/m0-03-context.json` (implementation context
