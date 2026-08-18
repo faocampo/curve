@@ -2,13 +2,13 @@
 
 ## Purpose
 
-This directory is the architecture and implementation handoff derived from the [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) (product vision, requirements, acceptance criteria, rollout, and decision register). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
+This directory is the architecture and implementation handoff derived from the [Curve PRD v0.9](../curve-ai-native-sdlc-prd.md) (product vision, requirements, acceptance criteria, rollout, and decision register). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
 
 The suite is implementation-oriented. D-001 (Plane foundation, licensing, and
-upgrade-boundary decision) is owner-approved and recorded as `DECIDED`; D-003
-(runtime topology and trust-zone decision) has a digest-bound `LOCAL_ONLY` proof basis and approved
-two-stage direction while both executions and the decision remain gated; other agreed planning directions remain
-`PROPOSED` until their named owners approve them. An implementation package
+upgrade-boundary decision) and D-003 (runtime topology and trust-zone decision)
+for `LOCAL_ONLY` are owner-approved and recorded as `DECIDED`; other agreed planning directions remain
+`PROPOSED` until their named owners approve them. M0-S3 (local Temporal
+round-trip implementation packet) is the executable local runtime proof. An implementation package
 remains blocked until every decision scope named by its exact packet is
 `DECIDED` and its remaining entry criteria pass. A separately authorized P0
 proof may collect decision evidence under its bounded packet.
@@ -25,9 +25,9 @@ identifiers are:
 - D-003 (runtime topology and trust-zone decision).
 - D-007 (MCP trust and authorization decision).
 - D-009 (retention, legal-hold, backup, and erasure decision).
-- P0-06 (two-stage local Temporal proof work package).
-- P0-06A (isolated Temporal feasibility proof).
-- P0-06B (least-privilege Plane integration proof).
+- P0-06 (historical two-stage local Temporal proof work package).
+- P0-06A (superseded isolated Temporal feasibility proof).
+- P0-06B (superseded least-privilege Plane integration proof).
 - M0-S1 (Curve module-shell implementation packet).
 - M0-S2 (operation and delivery kernel implementation packet).
 - M0-S3 (local Temporal round-trip implementation packet).
@@ -51,8 +51,8 @@ identifiers are:
 | [Implementation-readiness review](review-analysis-and-remediation.md) | Prioritized gaps, closure evidence, owners, dependencies, and remediation status | Review record; never overrides the PRD or approved ADRs |
 | [Plane foundation inventory](plane-foundation-inventory.md) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; foundation `549db1a...`; current post-M0-S2 `preview` base `eff8686a...` |
 | [ADR-001: Plane upstream foundation](adr-001-plane-upstream-foundation.md) | Decided updateable upstream baseline, fork workflow, proof results, consequences, rollback, approval, and review triggers | D-001 decision record; `DECIDED` on 2026-08-15 |
-| [ADR-003: Runtime topology](adr-003-runtime-topology.md) | Local/non-local Temporal and Curve runtime boundary | D-003 (runtime topology and trust-zone decision) has an approved P0-06A (isolated Temporal feasibility proof)/P0-06B (least-privilege Plane integration proof) direction; both executions, the local decision, and every non-local decision remain gated |
-| [D-003 local topology decision packet](d003-local-topology-decision-packet.md) | Decision-ready least-privilege local Temporal/worker/database network, environment, proof, acceptance, and rollback contract | `PROPOSED_OWNER_DECISION_REQUIRED`; approval would make M0-S3 (local Temporal round-trip implementation packet) the single executable proof and retire the duplicated standalone proof flow |
+| [ADR-003: Runtime topology](adr-003-runtime-topology.md) | Local/non-local Temporal and Curve runtime boundary | `DECIDED/LOCAL_ONLY`: SDK 1.31.0, two-network Compose overlay, worker allowlist, M0-S3 proof, rollback, and explicit non-local blockers |
+| [D-003 local topology decision packet](d003-local-topology-decision-packet.md) | Approved least-privilege local Temporal/worker/database network, environment, proof, acceptance, and rollback contract | `APPROVED_AND_MERGED`; approved head `7826f403...`, merge `097016f...` |
 | [ADR-006: Orca human assistance](adr-006-orca-human-assistance.md) | Proposed developer-operated Orca MCP integration boundary | D-006 decision packet; owner/licensing approval pending |
 | [ADR-007: MCP and Orca profile](adr-007-mcp-trust-and-orca-profile.md) | Proposed MCP trust registry and developer-operated Orca write-back allowlist | D-007 decision packet; security/platform approval pending |
 | [ADR-009: Retention and erasure](adr-009-retention-and-erasure.md) | Required data-class/asset retention, hold, backup, and erasure decision | D-009 remains open and blocks protected storage/non-local activation |
@@ -62,12 +62,12 @@ identifiers are:
 | [M0 local task packets](m0-local-skeleton-task-packets.md) | Independently reviewable Plane-fork implementation packages | M0-S1 and M0-S2 complete; each later packet follows its own entry criteria |
 | [M0-S2 relational contract](../../contracts/database/m0-s2-relational-contract.md) | Physical persistence, uniqueness, lifecycle checks, transaction boundaries, relay recovery, and migration obligations for the operation and delivery kernel | Normative M0-S2 database contract |
 | [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) | Exact Curve contract revision, Plane base/head/merge, context digest, accepted tests, tree equivalence, status, and rollback | Accepted post-merge evidence for M0-02 and M0-05 |
-| [M0-03 core policy task packet](m0-03-core-policy-task-packet.md) (dispatch contract for the authorization/policy kernel) | Exact Plane base, security decisions, scope, acceptance scenarios, commands, stop conditions, and rollback | `READY_FOR_SECURITY_REVIEW`; Plane implementation waits for exact-head approval and merge |
+| [M0-03 core policy task packet](m0-03-core-policy-task-packet.md) (dispatch contract for the authorization/policy kernel) | Exact Plane base, security decisions, scope, acceptance scenarios, commands, stop conditions, and rollback | Approved through Curve PR #7 head `cb6f7d95...` and merge `fcb8a608...`; Plane implementation is next |
 | [M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md) (decision persistence, evaluation order, transactions, migration, and rollback) | Physical append-only policy-decision and audit-binding contract | Proposed material security contract for M0-03 |
 | [Core policy manifest](../../contracts/policy/core-policy-v1.json) (immutable v1 action allowlist and deny precedence) | Provider-neutral roles, classifications, environments, ACL/assignment requirements, target policy, and safe projections | Proposed v1 policy ceiling; provider-specific policy remains gated |
 | [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
-| [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | P0-06A (isolated Temporal feasibility proof), three execution approvals, checked projections, recomputed bundles/artifacts/ruleset, broker-issued signed start grant, bounded execution/VCS leases, normal/reconciliation evidence branches, immutable review disposition, external signed publication attestation, limits, cleanup, transitions, and the P0-06B (least-privilege Plane integration proof) design gate | P0-06A remains blocked pending publication, harness, authorization bundle/attempt approval, integrity projection, broker conformance, preflight, claim-time recheck, and claim; GitHub Project status is administrative; P0-06B is unplanned and unauthorized |
-| [P0-06 stage record](proofs/p0-06-stage-record.json) | `curve.proof-stage-projection/v2` P0-06A/P0-06B authorization, readiness, broker, claim, outcome-specific branch/ticket, lease, operation-evidence, publication-intent, external-attestation, and review state linked from GitHub Project #2 | Machine-readable fail-closed proof-state projection; runtime transitions still require trusted-controller reconciliation and independently verified broker/attestation evidence |
+| [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | Historical P0-06A/P0-06B standalone-proof design and supersession record | `SUPERSEDED`; retained for audit, with M0-S3 as the executable proof |
+| [P0-06 stage record](proofs/p0-06-stage-record.json) | `curve.proof-stage-projection/v3` terminal supersession binding | `P0-06_SUPERSEDED`; D-003 `LOCAL_ONLY` and replacement M0-S3 are machine validated |
 | [GitHub Project tracking map](github-project-execution-map.md) | One-to-one 70-package visual index, read-only catalog/context inspection, and bounded single-existing-item status reconciliation | Administrative status tracking for all packages; status is informational, while task packets and execution controls remain authoritative |
 | [Machine-readable contracts](../../contracts/README.md) | OpenAPI, JSON Schema, MCP, SSE, provider, operation, and Temporal contracts | Normative wire/schema source |
 
@@ -94,7 +94,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 
 ```mermaid
 flowchart TD
-    prd["Curve PRD v0.8"] --> decisions["D-001 through D-016 and ADRs"]
+    prd["Curve PRD v0.9"] --> decisions["D-001 through D-016 and ADRs"]
     prd --> architecture[Architecture]
     architecture --> c4["C4 architecture views"]
     prd --> domain[Domain model]

@@ -1083,3 +1083,35 @@ acceptance, rollback, supersession, and owner-approval contract). D-003
 `PROPOSED_OWNER_DECISION_REQUIRED`; staging and production remain fail closed,
 and no Docker or application-code mutation is authorized by preparation of the
 proposal.
+
+### D-003 (local runtime topology) owner decision and governance reconciliation
+
+Federico Ocampo approved D-003 (runtime topology and trust-zone decision) for
+`LOCAL_ONLY` at exact Curve PR #9 head
+`7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`. The approval fixed Temporal
+Python SDK 1.31.0 and the Curve-only two-network Compose-overlay topology,
+retired P0-06A (isolated Temporal feasibility proof) and P0-06B
+(least-privilege Plane integration proof) as standalone gates, and made M0-S3
+(local Temporal round-trip implementation packet) the executable proof. Curve
+PR #9 remained green and squash-merged as
+`097016ffe2eb259cc780ad2a6cd41ca3422366b2` on 2026-08-18.
+
+The reconciliation records a scoped decision rather than broad infrastructure
+authority. Local development uses `docker-compose-curve.yml` (Curve-only local
+Compose overlay), internal `curve-control` and `curve-data` networks, a
+dedicated worker settings/environment allowlist, synthetic `INTERNAL` data,
+the existing Plane PostgreSQL service as business truth, and disposable
+Temporal SQLite history. Staging and production remain fail closed pending
+their named topology, security, persistence, backup/recovery, ownership, and
+retention decisions.
+
+The superseded proof design remains in Git history and the historical
+[P0-06 task packet](../technical/p0-06-local-temporal-proof-task-packet.md)
+(retired broker/lease proof design and audit record). The active machine
+projection advances to `curve.proof-stage-projection/v3` with terminal
+`P0-06_SUPERSEDED` state, binding the approved decision head, merge commit,
+historical v2 source, and replacement M0-S3 package. Project status becomes
+`Done` as visual supersession metadata. Runtime behavior is still unproven;
+M0-S3 must produce duplicate-delivery, retry-after-effect, cancellation,
+replay, negative network, protected-string, baseline-disabled, cleanup, and
+rollback evidence against its final exact Plane base.

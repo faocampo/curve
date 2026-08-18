@@ -4,21 +4,23 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PROPOSED_OWNER_DECISION_REQUIRED` |
-| Version | 1.0 |
+| Status | `APPROVED_AND_MERGED` |
+| Version | 1.1 |
 | Date | 2026-08-18 |
 | Decision | D-003 (runtime topology and trust-zone decision), `LOCAL_ONLY` scope |
 | Decision owner | Federico Ocampo, CTO at X3M |
 | Human reviewer | Federico Ocampo (`faocampo`) |
-| Curve baseline | `ad9871874b07c2ce1bc30171714cbea815adf5ba` on `main` |
+| Curve baseline | Approved head `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`; merge `097016ffe2eb259cc780ad2a6cd41ca3422366b2` on `main` |
 | Plane baseline | `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` on `preview` |
 | Consuming package | M0-S3 (local Temporal round-trip implementation packet) |
 | Non-local scope | Staging and production remain undecided and fail closed |
 
-## Decision requested
+## Approved decision
 
-Approve the least-privilege local topology in this packet and authorize the
-following governance correction:
+Federico Ocampo approved the least-privilege local topology in this packet at
+exact head `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb` and authorized the
+following governance correction. Curve PR #9 merged the approved head as
+`097016ffe2eb259cc780ad2a6cd41ca3422366b2` after its `validate` check passed:
 
 1. D-003 (runtime topology and trust-zone decision) becomes `DECIDED` for
    `LOCAL_ONLY` at the exact approved and merged revision of this packet.
@@ -275,11 +277,10 @@ database migration.
 | Curve changes baseline Plane behavior | Overlay absent by default, feature switch, baseline health and full test comparison. |
 | Local design is mistaken for production approval | D-003 (runtime topology and trust-zone decision) is scoped `LOCAL_ONLY`; staging/production matrix remains fail closed. |
 
-## Supersession plan after approval
+## Supersession reconciliation checklist
 
-The implementation agent updates the following normative sources in the same
-governance reconciliation PR before M0-S3 (local Temporal round-trip
-implementation packet) dispatch:
+The governance reconciliation PR updates the following normative sources before
+M0-S3 (local Temporal round-trip implementation packet) dispatch:
 
 - `adr-003-runtime-topology.md` (runtime topology and Temporal profile) to
   `DECIDED/LOCAL_ONLY` with this topology and explicit non-local blockers;
@@ -297,14 +298,18 @@ implementation packet) dispatch:
   `github-project-execution-map.md` (visual GitHub Project mapping) to remove
   the retired proof dependency while preserving status as visual metadata.
 
-## Exact owner approval requested
+## Exact owner approval record
 
 The owner can approve this material architecture/security decision with:
 
 > I approve D-003 (runtime topology and trust-zone decision) for `LOCAL_ONLY`
-> at exact head `<HEAD_SHA>`, approve Temporal Python SDK `1.31.0`, approve the
+> at exact head `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`, approve Temporal Python SDK `1.31.0`, approve the
 > two-network Compose-overlay topology, retire P0-06A (isolated Temporal
 > feasibility proof) and P0-06B (least-privilege Plane integration proof) as
 > standalone gates, make M0-S3 (local Temporal round-trip implementation
 > packet) the executable proof, and authorize squash merge of the decision
 > packet while CI remains green.
+
+Repository evidence: [Curve PR #9](https://github.com/faocampo/curve/pull/9),
+merged 2026-08-18 as
+`097016ffe2eb259cc780ad2a6cd41ca3422366b2` after the `validate` check passed.

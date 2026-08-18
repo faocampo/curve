@@ -4,7 +4,7 @@
 
 | Item | M0 contract |
 | --- | --- |
-| Namespace | `curve-local` for the local proof; non-local values require D-003. |
+| Namespace | `curve-local` for the D-003-approved `LOCAL_ONLY` profile; non-local values require a separately decided D-003 scope. |
 | Task queue | `curve-control-plane-v1` |
 | Workflow type | `CurveOperationWorkflowV1` |
 | Workflow ID | `curve:{workspace_id}:{operation_id}` |

@@ -355,9 +355,9 @@ The table distinguishes a fixed contract from an unresolved production selection
 | Capability | Technology or boundary | Status | Decision / implementation constraint |
 | --- | --- | --- | --- |
 | Work-management foundation | Plane community edition | `ADR_DECIDED`; accepted base pinned | D-001 approves candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`, the reuse boundary, and upstream process; fork `preview` foundation is `549db1aea8f3307b337b3686dbb844a87549cd95`; M0-S1 and M0-S2 are merged and the current implementation base is `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` |
-| Curve relational state | PostgreSQL category used by Plane/Curve | `FIXED_CONTRACT`; topology open | D-003 selects topology, persistence, HA, backup, and operations |
+| Curve relational state | PostgreSQL category used by Plane/Curve | `FIXED_CONTRACT`; local topology decided, non-local open | D-003 `LOCAL_ONLY` reuses Plane PostgreSQL over `curve-data`; non-local persistence, HA, backup, and operations remain open |
 | Large immutable bodies | Workspace-scoped immutable object storage | `FIXED_CONTRACT`; product open | D-003/D-009 select product, topology, retention, erasure, and backup |
-| Durable orchestration | Temporal | `PRD_SELECTED`; deployment open | D-003 selects service/persistence/HA; workflow version/replay rules are fixed |
+| Durable orchestration | Temporal | `PRD_SELECTED`; local topology decided, non-local open | D-003 `LOCAL_ONLY` pins CLI 1.8.1/server 1.31.2/SDK 1.31.0 and disposable SQLite; non-local service persistence/HA remains open; workflow version/replay rules are fixed |
 | Bounded background work | Plane Celery infrastructure | `PRD_SELECTED` existing capability | Notifications, exports, and bounded refresh only; no lifecycle state ownership |
 | Internal knowledge | X3M Onyx | `PRD_SELECTED`; identity open | D-002 selects per-operation delegation; no user PAT storage |
 | Tool interoperability | MCP behind `ToolProvider` | `FIXED_CONTRACT`; protocol policy open | D-007 selects protocol/transports, registry, auth, risk, and allowlist |

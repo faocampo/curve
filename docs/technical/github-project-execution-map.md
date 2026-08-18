@@ -5,10 +5,10 @@
 | Field | Value |
 | --- | --- |
 | Status | Active visual-tracking contract |
-| Version | 1.4 |
-| Date | 2026-08-15 |
+| Version | 1.5 |
+| Date | 2026-08-18 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
-| Normative work catalog | [Development plan](development-plan.md#work-package-catalog) |
+| Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (70-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
 | Last reconciliation | 2026-08-15 against merged Curve baseline `fe8664a1fd58d34bb10273d3da2d39804659bbfc`: 70 total items, 70 owned markers, 70 matching source revisions, zero duplicates |
@@ -86,9 +86,8 @@ status update:
 
 ```text
 pnpm project:check
-CURVE_PROJECT_SOURCE_REF=HEAD node scripts/sync-github-project.mjs --context P0-06
-node scripts/sync-github-project.mjs --validate-status P0-06=Ready
-pnpm project:sync -- --status P0-06="Ready"
+node scripts/sync-github-project.mjs --validate-status P0-06=Done
+pnpm project:sync -- --status P0-06="Done"
 pnpm project:sync -- --status M0-01="In progress"
 pnpm project:sync -- --status M0-01="In review"
 pnpm project:sync -- --status M0-01="Done"
@@ -96,7 +95,7 @@ pnpm project:sync -- --status M0-01="Done"
 
 `project:check` parses the 70-row local catalog and reports its default visual
 projection. It performs no GitHub request. `--context` computes registered
-context and stage-record digests for a selected task and remains read-only.
+context and stage-record digests for an active task with a context manifest and remains read-only.
 `--validate-status` validates a task ID and Project status locally and explicitly
 reports that the result is informational.
 
@@ -122,26 +121,26 @@ unrecognized content. They are operational integrity checks rather than approval
 gates. The command may change a Project status regardless of the corresponding
 Curve execution, product, or architecture state.
 
-## P0-06 tracking rule
+## P0-06 historical tracking rule
 
-P0-06 (two-stage local Temporal proof) is tracked on the board like every other
-work package. Its technical state remains in the versioned
-[stage record](proofs/p0-06-stage-record.json), D-003 (runtime topology and
-trust-zone decision), and the
-[task packet](p0-06-local-temporal-proof-task-packet.md).
+P0-06 (historical two-stage local Temporal proof) is tracked on the board like
+every other work package. Its terminal technical state remains in the versioned
+[stage record](proofs/p0-06-stage-record.json) (machine-readable supersession
+binding), [ADR-003](adr-003-runtime-topology.md) (approved local topology,
+pins, evidence, and rollback), and the [task packet](p0-06-local-temporal-proof-task-packet.md)
+(superseded two-stage design and audit history).
 
-Changing the P0-06 Project status does not change those records and does not
-activate the proof. A proof attempt begins only when its separately defined
-execution controls are satisfied. Status updates before, during, and after the
-proof are direct visual-tracking writes; they do not belong in execution leases,
-VCS operation allowlists, signed start grants, or terminal evidence contracts.
+Changing the P0-06 Project status does not change those records. `Done` records
+that the standalone proof path was superseded. M0-S3 (local Temporal round-trip
+implementation packet) owns the executable local proof.
 
 The current governed technical state remains:
 
-- D-003 (runtime topology and trust-zone decision): `PROPOSED`;
-- P0-06A (isolated Temporal feasibility proof): `P0-06A_DESIGN`, authorization
-  `PROPOSED`; and
-- P0-06B (least-privilege Plane integration proof): `NOT_AUTHORIZED`.
+- D-003 (runtime topology and trust-zone decision): `DECIDED/LOCAL_ONLY`;
+- P0-06A (isolated Temporal feasibility proof): `SUPERSEDED_UNISSUED`;
+- P0-06B (least-privilege Plane integration proof): `SUPERSEDED_UNISSUED`; and
+- M0-S3 (local Temporal round-trip implementation packet): executable proof,
+  blocked until its remaining implementation and dispatch prerequisites pass.
 
 ## Reconciliation cadence
 

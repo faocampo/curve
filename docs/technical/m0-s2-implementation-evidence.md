@@ -80,8 +80,9 @@ policy; a persistent-environment rewind requires its own reviewed data plan.
 ## Downstream consequence
 
 M0-02 (core aggregate persistence) and M0-05 (transactional delivery kernel)
-are complete. M0-03 (core authorization and policy kernel) may be materialized
-as an independent task packet. M0-S3 (local Temporal round trip) remains
-blocked until P0-06B (least-privilege Plane integration proof) is accepted and
-`D-003 (runtime topology and trust-zone decision)` is formally decided for the
-local profile.
+are complete. M0-03 (core authorization and policy kernel) has an approved
+Curve contract and is the next Plane implementation. D-003 (runtime topology
+and trust-zone decision) is now `DECIDED` for `LOCAL_ONLY`, and P0-06A/P0-06B
+are superseded standalone gates. M0-S3 (local Temporal round trip) remains
+blocked until the M0-03 policy kernel is implemented and its exact Plane base,
+Curve context, owner/reviewer, and task packet are pinned.
