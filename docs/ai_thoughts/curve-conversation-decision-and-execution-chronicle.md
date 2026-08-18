@@ -1083,3 +1083,44 @@ acceptance, rollback, supersession, and owner-approval contract). D-003
 `PROPOSED_OWNER_DECISION_REQUIRED`; staging and production remain fail closed,
 and no Docker or application-code mutation is authorized by preparation of the
 proposal.
+
+### M0-S4 (API, SSE, and minimal UI) experience readiness
+
+After the M0-S2 (operation and delivery kernel implementation packet) merge,
+the merged Plane Curve shell was re-inspected at `origin/preview` merge
+`eff8686a69aa112ea8fda79be0e1316dc1fd97d6`. The implemented surface contains
+the workspace route `/:workspaceSlug/curve`, backend-controlled navigation, and
+an accessible empty state. It does not yet represent an Operation or resumable
+event state.
+
+M0-S4 (API, SSE, and minimal UI implementation packet) already required a
+minimal local foundation-probe page, cancellation, safe errors, workspace
+authorization, and SSE reconnection. The [Curve Experience Blueprint](../technical/curve-experience-blueprint.md)
+(user-facing flow approval gate) also requires an approved screen/state flow,
+clickable prototype, and task-based review before user-facing implementation.
+The gap was therefore treated as experience-contract work rather than Plane
+application implementation.
+
+The proposed flow stays inside the existing Curve workspace route and exposes
+one user job: verify the local control path end to end. It presents stable
+stages—request accepted, operation recorded, workflow started, worker completed,
+and status received—rather than service topology. Runtime identifiers, ETag,
+correlation, last event, timestamps, and safe diagnostics appear in a collapsed
+technical-details panel. Credentials, raw server errors, protected bodies,
+Temporal payloads, and cross-workspace identifiers remain excluded.
+
+The state contract covers loading, disabled, permission-limited, idle, create
+pending, queued, running, cancellation confirmation/requested/cancelled,
+succeeded, failed, SSE reconnecting, stale cursor, and resync failure. A browser
+exercise found and corrected a prototype scheduling defect in which rendering
+the queued state cleared the timers for the subsequent running and succeeded
+states. The corrected prototype passed happy-path progression, confirmation
+focus, cancellation, stale-cursor resynchronization, and safe terminal-state
+checks before the preview image was captured.
+
+The proposal is recorded in the [M0-S4 foundation probe experience contract](../technical/ux-m0-s4-foundation-probe.md)
+(UX-004/UX-005 flow, state, accessibility, prototype-review, and browser-test
+contract), the clickable HTML prototype, and the generated success-state
+preview. Its status remains `PROPOSED_REVIEW_REQUIRED`. Federico Ocampo must
+complete the seven task prompts and approve the exact Curve revision before the
+user-facing portion of M0-S4 can enter implementation.
