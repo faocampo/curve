@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
@@ -15,12 +15,55 @@ import {
   validateP0_06AReadyPristineState,
   validateSingleApplyRequest,
 } from "../lib/p0-06-policy.mjs";
+import { M0_03_CONTEXT_PATHS, digestContextEntries } from "../lib/context-pack.mjs";
 
 const STAGE_RECORD = JSON.parse(
   readFileSync(new URL("../../docs/technical/proofs/p0-06-stage-record.json", import.meta.url), "utf8"),
 );
 const STAGE_A = STAGE_RECORD.stages["P0-06A"];
 const SYNCHRONIZER_PATH = fileURLToPath(new URL("../sync-github-project.mjs", import.meta.url));
+
+test("M0-03 context pins every policy contract fixture and its deterministic digest algorithm", () => {
+  const fixtureDirectories = [
+    {
+      url: new URL("../../contracts/schemas/examples/", import.meta.url),
+      prefix: "contracts/schemas/examples/",
+      matches: (name) => /^(core-policy-manifest|policy-decision|policy-evaluation)\.(valid|invalid)\.json$/.test(name),
+    },
+    {
+      url: new URL("../../contracts/schemas/semantic-fixtures/", import.meta.url),
+      prefix: "contracts/schemas/semantic-fixtures/",
+      matches: (name) => /^policy-.*\.json$/.test(name),
+    },
+  ];
+  const expectedFixtures = fixtureDirectories.flatMap(({ url, prefix, matches }) =>
+    readdirSync(url).filter(matches).map((name) => `${prefix}${name}`),
+  );
+  for (const path of expectedFixtures) assert.ok(M0_03_CONTEXT_PATHS.includes(path), path);
+  assert.ok(M0_03_CONTEXT_PATHS.includes("scripts/lib/context-pack.mjs"));
+  assert.ok(M0_03_CONTEXT_PATHS.includes("scripts/validate-contracts.mjs"));
+  assert.equal(new Set(M0_03_CONTEXT_PATHS).size, M0_03_CONTEXT_PATHS.length);
+  assert.deepEqual(M0_03_CONTEXT_PATHS, [...M0_03_CONTEXT_PATHS].sort());
+
+  const digest = digestContextEntries([
+    { path: "b", contents: Buffer.from("two") },
+    { path: "a", contents: Buffer.from("one") },
+  ]);
+  assert.equal(digest, "sha256:029c7c48f7822596ae3db41495a419c74964e317463c27ae1023b9d6efdc9110");
+  assert.equal(digest, digestContextEntries([
+    { path: "a", contents: Buffer.from("one") },
+    { path: "b", contents: Buffer.from("two") },
+  ]));
+  assert.notEqual(digest, digestContextEntries([
+    { path: "a", contents: Buffer.from("changed") },
+    { path: "b", contents: Buffer.from("two") },
+  ]));
+  assert.throws(() => digestContextEntries([
+    { path: "a", contents: Buffer.from("one") },
+    { path: "a", contents: Buffer.from("two") },
+  ]), /unique/);
+  assert.throws(() => digestContextEntries([{ path: "a", contents: "one" }]), /Buffer/);
+});
 
 test("pristine claim and review contracts exactly match the current P0-06A projection", () => {
   assert.deepEqual(STAGE_A.claim, P0_06A_READY_PRISTINE_CLAIM);

@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "workspace_id": "11111111-1111-4111-8111-111111111111",
+  "subject": {
+    "actor_type": "HUMAN",
+    "actor_id": "product-approver"
+  },
+  "effective_principal": {
+    "actor_type": "HUMAN",
+    "actor_id": "product-approver"
+  },
+  "membership": {
+    "workspace_id": "11111111-1111-4111-8111-111111111111",
+    "active": true,
+    "plane_role": "MEMBER"
+  },
+  "roles": ["WORKSPACE_MEMBER", "PRODUCT_APPROVER"],
+  "action": "CURVE.GATE.DECIDE.PRD",
+  "resource": {
+    "workspace_id": "11111111-1111-4111-8111-111111111111",
+    "ref": {
+      "resource_type": "ARTIFACT_VERSION",
+      "resource_id": "77777777-7777-4777-8777-777777777777",
+      "resource_version": 4
+    },
+    "exists": true,
+    "owner": null
+  },
+  "classification": "CONFIDENTIAL",
+  "environment": "LOCAL",
+  "feature_enabled": true,
+  "object_acl": null,
+  "assignment_context": {
+    "workspace_id": "11111111-1111-4111-8111-111111111111",
+    "subject_ref": {
+      "resource_type": "ARTIFACT_VERSION",
+      "resource_id": "77777777-7777-4777-8777-777777777777",
+      "resource_version": 4
+    },
+    "assignment_version": 2,
+    "risk_tier": "HIGH",
+    "gate_assignments": [
+      {
+        "role": "PRODUCT_APPROVER",
+        "principal": {
+          "actor_type": "SERVICE",
+          "actor_id": "curve-controller"
+        },
+        "active": true
+      }
+    ],
+    "material_contributors": [],
+    "low_risk_overlap_allowed": false,
+    "overlap_exception_ref": null
+  },
+  "target_context": null,
+  "service_authorization": null,
+  "evaluated_at": "2026-08-18T12:00:00Z",
+  "policy_manifest_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "correlation_id": "gate-correlation-123"
+}

@@ -10,6 +10,7 @@ import {
   selectUniqueProjectItem,
   validateSingleApplyRequest,
 } from "./lib/p0-06-policy.mjs";
+import { contextPathsFor, digestContextEntries } from "./lib/context-pack.mjs";
 
 const OWNER = "faocampo";
 const PROJECT_NUMBER = "2";
@@ -29,19 +30,6 @@ const initialStatus = new Map([
 ]);
 
 const proofStageRecordPaths = new Map([["P0-06", P0_06_STAGE_RECORD_PATH]]);
-const contextPaths = new Map([
-  [
-    "P0-06",
-    [
-      "contracts/temporal/m0-workflow-contract.md",
-      "docs/technical/adr-003-runtime-topology.md",
-      "docs/technical/development-plan.md",
-      "docs/technical/m0-readiness-board.md",
-      "docs/technical/p0-06-local-temporal-proof-task-packet.md",
-    ],
-  ],
-]);
-
 function ghArguments(args) {
   return args[0] === "api"
     ? [
@@ -205,22 +193,15 @@ function shortenedTitle(task) {
 }
 
 function contextDigestFor(taskId, sourceRevision, allowMissing = false) {
-  const paths = contextPaths.get(taskId);
+  const paths = contextPathsFor(taskId);
   if (!paths) return null;
-  const digest = createHash("sha256");
-  digest.update("curve-context-pack:v1\0");
-  for (const path of [...paths].sort()) {
+  const entries = [];
+  for (const path of paths) {
     const object = `${sourceRevision}:${path}`;
     if (allowMissing && !gitObjectExists(object)) return null;
-    const contents = gitBytes(["show", object]);
-    digest.update(path);
-    digest.update("\0");
-    digest.update(String(contents.length));
-    digest.update("\0");
-    digest.update(contents);
-    digest.update("\0");
+    entries.push({ path, contents: gitBytes(["show", object]) });
   }
-  return `sha256:${digest.digest("hex")}`;
+  return digestContextEntries(entries);
 }
 
 function parseProofStageProjection(taskId, path, contents) {
