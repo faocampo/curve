@@ -4,11 +4,11 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PROPOSED`; M0-03 security contract awaiting exact-head review |
-| Version | 1.0 |
+| Status | `IMPLEMENTED_FOR_M0`; provider-specific extensions remain gated by their consuming decisions |
+| Version | 1.1 |
 | Last updated | 2026-08-18 |
 | Owner and reviewer | Federico Ocampo, CTO at X3M (`faocampo`) |
-| Product source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) (product requirements, risk roles, and acceptance scenarios) |
+| Product source | [Curve PRD v0.9](../curve-ai-native-sdlc-prd.md) (product requirements, risk roles, D-003 local decision, and acceptance scenarios) |
 | Machine contracts | [Core policy manifest](../../contracts/policy/core-policy-v1.json) (immutable action allowlist and deny precedence), [policy evaluation schema](../../contracts/schemas/policy-evaluation.schema.json) (safe evaluator input), and [policy decision schema](../../contracts/schemas/policy-decision.schema.json) (immutable decision output) |
 
 ## Authorization boundary

@@ -5,19 +5,20 @@
 | Field | Value |
 | --- | --- |
 | Status | Active visual-tracking contract |
-| Version | 1.5 |
+| Version | 1.6 |
 | Date | 2026-08-18 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (70-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
-| Last reconciliation | 2026-08-15 against merged Curve baseline `fe8664a1fd58d34bb10273d3da2d39804659bbfc`: 70 total items, 70 owned markers, 70 matching source revisions, zero duplicates |
+| Last reconciliation | 2026-08-18: canonical M0-03 and P0-06 items moved to `Done`; packet-checkpoint item `PVTI_lAHOBNjuQc4BgZzOzg3CeqQ` created once for M0-S3 and moved to `In progress`; full-catalog ownership/source reconciliation remains the prior 70-item baseline |
 
 ## Purpose and authority boundary
 
 GitHub Project #2 is a visual index for Curve development. It helps the team see
 the current phase, locate the normative task packet, and follow progress across
-the 70 planned work packages.
+the 70 planned work packages plus explicit packet-level checkpoints used to
+decompose a large package.
 
 The development plan, approved product decisions, architecture decisions, task
 packets, repository state, test evidence, and Curve runtime records remain the
@@ -50,7 +51,9 @@ grant. Execution systems evaluate their own authoritative inputs independently.
 | M5 quality/VCS/readiness | M5-01 through M5-14 | 14 | Backlog |
 | M6 prototypes/KPIs | M6-01 through M6-05 | 5 | Backlog |
 | R1 qualification/rollout | R1-01 through R1-05 | 5 | Backlog |
-| **Total** |  | **70** |  |
+| Canonical catalog total |  | **70** |  |
+| M0-S3 packet checkpoint | Decomposed executable slice of M0-06 | 1 | Current working projection |
+| **Current visual total** |  | **71** |  |
 
 ## Field mapping
 
@@ -86,6 +89,7 @@ status update:
 
 ```text
 pnpm project:check
+node scripts/sync-github-project.mjs --context M0-S3
 node scripts/sync-github-project.mjs --validate-status P0-06=Done
 pnpm project:sync -- --status P0-06="Done"
 pnpm project:sync -- --status M0-01="In progress"
@@ -93,9 +97,10 @@ pnpm project:sync -- --status M0-01="In review"
 pnpm project:sync -- --status M0-01="Done"
 ```
 
-`project:check` parses the 70-row local catalog and reports its default visual
+`project:check` parses the 70-row canonical catalog and reports its default visual
 projection. It performs no GitHub request. `--context` computes registered
-context and stage-record digests for an active task with a context manifest and remains read-only.
+context and stage-record digests for a whitelisted catalog or packet identifier
+such as M0-S3 and remains read-only.
 `--validate-status` validates a task ID and Project status locally and explicitly
 reports that the result is informational.
 
@@ -104,6 +109,11 @@ reports that the result is informational.
 including P0-06 (two-stage local Temporal proof). It updates the deterministic
 body and selected status of the existing synchronizer-owned draft item. It does
 not create items or mutate the full catalog.
+
+M0-S3 (local Temporal round-trip implementation packet) is a packet checkpoint
+inside M0-06 rather than a second canonical work package. Its draft item is
+managed directly by Federico Ocampo or authorized automation and is excluded
+from the 70-row catalog synchronizer.
 
 For write safety, apply mode requires:
 
@@ -140,7 +150,7 @@ The current governed technical state remains:
 - P0-06A (isolated Temporal feasibility proof): `SUPERSEDED_UNISSUED`;
 - P0-06B (least-privilege Plane integration proof): `SUPERSEDED_UNISSUED`; and
 - M0-S3 (local Temporal round-trip implementation packet): executable proof,
-  blocked until its remaining implementation and dispatch prerequisites pass.
+  `In progress` while its exact dispatch revision and context are materialized.
 
 ## Reconciliation cadence
 

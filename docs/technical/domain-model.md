@@ -4,15 +4,15 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Architecture input; M0-S2 relational decisions approved; M0-03 policy additions proposed for exact-head security review; remaining capabilities stay gated by the PRD decision register |
-| Source | [`curve-ai-native-sdlc-prd.md`](../curve-ai-native-sdlc-prd.md) (Curve PRD v0.8 product, lifecycle, security, and acceptance contract) |
+| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; remaining capabilities stay gated by the PRD decision register |
+| Source | [`curve-ai-native-sdlc-prd.md`](../curve-ai-native-sdlc-prd.md) (Curve PRD v0.9 product, lifecycle, security, D-003 local decision, and acceptance contract) |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
 | Last updated | 2026-08-18 |
 | Scope | Logical domain and persistence model for Curve R1 |
 
 ## 1. Purpose and precedence
 
-This document derives the logical domain model required by PRD v0.8. It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests. D-001 fixes the Plane/Curve repository and authority boundary; the document does not select the remaining database topology, object-storage product, identity mechanism, provider version, retention period, or other owner-gated decisions D-002 through D-016.
+This document derives the logical domain model required by PRD v0.9. It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests. D-001 fixes the Plane/Curve repository and authority boundary; the document does not select the remaining database topology, object-storage product, identity mechanism, provider version, retention period, or other owner-gated decisions D-002 through D-016.
 
 The PRD remains authoritative. Its scope invariants, lifecycle transitions, numbered functional requirements (FR), non-functional requirements (NFR), acceptance criteria (AC), and decision register take precedence over this document. If this document cannot be implemented without changing one of those contracts, the implementation MUST stop and propose a PRD revision; it MUST NOT silently reinterpret the requirement.
 

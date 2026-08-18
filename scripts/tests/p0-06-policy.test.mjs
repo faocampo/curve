@@ -15,7 +15,12 @@ import {
   validateP0_06AReadyPristineState,
   validateSingleApplyRequest,
 } from "../lib/p0-06-policy.mjs";
-import { M0_03_CONTEXT_PATHS, digestContextEntries } from "../lib/context-pack.mjs";
+import {
+  M0_03_CONTEXT_PATHS,
+  M0_S3_CONTEXT_PATHS,
+  contextPathsFor,
+  digestContextEntries,
+} from "../lib/context-pack.mjs";
 
 const STAGE_RECORD = JSON.parse(
   readFileSync(new URL("../../docs/technical/proofs/p0-06-stage-record.json", import.meta.url), "utf8"),
@@ -62,6 +67,33 @@ test("M0-03 context pins every policy contract fixture and its deterministic dig
     { path: "a", contents: Buffer.from("two") },
   ]), /unique/);
   assert.throws(() => digestContextEntries([{ path: "a", contents: "one" }]), /Buffer/);
+});
+
+test("M0-S3 context pins the approved topology, workflow, delivery, policy, and evidence contracts", () => {
+  const requiredPaths = [
+    "contracts/database/m0-03-policy-contract.md",
+    "contracts/database/m0-s2-relational-contract.md",
+    "contracts/policy/core-policy-v1.json",
+    "contracts/schemas/audit-event.schema.json",
+    "contracts/schemas/event-envelope.schema.json",
+    "contracts/schemas/operation.schema.json",
+    "contracts/schemas/outbox-event.schema.json",
+    "contracts/schemas/policy-decision.schema.json",
+    "contracts/schemas/policy-evaluation.schema.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-transition-service.valid.json",
+    "contracts/temporal/m0-workflow-contract.md",
+    "docs/technical/adr-003-runtime-topology.md",
+    "docs/technical/d003-local-topology-decision-packet.md",
+    "docs/technical/m0-03-implementation-evidence.md",
+    "docs/technical/m0-local-skeleton-task-packets.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ];
+  for (const path of requiredPaths) assert.ok(M0_S3_CONTEXT_PATHS.includes(path), path);
+  assert.equal(new Set(M0_S3_CONTEXT_PATHS).size, M0_S3_CONTEXT_PATHS.length);
+  assert.deepEqual(M0_S3_CONTEXT_PATHS, [...M0_S3_CONTEXT_PATHS].sort());
+  assert.deepEqual(contextPathsFor("M0-S3"), M0_S3_CONTEXT_PATHS);
+  assert.equal(contextPathsFor("UNREGISTERED"), null);
 });
 
 test("the live P0-06 projection is terminal and points to M0-S3", () => {
