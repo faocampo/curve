@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "policy_key": "CURVE_CORE_POLICY",
+  "policy_version": 1,
+  "default_effect": "DENY",
+  "unknown_classification": "RESTRICTED",
+  "allow_reason_code": "POLICY_ALLOWED",
+  "deny_precedence": ["FEATURE_DISABLED", "UNKNOWN_ACTION"],
+  "actions": [
+    {
+      "action": "CURVE.SHELL.VIEW",
+      "allowed_resource_types": ["WORKSPACE"],
+      "allowed_actor_types": ["HUMAN"],
+      "allowed_roles": ["WORKSPACE_MEMBER"],
+      "allowed_classifications": ["INTERNAL"],
+      "allowed_environments": ["LOCAL"],
+      "object_acl": "NOT_APPLICABLE",
+      "owner_satisfies_acl": false,
+      "assignment": "NONE",
+      "separation_of_duty": "NONE",
+      "target_allowlist": "NOT_APPLICABLE",
+      "external_side_effect": false,
+      "permitted_projection": ["SHELL_STATE"]
+    }
+  ]
+}

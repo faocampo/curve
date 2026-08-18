@@ -4,10 +4,10 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Architecture input; M0-S2 relational decisions approved; remaining capabilities stay gated by the PRD decision register |
-| Source | [`curve-ai-native-sdlc-prd.md`](../curve-ai-native-sdlc-prd.md), version 0.8 |
+| Status | Architecture input; M0-S2 relational decisions approved; M0-03 policy additions proposed for exact-head security review; remaining capabilities stay gated by the PRD decision register |
+| Source | [`curve-ai-native-sdlc-prd.md`](../curve-ai-native-sdlc-prd.md) (Curve PRD v0.8 product, lifecycle, security, and acceptance contract) |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
-| Last updated | 2026-08-15 |
+| Last updated | 2026-08-18 |
 | Scope | Logical domain and persistence model for Curve R1 |
 
 ## 1. Purpose and precedence
@@ -112,6 +112,7 @@ Append-only records instead carry `id`, `workspace_id`, a parent aggregate ident
 | `PullRequestBinding` | Provider observations, synchronized review-comment bindings | Trusted VCS controller | One slice has at most one active binding. VCS facts and Curve Code Readiness remain distinct fields. |
 | `PullRequestSet` | Required binding membership for a plan generation | Initiative workflow projection | Aggregate state is derived; it is never an atomic cross-repository transaction. |
 | `ProviderConnection` | Capability/version and secret-reference metadata | Platform administrator | Secret values are external to the domain store. Configuration changes create an audited version and do not alter active runs. |
+| `PolicyDecision` | Immutable safe evaluation result | Curve authorization service | One evaluated subject/workspace/resource/action produces one append-only decision. Allowed mutations bind the exact decision, domain event/outbox, and audit in one transaction; denied operations bind only the decision and safe denied audit. |
 | `Budget` | Immutable policy versions plus reservation and usage-ledger records | Product/Platform approvers and budget service | Reservation checks and ledger append are atomic across applicable scopes; historical usage is never rewritten. |
 | `StoredObject` | Immutable bytes plus retention/erasure metadata | Object service | Bytes are create-once and digest-verified; ACL and legal/retention state are separately controlled. |
 
@@ -581,6 +582,12 @@ VCS is authoritative for branch, commit, check, review, PR/MR, close, and merge 
 | `AuditEvent.actor`, `effective_principal`, `policy_decision_ref` | `ActorRef`, `ActorRef`, typed ref | NO, YES, YES | Includes denied commands and cross-workspace probes. |
 | `AuditEvent.before_digest`, `after_digest`, `details_ref` | `Digest`, `Digest`, protected `ObjectRef` | YES | M0-S2 leaves `details_ref` absent because protected storage is disabled. |
 | `AuditEvent.occurred_at`, `correlation_id` | `Instant`, opaque ID | NO | Supports lineage and export. |
+| `PolicyDecision.sequence`, `recorded_at`, `recorded_by` | positive integer, `Instant`, `ActorRef` | NO | Sequence is workspace/resource scoped and unique; recorder is the trusted service/system that persisted the immutable result; recording time is not earlier than evaluation time. |
+| `PolicyDecision.action`, `resource_ref`, `effect`, `reason_codes` | stable code, `ResourceRef`, stable code, ordered code list | NO | Effect is `ALLOW`, `DENY`, or reserved `REQUIRE_HUMAN_CONFIRMATION`; M0 v1 emits allow/deny only. Allow contains only `POLICY_ALLOWED`; deny codes are non-empty and manifest-ordered. |
+| `PolicyDecision.subject`, `effective_principal` | `ActorRef`, `ActorRef` | NO | Subject is authenticated; effective principal equals subject in M0 unless a later decided delegation applies. Agents cannot be allowed by the core manifest. |
+| `PolicyDecision.policy_key`, `policy_version`, `policy_manifest_digest`, `input_digest` | stable code, positive integer, `Digest`, `Digest` | NO | Binds exact immutable policy bytes and canonical safe input without protected bodies, credentials, or raw idempotency keys. |
+| `PolicyDecision.normalized_classification`, `permitted_projection` | `DataClassification`, code set | NO | `UNKNOWN` input becomes `RESTRICTED`. Projection is non-empty only for `ALLOW`. |
+| `PolicyDecision.evaluated_at`, `correlation_id` | `Instant`, opaque ID | NO | Decision time equals the trusted input instant; the pure evaluator reads no clock. Correlation supports request/command lineage. Record is append-only. |
 | `ProjectionCheckpoint.projection_name`, `partition_key` | text | NO | Workspace is part of partition key. |
 | `ProjectionCheckpoint.last_event_sequence`, `last_event_id`, `updated_at` | integer, `OpaqueId`, `Instant` | NO | Rebuildable projection cursor. |
 | `ReconciliationCase.provider_connection_id`, `resource_ref` | `OpaqueId`, `ExternalRef` | NO | Created for persistent or ambiguous divergence. |
@@ -588,6 +595,10 @@ VCS is authoritative for branch, commit, check, review, PR/MR, close, and merge 
 
 The M0-S2 physical keys, state checks, transactions, and relay primitives are
 normative in the [M0-S2 relational contract](../../contracts/database/m0-s2-relational-contract.md).
+The M0-03 decision fields, evaluator input ownership, lookup order, transaction
+binding, migration, and rollback are normative in the
+[M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md)
+(append-only policy decisions and authorization transaction boundary).
 The DomainEvent envelope fields are fixed by the PRD. The exact later
 topic/stream layout and network broker remain architecture choices. Celery may
 produce notifications or refresh projections but MUST NOT become a second
