@@ -67,6 +67,65 @@ for (const file of markdownFiles) {
   if (inFence) failures.push(`${relative(root, file)}: unclosed fenced code block`);
 }
 
+const laterPacketCatalogPath = join(root, "docs/technical/m1-m7-task-packets.md");
+const laterPacketCatalog = readFileSync(laterPacketCatalogPath, "utf8");
+const expectedLaterPacketIds = [
+  ...Array.from({ length: 7 }, (_, index) => `M1-${String(index + 1).padStart(2, "0")}`),
+  ...Array.from({ length: 6 }, (_, index) => `M2-${String(index + 1).padStart(2, "0")}`),
+  ...Array.from({ length: 6 }, (_, index) => `M3-${String(index + 1).padStart(2, "0")}`),
+  ...Array.from({ length: 6 }, (_, index) => `M4-${String(index + 1).padStart(2, "0")}`),
+  ...Array.from({ length: 14 }, (_, index) => `M5-${String(index + 1).padStart(2, "0")}`),
+  ...Array.from({ length: 5 }, (_, index) => `M6-${String(index + 1).padStart(2, "0")}`),
+  ...Array.from({ length: 5 }, (_, index) => `M7-${String(index + 1).padStart(2, "0")}`),
+];
+const laterPacketRowIds = Array.from(
+  laterPacketCatalog.matchAll(/^\| (M[1-7]-\d{2})(?: [^|]*)? \|/gm),
+  (match) => match[1],
+);
+const laterPacketRows = laterPacketCatalog
+  .split(/\r?\n/)
+  .filter((line) => /^\| M[1-7]-\d{2}/.test(line));
+for (const row of laterPacketRows) {
+  if (!/^\| M[1-7]-\d{2} \([^)]+\) \|/.test(row)) {
+    failures.push(
+      "docs/technical/m1-m7-task-packets.md: every packet row must place its short description in parentheses immediately after the identifier",
+    );
+  }
+}
+if (/\bD-\d{3}\b(?! \()/m.test(laterPacketCatalog)) {
+  failures.push(
+    "docs/technical/m1-m7-task-packets.md: every decision identifier must be followed immediately by a parenthetical description",
+  );
+}
+for (const packetId of expectedLaterPacketIds) {
+  const count = laterPacketRowIds.filter((candidate) => candidate === packetId).length;
+  if (count !== 2) {
+    failures.push(
+      `docs/technical/m1-m7-task-packets.md: ${packetId} must have one outcome row and one dependency/trace row; found ${count}`,
+    );
+  }
+}
+for (const packetId of new Set(laterPacketRowIds)) {
+  if (!expectedLaterPacketIds.includes(packetId)) {
+    failures.push(`docs/technical/m1-m7-task-packets.md: unexpected packet row ${packetId}`);
+  }
+}
+if (/^\| M[1-7]-\d{2}-M[1-7]-\d{2}/m.test(laterPacketCatalog)) {
+  failures.push(
+    "docs/technical/m1-m7-task-packets.md: grouped dispatch rows are prohibited; use one repository-local packet per row",
+  );
+}
+for (const packetId of expectedLaterPacketIds.filter((packetId) => packetId.startsWith("M7-"))) {
+  const traceRow = laterPacketCatalog
+    .split(/\r?\n/)
+    .find((line) => line.startsWith(`| ${packetId} `) && line.includes("OPEN:"));
+  if (!traceRow || !traceRow.includes("post-R1 extension decision must add exact FR/NFR/AC")) {
+    failures.push(
+      `docs/technical/m1-m7-task-packets.md: ${packetId} must retain its explicit post-R1 product-trace decision gate`,
+    );
+  }
+}
+
 const temporary = mkdtempSync(join(tmpdir(), "curve-mermaid-"));
 try {
   const puppeteerConfig = join(temporary, "puppeteer-config.json");
