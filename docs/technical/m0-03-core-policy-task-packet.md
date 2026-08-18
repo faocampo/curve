@@ -5,14 +5,15 @@
 | Field | Value |
 | --- | --- |
 | Task ID | `CURVE-M0-03-CORE-POLICY` |
-| Status | `READY_FOR_SECURITY_REVIEW`; Plane code dispatch is blocked until this exact packet head is approved and merged |
+| Status | `COMPLETED`; Plane PR #4 merged approved implementation head `a807dd7a3f7b81f13ca815b165fba4f4bc068d9e` as `922dd6de5d5ed5081f35cd88343154022867ccad` |
 | Risk | `HIGH`; authorization and tenant-isolation control plane |
 | Date | 2026-08-18 |
 | Human owner and reviewer | Federico Ocampo, CTO at X3M (`faocampo`) |
 | Implementer | AI coding agent; separate from human approval |
 | Repository | `git@github.com:faocampo/plane.git` |
 | Base branch | `preview` |
-| Base SHA | `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` |
+| Implementation base SHA | `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` |
+| Accepted implementation | [M0-03 implementation evidence](m0-03-implementation-evidence.md) (exact contract/context, Plane head/merge, validation, security acceptance, and rollback) |
 | Feature branch | `curve/m0-03-core-policy` |
 | GitHub Project item | `M0-03` in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) (visual progress tracking for the core policy package) |
 | Product trace | FR-043; NFR-009-NFR-012; AC-09, AC-35, AC-52 |
@@ -468,14 +469,16 @@ tombstone, and erasure policy).
 
 ## Completion evidence
 
-M0-03 becomes `DONE` only after:
+M0-03 is `DONE`. The completion conditions were satisfied as follows:
 
-1. this exact packet head is approved and merged;
-2. the Plane implementation starts from the pinned/reviewed base and contains a
-   valid M0-03 context record;
-3. every acceptance scenario and required command passes;
-4. the implementation head receives Federico Ocampo's exact-head review and is
-   merged into `preview`;
-5. approved-head and merge trees are proven equivalent;
-6. a post-merge evidence record updates M0 readiness and traceability;
-7. GitHub Project M0-03 is moved to `Done` as visual metadata.
+1. Curve PR #7 merged this approved packet and its policy contracts.
+2. The implementation started from reviewed Plane base `eff8686a...` and
+   recorded context digest `sha256:113fcd3c...`.
+3. The accepted validation is recorded in [M0-03 implementation evidence](m0-03-implementation-evidence.md)
+   (exact contract/context, tests, migration proof, security evidence, and rollback).
+4. Federico Ocampo approved Plane head `a807dd7...`; Plane PR #4 merged it into
+   `preview` as `922dd6d...`.
+5. The approved and merged trees both equal `a9ca8dd5...`.
+6. M0 readiness and downstream traceability are updated by the dispatch-readiness
+   revision containing this record.
+7. GitHub Project M0-03 is `Done` as visual metadata.

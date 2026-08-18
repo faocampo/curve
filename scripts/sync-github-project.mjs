@@ -517,10 +517,7 @@ if (args.validateStatus) {
 
 if (args.contextTaskId) {
   const sourceRevision = git(["rev-parse", "--verify", "--end-of-options", `${CONTEXT_SOURCE_REF}^{commit}`]);
-  const tasks = parseTasks(gitBytes(["show", `${sourceRevision}:docs/technical/development-plan.md`]).toString("utf8"));
-  if (!tasks.some((task) => task.id === args.contextTaskId)) {
-    throw new Error(`Unknown task ID: ${args.contextTaskId}`);
-  }
+  if (!contextPathsFor(args.contextTaskId)) throw new Error(`Unknown context-pack ID: ${args.contextTaskId}`);
   const contextDigest = contextDigestFor(args.contextTaskId, sourceRevision);
   if (!contextDigest) throw new Error(`No context-path manifest for ${args.contextTaskId}.`);
   const projection = proofStageProjectionFor(args.contextTaskId, sourceRevision);

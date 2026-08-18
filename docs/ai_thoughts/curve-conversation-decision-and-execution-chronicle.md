@@ -1115,3 +1115,36 @@ historical v2 source, and replacement M0-S3 package. Project status becomes
 M0-S3 must produce duplicate-delivery, retry-after-effect, cancellation,
 replay, negative network, protected-string, baseline-disabled, cleanup, and
 rollback evidence against its final exact Plane base.
+
+### M0-03 completion and M0-S3 dispatch materialization
+
+Federico Ocampo approved and authorized both post-decision merge gates on
+2026-08-18. Curve PR #13 (D-003 decision reconciliation) merged approved head
+`dd6a01dcf428c18b1fdfc79259c89d623251e5f7` as
+`af7b5e872512b34516d451e26de312421eea78ec` after its documentation-contract
+check passed. Plane PR #4 (M0-03 core authorization and policy kernel) merged
+approved head `a807dd7a3f7b81f13ca815b165fba4f4bc068d9e` as
+`922dd6de5d5ed5081f35cd88343154022867ccad`.
+
+The M0-03 implementation evidence records a byte-pinned Curve context,
+deny-first policy evaluation, live workspace membership, canonical policy-input
+digests, immutable decisions/audits, transaction-bound authorization receipts,
+reversible migration proof, 113 Curve tests, 629 Plane backend tests, and
+equivalent approved/merge trees. GitHub reported no automated Plane check suite
+for that branch, so the accepted evidence consists of the reproducible local
+validation and Federico Ocampo's exact-head disposition.
+
+With D-003 (runtime topology and trust-zone decision) and M0-03 (core
+authorization and policy kernel) resolved, the next preparation step pins
+M0-S3 (local Temporal round-trip implementation packet) to Plane `preview`
+`922dd6d...`, Federico Ocampo as owner/reviewer, Temporal Python SDK 1.31.0, the
+approved two-network overlay, the existing local Plane Docker services, and one
+visual Project item. A new deterministic `M0-S3` context-path manifest covers
+the workflow, delivery, policy, topology, security, and implementation-evidence
+contracts. The Plane implementation will record the exact merged Curve revision,
+per-file digests, aggregate digest, and Plane base before source mutation.
+
+This preparation introduces no new product, security, data, licensing,
+infrastructure, or external-side-effect decision. Staging, production,
+AWS/Kubernetes, gVisor, OpenHands, protected data, deployment, and the broader
+M0-06 parent/child workflow remain outside the local round-trip slice.

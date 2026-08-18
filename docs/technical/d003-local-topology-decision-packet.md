@@ -224,12 +224,16 @@ Required commands after implementation:
 git diff --check
 pnpm check
 pnpm build
-docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -k "workflow or temporal or replay or cancellation"
+docker compose -f docker-compose-local.yml up -d plane-db plane-redis plane-mq plane-minio api worker beat-worker
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve config
+docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve build api curve-worker
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve up -d
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve ps
-docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve down
-docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
+docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve exec api pytest plane/curve/tests -k "workflow or temporal or replay or cancellation"
+docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve exec curve-worker python -m plane.curve.temporal.network_probe
+docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve stop curve-worker temporal
+docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve rm -f curve-worker temporal
+docker compose -f docker-compose-local.yml ps
 ```
 
 The implementation PR must also preserve repository-native CI and record the
