@@ -1,7 +1,7 @@
 # ADR-001: Use official Plane upstream as Curve's updateable foundation
 
 - Status: DECIDED
-- Decision version: 1.0
+- Decision version: 1.0 (approved); evidence addendum updated 2026-08-18
 - PRD decision: D-001
 - Owner and engineering approver: Federico Ocampo, CTO at X3M
 - Licensing reviewer: Federico Ocampo, CTO at X3M
@@ -50,7 +50,8 @@ The product sponsor confirmed that the intended model is to use the original Pla
 | Pre-merge fork/upstream base | `origin/preview` and `upstream/preview` were both at `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` as verified on 2026-08-13 |
 | Candidate branch and commit | Approved `curve/plane-upstream-sync-2026-08-12` at `d380678912e9b46805ef852d2e05411f1fea6d8b`; merged by Plane PR #1 |
 | Accepted fork `preview` base | `549db1aea8f3307b337b3686dbb844a87549cd95`; merge parents are prior base `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` and approved candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` |
-| Current implementation descendant | Plane PR #2 merged M0-S1 at `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`; approved exact head `81712b66e22f1a60883a619c5db63a2101dc365d` is its parent |
+| M0-S1 implementation descendant at decision time | Plane PR #2 merged M0-S1 at `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`; approved exact head `81712b66e22f1a60883a619c5db63a2101dc365d` is its parent |
+| Post-decision M0-S2 descendant | Plane PR #3 merged approved M0-S2 head `f520075493290389aa54532baec36268c34e2885` into `preview` at `eff8686a69aa112ea8fda79be0e1316dc1fd97d6`; the approved-head and merge trees are identical |
 | Accepted Curve governance baseline | Curve PR #1 squash-merged to `main` at `1529b8b7f04f226ac8be151f89104b6582650b42`; post-merge validation run 31887095811 passed |
 | Frontend verification | `pnpm check`: 60/60 successful at the exact candidate SHA; `pnpm build`: 16/16 successful on the pre-commit-equivalent candidate tree |
 | Backend verification | Repository Compose suite: 516 passed, 92 warnings, 84.10 seconds; exit code 0 |
@@ -69,7 +70,14 @@ Use the official public Plane repository as Curve's upstream code baseline and F
 
 Keep the Curve and Plane repositories separate. The Curve repository is the governance and normative-contract source for PRDs, ADRs, security decisions, architecture, and immutable task packets. The public Plane fork owns deployable Curve code, migrations, UI, worker/runtime configuration, generated clients, and a pinned implementation snapshot or reference to the approved Curve contracts. This avoids a combined monorepo while allowing code and generated artifacts to change atomically in Plane. This repository boundary is approved by D-001.
 
-The accepted Plane `preview` merge commit `549db1aea8f3307b337b3686dbb844a87549cd95` is the historical foundation base for the first Curve implementation task packets. Plane PR #2 completed M0-S1 (Curve module shell) and advanced the current implementation base to `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`. The local repository-level commercial/community audit, reuse/build recommendation, additive migration, feature-disabled behavior, workspace-isolation, and rollback proof are complete. Federico Ocampo approved the applicable exact heads on 2026-08-15 and both changes merged through their authorized methods.
+The accepted Plane `preview` merge commit `549db1aea8f3307b337b3686dbb844a87549cd95` is the historical foundation base for the first Curve implementation task packets. Plane PR #2 completed M0-S1 (Curve module shell) and advanced the implementation base at the time of this decision to `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`. The local repository-level commercial/community audit, reuse/build recommendation, additive migration, feature-disabled behavior, workspace-isolation, and rollback proof are complete. Federico Ocampo approved the applicable exact heads on 2026-08-15 and both changes merged through their authorized methods.
+
+The 2026-08-18 evidence addendum preserves the approved D-001 decision and its
+version-1.0 digest. It records that Plane PR #3 completed M0-S2 (operation
+and delivery kernel) and advanced the current accepted implementation descendant
+to `eff8686a69aa112ea8fda79be0e1316dc1fd97d6`. See [M0-S2 implementation evidence](m0-s2-implementation-evidence.md)
+(exact contract, context, implementation, validation, merge, and rollback
+binding).
 
 ## Approval record
 

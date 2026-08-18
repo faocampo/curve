@@ -7,8 +7,8 @@
 | Status | Engineering baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Engineers, reviewers, security and platform teams, and AI coding agents |
-| Version | 0.4 |
-| Last updated | 2026-08-15 |
+| Version | 0.5 |
+| Last updated | 2026-08-18 |
 | Normative source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Architecture | [Curve Technical Architecture](./architecture.md) |
 
@@ -354,7 +354,7 @@ The table distinguishes a fixed contract from an unresolved production selection
 
 | Capability | Technology or boundary | Status | Decision / implementation constraint |
 | --- | --- | --- | --- |
-| Work-management foundation | Plane community edition | `ADR_DECIDED`; accepted base pinned | D-001 approves candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`, the reuse boundary, and upstream process; fork `preview` foundation is `549db1aea8f3307b337b3686dbb844a87549cd95`; M0-S1 is merged and the current implementation base is `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a` |
+| Work-management foundation | Plane community edition | `ADR_DECIDED`; accepted base pinned | D-001 approves candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`, the reuse boundary, and upstream process; fork `preview` foundation is `549db1aea8f3307b337b3686dbb844a87549cd95`; M0-S1 and M0-S2 are merged and the current implementation base is `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` |
 | Curve relational state | PostgreSQL category used by Plane/Curve | `FIXED_CONTRACT`; topology open | D-003 selects topology, persistence, HA, backup, and operations |
 | Large immutable bodies | Workspace-scoped immutable object storage | `FIXED_CONTRACT`; product open | D-003/D-009 select product, topology, retention, erasure, and backup |
 | Durable orchestration | Temporal | `PRD_SELECTED`; deployment open | D-003 selects service/persistence/HA; workflow version/replay rules are fixed |

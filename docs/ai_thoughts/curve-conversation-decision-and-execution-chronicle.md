@@ -6,8 +6,8 @@
 | ----- | ----- |
 | Status | Living retrospective and engineering rationale |
 | Product | Curve |
-| Period covered | From the initial Plane license question through 2026-08-15 |
-| Last updated | 2026-08-15 |
+| Period covered | From the initial Plane license question through 2026-08-18 |
+| Last updated | 2026-08-18 |
 | Audience | X3M product, engineering, architecture, security, operations, legal, and AI agents |
 | Normative authority | Informational only; the PRD and approved ADRs take precedence |
 
@@ -916,3 +916,41 @@ The technical state remains D-003 (runtime topology and trust-zone decision)
 `PROPOSED`, P0-06A at `P0-06A_DESIGN` with authorization `PROPOSED`, and P0-06B
 (least-privilege Plane integration proof) `NOT_AUTHORIZED`. The current Project
 column may change independently because it is informational metadata.
+
+### M0-S2 (operation and delivery kernel) implementation and merge
+
+After Curve PR #5 merged the approved M0-S2 contracts to Curve `main` at
+`ab2c81a33ede719c02ff0a2a6ab35eabcf304de1`, the Plane implementation was
+materialized from M0-S1 base
+`7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`. The context pack bound that Curve
+revision, Federico Ocampo as owner/reviewer, and digest
+`sha256:45c266e1ab0d096747d6493a828d689251584bad70a1570582478bfe1a91cedc`.
+
+The implementation added workspace-scoped Operation, DomainEvent, OutboxEvent,
+InboxMessage, IdempotencyRecord, and AuditEvent persistence; digest-only
+idempotency; database ResourceRef replay; transactional event/outbox/audit
+writes; optimistic versions; state-dependent database constraints; immutable
+history; relay claim, retry, dead-letter, and recovery primitives; contract
+serialization; and byte-pinned schema validation. The accepted verification
+comprised 575 complete backend tests, 59 Curve-focused tests, migration drift
+and forward/backward/forward proofs, Ruff, eight pinned-schema integrity checks,
+60 frontend check tasks, 16 production build tasks, secret-pattern scanning,
+and whitespace validation.
+
+Federico Ocampo approved Plane PR #3 at exact head
+`f520075493290389aa54532baec36268c34e2885` and authorized its squash merge into
+`preview`. GitHub created merge commit
+`eff8686a69aa112ea8fda79be0e1316dc1fd97d6`. Its tree
+`c666fdeabd642719e9482024af3e4c645f183380` exactly matched the approved-head
+tree. M0-02 (core aggregate persistence) and M0-05 (transactional delivery
+kernel) were then updated to `Done` in GitHub Project #2 as visual metadata.
+
+The durable result is recorded in [M0-S2 implementation evidence](../technical/m0-s2-implementation-evidence.md)
+(exact contract, context, implementation, validation, merge, and rollback
+binding). The sequencing consequence is that M0-03 (core authorization and
+policy kernel) can be materialized independently. M0-S3 (local Temporal round
+trip) remains blocked by accepted P0-06B (least-privilege Plane integration
+proof) evidence and a decided `D-003 (runtime topology and trust-zone
+decision)` local profile. This step remained limited to implementation-evidence
+and governance reconciliation; Temporal, Docker, protected-storage, provider,
+and production work remain assigned to their later packages.

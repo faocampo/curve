@@ -4,12 +4,12 @@
 
 | Field | Value |
 | --- | --- |
-| Status | M0-S1 completed; M0-S2 contract reconciliation in review; later packets remain blocked by their recorded prerequisites |
-| Version | 1.6 |
-| Date | 2026-08-15 |
+| Status | M0-S1 and M0-S2 completed; later packets remain blocked by their recorded prerequisites |
+| Version | 1.7 |
+| Date | 2026-08-18 |
 | Product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Contract baseline floor | Accepted Curve `main` commit `41373e8597056e1411a206894a16c74521d149da` |
-| Plane implementation base | M0-S1 merge commit `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a` on fork `preview` |
+| Plane implementation base | M0-S2 merge commit `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` on fork `preview` |
 
 ## Purpose
 
@@ -25,7 +25,7 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | --- | --- |
 | Repository | `git@github.com:faocampo/plane.git` |
 | Base branch | Fork `preview` |
-| Base SHA | `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`; every materialized packet must verify the live base still matches or use a separately reviewed descendant |
+| Base SHA | `eff8686a69aa112ea8fda79be0e1316dc1fd97d6`; every materialized packet must verify the live base still matches or use a separately reviewed descendant |
 | Curve revision | At least accepted governance baseline `41373e8597056e1411a206894a16c74521d149da`; materialization records the exact merged Curve revision containing the packet and its context digest |
 | GitHub Project item | Exact visual-tracking item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and maintained during delivery |
 | Branch | One feature branch per packet: `curve/m0-s1-module-shell` through `curve/m0-s5-observability` |
@@ -48,14 +48,14 @@ overwrite an existing environment file.
 
 | Blocker | Required resolution |
 | --- | --- |
-| `B-PUBLISH` | Satisfied through the current accepted baselines: Curve PR #3 merged at `41373e8597056e1411a206894a16c74521d149da`; Plane PR #2 merged M0-S1 at `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`. The M0-S2 contract revision and its context digest remain pending until this change merges. |
-| `B-REVIEW` | Satisfied for the foundation and post-merge reconciliation: Federico approved the applicable exact Curve and Plane heads; both repositories merged and exact-main CI passed. Each later proof or implementation output still requires its own exact-head review. |
-| `B-BASE` | Satisfied: reviewed upstream-sync is preserved in fork history and M0-S1 is merged into `preview` at `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`. |
+| `B-PUBLISH` | Satisfied through the current accepted baselines: Curve PR #5 merged the M0-S2 contracts at `ab2c81a33ede719c02ff0a2a6ab35eabcf304de1`; Plane PR #3 merged M0-S2 at `eff8686a69aa112ea8fda79be0e1316dc1fd97d6`. |
+| `B-REVIEW` | Satisfied through M0-S2: Federico approved Curve PR #5 exact head `215911477e67a2678e595fb9991626a7fb23000a` and Plane PR #3 exact head `f520075493290389aa54532baec36268c34e2885`; both merged. Each later proof or implementation output still requires its own exact-head review. |
+| `B-BASE` | Satisfied: reviewed upstream-sync, M0-S1, and M0-S2 are preserved in fork history; current `preview` is `eff8686a69aa112ea8fda79be0e1316dc1fd97d6`. |
 | `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Federico Ocampo against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
 | `B-P002` | Satisfied: the owner-reviewed local topology boundary and two-stage proof direction merged through Curve PR #3 at `41373e8597056e1411a206894a16c74521d149da`. This closes the proposal artifact only; it does not prove Temporal, decide D-003, select a shared-network topology, or authorize non-local activation. |
 | `B-D003` | Required only for M0-S3 (local Temporal round trip) and later: P0-06B (least-privilege Plane integration proof) evidence is accepted and the D-003 (runtime topology and trust-zone decision) `LOCAL_ONLY` profile is formally `DECIDED`. P0-06A (isolated Temporal feasibility proof) acceptance alone does not satisfy this blocker. |
 | `B-PEOPLE` | Satisfied for M0-S1 and M0-S2: Federico Ocampo is the named human owner and reviewer; the AI coding agent remains the separate implementer. Every later M0 packet records a named human owner plus Federico Ocampo (`faocampo`) or a named replacement reviewer. |
-| `B-CONTEXT` | The materialized packet records its Curve revision and context-pack digest. |
+| `B-CONTEXT` | Satisfied for M0-S2 at Curve revision `ab2c81a33ede719c02ff0a2a6ab35eabcf304de1` and context digest `sha256:45c266e1ab0d096747d6493a828d689251584bad70a1570582478bfe1a91cedc`. Every later materialized packet records its own exact revision and digest. |
 | `B-PROJECT` | The owning M0 package exists exactly once in GitHub Project #2 for visual tracking. Its status is informational and does not gate dispatch. |
 
 No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
@@ -118,7 +118,7 @@ pnpm build
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S2-DELIVERY-KERNEL` |
-| Status | `IN_REVIEW`: M0-S1, `B-PEOPLE`, and `B-PROJECT` are satisfied; the approved relational/schema revision must merge and supply `B-CONTEXT` before implementation dispatch |
+| Status | `COMPLETED`: Plane PR #3 merged approved implementation head `f520075493290389aa54532baec36268c34e2885` into `preview` at `eff8686a69aa112ea8fda79be0e1316dc1fd97d6`; M0-02 and M0-05 Project items are `Done` |
 | Risk | `STANDARD`; transactional and immutable control-plane state |
 | Human owner and reviewer | Federico Ocampo (`faocampo`); the AI coding agent is the separate implementer |
 | Outcome | Persist workspace-scoped Operation, durable DomainEvent, outbox, inbox, digest-only idempotency, and append-only audit records atomically. |
@@ -128,6 +128,7 @@ pnpm build
 | Contracts | `operation.schema.json`; `operation-event-v1.schema.json`; `event-envelope.schema.json`; `outbox-event.schema.json`; `inbox-message.schema.json`; `idempotency-record.schema.json`; `audit-event.schema.json`; [M0-S2 relational contract](../../contracts/database/m0-s2-relational-contract.md); state matrix |
 | Migration | Add only Curve-owned tables and indexes. Prove forward/backward/forward on a disposable database and retain generated SQL for review. |
 | Rollback | Stop relay/API writers, preserve inspection access, reverse only unshipped local Curve migrations, and revert the packet commit. |
+| Accepted evidence | [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) (exact contract, context, implementation, merge, tests, and rollback binding) |
 
 ### M0-S2 executable acceptance
 
@@ -172,7 +173,7 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S3-TEMPORAL-ROUND-TRIP` |
-| Status | `BLOCKED`: M0-S2 merged, accepted P0-06B evidence and `B-D003`, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
+| Status | `BLOCKED`: M0-S2 is satisfied; accepted P0-06B evidence and `B-D003`, `B-PEOPLE`, `B-CONTEXT`, and `B-PROJECT` remain required |
 | Risk | `STANDARD`; durable asynchronous control flow, local synthetic data only |
 | Outcome | Deliver one harmless Operation through the outbox, a dedicated Temporal worker, idempotent application activities, cancellation, and terminal audit state. |
 | Traceability | FR-015, FR-022; NFR-004; AC-17-AC-21, AC-58 |

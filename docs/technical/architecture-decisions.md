@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Decision index; D-001 (Plane upstream foundation decision) decided; D-003 (runtime topology and trust-zone decision) two-stage `LOCAL_ONLY` proof direction approved and both executions gated; remaining decision scopes blocked until owner approval and required proof |
-| Version | 0.6 |
+| Version | 0.7 |
 | Source | [Curve PRD v0.8 decision register](../curve-ai-native-sdlc-prd.md#decision-register) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
@@ -19,7 +19,7 @@ An AI agent may draft an ADR, gather evidence, run non-destructive proofs, and r
 
 | PRD ID | Status | ADR subject | Blocks | Minimum evidence before decision |
 | ------ | ------ | ----------- | ------ | -------------------------------- |
-| D-001 | DECIDED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) | P0/M0 | Federico Ocampo approved ADR digest `0c780a...`, both exact foundation PR heads, the reuse/license boundary, and the repository/upgrade strategy. Plane foundation `549db1a...` and Curve governance baseline `fe8664a...` are merged. M0-01 completed additive migration, disabled-state, workspace-isolation, and rollback proof; current Plane `preview` is `7685bbc...`. |
+| D-001 | DECIDED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) (approved fork, licensing, reuse, and upgrade strategy) | P0/M0 | Federico Ocampo approved ADR digest `0c780a...`, both exact foundation PR heads, the reuse/license boundary, and the repository/upgrade strategy. Plane foundation `549db1a...` and Curve governance baseline `fe8664a...` are merged. M0-01 completed additive migration, disabled-state, workspace-isolation, and rollback proof; M0-S2 advanced current Plane `preview` to `eff8686a...`. |
 | D-002 | PROPOSED | Onyx per-operation delegated identity | M1 | Supported OAuth mechanism, issuer/audience/scopes, token lifetime/revocation, source ACL behavior, durable-wait reauthorization, audit, threat model, proof. |
 | D-003 | PROPOSED | Development/staging/production topology and trust zones | P0-06A (isolated Temporal feasibility proof)/P0-06B (least-privilege Plane integration proof); M0-S3 (local Temporal round trip)/M0-06 (Temporal workflow skeleton); non-local M0/M4/M6 | Federico Ocampo approved the local proof basis and two-stage response. P0-06A awaits its packet, harness/image, immutable authorization bundle, ordered app-bound checks, recomputed artifacts, live exact-tag ruleset, trusted controller, conformant independent start-grant broker, preflight, and claim-time recheck. GitHub Project status is visual metadata; the signed broker grant is activation authority. Terminal evidence is outcome-specific and binds the reviewed VCS and execution evidence. P0-06A cannot decide D-003. P0-06B is unplanned and unauthorized. Staging/production capacity, residency, HA, RPO/RTO, Kubernetes/gVisor, persistence, secrets, backup/restore, cost, and ownership remain unresolved. |
 | D-004 | PROPOSED | Thin Curve Model Gateway over approved OpenRouter access | Model-enabled M1/M3/M5 | Versioned contract, failure behavior, policy enforcement, telemetry, HA impact, license/supply chain, operations proof, replacement strategy. |

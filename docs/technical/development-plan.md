@@ -5,8 +5,8 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 0.4 |
-| Last updated | 2026-08-15 |
+| Version | 0.5 |
+| Last updated | 2026-08-18 |
 | Source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
@@ -33,7 +33,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 
 ## Planning assumptions
 
-- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` is the initial materialization base unless a separately reviewed descendant replaces it.
+- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` remains the historical foundation, and accepted descendant `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` is the current post-M0-S2 implementation base.
 - Federico Ocampo approved the D-003 (runtime topology and trust-zone decision) `LOCAL_ONLY` sections at proposal revision `cac4dcac...` as the bounded basis for P0-06 (two-stage local Temporal proof) and approved two stages: P0-06A (isolated Temporal feasibility proof) followed by a separately designed and approved P0-06B (least-privilege Plane integration proof). D-003 remains `PROPOSED` until P0-06B evidence is accepted and the owner decides the exact local scope; staging and production remain fail-closed.
 - Component names in this plan are logical. The architecture may co-deploy compatible components, but ownership, contracts, trust boundaries, and failure isolation remain distinct.
 - Relative sizes are planning signals: `S` is a bounded adapter/schema/UI slice, `M` is a component with several contracts, and `L` must be decomposed before dispatch. They are not calendar estimates.
@@ -153,10 +153,14 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07 | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | Audit completeness fixture, telemetry leakage test, SLO dashboard. |
 | M0-09 | M | Provider registry, connection lifecycle, capability documents, common error taxonomy, callback ingress, outgoing webhooks, and reconciliation scheduler | M0-03, M0-05, M0-07, D-007 | FR-003, FR-023, FR-044, NFR-005, NFR-008, NFR-013, AC-33, AC-57 | Fake-provider conformance suite and 15-minute reconciliation proof. |
 
-The current Plane implementation base is M0-S1 merge
-`7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`; M0-S1 is complete. The five-packet
-local M0 checkpoint is packet-scoped. M0-S2 requires
-D-001 and the approved P0-02 local boundary; M0-S3 and its downstream packets
+The current Plane implementation base is M0-S2 merge
+`eff8686a69aa112ea8fda79be0e1316dc1fd97d6`; M0-S1 and M0-S2 are complete.
+M0-S2 satisfies M0-02 (core aggregate persistence) and M0-05 (transactional
+delivery kernel) through [M0-S2 implementation evidence](m0-s2-implementation-evidence.md)
+(exact contract, context, implementation, validation, and merge binding).
+M0-03 (core authorization and policy kernel) is the next independent package
+to materialize. The five-packet local M0 checkpoint remains packet-scoped.
+M0-S3 and its downstream packets
 additionally require accepted P0-06B evidence and a decided D-003 `LOCAL_ONLY`
 profile. P0-06A proves isolated primitives only. D-007 does not gate M0-S1 through M0-S5 because those packets expose no
 MCP capability. D-007 remains required by M0-09 and later MCP-enabled
@@ -172,7 +176,8 @@ leakage.
 ### M1: Alignment, evidence, and PRD
 
 The implementation-oriented packet catalog for M1-M7 is
-[M1-M7 coding-agent task packets](m1-m7-task-packets.md). Federico Ocampo is the
+[M1-M7 coding-agent task packets](m1-m7-task-packets.md) (milestone outcomes,
+material gates, deterministic evidence, and rollback contracts). Federico Ocampo is the
 default owner and reviewer until explicitly reassigned. GitHub Project status
 is visual metadata; only the material decision classes defined by that catalog
 can gate packet materialization.
