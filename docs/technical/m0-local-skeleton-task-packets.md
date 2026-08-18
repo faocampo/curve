@@ -300,40 +300,39 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S5-OBSERVABILITY` |
-| Status | `BLOCKED`: M0-S2-M0-S4 merged, documented X3M telemetry conventions, `B-PEOPLE`, `B-CONTEXT`, `B-PROJECT` |
+| Status | `READY_FOR_PLATFORM_BINDING_REVIEW`: [standalone M0-S5 task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) is materialized; code remains blocked by its entry gates |
 | Risk | `STANDARD`; telemetry is a potential data-exfiltration boundary |
 | Outcome | Correlate the local Operation across HTTP, database, relay, workflow, and UI without leaking protected or credential data. |
 | Traceability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 |
-| In scope | Structured safe logs; OpenTelemetry spans; Prometheus metrics; audit completeness; redaction tests; local Grafana dashboard definition; stuck/failed Operation and worker-health alerts |
+| Delivery split | M0-S5A (telemetry kernel and static observability assets) is independently reviewable after M0-S4; M0-S5B (X3M local observability integration proof) additionally requires OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding) |
+| In scope | Structured safe logs; OpenTelemetry spans; bounded Prometheus metrics; audit completeness; redaction tests; local Grafana dashboard definition; stuck/failed Operation and worker-health alerts |
 | Out of scope | Raw prompt/code/evidence telemetry, Langfuse model traces, production SLO approval, production dashboard deployment |
-| Contracts | `audit-event.schema.json`; `access-envelope.schema.json`; Event/Operation schemas; `security-and-operations.md` telemetry and redaction rules |
+| Contracts | [Telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (exporter, metrics, spans, logs, dashboard, alerts, and redaction); [telemetry manifest schema](../../contracts/schemas/telemetry-manifest.schema.json) (machine validation and fail-closed defaults); Audit, Access Envelope, Event, and Operation schemas; [Security and operations](security-and-operations.md) (telemetry, redaction, and incident controls) |
 | Migration | No migration expected. Stop for contract review if new persisted telemetry fields are proposed. |
 | Rollback | Disable Curve exporters and remove the dashboard definition while retaining minimum application audit records; revert the packet commit. |
 
 ### M0-S5 executable acceptance
 
-1. Given one synthetic probe, when it completes, then one correlation chain links
-   HTTP, outbox, workflow, activity, Operation history, audit, and SSE evidence.
-2. Given human and service activity, when audited, then authenticated actor and
-   effective principal are attributable and workspace scoped.
-3. Given sentinel secrets and protected-body strings in negative fixtures, when
-   all paths run, then none appears in logs, traces, metric labels, or errors.
-4. Given the local dashboard, when successful, failed, retried, and stuck fixtures
-   run, then it displays throughput, latency, failures, retries, backlog, and worker health.
+The executable scenarios, closed telemetry surface, configuration behavior,
+cardinality limits, required tests, evidence, stop conditions, and two-stage
+rollback are governed by the [standalone M0-S5 task packet](m0-s5-observability-task-packet.md)
+(safe telemetry kernel and X3M local-integration proof). Its M0-S5A acceptance
+uses deterministic in-memory exporters. Its M0-S5B acceptance uses only the
+owner-approved OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding).
 
 ### M0-S5 required commands
 
 ```text
 git diff --check
 docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -k "audit or telemetry or redaction or correlation"
-docker compose -f docker-compose-local.yml --profile curve config
-docker compose -f docker-compose-local.yml --profile curve up -d
-docker compose -f docker-compose-local.yml --profile curve ps
 pnpm check
 pnpm build
 docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
-docker compose -f docker-compose-local.yml --profile curve down
 ```
+
+The M0-S5B (X3M local observability integration proof) commands are added from
+OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding) when that record is
+complete; no endpoint or provisioning command is inferred.
 
 ## Local vertical checkpoint
 

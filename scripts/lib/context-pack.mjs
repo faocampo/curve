@@ -82,6 +82,25 @@ export const M0_S3_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const M0_08_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/observability/m0-s5-telemetry-v1.json",
+    "contracts/schemas/examples/telemetry-manifest.invalid.json",
+    "contracts/schemas/examples/telemetry-manifest.valid.json",
+    "contracts/schemas/telemetry-manifest.schema.json",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/architecture.md",
+    "docs/technical/domain-model.md",
+    "docs/technical/m0-authorization-and-state-matrices.md",
+    "docs/technical/m0-s5-observability-task-packet.md",
+    "docs/technical/m0-traceability.md",
+    "docs/technical/security-and-operations.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ].sort(),
+);
+
+
 export const M0_S4_CONTEXT_PATHS = Object.freeze(
   [
     "contracts/openapi/curve-v1.openapi.yaml",
@@ -129,6 +148,7 @@ const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
   ["M0-S3", M0_S3_CONTEXT_PATHS],
   ["M0-S4", M0_S4_CONTEXT_PATHS],
+  ["M0-08", M0_08_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {

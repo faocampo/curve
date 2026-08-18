@@ -56,6 +56,8 @@ const inboxSchema = join(root, "contracts/schemas/inbox-message.schema.json");
 const idempotencySchema = join(root, "contracts/schemas/idempotency-record.schema.json");
 const policyEvaluationSchema = join(root, "contracts/schemas/policy-evaluation.schema.json");
 const policyDecisionSchema = join(root, "contracts/schemas/policy-decision.schema.json");
+const telemetryManifestSchema = join(root, "contracts/schemas/telemetry-manifest.schema.json");
+const telemetryManifestPath = join(root, "contracts/observability/m0-s5-telemetry-v1.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -64,6 +66,7 @@ const fixtureSpecs = [
   ["contracts/mcp/examples/forged-actor.invalid.json", invocationSchema, false],
   ["docs/technical/proofs/p0-06-stage-record.json", p0_06StageProjectionSchema, true],
   ["contracts/policy/core-policy-v1.json", corePolicyManifestSchema, true],
+  ["contracts/observability/m0-s5-telemetry-v1.json", telemetryManifestSchema, true],
   ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
   ["contracts/schemas/semantic-fixtures/operation-terminal-null.invalid.json", operationSchema, false],
   ["contracts/schemas/semantic-fixtures/outbox-claim.valid.json", outboxSchema, true],
@@ -210,6 +213,98 @@ if (
   JSON.stringify(transitionPolicy.permitted_projection) !== JSON.stringify(["NO_BODY"])
 ) {
   throw new Error("CURVE.OPERATION.TRANSITION differs from the immutable trusted-service boundary");
+}
+
+const telemetryManifest = JSON.parse(readFileSync(telemetryManifestPath, "utf8"));
+const telemetryManifestDigest = createHash("sha256")
+  .update(JSON.stringify(canonicalJson(telemetryManifest)))
+  .digest("hex");
+if (telemetryManifestDigest !== "b8c2530bd8a3a3298140cc864349706b6e73685d515403043b678ffbac1d6568") {
+  throw new Error(
+    "contracts/observability/m0-s5-telemetry-v1.json changed without a new reviewed contract version",
+  );
+}
+const expectedTelemetryMetrics = [
+  "curve.activity.execution",
+  "curve.activity.retry",
+  "curve.audit.append",
+  "curve.operation.completed",
+  "curve.operation.duration",
+  "curve.operation.started",
+  "curve.outbox.backlog",
+  "curve.outbox.delivery",
+  "curve.outbox.oldest_age",
+  "curve.sse.connections",
+  "curve.sse.resume",
+  "curve.telemetry.export.failure",
+  "curve.worker.heartbeat.age",
+  "curve.workflow.completed",
+].sort();
+const telemetryMetricNames = telemetryManifest.metrics.map((metric) => metric.name).sort();
+if (
+  new Set(telemetryMetricNames).size !== telemetryMetricNames.length ||
+  JSON.stringify(telemetryMetricNames) !== JSON.stringify(expectedTelemetryMetrics)
+) {
+  throw new Error("contracts/observability/m0-s5-telemetry-v1.json metric set differs from immutable v1");
+}
+if (
+  telemetryManifest.default_mode !== "DISABLED" ||
+  telemetryManifest.configuration.explicit_endpoint_required !== true ||
+  telemetryManifest.configuration.external_default_endpoint_allowed !== false ||
+  telemetryManifest.correlation.metric_identifiers_allowed !== false
+) {
+  throw new Error("contracts/observability/m0-s5-telemetry-v1.json weakens fail-closed export defaults");
+}
+const metricAttributeNames = new Set(telemetryManifest.metric_attributes.map((attribute) => attribute.name));
+if (metricAttributeNames.size !== telemetryManifest.metric_attributes.length) {
+  throw new Error("contracts/observability/m0-s5-telemetry-v1.json contains duplicate metric attributes");
+}
+const highCardinalityMetricAttributes = new Set([
+  "curve.correlation_id",
+  "curve.event.id",
+  "curve.operation.id",
+  "curve.workflow.id",
+  "curve.workspace.scope",
+]);
+for (const metric of telemetryManifest.metrics) {
+  for (const attribute of metric.allowed_attributes) {
+    if (!metricAttributeNames.has(attribute)) {
+      throw new Error(`${metric.name} uses undeclared metric attribute ${attribute}`);
+    }
+    if (highCardinalityMetricAttributes.has(attribute)) {
+      throw new Error(`${metric.name} uses high-cardinality metric attribute ${attribute}`);
+    }
+  }
+}
+const forbiddenTelemetryName = new RegExp(
+  telemetryManifest.attribute_policy.forbidden_name_patterns.map((pattern) => `(?:${pattern})`).join("|"),
+  "i",
+);
+for (const [surface, names] of [
+  ["trace", telemetryManifest.attribute_policy.trace_allowlist],
+  ["log", telemetryManifest.attribute_policy.log_allowlist],
+]) {
+  for (const name of names) {
+    if (forbiddenTelemetryName.test(name)) throw new Error(`${surface} allowlist contains forbidden name ${name}`);
+  }
+}
+const traceAllowlist = new Set(telemetryManifest.attribute_policy.trace_allowlist);
+for (const span of telemetryManifest.spans) {
+  for (const attribute of span.allowed_attributes) {
+    if (!traceAllowlist.has(attribute)) throw new Error(`${span.name} uses non-allowlisted trace attribute ${attribute}`);
+  }
+}
+const logAllowlist = new Set(telemetryManifest.attribute_policy.log_allowlist);
+for (const field of telemetryManifest.logs.required_fields) {
+  if (!logAllowlist.has(field)) throw new Error(`required log field ${field} is absent from the log allowlist`);
+}
+for (const [surface, identifiers] of [
+  ["dashboard", telemetryManifest.dashboard.panels.map((panel) => panel.id)],
+  ["alert", telemetryManifest.alerts.rules.map((rule) => rule.id)],
+]) {
+  if (new Set(identifiers).size !== identifiers.length) {
+    throw new Error(`contracts/observability/m0-s5-telemetry-v1.json contains duplicate ${surface} identifiers`);
+  }
 }
 
 for (const [fixtureName, schema, shouldBeValid] of fixtureSpecs) {

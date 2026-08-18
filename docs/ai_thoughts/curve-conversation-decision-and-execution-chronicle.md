@@ -1273,3 +1273,40 @@ implementation packet) remains open and is ready for implementation. M0-07
 (public API/SSE contract package) and the Plane UI/API/SSE engineering work
 remain incomplete until their executable acceptance criteria pass. Neither
 M0-S4 nor M0-07 is complete because of the Definition/UX approval alone.
+### M0-S5 (local audit and observability) codeability contract
+
+While M0-03 (core authorization and policy kernel work package) awaited its
+exact-head decision, the next independent documentation refinement audited
+M0-S5. The earlier four acceptance bullets expressed the intended outcome but
+did not give a coding agent an exact exporter mode, metric/span/log registry,
+attribute-cardinality ceiling, correlation propagation rule, dashboard/alert
+inventory, exporter-failure boundary, or X3M provisioning input contract.
+
+The refinement separates implementation from environment binding. M0-S5A
+(telemetry kernel and static observability assets) uses Plane's pinned
+OpenTelemetry dependencies, defaults to disabled, supports deterministic
+in-memory tests, rejects inherited external endpoints, derives a keyed
+workspace scope, and materializes a bounded metric/span/log plus dashboard and
+alert surface. M0-S5B (X3M local observability integration proof) binds those
+assets to X3M's existing collector, Prometheus datasource, Grafana provisioning,
+and alert route only after OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana
+binding) names the exact configuration and owner.
+
+The fail-closed contract preserves PostgreSQL AuditEvent records as authoritative
+evidence. Telemetry export is a derived operational projection: audit failure
+rolls back protected mutation, while exporter failure cannot change domain or
+audit state. Raw workspace and business identifiers are excluded from metric
+labels, and every metric value belongs to a closed set. Traces and logs use
+allowlisted fields plus an HMAC-derived workspace scope; sentinel leakage tests
+cover success and error paths. Curve explicitly cannot inherit Plane's external
+default telemetry endpoint.
+
+The proposal is recorded in the [M0-S5 observability task packet](../technical/m0-s5-observability-task-packet.md)
+(telemetry kernel, X3M integration proof, tests, evidence, and rollback) and the
+[telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json)
+(fail-closed exporter, bounded metrics, spans, logs, dashboard, alerts, and
+redaction contract). M0-S5A still waits for the implemented M0-03/M0-S3/M0-S4
+dependency chain and exact contract-head approval. M0-S5B additionally waits for
+the owner-approved OBS-BIND-001 record. No collector, dashboard, alert,
+repository implementation, Docker profile, or infrastructure was changed by
+this preparation step.

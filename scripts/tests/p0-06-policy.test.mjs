@@ -17,6 +17,7 @@ import {
 } from "../lib/p0-06-policy.mjs";
 import {
   M0_03_CONTEXT_PATHS,
+  M0_08_CONTEXT_PATHS,
   M0_S3_CONTEXT_PATHS,
   M0_S4_CONTEXT_PATHS,
   contextPathsFor,
@@ -130,6 +131,23 @@ test("M0-S4 context pins the API, SSE, policy, runtime, UX, and implementation c
   assert.equal(new Set(M0_S4_CONTEXT_PATHS).size, M0_S4_CONTEXT_PATHS.length);
   assert.deepEqual(M0_S4_CONTEXT_PATHS, [...M0_S4_CONTEXT_PATHS].sort());
   assert.deepEqual(contextPathsFor("M0-S4"), M0_S4_CONTEXT_PATHS);
+});
+
+test("M0-08 context pins the observability contract, packet, fixtures, and validators", () => {
+  const requiredPaths = [
+    "contracts/observability/m0-s5-telemetry-v1.json",
+    "contracts/schemas/examples/telemetry-manifest.invalid.json",
+    "contracts/schemas/examples/telemetry-manifest.valid.json",
+    "contracts/schemas/telemetry-manifest.schema.json",
+    "docs/technical/m0-s5-observability-task-packet.md",
+    "docs/technical/m0-traceability.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ];
+  for (const path of requiredPaths) assert.ok(M0_08_CONTEXT_PATHS.includes(path), path);
+  assert.equal(new Set(M0_08_CONTEXT_PATHS).size, M0_08_CONTEXT_PATHS.length);
+  assert.deepEqual(M0_08_CONTEXT_PATHS, [...M0_08_CONTEXT_PATHS].sort());
+  assert.deepEqual(contextPathsFor("M0-08"), M0_08_CONTEXT_PATHS);
 });
 
 test("the live P0-06 projection is terminal and points to M0-S3", () => {
