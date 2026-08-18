@@ -18,6 +18,12 @@ The record created through this gate becomes the implementation contract for the
 
 UX-001 through UX-004 may cover several coherent flows. UX-005 is required for each user-facing work package. A material change to the primary task, navigation location, role authorization, state transition, or progressive-disclosure behavior supersedes the affected record and requires a new UX-004/UX-005 disposition before implementation continues.
 
+## Work-package experience records
+
+| Work package | Experience record | Review state | Implementation effect |
+| --- | --- | --- | --- |
+| M0-S4 (API, SSE, and minimal UI implementation packet) | [Foundation probe experience](ux-m0-s4-foundation-probe.md) (clickable local foundation-status flow and screen contract) | `PROPOSED_REVIEW_REQUIRED` | User-facing implementation remains blocked until Federico completes the task review and approves the exact Curve commit. |
+
 ## Experience model
 
 Curve organizes interaction around these user goals:
@@ -103,7 +109,8 @@ The following v1 mockups establish a shared visual direction for the first Curve
 | Projects, roadmaps, and tasks | [Product planning](../design/mockups/curve-planning-v1.png) | Sequence work, identify dependencies, and act on the critical path. |
 | Kanban board | [Delivery board lifecycle](../design/mockups/curve-kanban-delivery-lifecycle-v2.png) | Move work from definition through pre-production, monitored customer rollout, verified use, and closure. |
 | Task details and coding-agent execution | [Task execution](../design/mockups/curve-task-execution-v1.png) | Review progress and evidence, answer a scoped question, and control the run. |
+| M0 local foundation verification | [Foundation probe](../design/mockups/curve-foundation-probe-v1.png) | Run, follow, recover, or cancel the local end-to-end foundation check. |
 
 The set uses a compact, Plane-integrated navigation model: Home, Initiatives, Roadmaps, Execution, Quality, and Evidence. It keeps policy, audit, provider, and runtime detail available in the governing decision context rather than exposing the control-plane topology as primary navigation.
 
-The [Kanban delivery lifecycle](kanban-delivery-lifecycle.md) defines the board columns, status meaning, and progression evidence for this surface.
+The [Kanban delivery lifecycle](kanban-delivery-lifecycle.md) (delivery-board statuses, transition meaning, and progression evidence) defines the board columns, status meaning, and progression evidence for this surface.
