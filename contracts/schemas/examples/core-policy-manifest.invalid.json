@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "policy_key": "CURVE_CORE_POLICY",
+  "policy_version": 1,
+  "default_effect": "ALLOW",
+  "unknown_classification": "INTERNAL",
+  "deny_precedence": [],
+  "actions": []
+}

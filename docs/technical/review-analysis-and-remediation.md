@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Remediation in progress; implementation authority is package-specific |
-| Version | 0.4 |
+| Version | 0.5 |
 | Review date | 2026-08-18 |
 | Reviewed baseline | Curve PRD v0.4; remediation target advanced through Curve PRD v0.8 and the governed technical suite |
 | Audience | Product, engineering, architecture, security, platform operations, legal, and AI coding agents |
@@ -15,7 +15,7 @@
 
 The Curve direction is technically coherent: Plane remains the work-management foundation, Temporal owns durable Curve workflows, Onyx supplies permission-aware knowledge, OpenHands is the first execution provider, and trusted Curve controllers retain all VCS mutation authority. The proposed Loomit SDK Compatibility pilot is a suitable bounded validation scenario.
 
-Readiness is now package-specific. D-001 (Plane upstream foundation decision) is `DECIDED`; M0-S1 (module shell) and M0-S2 (operation and delivery kernel) are implemented and merged. M0-03 (core authorization and policy kernel) is ready for task-packet materialization. Other packages retain their recorded decision and proof blockers, preserving named-owner authority over infrastructure, security, provider, retention, quality, and pilot-contract behavior.
+Readiness is now package-specific. D-001 (Plane upstream foundation decision) is `DECIDED`; M0-S1 (module shell) and M0-S2 (operation and delivery kernel) are implemented and merged. M0-03 (core authorization and policy kernel) has a materialized task packet, relational contract, schemas, and core manifest at `READY_FOR_SECURITY_REVIEW`; Plane implementation waits for Federico Ocampo's exact-head approval and merge. Other packages retain their recorded decision and proof blockers, preserving named-owner authority over infrastructure, security, provider, retention, quality, and pilot-contract behavior.
 
 The remediation objective is therefore:
 
@@ -121,7 +121,10 @@ approved P0-06B (least-privilege Plane integration proof). M0-S1 (module shell)
 and M0-S2 (operation/delivery kernel) completed through their own packet gates;
 their accepted result is recorded in [M0-S2 implementation evidence](m0-s2-implementation-evidence.md)
 (exact contract, implementation, validation, and merge binding). M0-03 (core
-authorization and policy kernel) may now be materialized independently.
+authorization and policy kernel) is materialized independently in the
+[M0-03 core policy task packet](m0-03-core-policy-task-packet.md) (material
+security decisions, exact Plane base, acceptance tests, commands, and rollback)
+and awaits exact-head approval before code dispatch.
 M0-S3 (local Temporal round trip) waits for accepted P0-06B evidence and a
 decided local profile. Protected-object persistence
 and every staging or production activation remain blocked while D-009 is open.

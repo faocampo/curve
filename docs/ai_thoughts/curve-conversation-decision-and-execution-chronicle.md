@@ -954,3 +954,43 @@ proof) evidence and a decided `D-003 (runtime topology and trust-zone
 decision)` local profile. This step remained limited to implementation-evidence
 and governance reconciliation; Temporal, Docker, protected-storage, provider,
 and production work remain assigned to their later packages.
+
+### M0-03 (core authorization and policy kernel) contract materialization
+
+After the M0-S2 (operation and delivery kernel) implementation merged, the next
+independent M0 package was M0-03. GitHub Project #2 already contained one M0-03
+item; its status moved from `Backlog` to `In progress` as visual metadata while
+the contract was prepared. This status did not authorize Plane code.
+
+The existing security texts named the required policy inputs and deny-first
+posture but left implementation-critical gaps: there was no persisted
+policy-decision entity, no exact role/ACL/assignment/separation precedence, no
+immutable action/resource allowlist that a coding agent could byte-pin, and no
+machine binding from ACL, assignment, target, or service authorization context
+to the exact workspace and owning resource/configuration version. Because those
+choices define a tenant-isolation and authorization boundary, they were treated
+as a material security contract requiring Federico Ocampo's exact-head review.
+
+The proposed resolution adds one append-only `PolicyDecision` record and no
+membership, general role-assignment, or object-ACL mirror. Plane remains the
+live authentication and workspace-membership authority. Later aggregate owners
+supply versioned gate assignments and ACL metadata to a pure evaluator. The
+byte-pinned core manifest defaults to deny, rejects agents, exact-matches action,
+resource type, and target identifiers, treats ACLs/allowlists as narrowing
+constraints, maps unknown classification to `RESTRICTED`, enforces risk-tier
+separation, and contains no external-side-effect action. Human evaluations use a
+live Plane membership; services carry no Plane membership and require an exact
+active workspace-scoped authorization with trusted issue/expiry time. Allowed
+mutations bind the exact decision, domain event/outbox, and audit in one
+transaction; denied operations persist only the safe decision and denied audit;
+persistence failure fails closed.
+
+The proposal is recorded in the [M0-03 core policy task packet](../technical/m0-03-core-policy-task-packet.md)
+(exact Plane base, material security decisions, acceptance scenarios, commands,
+stop conditions, and rollback), [M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md)
+(append-only decision persistence, evaluation order, transaction binding,
+migration, and rollback), and machine-validated policy manifest/input/output
+schemas. Plane implementation remains blocked until the exact published Curve
+head is approved and merged. D-003 (runtime topology and trust-zone decision),
+P0-06A (isolated Temporal feasibility proof), and P0-06B (least-privilege Plane
+integration proof) are unchanged by this package.

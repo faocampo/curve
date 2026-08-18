@@ -48,10 +48,14 @@ for (const file of schemaFiles) {
 const invocationSchema = join(root, "contracts/mcp/orca-tools-v1.schema.json");
 const resultSchema = join(root, "contracts/mcp/orca-tool-result-v1.schema.json");
 const p0_06StageProjectionSchema = join(root, "contracts/schemas/p0-06-stage-projection-v2.schema.json");
+const corePolicyManifestSchema = join(root, "contracts/schemas/core-policy-manifest.schema.json");
+const corePolicyManifestPath = join(root, "contracts/policy/core-policy-v1.json");
 const operationSchema = join(root, "contracts/schemas/operation.schema.json");
 const outboxSchema = join(root, "contracts/schemas/outbox-event.schema.json");
 const inboxSchema = join(root, "contracts/schemas/inbox-message.schema.json");
 const idempotencySchema = join(root, "contracts/schemas/idempotency-record.schema.json");
+const policyEvaluationSchema = join(root, "contracts/schemas/policy-evaluation.schema.json");
+const policyDecisionSchema = join(root, "contracts/schemas/policy-decision.schema.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -59,6 +63,7 @@ const fixtureSpecs = [
   ["contracts/mcp/examples/forbidden-tool.invalid.json", invocationSchema, false],
   ["contracts/mcp/examples/forged-actor.invalid.json", invocationSchema, false],
   ["docs/technical/proofs/p0-06-stage-record.json", p0_06StageProjectionSchema, true],
+  ["contracts/policy/core-policy-v1.json", corePolicyManifestSchema, true],
   ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
   ["contracts/schemas/semantic-fixtures/operation-terminal-null.invalid.json", operationSchema, false],
   ["contracts/schemas/semantic-fixtures/outbox-claim.valid.json", outboxSchema, true],
@@ -71,6 +76,10 @@ const fixtureSpecs = [
   ["contracts/schemas/semantic-fixtures/idempotency-completed.valid.json", idempotencySchema, true],
   ["contracts/schemas/semantic-fixtures/idempotency-raw-key.invalid.json", idempotencySchema, false],
   ["contracts/schemas/semantic-fixtures/idempotency-terminal-null.invalid.json", idempotencySchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-service.valid.json", policyEvaluationSchema, true],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-service-membership.invalid.json", policyEvaluationSchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-human-service-auth.invalid.json", policyEvaluationSchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-decision-human-recorder.invalid.json", policyDecisionSchema, false],
 ];
 
 for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".json").sort()) {
@@ -78,6 +87,78 @@ for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".jso
   const match = fixtureName.match(/\/([^/]+)\.(valid|invalid)\.json$/);
   if (!match) throw new Error(`Unexpected schema fixture name: ${fixtureName}`);
   fixtureSpecs.push([fixtureName, join(root, `contracts/schemas/${match[1]}.schema.json`), match[2] === "valid"]);
+}
+
+const corePolicyManifest = JSON.parse(readFileSync(corePolicyManifestPath, "utf8"));
+const expectedCorePolicyDenyPrecedence = [
+  "POLICY_CONTEXT_INVALID",
+  "FEATURE_DISABLED",
+  "UNAUTHENTICATED",
+  "AGENT_NOT_ALLOWED",
+  "WORKSPACE_MISMATCH",
+  "INACTIVE_MEMBERSHIP",
+  "UNKNOWN_ACTION",
+  "RESOURCE_TYPE_NOT_ALLOWED",
+  "RESOURCE_NOT_FOUND",
+  "UNSUPPORTED_PRINCIPAL",
+  "ROLE_NOT_ALLOWED",
+  "ENVIRONMENT_NOT_ALLOWED",
+  "CLASSIFICATION_NOT_ALLOWED",
+  "OBJECT_ACL_REQUIRED",
+  "OBJECT_ACL_DENIED",
+  "ASSIGNMENT_REQUIRED",
+  "ASSIGNMENT_MISMATCH",
+  "SEPARATION_OF_DUTY_DENIED",
+  "TARGET_ALLOWLIST_REQUIRED",
+  "TARGET_NOT_ALLOWED",
+  "SERVICE_AUTHORIZATION_REQUIRED",
+  "SERVICE_AUTHORIZATION_INVALID",
+  "SERVICE_AUTHORIZATION_INACTIVE",
+  "SERVICE_AUTHORIZATION_EXPIRED",
+  "EXTERNAL_EFFECT_NOT_ALLOWED",
+];
+if (
+  JSON.stringify(corePolicyManifest.deny_precedence) !==
+  JSON.stringify(expectedCorePolicyDenyPrecedence)
+) {
+  throw new Error(
+    "contracts/policy/core-policy-v1.json deny precedence differs from immutable v1",
+  );
+}
+const expectedCorePolicyResources = new Map([
+  ["CURVE.SHELL.VIEW", ["WORKSPACE"]],
+  ["CURVE.OPERATION.READ", ["OPERATION"]],
+  ["CURVE.OPERATION.CANCEL", ["OPERATION"]],
+  ["CURVE.FOUNDATION_PROBE.START", ["WORKSPACE"]],
+  ["CURVE.PROVIDER_CONNECTION.ADMINISTER", ["PROVIDER_CONNECTION"]],
+  ["CURVE.GATE.DECIDE.PRD", ["ARTIFACT_VERSION"]],
+  ["CURVE.GATE.DECIDE.PLAN", ["EXECUTION_PLAN"]],
+  ["CURVE.GATE.DECIDE.CODE_READINESS", ["PULL_REQUEST_SET"]],
+  ["CURVE.FINDING.DISPOSITION.NON_SECURITY", ["REVIEW_FINDING"]],
+]);
+const actionNames = corePolicyManifest.actions.map((action) => action.action);
+if (new Set(actionNames).size !== actionNames.length) {
+  throw new Error("contracts/policy/core-policy-v1.json contains duplicate actions");
+}
+if (
+  actionNames.length !== expectedCorePolicyResources.size ||
+  actionNames.some((actionName) => !expectedCorePolicyResources.has(actionName))
+) {
+  throw new Error("contracts/policy/core-policy-v1.json action set differs from immutable v1");
+}
+for (const action of corePolicyManifest.actions) {
+  if (
+    JSON.stringify(action.allowed_resource_types) !==
+    JSON.stringify(expectedCorePolicyResources.get(action.action))
+  ) {
+    throw new Error(`${action.action} resource types differ from immutable v1`);
+  }
+  if (action.allowed_actor_types.includes("AGENT")) {
+    throw new Error(`${action.action} grants authority to AGENT`);
+  }
+  if (action.external_side_effect !== false) {
+    throw new Error(`${action.action} grants an M0 external side effect`);
+  }
 }
 
 for (const [fixtureName, schema, shouldBeValid] of fixtureSpecs) {

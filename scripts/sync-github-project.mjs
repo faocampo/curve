@@ -31,6 +31,23 @@ const initialStatus = new Map([
 const proofStageRecordPaths = new Map([["P0-06", P0_06_STAGE_RECORD_PATH]]);
 const contextPaths = new Map([
   [
+    "M0-03",
+    [
+      "contracts/database/m0-03-policy-contract.md",
+      "contracts/policy/core-policy-v1.json",
+      "contracts/schemas/core-policy-manifest.schema.json",
+      "contracts/schemas/policy-decision.schema.json",
+      "contracts/schemas/policy-evaluation.schema.json",
+      "docs/curve-ai-native-sdlc-prd.md",
+      "docs/technical/architecture.md",
+      "docs/technical/domain-model.md",
+      "docs/technical/m0-03-core-policy-task-packet.md",
+      "docs/technical/m0-authorization-and-state-matrices.md",
+      "docs/technical/m0-s2-implementation-evidence.md",
+      "docs/technical/security-and-operations.md",
+    ],
+  ],
+  [
     "P0-06",
     [
       "contracts/temporal/m0-workflow-contract.md",
