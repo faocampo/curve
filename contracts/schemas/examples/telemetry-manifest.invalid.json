@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "manifest_key": "CURVE_M0_TELEMETRY",
+  "manifest_version": 1,
+  "default_mode": "OTLP",
+  "allowed_modes": ["DISABLED", "IN_MEMORY_TEST", "OTLP"],
+  "configuration": {
+    "mode_env": "CURVE_TELEMETRY_MODE",
+    "endpoint_env": "OTEL_EXPORTER_OTLP_ENDPOINT",
+    "protocol_env": "OTEL_EXPORTER_OTLP_PROTOCOL",
+    "headers_env": "OTEL_EXPORTER_OTLP_HEADERS",
+    "insecure_env": "OTEL_EXPORTER_OTLP_INSECURE",
+    "workspace_scope_key_env": "CURVE_TELEMETRY_SCOPE_HMAC_KEY",
+    "workspace_scope_key_id_env": "CURVE_TELEMETRY_SCOPE_KEY_ID",
+    "explicit_endpoint_required": false,
+    "external_default_endpoint_allowed": true,
+    "insecure_allowed_environment": "PRODUCTION"
+  },
+  "correlation": {
+    "application_field": "correlation_id",
+    "trace_headers": ["traceparent", "tracestate"],
+    "workspace_scope_algorithm": "HMAC-SHA256",
+    "workspace_scope_domain": "curve-workspace-scope:v1",
+    "metric_identifiers_allowed": true,
+    "audit_bridge_fields": ["workspace_id", "correlation_id", "target_ref", "policy_decision_ref"]
+  },
+  "attribute_policy": {
+    "trace_allowlist": ["curve.secret"],
+    "log_allowlist": ["curve.secret"],
+    "forbidden_name_patterns": ["secret"],
+    "forbidden_value_classes": ["CREDENTIAL"]
+  },
+  "metric_attributes": [
+    {
+      "name": "curve.operation.id",
+      "allowed_values": ["ANY"]
+    }
+  ],
+  "metrics": [],
+  "spans": [],
+  "logs": {
+    "required_fields": ["curve.secret"],
+    "event_codes": ["CURVE_SECRET_LEAK"]
+  },
+  "dashboard": {
+    "implementation_path": "dashboard.json",
+    "datasource_variable": "PROMETHEUS",
+    "panels": []
+  },
+  "alerts": {
+    "implementation_path": "alerts.yaml",
+    "rules": []
+  }
+}
