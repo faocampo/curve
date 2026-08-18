@@ -58,6 +58,28 @@ Federico Ocampo's exact-head approval accepts these implementation choices:
    operation closed.
 6. Provider-specific adapters and external-side-effect rules remain gated by
    their consuming ADRs and are outside this packet.
+7. `CURVE_ENVIRONMENT` and `CURVE_POLICY_RECORDER_ACTOR_ID` are required trusted
+   process configuration whenever Curve is enabled. They have no permissive
+   default, cannot be supplied by a request, and invalid or absent values fail
+   policy evaluation closed before resource projection.
+8. Current M0 runtime metadata has one exact source: Workspace and synthetic
+   foundation-probe resources are `INTERNAL`; an Operation is `INTERNAL` until a
+   later reviewed aggregate contract adds persisted classification; Workspace
+   ownership comes from `Workspace.owner_id`; Operation ownership comes from
+   its validated `created_by`; Operation version comes from
+   `aggregate_version`. Unmaterialized resource types have no runtime resolver
+   and therefore cannot be authorized by M0-03.
+9. Query authorization and mutation authorization use separate enforcement
+   functions. A query persists its decision and one linked query audit before
+   returning a named projection. An allowed mutation persists its decision,
+   domain mutation, event/outbox, and linked result audit in one transaction.
+   A permission class cannot pre-commit an allowed mutation decision.
+10. Existing Operation mutation primitives become internal implementation
+    functions. The only public Curve mutation entry points require an opaque,
+    immutable in-process authorization receipt produced by the approved policy
+    service for the exact action, workspace, resource, version, and transaction.
+    Caller dictionaries, model instances, and serialized policy output cannot
+    manufacture that receipt.
 
 ## Governed inputs
 
@@ -130,6 +152,11 @@ requires a new digest and review disposition.
    endpoint or non-Curve authorization change is allowed.
 8. Unit, contract, database, migration, workspace-isolation, no-leakage, and
    forced-failure tests.
+9. Trusted configuration parsing for exact Curve environment and recorder
+   identity, with enabled-and-unconfigured startup/evaluation denial.
+10. A single query-authorization service and a single mutation-authorization
+    transaction wrapper, plus a private Operation mutation adapter that rejects
+    direct or forged authorization receipts.
 
 ### Out of scope
 
@@ -158,6 +185,76 @@ The implementation separates:
 4. workspace-scoped metadata lookup;
 5. decision persistence/audit transaction service;
 6. request/domain adapters.
+
+### Trusted runtime sources
+
+The policy context builder reads only these process-owned sources:
+
+| Policy input | M0-03 authoritative source | Fail-closed behavior |
+| --- | --- | --- |
+| Environment | Required `CURVE_ENVIRONMENT`, exactly `LOCAL`, `STAGING`, or `PRODUCTION` | Missing, empty, or unknown value produces `POLICY_CONTEXT_INVALID`; no `DEBUG`, hostname, branch, or request-header inference |
+| Recorder identity | Required `CURVE_POLICY_RECORDER_ACTOR_ID`; adapter constructs `SERVICE` ActorRef and callers cannot override it | Missing/empty value prevents decision persistence and protected action |
+| Trusted evaluation time | One timezone-aware UTC `timezone.now()` read by the request/controller adapter before pure evaluation | Naive, caller-provided, or changed-during-evaluation time is invalid |
+| Feature state | `CURVE_ENABLED` plus exact workspace-slug allowlist from the existing Curve configuration | Unknown workspace or absent allowlist entry denies without resource projection |
+| Human identity | Authenticated Plane `User.id` | Anonymous or inactive user denies; request fields cannot replace it |
+| Membership | Live active `WorkspaceMember` for exact `(workspace_id, user_id)` | Missing/inactive membership denies; Plane role 20/15/5 maps only to membership metadata and always resolves the single M0 role `WORKSPACE_MEMBER` |
+| Workspace metadata | Plane `Workspace` selected by requested slug/id; owner is `HUMAN` ActorRef from `owner_id`; class is `INTERNAL` | Global child lookup and request-supplied owner/class are prohibited |
+| Operation metadata | Curve `Operation` selected by `(workspace_id, operation_id)`; owner is validated `created_by`; version is `aggregate_version`; M0 class is `INTERNAL` | Missing/cross-workspace resource is non-disclosing; caller-supplied owner/version/class is prohibited |
+| Manifest | Fixed packaged v1 bytes and byte digest | Missing or digest mismatch disables the policy service |
+
+The recorder actor ID is a non-secret stable deployment identifier, not an
+authentication claim. Human/service authentication and service-authorization
+validation remain separate. The API and future Temporal worker use distinct
+recorder IDs when they are distinct processes.
+
+Only `WORKSPACE` and `OPERATION` have runtime metadata resolvers in M0-03.
+Manifest entries for later aggregates are a permission ceiling and testable
+policy vocabulary; their runtime evaluation returns `RESOURCE_NOT_FOUND` until
+their owning package supplies a reviewed versioned resolver. Adding persisted
+classification to Operation or enabling a non-`INTERNAL` M0 resource requires
+a new contract version and migration review.
+
+### Enforcement API and transaction ownership
+
+The implementation exposes two policy-owned orchestration paths:
+
+1. `authorize_query` builds trusted context, evaluates once, and in one short
+   transaction inserts the immutable `PolicyDecision` plus exactly one linked
+   `AuditEvent` with `ALLOWED` or `DENIED`. It returns an immutable named
+   projection receipt only for `ALLOW`. The request caches that receipt by
+   `(action, workspace_id, resource_ref, resource_version)` so repeated DRF
+   permission/object checks cannot append duplicate decisions.
+2. `execute_authorized_mutation` opens the transaction, locks the exact
+   workspace-scoped aggregate where applicable, builds/revalidates trusted
+   context, evaluates once, inserts `PolicyDecision`, and either records one
+   linked denied audit with no mutation or invokes a private mutation callback.
+   The callback receives an opaque `AuthorizedPolicyReceipt`; it applies the
+   domain change and appends the linked DomainEvent/outbox/audit before commit.
+
+The receipt is process-local, immutable, constructed only inside the policy
+module, and binds decision ID, manifest digest/version, action, workspace,
+resource ref/version, effect, projection, evaluated time, and active database
+transaction. Reusing it after the transaction, for another action/resource/
+version, or after an aggregate change fails closed. Serialized policy decisions,
+request JSON, and plain mappings are never accepted as receipts.
+The wrapper stores the exact receipt identity in a module-private `ContextVar`
+only for the callback lifetime; private mutation adapters require object-identity
+equality with that active value plus an active Django atomic block. The context
+is reset in `finally`, including callback failure and nested-savepoint paths.
+
+`CurveCorePolicyPermission` uses `authorize_query` for the current shell read.
+It may derive identity and membership for a later mutation view but cannot
+persist an allowed mutation decision. Future M0-S4 (API, SSE, and minimal
+approved UI packet) mutation views must call `execute_authorized_mutation`.
+`create_operation` and `transition_operation` are moved behind private adapters;
+tests prove imports/calls that omit the exact receipt cannot mutate state.
+
+For an allowed mutation that later fails an optimistic-version or state guard,
+the same transaction retains the `ALLOW` policy decision and one linked
+`NO_EFFECT` audit while applying no domain/event/outbox change. A database error
+while recording any required decision/audit rolls the complete transaction
+back. An allowed query that later encounters an internal rendering error retains
+its already committed authorization audit and exposes no protected error detail.
 
 The protected boundary maps the current shell and operation services to exact
 actions: shell read to `CURVE.SHELL.VIEW`, local probe creation to
@@ -275,6 +372,32 @@ other route.
 28. **Regression.** Given Curve disabled and enabled, when the complete Plane
     backend suite and repository checks run, then there is no repository-native
     regression.
+29. **Trusted configuration.** Given enabled Curve with missing/unknown
+    `CURVE_ENVIRONMENT` or missing `CURVE_POLICY_RECORDER_ACTOR_ID`, when a
+    protected query or mutation is attempted, then it fails closed before body
+    projection/mutation and records no falsely attributed decision. Given valid
+    settings, request/header/body values cannot override them.
+30. **Current resource authority.** Given Workspace or Operation context, when
+    policy input is built, then owner, version, membership, feature state, and
+    fixed M0 `INTERNAL` classification come only from the named authoritative
+    records. Given a later unmaterialized resource type, runtime authorization
+    cannot succeed even if its manifest action and caller-supplied metadata look
+    valid.
+31. **Single query decision.** Given DRF invokes permission checks more than
+    once for one shell request, when the request completes or denies, then one
+    `PolicyDecision` and one linked query `AuditEvent` exist, and the view can
+    receive only the permitted named projection.
+32. **Atomic mutation authorization.** Given an allowed Operation create or
+    transition, when the private callback succeeds, then decision, mutation,
+    DomainEvent/outbox, and linked result audit commit together. Given denial or
+    persistence failure, none of the protected mutation records commit. Given a
+    post-authorization state/version failure, the allowed decision and one
+    linked `NO_EFFECT` audit commit with no domain/event/outbox change.
+33. **Bypass resistance.** Given direct calls to the prior Operation mutation
+    functions, a plain mapping/model/serialized decision, an expired receipt, a
+    receipt from another transaction, action, workspace, resource, or version,
+    or a forged receipt-like object, when mutation is attempted, then it fails
+    before database change and leaves no orphan decision/audit.
 
 ## Required commands
 
@@ -320,6 +443,12 @@ The coding agent stops before mutation when:
 - the manifest, schema, or relational contract conflicts;
 - implementation would require changing Plane membership semantics or a
   non-Curve route;
+- enabled execution lacks exact trusted `CURVE_ENVIRONMENT` or
+  `CURVE_POLICY_RECORDER_ACTOR_ID` configuration, or code infers either value;
+- a runtime resolver would authorize a resource type other than current M0
+  `WORKSPACE` or `OPERATION`, or would accept caller-owned authority metadata;
+- a public/direct mutation path can execute without the policy module's exact
+  transaction-bound receipt;
 - implementation requires provider, network side effect, protected storage, or
   unresolved D-003/D-007/D-009 behavior;
 - a test requires real X3M data or credentials;

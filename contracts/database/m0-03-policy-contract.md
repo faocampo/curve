@@ -106,6 +106,26 @@ the authoritative producer below:
 | `evaluated_at` | Trusted Curve request/controller clock | Required UTC instant included in the canonical input; the pure evaluator performs no clock read and returns this exact value in `PolicyDecision`. |
 | manifest digest | Byte-pinned contract copy | Must equal the runtime manifest bytes before serving Curve traffic. |
 
+### M0 runtime authority map
+
+The context builder admits only these current runtime bindings:
+
+| Runtime value | Authoritative binding |
+| --- | --- |
+| Environment | Required process-owned `CURVE_ENVIRONMENT` with exact `LOCAL`, `STAGING`, or `PRODUCTION`; missing/unknown denies, and no request/hostname/`DEBUG` inference exists. |
+| Recorder | Required process-owned `CURVE_POLICY_RECORDER_ACTOR_ID`; persistence constructs a `SERVICE` ActorRef from it and never accepts recorder data from the evaluation input or request. |
+| Evaluation instant | One aware UTC time read by the trusted adapter and supplied unchanged to the pure evaluator and result. |
+| Workspace | Plane `Workspace` resolved by requested slug/id; owner is the `HUMAN` ActorRef for `owner_id`; M0 classification is `INTERNAL`. |
+| Membership | Live active Plane `WorkspaceMember` for exact workspace/user; numeric Plane roles 20, 15, and 5 map to `ADMIN`, `MEMBER`, and `GUEST` metadata respectively, while the only M0 authorization role they grant is `WORKSPACE_MEMBER`. |
+| Operation | Curve `Operation` queried by `(workspace_id, id)`; owner is validated `created_by`, version is `aggregate_version`, and M0 classification is `INTERNAL`. |
+
+`WORKSPACE` and `OPERATION` are the only runtime resource resolvers in M0-03.
+Other types in the manifest are inactive permission-ceiling declarations until
+their owning package supplies a versioned resolver. A request cannot activate
+them by supplying resource, ACL, assignment, classification, target, or service
+metadata. Adding stored Operation classification or authorizing a current M0
+resource above `INTERNAL` requires a reviewed contract/migration change.
+
 ## Deterministic decision order
 
 Evaluation is pure and follows the manifest's ordered fail-closed predicates:
@@ -199,6 +219,67 @@ workspace that has no workspace UUID cannot create a workspace-scoped row; it
 emits only the existing redacted authentication/security signal with the request
 correlation ID.
 
+## Enforcement API and receipt contract
+
+Policy owns two orchestration functions rather than exposing a reusable boolean
+check:
+
+### Query authorization
+
+`authorize_query` resolves trusted context, evaluates exactly once, and in one
+transaction inserts the immutable decision plus one linked query audit. `ALLOW`
+uses audit outcome `ALLOWED`; every denial uses `DENIED`. Only then may the
+caller load the manifest-named projection. A request-local cache keyed by exact
+action/workspace/resource/version reuses the immutable result when DRF invokes
+permission/object checks repeatedly, so one request cannot append duplicate
+decisions.
+
+The cache is not a cross-request authorization cache. It stores no protected
+body, expires with the request, and cannot be used after an aggregate version or
+trusted context change.
+
+### Mutation authorization
+
+`execute_authorized_mutation` owns the outer PostgreSQL transaction. It locks
+current workspace-scoped metadata where applicable, rebuilds trusted context,
+evaluates once, inserts `PolicyDecision`, and then follows exactly one branch:
+
+- `DENY`: append one linked `DENIED` audit and commit no domain/event/outbox
+  mutation.
+- `ALLOW`: construct an opaque process-local `AuthorizedPolicyReceipt`, invoke
+  one private mutation callback, and append the callback's exact linked result
+  audit before committing decision/domain/event/outbox/audit together.
+- Allowed policy plus stale version/invalid domain transition: apply no domain
+  change, append one linked `NO_EFFECT` audit, and commit the decision/audit pair.
+- Any required persistence error: roll the whole transaction back and return a
+  stable safe failure.
+
+The receipt binds decision ID, policy version/digest, action, workspace,
+resource ref/version, effect, permitted projection, evaluated instant, and the
+active database transaction. Its constructor is private to the policy module.
+It cannot be serialized, accepted from JSON, reconstructed from a
+`PolicyDecision`, reused after transaction completion, or applied to another
+action/workspace/resource/version. Mutation adapters validate all bindings
+before touching state.
+
+The implementation holds the exact active receipt identity in a module-private
+`ContextVar` only during the callback and requires both identity equality and an
+active Django atomic block. A `finally` reset fences callback failure, nested
+savepoints, task reuse, and later calls. This is an in-process trusted-code
+capability boundary; external callers and request/provider/model data never
+obtain a constructor or serialization format.
+
+Existing Operation primitives are moved behind private callbacks. The public
+Curve service surface offers only policy-orchestrated create/transition/cancel
+entry points. A direct import/call, mapping, model instance, serialized decision,
+expired receipt, or receipt-like object cannot execute a mutation. Unit and
+module-boundary tests enforce that contract.
+
+The current `CurveCorePolicyPermission` applies only the query path for the
+workspace shell. A future mutation view may derive request identity in DRF but
+must delegate transaction ownership to `execute_authorized_mutation`; it cannot
+pre-persist an allowed decision in `has_permission`.
+
 ## Transactions and audit binding
 
 For an allowed mutation, one PostgreSQL transaction must:
@@ -287,3 +368,18 @@ backup, legal-hold, tombstone, and erasure policy).
 13. `CURVE.OPERATION.TRANSITION` allows only an exactly authorized
     `TRUSTED_SERVICE` and still defers aggregate-version/state validity to the
     Operation transition guard.
+14. Missing/unknown `CURVE_ENVIRONMENT` or missing recorder identity fails
+    closed; request data cannot override process-owned environment, recorder, or
+    trusted time.
+15. Workspace/Operation ownership, membership, version, and fixed M0
+    classification come only from their named authoritative records; every
+    unmaterialized resource type is runtime-ineligible.
+16. Repeated permission checks for one query append one decision/audit pair;
+    separate requests re-evaluate live membership, feature state, and resource
+    version.
+17. Allowed mutation decision, domain change, event/outbox, and linked audit are
+    atomic; domain version/state rejection produces only the linked decision and
+    `NO_EFFECT` audit.
+18. Direct Operation mutation calls and forged, serialized, cross-transaction,
+    cross-action, cross-workspace, cross-resource, or stale authorization
+    receipts fail before mutation.

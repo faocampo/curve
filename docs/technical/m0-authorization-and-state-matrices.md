@@ -77,6 +77,23 @@ cannot decide a gate, grant a waiver, reclassify a finding, or become a human
 assignment. M0-03 implements the role vocabulary/resolver boundary; later
 packages persist their own assignments.
 
+## Trusted M0 runtime sources
+
+| Context | Exact source and current limit |
+| --- | --- |
+| Environment | Required process configuration `CURVE_ENVIRONMENT`; no default or inference; missing/unknown denies |
+| Policy recorder | Required process configuration `CURVE_POLICY_RECORDER_ACTOR_ID`; converted to trusted `SERVICE` ActorRef outside caller input |
+| Evaluation time | One aware UTC time from the trusted request/controller adapter; the evaluator reads no clock |
+| Feature state | Existing global Curve enablement plus exact workspace-slug allowlist |
+| Human/membership | Plane authentication and live active membership for exact workspace; Plane 20/15/5 remains membership metadata and grants only `WORKSPACE_MEMBER` |
+| Workspace metadata | Exact Plane Workspace; owner from `owner_id`; M0 classification `INTERNAL` |
+| Operation metadata | `(workspace_id, operation_id)` only; owner from validated `created_by`; version from `aggregate_version`; M0 classification `INTERNAL` |
+| Other resource types | No M0 runtime resolver; manifest entries remain inactive permission ceilings until their owning package supplies a reviewed resolver |
+
+Requests, query parameters, headers, providers, models, tools, and retrieved text
+cannot supply or override any source above. Persisted Operation classification
+or a non-`INTERNAL` M0 resource requires a later reviewed contract and migration.
+
 ## Core action matrix
 
 The exact machine-readable values live in the
@@ -157,6 +174,20 @@ exception.
 | Known in-workspace role/ACL denial | Safe metadata only | Deny | Stable `403` | Immutable decision plus denied audit |
 | Allowed but stale aggregate version | Safe metadata and decision | No mutation | `412` | Decision plus no-effect audit |
 | Allowed/current | Named projection or command only | Allow | Action-specific success | Decision linked from mutation audit |
+
+## Enforcement path matrix
+
+| Path | Decision transaction | Allowed behavior | Denied or domain-invalid behavior |
+| --- | --- | --- | --- |
+| Query | `authorize_query` evaluates once and inserts decision plus one linked query audit; request-local exact-key cache prevents duplicate DRF checks | Return only the manifest-named projection receipt, then load that safe projection | Stable non-disclosing response; one `DENIED` decision/audit pair; no protected body |
+| Mutation | `execute_authorized_mutation` owns the outer transaction and creates a private transaction-bound receipt only after `ALLOW` | Decision, domain change, DomainEvent/outbox, and linked result audit commit together | Policy denial commits only one `DENIED` decision/audit; stale version/state commits only allowed decision plus linked `NO_EFFECT` audit; persistence error rolls back all |
+| Direct primitive call | No valid policy-owned transaction receipt | No behavior | Reject before state access/mutation; mappings, models, serialized decisions, expired/cross-context/forged receipts are invalid |
+
+`CurveCorePolicyPermission` uses the query path for the current workspace shell.
+A DRF mutation permission may resolve identity but cannot pre-commit an allowed
+decision; the domain service must own the mutation transaction. Existing
+Operation create/transition primitives become private callbacks reachable only
+through the policy orchestration service.
 
 ## Decision and audit persistence
 
