@@ -15,7 +15,7 @@ import {
   validateP0_06AReadyPristineState,
   validateSingleApplyRequest,
 } from "../lib/p0-06-policy.mjs";
-import { M0_03_CONTEXT_PATHS, digestContextEntries } from "../lib/context-pack.mjs";
+import { M0_03_CONTEXT_PATHS, M0_08_CONTEXT_PATHS, digestContextEntries } from "../lib/context-pack.mjs";
 
 const STAGE_RECORD = JSON.parse(
   readFileSync(new URL("../../docs/technical/proofs/p0-06-stage-record.json", import.meta.url), "utf8"),
@@ -63,6 +63,22 @@ test("M0-03 context pins every policy contract fixture and its deterministic dig
     { path: "a", contents: Buffer.from("two") },
   ]), /unique/);
   assert.throws(() => digestContextEntries([{ path: "a", contents: "one" }]), /Buffer/);
+});
+
+test("M0-08 context pins the observability contract, packet, fixtures, and validators", () => {
+  const requiredPaths = [
+    "contracts/observability/m0-s5-telemetry-v1.json",
+    "contracts/schemas/examples/telemetry-manifest.invalid.json",
+    "contracts/schemas/examples/telemetry-manifest.valid.json",
+    "contracts/schemas/telemetry-manifest.schema.json",
+    "docs/technical/m0-s5-observability-task-packet.md",
+    "docs/technical/m0-traceability.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ];
+  for (const path of requiredPaths) assert.ok(M0_08_CONTEXT_PATHS.includes(path), path);
+  assert.equal(new Set(M0_08_CONTEXT_PATHS).size, M0_08_CONTEXT_PATHS.length);
+  assert.deepEqual(M0_08_CONTEXT_PATHS, [...M0_08_CONTEXT_PATHS].sort());
 });
 
 test("pristine claim and review contracts exactly match the current P0-06A projection", () => {

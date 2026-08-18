@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Status | Active readiness control; D-001 (Plane upstream foundation decision) merged; D-003 (runtime topology and trust-zone decision) two-stage local proof direction approved and both executions gated; remaining scoped approvals pending |
-| Version | 1.8 |
+| Version | 1.9 |
 | Date | 2026-08-18 |
 | Normative product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
@@ -69,7 +69,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | M0-S2 local operation/delivery packet | DONE | Contract revision `ab2c81a...`, context digest `sha256:45c266e1...`, approved implementation head `f520075...`, and Plane merge `eff8686a...` are bound in [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) (post-merge acceptance record). |
 | M0-06 Temporal skeleton | BLOCKED | Requires M0-05, accepted P0-06B integration evidence, and a decided D-003 local profile. |
 | M0-07 API/SSE | BLOCKED | M0-02 and M0-05 are satisfied; M0-03 remains required. |
-| M0-08 audit/observability | BLOCKED | Requires the implemented M0 foundation packages. |
+| M0-08 audit/observability | READY_FOR_PLATFORM_BINDING_REVIEW | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) and [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboard, and alerts) are materialized. M0-S5A waits for M0-03/M0-S3/M0-S4 implementation and exact contract-head approval. M0-S5B additionally waits for OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding). |
 | M0-09 provider registry | BLOCKED | M0-05 is satisfied; M0-03, M0-07, and D-007 remain required before MCP enablement. |
 
 ## Interim repository-governance configuration

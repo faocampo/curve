@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "manifest_key": "CURVE_M0_TELEMETRY",
+  "manifest_version": 1,
+  "default_mode": "DISABLED",
+  "allowed_modes": ["DISABLED", "IN_MEMORY_TEST", "OTLP"],
+  "configuration": {
+    "mode_env": "CURVE_TELEMETRY_MODE",
+    "endpoint_env": "OTEL_EXPORTER_OTLP_ENDPOINT",
+    "protocol_env": "OTEL_EXPORTER_OTLP_PROTOCOL",
+    "headers_env": "OTEL_EXPORTER_OTLP_HEADERS",
+    "insecure_env": "OTEL_EXPORTER_OTLP_INSECURE",
+    "workspace_scope_key_env": "CURVE_TELEMETRY_SCOPE_HMAC_KEY",
+    "workspace_scope_key_id_env": "CURVE_TELEMETRY_SCOPE_KEY_ID",
+    "explicit_endpoint_required": true,
+    "external_default_endpoint_allowed": false,
+    "insecure_allowed_environment": "LOCAL"
+  },
+  "correlation": {
+    "application_field": "correlation_id",
+    "trace_headers": ["traceparent", "tracestate"],
+    "workspace_scope_algorithm": "HMAC-SHA256",
+    "workspace_scope_domain": "curve-workspace-scope:v1",
+    "metric_identifiers_allowed": false,
+    "audit_bridge_fields": ["workspace_id", "correlation_id", "target_ref", "policy_decision_ref"]
+  },
+  "attribute_policy": {
+    "trace_allowlist": ["curve.correlation_id"],
+    "log_allowlist": ["curve.correlation_id"],
+    "forbidden_name_patterns": ["secret"],
+    "forbidden_value_classes": ["CREDENTIAL"]
+  },
+  "metric_attributes": [
+    {
+      "name": "curve.component",
+      "allowed_values": ["API"]
+    }
+  ],
+  "metrics": [
+    {
+      "name": "curve.operation.started",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "Accepted operations.",
+      "allowed_attributes": ["curve.component"]
+    }
+  ],
+  "spans": [
+    {
+      "name": "curve.http.command",
+      "kind": "SERVER",
+      "allowed_attributes": ["curve.correlation_id"]
+    }
+  ],
+  "logs": {
+    "required_fields": ["curve.correlation_id"],
+    "event_codes": ["CURVE_COMMAND_ACCEPTED"]
+  },
+  "dashboard": {
+    "implementation_path": "apps/api/plane/curve/observability/grafana/curve-m0-dashboard.json",
+    "datasource_variable": "DS_PROMETHEUS",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Operation throughput",
+        "query": "sum(rate(curve_operation_started_total[5m]))"
+      }
+    ]
+  },
+  "alerts": {
+    "implementation_path": "apps/api/plane/curve/observability/prometheus/curve-m0-alerts.yaml",
+    "rules": [
+      {
+        "id": "CURVE_OPERATION_STUCK",
+        "severity": "WARNING",
+        "expression": "curve_operation_started_total > 0",
+        "for": "5m",
+        "summary": "A test alert."
+      }
+    ]
+  }
+}

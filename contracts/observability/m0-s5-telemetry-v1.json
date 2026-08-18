@@ -1,0 +1,435 @@
+{
+  "schema_version": "1.0",
+  "manifest_key": "CURVE_M0_TELEMETRY",
+  "manifest_version": 1,
+  "default_mode": "DISABLED",
+  "allowed_modes": ["DISABLED", "IN_MEMORY_TEST", "OTLP"],
+  "configuration": {
+    "mode_env": "CURVE_TELEMETRY_MODE",
+    "endpoint_env": "OTEL_EXPORTER_OTLP_ENDPOINT",
+    "protocol_env": "OTEL_EXPORTER_OTLP_PROTOCOL",
+    "headers_env": "OTEL_EXPORTER_OTLP_HEADERS",
+    "insecure_env": "OTEL_EXPORTER_OTLP_INSECURE",
+    "workspace_scope_key_env": "CURVE_TELEMETRY_SCOPE_HMAC_KEY",
+    "workspace_scope_key_id_env": "CURVE_TELEMETRY_SCOPE_KEY_ID",
+    "explicit_endpoint_required": true,
+    "external_default_endpoint_allowed": false,
+    "insecure_allowed_environment": "LOCAL"
+  },
+  "correlation": {
+    "application_field": "correlation_id",
+    "trace_headers": ["traceparent", "tracestate"],
+    "workspace_scope_algorithm": "HMAC-SHA256",
+    "workspace_scope_domain": "curve-workspace-scope:v1",
+    "metric_identifiers_allowed": false,
+    "audit_bridge_fields": ["workspace_id", "correlation_id", "target_ref", "policy_decision_ref"]
+  },
+  "attribute_policy": {
+    "trace_allowlist": [
+      "curve.activity.type",
+      "curve.cancel.requested",
+      "curve.command.type",
+      "curve.component",
+      "curve.correlation_id",
+      "curve.error.code",
+      "curve.event.id",
+      "curve.operation.id",
+      "curve.operation.status",
+      "curve.operation.type",
+      "curve.outbox.destination_kind",
+      "curve.outbox.state",
+      "curve.replayed",
+      "curve.result",
+      "curve.retry.attempt",
+      "curve.telemetry.scope_key_id",
+      "curve.workflow.id",
+      "curve.workflow.type",
+      "curve.workspace.scope"
+    ],
+    "log_allowlist": [
+      "curve.activity.type",
+      "curve.command.type",
+      "curve.component",
+      "curve.correlation_id",
+      "curve.error.code",
+      "curve.event.code",
+      "curve.event.id",
+      "curve.operation.id",
+      "curve.operation.status",
+      "curve.operation.type",
+      "curve.outbox.destination_kind",
+      "curve.outbox.state",
+      "curve.replayed",
+      "curve.result",
+      "curve.retry.attempt",
+      "curve.telemetry.scope_key_id",
+      "curve.workflow.id",
+      "curve.workflow.type",
+      "curve.workspace.scope",
+      "log.level",
+      "span.id",
+      "trace.id"
+    ],
+    "forbidden_name_patterns": [
+      "(authorization|cookie|credential|evidence|idempotency_key|password|patch|prompt|request_body|response_body|secret|source_code|token|tool_output)"
+    ],
+    "forbidden_value_classes": [
+      "CREDENTIAL",
+      "EVIDENCE_BODY",
+      "MODEL_INPUT",
+      "MODEL_OUTPUT",
+      "PATCH_OR_SOURCE",
+      "PROTECTED_OBJECT_BODY",
+      "RAW_IDEMPOTENCY_KEY",
+      "REQUEST_OR_RESPONSE_BODY",
+      "TOOL_OUTPUT"
+    ]
+  },
+  "metric_attributes": [
+    {
+      "name": "curve.activity.type",
+      "allowed_values": ["COMPLETE_PROBE", "START_PROBE", "TRANSITION_OPERATION"]
+    },
+    {
+      "name": "curve.component",
+      "allowed_values": ["API", "AUDIT", "OUTBOX_RELAY", "SSE", "TELEMETRY", "TEMPORAL_WORKER"]
+    },
+    {
+      "name": "curve.error.code",
+      "allowed_values": [
+        "CURVE_AUDIT_APPEND_FAILED",
+        "CURVE_INVALID_COMMAND",
+        "CURVE_INVALID_OPERATION_TRANSITION",
+        "CURVE_OPTIMISTIC_CONCURRENCY",
+        "CURVE_POLICY_DENIED",
+        "CURVE_TELEMETRY_EXPORT_FAILED",
+        "CURVE_TEMPORAL_UNAVAILABLE",
+        "NONE"
+      ]
+    },
+    {
+      "name": "curve.operation.status",
+      "allowed_values": [
+        "CANCELLED",
+        "CANCEL_REQUESTED",
+        "FAILED",
+        "PENDING",
+        "QUEUED",
+        "RUNNING",
+        "SUCCEEDED",
+        "WAITING_FOR_HUMAN"
+      ]
+    },
+    {
+      "name": "curve.operation.type",
+      "allowed_values": ["FOUNDATION_PROBE", "PROVIDER_RECONCILIATION", "WORKFLOW_COMMAND"]
+    },
+    {
+      "name": "curve.outbox.destination_kind",
+      "allowed_values": ["CURVE_LOCAL", "TEMPORAL"]
+    },
+    {
+      "name": "curve.outbox.state",
+      "allowed_values": ["CLAIMED", "DEAD_LETTER", "DELIVERED", "PENDING", "RETRY_SCHEDULED"]
+    },
+    {
+      "name": "curve.result",
+      "allowed_values": ["CANCELLED", "DENIED", "FAILED", "REPLAYED", "RETRIED", "SUCCEEDED"]
+    },
+    {
+      "name": "curve.workflow.type",
+      "allowed_values": ["FOUNDATION_PROBE_V1"]
+    }
+  ],
+  "metrics": [
+    {
+      "name": "curve.operation.started",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "Accepted non-replayed Curve operations.",
+      "allowed_attributes": ["curve.component", "curve.operation.type"]
+    },
+    {
+      "name": "curve.operation.completed",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "Curve operations reaching an allowed terminal result.",
+      "allowed_attributes": ["curve.component", "curve.operation.type", "curve.result"]
+    },
+    {
+      "name": "curve.operation.duration",
+      "instrument": "HISTOGRAM",
+      "unit": "s",
+      "description": "Elapsed time from accepted operation creation to terminal state.",
+      "allowed_attributes": ["curve.component", "curve.operation.type", "curve.result"],
+      "boundaries": [0.1, 0.25, 0.5, 1, 2.5, 5, 10, 30, 60, 120, 300]
+    },
+    {
+      "name": "curve.outbox.delivery",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "Outbox delivery attempts and terminal outcomes.",
+      "allowed_attributes": ["curve.component", "curve.outbox.destination_kind", "curve.result"]
+    },
+    {
+      "name": "curve.outbox.backlog",
+      "instrument": "GAUGE",
+      "unit": "1",
+      "description": "Current outbox rows by bounded lifecycle state.",
+      "allowed_attributes": ["curve.component", "curve.outbox.state"]
+    },
+    {
+      "name": "curve.outbox.oldest_age",
+      "instrument": "GAUGE",
+      "unit": "s",
+      "description": "Age of the oldest deliverable outbox row.",
+      "allowed_attributes": ["curve.component"]
+    },
+    {
+      "name": "curve.workflow.completed",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "Temporal workflow terminal outcomes.",
+      "allowed_attributes": ["curve.component", "curve.workflow.type", "curve.result"]
+    },
+    {
+      "name": "curve.activity.execution",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "Temporal activity attempts and outcomes.",
+      "allowed_attributes": ["curve.activity.type", "curve.component", "curve.result"]
+    },
+    {
+      "name": "curve.activity.retry",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "Temporal activity retries after the initial attempt.",
+      "allowed_attributes": ["curve.activity.type", "curve.component"]
+    },
+    {
+      "name": "curve.worker.heartbeat.age",
+      "instrument": "GAUGE",
+      "unit": "s",
+      "description": "Age of the most recent trusted Curve worker heartbeat.",
+      "allowed_attributes": ["curve.component"]
+    },
+    {
+      "name": "curve.sse.connections",
+      "instrument": "UP_DOWN_COUNTER",
+      "unit": "1",
+      "description": "Active authorized Curve SSE connections.",
+      "allowed_attributes": ["curve.component"]
+    },
+    {
+      "name": "curve.sse.resume",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "SSE resume attempts by bounded outcome.",
+      "allowed_attributes": ["curve.component", "curve.result"]
+    },
+    {
+      "name": "curve.audit.append",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "Immutable audit append outcomes without audit content.",
+      "allowed_attributes": ["curve.component", "curve.result"]
+    },
+    {
+      "name": "curve.telemetry.export.failure",
+      "instrument": "COUNTER",
+      "unit": "1",
+      "description": "Bounded telemetry exporter failures observed locally.",
+      "allowed_attributes": ["curve.component", "curve.error.code"]
+    }
+  ],
+  "spans": [
+    {
+      "name": "curve.http.command",
+      "kind": "SERVER",
+      "allowed_attributes": [
+        "curve.command.type",
+        "curve.component",
+        "curve.correlation_id",
+        "curve.error.code",
+        "curve.operation.id",
+        "curve.operation.type",
+        "curve.result",
+        "curve.workspace.scope"
+      ]
+    },
+    {
+      "name": "curve.outbox.dispatch",
+      "kind": "PRODUCER",
+      "allowed_attributes": [
+        "curve.component",
+        "curve.correlation_id",
+        "curve.event.id",
+        "curve.operation.id",
+        "curve.outbox.destination_kind",
+        "curve.result",
+        "curve.retry.attempt",
+        "curve.workspace.scope"
+      ]
+    },
+    {
+      "name": "curve.workflow.run",
+      "kind": "CONSUMER",
+      "allowed_attributes": [
+        "curve.component",
+        "curve.correlation_id",
+        "curve.operation.id",
+        "curve.result",
+        "curve.workflow.id",
+        "curve.workflow.type",
+        "curve.workspace.scope"
+      ]
+    },
+    {
+      "name": "curve.activity.run",
+      "kind": "INTERNAL",
+      "allowed_attributes": [
+        "curve.activity.type",
+        "curve.component",
+        "curve.correlation_id",
+        "curve.error.code",
+        "curve.operation.id",
+        "curve.result",
+        "curve.retry.attempt",
+        "curve.workspace.scope"
+      ]
+    },
+    {
+      "name": "curve.sse.publish",
+      "kind": "PRODUCER",
+      "allowed_attributes": [
+        "curve.component",
+        "curve.correlation_id",
+        "curve.event.id",
+        "curve.operation.id",
+        "curve.result",
+        "curve.workspace.scope"
+      ]
+    }
+  ],
+  "logs": {
+    "required_fields": [
+      "curve.component",
+      "curve.correlation_id",
+      "curve.event.code",
+      "curve.telemetry.scope_key_id",
+      "curve.workspace.scope",
+      "log.level"
+    ],
+    "event_codes": [
+      "CURVE_ACTIVITY_COMPLETED",
+      "CURVE_ACTIVITY_FAILED",
+      "CURVE_AUDIT_APPEND_FAILED",
+      "CURVE_COMMAND_ACCEPTED",
+      "CURVE_COMMAND_DENIED",
+      "CURVE_OPERATION_TERMINAL",
+      "CURVE_OUTBOX_DELIVERED",
+      "CURVE_OUTBOX_RETRY_SCHEDULED",
+      "CURVE_SSE_RESUMED",
+      "CURVE_TELEMETRY_CONFIGURATION_INVALID",
+      "CURVE_TELEMETRY_EXPORT_FAILED",
+      "CURVE_WORKFLOW_COMPLETED",
+      "CURVE_WORKFLOW_STARTED"
+    ]
+  },
+  "dashboard": {
+    "implementation_path": "apps/api/plane/curve/observability/grafana/curve-m0-dashboard.json",
+    "datasource_variable": "DS_PROMETHEUS",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Operation throughput",
+        "query": "sum(rate(curve_operation_started_total[5m]))"
+      },
+      {
+        "id": 2,
+        "title": "Operation terminal outcomes",
+        "query": "sum by (curve_result) (rate(curve_operation_completed_total[5m]))"
+      },
+      {
+        "id": 3,
+        "title": "Operation p95 duration",
+        "query": "histogram_quantile(0.95, sum by (le) (rate(curve_operation_duration_seconds_bucket[5m])))"
+      },
+      {
+        "id": 4,
+        "title": "Outbox backlog",
+        "query": "sum by (curve_outbox_state) (curve_outbox_backlog)"
+      },
+      {
+        "id": 5,
+        "title": "Oldest outbox item age",
+        "query": "max(curve_outbox_oldest_age_seconds)"
+      },
+      {
+        "id": 6,
+        "title": "Activity retries",
+        "query": "sum by (curve_activity_type) (rate(curve_activity_retry_total[5m]))"
+      },
+      {
+        "id": 7,
+        "title": "Worker heartbeat age",
+        "query": "max(curve_worker_heartbeat_age_seconds)"
+      },
+      {
+        "id": 8,
+        "title": "SSE connections and resumes",
+        "query": "sum(curve_sse_connections) or sum(rate(curve_sse_resume_total[5m]))"
+      },
+      {
+        "id": 9,
+        "title": "Audit append failures",
+        "query": "sum(rate(curve_audit_append_total{curve_result=\"FAILED\"}[5m]))"
+      },
+      {
+        "id": 10,
+        "title": "Telemetry export failures",
+        "query": "sum(rate(curve_telemetry_export_failure_total[5m]))"
+      }
+    ]
+  },
+  "alerts": {
+    "implementation_path": "apps/api/plane/curve/observability/prometheus/curve-m0-alerts.yaml",
+    "rules": [
+      {
+        "id": "CURVE_AUDIT_APPEND_FAILURE",
+        "severity": "CRITICAL",
+        "expression": "sum(increase(curve_audit_append_total{curve_result=\"FAILED\"}[5m])) > 0",
+        "for": "1m",
+        "summary": "A Curve audit append failed; protected mutations remain fail-closed."
+      },
+      {
+        "id": "CURVE_OUTBOX_STUCK",
+        "severity": "WARNING",
+        "expression": "max(curve_outbox_oldest_age_seconds) > 30",
+        "for": "5m",
+        "summary": "The oldest deliverable Curve outbox item has exceeded the local M0 age threshold."
+      },
+      {
+        "id": "CURVE_WORKER_HEARTBEAT_STALE",
+        "severity": "CRITICAL",
+        "expression": "max(curve_worker_heartbeat_age_seconds) > 30",
+        "for": "2m",
+        "summary": "The trusted local Curve worker heartbeat is stale."
+      },
+      {
+        "id": "CURVE_OPERATION_FAILURE_RATIO",
+        "severity": "WARNING",
+        "expression": "sum(rate(curve_operation_completed_total{curve_result=\"FAILED\"}[5m])) / clamp_min(sum(rate(curve_operation_completed_total[5m])), 1) > 0.05",
+        "for": "5m",
+        "summary": "The local Curve operation failure ratio exceeds five percent."
+      },
+      {
+        "id": "CURVE_TELEMETRY_EXPORT_FAILURE",
+        "severity": "WARNING",
+        "expression": "sum(increase(curve_telemetry_export_failure_total[5m])) > 0",
+        "for": "5m",
+        "summary": "Curve telemetry export is failing while domain audit remains authoritative."
+      }
+    ]
+  }
+}

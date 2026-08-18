@@ -31,7 +31,12 @@ identifiers are:
 - M0-S1 (Curve module-shell implementation packet).
 - M0-S2 (operation and delivery kernel implementation packet).
 - M0-S3 (local Temporal round-trip implementation packet).
+- M0-S5 (local audit and observability implementation packet).
+- M0-S5A (telemetry kernel and static observability assets).
+- M0-S5B (X3M local observability integration proof).
 - M0-03 (core authorization and policy kernel work package).
+- M0-08 (audit and observability foundation work package).
+- OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding).
 
 ## Document set
 
@@ -64,6 +69,8 @@ identifiers are:
 | [M0-03 core policy task packet](m0-03-core-policy-task-packet.md) (dispatch contract for the authorization/policy kernel) | Exact Plane base, security decisions, scope, acceptance scenarios, commands, stop conditions, and rollback | `READY_FOR_SECURITY_REVIEW`; Plane implementation waits for exact-head approval and merge |
 | [M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md) (decision persistence, evaluation order, transactions, migration, and rollback) | Physical append-only policy-decision and audit-binding contract | Proposed material security contract for M0-03 |
 | [Core policy manifest](../../contracts/policy/core-policy-v1.json) (immutable v1 action allowlist and deny precedence) | Provider-neutral roles, classifications, environments, ACL/assignment requirements, target policy, and safe projections | Proposed v1 policy ceiling; provider-specific policy remains gated |
+| [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) | Independently reviewable M0-S5A telemetry-kernel and M0-S5B local-integration changes | `READY_FOR_PLATFORM_BINDING_REVIEW`; implementation dependencies and OBS-BIND-001 remain gated |
+| [M0-S5 telemetry manifest](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboards, alerts, and redaction contract) | Normative v1 instrumentation and operational-asset surface | Export defaults to disabled; X3M endpoint/datasource/alert binding is supplied separately |
 | [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
 | [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | P0-06A (isolated Temporal feasibility proof), three execution approvals, checked projections, recomputed bundles/artifacts/ruleset, broker-issued signed start grant, bounded execution/VCS leases, normal/reconciliation evidence branches, immutable review disposition, external signed publication attestation, limits, cleanup, transitions, and the P0-06B (least-privilege Plane integration proof) design gate | P0-06A remains blocked pending publication, harness, authorization bundle/attempt approval, integrity projection, broker conformance, preflight, claim-time recheck, and claim; GitHub Project status is administrative; P0-06B is unplanned and unauthorized |
 | [P0-06 stage record](proofs/p0-06-stage-record.json) | `curve.proof-stage-projection/v2` P0-06A/P0-06B authorization, readiness, broker, claim, outcome-specific branch/ticket, lease, operation-evidence, publication-intent, external-attestation, and review state linked from GitHub Project #2 | Machine-readable fail-closed proof-state projection; runtime transitions still require trusted-controller reconciliation and independently verified broker/attestation evidence |
