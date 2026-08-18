@@ -20,7 +20,6 @@ import { M0_03_CONTEXT_PATHS, digestContextEntries } from "../lib/context-pack.m
 const STAGE_RECORD = JSON.parse(
   readFileSync(new URL("../../docs/technical/proofs/p0-06-stage-record.json", import.meta.url), "utf8"),
 );
-const STAGE_A = STAGE_RECORD.stages["P0-06A"];
 const SYNCHRONIZER_PATH = fileURLToPath(new URL("../sync-github-project.mjs", import.meta.url));
 
 test("M0-03 context pins every policy contract fixture and its deterministic digest algorithm", () => {
@@ -65,36 +64,23 @@ test("M0-03 context pins every policy contract fixture and its deterministic dig
   assert.throws(() => digestContextEntries([{ path: "a", contents: "one" }]), /Buffer/);
 });
 
-test("pristine claim and review contracts exactly match the current P0-06A projection", () => {
-  assert.deepEqual(STAGE_A.claim, P0_06A_READY_PRISTINE_CLAIM);
-  assert.deepEqual(STAGE_A.review, P0_06A_READY_PRISTINE_REVIEW);
+test("the live P0-06 projection is terminal and points to M0-S3", () => {
+  assert.equal(STAGE_RECORD.schema_version, "curve.proof-stage-projection/v3");
+  assert.equal(STAGE_RECORD.current_stage, "P0-06_SUPERSEDED");
+  assert.equal(STAGE_RECORD.state, "SUPERSEDED");
+  assert.equal(STAGE_RECORD.superseded_by.decision_id, "D-003");
+  assert.equal(STAGE_RECORD.superseded_by.replacement_task, "M0-S3");
+  assert.equal(STAGE_RECORD.historical_record.schema_version, "curve.proof-stage-projection/v2");
+});
+
+test("historical pristine claim and review policy remains deterministic", () => {
   assert.equal(
     validateP0_06AReadyPristineState({
-      claim: structuredClone(STAGE_A.claim),
-      review: structuredClone(STAGE_A.review),
+      claim: structuredClone(P0_06A_READY_PRISTINE_CLAIM),
+      review: structuredClone(P0_06A_READY_PRISTINE_REVIEW),
     }),
     true,
   );
-});
-
-test("stage readiness carries the pending broker and publication-attestation contract fields", () => {
-  const readiness = STAGE_A.readiness;
-  const expected = {
-    broker_conformance_report_path: "docs/technical/proofs/p0-06a/authorization/broker-conformance-report.json",
-    broker_conformance_report_digest: null,
-    broker_claim_ruleset_recheck_policy_path:
-      "docs/technical/proofs/p0-06a/authorization/broker-claim-ruleset-recheck-policy.json",
-    broker_claim_ruleset_recheck_policy_digest: null,
-    publication_attestation_schema_path:
-      "docs/technical/proofs/p0-06a/authorization/publication-attestation.schema.json",
-    publication_attestation_schema_digest: null,
-    publication_attestation_verification_key_path:
-      "docs/technical/proofs/p0-06a/authorization/publication-attestation-verification-key.pem",
-    publication_attestation_verification_key_digest: null,
-    publication_attestation_key_id: null,
-    publication_attestation_store_uri_template: null,
-  };
-  for (const [field, value] of Object.entries(expected)) assert.equal(readiness[field], value, field);
 });
 
 function changed(value) {
@@ -154,8 +140,8 @@ test("single-item apply policy requires one explicit assignment", () => {
     );
   }
   assert.deepEqual(
-    validateSingleApplyRequest({ assignments: [{ taskId: "P0-06", status: "Ready" }] }),
-    { taskId: "P0-06", status: "Ready" },
+    validateSingleApplyRequest({ assignments: [{ taskId: "P0-06", status: "Done" }] }),
+    { taskId: "P0-06", status: "Done" },
   );
 });
 
@@ -182,15 +168,15 @@ test("legacy body status is parsed only from one supported status line", () => {
   );
 });
 
-test("proof-package status validation is informational and read-only", () => {
-  const result = spawnSync(process.execPath, [SYNCHRONIZER_PATH, "--validate-status", "P0-06=Ready"], {
+test("superseded proof-package status validation is informational and read-only", () => {
+  const result = spawnSync(process.execPath, [SYNCHRONIZER_PATH, "--validate-status", "P0-06=Done"], {
     encoding: "utf8",
   });
   assert.equal(result.status, 0, result.stderr);
   assert.deepEqual(JSON.parse(result.stdout), {
     mode: "validate-status",
     taskId: "P0-06",
-    status: "Ready",
+    status: "Done",
     valid: true,
     projectStatusAuthority: "informational-only",
   });

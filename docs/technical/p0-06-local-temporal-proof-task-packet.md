@@ -5,22 +5,39 @@
 | Field | Value |
 | --- | --- |
 | Work package | `P0-06` (two-stage local Temporal proof work package) |
-| Current stage | `P0-06A` (isolated Temporal feasibility proof): isolated Temporal primitive feasibility |
-| Current state | `BACKLOG/BLOCKED`; no Docker, harness, claim, or Project mutation is authorized by this document alone |
-| Decision | D-003 (runtime topology and trust-zone decision) remains `PROPOSED`; P0-06 (two-stage local Temporal proof work package) completes only after separately approved P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane integration proof) evidence |
+| Current stage | `P0-06_SUPERSEDED` (terminal historical projection) |
+| Current state | `SUPERSEDED`; this packet grants no dispatch or execution authority |
+| Decision | D-003 (runtime topology and trust-zone decision) is `DECIDED` for `LOCAL_ONLY`; M0-S3 (local Temporal round-trip implementation packet) is the executable proof |
 | Decision owner | Federico Ocampo, CTO at X3M, acting as Platform Operations decision owner for `LOCAL_ONLY` |
 | Human reviewer | Federico Ocampo (`faocampo`) |
 | Technical operator | OpenAI Codex under Federico Ocampo's oversight |
 | Original scope approval | On 2026-08-15 Federico approved the `LOCAL_ONLY` sections of ADR proposal revision `sha256:cac4dcac2a03156faf21b0deffdc22bec611da1b070a421b4d5b631bfec8a142` as a proof basis; staging and production content in that revision was not approved |
 | Two-stage direction | On 2026-08-15 Federico approved P0-06A (isolated Temporal feasibility proof) followed by a separately designed and approved P0-06B (least-privilege Plane integration proof) |
-| Durable approval evidence | Pending the publication PR, exact-head approval record, merge commit, and successful post-merge validation |
-| P0-06A (isolated Temporal feasibility proof) authorization ID | Proposed `D003-LOCAL-PROOF-A-2026-08-15-01`; becomes valid only through exact-head approval of this packet, the exact harness head, and the immutable per-attempt authorization-bundle head; a later projection review verifies repository integrity without adding execution authority |
-| P0-06B (least-privilege Plane integration proof) authorization | `NOT_AUTHORIZED`; no attempt ID, topology, harness, expiry, or mutation authority exists yet |
+| Durable supersession evidence | [Curve PR #9](https://github.com/faocampo/curve/pull/9), approved head `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`, green `validate`, merge `097016ffe2eb259cc780ad2a6cd41ca3422366b2` |
+| P0-06A (isolated Temporal feasibility proof) authorization | `SUPERSEDED_UNISSUED`; proposed authorization `D003-LOCAL-PROOF-A-2026-08-15-01` was never activated |
+| P0-06B (least-privilege Plane integration proof) authorization | `SUPERSEDED_UNISSUED`; no attempt was authorized |
 
-Conversation approvals establish owner intent and scope. Repository execution
-policy additionally requires an attributable GitHub record that binds the exact
-PR head. Until that record exists and every readiness condition below passes,
-P0-06 and both stages remain blocked.
+Federico Ocampo retired both stages as standalone gates on 2026-08-18. The
+historical design below is retained for audit and explains the superseded
+control model. Its readiness lists, commands, leases, and state transitions are
+inactive. The active implementation and proof contract is M0-S3 (local
+Temporal round-trip implementation packet) in
+[M0 local skeleton task packets](m0-local-skeleton-task-packets.md) (repository-local M0 scope, acceptance tests, commands, and rollback).
+
+## Supersession effect
+
+- P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege
+  Plane integration proof) have terminal status `SUPERSEDED`.
+- The claim tag, broker start grant, proof ticket, execution/VCS leases,
+  harness-only attempt, and terminal-publication flow are retired from the
+  active local delivery path.
+- GitHub Project status remains visual metadata; P0-06 may be shown as `Done`
+  to record its supersession.
+- The approved two-network topology, SDK pin, evidence, security checks, and
+  rollback are executed once through M0-S3 (local Temporal round-trip
+  implementation packet).
+- Historical sections below must be read as prior design, never as current
+  authority.
 
 ## Reference legend
 
@@ -34,7 +51,7 @@ P0-06 and both stages remain blocked.
 The parenthetical description accompanies these identifiers throughout this
 packet so a reader does not need to memorize the catalog.
 
-## Approved two-stage boundary
+## Historical two-stage boundary (superseded)
 
 | Stage | Purpose | Permitted result | Decision effect |
 | --- | --- | --- | --- |

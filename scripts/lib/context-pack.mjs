@@ -38,19 +38,8 @@ export const M0_03_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
-const P0_06_CONTEXT_PATHS = Object.freeze(
-  [
-    "contracts/temporal/m0-workflow-contract.md",
-    "docs/technical/adr-003-runtime-topology.md",
-    "docs/technical/development-plan.md",
-    "docs/technical/m0-readiness-board.md",
-    "docs/technical/p0-06-local-temporal-proof-task-packet.md",
-  ].sort(),
-);
-
 const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
-  ["P0-06", P0_06_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {

@@ -1,8 +1,8 @@
 {
   "schema_version": "curve.proof-stage-projection/v3",
   "task_id": "P0-06",
-  "current_stage": "P0-06_SUPERSEDED",
-  "state": "SUPERSEDED",
+  "current_stage": "P0-06A_READY",
+  "state": "ACTIVE",
   "updated_on": "2026-08-18",
   "superseded_at": "2026-08-18T17:07:15Z",
   "superseded_by": {
@@ -19,5 +19,5 @@
     "source_revision": "097016ffe2eb259cc780ad2a6cd41ca3422366b2",
     "path": "docs/technical/proofs/p0-06-stage-record.json"
   },
-  "reason": "D-003 LOCAL_ONLY selected M0-S3 as the executable Temporal proof and retired P0-06A and P0-06B as standalone gates."
+  "reason": "Invalid active state after supersession."
 }

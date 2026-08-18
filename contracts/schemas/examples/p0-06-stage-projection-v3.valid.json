@@ -19,5 +19,5 @@
     "source_revision": "097016ffe2eb259cc780ad2a6cd41ca3422366b2",
     "path": "docs/technical/proofs/p0-06-stage-record.json"
   },
-  "reason": "D-003 LOCAL_ONLY selected M0-S3 as the executable Temporal proof and retired P0-06A and P0-06B as standalone gates."
+  "reason": "Standalone proof gates were superseded by M0-S3."
 }

@@ -47,7 +47,7 @@ for (const file of schemaFiles) {
 
 const invocationSchema = join(root, "contracts/mcp/orca-tools-v1.schema.json");
 const resultSchema = join(root, "contracts/mcp/orca-tool-result-v1.schema.json");
-const p0_06StageProjectionSchema = join(root, "contracts/schemas/p0-06-stage-projection-v2.schema.json");
+const p0_06StageProjectionSchema = join(root, "contracts/schemas/p0-06-stage-projection-v3.schema.json");
 const corePolicyManifestSchema = join(root, "contracts/schemas/core-policy-manifest.schema.json");
 const corePolicyManifestPath = join(root, "contracts/policy/core-policy-v1.json");
 const operationSchema = join(root, "contracts/schemas/operation.schema.json");

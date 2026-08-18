@@ -1,186 +1,215 @@
 # ADR-003: Curve Runtime Topology and Temporal Profile
 
-- Status: PROPOSED
+- Status: DECIDED for `LOCAL_ONLY`; non-local scopes remain OPEN
 - PRD decision: D-003 (runtime topology and trust-zone decision)
-- Owner: Federico Ocampo, CTO at X3M, acting as Platform Operations decision owner for `LOCAL_ONLY`
-- Reviewers: Security, database operations, observability, Curve engineering
-- Proof-scope and two-stage direction approval date: 2026-08-15
-- Decision date: Pending accepted P0-06B (least-privilege Plane integration
-  proof) evidence and named-owner disposition
-- Required by: M0-06 (Temporal workflow-skeleton work package); every staging or production activation
-- Supersedes: the historical shared-`dev_env` local candidate documented below; no accepted ADR
+- Owner: Federico Ocampo, CTO at X3M
+- Reviewers: Federico Ocampo (`faocampo`) as Curve engineering approver and interim human reviewer
+- Decision date: 2026-08-18
+- Approved head: `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`
+- Merge commit: `097016ffe2eb259cc780ad2a6cd41ca3422366b2`
+- Required by: M0-S3 (local Temporal round-trip implementation packet)
+- Supersedes: the shared-`dev_env` candidate and the standalone P0-06A/P0-06B proof sequence
 
 ## Context and constraints
 
-X3M already provides local, staging, and production topology on Kubernetes and AWS, PostgreSQL, Secrets Manager, S3/KMS-compatible object storage, identity, networking/egress controls, Prometheus/Grafana, logs, and tracing. Curve adds Temporal, gVisor, and OpenHands. Plane's existing Celery workers continue to own existing bounded Plane work; Temporal exclusively owns durable Curve lifecycle orchestration.
+X3M already provides its local, staging, and production topology on Kubernetes
+and AWS, PostgreSQL, Secrets Manager, S3/KMS-compatible object storage,
+identity, networking and egress controls, Prometheus/Grafana, logs, and
+tracing. Curve adds Temporal, gVisor, and OpenHands. Plane's existing Celery
+workers continue to own existing Plane behavior. Temporal owns durable Curve
+lifecycle orchestration.
+
+This decision is intentionally scoped to local development with synthetic data.
+It supplies the topology required by M0-S3 (local Temporal round-trip
+implementation packet). Staging and production remain fail closed pending
+separate D-003 (runtime topology and trust-zone decision) scopes with named
+Platform Operations, Security, database, and on-call owners.
 
 ## Decision drivers and weighted criteria
 
-1. Durable replay-safe human and provider waits.
-2. Workspace isolation and data residency.
-3. Reuse of supported X3M operations and observability.
-4. Recoverability, versioned deployment, and safe rollback.
-5. No production dependency introduced by the first local skeleton.
+1. Durable, replay-safe human and provider waits.
+2. Minimal network and credential reachability from the Curve worker.
+3. Reuse of the existing Plane Docker stack without changing its default path.
+4. Deterministic ARM64 and x86-64 local development.
+5. Recoverability, versioned workflows, and simple rollback.
+6. One implementation that also supplies the local proof evidence.
 
 ## Options considered
 
-1. **Approved proof sequence, topology unresolved:** P0-06A (isolated Temporal feasibility proof) first validates primitive behavior; a separately planned and exact-head-approved P0-06B (least-privilege Plane integration proof) selects and validates the local network, worker environment, credentials, and service dependencies.
-2. **Historical candidate, superseded:** local Temporal development service and a Curve worker on Plane's shared `dev_env` network. Security review superseded this topology before execution.
-3. Temporal Cloud: deferred pending procurement, residency, security, and cost review.
-4. Celery-only orchestration: rejected because it does not satisfy the PRD's durable workflow/history/replay contract.
-5. Do nothing: blocks M0-06 (Temporal workflow-skeleton work package) and all lifecycle milestones.
+1. **Selected:** a Curve-only Compose overlay with a dedicated Temporal control
+   network and a dedicated Curve data network.
+2. Shared Plane `dev_env`: rejected because it exposes unrelated local Plane
+   services and application settings to the Curve worker.
+3. Isolated P0-06A followed by integrated P0-06B: superseded because P0-06B
+   duplicates the M0-S3 implementation and acceptance evidence.
+4. Temporal Cloud: deferred pending procurement, residency, security, support,
+   and cost review.
+5. Celery-only orchestration: rejected because it does not satisfy Curve's
+   durable history, timer, replay, and workflow-versioning contract.
 
 ## Evidence and proof results
 
-The Plane candidate baseline and existing Compose stack have passed application, migration, worker, Beat, and health smoke tests. Temporal itself has not yet been added or proven. P0-06A (isolated Temporal feasibility proof) must first prove pinned server/SDK primitives in isolation. A later, separately approved P0-06B (least-privilege Plane integration proof) must select and prove the final Plane-integrated local topology with synthetic data.
+Curve PR #9 published the decision packet at approved head
+`7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`. Its documentation-contract check
+passed, and it was squash-merged to `main` as
+`097016ffe2eb259cc780ad2a6cd41ca3422366b2` on 2026-08-18.
 
-The existing local stack is `docker-compose-local.yml`. It already provides the `dev_env` bridge network, PostgreSQL 15.7, Valkey 7.2.11, RabbitMQ 3.13.6, MinIO, the Django API/migrator, and the existing Celery worker and Beat processes. The API images use Python 3.12 on both supported development and production Dockerfiles. No Temporal package is present in the candidate Plane dependency set.
+The accepted Plane base is fork `preview` at
+`eff8686a69aa112ea8fda79be0e1316dc1fd97d6`. It contains the existing Plane
+Docker stack and completed M0-S2 (operation and delivery kernel implementation
+packet). Temporal is not present at that base. Runtime evidence will therefore
+be produced by M0-S3 itself against its exact dispatched Plane base.
 
-The proposed local pins were checked against official upstream metadata on 2026-08-12:
+## Decision
 
-| Component | Proposed local pin | Evidence and constraint |
+### Approved local component pins
+
+| Component | Approved local pin | Source and constraint |
 | --- | --- | --- |
-| Temporal CLI/development server image | `docker.io/temporalio/temporal:1.8.1@sha256:59561b9ef060eaeb1f46cb6a1842d6cbdd8a393eb3b6d315ecef5fe2f0b1d7a6` | The [official CLI release](https://github.com/temporalio/cli/releases/tag/v1.8.1) contains the development server. Registry inspection resolved this multi-architecture index; platform manifests are `sha256:d7fe04db99586b7e20c3ee96ced04e5585be380b5a565cabb1fb40281f1a64b5` for `linux/amd64` and `sha256:92ca723892947bbc7bb0cb2b076dd1c16acf4a79de8661780912d5d49fa16416` for `linux/arm64`. |
-| Embedded Temporal Server | `1.31.2` | CLI `1.8.1` includes the [Temporal Server 1.31.2 security update](https://github.com/temporalio/temporal/releases/tag/v1.31.2). The development image is not a staging/production server selection. |
-| Temporal Python SDK | `temporalio==1.30.0` | The [official Python SDK release](https://github.com/temporalio/sdk-python/releases/tag/1.30.0) and [PyPI package](https://pypi.org/project/temporalio/1.30.0/) support Python 3.10 and later, including Plane's Python 3.12 image. Lockfile hash/provenance is captured by M0-S3 when the dependency is added. |
-| Staging/production chart candidate | Temporal Helm chart `1.2.0`, server `1.31.2` | Upstream's [chart release](https://github.com/temporalio/helm-charts/releases/tag/temporal-1.2.0) and values are an evaluation baseline only. Platform Operations must approve image digests, chart values, schema/upgrade compatibility, and X3M placement before non-local use. |
+| Temporal CLI development image | `docker.io/temporalio/temporal:1.8.1@sha256:59561b9ef060eaeb1f46cb6a1842d6cbdd8a393eb3b6d315ecef5fe2f0b1d7a6` | [Temporal CLI v1.8.1](https://github.com/temporalio/cli/releases/tag/v1.8.1); multi-architecture index pinned by digest. |
+| Embedded Temporal Server | `1.31.2` | [Temporal Server v1.31.2](https://github.com/temporalio/temporal/releases/tag/v1.31.2); local development only. |
+| Temporal Python SDK | `temporalio==1.31.0` | [Temporal Python SDK v1.31.0](https://github.com/temporalio/sdk-python/releases/tag/v1.31.0) and [PyPI 1.31.0](https://pypi.org/project/temporalio/1.31.0/); Python 3.10+ and musllinux wheels for x86-64 and ARM64. |
 
-No image was pulled and no service, volume, port, dependency, or repository code was changed while collecting this metadata.
+### Approved two-network Compose-overlay topology
 
-## Historical local candidate and retained constraints
+Curve adds `docker-compose-curve.yml` (Curve-only local Compose overlay).
+Developers invoke it with `docker-compose-local.yml` (existing Plane local
+stack) and the `curve` profile. Running the existing Plane command without the
+overlay leaves the baseline Compose model unchanged.
 
-The local bullets below record the original planning candidate for traceability.
-They are superseded and provide no P0-06B (least-privilege Plane integration
-proof) topology, network, worker-environment, credential, or execution authority.
-P0-06B must replace them with a separately reviewed design before any
-Plane-integrated proof can run.
+```mermaid
+flowchart LR
+    host["Developer host"]
 
-- Add a `curve` Compose profile to `docker-compose-local.yml` containing the pinned Temporal CLI development image above and a dedicated `curve-worker` built from Plane's development API image. Do not add another PostgreSQL, queue, cache, object store, or observability service.
-- Start the local service with `temporal server start-dev --ip 0.0.0.0 --namespace curve-local`, persist its synthetic-only SQLite state in a Curve-specific named development volume, expose gRPC/UI only on loopback ports `7233`/`8233`, and add a cluster-health check. The implementation packet must confirm these flags against the pinned binary before committing Compose.
-- Use namespace `curve-local`, task queue `curve-control-plane-v1`, and workflow IDs `curve:{workspace_id}:{operation_id}` locally.
-- Connect `curve-worker` over the internal `dev_env` network at `temporal:7233`. Give it only the Curve worker entrypoint and Plane application environment required for synthetic M0 operations; do not launch it through Celery or share Celery queues.
-- Keep domain state in PostgreSQL. Temporal history contains opaque IDs, versions, digests, and safe correlation only—never protected bodies or credentials.
-- Local Temporal SQLite is disposable orchestration history, not product truth. It may be retained across ordinary developer restarts to prove replay, but `down -v` is permitted only for the explicitly disposable Curve Temporal volume and never as an implicit cleanup of existing Plane volumes.
-- In staging/production, use X3M-managed PostgreSQL infrastructure with separate Temporal persistence and visibility databases/schemas, dedicated credentials, and namespace-level application identities. Do not put Temporal tables in Plane's application schema.
-- Candidate HA shape for Platform Operations review is three frontend, three history, three matching, and two worker replicas distributed across failure domains, with independently scalable history/matching and no public frontend. This is a sizing hypothesis, not an approved deployment.
-- Exact chart/image digests, region, replicas/capacity, network policies, ingress, mTLS/auth, payload codec/encryption, backup/restore, RPO/RTO, maintenance window, schema-upgrade order, compatibility window, alerts, on-call, and cost owner remain mandatory named decisions before staging/production activation.
-- Do not replace or repurpose Plane Celery.
+    subgraph plane["dev_env (existing Plane network)"]
+        api["Plane API"]
+        celery["Plane Celery and Beat"]
+        services["RabbitMQ, Valkey, MinIO"]
+        db1["plane-db"]
+    end
 
-All shared-`dev_env` and Plane application-environment content above is retained
-as superseded candidate evidence, not as the contract for P0-06B (least-privilege
-Plane integration proof) or an authorized execution path. Security review
-found that an untrusted proof worker on the shared network could reach local
-PostgreSQL, RabbitMQ, Valkey, MinIO, and development credentials. Federico
-approved a two-stage proof response: P0-06A (isolated Temporal feasibility
-proof) runs fully isolated and cannot validate or decide this profile;
-P0-06B (least-privilege Plane integration proof) must first define a new
-least-privilege integration topology and receive separate exact-head approval.
-Its approved design replaces the historical local candidate before D-003
-(runtime topology and trust-zone decision) can become `DECIDED` for
-`LOCAL_ONLY`.
+    subgraph control["curve-control (internal)"]
+        temporal["Temporal development server"]
+        worker1["curve-worker"]
+    end
 
-## P0-06B (least-privilege Plane integration proof) decision contract
+    subgraph data["curve-data (internal)"]
+        worker2["curve-worker"]
+        db2["plane-db"]
+    end
 
-| Concern | Proposed requirement | P0-06B proof before `DECIDED` |
-| --- | --- | --- |
-| Activation | Compose profile `curve`; off by default | Resolved Compose config and baseline health with profile absent/present. |
-| Data | Synthetic identifiers and safe enums only; no protected body, credential, repository content, or production delegation | Inspect workflow histories and telemetry for sentinel protected strings. |
-| Persistence | Curve-specific SQLite volume owned only by the dev server; PostgreSQL remains Curve domain truth | Restart server/worker and replay to completion; delete only a disposable copy during reset test. |
-| Network | **UNRESOLVED:** P0-06B must select the minimum dedicated network, ports, service identities, and permitted destinations; shared `dev_env` is not the selected contract. | Separate exact-head design approval, applied network/port inspection, dependency-denial tests, and proof that unrelated Plane services and credentials are unreachable. |
-| Worker | Dedicated process built from the compatible Plane API image with `temporalio==1.30.0`; exact environment keys, identity, credential path, service dependencies, and task queue are **UNRESOLVED** until the P0-06B design. | Separate exact-head design approval, environment allowlist, health, graceful shutdown, worker restart, dependency-denial, and task-queue isolation tests. |
-| Compatibility | Pinned image/SDK, archived synthetic histories, explicit workflow patch markers | Replay old histories against candidate worker before upgrade. |
-| Operations | Correlation, safe logs, SDK/server metrics where supported, stuck workflow and outbox backlog visibility | Local trace/metric/log evidence without protected strings. |
-| Rollback | Disable profile and relay dispatch; preserve inspectable application state; no Plane table/volume removal | Start existing Plane stack without Curve and rerun its health smoke. |
+    host -->|"127.0.0.1:7233 and 8233"| temporal
+    worker1 -->|"gRPC 7233"| temporal
+    worker2 -->|"PostgreSQL 5432"| db2
+    api --> db1
+    celery --> db1
+    celery --> services
+```
 
-## Staging and production decision matrix
+`curve-worker` is one container attached to `curve-control` and `curve-data`.
+`plane-db` is the existing database container attached to `dev_env` and
+`curve-data`. The Curve networks are Docker `internal` networks. Temporal has
+no Plane-network attachment or Plane credential. The worker receives no
+RabbitMQ, Valkey, MinIO, AWS, SMTP, VCS, provider, production, or
+user-delegation endpoint or credential.
 
-The following cells must be completed by named Platform Operations, Security, and database owners. Defaults are fail-closed; a coding agent cannot infer them from the local profile.
+### Service and environment contract
 
-| Decision field | Staging | Production |
-| --- | --- | --- |
-| AWS account/region, cluster, namespace, residency | **Required** | **Required** |
-| Helm/chart and every image digest | **Required** | **Required** |
-| Frontend/history/matching/worker replica and resource sizing | **Required** | **Required** |
-| PostgreSQL endpoint, separate databases/schemas, credentials, schema-management owner | **Required** | **Required** |
-| Network policy, service discovery, mTLS, authorization, certificate rotation | **Required** | **Required** |
-| Namespace retention and allowed payload/search attributes | **Required** | **Required; consistent with D-009** |
-| Payload codec/encryption and key ownership | **Required** | **Required** |
-| Metrics/logs/traces, dashboards, alerts, on-call and escalation | **Required** | **Required** |
-| Backup/restore, RPO/RTO, DR topology and witnessed exercise | **Required before activation** | **Required before activation** |
-| Schema/server/SDK/worker upgrade order, rollback and compatibility window | **Required** | **Required** |
-| Capacity/load test, cost centre and lifecycle owner | **Required** | **Required** |
+| Boundary | Local contract |
+| --- | --- |
+| Activation | `curve` profile in the Curve-only overlay; disabled by default. |
+| Temporal | `temporal server start-dev`; namespace `curve-local`; task queue `curve-control-plane-v1`; Curve-specific disposable SQLite volume; loopback-only host ports `7233` and `8233`; health check. |
+| Worker | Dedicated entrypoint built from the compatible Plane API image; no Celery process or queue; no published port. |
+| Worker settings | `DJANGO_SETTINGS_MODULE=plane.settings.curve_worker`; only database, Curve-enable/workspace allowlist, Temporal address/namespace/task queue/identity, and bounded log-level settings. |
+| Database | Existing `plane-db`; PostgreSQL remains authoritative for Curve business state. |
+| Temporal payloads | Workspace and operation IDs, versions, digests, classifications, safe enums, correlation IDs, and error codes only. |
+| Data | Synthetic `INTERNAL` fixtures; sentinel values prove protected bodies and credentials do not enter history, logs, or telemetry. |
+| Workflow identity | `curve:{workspace_id}:{operation_id}`. |
+
+The exact Temporal CLI flags must be verified against the pinned image during
+M0-S3 (local Temporal round-trip implementation packet). The lockfile records
+the SDK package and artifact provenance when the dependency is added.
+
+### Executable proof
+
+M0-S3 (local Temporal round-trip implementation packet) is the sole executable
+proof for this local decision. It must demonstrate:
+
+1. the existing Plane stack remains healthy with the overlay absent;
+2. the resolved overlay contains only the approved services, networks, ports,
+   environment variables, volume, and image pins;
+3. duplicate outbox delivery produces exactly one workflow effect;
+4. a worker restart after a committed activity effect does not duplicate the
+   database mutation;
+5. cancellation reaches a terminal state without orphaned work;
+6. committed histories replay without nondeterminism;
+7. the worker cannot reach RabbitMQ, Valkey, MinIO, private/metadata
+   destinations, or the public internet;
+8. Temporal history, application state, logs, metrics, and traces contain none
+   of the sentinel protected strings;
+9. removing the overlay/profile returns to the unchanged Plane local stack.
+
+P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane
+integration proof) are `SUPERSEDED` standalone gates. Their historical packet
+and Git history remain audit evidence; they provide no current dispatch or
+execution authority.
 
 ## Security, privacy, licensing, and operational impact
 
-The local proof uses synthetic data. Non-local use is blocked until Platform Operations and Security approve placement, network paths, secrets, TLS/auth, encryption, telemetry, retention, backup/restore, and on-call ownership.
+The local profile uses synthetic data and loopback-only host access. Internal
+networks and the environment allowlist bound the worker's reach. PostgreSQL
+retains business truth; disposable Temporal SQLite retains only local workflow
+history. The Temporal CLI image and Python SDK retain their upstream licenses
+and notices in the implementation's dependency and image inventory.
 
-## Local proof-scope and two-stage approval record
-
-Federico Ocampo approved the `LOCAL_ONLY` local-profile sections at ADR revision
-`sha256:cac4dcac2a03156faf21b0deffdc22bec611da1b070a421b4d5b631bfec8a142`
-as the basis for proof planning. The revision also contains staging/production
-candidate text; that non-local content was not approved. After the shared-network
-risk was identified, Federico approved an isolated P0-06A feasibility proof
-followed by a separately designed and approved least-privilege P0-06B
-integration proof.
-
-| Field | Approved value or current gate |
-| --- | --- |
-| Decision owner | Federico Ocampo, CTO at X3M, acting as Platform Operations decision owner for `LOCAL_ONLY` |
-| Technical operator | OpenAI Codex, operating under Federico Ocampo's oversight and the Curve execution protocol |
-| Conversation approvals | `2026-08-15`; they establish scope and direction but do not satisfy the repository's exact-head execution-approval rule |
-| Durable evidence | Publication PR URL, exact approved head, attributable GitHub record timestamp, merge commit, and post-merge CI are pending |
-| P0-06A | Isolated, credential-free, synthetic Temporal primitive proof; cannot decide D-003 (runtime topology and trust-zone decision) or unblock M0-S3 (local Temporal round-trip implementation packet) |
-| P0-06B | Final least-privilege Plane integration proof; `NOT_AUTHORIZED` until its separate immutable packet and exact-head approval exist |
-| Approved pins | Temporal CLI image `1.8.1@sha256:59561b9ef060eaeb1f46cb6a1842d6cbdd8a393eb3b6d315ecef5fe2f0b1d7a6`; embedded server `1.31.2`; Python SDK `1.30.0` |
-| Evidence contract | [P0-06 two-stage Temporal proof task packet](p0-06-local-temporal-proof-task-packet.md) |
-| Excluded authority | Staging, production, AWS or Kubernetes provisioning, gVisor, OpenHands, external providers, protected or production data, production credentials, and SLA claims |
-| Execution guardrails | P0-06A (isolated Temporal feasibility proof) attempt ID, time window, resources, claim, stop, cleanup, immutable evidence-head review, and bounded execution/VCS authority become binding only through the exact-head execution approvals defined by its packet. An independently deployed broker must pass its conformance suite, recheck the live exact-tag ruleset and all authorization inputs at claim time, and issue the signed short-lived start grant that alone activates the wrapper. The broker/GitHub App executes or signs and dispatches exact execution and VCS operations; the controller receives only opaque lease handles and signed receipts, never a reusable GitHub credential, including in process memory. GitHub Project status updates are independent administrative tracking writes and carry no execution authority. P0-06B (least-privilege Plane integration proof) requires a new approval. |
-
-No execution is authorized yet. P0-06A (isolated Temporal feasibility proof)
-remains blocked by publication, committed/reviewed harness, immutable image,
-immutable authorization bundle, v2 stage record and integrity projection,
-trusted controller, conformant independent start-grant broker, Security incident
-owner, active exact-tag ruleset and absent
-claim, all required artifact/controller/ticket/start-grant/execution/
-reconciliation/review-disposition paths, digests, checks and operation evidence,
-fixed reconciliation branch and `create-reconciliation-evidence-ref` operation,
-publication-intent and signed external-attestation schema, verification key and
-store, controller-owned terminal Project-marker policy, workstation
-preflight, Project readiness, and expiry checks. P0-06B (least-privilege Plane
-integration proof) remains unplanned and unauthorized. Neither approval represents a
-successful proof or decides any local, staging, or production field.
+Staging and production remain blocked until named owners decide region,
+residency, Kubernetes namespace, image/chart digests, persistence and
+visibility stores, credentials, mTLS and authorization, payload encryption,
+backup/restore, RPO/RTO, disaster recovery, capacity, observability, on-call,
+cost, and upgrade/rollback procedures.
 
 ## Data/API/event/migration compatibility impact
 
-Temporal workflow input uses versioned contract objects with identifiers/digests only. Workflow changes use explicit version markers and replay tests. Database migrations remain owned by the Curve Django app.
+Temporal workflow inputs use versioned contract objects containing approved
+identifiers and digests. Workflow changes use explicit version markers and
+replay tests. M0-S3 adds no database migration unless its separately reviewed
+contract demonstrates that an additive Curve-owned field or index is required.
+Existing Plane tables, APIs, Celery tasks, services, and user-facing behavior
+remain unchanged.
 
 ## Failure, rollback, and exit strategy
 
-Curve is disabled by default. Removing the Compose profile and `curve-worker` leaves existing Plane API, Celery, and data behavior unchanged. Failed or incompatible histories remain pinned to their worker build until replay compatibility or controlled termination is approved.
+Disable relay dispatch, stop the Curve worker and Temporal service, and invoke
+Plane without the Curve overlay. Preserve PostgreSQL operation and audit state
+for inspection. The Temporal SQLite volume may be deleted only through an
+explicit Curve-only cleanup command. Revert the M0-S3 implementation commit if
+the local profile is not accepted. Existing Plane volumes and schemas are never
+removed as part of this rollback.
 
 ## Implementation consequences and affected work packages
 
-Publication of the owner-approved local topology boundary supplies the evidence
-needed to close P0-02 after review and Project reconciliation. P0-06A
-materialization additionally requires every gate in its packet. Accepted
-P0-06A evidence returns P0-06 to `Backlog` for P0-06B; it does not satisfy
-D-003. Accepted P0-06B evidence and the corresponding scoped D-003 decision
-still block M0-S3/M0-06. Every non-local use, M0-08 recovery
-claim, M4 runner profile, and M6 preview profile remains blocked by its own
-approved environment scope.
+- M0-S3 (local Temporal round-trip implementation packet) may be materialized
+  after M0-03 (core authorization and policy kernel) is implemented and its
+  exact Plane base, Curve governance revision, owner, reviewer, context digest,
+  commands, and Project item are pinned.
+- M0-06 (Temporal workflow-skeleton work package) consumes the M0-S3 evidence.
+- P0-06 (historical two-stage local Temporal proof work package) becomes
+  `Done/SUPERSEDED` visual history.
+- Staging/production M0, gVisor/OpenHands M4, and preview M6 packages still
+  require their applicable non-local D-003 decisions.
 
-## Validation and review date
+## Approval record and review date
 
-The local version/image proposal and two-stage direction have named,
-digest-bound scope approval. Both proof stages remain execution-gated. This ADR
-remains `PROPOSED` pending:
-
-- exact-head publication plus accepted P0-06A isolated feasibility evidence;
-- separate approval, execution, and Federico Ocampo's acceptance of P0-06B
-  least-privilege Plane-integration evidence;
-- a scoped `LOCAL_ONLY` decision date and review record after evidence
-  acceptance; and
-- completion and approval of every staging/production decision-matrix cell,
-  including named service, database, security, and on-call owners, before
-  either environment is activated.
+| Field | Value |
+| --- | --- |
+| Decision | D-003 (runtime topology and trust-zone decision), `LOCAL_ONLY` |
+| Approver | Federico Ocampo, CTO at X3M |
+| Approved exact head | `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb` |
+| Approval date | 2026-08-18 |
+| Repository evidence | [Curve PR #9](https://github.com/faocampo/curve/pull/9), green `validate`, squash merge `097016ffe2eb259cc780ad2a6cd41ca3422366b2` |
+| Approved SDK | `temporalio==1.31.0` |
+| Approved topology | Curve-only Compose overlay; `curve-control` and `curve-data` internal networks |
+| Superseded gates | P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane integration proof) |
+| Executable proof | M0-S3 (local Temporal round-trip implementation packet) |
+| Excluded authority | Staging, production, AWS/Kubernetes provisioning, gVisor, OpenHands, protected data, external providers, production credentials, and deployment |
+| Review trigger | A new environment, network path, credential, data classification, persistence product, SDK/server major version, or rollback model requires a new scoped decision. |

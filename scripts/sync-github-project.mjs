@@ -27,6 +27,7 @@ const initialStatus = new Map([
   ["P0-03", "In progress"],
   ["P0-04", "Done"],
   ["P0-05", "Ready"],
+  ["P0-06", "Done"],
 ]);
 
 const proofStageRecordPaths = new Map([["P0-06", P0_06_STAGE_RECORD_PATH]]);
@@ -215,6 +216,22 @@ function parseProofStageProjection(taskId, path, contents) {
   if (!contents.equals(canonical)) {
     throw new Error(`Proof stage record for ${taskId} must be canonical UTF-8 JSON.`);
   }
+  if (record.schema_version === "curve.proof-stage-projection/v3") {
+    if (
+      record.task_id !== taskId ||
+      record.current_stage !== "P0-06_SUPERSEDED" ||
+      record.state !== "SUPERSEDED" ||
+      record.superseded_by?.replacement_task !== "M0-S3"
+    ) {
+      throw new Error(`Incomplete terminal proof stage record for ${taskId}.`);
+    }
+    return {
+      path,
+      digest: `sha256:${createHash("sha256").update(contents).digest("hex")}`,
+      record,
+      terminal: true,
+    };
+  }
   if (record.schema_version !== "curve.proof-stage-projection/v2") {
     throw new Error(`Unsupported proof stage record schema for ${taskId}: ${record.schema_version}`);
   }
@@ -248,7 +265,22 @@ function localProofStageProjectionFor(taskId) {
 }
 
 function stageSummary(projection) {
-  const { path, digest, record, stageKey, stage } = projection;
+  const { path, digest, record } = projection;
+  if (projection.terminal) {
+    return {
+      path,
+      digest,
+      currentStage: record.current_stage,
+      stageKey: null,
+      description: "Standalone proof gates retired; M0-S3 is the executable proof",
+      state: record.state,
+      supersededBy: record.superseded_by.decision_id,
+      replacementTask: record.superseded_by.replacement_task,
+      executionAuthorized: false,
+      projectStatusMutable: true,
+    };
+  }
+  const { stageKey, stage } = projection;
   const readiness = Object.values(stage.readiness ?? {});
   return {
     path,
@@ -275,16 +307,22 @@ function bodyFor(task, sourceRevision, allowMissingContext = false) {
   let proofLines = "";
   if (projection) {
     const summary = stageSummary(projection);
-    proofLines =
-      `- Proof stage record: \`${summary.path}\`\n` +
-      `- Proof stage record digest: \`${summary.digest}\`\n` +
-      `- Current proof stage: \`${summary.currentStage}\` (${summary.description})\n` +
-      `- Authorization: \`${summary.authorizationId ?? "UNASSIGNED"}\` / \`${summary.authorizationState}\`\n` +
-      `- Readiness fields: \`${summary.readinessPopulated}/${summary.readinessTotal}\` populated\n` +
-      `- Claim state: \`${summary.claimState}\`\n` +
-      `- Review disposition: \`${summary.reviewDisposition}\`\n` +
-      `- Project status authority: \`INFORMATIONAL_ONLY\`\n` +
-      `- Proof record source: https://github.com/${OWNER}/curve/blob/${sourceRevision}/${summary.path}\n`;
+    proofLines = summary.state === "SUPERSEDED"
+      ? `- Historical proof record: \`${summary.path}\`\n` +
+        `- Historical proof record digest: \`${summary.digest}\`\n` +
+        `- Historical proof state: \`${summary.currentStage}\` / \`${summary.state}\`\n` +
+        `- Superseded by: \`${summary.supersededBy}\`; replacement proof: \`${summary.replacementTask}\`\n` +
+        `- Project status authority: \`INFORMATIONAL_ONLY\`\n` +
+        `- Proof record source: https://github.com/${OWNER}/curve/blob/${sourceRevision}/${summary.path}\n`
+      : `- Proof stage record: \`${summary.path}\`\n` +
+        `- Proof stage record digest: \`${summary.digest}\`\n` +
+        `- Current proof stage: \`${summary.currentStage}\` (${summary.description})\n` +
+        `- Authorization: \`${summary.authorizationId ?? "UNASSIGNED"}\` / \`${summary.authorizationState}\`\n` +
+        `- Readiness fields: \`${summary.readinessPopulated}/${summary.readinessTotal}\` populated\n` +
+        `- Claim state: \`${summary.claimState}\`\n` +
+        `- Review disposition: \`${summary.reviewDisposition}\`\n` +
+        `- Project status authority: \`INFORMATIONAL_ONLY\`\n` +
+        `- Proof record source: https://github.com/${OWNER}/curve/blob/${sourceRevision}/${summary.path}\n`;
   }
   return `<!-- curve-project-sync:v1 id=${task.id} -->
 ## Curve work package

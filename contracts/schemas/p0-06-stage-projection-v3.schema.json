@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/p0-06-stage-projection-v3.schema.json",
+  "title": "Curve P0-06 terminal supersession projection v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "current_stage",
+    "state",
+    "updated_on",
+    "superseded_at",
+    "superseded_by",
+    "historical_record",
+    "reason"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.proof-stage-projection/v3" },
+    "task_id": { "const": "P0-06" },
+    "current_stage": { "const": "P0-06_SUPERSEDED" },
+    "state": { "const": "SUPERSEDED" },
+    "updated_on": { "type": "string", "format": "date" },
+    "superseded_at": { "type": "string", "format": "date-time" },
+    "superseded_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_id",
+        "decision_scope",
+        "approved_head",
+        "merge_commit",
+        "approval_url",
+        "replacement_task"
+      ],
+      "properties": {
+        "decision_id": { "const": "D-003" },
+        "decision_scope": { "const": "LOCAL_ONLY" },
+        "approved_head": { "$ref": "#/$defs/sha" },
+        "merge_commit": { "$ref": "#/$defs/sha" },
+        "approval_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://github\\.com/faocampo/curve/pull/9$"
+        },
+        "replacement_task": { "const": "M0-S3" }
+      }
+    },
+    "historical_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "current_stage", "source_revision", "path"],
+      "properties": {
+        "schema_version": { "const": "curve.proof-stage-projection/v2" },
+        "current_stage": { "const": "P0-06A_DESIGN" },
+        "source_revision": { "$ref": "#/$defs/sha" },
+        "path": { "const": "docs/technical/proofs/p0-06-stage-record.json" }
+      }
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    }
+  },
+  "$defs": {
+    "sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  }
+}
