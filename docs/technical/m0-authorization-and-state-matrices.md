@@ -39,26 +39,27 @@ future approved policy version and exposes no protected projection.
 
 | Order | Predicate | Deny code | Rule |
 | --- | --- | --- | --- |
-| 1 | Contract and manifest integrity | `POLICY_CONTEXT_INVALID` | Input schema and exact manifest byte digest must pass. |
+| 1 | Contract, manifest, and trusted time integrity | `POLICY_CONTEXT_INVALID` | Input schema, exact manifest byte digest, and caller-supplied trusted `evaluated_at` must pass; the pure evaluator reads no clock. |
 | 2 | Feature enablement | `FEATURE_DISABLED` | Disabled Curve exposes no protected action. |
 | 3 | Authentication and global actor ceiling | `UNAUTHENTICATED`, `AGENT_NOT_ALLOWED` | Actor must be authenticated; `AGENT` is globally rejected in v1. |
 | 4 | Workspace equality and membership | `WORKSPACE_MISMATCH`, `INACTIVE_MEMBERSHIP` | Requested and resource workspace must match. A human requires active membership in that workspace; a non-human carries no Plane membership. |
 | 5 | Exact action | `UNKNOWN_ACTION` | No wildcard, prefix, inferred, or prompt-supplied action exists. |
 | 6 | Resource type and existence | `RESOURCE_TYPE_NOT_ALLOWED`, `RESOURCE_NOT_FOUND` | The exact type must be listed for the action. Lookup is workspace-scoped; absent and other-workspace IDs are indistinguishable and never trigger a global lookup. |
 | 7 | Action actor type and effective principal | `UNSUPPORTED_PRINCIPAL` | Subject and effective principal must be allowed for the exact action and equal in M0. |
-| 8 | Role | `ROLE_NOT_ALLOWED` | At least one resolved role must be allowed; ACL cannot repair a role denial. |
+| 8 | Actor/role consistency and role floor | `ROLE_NOT_ALLOWED` | A human never carries `TRUSTED_SERVICE`; a service carries only `TRUSTED_SERVICE`; agent/system inputs carry no role. At least one resolved role must be action-allowed; ACL cannot repair a role denial. |
 | 9 | Environment | `ENVIRONMENT_NOT_ALLOWED` | The exact environment must be listed. |
 | 10 | Classification | `CLASSIFICATION_NOT_ALLOWED` | `UNKNOWN` becomes `RESTRICTED`; the normalized class must be listed. |
-| 11 | Object ACL | `OBJECT_ACL_REQUIRED`, `OBJECT_ACL_DENIED` | Workspace/resource/version must match. Deny principal/role wins; allow entries only narrow. Required missing ACL denies unless exact owner metadata satisfies the action contract. |
+| 11 | Object ACL | `OBJECT_ACL_REQUIRED`, `OBJECT_ACL_DENIED` | Workspace/resource/version must match. Deny principal/role wins; allow entries only narrow. Required missing ACL denies unless the immutable action sets `owner_satisfies_acl=true` and exact owner metadata matches. |
 | 12 | Assignment | `ASSIGNMENT_REQUIRED`, `ASSIGNMENT_MISMATCH` | Assigned actions require exact workspace/subject/version context plus the active human assignment and role. |
 | 13 | Separation of duties | `SEPARATION_OF_DUTY_DENIED` | Risk-tier rules below must pass. |
 | 14 | Target allowlist | `TARGET_ALLOWLIST_REQUIRED`, `TARGET_NOT_ALLOWED` | Context must match workspace; required empty lists deny; target comparison is exact. |
-| 15 | Service authorization | `SERVICE_AUTHORIZATION_REQUIRED`, `SERVICE_AUTHORIZATION_INVALID`, `SERVICE_AUTHORIZATION_INACTIVE`, `SERVICE_AUTHORIZATION_EXPIRED` | Authorization ID, workspace, service, active state, exact action, issue time, and trusted expiry must match; non-service actors carry no service authorization. |
+| 15 | Service authorization | `SERVICE_AUTHORIZATION_REQUIRED`, `SERVICE_AUTHORIZATION_INVALID`, `SERVICE_AUTHORIZATION_INACTIVE`, `SERVICE_AUTHORIZATION_EXPIRED` | Authorization ID/version, workspace, service, active state, exact action, issue time, and the input `evaluated_at` expiry comparison must match; non-service actors carry no service authorization. |
 | 16 | External effect boundary | `EXTERNAL_EFFECT_NOT_ALLOWED` | Core v1 actions perform no provider/network external effect. |
 
-All matched reasons are retained in the safe decision record in the manifest's
-precedence order. Public error bodies expose a stable general Problem Details
-code rather than ACL, owner, assignment, classification, or policy internals.
+All matched deny reasons are retained in the safe decision record in the
+manifest's precedence order. An allow records only `POLICY_ALLOWED`. Public
+error bodies expose a stable general Problem Details code rather than ACL,
+owner, assignment, classification, or policy internals.
 
 ## Roles and source of authority
 
@@ -88,6 +89,7 @@ action allowlist and deny precedence). This table is the human-readable view.
 | `CURVE.OPERATION.READ` | `OPERATION` | Human member/assigned/admin role or exact trusted service | Any known class; enabled environment | ACL required; service authorization when service | Safe Operation metadata only |
 | `CURVE.OPERATION.CANCEL` | `OPERATION` | Same role floor as read | Any known class; enabled environment | ACL required; operation must separately be cancellable/current | No protected body |
 | `CURVE.FOUNDATION_PROBE.START` | `WORKSPACE` | Human active workspace member or assigned/admin role | `INTERNAL`; `LOCAL` only | ACL/assignment/target N/A | Safe Operation metadata |
+| `CURVE.OPERATION.TRANSITION` | `OPERATION` | Exact service with only `TRUSTED_SERVICE` | Any known class; enabled environment | ACL/assignment/target N/A; exact versioned service authorization | No body; domain transition/version guard remains authoritative |
 | `CURVE.PROVIDER_CONNECTION.ADMINISTER` | `PROVIDER_CONNECTION` | Human `PLATFORM_ADMINISTRATOR` | Any known class; enabled environment | Optional narrowing ACL; exact non-empty target allowlist | No body; provider adapter remains unimplemented |
 | `CURVE.GATE.DECIDE.PRD` | `ARTIFACT_VERSION` | Assigned human `PRODUCT_APPROVER` | Any known class; enabled environment | ACL, exact assignment, and risk separation required | No body |
 | `CURVE.GATE.DECIDE.PLAN` | `EXECUTION_PLAN` | Assigned human `TECHNICAL_APPROVER` | Any known class; enabled environment | ACL, exact assignment, and risk separation required | No body |
@@ -107,7 +109,8 @@ Object ACL evaluation occurs only after safe resource metadata is found through
 2. Exact principal deny wins over principal allow, role allow, and ownership.
 3. Any matching role deny wins over any role allow and ownership.
 4. For a required ACL, an exact allow-principal, allow-role, or accepted owner
-   match is required after deny checks.
+   match is required after deny checks. Ownership applies only to an action with
+   `owner_satisfies_acl=true`; v1 enables it only for Operation read/cancel.
 5. For optional narrowing ACL, an absent ACL leaves the role result unchanged;
    a present ACL applies the same deny/allow rules.
 6. An empty required ACL denies unless the owning service supplies exact owner
@@ -119,7 +122,7 @@ Object ACL evaluation occurs only after safe resource metadata is found through
 
 | Risk tier | Required rule |
 | --- | --- |
-| `HIGH` | Product, Technical, and Code approvers are three distinct active humans. The Code Approver is absent from material authors/operators. Missing any assignment denies. |
+| `HIGH` | Product, Technical, and Code approvers are three distinct active humans. The Code Approver is absent from the material-contributor set of authors and operators. Missing/inactive/non-human assignments deny. |
 | `STANDARD` | Duplicate gate humans deny unless an approved, current workspace policy-exception `ResourceRef` is supplied. Code-author/operator restrictions from the applicable workflow still apply. |
 | `LOW` | Overlap is permitted only when the pinned workflow version explicitly sets `low_risk_overlap_allowed=true`; otherwise deny. |
 
@@ -134,7 +137,8 @@ re-evaluation.
 | `INTERNAL` | `INTERNAL` | Evaluate exact action rules. |
 | `CONFIDENTIAL` | `CONFIDENTIAL` | Evaluate exact action and ACL; projection remains named/minimized. |
 | `RESTRICTED` | `RESTRICTED` | Evaluate only actions that explicitly list `RESTRICTED`; no core external effect exists. |
-| `UNKNOWN` or missing source classification | `RESTRICTED` | Never infer a lower class. Invalid missing required metadata denies. |
+| Explicit `UNKNOWN` | `RESTRICTED` | Never infer a lower class. |
+| Missing required classification | N/A | Invalid policy context denies before evaluation. |
 
 Target allowlists are exact typed IDs. `REQUIRED` with an empty list denies. A
 retrieved instruction, model response, provider callback, URL parameter, or

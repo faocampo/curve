@@ -4,6 +4,7 @@
   "policy_version": 1,
   "default_effect": "DENY",
   "unknown_classification": "RESTRICTED",
+  "allow_reason_code": "POLICY_ALLOWED",
   "deny_precedence": ["FEATURE_DISABLED", "UNKNOWN_ACTION"],
   "actions": [
     {
@@ -14,6 +15,7 @@
       "allowed_classifications": ["INTERNAL"],
       "allowed_environments": ["LOCAL"],
       "object_acl": "NOT_APPLICABLE",
+      "owner_satisfies_acl": false,
       "assignment": "NONE",
       "separation_of_duty": "NONE",
       "target_allowlist": "NOT_APPLICABLE",

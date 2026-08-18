@@ -77,9 +77,18 @@ const fixtureSpecs = [
   ["contracts/schemas/semantic-fixtures/idempotency-raw-key.invalid.json", idempotencySchema, false],
   ["contracts/schemas/semantic-fixtures/idempotency-terminal-null.invalid.json", idempotencySchema, false],
   ["contracts/schemas/semantic-fixtures/policy-evaluation-service.valid.json", policyEvaluationSchema, true],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-transition-service.valid.json", policyEvaluationSchema, true],
   ["contracts/schemas/semantic-fixtures/policy-evaluation-service-membership.invalid.json", policyEvaluationSchema, false],
   ["contracts/schemas/semantic-fixtures/policy-evaluation-human-service-auth.invalid.json", policyEvaluationSchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-human-service-role.invalid.json", policyEvaluationSchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-service-human-role.invalid.json", policyEvaluationSchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-service-version.invalid.json", policyEvaluationSchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-target-version.valid.json", policyEvaluationSchema, true],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-target-version.invalid.json", policyEvaluationSchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-gate-assignment.valid.json", policyEvaluationSchema, true],
+  ["contracts/schemas/semantic-fixtures/policy-evaluation-gate-assignment.invalid.json", policyEvaluationSchema, false],
   ["contracts/schemas/semantic-fixtures/policy-decision-human-recorder.invalid.json", policyDecisionSchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-decision-allow-reason.invalid.json", policyDecisionSchema, false],
 ];
 
 for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".json").sort()) {
@@ -125,16 +134,35 @@ if (
     "contracts/policy/core-policy-v1.json deny precedence differs from immutable v1",
   );
 }
+if (corePolicyManifest.allow_reason_code !== "POLICY_ALLOWED") {
+  throw new Error("contracts/policy/core-policy-v1.json allow reason differs from immutable v1");
+}
+if (corePolicyManifest.deny_precedence.includes(corePolicyManifest.allow_reason_code)) {
+  throw new Error("contracts/policy/core-policy-v1.json mixes allow and deny reason codes");
+}
 const expectedCorePolicyResources = new Map([
   ["CURVE.SHELL.VIEW", ["WORKSPACE"]],
   ["CURVE.OPERATION.READ", ["OPERATION"]],
   ["CURVE.OPERATION.CANCEL", ["OPERATION"]],
   ["CURVE.FOUNDATION_PROBE.START", ["WORKSPACE"]],
+  ["CURVE.OPERATION.TRANSITION", ["OPERATION"]],
   ["CURVE.PROVIDER_CONNECTION.ADMINISTER", ["PROVIDER_CONNECTION"]],
   ["CURVE.GATE.DECIDE.PRD", ["ARTIFACT_VERSION"]],
   ["CURVE.GATE.DECIDE.PLAN", ["EXECUTION_PLAN"]],
   ["CURVE.GATE.DECIDE.CODE_READINESS", ["PULL_REQUEST_SET"]],
   ["CURVE.FINDING.DISPOSITION.NON_SECURITY", ["REVIEW_FINDING"]],
+]);
+const expectedOwnerAcl = new Map([
+  ["CURVE.SHELL.VIEW", false],
+  ["CURVE.OPERATION.READ", true],
+  ["CURVE.OPERATION.CANCEL", true],
+  ["CURVE.FOUNDATION_PROBE.START", false],
+  ["CURVE.OPERATION.TRANSITION", false],
+  ["CURVE.PROVIDER_CONNECTION.ADMINISTER", false],
+  ["CURVE.GATE.DECIDE.PRD", false],
+  ["CURVE.GATE.DECIDE.PLAN", false],
+  ["CURVE.GATE.DECIDE.CODE_READINESS", false],
+  ["CURVE.FINDING.DISPOSITION.NON_SECURITY", false],
 ]);
 const actionNames = corePolicyManifest.actions.map((action) => action.action);
 if (new Set(actionNames).size !== actionNames.length) {
@@ -159,6 +187,29 @@ for (const action of corePolicyManifest.actions) {
   if (action.external_side_effect !== false) {
     throw new Error(`${action.action} grants an M0 external side effect`);
   }
+  if (action.owner_satisfies_acl !== expectedOwnerAcl.get(action.action)) {
+    throw new Error(`${action.action} owner ACL rule differs from immutable v1`);
+  }
+}
+const transitionPolicy = corePolicyManifest.actions.find(
+  (action) => action.action === "CURVE.OPERATION.TRANSITION",
+);
+if (
+  JSON.stringify(transitionPolicy.allowed_actor_types) !== JSON.stringify(["SERVICE"]) ||
+  JSON.stringify(transitionPolicy.allowed_roles) !== JSON.stringify(["TRUSTED_SERVICE"]) ||
+  JSON.stringify(transitionPolicy.allowed_classifications) !==
+    JSON.stringify(["INTERNAL", "CONFIDENTIAL", "RESTRICTED"]) ||
+  JSON.stringify(transitionPolicy.allowed_environments) !==
+    JSON.stringify(["LOCAL", "STAGING", "PRODUCTION"]) ||
+  transitionPolicy.object_acl !== "NOT_APPLICABLE" ||
+  transitionPolicy.owner_satisfies_acl !== false ||
+  transitionPolicy.assignment !== "NONE" ||
+  transitionPolicy.separation_of_duty !== "NONE" ||
+  transitionPolicy.target_allowlist !== "NOT_APPLICABLE" ||
+  transitionPolicy.external_side_effect !== false ||
+  JSON.stringify(transitionPolicy.permitted_projection) !== JSON.stringify(["NO_BODY"])
+) {
+  throw new Error("CURVE.OPERATION.TRANSITION differs from the immutable trusted-service boundary");
 }
 
 for (const [fixtureName, schema, shouldBeValid] of fixtureSpecs) {

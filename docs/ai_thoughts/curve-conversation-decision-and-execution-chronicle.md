@@ -994,3 +994,22 @@ schemas. Plane implementation remains blocked until the exact published Curve
 head is approved and merged. D-003 (runtime topology and trust-zone decision),
 P0-06A (isolated Temporal feasibility proof), and P0-06B (least-privilege Plane
 integration proof) are unchanged by this package.
+
+Before owner approval, a second codeability audit found four underspecified
+machine boundaries. Expiry checks lacked a trusted time input even though the
+evaluator was defined as pure; allowed decisions required reasons without one
+canonical allow code; actor/role and target/service version bindings were not
+fully schema-enforced; and the trusted worker lifecycle action needed by M0-S3
+(local Temporal round-trip implementation packet) was absent from the v1 action
+ceiling.
+
+The proposal was corrected in place while remaining under security review. The
+evaluation input now carries exact trusted `evaluated_at`, versioned target
+configuration and service authorization, active human gate assignments, a
+material-contributor set covering authors/operators, and actor-type-consistent
+roles. The manifest defines `POLICY_ALLOWED`, an explicit per-action
+`owner_satisfies_acl` rule, and `CURVE.OPERATION.TRANSITION` for an exactly
+authorized `TRUSTED_SERVICE`. Negative fixtures reject human/service role
+forgery, unversioned service authorization, and noncanonical allow reasons. The
+Plane implementation remains pending Federico's approval of the superseding
+exact Curve head.

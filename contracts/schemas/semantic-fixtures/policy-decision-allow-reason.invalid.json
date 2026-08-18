@@ -18,7 +18,7 @@
     "actor_id": "user-123"
   },
   "effect": "ALLOW",
-  "reason_codes": ["POLICY_ALLOWED"],
+  "reason_codes": ["ROLE_ALLOWED", "OBJECT_ACL_ALLOWED"],
   "policy_key": "CURVE_CORE_POLICY",
   "policy_version": 1,
   "policy_manifest_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",

@@ -2,18 +2,14 @@
   "schema_version": "1.0",
   "workspace_id": "11111111-1111-4111-8111-111111111111",
   "subject": {
-    "actor_type": "HUMAN",
-    "actor_id": "user-123"
+    "actor_type": "SERVICE",
+    "actor_id": "curve-controller"
   },
   "effective_principal": {
-    "actor_type": "HUMAN",
-    "actor_id": "user-123"
+    "actor_type": "SERVICE",
+    "actor_id": "curve-controller"
   },
-  "membership": {
-    "workspace_id": "11111111-1111-4111-8111-111111111111",
-    "active": true,
-    "plane_role": "MEMBER"
-  },
+  "membership": null,
   "roles": ["WORKSPACE_MEMBER"],
   "action": "CURVE.OPERATION.READ",
   "resource": {
@@ -24,10 +20,7 @@
       "resource_version": 2
     },
     "exists": true,
-    "owner": {
-      "actor_type": "HUMAN",
-      "actor_id": "user-123"
-    }
+    "owner": null
   },
   "classification": "INTERNAL",
   "environment": "LOCAL",
@@ -42,7 +35,7 @@
     "acl_version": 1,
     "allow_principals": [],
     "deny_principals": [],
-    "allow_roles": ["WORKSPACE_MEMBER"],
+    "allow_roles": ["TRUSTED_SERVICE"],
     "deny_roles": []
   },
   "assignment_context": null,
@@ -62,5 +55,5 @@
   },
   "evaluated_at": "2026-08-18T12:00:00Z",
   "policy_manifest_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  "correlation_id": "correlation-123"
+  "correlation_id": "service-correlation-123"
 }

@@ -10,6 +10,7 @@
     "policy_version",
     "default_effect",
     "unknown_classification",
+    "allow_reason_code",
     "deny_precedence",
     "actions"
   ],
@@ -19,6 +20,7 @@
     "policy_version": { "const": 1 },
     "default_effect": { "const": "DENY" },
     "unknown_classification": { "const": "RESTRICTED" },
+    "allow_reason_code": { "const": "POLICY_ALLOWED" },
     "deny_precedence": {
       "type": "array",
       "minItems": 1,
@@ -58,6 +60,7 @@
         "allowed_classifications",
         "allowed_environments",
         "object_acl",
+        "owner_satisfies_acl",
         "assignment",
         "separation_of_duty",
         "target_allowlist",
@@ -114,6 +117,7 @@
           "type": "string",
           "enum": ["NOT_APPLICABLE", "OPTIONAL_NARROWING", "REQUIRED"]
         },
+        "owner_satisfies_acl": { "type": "boolean" },
         "assignment": {
           "type": "string",
           "enum": [

@@ -20,6 +20,7 @@
     "assignment_context",
     "target_context",
     "service_authorization",
+    "evaluated_at",
     "policy_manifest_digest",
     "correlation_id"
   ],
@@ -60,6 +61,7 @@
     "service_authorization": {
       "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/serviceAuthorization" }]
     },
+    "evaluated_at": { "$ref": "common.schema.json#/$defs/Instant" },
     "policy_manifest_digest": { "$ref": "common.schema.json#/$defs/Digest" },
     "correlation_id": { "type": "string", "minLength": 1, "maxLength": 255 }
   },
@@ -76,6 +78,9 @@
       "then": {
         "properties": {
           "membership": { "$ref": "#/$defs/membership" },
+          "roles": {
+            "not": { "contains": { "const": "TRUSTED_SERVICE" } }
+          },
           "service_authorization": { "type": "null" }
         }
       },
@@ -94,6 +99,7 @@
       },
       "then": {
         "properties": {
+          "roles": { "const": ["TRUSTED_SERVICE"] },
           "service_authorization": {
             "$ref": "#/$defs/serviceAuthorization"
           }
@@ -101,6 +107,21 @@
       },
       "else": {
         "properties": { "service_authorization": { "type": "null" } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "subject": {
+            "properties": {
+              "actor_type": { "enum": ["AGENT", "SYSTEM"] }
+            },
+            "required": ["actor_type"]
+          }
+        }
+      },
+      "then": {
+        "properties": { "roles": { "maxItems": 0 } }
       }
     }
   ],
@@ -194,13 +215,23 @@
     "gateAssignment": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["role", "principal"],
+      "required": ["role", "principal", "active"],
       "properties": {
         "role": {
           "type": "string",
           "enum": ["PRODUCT_APPROVER", "TECHNICAL_APPROVER", "CODE_APPROVER"]
         },
-        "principal": { "$ref": "common.schema.json#/$defs/ActorRef" }
+        "principal": {
+          "allOf": [
+            { "$ref": "common.schema.json#/$defs/ActorRef" },
+            {
+              "properties": {
+                "actor_type": { "const": "HUMAN" }
+              }
+            }
+          ]
+        },
+        "active": { "const": true }
       }
     },
     "assignmentContext": {
@@ -215,7 +246,7 @@
         "assignment_version",
         "risk_tier",
         "gate_assignments",
-        "material_authors",
+        "material_contributors",
         "low_risk_overlap_allowed",
         "overlap_exception_ref"
       ],
@@ -232,7 +263,7 @@
           "maxItems": 3,
           "items": { "$ref": "#/$defs/gateAssignment" }
         },
-        "material_authors": {
+        "material_contributors": {
           "type": "array",
           "uniqueItems": true,
           "items": { "$ref": "common.schema.json#/$defs/ActorRef" }
@@ -241,7 +272,7 @@
         "overlap_exception_ref": {
           "oneOf": [
             { "type": "null" },
-            { "$ref": "common.schema.json#/$defs/ResourceRef" }
+            { "$ref": "#/$defs/versionedResourceRef" }
           ]
         }
       }
@@ -249,9 +280,16 @@
     "targetContext": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["workspace_id", "target_type", "target_id", "allowed_targets"],
+      "required": [
+        "workspace_id",
+        "configuration_ref",
+        "target_type",
+        "target_id",
+        "allowed_targets"
+      ],
       "properties": {
         "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
+        "configuration_ref": { "$ref": "#/$defs/versionedResourceRef" },
         "target_type": {
           "type": "string",
           "pattern": "^[A-Z][A-Z0-9_]{0,99}$"
@@ -269,6 +307,7 @@
       "additionalProperties": false,
       "required": [
         "authorization_id",
+        "authorization_version",
         "workspace_id",
         "service",
         "active",
@@ -278,6 +317,9 @@
       ],
       "properties": {
         "authorization_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+        "authorization_version": {
+          "$ref": "common.schema.json#/$defs/AggregateVersion"
+        },
         "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
         "service": {
           "allOf": [
@@ -302,6 +344,12 @@
         "issued_at": { "$ref": "common.schema.json#/$defs/Instant" },
         "expires_at": { "$ref": "common.schema.json#/$defs/Instant" }
       }
+    },
+    "versionedResourceRef": {
+      "allOf": [
+        { "$ref": "common.schema.json#/$defs/ResourceRef" },
+        { "required": ["resource_version"] }
+      ]
     }
   }
 }

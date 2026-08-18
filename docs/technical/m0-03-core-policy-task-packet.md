@@ -24,7 +24,8 @@ Implement one provider-neutral, deny-first Curve authorization kernel that:
 - uses live Plane identity and workspace membership;
 - evaluates exact action, effective principal, workspace, role, object ACL,
   classification, environment, assignment, risk-tier separation, target
-  allowlist, and trusted-service authorization;
+  allowlist, trusted evaluation time, and versioned trusted-service
+  authorization;
 - persists an immutable safe `PolicyDecision` and binds it to `AuditEvent`;
 - denies unknown actions, missing required context, agents, empty required
   allowlists, cross-workspace references, and persistence failures;
@@ -44,12 +45,15 @@ Federico Ocampo's exact-head approval accepts these implementation choices:
    supply them to the same evaluator.
 3. The byte-pinned [core policy manifest](../../contracts/policy/core-policy-v1.json)
    (immutable action/resource allowlist, allowed roles/classes/environments, and
-   deny precedence) is the v1 policy version. Unknown or missing actions and
-   mismatched resource types deny.
+   reason precedence) is the v1 policy version. An allowed decision records only
+   `POLICY_ALLOWED`; denied reasons use the manifest's ordered deny list.
+   Unknown or missing actions and mismatched resource types deny.
 4. `UNKNOWN` classification normalizes to `RESTRICTED`. ACLs and target
    allowlists can narrow permission but cannot broaden a role/action decision.
    ACL, assignment, target, and service-authorization contexts bind the exact
-   workspace and owning resource/configuration version.
+   workspace and owning resource/configuration/authorization version. Only the
+   Operation read/cancel actions allow an exact owner match to satisfy a
+   required ACL.
 5. A policy-decision or denial-audit persistence failure fails the protected
    operation closed.
 6. Provider-specific adapters and external-side-effect rules remain gated by
@@ -59,6 +63,7 @@ Federico Ocampo's exact-head approval accepts these implementation choices:
 
 The implementation pins the exact merged Curve revision containing:
 
+- [this M0-03 task packet](m0-03-core-policy-task-packet.md) (implementation scope, boundaries, acceptance tests, commands, and stop conditions);
 - [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) (product behavior, security requirements, and acceptance scenarios);
 - [Architecture](architecture.md) (Curve components, trust boundaries, and PostgreSQL authority);
 - [Security and operations](security-and-operations.md) (identity, tenant isolation, classification, and audit rules);
@@ -66,12 +71,18 @@ The implementation pins the exact merged Curve revision containing:
 - [M0 authorization matrices](m0-authorization-and-state-matrices.md) (deterministic role, ACL, assignment, separation, and response precedence);
 - [M0-03 relational contract](../../contracts/database/m0-03-policy-contract.md) (physical decision record, transactions, migration, and rollback);
 - [Core policy manifest](../../contracts/policy/core-policy-v1.json) (immutable v1 action allowlist and deny precedence);
+- [Core policy manifest schema](../../contracts/schemas/core-policy-manifest.schema.json) (machine-valid manifest structure and required action fields);
 - [Policy evaluation schema](../../contracts/schemas/policy-evaluation.schema.json) (safe evaluator input);
 - [Policy decision schema](../../contracts/schemas/policy-decision.schema.json) (immutable evaluator output);
+- [Policy semantic fixtures](../../contracts/schemas/semantic-fixtures/) (accepted and rejected M0-03 evaluation and decision examples matching `policy-*.json`);
+- [Contract validator](../../scripts/validate-contracts.mjs) (schema compilation, fixture expectations, and immutable v1 policy assertions);
 - [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) (accepted Plane base, operation/delivery kernel, tests, and merge binding).
 
 The context digest uses the repository's existing `curve-context-pack:v1`
-algorithm over those paths at the exact merged Curve revision. Before code
+algorithm over those paths at the exact merged Curve revision. The semantic
+fixture input expands every path matching
+`contracts/schemas/semantic-fixtures/policy-*.json` at that revision and sorts
+the paths lexicographically before hashing. Before code
 dispatch, the coding agent records the revision, ordered paths, per-file byte
 digests, aggregate context digest, owner, reviewer, Plane base, and packet ID in
 `apps/api/plane/curve/contracts/m0-03-context.json` (implementation context
@@ -145,6 +156,13 @@ The implementation separates:
 5. decision persistence/audit transaction service;
 6. request/domain adapters.
 
+The protected boundary maps the current shell and operation services to exact
+actions: shell read to `CURVE.SHELL.VIEW`, local probe creation to
+`CURVE.FOUNDATION_PROBE.START`, Operation read/cancel to their named actions,
+and trusted worker lifecycle changes to `CURVE.OPERATION.TRANSITION`. The
+transition action requires a `SERVICE` principal with only the
+`TRUSTED_SERVICE` role and exact active, versioned service authorization.
+
 No endpoint or service may implement a parallel authorization path. A protected
 resource query accepts `workspace_id` as a mandatory predicate and never falls
 back to a global ID lookup.
@@ -180,10 +198,12 @@ other route.
 7. **Agent authority.** Given any `AGENT` actor and any claimed role/ACL, when any
    core action is evaluated, then it denies with `AGENT_NOT_ALLOWED`.
 8. **Role floor.** Given an ACL that names a principal, when the action is not
-   allowed for any resolved role, then the ACL cannot grant it.
+   allowed for any resolved role, then the ACL cannot grant it. A human cannot
+   carry `TRUSTED_SERVICE`; a service carries exactly `TRUSTED_SERVICE`; an
+   agent or system carries no role in the v1 input.
 9. **ACL precedence.** Given both allow and deny ACL matches, when evaluated,
    then deny wins. A required missing ACL denies unless exact owner metadata is
-   accepted by the action contract.
+   accepted by the action's immutable `owner_satisfies_acl=true` rule.
 10. **Classification.** Given `UNKNOWN`, when evaluated, then the persisted
    decision classification is `RESTRICTED`. A classification absent from the
    action policy denies.
@@ -205,15 +225,18 @@ other route.
     authorization from a different workspace/resource/version, when evaluated,
     then it denies as invalid policy context before any protected projection.
 18. **Trusted service.** Given a service actor, when authorization identity,
-    workspace, live active state, exact action, issue time, or expiry is missing
-    or mismatched, or a Plane membership is supplied for the service, then it
-    denies. A service never receives a human approver role. Human, system, and
-    agent inputs carry no service authorization.
+    authorization version, workspace, live active state, exact action, issue
+    time, trusted evaluation time, or expiry is missing or mismatched, or a
+    Plane membership/human role is supplied for the service, then it denies. A
+    service never receives a human approver role. Human, system, and agent
+    inputs carry no service authorization.
 19. **Immutable evidence.** Given any policy decision, when it is recorded, then
     its positive sequence is unique and monotonic for the workspace/resource and
     `recorded_by` is a trusted `SERVICE` or `SYSTEM`, and `recorded_at` is not
-    earlier than `evaluated_at`; when update/delete is attempted through model or
-    queryset APIs, then it fails and the original row remains unchanged.
+    earlier than the exact trusted input `evaluated_at`; an allowed decision has
+    only `POLICY_ALLOWED` and a denied decision contains only ordered manifest
+    deny codes; when update/delete is attempted through model or queryset APIs,
+    then it fails and the original row remains unchanged.
 20. **Atomic allow.** Given an allowed mutation, when audit append fails, then
     the decision, domain mutation, DomainEvent, outbox item, and audit all roll
     back.
@@ -238,10 +261,15 @@ other route.
     Curve-specific adapter denies before the view loads protected state and
     records one safe decision/audit pair; every non-Curve Plane route retains its
     existing permission behavior.
-26. **Migration.** Given a disposable PostgreSQL database, when the new Curve
+26. **Trusted lifecycle transition.** Given the local worker presents exact
+    versioned service authorization for `CURVE.OPERATION.TRANSITION`, when the
+    workspace, Operation, action, role, evaluated time, expected aggregate
+    version, and domain transition all match, then the transition may proceed;
+    any mismatch denies before mutation.
+27. **Migration.** Given a disposable PostgreSQL database, when the new Curve
     migration runs forward, backward, and forward, then all steps pass and no
     existing Plane table or migration changes.
-27. **Regression.** Given Curve disabled and enabled, when the complete Plane
+28. **Regression.** Given Curve disabled and enabled, when the complete Plane
     backend suite and repository checks run, then there is no repository-native
     regression.
 
