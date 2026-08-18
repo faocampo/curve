@@ -1013,3 +1013,25 @@ authorized `TRUSTED_SERVICE`. Negative fixtures reject human/service role
 forgery, unversioned service authorization, and noncanonical allow reasons. The
 Plane implementation remains pending Federico's approval of the superseding
 exact Curve head.
+
+A third read-only codeability audit mapped the proposed policy contract to the
+accepted Plane M0-S2 (operation and delivery kernel) implementation. It found
+four remaining implementation ambiguities: the deployment environment and
+decision-recorder identity had no named trusted source; Workspace/Operation
+owner, classification, and version inputs were not pinned; a DRF permission
+could pre-commit an allowed decision outside the required mutation transaction;
+and the existing public Python Operation services could remain callable without
+policy authorization.
+
+The proposal was tightened before approval. Enabled Curve now requires explicit
+`CURVE_ENVIRONMENT` and `CURVE_POLICY_RECORDER_ACTOR_ID` process configuration
+with no permissive inference. Current Workspace and Operation resources use
+authoritative Plane/Curve records and fixed synthetic-local `INTERNAL`
+classification; later manifest resource types have no runtime resolver. Query
+authorization records one cached-per-request decision/audit pair. Mutation
+authorization owns the outer database transaction and passes a private,
+transaction-bound receipt to internal Operation callbacks, binding the exact
+decision, domain mutation, event/outbox, and result audit. Direct, serialized,
+forged, expired, or cross-context receipts fail before mutation. The exact Curve
+head still requires Federico Ocampo's security approval before Plane code can
+start.
