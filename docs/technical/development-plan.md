@@ -5,9 +5,9 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 0.5 |
+| Version | 0.6 |
 | Last updated | 2026-08-18 |
-| Source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
+| Source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) (product requirements, lifecycle, security invariants, and acceptance criteria) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
 
@@ -145,7 +145,7 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | -- | ---- | ----------- | ------------ | --------- | ------------------- |
 | M0-01 | M | Curve module boundary integrated with Plane identity/workspace references and feature-flagged navigation/API exposure | P0-01, P0-02 | FR-001, FR-022, NFR-015-NFR-016, AC-01, AC-35 | Workspace isolation tests, disabled behavior with unchanged Plane routes/navigation, forward/backward/forward additive Curve migration proof, rollback path, and supported Plane upgrade test. This package owns the implementation proof allocated by D-001. |
 | M0-02 | M | Core aggregate persistence, opaque IDs, UTC timestamps, aggregate versions, tombstones, append-only histories, and migrations | M0-01 | FR-007, FR-021, NFR-004, NFR-018, AC-08, AC-34, AC-56 | Forward/backward migration and optimistic-concurrency suites. |
-| M0-03 | M | Core authorization/policy kernel for roles, object ACLs, risk tier, assignments, separation of duties, classification, and deny-by-default generic allowlists | M0-01 | FR-043, NFR-009-NFR-012, AC-09, AC-35, AC-52 | Cross-workspace IDOR matrix, separation-of-duty fixtures, empty-allowlist denial, and policy decision audit. Provider-specific policy is added by the consuming adapter after its ADR is decided. |
+| M0-03 | M | Core authorization/policy kernel for roles, object ACLs, risk tier, assignments, separation of duties, classification, and deny-by-default generic allowlists | M0-01 | FR-043, NFR-009-NFR-012, AC-09, AC-35, AC-52 | [M0-03 core policy task packet](m0-03-core-policy-task-packet.md) (exact implementation scope, security decisions, tests, commands, and rollback) and [M0-03 relational contract](../../contracts/database/m0-03-policy-contract.md) (append-only decision persistence and transaction boundary) are `READY_FOR_SECURITY_REVIEW`; implementation waits for exact-head approval/merge. Completion requires cross-workspace IDOR, role/ACL/classification/target/service denial, risk-tier separation, manifest integrity, immutable decision/audit binding, forced-failure rollback, and migration proof. Provider-specific policy follows its decided ADR. |
 | M0-04 | M | Workspace-scoped object storage, AccessEnvelope, digest service, retention hooks, upload/download intents, and cryptographic-erasure workflow | M0-02, M0-03, D-009 | FR-004, FR-021, NFR-010-NFR-011, NFR-018, NFR-020, AC-53, AC-56 | Classification, ACL, integrity, size, tombstone, erasure, and backup tests. |
 | M0-05 | M | Transactional outbox, inbox, idempotency store, Operation resource, dead-letter state, and replay-safe relay | M0-02 | FR-021, FR-023, FR-044, NFR-004-NFR-005, AC-26, AC-33 | Duplicate/lost/out-of-order test suite with no duplicate effects. |
 | M0-06 | L | Temporal parent-workflow skeleton, version markers, child-attempt workflow, signals, timers, cancellation, continue-as-new, and replay corpus | M0-05, D-003 | FR-015, FR-022, NFR-004, AC-17-AC-21, AC-58 | Restart/replay/cancellation demonstrations and archived-history compatibility. Decompose before dispatch. |
@@ -158,8 +158,11 @@ The current Plane implementation base is M0-S2 merge
 M0-S2 satisfies M0-02 (core aggregate persistence) and M0-05 (transactional
 delivery kernel) through [M0-S2 implementation evidence](m0-s2-implementation-evidence.md)
 (exact contract, context, implementation, validation, and merge binding).
-M0-03 (core authorization and policy kernel) is the next independent package
-to materialize. The five-packet local M0 checkpoint remains packet-scoped.
+M0-03 (core authorization and policy kernel) is the next independent package.
+Its [task packet](m0-03-core-policy-task-packet.md) (material security contract,
+acceptance tests, commands, and rollback) is materialized for exact-head security
+review; Plane implementation remains blocked until that head is approved and
+merged. The five-packet local M0 checkpoint remains packet-scoped.
 M0-S3 and its downstream packets
 additionally require accepted P0-06B evidence and a decided D-003 `LOCAL_ONLY`
 profile. P0-06A proves isolated primitives only. D-007 does not gate M0-S1 through M0-S5 because those packets expose no

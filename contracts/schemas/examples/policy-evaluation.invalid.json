@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "workspace_id": "11111111-1111-4111-8111-111111111111",
+  "subject": {
+    "actor_type": "HUMAN",
+    "actor_id": "user-123"
+  },
+  "effective_principal": {
+    "actor_type": "HUMAN",
+    "actor_id": "user-123"
+  },
+  "membership": {
+    "workspace_id": "11111111-1111-4111-8111-111111111111",
+    "active": true,
+    "plane_role": "MEMBER"
+  },
+  "roles": ["WORKSPACE_MEMBER"],
+  "action": "CURVE.OPERATION.READ",
+  "resource": {
+    "workspace_id": "11111111-1111-4111-8111-111111111111",
+    "ref": {
+      "resource_type": "OPERATION",
+      "resource_id": "22222222-2222-4222-8222-222222222222"
+    },
+    "exists": false,
+    "owner": null
+  },
+  "classification": "INTERNAL",
+  "environment": "LOCAL",
+  "feature_enabled": true,
+  "object_acl": null,
+  "assignment_context": {
+    "risk_tier": "STANDARD",
+    "gate_assignments": [],
+    "material_authors": [],
+    "low_risk_overlap_allowed": false,
+    "overlap_exception_ref": null
+  },
+  "target_context": null,
+  "service_authorization": null,
+  "policy_manifest_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "correlation_id": "correlation-123",
+  "protected_body": "must never enter policy input"
+}

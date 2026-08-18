@@ -168,6 +168,17 @@ pnpm build
 docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
 ```
 
+## Independent packet M0-03: Core authorization and policy kernel
+
+M0-03 (core authorization and policy kernel) is independent of the Temporal
+sequence below and now has its own [M0-03 core policy task packet](m0-03-core-policy-task-packet.md)
+(exact Plane base, material security decisions, acceptance tests, commands, stop
+conditions, and rollback) plus [M0-03 relational contract](../../contracts/database/m0-03-policy-contract.md)
+(append-only decision persistence, evaluation order, transaction binding,
+migration, and rollback). Its status is `READY_FOR_SECURITY_REVIEW`; no coding
+agent may dispatch it until Federico Ocampo approves the exact published Curve
+head and authorizes merge.
+
 ## Packet M0-S3: Temporal round trip
 
 | Field | Dispatch specification |

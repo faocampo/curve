@@ -7,10 +7,10 @@
 | Status | Derived security and operations baseline; production enablement is blocked by applicable non-decided ADRs |
 | Owner | X3M security, platform operations, and Curve engineering |
 | Audience | Security, identity, platform, SRE, backend, provider-adapter, and AI coding-agent teams |
-| Version | 0.3 |
-| Last updated | 2026-08-15 |
-| Normative source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
-| Companion documents | [Architecture](architecture.md), [Domain model](domain-model.md), [Workflows and sequences](workflows-and-sequences.md), and [Integration contracts](integration-contracts.md) |
+| Version | 0.4 |
+| Last updated | 2026-08-18 |
+| Normative source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) (product requirements, security invariants, and acceptance criteria) |
+| Companion documents | [Architecture](architecture.md) (components and trust boundaries), [Domain model](domain-model.md) (entities, ownership, and persistence invariants), [Workflows and sequences](workflows-and-sequences.md) (durable lifecycle interactions), and [Integration contracts](integration-contracts.md) (provider-neutral interfaces and error behavior) |
 
 ## Purpose and authority
 
@@ -108,6 +108,16 @@ context = role, ownership, gate assignment, risk tier, provider scope, plan auth
 ```
 
 The decision produces `ALLOW`, `DENY`, or `REQUIRE_HUMAN_CONFIRMATION`, plus a policy/version reference and permitted data projection. `ALLOW` is not a blanket permission: it is scoped to the resource, action, workspace, classification, and operation. The result is attached to the command/activity audit entry; denied attempts are also audited without retaining sensitive request bodies.
+
+M0-03 implements this boundary through the [core policy manifest](../../contracts/policy/core-policy-v1.json)
+(immutable v1 action allowlist and deny precedence), [policy evaluation schema](../../contracts/schemas/policy-evaluation.schema.json)
+(safe subject/workspace/role/ACL/assignment/classification input),
+[policy decision schema](../../contracts/schemas/policy-decision.schema.json)
+(immutable effect/reason/digest/projection output), and
+[M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md)
+(decision persistence, lookup order, transaction binding, migration, and
+rollback). Those artifacts remain `PROPOSED` until Federico Ocampo approves the
+exact published Curve head.
 
 | Principal | May do | Must not do |
 | --- | --- | --- |
