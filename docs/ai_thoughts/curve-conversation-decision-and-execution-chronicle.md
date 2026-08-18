@@ -1035,3 +1035,51 @@ decision, domain mutation, event/outbox, and result audit. Direct, serialized,
 forged, expired, or cross-context receipts fail before mutation. The exact Curve
 head still requires Federico Ocampo's security approval before Plane code can
 start.
+
+### D-003 (local runtime topology) decision-ready simplification
+
+After Plane PR #3 merged M0-S2 (operation and delivery kernel implementation
+packet), the next Temporal-dependent package remained blocked by a circular
+proof sequence. P0-06A (isolated Temporal feasibility proof) could not decide
+the integration topology. P0-06B (least-privilege Plane integration proof) was
+required to decide D-003 (runtime topology and trust-zone decision), while its
+required Compose, worker, persistence, replay, retry, cancellation, and rollback
+evidence duplicated M0-S3 (local Temporal round-trip implementation packet).
+
+The current Plane `preview` tree was re-inspected instead of relying on earlier
+planning assumptions. `docker-compose-local.yml` (existing Plane local stack)
+places PostgreSQL, Valkey, RabbitMQ, MinIO, API, Celery, Beat, and migrator on
+one `dev_env` network, and the existing API/worker processes load broad
+application environments. Attaching the Curve worker directly to that network
+would therefore grant more reachability and configuration than the Temporal
+round trip requires.
+
+The proposed correction uses `docker-compose-curve.yml` (Curve-only local
+Compose overlay) with two internal networks: one shared only by the Temporal
+development server and Curve worker, and one shared only by the Curve worker
+and existing PostgreSQL service. The worker loads a dedicated settings module
+and an explicit environment allowlist instead of Plane's application env file.
+The normal Plane Compose command omits the overlay and remains unchanged.
+
+Official upstream evidence was refreshed on 2026-08-18. Temporal CLI 1.8.1
+still resolves to the documented multi-architecture OCI digest and embeds
+Temporal Server 1.31.2. Temporal Python SDK 1.31.0 supersedes the proposed
+1.30.0 pin and adds musllinux wheels for x86-64 and ARM64, matching Plane's
+Python 3.12 Alpine image.
+
+The proposed governance correction retires P0-06A (isolated Temporal
+feasibility proof) and P0-06B (least-privilege Plane integration proof) as
+standalone execution gates and makes M0-S3 (local Temporal round-trip
+implementation packet) the single implementation/proof. It removes the special
+GitHub claim, broker, ticket, four-lease, and terminal-projection protocol from
+this synthetic local path while retaining exact-head human review, repository
+CI, bounded Docker execution, runtime evidence, and rollback proof. GitHub
+Project status remains visual metadata.
+
+The complete proposal is recorded in [D-003 local topology decision packet](../technical/d003-local-topology-decision-packet.md)
+(least-privilege local network, worker environment, component pins, executable
+acceptance, rollback, supersession, and owner-approval contract). D-003
+(runtime topology and trust-zone decision) remains
+`PROPOSED_OWNER_DECISION_REQUIRED`; staging and production remain fail closed,
+and no Docker or application-code mutation is authorized by preparation of the
+proposal.
