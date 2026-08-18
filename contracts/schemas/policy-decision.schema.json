@@ -85,6 +85,11 @@
       "if": { "properties": { "effect": { "const": "ALLOW" } } },
       "then": {
         "properties": {
+          "reason_codes": {
+            "minItems": 1,
+            "maxItems": 1,
+            "prefixItems": [{ "const": "POLICY_ALLOWED" }]
+          },
           "permitted_projection": { "minItems": 1 }
         }
       }
@@ -97,6 +102,9 @@
       },
       "then": {
         "properties": {
+          "reason_codes": {
+            "not": { "contains": { "const": "POLICY_ALLOWED" } }
+          },
           "permitted_projection": { "maxItems": 0 }
         }
       }

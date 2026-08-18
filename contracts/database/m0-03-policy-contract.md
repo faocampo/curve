@@ -49,7 +49,7 @@ body, user token, or raw idempotency key.
 | `subject` | `jsonb` | No | Validated `ActorRef` for the authenticated actor. |
 | `effective_principal` | `jsonb` | No | Validated `ActorRef`; equal to subject in M0 unless a later decided delegation contract applies. |
 | `effect` | `varchar(32)` | No | `ALLOW`, `DENY`, or `REQUIRE_HUMAN_CONFIRMATION`. M0 core rules produce `ALLOW` or `DENY`; the third value is reserved for later approved workflows. |
-| `reason_codes` | `jsonb` | No | Non-empty unique ordered stable codes; order follows manifest deny precedence. |
+| `reason_codes` | `jsonb` | No | `ALLOW` contains only `POLICY_ALLOWED`; a deny contains one or more unique stable codes in manifest deny precedence. |
 | `policy_key` | `varchar(100)` | No | Exactly `CURVE_CORE_POLICY`. |
 | `policy_version` | `positive integer` | No | Exactly `1`. |
 | `policy_manifest_digest` | `varchar(71)` | No | SHA-256 of exact UTF-8 manifest bytes. |
@@ -57,7 +57,7 @@ body, user token, or raw idempotency key.
 | `normalized_classification` | `varchar(20)` | No | `INTERNAL`, `CONFIDENTIAL`, or `RESTRICTED`; `UNKNOWN` input becomes `RESTRICTED`. |
 | `permitted_projection` | `jsonb` | No | Non-empty manifest projection on `ALLOW`; empty for every other effect. |
 | `correlation_id` | `varchar(255)` | No | Safe request/command correlation identifier. |
-| `evaluated_at` | `timestamptz` | No | Trusted server time in UTC. |
+| `evaluated_at` | `timestamptz` | No | Exact trusted UTC time supplied to the pure evaluator and returned unchanged. |
 | `recorded_at` | `timestamptz` | No | Database recording time in UTC. |
 | `recorded_by` | `jsonb` | No | Validated trusted `SERVICE` or `SYSTEM` actor that persisted the result. |
 
@@ -96,13 +96,14 @@ the authoritative producer below:
 | `subject` | Plane authentication | Required; anonymous input denies. |
 | `effective_principal` | Curve request boundary | Equals subject in M0; a service may supply itself only with a matching unexpired service authorization. |
 | `membership` | Live Plane `WorkspaceMember` query for a human | Active and workspace-equal for `HUMAN`; exactly `null` for `SERVICE`, `SYSTEM`, or `AGENT`; no independent Curve membership cache. |
-| `roles` | Resolver combining membership and later versioned assignments | M0 maps active membership to `WORKSPACE_MEMBER`; unimplemented roles are absent rather than inferred. |
+| `roles` | Resolver combining membership and later versioned assignments | M0 maps active human membership to `WORKSPACE_MEMBER`; a human never carries `TRUSTED_SERVICE`, a service carries exactly `TRUSTED_SERVICE`, and agent/system inputs carry no role. Unimplemented roles are absent rather than inferred. |
 | `resource` | Workspace-scoped metadata query or safe request reference on an early denial | Exact type, requested workspace, ref, existence, and owner. Query uses `(workspace_id, id)` only; not-found remains non-disclosing and the protected body stays unloaded. |
 | `object_acl` | Owning aggregate metadata | Exact workspace/resource/version binding. ACL only narrows an already allowed role/action. A required missing ACL denies. |
-| `assignment_context` | Owning Initiative/Gate aggregate in later milestones | Exact workspace/subject/version binding. Exact human assignment and risk-tier separation are required for gate actions; unrelated actions use `null`; missing required context denies. |
+| `assignment_context` | Owning Initiative/Gate aggregate in later milestones | Exact workspace/subject/version binding. Gate assignments are active humans; the material-contributor set includes authors and operators. Exact assignment and risk-tier separation are required for gate actions; unrelated actions use `null`; missing required context denies. |
 | `classification` | Owning resource metadata | `UNKNOWN` normalizes to `RESTRICTED`; callers cannot lower it. |
-| `target_context` | Approved workspace/provider/repository configuration | Exact workspace binding. A required empty allowlist denies. Prompt or retrieved content cannot add a target. |
-| `service_authorization` | Trusted Curve controller boundary | Exact authorization ID, workspace, service, live active state, action, issue time, and expiry; absent, revoked/inactive, future-issued, or expired input denies service access. |
+| `target_context` | Approved workspace/provider/repository configuration | Exact workspace and versioned configuration-reference binding. A required empty allowlist denies. Prompt or retrieved content cannot add a target. |
+| `service_authorization` | Trusted Curve controller boundary | Exact authorization ID/version, workspace, service, live active state, action, issue time, and expiry; absent, revoked/inactive, future-issued, or expired input denies service access. |
+| `evaluated_at` | Trusted Curve request/controller clock | Required UTC instant included in the canonical input; the pure evaluator performs no clock read and returns this exact value in `PolicyDecision`. |
 | manifest digest | Byte-pinned contract copy | Must equal the runtime manifest bytes before serving Curve traffic. |
 
 ## Deterministic decision order
@@ -124,34 +125,41 @@ Evaluation is pure and follows the manifest's ordered fail-closed predicates:
 7. Require the subject/effective-principal actor type to be allowed for the exact
    action. In M0 they must be equal; a service must also match the service
    authorization identity checked below.
-8. Require at least one allowed role. A Plane workspace role alone never grants
-   an approver or platform role.
+8. Require actor-type-consistent roles, then at least one action-allowed role. A
+   human cannot carry `TRUSTED_SERVICE`; a service carries only
+   `TRUSTED_SERVICE`; an agent/system carries no role. A Plane workspace role
+   alone never grants an approver or platform role.
 9. Require the environment and normalized classification to be allowed.
 10. Apply object ACL. Reject any workspace/resource/version mismatch. Principal
    or role deny entries win. Allow entries can only
    narrow the role result. For `REQUIRED`, a missing/empty non-owner allow set
-   denies. Resource ownership may satisfy the ACL only when the action's owning
-   service explicitly supplies the matching owner metadata.
+   denies. Resource ownership may satisfy the ACL only when the immutable action
+   policy sets `owner_satisfies_acl=true` and the owning service supplies exact
+   matching owner metadata.
 11. For assigned actions, require an exact workspace/subject/version context and
     a matching active human assignment.
-12. Enforce separation of duties: `HIGH` requires three distinct human gate
-    assignments and excludes a material author/operator from Code Readiness;
+12. Enforce separation of duties: `HIGH` requires three distinct active human
+    gate assignments and excludes every material contributor (author or
+    operator) from Code Readiness;
     `STANDARD` overlap requires an explicit policy-exception reference; `LOW`
     overlap requires the workflow's affirmative `low_risk_overlap_allowed`.
 13. For target-controlled actions, require an exact workspace-bound target in a
     non-empty allowlist. An empty required allowlist denies.
-14. Require service authorization for service actors. Absence produces
+14. Require service authorization for service actors. Its authorization version
+    participates in the context binding. Absence produces
     `SERVICE_AUTHORIZATION_REQUIRED`; identity/workspace/action/time-shape
     mismatch produces `SERVICE_AUTHORIZATION_INVALID`; inactive/revoked state
-    produces `SERVICE_AUTHORIZATION_INACTIVE`; and a trusted time at or after
-    expiry produces `SERVICE_AUTHORIZATION_EXPIRED`. A valid authorization has
+    produces `SERVICE_AUTHORIZATION_INACTIVE`; and the exact input
+    `evaluated_at` at or after expiry produces `SERVICE_AUTHORIZATION_EXPIRED`.
+    A valid authorization has
     exact workspace/service/action identity and
-    `issued_at <= trusted_now < expires_at`. Human, system, and agent inputs must
+    `issued_at <= evaluated_at < expires_at`. Human, system, and agent inputs must
     carry no service authorization.
 15. Reject any core action marked as an external side effect. M0-03 performs no
     provider, VCS, model, sandbox, deployment, or network mutation.
 16. Return the first deny reason by manifest precedence plus every other matched
-    safe reason in that same order. `ALLOW` returns the manifest projection only.
+    safe deny reason in that same order. `ALLOW` returns exactly the manifest's
+    `POLICY_ALLOWED` reason and permitted projection.
 
 `REQUIRE_HUMAN_CONFIRMATION` is a contract value for future approved policy
 versions. No v1 action emits it, and it never exposes a permitted projection.
@@ -202,6 +210,10 @@ For an allowed mutation, one PostgreSQL transaction must:
 5. append `AuditEvent` with `policy_decision_ref` pointing to the exact decision;
 6. commit all records together.
 
+When the mutation creates or changes an `Operation`, its `policy_version_ref`
+binds the exact `PolicyDecision` resource plus the policy manifest version and
+digest.
+
 For a denied mutation or query, a separate minimal transaction inserts the
 `PolicyDecision` and a safe `AuditEvent` with outcome `DENIED`; it creates no
 Operation, DomainEvent, OutboxEvent, InboxMessage, or IdempotencyRecord. If the
@@ -217,7 +229,7 @@ sha256(
 ```
 
 Arrays preserve contract order except semantic sets (`roles`, ACL principal/role
-sets, assignments, authors, allowed actions, and allowed targets), which are
+sets, assignments, material contributors, allowed actions, and allowed targets), which are
 sorted by canonical JSON bytes before hashing. Raw idempotency keys and
 protected bodies never enter this input or digest.
 
@@ -249,7 +261,9 @@ backup, legal-hold, tombstone, and erasure policy).
 3. Anonymous, inactive-member, wrong-workspace, unknown-action, missing-role,
    disallowed-environment, disallowed-classification, missing/deny ACL,
    assignment mismatch, separation violation, empty/incorrect target allowlist,
-   and absent/expired service authorization each deny with no side effect.
+   and absent/expired/unversioned service authorization each deny with no side
+   effect. A human trusted-service role, service human role, or non-human gate
+   assignment is schema-invalid or denies before projection.
 4. `UNKNOWN` classification produces `RESTRICTED` in the decision.
 5. ACL allow cannot grant an action denied by role; deny overrides owner/role
    allow.
@@ -259,7 +273,10 @@ backup, legal-hold, tombstone, and erasure policy).
    not reveal existence.
 8. Allowed and denied decisions are immutable, workspace-scoped, sequence-
    unique, recording-attributed, schema-valid, and linked from their audit events.
-9. A decision whose `recorded_at` precedes `evaluated_at` is rejected.
+   Allowed decisions contain only `POLICY_ALLOWED`; denied decisions contain no
+   allow reason.
+9. The evaluator reads no clock. A decision's `evaluated_at` exactly equals the
+   trusted input instant, and a row whose `recorded_at` precedes it is rejected.
 10. A public request that attempts to inject role, ACL, assignment,
     classification, allowlist, service authorization, manifest digest, or
     effective-principal context cannot alter the trusted resolved input.
@@ -267,3 +284,6 @@ backup, legal-hold, tombstone, and erasure policy).
 12. No policy input, decision, audit, log, exception, or test artifact contains
     protected bodies, credentials, raw idempotency keys, or unauthorized ACL
     details.
+13. `CURVE.OPERATION.TRANSITION` allows only an exactly authorized
+    `TRUSTED_SERVICE` and still defers aggregate-version/state validity to the
+    Operation transition guard.
