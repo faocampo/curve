@@ -5,9 +5,9 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Remediation in progress; implementation authority is package-specific |
-| Version | 0.7 |
+| Version | 0.8 |
 | Review date | 2026-08-20 |
-| Reviewed baseline | Curve PRD v0.4; remediation target advanced through Curve PRD v0.10 and the governed technical suite |
+| Reviewed baseline | Curve PRD v0.4; remediation target advanced through [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (current product requirements, decision register, and accepted local Temporal proof) and the governed technical suite |
 | Audience | Product, engineering, architecture, security, platform operations, legal, and AI coding agents |
 | Authority | Records gaps and closure evidence; it does not override the PRD or approve an ADR |
 
@@ -16,13 +16,11 @@
 The Curve direction is technically coherent: Plane remains the work-management foundation, Temporal owns durable Curve workflows, Onyx supplies permission-aware knowledge, OpenHands is the first execution provider, and trusted Curve controllers retain all VCS mutation authority. The proposed Loomit SDK Compatibility pilot is a suitable bounded validation scenario.
 
 Readiness is now package-specific. D-001 (Plane upstream foundation decision)
-is `DECIDED`; D-003 (runtime topology and trust-zone decision) has an
-owner-approved private-platform direction pending exact-head amendment merge;
-M0-S1 (module shell) and M0-S2 (operation and delivery kernel) are
-implemented and merged. M0-03 (core authorization and policy kernel) is also
-implemented and merged at Plane `preview` `922dd6d...`; M0-S3 (local Temporal
-round-trip implementation packet) is the next executable slice after its exact
-dispatch revision and context are materialized. Other packages retain their recorded decision
+is `DECIDED`; D-003 (runtime topology and trust-zone decision) is decided and
+implemented for `LOCAL_ONLY`. M0-S1 (module shell), M0-S2 (operation and
+delivery kernel), M0-03 (core authorization and policy kernel), and M0-S3
+(local Temporal round-trip implementation packet) are implemented and merged.
+The current accepted Plane `preview` is `d99342f...`. Other packages retain their recorded decision
 and proof blockers, preserving named-owner authority over infrastructure,
 security, provider, retention, quality, and pilot-contract behavior.
 
@@ -41,7 +39,7 @@ The review covered:
 
 - The complete [Curve PRD](../curve-ai-native-sdlc-prd.md), including scope, lifecycle, requirements, NFRs, acceptance criteria, risks, decisions, and architecture handoff.
 - The complete technical suite indexed by the [technical README](README.md).
-- The historical Plane review baseline at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` and the current accepted M0-03 implementation descendant `922dd6de5d5ed5081f35cd88343154022867ccad` on branch `preview`.
+- The historical Plane review baseline at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` and the current accepted M0-S3 implementation descendant `d99342f589db4eb488695487d3ae3f2c16bf0874` on branch `preview`.
 - The inspected Sachiel baseline at commit `07f0a7aeedc2930e99e42524ce75c2150a700c4a` on branch `main`.
 - The inspected General Config baseline at commit `d95dec9b913a54b956f96e96de186003f292d082` on branch `master`.
 - Official upstream documentation for Temporal, gVisor, OpenHands, Onyx, CodeQL, EKS, OpenFeature, and AGPL obligations.
@@ -64,11 +62,11 @@ Repository SHAs above are review evidence, not approved Gate 2 base SHAs. Gate 2
 
 | ID | Priority | Finding | Affected decisions or milestones | Required closure evidence | Owner | State |
 | -- | -------- | ------- | -------------------------------- | ------------------------- | ----- | ----- |
-| R-001 | P0 | D-001-D-016 had all remained `OPEN`, although the execution plan treated several as selected. | D-001-D-016; M0-M6 | D-001 is decided with attributable exact-head evidence. D-003 retains its original approval evidence and has an owner-approved 2026-08-20 private-platform amendment pending exact-head merge; environment activation remains package-gated. Other scopes remain `PROPOSED` or `OPEN`; each consuming package still requires its owner-approved ADR status/evidence. | Named PRD decision owners | IN PROGRESS |
+| R-001 | P0 | D-001-D-016 had all remained `OPEN`, although the execution plan treated several as selected. | D-001-D-016; M0-M6 | D-001 is decided with attributable exact-head evidence. D-003 is decided and implemented for `LOCAL_ONLY` through the merged private-platform amendment and accepted M0-S3 proof; environment activation remains package-gated. Other scopes remain `PROPOSED` or `OPEN`; each consuming package still requires its owner-approved ADR status/evidence. | Named PRD decision owners | IN PROGRESS |
 | R-002 | P0 | The planned pilot was GitLab + OpenHands, while the early normative R0B text named GitHub + Orca. | Release baseline; D-006-D-008; D-015 | R0B now identifies GitLab/OpenHands as the validation configuration. R1 separately requires both VCS providers, OpenHands automation, and the developer-operated Orca MCP profile. | Product owner and engineering lead | CLOSED |
 | R-003 | P0 | The plan treated Orca as an automated provider without an authoritative API while developers actually operate it manually. | D-006-D-007; M0-09; M4; AC-16 | OpenHands is the sole automated provider and Orca is a developer-operated MCP client. The D-006/D-007 dependency order, trust/error contracts, named-owner decisions, and conformance proof remain open and must be resolved by Security, Platform Administration, and Agent Platform before MCP implementation. | Agent platform owner; security and platform administration | IN PROGRESS |
 | R-004 | P0 | D-004 selected Portkey or Envoy, while planning selected a thin Curve gateway over OpenRouter and only three new infrastructure services. | D-004; model-enabled M1/M3/M5 | The PRD and technology baseline now consistently specify the in-process Curve Model Gateway and no longer block the model-free M0 skeleton; closure still requires the approved ADR, OpenRouter contract proof, failure behavior, policy, telemetry, ownership, and exit strategy before model use. | AI platform and operations | IN PROGRESS |
-| R-005 | P0 | The Plane fork lacked an authoritative `upstream` remote/ref, and rebasing shared `preview` could have rewritten published history. | D-001; M0 | D-001 is decided: the fetch-only upstream, exact pins, ancestry report, isolated candidate, checks, local smoke, community/commercial boundary, licensing obligations, ownership, and exact-head dispositions are approved. Candidate `d380678...` is merged without rewriting history and foundation `549db1a...` is preserved. M0-01, M0-S2, and M0-03 completed their accepted implementation proofs; current `preview` is `922dd6d...`. | Federico Ocampo, CTO at X3M | CLOSED |
+| R-005 | P0 | The Plane fork lacked an authoritative `upstream` remote/ref, and rebasing shared `preview` could have rewritten published history. | D-001; M0 | D-001 is decided: the fetch-only upstream, exact pins, ancestry report, isolated candidate, checks, local smoke, community/commercial boundary, licensing obligations, ownership, and exact-head dispositions are approved. Candidate `d380678...` is merged without rewriting history and foundation `549db1a...` is preserved. M0-01, M0-S2, M0-03, and M0-S3 completed their accepted implementation proofs; current `preview` is `d99342f...`. | Federico Ocampo, CTO at X3M | CLOSED |
 | R-006 | P0 | The supplied General Config repository does not implement the target `/mm/organizations/{orgId}/apps/{appId}` route. | D-015; pilot Gate 2 | R0B now models CIA as an external versioned-contract/staging prerequisite; closure requires the authoritative OpenAPI artifact, deployed version, staging probe, and owner approval. | CIA TL and Product owner | IN PROGRESS |
 | R-007 | P0 | The proposed SDK compatibility wire shape used camel case, while inspected Sachiel wire representations use snake case. | Pilot contract; M3; M5 | The reference contract now specifies snake-case wire fields and a camel-case mapper; closure requires CIA/Sachiel approval, authoritative OpenAPI, and consumer contract tests. | CIA TL and Sachiel TL | IN PROGRESS |
 | R-008 | P0 | The four-state UI requirement did not distinguish missing compatibility data from failure of the App endpoint itself. | Pilot acceptance; Gate 2; Gate 3 | The reference contract now separates omitted compatibility on a successful App response from full App failure and defines unknown/invalid behavior; closure requires owner approval and fixtures. | Product approver and both TLs | IN PROGRESS |
@@ -76,7 +74,7 @@ Repository SHAs above are review evidence, not approved Gate 2 base SHAs. Gate 2
 | R-010 | P0 | CodeQL licensing and operation for private GitLab repositories are not approved. | D-010; M5 | AppSec/legal decision selecting licensed CodeQL use or an X3M-approved equivalent, including tool versions and evidence ingestion. | Application security and legal | BLOCKED |
 | R-011 | P0 | gVisor on EKS requires node installation and runtime integration beyond a `RuntimeClass`. | D-003; M4 | Staging proof with supported node OS/architecture/containerd, runsc/shim, custom AMI/bootstrap, runner pool, observability, upgrade, quarantine, and cleanup tests. | Platform operations | OPEN |
 | R-012 | P0 | OpenHands deployment/API mode and version are not pinned. | M4 | ADR and conformance proof selecting Agent Server/SDK/image digest, Curve-owned pod provisioning, authenticated event/artifact transport, heartbeat, cancellation, and reconciliation. | Agent platform owner | OPEN |
-| R-013 | P0 | Temporal production topology is described at service level but not fully operationalized; the original local contract added Curve-specific networks and a proxy. | D-003 (runtime topology and trust-zone decision); M0-S3 (local Temporal round-trip implementation packet); non-local M0/M4/M6 | Federico's 2026-08-20 direction selects SDK 1.31.0, Plane's shared local `dev_env`, direct loopback Temporal ports, private EKS/VPC/VPN connectivity, `ClusterIP`, a dedicated Curve namespace by default, internal UI ingress, workload identity/Secrets Manager, authenticated non-local clients, synthetic local data, and M0-S3 as the executable proof. Exact-head amendment merge and accepted M0-S3 runtime evidence close the local slice. Environment activation still requires pinned images, persistence/visibility placement, certificates, retention, upgrade, backup/restore, RPO/RTO, DR, capacity, cost, and named ownership evidence. | Federico Ocampo for connectivity direction; named Platform Operations owners for environment activation | IN PROGRESS |
+| R-013 | P0 | Temporal production topology is described at service level but not fully operationalized; the original local contract added Curve-specific networks and a proxy. | D-003 (runtime topology and trust-zone decision); M0-S3 (local Temporal round-trip implementation packet); non-local M0/M4/M6 | Federico's 2026-08-20 direction selects SDK 1.31.0, Plane's shared local `dev_env`, direct loopback Temporal ports, private EKS/VPC/VPN connectivity, `ClusterIP`, a dedicated Curve namespace by default, internal UI ingress, workload identity/Secrets Manager, authenticated non-local clients, synthetic local data, and M0-S3 as the executable proof. The merged amendment and [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact context, merge, tests, runtime proof, security acceptance, and rollback) close the local slice. Environment activation still requires pinned images, persistence/visibility placement, certificates, retention, upgrade, backup/restore, RPO/RTO, DR, capacity, cost, and named ownership evidence. | Federico Ocampo for connectivity direction; named Platform Operations owners for environment activation | IN PROGRESS |
 | R-014 | P0 | Retention is called manual-governed, but no class-by-asset periods or legal-hold/backup behavior exist. | D-009; M0 | Approved retention matrix for bodies, derivatives, audit, backups, sandboxes, previews, tombstones, legal holds, and cryptographic erasure. | Security, privacy, and legal | BLOCKED |
 | R-015 | P1 | D-011 leaves the flag backend open; the plan says Curve owns flags while Sachiel already uses Flipt. | D-011; M5 | Approved Curve OpenFeature backend/provider and registered Sachiel Flipt delivery profile with naming, environments, targeting, audit, expiry, cleanup, and outage behavior. | Platform operations | OPEN |
 | R-016 | P1 | Onyx OAuth delegation is a direction, not a proven per-operation identity contract. | D-002; M1 | X3M Onyx proof covering issuer/audience/scopes, token exchange or pass-through flow, expiry, revocation, durable-wait reauthorization, source ACLs, and audit. | Security and identity owner | OPEN |
@@ -133,8 +131,10 @@ authorization and policy kernel) is complete through the
 security decisions, exact Plane base, acceptance tests, commands, and rollback)
 and [M0-03 implementation evidence](m0-03-implementation-evidence.md) (exact
 context, Plane implementation/merge, validation, security acceptance, and
-rollback). M0-S3 (local Temporal round trip) is ready after this dispatch
-revision merges and its exact context is materialized. Protected-object persistence
+rollback). M0-S3 (local Temporal round trip) is accepted and merged; see
+[M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact
+context, Plane implementation/merge, validation, runtime proof, security
+acceptance, and rollback). Protected-object persistence
 and every staging or production activation remain blocked while D-009 is open.
 
 ## Pilot contract corrections

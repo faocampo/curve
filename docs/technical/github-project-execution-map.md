@@ -11,7 +11,7 @@
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (70-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
-| Last reconciliation | 2026-08-18: canonical M0-03 and P0-06 items moved to `Done`; packet-checkpoint item `PVTI_lAHOBNjuQc4BgZzOzg3CeqQ` created once for M0-S3 and moved to `In progress`; full-catalog ownership/source reconciliation remains the prior 70-item baseline |
+| Last reconciliation | 2026-08-20: packet-checkpoint item `PVTI_lAHOBNjuQc4BgZzOzg3CeqQ` moved to `Done` after Plane PR #5 merged M0-S3 as `d99342f...`; full-catalog ownership/source reconciliation remains the prior 70-item baseline |
 
 ## Purpose and authority boundary
 
@@ -52,7 +52,7 @@ grant. Execution systems evaluate their own authoritative inputs independently.
 | M6 prototypes/KPIs | M6-01 through M6-05 | 5 | Backlog |
 | R1 qualification/rollout | R1-01 through R1-05 | 5 | Backlog |
 | Canonical catalog total |  | **70** |  |
-| M0-S3 packet checkpoint | Decomposed executable slice of M0-06 | 1 | Current working projection |
+| M0-S3 packet checkpoint | Decomposed executable slice of M0-06 | 1 | Completed proof projection; Plane merge `d99342f...` |
 | **Current visual total** |  | **71** |  |
 
 ## Field mapping

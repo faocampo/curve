@@ -4,13 +4,13 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `APPROVED_DIRECTION_PENDING_EXACT_HEAD_REVIEW`; effective only after this exact documentation revision is approved and merged |
-| Version | 1.0 |
+| Status | `EFFECTIVE`; exact head `5e165c502f5bf6c1900085be4388495d7c504b48` approved and squash-merged as `aece53943525c6e7f7993551453954fe27b00746` |
+| Version | 1.1 |
 | Date | 2026-08-20 |
 | Decision | D-003 (runtime topology and trust-zone decision), local shared-network revision and private-EKS deployment direction |
 | Decision owner | Federico Ocampo, CTO at X3M |
 | Human reviewer | Federico Ocampo (`faocampo`) |
-| Supersedes when effective | The local two-internal-network topology in [ADR-003](adr-003-runtime-topology.md) (live runtime topology decision) and [D-003 local decision packet](d003-local-topology-decision-packet.md) (2026-08-18 historical least-privilege decision evidence) |
+| Supersedes | The local two-internal-network topology in [ADR-003](adr-003-runtime-topology.md) (live runtime topology decision) and [D-003 local decision packet](d003-local-topology-decision-packet.md) (2026-08-18 historical least-privilege decision evidence) |
 | Consuming package | M0-S3 (local Temporal round-trip implementation packet) |
 | Data scope | Synthetic `INTERNAL` data for M0-S3; protected and production data remain governed by their separate decisions |
 
@@ -29,10 +29,10 @@ Federico Ocampo approved this architecture direction on 2026-08-20:
 5. OpenHands and coding-agent sandboxes retain their separate gVisor, egress,
    credential, repository, and cleanup isolation requirements.
 
-This direction becomes the normative D-003 (runtime topology and trust-zone
-decision) amendment only after Federico approves its exact Git head and the
-documentation PR merges. Until then, implementation remains pinned to the
-previously merged decision.
+This direction is the normative D-003 (runtime topology and trust-zone
+decision) amendment. Federico approved exact Git head `5e165c502f...`, and
+[Curve PR #15](https://github.com/faocampo/curve/pull/15) (private-platform
+connectivity amendment) squash-merged it as `aece539...` on 2026-08-20.
 
 ## Decision drivers
 
@@ -209,7 +209,7 @@ network-denial tests remain in the later gVisor/OpenHands packages.
 
 ## Effectiveness and evidence
 
-When this exact amendment is approved and merged:
+This amendment is approved and merged. Its effective consequences are:
 
 1. [ADR-003](adr-003-runtime-topology.md) (live runtime topology decision) is
    interpreted through this amendment.
@@ -221,5 +221,9 @@ When this exact amendment is approved and merged:
    historical evidence.
 4. M0-S3 (local Temporal round-trip implementation packet) is rematerialized
    from the merged Curve revision before Plane source changes continue.
-5. The Plane implementation PR provides the executable local evidence. A
-   separate EKS deployment PR provides non-local activation evidence.
+5. [Plane PR #5](https://github.com/faocampo/plane/pull/5) (M0-S3 local
+   Temporal round-trip implementation) provides the executable local evidence,
+   recorded in [M0-S3 implementation evidence](m0-s3-implementation-evidence.md)
+   (exact context, merge, tests, runtime proof, security acceptance, and
+   rollback). A separate EKS deployment PR provides non-local activation
+   evidence.
