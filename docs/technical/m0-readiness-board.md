@@ -4,14 +4,14 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Active readiness control; D-001 (Plane upstream foundation decision) is decided; D-003 (runtime topology and trust-zone decision) private-platform direction is owner-approved pending exact-head merge; remaining scoped approvals pending |
-| Version | 1.11 |
+| Status | Active readiness control; D-001 (Plane upstream foundation decision) and D-003 (runtime topology and trust-zone decision) local profile are decided; M0-S3 is implemented; remaining scoped approvals pending |
+| Version | 1.12 |
 | Date | 2026-08-20 |
-| Normative product baseline | [Curve PRD v0.10](../curve-ai-native-sdlc-prd.md) (current product requirements and decision register) |
+| Normative product baseline | [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (current product requirements, decision register, and accepted local Temporal proof) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Accepted Plane baseline | Fork `preview` at M0-03 merge `922dd6de5d5ed5081f35cd88343154022867ccad`; preserves the approved upstream candidate, M0-S1, M0-S2, and M0-03 in its ancestry |
-| Published Curve baseline | Curve PR #14 merged the M0-S3 dispatch baseline to `main` at `b55d90fa71438e8ed2a5bf11e04be4b32295e935`; the 2026-08-20 connectivity amendment is the next publication |
-| Published Plane implementation | Plane PR #4 merged exact M0-03 head `a807dd7a3f7b81f13ca815b165fba4f4bc068d9e` into fork `preview` at `922dd6de5d5ed5081f35cd88343154022867ccad` |
+| Accepted Plane baseline | Fork `preview` at M0-S3 merge `d99342f589db4eb488695487d3ae3f2c16bf0874`; preserves the approved upstream candidate, M0-S1, M0-S2, M0-03, and M0-S3 in its ancestry |
+| Published Curve baseline | Curve PR #15 merged the effective D-003 shared-network amendment and M0-S3 context to `main` at `aece53943525c6e7f7993551453954fe27b00746` |
+| Published Plane implementation | Plane PR #5 merged exact M0-S3 head `7fd231b062dc485b37078979a78ec83618be78d8` into fork `preview` at `d99342f589db4eb488695487d3ae3f2c16bf0874` |
 
 ## Readiness rule
 
@@ -29,8 +29,8 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 
 | Decision | Status | Accountable role | Named approver | Evidence owner | Blocks now | Evidence and next action |
 | --- | --- | --- | --- | --- | --- | --- |
-| [D-001](adr-001-plane-upstream-foundation.md) (Plane upstream, licensing, fork, and upgrade decision) | DECIDED | Curve engineering approver; licensing reviewer | Federico Ocampo, CTO at X3M | Federico Ocampo, Plane support/upgrade owner | No unresolved D-001 action | Owner approval, exact-head dispositions, licensing acceptance, repository boundary, review triggers, Curve merge, and Plane foundation `549db1a...` are recorded. M0-01 separately completed additive migration, disabled-state, workspace-isolation, and rollback proof; current Plane `preview` is `922dd6d...` after M0-03. |
-| [D-003](adr-003-runtime-topology.md) (Temporal topology, connectivity, and trust boundary) | OWNER-APPROVED private-platform direction; exact-head merge pending; activation details OPEN | Platform Operations | Federico Ocampo, CTO at X3M, for connectivity direction | OpenAI Codex under Federico Ocampo's oversight | M0-S3 resumes after exact-head amendment merge and context rematerialization; environment activation remains package-gated | Temporal Python SDK 1.31.0; shared Plane `dev_env`; direct loopback ports; private EKS/VPC/VPN; `ClusterIP`; dedicated namespace by default; internal UI ingress; workload identity/Secrets Manager; authenticated non-local Temporal clients; revised M0-S3 proof. See [connectivity amendment](d003-private-platform-connectivity-amendment.md) (decision, controls, proof, and activation inputs). |
+| [D-001](adr-001-plane-upstream-foundation.md) (Plane upstream, licensing, fork, and upgrade decision) | DECIDED | Curve engineering approver; licensing reviewer | Federico Ocampo, CTO at X3M | Federico Ocampo, Plane support/upgrade owner | No unresolved D-001 action | Owner approval, exact-head dispositions, licensing acceptance, repository boundary, review triggers, Curve merge, and Plane foundation `549db1a...` are recorded. M0-01, M0-S2, M0-03, and M0-S3 completed their accepted proofs; current Plane `preview` is `d99342f...`. |
+| [D-003](adr-003-runtime-topology.md) (Temporal topology, connectivity, and trust boundary) | DECIDED and implemented for `LOCAL_ONLY`; activation details OPEN | Platform Operations | Federico Ocampo, CTO at X3M, for connectivity direction | OpenAI Codex under Federico Ocampo's oversight | No local M0-S3 blocker; environment activation remains package-gated | Temporal Python SDK 1.31.0; shared Plane `dev_env`; direct loopback ports; private EKS/VPC/VPN; `ClusterIP`; dedicated namespace by default; internal UI ingress; workload identity/Secrets Manager; authenticated non-local Temporal clients. See [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact context, merge, tests, runtime proof, security acceptance, and rollback). |
 | [D-007](adr-007-mcp-trust-and-orca-profile.md) | PROPOSED | Security; Platform Administration | **Required** | Curve security engineering | MCP-enabled M0-09/M1/M4 | Trust-record and typed-error contracts, identity/limit decisions, complete conformance fixtures, and dependency ordering with D-006 remain unresolved. No MCP package may proceed until the named owners decide the applicable scope. |
 | [D-009](adr-009-retention-and-erasure.md) | OPEN | Security; Privacy; Legal | **Required** | Data governance | M0-04; staging/production | Asset inventory, owner-fillable period/backup/hold matrix, erasure state machine, policy precedence and acceptance proof are prepared. Named owners must resolve every `TBD`; no period is inferred. |
 
@@ -50,9 +50,9 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 
 | Package | State | Allowed scope or blocker |
 | --- | --- | --- |
-| P0-01 Plane inventory | DONE | Repository-level capability/license-boundary proof and reuse/build recommendation are approved under D-001; Plane PR #1 established foundation `549db1a...`. M0-01 completed migration/disabled-state/workspace-isolation/rollback evidence in Plane PR #2; M0-S2 and M0-03 advanced current `preview` to `922dd6d...`. |
-| P0-02 topology | IN_REVIEW | Original local evidence is merged. The 2026-08-20 shared-network/private-EKS amendment requires exact-head approval and merge before M0-S3 continues. |
-| P0-03 ADR set | IN_PROGRESS | D-001 is decided; D-003 connectivity direction is owner-approved pending exact-head merge; D-007 and D-009 still require named decisions; D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
+| P0-01 Plane inventory | DONE | Repository-level capability/license-boundary proof and reuse/build recommendation are approved under D-001; Plane PR #1 established foundation `549db1a...`. M0-01, M0-S2, M0-03, and M0-S3 advanced current `preview` to `d99342f...`. |
+| P0-02 topology | DONE_LOCAL / NON_LOCAL_INPUTS_OPEN | The shared-network amendment and M0-S3 implementation are accepted. Non-local activation retains its environment-package inputs. |
+| P0-03 ADR set | IN_PROGRESS | D-001 and D-003 `LOCAL_ONLY` are decided; D-007 and D-009 still require named decisions; D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
 | P0-04 documentation/contracts validation | DONE | PRD v0.8 and the accompanying contract/governance suite are merged through Curve PR #2 at `fe8664a...`; post-merge `validate` passed in [run 31888595658](https://github.com/faocampo/curve/actions/runs/31888595658). |
 | P0-05 test strategy | READY_FOR_IMPLEMENTATION | May proceed using synthetic fixtures. |
 | P0-06 (historical two-stage local Temporal proof) | DONE / SUPERSEDED | Curve PR #9 retired P0-06A and P0-06B as standalone gates. Their historical packet and Git record remain available; M0-S3 supplies the executable local proof. |
@@ -62,9 +62,9 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | M0-04 protected storage | BLOCKED | Requires M0-02, M0-03, and D-009. |
 | M0-05 delivery kernel | DONE | Plane PR #3 merged transactional operation/event/outbox/audit/idempotency writes, replay-safe relay primitives, inbox deduplication, recovery, and contract tests. Project item M0-05 is `Done`. |
 | M0-S2 local operation/delivery packet | DONE | Contract revision `ab2c81a...`, context digest `sha256:45c266e1...`, approved implementation head `f520075...`, and Plane merge `eff8686a...` are bound in [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) (post-merge acceptance record). |
-| M0-S3 local Temporal round trip | IN_REVIEW / PAUSED_FOR_CONTEXT | Implementation is locally proven against the original context. Resume only after the D-003 connectivity amendment is exact-head approved and merged, its deterministic context is rematerialized, the unmerged Plane branch removes Curve-specific networks/proxy, and the revised acceptance suite passes. Plane base remains `922dd6d...`; Project status stays informational. |
-| M0-06 Temporal skeleton | READY_AFTER_MERGE | M0-S3 is the executable first slice of this decomposed package. It may start after the exact dispatch revision and context digest are materialized; broader parent/child workflow behavior remains later M0-06 scope. |
-| M0-07 API/SSE | READY_FOR_PACKET_RECONCILIATION | M0-02, M0-03, and M0-05 are satisfied. M0-S4 still requires completed M0-S3 plus its own exact base/context materialization. |
+| M0-S3 local Temporal round trip | DONE | Plane PR #5 merged approved head `7fd231b...` as `d99342f...`; context, tests, runtime, security, migration, replay, restart, cancellation, and rollback are accepted in [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (post-merge acceptance record). Project status is `Done`. |
+| M0-06 Temporal skeleton | IN_PROGRESS / DECOMPOSED | M0-S3 completed the executable first slice. Broader parent/child, continue-as-new, provider-attempt, and reconciliation behavior remains later M0-06 scope. |
+| M0-07 API/SSE | READY_FOR_PACKET_RECONCILIATION | M0-02, M0-03, M0-05, and M0-S3 are satisfied. M0-S4 requires its own owner/reviewer, exact `d99342f...` descendant base, context, Project item, commands, and user-facing experience-gate evidence. |
 | M0-08 audit/observability | BLOCKED | Requires the implemented M0 foundation packages. |
 | M0-09 provider registry | BLOCKED | M0-05 is satisfied; M0-03, M0-07, and D-007 remain required before MCP enablement. |
 
@@ -89,8 +89,11 @@ live amendment, evidence, and rollback) and
 approval and merge). The 2026-08-20
 [private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md)
 (shared local network, private EKS direction, controls, and revised proof)
-supersedes its two-network implementation contract after exact-head approval
-and merge. M0-S3 remains the executable proof. P0-06A and P0-06B remain
+supersedes its two-network implementation contract at merge `aece539...`.
+M0-S3 is accepted at Plane merge `d99342f...`; see
+[M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact
+context, merge, tests, runtime proof, security acceptance, and rollback).
+P0-06A and P0-06B remain
 retired standalone gates. GitHub Project statuses remain administrative visual
 tracking.
 

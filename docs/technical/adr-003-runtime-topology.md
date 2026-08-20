@@ -1,6 +1,6 @@
 # ADR-003: Curve Runtime Topology and Temporal Profile
 
-- Status: DECIDED for the local shared-network profile when the 2026-08-20 amendment is exact-head approved and merged; non-local activation remains OPEN
+- Status: DECIDED and implemented for the local shared-network profile; non-local activation remains OPEN
 - PRD decision: D-003 (runtime topology and trust-zone decision)
 - Owner: Federico Ocampo, CTO at X3M
 - Reviewers: Federico Ocampo (`faocampo`) as Curve engineering approver and interim human reviewer
@@ -8,6 +8,9 @@
 - Connectivity amendment date: 2026-08-20
 - Approved head: `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`
 - Merge commit: `097016ffe2eb259cc780ad2a6cd41ca3422366b2`
+- Amendment approved head: `5e165c502f5bf6c1900085be4388495d7c504b48`
+- Amendment merge: `aece53943525c6e7f7993551453954fe27b00746`
+- Local implementation merge: `d99342f589db4eb488695487d3ae3f2c16bf0874`
 - Required by: M0-S3 (local Temporal round-trip implementation packet)
 - Amended by: [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, security boundary, and revised M0-S3 proof)
 - Supersedes when amendment is effective: the two-internal-network local topology; the standalone P0-06A/P0-06B proof sequence remains superseded
@@ -129,8 +132,8 @@ the SDK package and artifact provenance when the dependency is added.
 
 ### Executable proof
 
-M0-S3 (local Temporal round-trip implementation packet) is the sole executable
-proof for this local decision. It must demonstrate:
+M0-S3 (local Temporal round-trip implementation packet) is the accepted
+executable proof for this local decision. It demonstrated:
 
 1. the existing Plane stack remains healthy with the overlay absent;
 2. the resolved overlay contains only the approved services, shared network, ports,
@@ -145,6 +148,11 @@ proof for this local decision. It must demonstrate:
 8. Temporal history, application state, logs, metrics, and traces contain none
    of the sentinel protected strings;
 9. removing the overlay/profile returns to the unchanged Plane local stack.
+
+The accepted results are recorded in
+[M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact
+context, Plane head/merge, tests, runtime proof, security acceptance, and
+rollback).
 
 P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane
 integration proof) are `SUPERSEDED` standalone gates. Their historical packet
@@ -188,10 +196,9 @@ removed as part of this rollback.
 
 ## Implementation consequences and affected work packages
 
-- M0-S3 (local Temporal round-trip implementation packet) may be materialized
-  after M0-03 (core authorization and policy kernel) is implemented and its
-  exact Plane base, Curve governance revision, owner, reviewer, context digest,
-  commands, and Project item are pinned.
+- M0-S3 (local Temporal round-trip implementation packet) is accepted and
+  merged at Plane `preview` `d99342f...`, with exact Curve revision, Plane base,
+  owner, reviewer, context digest, commands, and Project item recorded.
 - M0-06 (Temporal workflow-skeleton work package) consumes the M0-S3 evidence.
 - P0-06 (historical two-stage local Temporal proof work package) becomes
   `Done/SUPERSEDED` visual history.
@@ -208,9 +215,9 @@ removed as part of this rollback.
 | Approval date | 2026-08-18 |
 | Repository evidence | [Curve PR #9](https://github.com/faocampo/curve/pull/9), green `validate`, squash merge `097016ffe2eb259cc780ad2a6cd41ca3422366b2` |
 | Approved SDK | `temporalio==1.31.0` |
-| Original approved topology | Curve-only Compose overlay; `curve-control` and `curve-data` internal networks, superseded when the 2026-08-20 amendment is approved and merged |
+| Original approved topology | Curve-only Compose overlay; `curve-control` and `curve-data` internal networks, superseded by the effective 2026-08-20 amendment |
 | Amended topology | Plane `dev_env` for local Curve services; direct loopback Temporal ports; private EKS `ClusterIP` direction with authenticated non-local clients; see [connectivity amendment](d003-private-platform-connectivity-amendment.md) (owner direction, controls, acceptance, and activation boundary) |
 | Superseded gates | P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane integration proof) |
-| Executable proof | M0-S3 (local Temporal round-trip implementation packet) |
+| Executable proof | M0-S3 (local Temporal round-trip implementation packet), accepted in [implementation evidence](m0-s3-implementation-evidence.md) (context, merge, tests, runtime proof, security acceptance, and rollback) |
 | Excluded authority | Staging, production, AWS/Kubernetes provisioning, gVisor, OpenHands, protected data, external providers, production credentials, and deployment |
 | Review trigger | A new environment, network path, credential, data classification, persistence product, SDK/server major version, or rollback model requires a new scoped decision. |

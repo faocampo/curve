@@ -7,14 +7,14 @@
 | Status | Derived architecture baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Architecture, engineering, security, platform operations, product, and AI coding agents |
-| Version | 0.4 |
+| Version | 0.5 |
 | Last updated | 2026-08-20 |
-| Normative source | [Curve PRD v0.10](../curve-ai-native-sdlc-prd.md) (product contract and decision register) |
+| Normative source | [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (product contract, decision register, and accepted local Temporal proof) |
 | Companion | [Engineering Patterns and Technologies](./engineering-patterns-and-technologies.md) |
 
 ## Purpose and authority
 
-This document translates the product contract in the [Curve PRD v0.10](../curve-ai-native-sdlc-prd.md) (product requirements, invariants, acceptance criteria, and decisions) into a logical architecture that can be refined into component, data, API, workflow, deployment, and implementation plans. It is not a replacement for the PRD.
+This document translates the product contract in the [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (product requirements, invariants, acceptance criteria, decisions, and accepted local Temporal proof) into a logical architecture that can be refined into component, data, API, workflow, deployment, and implementation plans. It is not a replacement for the PRD.
 
 The PRD's invariants, numbered requirements, lifecycle states, authorization rules, service objectives, acceptance criteria, and decision register are normative. If this document conflicts with the PRD, the PRD wins. In particular, this document:
 
@@ -595,7 +595,7 @@ The PRD records agreed planning directions as `PROPOSED` and leaves genuinely un
 | --- | --- | --- |
 | D-001 | Pinned Plane commit, reuse/build inventory, extension seams, supported upgrade/rebase baseline | M0 architecture sign-off |
 | D-002 | Onyx per-operation delegation protocol, token lifecycle, revocation, audit, failure proof | M1 |
-| D-003 | Dev/staging/prod topology, region/residency, trust zones, data services, HA, backups, secrets, Langfuse, ownership | Shared local `dev_env` plus private X3M EKS/VPC/VPN, `ClusterIP`, dedicated namespace by default, internal UI ingress, workload identity/Secrets Manager, and authenticated non-local Temporal clients are owner-directed in the 2026-08-20 amendment; exact-head merge makes it effective. Environment activation still requires its persistence, certificate, HA, backup/recovery, capacity, cost, and ownership evidence. |
+| D-003 | Dev/staging/prod topology, region/residency, trust zones, data services, HA, backups, secrets, Langfuse, ownership | Shared local `dev_env` plus private X3M EKS/VPC/VPN, `ClusterIP`, dedicated namespace by default, internal UI ingress, workload identity/Secrets Manager, and authenticated non-local Temporal clients are effective through the merged 2026-08-20 amendment. M0-S3 accepts the local implementation at Plane merge `d99342f...`; environment activation still requires its persistence, certificate, HA, backup/recovery, capacity, cost, and ownership evidence. |
 | D-004 | In-process Curve Model Gateway and OpenRouter contract, allowlists, routing/fallback constraints, operations, security, license, and replacement evaluation | Model-enabled M1/M3/M5 |
 | D-005 | Task/data-class model allowlist, residency/training/retention terms, fallback equivalence, evaluation baseline | M1 |
 | D-006 | Orca supported MCP client/version, delegated auth, bounded capability profile, ownership, support and license | Orca-enabled M4 / R1 human-assistance completeness |
