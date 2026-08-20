@@ -146,7 +146,7 @@ implementation packet) owns the executable local proof.
 
 The current governed technical state remains:
 
-- D-003 (runtime topology and trust-zone decision): `DECIDED/LOCAL_ONLY`;
+- D-003 (runtime topology and trust-zone decision): private-platform connectivity direction owner-approved on 2026-08-20; exact-head amendment merge pending;
 - P0-06A (isolated Temporal feasibility proof): `SUPERSEDED_UNISSUED`;
 - P0-06B (least-privilege Plane integration proof): `SUPERSEDED_UNISSUED`; and
 - M0-S3 (local Temporal round-trip implementation packet): executable proof,

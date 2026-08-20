@@ -1,14 +1,16 @@
 # ADR-003: Curve Runtime Topology and Temporal Profile
 
-- Status: DECIDED for `LOCAL_ONLY`; non-local scopes remain OPEN
+- Status: DECIDED for the local shared-network profile when the 2026-08-20 amendment is exact-head approved and merged; non-local activation remains OPEN
 - PRD decision: D-003 (runtime topology and trust-zone decision)
 - Owner: Federico Ocampo, CTO at X3M
 - Reviewers: Federico Ocampo (`faocampo`) as Curve engineering approver and interim human reviewer
-- Decision date: 2026-08-18
+- Original decision date: 2026-08-18
+- Connectivity amendment date: 2026-08-20
 - Approved head: `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`
 - Merge commit: `097016ffe2eb259cc780ad2a6cd41ca3422366b2`
 - Required by: M0-S3 (local Temporal round-trip implementation packet)
-- Supersedes: the shared-`dev_env` candidate and the standalone P0-06A/P0-06B proof sequence
+- Amended by: [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, security boundary, and revised M0-S3 proof)
+- Supersedes when amendment is effective: the two-internal-network local topology; the standalone P0-06A/P0-06B proof sequence remains superseded
 
 ## Context and constraints
 
@@ -19,16 +21,19 @@ tracing. Curve adds Temporal, gVisor, and OpenHands. Plane's existing Celery
 workers continue to own existing Plane behavior. Temporal owns durable Curve
 lifecycle orchestration.
 
-This decision is intentionally scoped to local development with synthetic data.
-It supplies the topology required by M0-S3 (local Temporal round-trip
-implementation packet). Staging and production remain fail closed pending
-separate D-003 (runtime topology and trust-zone decision) scopes with named
-Platform Operations, Security, database, and on-call owners.
+The executable M0-S3 (local Temporal round-trip implementation packet) remains
+scoped to local development with synthetic data. The 2026-08-20 amendment also
+fixes the deployment direction: ordinary Kubernetes service discovery inside
+X3M's private EKS/VPC/VPN perimeter, a dedicated Curve namespace by default,
+internal-only service exposure, and authenticated Temporal clients outside
+local development. Environment activation remains fail closed until the
+reviewable deployment package records Platform Operations, Security, database,
+certificate, backup, and on-call ownership.
 
 ## Decision drivers and weighted criteria
 
 1. Durable, replay-safe human and provider waits.
-2. Minimal network and credential reachability from the Curve worker.
+2. Simple connectivity aligned with X3M's private EKS deployment model.
 3. Reuse of the existing Plane Docker stack without changing its default path.
 4. Deterministic ARM64 and x86-64 local development.
 5. Recoverability, versioned workflows, and simple rollback.
@@ -36,10 +41,11 @@ Platform Operations, Security, database, and on-call owners.
 
 ## Options considered
 
-1. **Selected:** a Curve-only Compose overlay with a dedicated Temporal control
-   network and a dedicated Curve data network.
-2. Shared Plane `dev_env`: rejected because it exposes unrelated local Plane
-   services and application settings to the Curve worker.
+1. **Selected by the 2026-08-20 amendment:** a Curve-only Compose overlay whose
+   Temporal and worker services use Plane's existing `dev_env` network.
+2. Two Curve-specific internal Docker networks: superseded because they add a
+   proxy, failure modes, and a local topology that does not match private EKS
+   service discovery.
 3. Isolated P0-06A followed by integrated P0-06B: superseded because P0-06B
    duplicates the M0-S3 implementation and acceptance evidence.
 4. Temporal Cloud: deferred pending procurement, residency, security, support,
@@ -70,7 +76,7 @@ be produced by M0-S3 itself against its exact dispatched Plane base.
 | Embedded Temporal Server | `1.31.2` | [Temporal Server v1.31.2](https://github.com/temporalio/temporal/releases/tag/v1.31.2); local development only. |
 | Temporal Python SDK | `temporalio==1.31.0` | [Temporal Python SDK v1.31.0](https://github.com/temporalio/sdk-python/releases/tag/v1.31.0) and [PyPI 1.31.0](https://pypi.org/project/temporalio/1.31.0/); Python 3.10+ and musllinux wheels for x86-64 and ARM64. |
 
-### Approved two-network Compose-overlay topology
+### Approved shared-network Compose-overlay topology
 
 Curve adds `docker-compose-curve.yml` (Curve-only local Compose overlay).
 Developers invoke it with `docker-compose-local.yml` (existing Plane local
@@ -81,46 +87,37 @@ overlay leaves the baseline Compose model unchanged.
 flowchart LR
     host["Developer host"]
 
-    subgraph plane["dev_env (existing Plane network)"]
+    subgraph plane["dev_env (existing Plane Docker network)"]
         api["Plane API"]
         celery["Plane Celery and Beat"]
         services["RabbitMQ, Valkey, MinIO"]
-        db1["plane-db"]
-    end
-
-    subgraph control["curve-control (internal)"]
+        db["plane-db"]
         temporal["Temporal development server"]
-        worker1["curve-worker"]
-    end
-
-    subgraph data["curve-data (internal)"]
-        worker2["curve-worker"]
-        db2["plane-db"]
+        worker["curve-worker"]
     end
 
     host -->|"127.0.0.1:7233 and 8233"| temporal
-    worker1 -->|"gRPC 7233"| temporal
-    worker2 -->|"PostgreSQL 5432"| db2
-    api --> db1
-    celery --> db1
+    worker -->|"gRPC 7233"| temporal
+    worker -->|"PostgreSQL 5432"| db
+    api --> db
+    celery --> db
     celery --> services
 ```
 
-`curve-worker` is one container attached to `curve-control` and `curve-data`.
-`plane-db` is the existing database container attached to `dev_env` and
-`curve-data`. The Curve networks are Docker `internal` networks. Temporal has
-no Plane-network attachment or Plane credential. The worker receives no
-RabbitMQ, Valkey, MinIO, AWS, SMTP, VCS, provider, production, or
-user-delegation endpoint or credential.
+`temporal` and `curve-worker` join existing `dev_env`. Temporal publishes its
+gRPC and UI ports directly on host loopback. There is no Curve-specific Docker
+network or proxy. The worker retains a dedicated settings module and explicit
+environment allowlist; ordinary network reachability grants no AWS, SMTP, VCS,
+provider, production, approval, or user-delegation authority.
 
 ### Service and environment contract
 
 | Boundary | Local contract |
 | --- | --- |
 | Activation | `curve` profile in the Curve-only overlay; disabled by default. |
-| Temporal | `temporal server start-dev`; namespace `curve-local`; task queue `curve-control-plane-v1`; Curve-specific disposable SQLite volume; loopback-only host ports `7233` and `8233`; health check. |
+| Temporal | `temporal server start-dev`; namespace `curve-local`; task queue `curve-control-plane-v1`; Curve-specific disposable SQLite volume; direct loopback-only host ports `7233` and `8233`; health check; `dev_env` attachment. |
 | Worker | Dedicated entrypoint built from the compatible Plane API image; no Celery process or queue; no published port. |
-| Worker settings | `DJANGO_SETTINGS_MODULE=plane.settings.curve_worker`; only database, Curve-enable/workspace allowlist, Temporal address/namespace/task queue/identity, and bounded log-level settings. |
+| Worker settings | `DJANGO_SETTINGS_MODULE=plane.settings.curve_worker`; only database, Curve-enable/workspace allowlist, Temporal address/namespace/task queue/identity, and bounded log-level settings; no provider, VCS, production, or user-delegation credential. |
 | Database | Existing `plane-db`; PostgreSQL remains authoritative for Curve business state. |
 | Temporal payloads | Workspace and operation IDs, versions, digests, classifications, safe enums, correlation IDs, and error codes only. |
 | Data | Synthetic `INTERNAL` fixtures; sentinel values prove protected bodies and credentials do not enter history, logs, or telemetry. |
@@ -136,15 +133,15 @@ M0-S3 (local Temporal round-trip implementation packet) is the sole executable
 proof for this local decision. It must demonstrate:
 
 1. the existing Plane stack remains healthy with the overlay absent;
-2. the resolved overlay contains only the approved services, networks, ports,
+2. the resolved overlay contains only the approved services, shared network, ports,
    environment variables, volume, and image pins;
 3. duplicate outbox delivery produces exactly one workflow effect;
 4. a worker restart after a committed activity effect does not duplicate the
    database mutation;
 5. cancellation reaches a terminal state without orphaned work;
 6. committed histories replay without nondeterminism;
-7. the worker cannot reach RabbitMQ, Valkey, MinIO, private/metadata
-   destinations, or the public internet;
+7. the worker resolves and reaches Temporal and PostgreSQL over `dev_env`, and
+   Temporal's host ports bind only to `127.0.0.1`;
 8. Temporal history, application state, logs, metrics, and traces contain none
    of the sentinel protected strings;
 9. removing the overlay/profile returns to the unchanged Plane local stack.
@@ -156,17 +153,20 @@ execution authority.
 
 ## Security, privacy, licensing, and operational impact
 
-The local profile uses synthetic data and loopback-only host access. Internal
-networks and the environment allowlist bound the worker's reach. PostgreSQL
-retains business truth; disposable Temporal SQLite retains only local workflow
-history. The Temporal CLI image and Python SDK retain their upstream licenses
-and notices in the implementation's dependency and image inventory.
+The local profile uses synthetic data, shared `dev_env` service discovery, and
+loopback-only host access. The environment and credential allowlists bound the
+worker's capabilities. PostgreSQL retains business truth; disposable Temporal
+SQLite retains only local workflow history. The Temporal CLI image and Python
+SDK retain their upstream licenses and notices in the implementation's
+dependency and image inventory.
 
-Staging and production remain blocked until named owners decide region,
-residency, Kubernetes namespace, image/chart digests, persistence and
-visibility stores, credentials, mTLS and authorization, payload encryption,
-backup/restore, RPO/RTO, disaster recovery, capacity, observability, on-call,
-cost, and upgrade/rollback procedures.
+The private-EKS connectivity direction is approved: a dedicated `curve`
+namespace by default, Kubernetes `ClusterIP` service discovery, an internal
+VPN-only Temporal UI ingress, existing X3M platform policies, and authenticated
+Temporal clients outside local development. Activation remains blocked until
+named owners finalize image/chart digests, persistence and visibility stores,
+certificate delivery, backup/restore, RPO/RTO, disaster recovery, capacity,
+observability, on-call, cost, and upgrade/rollback procedures.
 
 ## Data/API/event/migration compatibility impact
 
@@ -208,7 +208,8 @@ removed as part of this rollback.
 | Approval date | 2026-08-18 |
 | Repository evidence | [Curve PR #9](https://github.com/faocampo/curve/pull/9), green `validate`, squash merge `097016ffe2eb259cc780ad2a6cd41ca3422366b2` |
 | Approved SDK | `temporalio==1.31.0` |
-| Approved topology | Curve-only Compose overlay; `curve-control` and `curve-data` internal networks |
+| Original approved topology | Curve-only Compose overlay; `curve-control` and `curve-data` internal networks, superseded when the 2026-08-20 amendment is approved and merged |
+| Amended topology | Plane `dev_env` for local Curve services; direct loopback Temporal ports; private EKS `ClusterIP` direction with authenticated non-local clients; see [connectivity amendment](d003-private-platform-connectivity-amendment.md) (owner direction, controls, acceptance, and activation boundary) |
 | Superseded gates | P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane integration proof) |
 | Executable proof | M0-S3 (local Temporal round-trip implementation packet) |
 | Excluded authority | Staging, production, AWS/Kubernetes provisioning, gVisor, OpenHands, protected data, external providers, production credentials, and deployment |

@@ -14,6 +14,18 @@
 | Plane baseline | `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` on `preview` |
 | Consuming package | M0-S3 (local Temporal round-trip implementation packet) |
 | Non-local scope | Staging and production remain undecided and fail closed |
+| Live applicability | Historical approval evidence. Its two-internal-network implementation contract is superseded when [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, revised security boundary, and M0-S3 acceptance) is exact-head approved and merged. |
+
+## 2026-08-20 supersession notice
+
+This packet preserves the exact architecture and approval evidence accepted on
+2026-08-18. Federico subsequently directed Curve to use Plane's shared local
+Docker network and X3M's private EKS/VPC/VPN platform boundary. The live
+contract is [ADR-003](adr-003-runtime-topology.md) (current runtime topology
+decision) interpreted through the [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md)
+(shared-network decision, EKS direction, security controls, and revised proof).
+The historical diagrams, approval quote, and P0 supersession evidence below
+remain unchanged for auditability.
 
 ## Approved decision
 

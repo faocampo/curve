@@ -5,10 +5,10 @@
 | Field | Value |
 | --- | --- |
 | Status | M0-S1, M0-S2, and M0-03 completed; M0-S3 is ready for dispatch after this exact revision is merged and materialized into its Plane context manifest; later packets remain blocked by their recorded prerequisites |
-| Version | 1.9 |
-| Date | 2026-08-18 |
-| Product baseline | [Curve PRD v0.9](../curve-ai-native-sdlc-prd.md) (current product requirements and D-003 local decision) |
-| Contract baseline floor | Accepted Curve `main` commit `af7b5e872512b34516d451e26de312421eea78ec` containing the reconciled D-003 `LOCAL_ONLY` decision; dispatch uses the merge commit containing this 1.9 packet |
+| Version | 2.0 |
+| Date | 2026-08-20 |
+| Product baseline | [Curve PRD v0.10](../curve-ai-native-sdlc-prd.md) (current product requirements and D-003 private-platform connectivity direction) |
+| Contract baseline floor | Accepted Curve `main` commit `b55d90fa71438e8ed2a5bf11e04be4b32295e935` containing the original M0-S3 dispatch; implementation resumes only from the merge containing this 2.0 shared-network amendment |
 | Plane implementation base | M0-03 merge commit `922dd6de5d5ed5081f35cd88343154022867ccad` on fork `preview` |
 
 ## Purpose
@@ -26,7 +26,7 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | Repository | `git@github.com:faocampo/plane.git` |
 | Base branch | Fork `preview` |
 | Base SHA | `922dd6de5d5ed5081f35cd88343154022867ccad`; every materialized M0-S3 packet must verify the live base still matches or use a separately reviewed descendant |
-| Curve revision | At least accepted D-003 reconciliation `af7b5e872512b34516d451e26de312421eea78ec`; M0-S3 materialization records the exact merged Curve revision containing this packet and its deterministic context digest |
+| Curve revision | At least Curve baseline `b55d90fa71438e8ed2a5bf11e04be4b32295e935`; M0-S3 materialization records the exact merged Curve revision containing the 2026-08-20 D-003 connectivity amendment, this packet, and its deterministic context digest |
 | GitHub Project item | Exact visual-tracking item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and maintained during delivery |
 | Branch | One feature branch per packet; M0-S3 uses `curve/m0-s3-temporal-round-trip` from the exact Plane base above |
 | Human owner | Federico Ocampo for M0-S1 through M0-S3; every later M0 packet records its own named person at dispatch; role-only values are invalid |
@@ -36,7 +36,7 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | Tool policy | Repository read/write, `git` read-only status/diff, `pnpm`, Docker Compose, and test tools only; no push, PR, deploy, cloud console, or external-system mutation |
 | Sandbox | Repository-scoped writes; no production credential; default-deny external egress except approved dependency retrieval; one active attempt; 2 vCPU, 8 GiB, two-hour limit when automated execution is used |
 | Cost budget | US$25 maximum automated attempt; dependency and local compute cost only; pause on exhaustion |
-| Global checks | `git diff --check`; `pnpm check`; `pnpm build`; complete Plane backend suite against the existing local Plane Docker services; M0-S3 overlay/profile health and negative-reachability proof |
+| Global checks | `git diff --check`; `pnpm check`; `pnpm build`; complete Plane backend suite against the existing local Plane Docker services; M0-S3 overlay/profile health, dependency-connectivity, loopback-exposure, replay, restart, cancellation, leakage, and rollback proof |
 | Cleanup | Stop only the Curve local profile and explicitly named disposable Temporal volume when reset is intended; retain the existing Plane stack, source diff, and sanitized test evidence |
 
 The repository instructions at `AGENTS.md`, `apps/api/tests/RUNNING_TESTS.md`,
@@ -48,12 +48,12 @@ overwrite an existing environment file.
 
 | Blocker | Required resolution |
 | --- | --- |
-| `B-PUBLISH` | Satisfied through M0-03: Curve policy contracts and D-003 reconciliation are merged; Plane PR #4 merged M0-03 at `922dd6de5d5ed5081f35cd88343154022867ccad`. This M0-S3 dispatch revision must merge before its context is materialized. |
+| `B-PUBLISH` | Satisfied through M0-03: Curve policy contracts and the original D-003 reconciliation are merged; Plane PR #4 merged M0-03 at `922dd6de5d5ed5081f35cd88343154022867ccad`. The 2026-08-20 connectivity amendment and this M0-S3 dispatch revision must merge before the replacement context is materialized. |
 | `B-REVIEW` | Satisfied through M0-03: Federico approved Plane PR #4 exact head `a807dd7a3f7b81f13ca815b165fba4f4bc068d9e`, merged as `922dd6de5d5ed5081f35cd88343154022867ccad`. Each later implementation output still requires its own exact-head review. |
 | `B-BASE` | Satisfied for M0-S3 dispatch: reviewed upstream-sync, M0-S1, M0-S2, and M0-03 are preserved in fork history; current pinned `preview` is `922dd6de5d5ed5081f35cd88343154022867ccad`. |
 | `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Federico Ocampo against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
-| `B-P002` | Satisfied: the owner-reviewed local topology proposal evolved into the approved D-003 `LOCAL_ONLY` decision merged through Curve PR #9 as `097016ffe2eb259cc780ad2a6cd41ca3422366b2`. |
-| `B-D003` | Satisfied for local M0-S3: Federico Ocampo approved D-003 `LOCAL_ONLY` at exact head `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`, Temporal Python SDK 1.31.0, and the two-network Compose overlay; Curve PR #9 merged as `097016ffe2eb259cc780ad2a6cd41ca3422366b2`. Non-local scopes remain blocked. |
+| `B-P002` | Satisfied for the original decision: Curve PR #9 merged D-003 `LOCAL_ONLY` as `097016ffe2eb259cc780ad2a6cd41ca3422366b2`. The 2026-08-20 owner direction replaces its two-network implementation contract after the amendment is exact-head approved and merged. |
+| `B-D003` | Satisfied for the original local M0-S3 through Curve PR #9. The 2026-08-20 owner direction selects Plane `dev_env`, direct loopback Temporal ports, and the private-EKS connectivity/security model in [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, EKS direction, controls, and revised proof). Implementation resumes only after the amendment's exact head is approved and merged. Environment activation still requires its reviewable operations package. |
 | `B-PEOPLE` | Satisfied for M0-S1 through M0-S3: Federico Ocampo is the named human owner and reviewer; the AI coding agent remains the separate implementer. Every later M0 packet records a named human owner plus Federico Ocampo (`faocampo`) or a named replacement reviewer. |
 | `B-CONTEXT` | Ready for M0-S3 materialization: `M0-S3` has an explicit governed path list and deterministic `curve-context-pack:v1` algorithm. After this revision merges, the Plane context manifest records the exact Curve merge revision, path/file digests, aggregate digest, Plane base, owner, reviewer, and task ID before source mutation. |
 | `B-PROJECT` | Satisfied for M0-S3: draft item `PVTI_lAHOBNjuQc4BgZzOzg3CeqQ` exists exactly once in GitHub Project #2 for visual tracking. Its status is informational and does not gate dispatch. |
@@ -193,9 +193,9 @@ bind approved implementation head `a807dd7...` and merge `922dd6d...`.
 | Project item | `PVTI_lAHOBNjuQc4BgZzOzg3CeqQ` in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) (visual M0-S3 progress tracker) |
 | Outcome | Deliver one harmless Operation through the outbox, a dedicated Temporal worker, idempotent application activities, cancellation, and terminal audit state. |
 | Traceability | FR-015, FR-022; NFR-004; AC-17-AC-21, AC-58 |
-| In scope | `temporalio==1.31.0`; separate Curve worker entrypoint built from the API image; Curve-only `docker-compose-curve.yml` overlay and `curve` profile; `curve-control` and `curve-data` internal networks; worker environment allowlist; namespace/task queue; workflow/activity contracts; relay dispatch; cancellation; replay corpus; local health and negative-reachability checks |
+| In scope | `temporalio==1.31.0`; separate Curve worker entrypoint built from the API image; Curve-only `docker-compose-curve.yml` overlay and `curve` profile; shared Plane `dev_env`; direct loopback-only Temporal gRPC/UI ports; worker environment and credential allowlist; namespace/task queue; workflow/activity contracts; relay dispatch; cancellation; replay corpus; local health, dependency-connectivity, exposure, restart, leakage, and rollback checks |
 | Out of scope | Staging/production Temporal, OpenHands, gVisor, protected payloads, Celery replacement, business workflows |
-| Contracts | [M0 workflow contract](../../contracts/temporal/m0-workflow-contract.md) (workflow identifiers, payloads, retries, cancellation, and replay); Operation/Event/Outbox/Inbox/Audit schemas; [ADR-003](adr-003-runtime-topology.md) (approved local topology, pins, networks, evidence, and rollback) |
+| Contracts | [M0 workflow contract](../../contracts/temporal/m0-workflow-contract.md) (workflow identifiers, payloads, retries, cancellation, and replay); Operation/Event/Outbox/Inbox/Audit schemas; [ADR-003](adr-003-runtime-topology.md) (live topology, pins, evidence, and rollback); [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, security boundary, and revised acceptance) |
 | Migration | Additive Operation workflow fields/indexes only if the reviewed contract requires them; otherwise no migration. |
 | Rollback | Disable relay dispatch and the `curve` profile; stop the Curve worker/Temporal services; retain inspectable terminal/cancelled operations; revert the packet commit. |
 
@@ -214,13 +214,15 @@ bind approved implementation head `a807dd7...` and merge `922dd6d...`.
 6. Given the existing Plane stack is started without the Curve overlay, then
    its resolved Compose model, services, routes, and repository-native checks
    remain unchanged.
-7. Given `curve-worker` is running, when it probes RabbitMQ, Valkey, MinIO,
-   private/metadata destinations, and the public internet, then each connection
-   is denied while Temporal and PostgreSQL remain reachable on their approved
-   ports.
+7. Given `curve-worker` is running on `dev_env`, when its dependency health is
+   checked, then Temporal and PostgreSQL resolve and accept connections; the
+   resolved Compose model contains no Curve-specific network or proxy.
 8. Given sentinel protected strings are supplied to negative fixtures, when the
    round trip completes, then none appears in Temporal history, logs, traces,
    metric labels, or safe errors.
+9. Given Temporal host access is inspected, then gRPC and UI are reachable at
+   `127.0.0.1:7233` and `127.0.0.1:8233`, and neither port publishes on a
+   non-loopback host address.
 
 ### M0-S3 required commands
 
@@ -232,7 +234,10 @@ docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve up -d
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve ps
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve exec api pytest plane/curve/tests -k "workflow or temporal or replay or cancellation"
-docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve exec curve-worker python -m plane.curve.temporal.network_probe
+docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve exec curve-worker python -m plane.curve.temporal.health
+docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve exec curve-worker python -m plane.curve.temporal.proof
+docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve port temporal 7233
+docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve port temporal 8233
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve stop curve-worker temporal
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve rm -f curve-worker temporal
 pnpm check
