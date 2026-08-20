@@ -1148,3 +1148,44 @@ This preparation introduces no new product, security, data, licensing,
 infrastructure, or external-side-effect decision. Staging, production,
 AWS/Kubernetes, gVisor, OpenHands, protected data, deployment, and the broader
 M0-06 parent/child workflow remain outside the local round-trip slice.
+
+### D-003 (private-platform connectivity) simplification direction
+
+On 2026-08-20 Federico Ocampo directed Curve to align its connectivity model
+with X3M's existing operating environment. Curve runs internally in X3M's AWS
+EKS cluster, inside the private VPC and behind VPN access. The selected design
+therefore uses standard service connectivity, authenticated clients, workload
+identity, Secrets Manager, and environment access controls as the primary
+boundary for trusted Curve control-plane components.
+
+For local development, `temporal` and `curve-worker` join Plane's existing
+`dev_env` network. Temporal publishes only loopback-bound development ports,
+and the worker connects directly to Temporal and Plane PostgreSQL. The earlier
+Curve-specific `curve-control`, `curve-data`, and `curve-loopback` networks and
+the local proxy are removed from the live M0-S3 contract.
+
+For X3M development, staging, and production, the approved direction uses a
+dedicated Curve namespace by default, Kubernetes `ClusterIP` services, an
+internal VPN-only Temporal UI ingress, X3M workload identity and Secrets
+Manager, and authenticated Temporal clients. Exact Helm values, database and
+certificate placement, HA, backup/restore, RPO/RTO, capacity, cost, and named
+operational ownership remain inputs of each environment activation package.
+This direction does not authorize a deployment by itself.
+
+The security boundary remains risk-based. Coding-agent and untrusted quality
+workloads continue to require gVisor, default-deny egress, JIT credentials,
+quotas, cleanup, and controller-only VCS mutation. Trusted Curve services use
+the established private-platform controls without bespoke container
+microsegmentation in the initial release.
+
+The governing change is recorded in the
+[D-003 private-platform connectivity amendment](../technical/d003-private-platform-connectivity-amendment.md)
+(shared local network, private EKS direction, controls, and revised proof).
+It updates the [Curve PRD](../curve-ai-native-sdlc-prd.md) (product requirements
+and decision register), [ADR-003](../technical/adr-003-runtime-topology.md)
+(runtime topology, historical approval, live amendment, and rollback), and
+[M0 local skeleton task packets](../technical/m0-local-skeleton-task-packets.md)
+(dispatch scope, commands, acceptance, and rollback). The amendment becomes
+effective only after Federico approves its exact PR head and it merges to
+Curve `main`; M0-S3 then rematerializes its deterministic context before Plane
+source changes continue.

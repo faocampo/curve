@@ -2,11 +2,12 @@
 
 ## Purpose
 
-This directory is the architecture and implementation handoff derived from the [Curve PRD v0.9](../curve-ai-native-sdlc-prd.md) (product vision, requirements, acceptance criteria, rollout, and decision register). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
+This directory is the architecture and implementation handoff derived from the [Curve PRD v0.10](../curve-ai-native-sdlc-prd.md) (product vision, requirements, acceptance criteria, rollout, and decision register). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
 
 The suite is implementation-oriented. D-001 (Plane foundation, licensing, and
-upgrade-boundary decision) and D-003 (runtime topology and trust-zone decision)
-for `LOCAL_ONLY` are owner-approved and recorded as `DECIDED`; other agreed planning directions remain
+upgrade-boundary decision) is decided. D-003 (runtime topology and trust-zone
+decision) has an owner-approved private-platform connectivity amendment pending
+exact-head merge; other agreed planning directions remain
 `PROPOSED` until their named owners approve them. M0-S3 (local Temporal
 round-trip implementation packet) is the executable local runtime proof. An implementation package
 remains blocked until every decision scope named by its exact packet is
@@ -51,8 +52,9 @@ identifiers are:
 | [Implementation-readiness review](review-analysis-and-remediation.md) | Prioritized gaps, closure evidence, owners, dependencies, and remediation status | Review record; never overrides the PRD or approved ADRs |
 | [Plane foundation inventory](plane-foundation-inventory.md) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; foundation `549db1a...`; current post-M0-03 `preview` base `922dd6d...` |
 | [ADR-001: Plane upstream foundation](adr-001-plane-upstream-foundation.md) | Decided updateable upstream baseline, fork workflow, proof results, consequences, rollback, approval, and review triggers | D-001 decision record; `DECIDED` on 2026-08-15 |
-| [ADR-003: Runtime topology](adr-003-runtime-topology.md) | Local/non-local Temporal and Curve runtime boundary | `DECIDED/LOCAL_ONLY`: SDK 1.31.0, two-network Compose overlay, worker allowlist, M0-S3 proof, rollback, and explicit non-local blockers |
-| [D-003 local topology decision packet](d003-local-topology-decision-packet.md) | Approved least-privilege local Temporal/worker/database network, environment, proof, acceptance, and rollback contract | `APPROVED_AND_MERGED`; approved head `7826f403...`, merge `097016f...` |
+| [ADR-003: Runtime topology](adr-003-runtime-topology.md) | Local/non-local Temporal and Curve runtime boundary | SDK 1.31.0; shared local `dev_env`; direct loopback ports; private EKS/`ClusterIP`/VPN direction; authenticated non-local clients; M0-S3 proof and rollback |
+| [D-003 local topology decision packet](d003-local-topology-decision-packet.md) | Historical 2026-08-18 least-privilege local network approval, proof, acceptance, and rollback evidence | `APPROVED_AND_MERGED` historical record; its two-network implementation contract is superseded by the amendment when effective |
+| [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) | Shared local network, private EKS deployment direction, service identity, security boundary, revised M0-S3 proof, and activation inputs | Owner-approved direction dated 2026-08-20; exact-head approval and merge required before Plane implementation resumes |
 | [ADR-006: Orca human assistance](adr-006-orca-human-assistance.md) | Proposed developer-operated Orca MCP integration boundary | D-006 decision packet; owner/licensing approval pending |
 | [ADR-007: MCP and Orca profile](adr-007-mcp-trust-and-orca-profile.md) | Proposed MCP trust registry and developer-operated Orca write-back allowlist | D-007 decision packet; security/platform approval pending |
 | [ADR-009: Retention and erasure](adr-009-retention-and-erasure.md) | Required data-class/asset retention, hold, backup, and erasure decision | D-009 remains open and blocks protected storage/non-local activation |
@@ -95,7 +97,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 
 ```mermaid
 flowchart TD
-    prd["Curve PRD v0.9"] --> decisions["D-001 through D-016 and ADRs"]
+    prd["Curve PRD v0.10"] --> decisions["D-001 through D-016 and ADRs"]
     prd --> architecture[Architecture]
     architecture --> c4["C4 architecture views"]
     prd --> domain[Domain model]

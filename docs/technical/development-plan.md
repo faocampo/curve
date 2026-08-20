@@ -5,9 +5,9 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 0.8 |
-| Last updated | 2026-08-18 |
-| Source | [Curve PRD v0.9](../curve-ai-native-sdlc-prd.md) (product requirements, lifecycle, security invariants, acceptance criteria, and D-003 local decision) |
+| Version | 0.9 |
+| Last updated | 2026-08-20 |
+| Source | [Curve PRD v0.10](../curve-ai-native-sdlc-prd.md) (product requirements, lifecycle, security invariants, acceptance criteria, and D-003 private-platform connectivity direction) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
 
@@ -34,7 +34,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 ## Planning assumptions
 
 - The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` remains the historical foundation, and accepted descendant `922dd6de5d5ed5081f35cd88343154022867ccad` is the current post-M0-03 implementation base.
-- Federico Ocampo decided D-003 (runtime topology and trust-zone decision) for `LOCAL_ONLY` at approved head `7826f403...`, merged as `097016f...`. Temporal Python SDK 1.31.0 and the two-network Compose overlay are fixed. M0-S3 (local Temporal round-trip implementation packet) is the executable proof; P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane integration proof) are superseded standalone gates. Staging and production remain fail closed.
+- Federico Ocampo decided the original D-003 (runtime topology and trust-zone decision) local scope at approved head `7826f403...`, merged as `097016f...`, and on 2026-08-20 directed the [private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, service identity, controls, and revised proof). Temporal Python SDK 1.31.0 remains fixed. M0-S3 (local Temporal round-trip implementation packet) uses Plane `dev_env` and direct loopback ports after the amendment's exact-head approval and merge; P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane integration proof) remain superseded standalone gates. Environment activation remains package-gated.
 - Component names in this plan are logical. The architecture may co-deploy compatible components, but ownership, contracts, trust boundaries, and failure isolation remain distinct.
 - Relative sizes are planning signals: `S` is a bounded adapter/schema/UI slice, `M` is a component with several contracts, and `L` must be decomposed before dispatch. They are not calendar estimates.
 - Every milestone has a production-like demonstration environment even when the capability is not production-enabled.
@@ -46,7 +46,7 @@ flowchart LR
     foundation["Applicable package-scoped P0 gates and Plane baseline"] --> s1["M0-S1 (module shell)"]
     s1 --> s2["M0-S2 (operation and delivery kernel)"]
     s2 --> m0_independent["Independent non-Temporal M0 foundation work"]
-    d003["D-003 (runtime topology) LOCAL_ONLY decided"] --> s3["M0-S3 (local Temporal round trip and executable proof)"]
+    d003["D-003 (runtime topology) shared local/private EKS direction"] --> s3["M0-S3 (local Temporal round trip and executable proof)"]
     policy["M0-03 (core policy kernel) implemented"] --> s3
     s2 --> s3
     s3 --> m0_temporal["Temporal-dependent M0 foundation work"]
@@ -104,7 +104,7 @@ Project status follows the [GitHub Project tracking map](github-project-executio
 | ID | Size | Deliverable | Dependencies | Completion evidence |
 | -- | ---- | ----------- | ------------ | ------------------- |
 | P0-01 | M | Plane community baseline and reuse/build inventory covering backend, web, auth, work items, pages, estimates, relationships, Gantt, notifications, APIs, webhooks, licensing, and extension points | D-001 | Approved inventory and compatibility ADR; no commercial-only assumption. |
-| P0-02 | M | Repository and deployment topology: logical component-to-repository mapping, owner-reviewed local topology, and fail-closed staging/production decision matrix covering trust zones, persistence, backup, security, and ownership | D-003 `LOCAL_ONLY` decision | Named owner approval of the local C4/deployment views, repository map, two-network Compose overlay, worker environment/network allowlists, shared-network risk, and explicit non-local blockers; selected staging/production topology remains just-in-time before activation. |
+| P0-02 | M | Repository and deployment topology: logical component-to-repository mapping, owner-reviewed local topology, and fail-closed staging/production decision matrix covering trust zones, persistence, backup, security, and ownership | D-003 local decision and private-platform connectivity amendment | Named owner approval of the local C4/deployment views, repository map, shared-`dev_env` Compose overlay, worker environment/credential allowlists, loopback exposure, private EKS/`ClusterIP`/VPN direction, authenticated non-local Temporal clients, and explicit environment-activation inputs. |
 | P0-03 | M | Decision ADR set for D-002-D-016 with selected versions, licenses, owners, security/data policy, and milestone block status | P0-01, P0-02 | Every D item is approved or explicitly blocks its package; no implicit default in code. |
 | P0-04 | S | Documentation, schema, ADR, and generated-contract conventions plus CI validation for Markdown, Mermaid, OpenAPI, JSON Schema, and architecture links | P0-01 | CI fails on invalid docs/contracts and produces rendered artifacts. |
 | P0-05 | M | Test harness strategy: unit, database, contract, fake providers, Temporal replay, browser, security fixtures, migration, load, and recovery | P0-02 | Test matrix maps every AC to an owning suite and environment. |
@@ -117,9 +117,10 @@ M0 packet. A bounded local M0 packet may be dispatched earlier only when every
 dependency and decision scope named by its immutable task packet is satisfied
 and every `READY` field passes. Under the current local-skeleton packets, M0-S1
 and M0-S2 do not depend on P0-06. P0-06 is complete through supersession.
-M0-S3 and its downstream packets require the decided D-003 `LOCAL_ONLY`
-profile, implemented M0-03 policy kernel, and their packet-specific base,
-context, owner/reviewer, Project, and acceptance evidence.
+M0-S3 and its downstream packets require the effective D-003
+private-platform connectivity amendment, the implemented M0-03 policy kernel,
+and their packet-specific base, context, owner/reviewer, Project, and
+acceptance evidence.
 
 ### P0B: Just-in-time integration proofs
 
@@ -149,7 +150,7 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-03 | M | Core authorization/policy kernel for roles, object ACLs, risk tier, assignments, separation of duties, classification, trusted evaluation time, versioned contexts, and deny-by-default generic allowlists | M0-01 | FR-043, NFR-009-NFR-012, AC-09, AC-35, AC-52 | `DONE`: Plane PR #4 merged approved head `a807dd7...` as `922dd6d...`. [M0-03 implementation evidence](m0-03-implementation-evidence.md) (exact context, implementation tree, tests, security acceptance, and rollback) records reversible migration, 113 Curve tests, 629 Plane tests, and equivalent approved/merge trees. Provider-specific policy follows its decided ADR. |
 | M0-04 | M | Workspace-scoped object storage, AccessEnvelope, digest service, retention hooks, upload/download intents, and cryptographic-erasure workflow | M0-02, M0-03, D-009 | FR-004, FR-021, NFR-010-NFR-011, NFR-018, NFR-020, AC-53, AC-56 | Classification, ACL, integrity, size, tombstone, erasure, and backup tests. |
 | M0-05 | M | Transactional outbox, inbox, idempotency store, Operation resource, dead-letter state, and replay-safe relay | M0-02 | FR-021, FR-023, FR-044, NFR-004-NFR-005, AC-26, AC-33 | Duplicate/lost/out-of-order test suite with no duplicate effects. |
-| M0-06 | L | Temporal parent-workflow skeleton, version markers, child-attempt workflow, signals, timers, cancellation, continue-as-new, and replay corpus | M0-05, M0-03, D-003 | FR-015, FR-022, NFR-004, AC-17-AC-21, AC-58 | Decomposed first into M0-S3 (local Temporal round-trip implementation packet): exact Plane base `922dd6d...`, SDK 1.31.0, two-network Compose overlay, duplicate/restart/replay/cancellation/leakage/network proof, and disablement rollback. Broader parent/child behavior remains later M0-06 scope. |
+| M0-06 | L | Temporal parent-workflow skeleton, version markers, child-attempt workflow, signals, timers, cancellation, continue-as-new, and replay corpus | M0-05, M0-03, D-003 | FR-015, FR-022, NFR-004, AC-17-AC-21, AC-58 | Decomposed first into M0-S3 (local Temporal round-trip implementation packet): exact Plane base `922dd6d...`, SDK 1.31.0, shared-`dev_env` Compose overlay, direct loopback ports, duplicate/restart/replay/cancellation/leakage/dependency-connectivity proof, and disablement rollback. Broader parent/child behavior remains later M0-06 scope. |
 | M0-07 | M | Public API conventions, Problem Details, ETag/If-Match, idempotency headers, cursor pagination, SSE resume, and OpenAPI generation | M0-02, M0-03, M0-05 | FR-023, NFR-002-NFR-005, NFR-013, AC-35 | API contract tests and generated client fixture. |
 | M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07 | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | Audit completeness fixture, telemetry leakage test, SLO dashboard. |
 | M0-09 | M | Provider registry, connection lifecycle, capability documents, common error taxonomy, callback ingress, outgoing webhooks, and reconciliation scheduler | M0-03, M0-05, M0-07, D-007 | FR-003, FR-023, FR-044, NFR-005, NFR-008, NFR-013, AC-33, AC-57 | Fake-provider conformance suite and 15-minute reconciliation proof. |
@@ -168,7 +169,7 @@ contracts, Project item, commands, and rollback are pinned; its deterministic
 Curve context is materialized immediately after this dispatch revision merges
 and before Plane mutation. The five-packet local M0 checkpoint remains
 packet-scoped. M0-S3 and its downstream packets consume the decided
-D-003 `LOCAL_ONLY` profile and M0-S3 itself supplies the runtime proof. D-007
+D-003 shared local profile and M0-S3 itself supplies the runtime proof. D-007
 does not gate M0-S1 through M0-S5 because those packets expose no
 MCP capability. D-007 remains required by M0-09 and later MCP-enabled
 capabilities under its current proposal; its dependency ordering with D-006

@@ -12,6 +12,7 @@
 | Human reviewer | Federico Ocampo (`faocampo`) |
 | Technical operator | OpenAI Codex under Federico Ocampo's oversight |
 | Original scope approval | On 2026-08-15 Federico approved the `LOCAL_ONLY` sections of ADR proposal revision `sha256:cac4dcac2a03156faf21b0deffdc22bec611da1b070a421b4d5b631bfec8a142` as a proof basis; staging and production content in that revision was not approved |
+| Current interpretation | Historical proof design only. The live M0-S3 network contract is governed by [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, and revised proof acceptance). |
 | Two-stage direction | On 2026-08-15 Federico approved P0-06A (isolated Temporal feasibility proof) followed by a separately designed and approved P0-06B (least-privilege Plane integration proof) |
 | Durable supersession evidence | [Curve PR #9](https://github.com/faocampo/curve/pull/9), approved head `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`, green `validate`, merge `097016ffe2eb259cc780ad2a6cd41ca3422366b2` |
 | P0-06A (isolated Temporal feasibility proof) authorization | `SUPERSEDED_UNISSUED`; proposed authorization `D003-LOCAL-PROOF-A-2026-08-15-01` was never activated |

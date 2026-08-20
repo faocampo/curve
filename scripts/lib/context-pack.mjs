@@ -71,6 +71,7 @@ export const M0_S3_CONTEXT_PATHS = Object.freeze(
     "docs/technical/adr-003-runtime-topology.md",
     "docs/technical/architecture.md",
     "docs/technical/d003-local-topology-decision-packet.md",
+    "docs/technical/d003-private-platform-connectivity-amendment.md",
     "docs/technical/m0-03-implementation-evidence.md",
     "docs/technical/m0-authorization-and-state-matrices.md",
     "docs/technical/m0-local-skeleton-task-packets.md",

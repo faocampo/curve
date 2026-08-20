@@ -84,6 +84,7 @@ test("M0-S3 context pins the approved topology, workflow, delivery, policy, and 
     "contracts/temporal/m0-workflow-contract.md",
     "docs/technical/adr-003-runtime-topology.md",
     "docs/technical/d003-local-topology-decision-packet.md",
+    "docs/technical/d003-private-platform-connectivity-amendment.md",
     "docs/technical/m0-03-implementation-evidence.md",
     "docs/technical/m0-local-skeleton-task-packets.md",
     "scripts/lib/context-pack.mjs",
