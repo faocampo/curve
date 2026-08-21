@@ -162,7 +162,7 @@ The panel excludes credentials, tokens, protected request/response bodies, raw T
 
 | Interaction | Contract behavior |
 | --- | --- |
-| Load page | Read Curve workspace shell, current/latest authorized probe, and an SSE resume cursor |
+| Load page | Read Curve workspace shell, request the latest authorized `FOUNDATION_PROBE` through the server-side `operation_type` filter, reject a mismatched detail projection, and obtain an SSE resume cursor |
 | Run foundation probe | `POST` one local-only probe command with a fresh idempotency key; accept `202`, `Location`, ETag, and a contract-valid Operation |
 | Receive progress | Subscribe to workspace-scoped SSE; persist the last acknowledged event ID after rendering the event |
 | Resume progress | Reconnect with `Last-Event-ID`; render only later events in server order |

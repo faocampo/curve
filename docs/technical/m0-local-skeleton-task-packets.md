@@ -250,11 +250,11 @@ docker compose -f docker-compose-local.yml ps
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S4-API-SSE-UI` |
-| Status | `READY_FOR_IMPLEMENTATION`: M0-S1 through M0-S3 are merged; Federico Ocampo is owner and human reviewer; UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) are approved through Curve PR #17; the Project item is `Ready`; acceptance and commands are defined below. Before mutation, the coding attempt pins the current Curve `main` context and verifies its Plane `preview` base descends from accepted M0-S3 merge `d99342f...`. |
+| Status | `IMPLEMENTATION_IN_PROGRESS`: M0-S1 through M0-S3 are merged; Federico Ocampo is owner and human reviewer; UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) are approved through Curve PR #17; the Plane implementation branch is `curve/m0-s4-api-sse-ui`; M0-S4 and M0-07 remain open until the implementation and acceptance evidence are reviewed. |
 | Risk | `STANDARD`; authenticated user-visible API and workspace boundary |
 | Outcome | Expose authorized Operation create/read/cancel behavior, resumable workspace events, and a minimal local foundation-probe UI. |
 | Traceability | FR-023; NFR-002-NFR-005, NFR-013; AC-01, AC-20, AC-35 |
-| In scope | DRF endpoints; RFC 9457 errors; ETag/If-Match; idempotency; cursor pagination; local-only probe command; SSE resume; generated/checked TypeScript types/services; workspace page; API and state-view tests extending the M0-S1 frontend harness |
+| In scope | DRF endpoints; RFC 9457 errors; ETag/If-Match; idempotency; cursor pagination with server-side Operation-type filtering; local-only probe command; SSE resume; generated/checked TypeScript types/services; workspace page; API and state-view tests extending the M0-S1 frontend harness |
 | Out of scope | General initiative UI, evidence, provider configuration UI, WebSockets, production probe endpoint, broad frontend test-platform refactor |
 | Contracts | `curve-v1.openapi.yaml`; `operation.schema.json`; `sse-event.schema.json`; error/idempotency/pagination conventions; authorization/state matrices |
 | Migration | None unless an approved contract defect requires an additive Curve migration; stop for contract review before adding it. |
@@ -274,6 +274,9 @@ docker compose -f docker-compose-local.yml ps
    then authorization fails before object disclosure.
 6. Given disabled, loading, running, failed, cancelled, and succeeded states, when
    rendered, then the page is keyboard-accessible and exposes no raw server error.
+7. Given a newer unrelated Operation exists, when Foundation status loads, then
+   the server-side `FOUNDATION_PROBE` filter is applied before pagination and the
+   unrelated Operation is neither rendered nor cancellable.
 
 ### M0-S4 required commands
 
