@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This gate keeps Curve’s Plane-hosted experience centered on user decisions rather than exposing the control plane’s internal domain seams as navigation. It is a delivery prerequisite for every package that creates or materially changes a user-facing flow.
+This gate keeps Curve’s product experience centered on user decisions while Plane-backed work management and control-plane details remain in their appropriate contexts. It is a delivery prerequisite for every package that creates or materially changes a user-facing flow.
 
 The record created through this gate becomes the implementation contract for the affected flow. It complements the PRD, architecture, API/event contracts, and accessibility tests; it does not change their authority.
 
@@ -17,6 +17,25 @@ The record created through this gate becomes the implementation contract for the
 | UX-005 | Work-package-linked screen contract | Exact implementation scope accepted | Enables the corresponding user-facing package to enter `Ready`. |
 
 UX-001 through UX-004 may cover several coherent flows. UX-005 is required for each user-facing work package. A material change to the primary task, navigation location, role authorization, state transition, or progressive-disclosure behavior supersedes the affected record and requires a new UX-004/UX-005 disposition before implementation continues.
+
+## Product-shell invariant
+
+Curve owns the user-facing application shell. Every Curve-enabled experience uses the approved Curve logo, product name, global navigation, breadcrumbs, and lifecycle terminology as its primary identity. The global information architecture is:
+
+| Navigation group | Primary destinations | Authority and purpose |
+| --- | --- | --- |
+| Product | Home, Initiatives, Roadmaps | Product intent, definition, sequencing, and accountable decisions. |
+| Delivery | Execution, Quality, Evidence | Plan execution, exceptions, quality results, lineage, and delivery readiness. |
+| Work management | Projects, Work items, Cycles, Views, Analytics | Plane-backed collaboration and work tracking; Plane remains authoritative for native records. |
+| Platform | Integrations, Policies, Foundation status, Settings | Platform configuration and operational verification for authorized roles. |
+
+The Curve shell exposes Plane attribution, open-source notices, and the exact-version AGPL source link through an About, Open source, or equivalent product surface. Plane attribution remains visible without becoming the primary application logo or a peer top-level product entry.
+
+## Work-package experience records
+
+| Work package | Experience record | Review state | Implementation effect |
+| --- | --- | --- | --- |
+| M0-S4 (API, SSE, and minimal UI implementation packet) | [Foundation probe experience](ux-m0-s4-foundation-probe.md) (clickable local foundation-status flow and screen contract) | `PROPOSED_REVIEW_REQUIRED` | User-facing implementation remains blocked until Federico completes the task review and approves the exact Curve commit. |
 
 ## Experience model
 
@@ -103,7 +122,8 @@ The following v1 mockups establish a shared visual direction for the first Curve
 | Projects, roadmaps, and tasks | [Product planning](../design/mockups/curve-planning-v1.png) | Sequence work, identify dependencies, and act on the critical path. |
 | Kanban board | [Delivery board lifecycle](../design/mockups/curve-kanban-delivery-lifecycle-v2.png) | Move work from definition through pre-production, monitored customer rollout, verified use, and closure. |
 | Task details and coding-agent execution | [Task execution](../design/mockups/curve-task-execution-v1.png) | Review progress and evidence, answer a scoped question, and control the run. |
+| M0 local foundation verification | [Foundation probe](../design/mockups/curve-foundation-probe-v2.png) | Run, follow, recover, or cancel the local end-to-end foundation check from Platform in the Curve product shell. |
 
-The set uses a compact, Plane-integrated navigation model: Home, Initiatives, Roadmaps, Execution, Quality, and Evidence. It keeps policy, audit, provider, and runtime detail available in the governing decision context rather than exposing the control-plane topology as primary navigation.
+The set uses the Curve-owned navigation model defined above. Product and Delivery remain the primary lifecycle surfaces; Plane-backed capabilities are grouped under Work management; platform configuration and foundation verification are grouped under Platform. Policy, audit, provider, and runtime detail appears progressively in the decision context that needs it.
 
-The [Kanban delivery lifecycle](kanban-delivery-lifecycle.md) defines the board columns, status meaning, and progression evidence for this surface.
+The [Kanban delivery lifecycle](kanban-delivery-lifecycle.md) (delivery-board statuses, transition meaning, and progression evidence) defines the board columns, status meaning, and progression evidence for this surface.

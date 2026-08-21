@@ -7,14 +7,14 @@
 | Status | Derived architecture baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Architecture, engineering, security, platform operations, product, and AI coding agents |
-| Version | 0.5 |
-| Last updated | 2026-08-20 |
-| Normative source | [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (product contract, decision register, and accepted local Temporal proof) |
-| Companion | [Engineering Patterns and Technologies](./engineering-patterns-and-technologies.md) |
+| Version | 0.6 |
+| Last updated | 2026-08-21 |
+| Normative source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product contract, Curve-first shell, decision register, and accepted local Temporal proof) |
+| Companion | [Engineering Patterns and Technologies](./engineering-patterns-and-technologies.md) (component, workflow, data, and technology implementation patterns) |
 
 ## Purpose and authority
 
-This document translates the product contract in the [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (product requirements, invariants, acceptance criteria, decisions, and accepted local Temporal proof) into a logical architecture that can be refined into component, data, API, workflow, deployment, and implementation plans. It is not a replacement for the PRD.
+This document translates the product contract in the [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell, invariants, acceptance criteria, decisions, and accepted local Temporal proof) into a logical architecture that can be refined into component, data, API, workflow, deployment, and implementation plans. It is not a replacement for the PRD.
 
 The PRD's invariants, numbered requirements, lifecycle states, authorization rules, service objectives, acceptance criteria, and decision register are normative. If this document conflicts with the PRD, the PRD wins. In particular, this document:
 
@@ -29,7 +29,7 @@ The PRD's invariants, numbered requirements, lifecycle states, authorization rul
 
 The architecture covers the R1 control plane and its provider boundaries:
 
-- Plane-hosted Curve user experience and domain APIs.
+- Curve-branded product shell, Plane-backed work-management experience, and Curve domain APIs.
 - Product, roadmap, initiative, artifact, evidence, gate, plan, execution, quality, delivery-contract, VCS, and audit domains.
 - Durable orchestration, human waits, retries, cancellation, invalidation, and reconciliation.
 - Knowledge, MCP, model, coding-agent, VCS, prototype, quality, feature-flag, documentation, export, and monitoring-evidence adapters.
@@ -122,7 +122,7 @@ flowchart TB
     quarantine --> controllers
 ```
 
-The boxes are logical components. D-003 decides their production placement, HA, persistence products, network topology, and operational ownership. D-004, D-006, D-008, and D-011 select unresolved provider details. The diagram does not decide them. The companion [C4 Architecture Views](c4-architecture.md) provides focused context, container, and component representations of these boundaries.
+The boxes are logical components. D-003 decides their production placement, HA, persistence products, network topology, and operational ownership. D-004, D-006, D-008, and D-011 select unresolved provider details. The diagram does not decide them. The companion [C4 Architecture Views](c4-architecture.md) (context, container, and component diagrams) provides focused representations of these boundaries.
 
 ## Component ownership and contracts
 
@@ -478,14 +478,17 @@ flowchart TB
 
 The required replicas, zones, load balancers, queues, persistence engines, backup targets, registry, secret manager, egress gateways, and region remain D-003 outputs. The diagram intentionally shows roles, not vendor choices.
 
-## Plane extension and compatibility strategy
+## Curve product shell and Plane extension strategy
 
-Curve is an additive bounded domain inside the Plane product surface, with explicit anti-corruption seams to Plane-native concepts.
+Curve is the user-facing product surface and an additive bounded domain implemented in the Plane fork, with explicit anti-corruption seams to Plane-native concepts. Product-surface ownership and data authority remain separate: Curve owns the shell and lifecycle experience; Plane remains authoritative for its native work-management records and behavior.
 
 - Add Curve-owned relational schemas and APIs; do not rename, overload, or repurpose Plane tables or status fields.
 - Reference Plane workspace, user, project, work-item, estimate, and relationship identifiers through bindings. Plane remains authoritative for those native fields.
 - Expose new APIs under `/api/v1/workspaces/{workspace_slug}/curve/`; do not make provider adapters or Temporal workflows depend on Plane's internal HTTP endpoints when a Curve application service can provide a stable contract.
-- Add Curve UI routes and navigation behind workspace feature enablement. Reuse accessible Plane components only after the D-001 inventory proves they are present and license-compatible.
+- Make the approved Curve logo, name, global navigation, breadcrumbs, and lifecycle terminology the primary product identity whenever the Curve product profile is enabled.
+- Organize global navigation into Product, Delivery, Work management, and Platform. Present Plane-backed projects, work items, cycles, views, and analytics inside Work management rather than as a peer product shell.
+- Add Curve UI routes and navigation behind workspace feature enablement. Reuse accessible Plane components only after the D-001 (Plane foundation, licensing, and upgrade strategy) inventory proves they are present and license-compatible.
+- Preserve visible Plane attribution, notices, and an exact-version AGPL source link through the Curve About, Open source, or equivalent product surface.
 - Use Plane notifications and comments through a narrow integration service. Notification delivery never becomes lifecycle truth.
 - Keep Celery jobs bounded and idempotent. Temporal exclusively owns durable lifecycle waits and orchestration.
 - Seed workflow/policy v1 explicitly. Existing Plane data is referenced, not copied; roadmap import behavior remains D-013.
@@ -617,7 +620,7 @@ Each ADR must include options, evidence, selection criteria, consequences, threa
 Before implementation, the architecture package must add the following without weakening this baseline:
 
 1. Requirement traceability matrix covering every goal, `FR-001`-`FR-044`, `NFR-001`-`NFR-020`, `AC-01`-`AC-60`, risk, decision, component, command, entity, test, and milestone.
-2. An ERD with workspace-scoped indexes, uniqueness, object layout, deletion, and migration semantics. The C4 context/container/component views are maintained in [C4 Architecture Views](c4-architecture.md).
+2. An ERD with workspace-scoped indexes, uniqueness, object layout, deletion, and migration semantics. The C4 context/container/component views are maintained in [C4 Architecture Views](c4-architecture.md) (context, container, and component diagrams).
 3. Versioned OpenAPI, event, webhook, SSE, provider, and object schemas.
 4. Temporal sequence diagrams for every happy, rework, cancellation, loss, stale-state, supersession, and reconciliation path.
 5. Threat model, data-flow inventory, Access Envelope rules, and security-test fixtures.

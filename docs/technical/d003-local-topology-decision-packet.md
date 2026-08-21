@@ -96,7 +96,7 @@ At Plane baseline `eff8686a69aa112ea8fda79be0e1316dc1fd97d6`:
 | --- | --- | --- |
 | Temporal CLI development image | `docker.io/temporalio/temporal:1.8.1@sha256:59561b9ef060eaeb1f46cb6a1842d6cbdd8a393eb3b6d315ecef5fe2f0b1d7a6` | Temporal CLI release 1.8.1 ([github.com/temporalio/cli](https://github.com/temporalio/cli/releases/tag/v1.8.1)); live OCI inspection on 2026-08-18 confirmed the index plus `linux/amd64` and `linux/arm64` manifests. |
 | Embedded Temporal Server | `1.31.2` | Temporal Server release 1.31.2 ([github.com/temporalio/temporal](https://github.com/temporalio/temporal/releases/tag/v1.31.2)); contains the replication-stream authorization security correction. |
-| Temporal Python SDK | `temporalio==1.31.0` | Temporal Python SDK release 1.31.0 ([github.com/temporalio/sdk-python](https://github.com/temporalio/sdk-python/releases/tag/1.31.0)); PyPI 1.31.0 ([pypi.org/project/temporalio](https://pypi.org/project/temporalio/1.31.0/)) supports Python 3.10+ and publishes musllinux wheels for x86-64 and ARM64, matching Plane's Alpine image. |
+| Temporal Python SDK | `temporalio==1.31.0` | Temporal Python SDK source ([github.com/temporalio/sdk-python](https://github.com/temporalio/sdk-python)); PyPI 1.31.0 ([pypi.org/project/temporalio](https://pypi.org/project/temporalio/1.31.0/)) supports Python 3.10+ and publishes musllinux wheels for x86-64 and ARM64, matching Plane's Alpine image. |
 
 The staging/production Temporal Helm chart and server topology remain outside
 this local decision.
