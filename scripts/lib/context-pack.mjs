@@ -108,6 +108,7 @@ export const M0_08_CONTEXT_PATHS = Object.freeze(
     "docs/technical/m0-authorization-and-state-matrices.md",
     "docs/technical/m0-local-skeleton-task-packets.md",
     "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-s4-implementation-evidence.md",
     "docs/technical/m0-s5-observability-task-packet.md",
     "docs/technical/m0-traceability.md",
     "docs/technical/security-and-operations.md",

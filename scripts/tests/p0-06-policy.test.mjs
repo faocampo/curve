@@ -153,6 +153,7 @@ test("M0-08 context pins the observability contract, packet, fixtures, and valid
     "contracts/temporal/m0-workflow-contract.md",
     "docs/technical/m0-local-skeleton-task-packets.md",
     "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-s4-implementation-evidence.md",
     "docs/technical/m0-s5-observability-task-packet.md",
     "docs/technical/m0-traceability.md",
     "docs/technical/ux-m0-s4-foundation-probe.md",

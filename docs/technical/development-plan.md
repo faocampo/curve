@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 1.2 |
+| Version | 1.3 |
 | Last updated | 2026-08-21 |
 | Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, lifecycle, security invariants, acceptance criteria, and accepted D-003 local implementation) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
@@ -33,7 +33,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 
 ## Planning assumptions
 
-- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` remains the historical foundation, and accepted descendant `d99342f589db4eb488695487d3ae3f2c16bf0874` is the current post-M0-S3 implementation base.
+- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` remains the historical foundation, and accepted descendant `e762fbbd2c1726a2833745add8245a1679c60d88` is the current post-M0-S4 implementation base.
 - Federico Ocampo decided the original D-003 (runtime topology and trust-zone decision) local scope at approved head `7826f403...`, merged as `097016f...`, and approved the [private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, service identity, controls, and revised proof) at head `5e165c...`, merged as `aece539...`. Temporal Python SDK 1.31.0 remains fixed. M0-S3 (local Temporal round-trip implementation packet) accepted Plane `dev_env`, direct loopback ports, replay, restart, cancellation, security, and rollback at merge `d99342f...`; P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane integration proof) remain superseded standalone gates. Environment activation remains package-gated.
 - Component names in this plan are logical. The architecture may co-deploy compatible components, but ownership, contracts, trust boundaries, and failure isolation remain distinct.
 - Relative sizes are planning signals: `S` is a bounded adapter/schema/UI slice, `M` is a component with several contracts, and `L` must be decomposed before dispatch. They are not calendar estimates.
@@ -155,8 +155,9 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07; OBS-BIND-001 for local X3M export/provisioning only | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (five M0-S5A implementation checkpoints, M0-S5B X3M integration proof, tests, evidence, and rollback) and [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (Curve-owned TLS/configuration, static private-provider controls, bounded instrumentation/dashboard/four-alert surface). M0-S5A proves generic OTel isolation, audit completeness, redaction/cardinality limits, process-local exporter-failure handling, repository-only asset correctness, and in-memory telemetry; M0-S5B proves the owner-approved live binding and independent platform path-health signal. |
 | M0-09 | M | Provider registry, connection lifecycle, capability documents, common error taxonomy, callback ingress, outgoing webhooks, and reconciliation scheduler | M0-03, M0-05, M0-07, D-007 | FR-003, FR-023, FR-044, NFR-005, NFR-008, NFR-013, AC-33, AC-57 | Fake-provider conformance suite and 15-minute reconciliation proof. |
 
-The current Plane implementation base is M0-S3 merge
-`d99342f589db4eb488695487d3ae3f2c16bf0874`; M0-S1, M0-S2, M0-03, and M0-S3 are complete.
+The current Plane implementation base is M0-S4 merge
+`e762fbbd2c1726a2833745add8245a1679c60d88`; M0-S1, M0-S2, M0-03, M0-S3,
+and M0-S4 are complete.
 M0-S2 satisfies M0-02 (core aggregate persistence) and M0-05 (transactional
 delivery kernel) through [M0-S2 implementation evidence](m0-s2-implementation-evidence.md)
 (exact contract, context, implementation, validation, and merge binding).
@@ -166,18 +167,16 @@ context, Plane implementation/merge, validation, security acceptance, and
 rollback). M0-S3 (local Temporal round-trip implementation packet) is accepted
 through [M0-S3 implementation evidence](m0-s3-implementation-evidence.md)
 (exact context, Plane head/merge, tests, runtime proof, security acceptance, and
-rollback). M0-S4 (API, SSE, and minimal UI implementation packet) is
-`IN_REVIEW`: Federico approved UX-004-M0-S4 (clickable prototype
-and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) at
-exact Curve head `a463876...`, merged through Curve PR #17 as `42ea329...`.
-Plane PR #6 (M0-S4 API/SSE/Curve-first UI implementation) is at exact head
-`a1748c7...`; 27 focused Curve web tests plus type, lint, and format checks pass.
-[CodeQL](https://github.com/faocampo/plane/actions/runs/32527413261) (exact-head
-Python and JavaScript analysis) and
-[copyright](https://github.com/faocampo/plane/actions/runs/32527415252)
-(exact-head Python and TypeScript license-header check) are green. Federico's
-exact-head acceptance and merge remain pending. The
-five-packet local M0 checkpoint remains packet-scoped. Downstream packets
+rollback). M0-S4 (API, SSE, and minimal Curve-first UI implementation packet)
+and the local M0-07 (public API and resumable SSE foundation work package) are
+accepted through [M0-S4 implementation evidence](m0-s4-implementation-evidence.md)
+(exact context, approvals, Curve/Plane merges, full regression, UX/security
+acceptance, and rollback). Federico approved Plane head `a1748c7...`, and Plane
+PR #6 squash-merged it into `preview` as `e762fbb...` with an identical Git
+tree. The exact merge tree passed 27 Curve frontend tests, 148 Curve backend
+tests, 664 Plane backend tests, all 60 monorepo checks, all 16 build tasks,
+CodeQL, copyright, and migration-drift verification. The five-packet local M0
+checkpoint remains packet-scoped. Downstream packets
 consume the decided D-003 shared local profile and accepted M0-S3 runtime proof. D-007
 does not gate M0-S1 through M0-S5 because those packets expose no
 MCP capability. D-007 remains required by M0-09 and later MCP-enabled

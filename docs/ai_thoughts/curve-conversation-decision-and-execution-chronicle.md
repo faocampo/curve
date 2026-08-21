@@ -1314,8 +1314,45 @@ The proposal is recorded in the [M0-S5 observability task packet](../technical/m
 (telemetry kernel, X3M integration proof, tests, evidence, and rollback) and the
 [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json)
 (fail-closed exporter, bounded metrics, spans, logs, dashboard, four alerts,
-redaction, and independent path-health boundary). M0-S5A still waits for the
-M0-S4 merge/evidence and exact contract-head approval. M0-S5B additionally
+redaction, and independent path-health boundary). At publication, M0-S5A
+waited for M0-S4 merge/evidence and exact contract-head approval; the later
+acceptance record below satisfies the M0-S4 dependency. M0-S5B additionally
 waits for the owner-approved OBS-BIND-001 record. No collector, dashboard,
 alert, repository implementation, Docker profile, or infrastructure was changed
 by this preparation step.
+
+### M0-S4 implementation approval, merge, and acceptance
+
+On 2026-08-21 Federico Ocampo approved Curve PR #18 at exact head
+`79c7cd6cced82f8f3dede6cbad2706ae3d7befb8` and Plane PR #6 at exact head
+`a1748c790a060434928b8ed521692b13b3f9739e`. He authorized both draft PRs to be
+marked ready and squash-merged while CI remained green. GitHub merged the Curve
+head into `main` as `ccd3c3aa6de46e0f2ee197905226cb40db0515b3`
+and the Plane head into `preview` as
+`e762fbbd2c1726a2833745add8245a1679c60d88`. Each approved head and its squash
+merge have the same Git tree, so the accepted content is exact.
+
+The post-merge verification ran against the exact Plane merge tree. `pnpm
+check` passed all 60 tasks, `pnpm build` passed all 16 tasks, the Curve frontend
+harness passed 27 tests, the complete Curve backend suite passed 148 tests, the
+complete Plane backend suite passed 664 tests with the repository's 92 existing
+deprecation warnings, and the migration-drift check found no Curve changes.
+Exact-head CodeQL and copyright checks were green.
+
+The first diagnostic backend attempt loaded Curve as disabled before Django URL
+configuration and therefore returned route-level `404` responses for ten API
+tests while 138 other Curve tests passed. The ignored synthetic test environment
+was corrected to enable Curve at process startup for the synthetic workspaces;
+the authoritative full Curve and Plane suites then passed. The disposable
+PostgreSQL, Valkey, RabbitMQ, MinIO, network, volumes, and temporary
+configuration were removed after verification.
+
+The acceptance is recorded in [M0-S4 implementation evidence](../technical/m0-s4-implementation-evidence.md)
+(exact context, approvals, merges, tests, product/security acceptance, and
+rollback). M0-S4 (API, SSE, and minimal Curve-first UI implementation packet)
+and M0-07 (public API and resumable SSE foundation work package) are complete.
+M0-S5A (telemetry kernel and static observability assets) now waits only for its
+own exact Curve contract-head approval, merge, and deterministic M0-08 (audit
+and observability foundation work package) context digest. M0-S5B (X3M local
+observability integration proof) additionally waits for OBS-BIND-001 (local X3M
+OTLP, Prometheus, Grafana, and independent path-health binding).

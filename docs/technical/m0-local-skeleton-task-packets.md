@@ -4,12 +4,12 @@
 
 | Field | Value |
 | --- | --- |
-| Status | M0-S1, M0-S2, M0-03, and M0-S3 completed; M0-S4 implementation is in human review; M0-S5 contracts are proposed for material approval |
-| Version | 2.3 |
+| Status | M0-S1, M0-S2, M0-03, M0-S3, and M0-S4 completed; M0-S5 contracts are proposed for material approval |
+| Version | 2.4 |
 | Date | 2026-08-21 |
-| Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, effective D-003 local profile, and accepted M0-S3 evidence) |
-| Contract baseline floor | Accepted Curve `main` commit `42ea32981a3d5ce814a74c18e458ac8152a7e2fa` containing the approved M0-S4 Definition/UX artifacts; each coding attempt refreshes and pins the current merged Curve context before mutation |
-| Plane implementation base | M0-S3 merge commit `d99342f589db4eb488695487d3ae3f2c16bf0874` on fork `preview` |
+| Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, effective D-003 local profile, and accepted M0-S3/M0-S4 evidence) |
+| Contract baseline floor | Accepted Curve `main` commit `ccd3c3aa6de46e0f2ee197905226cb40db0515b3` containing the approved M0-S4 Definition/UX lifecycle and implementation-readiness reconciliation; each coding attempt refreshes and pins the current merged Curve context before mutation |
+| Plane implementation base | M0-S4 merge commit `e762fbbd2c1726a2833745add8245a1679c60d88` on fork `preview` |
 
 ## Purpose
 
@@ -25,11 +25,11 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | --- | --- |
 | Repository | `git@github.com:faocampo/plane.git` |
 | Base branch | Fork `preview` |
-| Base SHA | `922dd6de5d5ed5081f35cd88343154022867ccad`; every materialized M0-S3 packet must verify the live base still matches or use a separately reviewed descendant |
-| Curve revision | At least Curve baseline `b55d90fa71438e8ed2a5bf11e04be4b32295e935`; M0-S3 materialization records the exact merged Curve revision containing the 2026-08-20 D-003 connectivity amendment, this packet, and its deterministic context digest |
+| Base SHA | Current accepted `preview` `e762fbbd2c1726a2833745add8245a1679c60d88`; every later packet verifies the live base or records a separately reviewed descendant |
+| Curve revision | At least accepted Curve baseline `ccd3c3aa6de46e0f2ee197905226cb40db0515b3`; every materialization records the exact merged Curve revision containing its packet and deterministic context digest |
 | GitHub Project item | Exact visual-tracking item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and maintained during delivery |
-| Branch | One feature branch per packet; M0-S3 uses `curve/m0-s3-temporal-round-trip` from the exact Plane base above |
-| Human owner | Federico Ocampo for M0-S1 through M0-S3; every later M0 packet records its own named person at dispatch; role-only values are invalid |
+| Branch | One feature branch per packet, created from the exact accepted Plane base recorded at dispatch |
+| Human owner | Federico Ocampo for M0-S1 through M0-S5 unless reassigned; every packet records its named person at dispatch; role-only values are invalid |
 | Human reviewer | Federico Ocampo (`faocampo`) for the current phase, distinct from the coding agent; any replacement must be named at dispatch |
 | Data | Synthetic `INTERNAL` local fixtures only; no protected object bodies, repository secrets, customer data, or production data |
 | Model policy | Dispatcher-approved coding model; no Curve Model Gateway or runtime model call; no silent model/provider substitution |
@@ -48,14 +48,14 @@ overwrite an existing environment file.
 
 | Blocker | Required resolution |
 | --- | --- |
-| `B-PUBLISH` | Satisfied through M0-S3: Curve amendment/context revision `aece539...` and Plane implementation merge `d99342f...` are published. Each later packet still requires its exact Curve context publication. |
-| `B-REVIEW` | Satisfied through M0-S3: Federico approved Plane PR #5 exact head `7fd231b...`, merged as `d99342f...`. Each later implementation output still requires its own exact-head review. |
-| `B-BASE` | Satisfied through M0-S3: reviewed upstream-sync, M0-S1, M0-S2, M0-03, and M0-S3 are preserved in fork history; current accepted `preview` is `d99342f589db4eb488695487d3ae3f2c16bf0874`. |
+| `B-PUBLISH` | Satisfied through M0-S4: Curve planning merge `ccd3c3a...` and Plane implementation merge `e762fbb...` are published. Each later packet still requires its exact Curve context publication. |
+| `B-REVIEW` | Satisfied through M0-S4: Federico approved Plane PR #6 exact head `a1748c7...`, merged as `e762fbb...`. Each later implementation output still requires its own exact-head review. |
+| `B-BASE` | Satisfied through M0-S4: reviewed upstream-sync, M0-S1, M0-S2, M0-03, M0-S3, and M0-S4 are preserved in fork history; current accepted `preview` is `e762fbbd2c1726a2833745add8245a1679c60d88`. |
 | `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Federico Ocampo against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
 | `B-P002` | Satisfied for `LOCAL_ONLY`: Curve PR #9 merged the original decision as `097016f...`; Curve PR #15 merged its shared-network amendment as `aece539...`. |
 | `B-D003` | Satisfied for local M0-S3: the effective [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, EKS direction, controls, and revised proof) selects Plane `dev_env`, direct loopback Temporal ports, and the private-EKS connectivity/security model. Environment activation still requires its reviewable operations package. |
-| `B-PEOPLE` | Satisfied for M0-S1 through M0-S3: Federico Ocampo is the named human owner and reviewer; the AI coding agent remains the separate implementer. Every later M0 packet records a named human owner plus Federico Ocampo (`faocampo`) or a named replacement reviewer. |
-| `B-CONTEXT` | Satisfied for M0-S3: the Plane context manifest binds Curve revision `aece539...`, 39 path/file digests, aggregate digest `sha256:0edadab2...`, Plane base `922dd6d...`, owner, reviewer, and task ID. Later packets require new manifests. |
+| `B-PEOPLE` | Satisfied for M0-S1 through M0-S5: Federico Ocampo is the named human owner and reviewer unless reassigned; the AI coding agent remains the separate implementer. |
+| `B-CONTEXT` | Satisfied through M0-S4: the accepted M0-S4 context binds Curve revision `79c7cd6...`, 38 path/file digests, aggregate digest `sha256:79cf9f3...`, Plane base `d99342f...`, owner, reviewer, and task ID. Later packets require new manifests. |
 | `B-PROJECT` | Satisfied for M0-S3: item `PVTI_lAHOBNjuQc4BgZzOzg3CeqQ` exists exactly once and is `Done` in GitHub Project #2. Its status is informational and does not gate dispatch. |
 
 No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
@@ -250,7 +250,7 @@ docker compose -f docker-compose-local.yml ps
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S4-API-SSE-UI` |
-| Status | `IMPLEMENTATION_IN_PROGRESS`: M0-S1 through M0-S3 are merged; Federico Ocampo is owner and human reviewer; UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) are approved through Curve PR #17; the Plane implementation branch is `curve/m0-s4-api-sse-ui`; M0-S4 and M0-07 remain open until the implementation and acceptance evidence are reviewed. |
+| Status | `ACCEPTED_AND_MERGED`: Federico Ocampo approved Plane head `a1748c790a060434928b8ed521692b13b3f9739e`; Plane PR #6 squash-merged it into `preview` as `e762fbbd2c1726a2833745add8245a1679c60d88`; [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (exact context, approvals, merge, tests, UX/security acceptance, and rollback) closes M0-S4 and the local M0-07 API/SSE scope. |
 | Risk | `STANDARD`; authenticated user-visible API and workspace boundary |
 | Outcome | Expose authorized Operation create/read/cancel behavior, resumable workspace events, and a minimal local foundation-probe UI. |
 | Traceability | FR-023; NFR-002-NFR-005, NFR-013; AC-01, AC-20, AC-35 |
@@ -300,7 +300,7 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S5-OBSERVABILITY` |
-| Status | `PROPOSED_FOR_MATERIAL_APPROVAL`: [standalone M0-S5 task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) is materialized for exact-head review; code remains blocked by M0-S4 merge/evidence and contract approval |
+| Status | `PROPOSED_FOR_MATERIAL_APPROVAL`: [standalone M0-S5 task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) is materialized for exact-head review; M0-S4 merge/evidence is satisfied, while M0-S5A code remains blocked by exact-head contract approval and its final M0-08 context digest |
 | Risk | `STANDARD`; telemetry is a potential data-exfiltration boundary |
 | Outcome | Correlate the local Operation across HTTP, database, relay, workflow, and UI without leaking protected or credential data. |
 | Traceability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 |

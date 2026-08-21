@@ -5,15 +5,15 @@
 | Field | Value |
 | --- | --- |
 | Package | M0-S5 (local audit and observability implementation packet) / M0-08 (audit and observability foundation work package) |
-| Status | `PROPOSED_FOR_MATERIAL_APPROVAL_AND_EXACT_HEAD_REVIEW`; M0-S5A implementation and M0-S5B platform binding remain gated |
-| Version | 1.8 |
+| Status | `PROPOSED_FOR_MATERIAL_APPROVAL_AND_EXACT_HEAD_REVIEW`; M0-S5A waits for this packet's exact-head approval and context digest; M0-S5B also waits for the platform binding |
+| Version | 1.9 |
 | Date | 2026-08-21 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Minimum Plane ancestor | `preview` merge `d99342f589db4eb488695487d3ae3f2c16bf0874` containing accepted M0-S3 (local Temporal round-trip implementation packet) evidence |
-| Implementation base | The future squash merge of Plane PR #6 (M0-S4 API, SSE, and Curve-first UI implementation) into `preview`; current exact candidate head `a1748c790a060434928b8ed521692b13b3f9739e` has green focused local evidence, [CodeQL](https://github.com/faocampo/plane/actions/runs/32527413261) (Python/JavaScript analysis), and [copyright](https://github.com/faocampo/plane/actions/runs/32527415252) (Python/TypeScript license-header check); Federico's exact-head acceptance and merge remain required before it can become a dispatch base |
-| Context readiness | Fail closed until Plane PR #6 is human-approved and merged and a follow-up Curve revision adds its accepted M0-S4 (API, SSE, and minimal UI implementation packet) evidence to the M0-08 context manifest; no current context digest authorizes implementation |
+| Minimum Plane ancestor | `preview` merge `e762fbbd2c1726a2833745add8245a1679c60d88` containing accepted M0-S3 (local Temporal round-trip implementation packet) and M0-S4 (API, SSE, and minimal Curve-first UI implementation packet) evidence |
+| Implementation base | Plane PR #6 (M0-S4 API, SSE, and Curve-first UI implementation) approved head `a1748c790a060434928b8ed521692b13b3f9739e`, squash-merged into `preview` as `e762fbbd2c1726a2833745add8245a1679c60d88`; the approved head and merge share Git tree `3f63bac0db7290bb614829ad9305c1f68a2d4159`; [CodeQL](https://github.com/faocampo/plane/actions/runs/32527413261) (Python/JavaScript analysis) and [copyright](https://github.com/faocampo/plane/actions/runs/32527415252) (Python/TypeScript license-header check) are green |
+| Context readiness | The M0-08 context path set now includes [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (exact context, approvals, merge, tests, UX/security acceptance, and rollback). Implementation remains fail closed until Federico approves this exact Curve contract head, it is merged, and the deterministic context pack is generated at that final revision; no earlier digest authorizes mutation. |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Risk | `STANDARD`, with telemetry treated as a data-exfiltration boundary |
 | Implementation branches | `curve/m0-s5a-observability-kernel` and, after OBS-BIND-001 approval, `curve/m0-s5b-x3m-observability-binding` |
@@ -98,10 +98,9 @@ All conditions must be true before code mutation:
   `d99342f589db4eb488695487d3ae3f2c16bf0874`.
 - The exact Curve contract SHA and its deterministic M0-08 (audit and
   observability foundation work package) context-pack digest are recorded. A
-  post-M0-S4 Curve revision must add the accepted M0-S4 API/SSE/UI contract and
-  `m0-s4-implementation-evidence.md` (exact M0-S4 context, merge, tests,
-  usability acceptance, and rollback evidence) to that manifest before the
-  digest is dispatch-authoritative.
+  final Curve revision must include [M0-S4 implementation evidence](m0-s4-implementation-evidence.md)
+  (exact M0-S4 context, merge, tests, usability acceptance, and rollback) in
+  that manifest before the digest is dispatch-authoritative.
 - Federico Ocampo approves the exact contract head and is the named human
   reviewer for the implementation PR.
 - The implementation packet contains exact build/test commands and synthetic
@@ -529,9 +528,10 @@ cannot silently alter the telemetry contract.
 The coding agent stops before mutation or publication when any of these occurs:
 
 - A required dependency, exact SHA, context digest, owner, or reviewer is absent.
-- Plane PR #6 (M0-S4 API, SSE, and Curve-first UI implementation) is unmerged,
-  or the final M0-08 (audit and observability foundation work package) context
-  manifest lacks its accepted implementation-evidence record.
+- Plane `preview` does not contain merge `e762fbb...` for Plane PR #6 (M0-S4
+  API, SSE, and Curve-first UI implementation), or the final M0-08 (audit and
+  observability foundation work package) context manifest lacks the accepted
+  M0-S4 implementation-evidence record.
 - A proposed metric/span/log field or dashboard/alert rule is outside the
   telemetry manifest.
 - A new persistence field, migration, package upgrade, external endpoint,
