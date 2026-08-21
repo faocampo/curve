@@ -170,8 +170,9 @@ rollback). M0-S4 (API, SSE, and minimal UI implementation packet) is
 `IN_REVIEW`: Federico approved UX-004-M0-S4 (clickable prototype
 and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) at
 exact Curve head `a463876...`, merged through Curve PR #17 as `42ea329...`.
-Plane PR #6 (M0-S4 API/SSE/Curve-first UI implementation) is green at exact
-head `4803893...`; Federico's exact-head acceptance and merge remain pending. The
+Plane PR #6 (M0-S4 API/SSE/Curve-first UI implementation) is at exact head
+`a1748c7...`; 27 focused Curve web tests plus type, lint, and format checks pass.
+Repository CI, Federico's exact-head acceptance, and merge remain pending. The
 five-packet local M0 checkpoint remains packet-scoped. Downstream packets
 consume the decided D-003 shared local profile and accepted M0-S3 runtime proof. D-007
 does not gate M0-S1 through M0-S5 because those packets expose no
