@@ -23,6 +23,9 @@ adjacent subject/deliverable cell supplies the same description. Common active
 identifiers are:
 
 - D-001 (Plane foundation, licensing, and upgrade-boundary decision).
+- D-002 (Onyx delegated-identity decision).
+- D-004 (model-gateway decision).
+- D-005 (model/provider data-policy decision).
 - D-003 (runtime topology and trust-zone decision).
 - D-007 (MCP trust and authorization decision).
 - D-009 (retention, legal-hold, backup, and erasure decision).
@@ -38,6 +41,7 @@ identifiers are:
 - M0-S5B (X3M local observability integration proof).
 - M0-03 (core authorization and policy kernel work package).
 - M0-08 (audit and observability foundation work package).
+- M1 (alignment, evidence, immutable PRD versions, and Gate 1 milestone).
 - OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding).
 
 ## Document set
@@ -64,6 +68,7 @@ identifiers are:
 | [ADR-006: Orca human assistance](adr-006-orca-human-assistance.md) | Proposed developer-operated Orca MCP integration boundary | D-006 decision packet; owner/licensing approval pending |
 | [ADR-007: MCP and Orca profile](adr-007-mcp-trust-and-orca-profile.md) | Proposed MCP trust registry and developer-operated Orca write-back allowlist | D-007 decision packet; security/platform approval pending |
 | [ADR-009: Retention and erasure](adr-009-retention-and-erasure.md) | Required data-class/asset retention, hold, backup, and erasure decision | D-009 remains open and blocks protected storage/non-local activation |
+| [D-002 Onyx delegation decision packet](d002-onyx-delegated-identity-decision-packet.md) (deployed Onyx auth proof, mechanism options, two-user ACL test, revocation, and decision template) | Evidence-complete process for selecting initiating-user Onyx delegation without a reusable PAT or broad service identity | `PROPOSED`; requires named Security/Identity owner and exact X3M Onyx proof |
 | [M0 readiness board](m0-readiness-board.md) | Decision, package, owner, evidence, and blocking-state control | Operational coding-readiness source |
 | [M0 authorization/state matrices](m0-authorization-and-state-matrices.md) | Core roles, authorization inputs, operation transitions, and Orca tool effects | M0 policy/state contract |
 | [M0 traceability](m0-traceability.md) | Requirement-to-contract-to-test ownership | M0 verification control |
@@ -79,6 +84,7 @@ identifiers are:
 | [M0-S4 foundation probe experience](ux-m0-s4-foundation-probe.md) (clickable local foundation-status flow, state contract, and review script) | Approved UX-004-M0-S4/UX-005-M0-S4 contract for the Operation API, resumable SSE, cancellation, recovery, and minimal workspace UI | `IMPLEMENTED_AND_ACCEPTED`; PR #17 head `a463876...` merged as `42ea329...`; Plane implementation and acceptance are recorded in the M0-S4 evidence document |
 | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) | Independently reviewable M0-S5A telemetry-kernel and M0-S5B local-integration changes | `PROPOSED_FOR_MATERIAL_APPROVAL`; M0-S4 merge/evidence is satisfied; exact-head contract approval/context and OBS-BIND-001 remain gated |
 | [M0-S5 telemetry manifest](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboard, four alerts, and redaction contract) | Normative v1 instrumentation and operational-asset surface | Export defaults to disabled; exporter-failure diagnostics stay process-local; X3M endpoint/datasource/alert/path-health binding is supplied separately |
+| [M1 alignment/evidence/PRD task packet](m1-alignment-evidence-prd-task-packet.md) (manual-first/provider-enhanced lanes, implementation slices, contracts, tests, readiness, and rollback) | One-milestone-ahead deterministic decomposition for Initiative through Gate 1 | `PREPARED_NOT_DISPATCHABLE`; M0 evidence plus D-002 (Onyx delegation), D-004 (model gateway), D-005 (model/data policy), D-009 (retention/erasure), and D-014 (budget policy) gate their applicable capabilities |
 | [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
 | [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | Historical P0-06A/P0-06B standalone-proof design and supersession record | `SUPERSEDED`; retained for audit, with M0-S3 as the executable proof |
 | [P0-06 stage record](proofs/p0-06-stage-record.json) | `curve.proof-stage-projection/v3` terminal supersession binding | `P0-06_SUPERSEDED`; D-003 `LOCAL_ONLY` and replacement M0-S3 are machine validated |
