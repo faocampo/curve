@@ -6,7 +6,7 @@
 | --- | --- |
 | Package | M0-S5 (local audit and observability implementation packet) / M0-08 (audit and observability foundation work package) |
 | Status | `PROPOSED_FOR_MATERIAL_APPROVAL_AND_EXACT_HEAD_REVIEW`; M0-S5A implementation and M0-S5B platform binding remain gated |
-| Version | 1.5 |
+| Version | 1.6 |
 | Date | 2026-08-21 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
@@ -59,8 +59,11 @@ This packet divides delivery into two independently reviewable changes:
 | [Access Envelope schema](../../contracts/schemas/access-envelope.schema.json) (classification, authorization, retention, and redaction policy) | Protected-data handling boundary |
 | [M0 traceability](m0-traceability.md) (requirement-to-contract-to-test ownership) | Verification ownership |
 | [OpenTelemetry environment-variable specification](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/) (standard SDK/exporter configuration and disabled/exporter behavior) | Upstream configuration semantics; Curve applies stricter explicit-endpoint and disabled defaults |
+| [OpenTelemetry Python trace SDK](https://opentelemetry-python.readthedocs.io/en/stable/sdk/trace.html) (TracerProvider, sampling, span limits, and shutdown-on-exit parameters) | Exact private-provider constructor controls and bounded span surface |
 | [OpenTelemetry Python trace export API](https://opentelemetry-python.readthedocs.io/en/stable/sdk/trace.export.html) (batch span processor queue, batch, export timeout, flush, and shutdown behavior) | Exact bounded trace-processor parameters implemented with Plane's pinned 1.28.1 package |
 | [OpenTelemetry Python metrics export API](https://opentelemetry-python.readthedocs.io/en/stable/sdk/metrics.export.html) (periodic reader interval, timeout, flush, and shutdown behavior) | Exact bounded metric-reader parameters implemented with Plane's pinned 1.28.1 package |
+| [OpenTelemetry Python metric views](https://opentelemetry-python.readthedocs.io/en/latest/sdk/metrics.view.html) (attribute filtering, explicit histogram aggregation, and drop aggregation) | Closed metric attributes, pinned histogram buckets, and undeclared-instrument drop behavior |
+| [OpenTelemetry Python resources](https://opentelemetry-python.readthedocs.io/en/stable/sdk/resources.html) (resource construction and detector behavior) | Curve constructs its static resource directly and bypasses environment-derived resource detection |
 | [Temporal Python SDK 1.31.0 interceptor source](https://github.com/temporalio/sdk-python/blob/1.31.0/temporalio/contrib/opentelemetry/_interceptor.py) (client/worker header propagation and replay-safe workflow interception) | Pinned public interceptor APIs used by Curve's traceparent-only carrier; Curve supplies its private tracer and closed carrier |
 | [W3C Trace Context](https://www.w3.org/TR/trace-context/) (traceparent and tracestate propagation standard) | Cross-boundary trace-header format |
 | [Prometheus OpenTelemetry guide](https://prometheus.io/docs/guides/opentelemetry/) (OTLP ingestion and metric translation strategies) | Contracted `UnderscoreEscapingWithSuffixes` name translation and binding proof |
@@ -69,6 +72,18 @@ This packet divides delivery into two independently reviewable changes:
 
 The coding agent pins one exact Curve commit containing all sources above. A
 later documentation commit cannot silently change an active implementation.
+
+### Dispatch policy
+
+| Field | Required dispatch value |
+| --- | --- |
+| Implementer | One AI coding agent, distinct from Federico Ocampo as owner and human reviewer |
+| Model policy | Dispatcher-approved coding model; no runtime model call, silent model/provider substitution, or Curve Model Gateway dependency |
+| Cost limit | US$25 maximum automated attempt; pause before exceeding the limit |
+| Repository authority | Read/write only on the named Plane feature branch; the agent does not merge, deploy, change GitHub Project state, or mutate X3M infrastructure |
+| Network policy | M0-S5A permits repository dependency/build traffic only when the pinned Plane lock and image inputs require it; all telemetry export is disabled. M0-S5B permits only the endpoint and verification window approved in OBS-BIND-001. |
+| Data policy | Synthetic `INTERNAL` values and the sentinel corpus only; no customer, credential, protected, source-body, prompt, response, patch, evidence-body, or tool-output value enters telemetry or PR evidence |
+| Stop behavior | Missing owner, reviewer, exact base/context, command, budget, or policy value stops before mutation |
 
 ## Entry gates and dispatch packets
 
@@ -104,6 +119,7 @@ with every field below:
 | OTLP endpoint | Local endpoint or X3M Secrets Manager/configuration reference; no credential value in Git |
 | OTLP protocol | Exact `grpc` or `http/protobuf` value supported by the local collector |
 | OTLP transport policy | Local TLS/insecure rule and certificate/CA reference where applicable |
+| TLS material mapping | Exact mapping from approved read-only CA/client-certificate/client-key mounts to the Curve-owned TLS environment names; a client certificate and key are supplied together or omitted together |
 | Workspace-scope key | Secrets Manager reference, stable key ID, rotation owner, and overlapping-key rotation procedure |
 | Prometheus datasource | Grafana datasource UID and approved dashboard variable binding |
 | Prometheus metric translation | Exact configuration evidence that the approved path produces `UnderscoreEscapingWithSuffixes` metric and label names, including contracted type/unit suffixes |
@@ -137,6 +153,12 @@ Absent or partial values leave OTLP export disabled. They do not block M0-S5A
 - Curve-private, process-local tracer and meter providers. They are never
   registered as the OpenTelemetry global providers and do not activate global
   Django instrumentation.
+- Explicit static resources, parent-based sampling, span limits, exception-
+  event prohibition, always-off exemplars, cumulative metric temporality,
+  manifest-defined views, and manual bounded shutdown. Generic OpenTelemetry
+  configuration cannot select Curve exporters, resources, sampling, limits,
+  temporality, views, or propagation; the upstream `OTEL_SDK_DISABLED=true`
+  kill switch may only disable the private providers.
 - An explicit `BatchSpanProcessor` and `PeriodicExportingMetricReader` using
   every queue, interval, batch, export-timeout, flush, and shutdown value in the
   telemetry manifest.
@@ -197,18 +219,21 @@ source of truth.
 | Default | `CURVE_TELEMETRY_MODE=DISABLED`; no SDK provider, exporter, network call, logging handler, or background telemetry thread |
 | Test mode | `IN_MEMORY_TEST`; deterministic in-process exporters, no network |
 | OTLP mode | Requires explicit `CURVE_OTEL_EXPORTER_OTLP_ENDPOINT`, `CURVE_OTEL_EXPORTER_OTLP_PROTOCOL`, applicable transport configuration, workspace-scope key, and key ID |
-| Configuration isolation | Curve reads only the `CURVE_*` names in the manifest. It does not read generic `OTEL_EXPORTER_OTLP_*`, Plane license-telemetry helpers, or Plane's external telemetry default. Every exporter constructor parameter is explicit. |
+| Configuration isolation | Curve's builder reads only the `CURVE_*` names in the manifest. It does not use generic `OTEL_EXPORTER_OTLP_*`, Plane license-telemetry helpers, or Plane's external telemetry default. Every exporter/provider control is explicit. The upstream `OTEL_SDK_DISABLED=true` kill switch may disable providers but no generic variable may enable export or change content. |
 | Protocol | Accept only the exact lowercase values `grpc` and `http/protobuf`; any other or mixed-case value disables exporter setup. |
 | Endpoint | Parse one absolute `http` or `https` URI. Reject userinfo, query, fragment, missing host, and every other scheme. The endpoint is supplied outside Git by the approved environment binding. |
 | Signal paths | `grpc` requires an empty or `/` endpoint path and uses the approved endpoint for both signals. `http/protobuf` treats the configured endpoint as a base and appends the standard `/v1/traces` and `/v1/metrics` paths exactly once; a base already ending in either signal path is invalid. |
 | Export headers | Optional `CURVE_OTEL_EXPORTER_OTLP_HEADERS` uses the OpenTelemetry comma-separated URL-encoded `key=value` format. Malformed or duplicate keys disable exporter setup. Header names/values are never logged, traced, audited, or returned in an error. |
+| TLS material | Optional `CURVE_OTEL_EXPORTER_OTLP_CERTIFICATE`, `CURVE_OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE`, and `CURVE_OTEL_EXPORTER_OTLP_CLIENT_KEY` contain absolute read-only file paths. Each file is at most `1048576` bytes. The client certificate/key pair is both-or-neither. Insecure mode rejects all TLS paths. Secure mode may use the system trust store when the CA path is absent. Partial, relative, unreadable, non-file, or oversized material disables exporter setup without exposing paths or contents. |
+| Compression | Explicitly `NONE` for M0; generic compression environment variables cannot override it. |
 | Insecure flag | Accept only lowercase `true` or `false`. `true` is valid only in `LOCAL` and requires an `http` endpoint; `false` requires `https`, for either protocol. |
-| Workspace-scope key | `CURVE_TELEMETRY_SCOPE_HMAC_KEY` is unpadded base64url and must decode to at least 32 bytes. `CURVE_TELEMETRY_SCOPE_KEY_ID` must match `^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$`. Invalid or partial pairs disable exporter setup. |
+| Workspace-scope key | `CURVE_TELEMETRY_SCOPE_HMAC_KEY` is unpadded base64url and must decode to 32 through 64 bytes. `CURVE_TELEMETRY_SCOPE_KEY_ID` must match `^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$`. Invalid or partial pairs disable exporter setup. |
 | External fallback | Prohibited; Curve never inherits or calls an external default endpoint |
 | Insecure transport | Accepted only for an explicitly approved local endpoint |
 | Invalid configuration | Curve application functions remain available; exporter setup stays disabled and emits one locally bounded configuration error without secrets |
 | Export failure | Domain transaction and immutable audit truth remain unaffected; a bounded local log and `IN_MEMORY_TEST` metric are recorded without recursive export loops. `curve.telemetry.export.failure` is excluded from the OTLP/dashboard/alert surface because a failed exporter cannot deliver its own outage signal. Complete-path outage detection uses the independent OBS-BIND-001 collector/platform signal. |
-| Process ownership | API providers initialize lazily once per post-fork process; the Temporal worker initializes explicitly before its client connects. Imports, migration commands, management commands, disabled Curve, and unrelated Plane requests do not initialize them. |
+| Process ownership | API providers initialize lazily once per post-fork process; the Temporal worker initializes explicitly before its client connects. Imports, migration commands, management commands, disabled Curve, and unrelated Plane requests do not initialize them. Provider `shutdown_on_exit` is false; Curve owns one bounded idempotent shutdown path. |
+| SDK isolation | Construct the Curve resource directly from only the manifest attributes. Pass `ParentBased(ALWAYS_ON)`, every `SpanLimits` value, always-off metric exemplars, cumulative temporality, and explicit views directly. Use a final match-all drop view so undeclared metrics are absent. No `Resource.create`, resource detector, default sampler/limits, exception recording, links, span events, or generic environment-derived configuration is allowed. |
 | Batching | Trace queue `2048`, schedule delay `5000 ms`, maximum batch `512`, and export timeout `10000 ms`; metric interval `60000 ms` and export timeout `10000 ms`. No generic OpenTelemetry environment variable can override them. |
 | Gauge collection | Map manifest `GAUGE` instruments to OpenTelemetry observable gauges. Database-backed callbacks have a `1000 ms` statement timeout, aggregate across enabled workspaces without workspace labels, and omit the observation with one bounded safe diagnostic on failure. Worker heartbeat uses the relay's `500 ms` loop clock; the alert treats a missing series as stale. |
 | Shutdown | API and worker providers flush and close within `10000 ms`; application shutdown cannot wait indefinitely. Repeated shutdown is idempotent. |
@@ -237,7 +262,9 @@ unit tests never instantiate network exporters.
 3. `workspace_id` appears in authoritative database/audit records. Telemetry
    uses `HMAC-SHA256(key, "curve-workspace-scope:v1" || 0x00 || workspace_id)`
    as `curve.workspace.scope`, encoded as unpadded base64url and accompanied by
-   a non-secret stable key ID. The key is at least 32 bytes. Rotation changes
+   a non-secret stable key ID. `workspace_id` is the canonical lowercase
+   RFC 4122 UUID string with hyphens and no surrounding whitespace. The key is
+   32 through 64 bytes. Rotation changes
    the key and key ID together at a controlled process restart; old and new
    deployments may overlap, and new telemetry always uses the provider's
    configured pair. Raw workspace IDs remain only in database/audit truth.
@@ -255,6 +282,11 @@ unit tests never instantiate network exporters.
 6. Every metric attribute has a closed value set in the telemetry manifest.
    Runtime values outside the set map to a documented bounded fallback or are
    dropped and counted as a local configuration/programming error.
+7. Trace and log attributes use only declared scalar values; collections are
+   capped at `16` items and every string at `128` UTF-8 bytes before export.
+   Free-form runtime strings, automatic exception events, span events, and
+   links are prohibited. Structured log records use static event-code templates
+   and are capped at `2048` serialized bytes.
 
 ## Audit and failure boundaries
 
@@ -279,7 +311,7 @@ unit tests never instantiate network exporters.
 | --- | --- |
 | Module | Additive `apps/api/plane/curve/observability/`; no edits to unrelated Plane instrumentation beyond one bounded Curve bootstrap hook |
 | Dependencies | Reuse Plane-pinned `opentelemetry-api==1.28.1`, `opentelemetry-sdk==1.28.1`, `opentelemetry-exporter-otlp==1.28.1`, and `opentelemetry-exporter-otlp-proto-grpc==1.28.1`; leave existing `opentelemetry-instrumentation-django==0.49b1` untouched and unused by Curve. Dependency changes require explicit justification, compatibility evidence, and lock updates. |
-| Provider isolation | Construct private tracer/meter providers and obtain instruments directly from them. Do not call global provider setters, `DjangoInstrumentor().instrument()`, Plane license-telemetry endpoint helpers, or generic OpenTelemetry auto-instrumentation. |
+| Provider isolation | Construct private tracer/meter providers and obtain instruments directly from them. Supply the manifest-pinned static resource, sampler, span limits, temporality, views, exemplar filter, and manual shutdown settings as constructor arguments. Do not call global provider setters, `Resource.create`, `DjangoInstrumentor().instrument()`, Plane license-telemetry endpoint helpers, or generic OpenTelemetry auto-instrumentation. |
 | API lifecycle | A thread-safe bootstrap service lazily initializes at most one provider bundle in each post-fork API process after Curve feature/workspace checks. Disabled mode returns a no-op bundle without registering handlers or exit hooks. |
 | Worker lifecycle | The worker constructs its provider bundle after environment/policy validation and before `Client.connect`; shutdown runs after the Temporal worker and relay stop, with bounded idempotent flush/close. Workflow code never emits or exports telemetry. |
 | Signals | OTLP exports traces and non-local-only metrics. Structured Curve logs use one allowlist-backed JSON stdout formatter/adapter and the existing X3M log collection route; no OpenTelemetry log exporter is created in M0. The local exporter-failure metric is available only to deterministic in-memory tests. |
@@ -313,6 +345,24 @@ uses a raw runtime name as a metric attribute.
 An unknown value is dropped from telemetry and emits one bounded local
 `CURVE_TELEMETRY_CONFIGURATION_INVALID` diagnostic. It never creates a new
 metric series dynamically.
+
+## M0-S5A implementation checkpoints
+
+Each checkpoint is one independently reviewable Plane change. A dispatcher may
+combine adjacent checkpoints in one PR only when the combined diff remains
+repository-local, preserves the stated test isolation, and Federico approves
+the exact dispatch packet.
+
+| Checkpoint | Scope | Required evidence |
+| --- | --- | --- |
+| M0-S5A-1 (configuration and private providers) | Parse the manifest-owned configuration, validate endpoint/TLS/HMAC inputs, build no-op and in-memory bundles, then build private OTLP tracer/meter providers with explicit resources, limits, processors, readers, views, and shutdown | Disabled/import/fork/concurrency tests; generic `OTEL_*` isolation; TLS negative matrix; no network in test mode |
+| M0-S5A-2 (typed telemetry and redaction) | Add the typed instrument/span/log registry, closed attributes, workspace-scope HMAC, static log templates, and bounded redaction processor | Manifest-to-code checker; cardinality and sentinel corpus; byte/item/event/link limits |
+| M0-S5A-3 (domain and Temporal propagation) | Instrument HTTP command, outbox dispatch, Temporal client/activity, and immutable audit boundaries; dual-read operation-event v1/v2 and replay-safe traceparent carrier | Correlation, audit rollback, duplicate delivery, old/new event, pre/post-header replay, cancellation, and exporter-failure tests |
+| M0-S5A-4 (SSE, metrics, and static assets) | Instrument resumable SSE, observable gauges, dashboard JSON, Prometheus rules, and the repository-local asset checker | SSE resume, gauge timeout/omission, absent worker, bounded failure-ratio inputs, exact queries/identifiers, and disabled rollback |
+| M0-S5A-5 (integrated local acceptance) | Run the complete Curve and Plane suites with `IN_MEMORY_TEST`, then repeat with telemetry disabled | All M0-S5A acceptance scenarios, migration statement `NONE`, deterministic cleanup, and a reviewable evidence report |
+
+M0-S5B (X3M local observability integration proof) remains a separate packet and
+PR after OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding) is approved.
 
 ## Acceptance scenarios
 
@@ -375,10 +425,15 @@ metric series dynamically.
     parent-child injection, neither duplicates a domain effect, and no migration
     or historical rewrite occurs.
 15. Given a stopped worker, a blocked database gauge query, low-volume operation
-    failures, and simultaneous SSE connections/resumes, when local Prometheus
-    evaluates the contracted assets, then worker absence alerts, the query
-    returns or omits within `1000 ms`, failure ratio uses five-minute increases,
-    and connections/resume rate remain separately visible.
+    failures, and simultaneous SSE connections/resumes, when the in-memory
+    metrics harness collects the instruments, then the query returns or omits
+    within `1000 ms`, failure-ratio inputs use bounded outcomes, and connections
+    and resume rate remain separately observable.
+16. Given the static dashboard and alert assets, when the repository-local asset
+    checker runs without Prometheus or Grafana, then it proves the absent-worker
+    clause, five-minute failure-ratio query, exact manifest identifiers, metric
+    translation, and closed label vocabulary. Live query/rule evaluation remains
+    the separate M0-S5B integration proof.
 
 ### M0-S5B executable acceptance
 
@@ -410,12 +465,12 @@ metric series dynamically.
 | --- | --- |
 | Contract | JSON Schema valid/invalid fixtures; operation-event v1/v2 dual-read and invalid `traceparent` fixtures; immutable metric set; bounded attribute values; span/log allowlist; unique dashboard/alert IDs |
 | Configuration | Disabled default, explicit endpoint, protocol, local insecure policy, no external fallback, synthetic Secrets Manager references |
-| Provider isolation | Generic `OTEL_*` variables and Plane telemetry enabled/disabled permutations; no global provider or Django auto-instrumentation mutation; one private provider per process |
+| Provider isolation | Generic `OTEL_*` variables and Plane telemetry enabled/disabled permutations; constructor-level static resource, sampler, span limits, temporality, views, exemplar, processor/reader, and shutdown assertions; no global provider, resource detector, Django auto-instrumentation, or exit-hook mutation; one private provider per process |
 | Correlation | Existing generated application correlation IDs remain in database/audit/SSE lineage and are absent from exported telemetry; no new caller correlation header; valid W3C `traceparent` propagation links HTTP/outbox/Temporal activity/SSE instrumentation |
 | Propagation abuse | Invalid `traceparent`; dropped `tracestate` and `baggage`; no untrusted context in events, Temporal history, logs, spans, metrics, or SSE |
 | Authorization | Cross-workspace denial produces safe telemetry and no disclosed target/body; actor/effective-principal audit attribution |
 | Cardinality | Prohibited identifier labels and arbitrary attribute values rejected or dropped; closed sets enforced |
-| Redaction | Sentinel corpus across success/error/retry/cancel/replay/export-failure paths; zero leakage |
+| Redaction | Sentinel corpus across success/error/retry/cancel/replay/export-failure paths; zero leakage; strings longer than `128` bytes and collections over `16` items rejected or bounded; zero span events/links; logs at most `2048` serialized bytes |
 | Reliability | Queue saturation, exporter timeouts/failures, independent complete-path outage detection, absent/stale worker, `1000 ms` gauge-query timeout, bounded/idempotent shutdown, process fork, concurrent initialization, worker restart, v1/v2 event and pre/post-header Temporal replay, duplicate delivery, workflow replay, SSE resume |
 | Audit | Atomic audit append; forced audit failure rolls back protected mutation; telemetry failure leaves audit intact |
 | Assets | Dashboard JSON parse; four-rule alert YAML parse; exact manifest IDs; no exporter-self-monitoring query; manifest-pinned metric-name translation; PromQL lint/parse where available |
@@ -428,12 +483,15 @@ the pinned Plane base. At minimum it executes:
 
 ```text
 git diff --check
+pnpm check:contracts
 node apps/api/plane/curve/contracts/check-integrity.mjs
+node apps/api/plane/curve/observability/check-assets.mjs
 docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -k "audit or telemetry or redaction or correlation"
 docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/curve/tests
 pnpm check
 pnpm build
 docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
+docker compose -f docker-compose-test.yml down -v
 ```
 
 M0-S5B (X3M local observability integration proof) additionally executes the

@@ -222,7 +222,7 @@ const telemetryManifestSchemaDocument = JSON.parse(readFileSync(telemetryManifes
 const telemetryManifestSchemaDigest = createHash("sha256")
   .update(JSON.stringify(canonicalJson(telemetryManifestSchemaDocument)))
   .digest("hex");
-if (telemetryManifestSchemaDigest !== "c5656c13cad54f4020a2b27587dff6463036edd61cc321f44ae935b3def150fc") {
+if (telemetryManifestSchemaDigest !== "1d65abeb873ad5d7b4a7785e5d1e2010e4fd41d5f307d5e355a63ebe3f160a60") {
   throw new Error(
     "contracts/schemas/telemetry-manifest.schema.json changed without a new reviewed contract version",
   );
@@ -230,7 +230,7 @@ if (telemetryManifestSchemaDigest !== "c5656c13cad54f4020a2b27587dff6463036edd61
 const telemetryManifestDigest = createHash("sha256")
   .update(JSON.stringify(canonicalJson(telemetryManifest)))
   .digest("hex");
-if (telemetryManifestDigest !== "b8e69a2991d1c7c6ae05daeafb45ce4b0187fb4e16d5a704a843b74faf629d77") {
+if (telemetryManifestDigest !== "611bf0f8760af2c9110eaded2b812d1203af31b813542fa6f0c78626d2a565e1") {
   throw new Error(
     "contracts/observability/m0-s5-telemetry-v1.json changed without a new reviewed contract version",
   );
@@ -266,6 +266,9 @@ if (
   telemetryManifest.configuration.protocol_env !== "CURVE_OTEL_EXPORTER_OTLP_PROTOCOL" ||
   telemetryManifest.configuration.headers_env !== "CURVE_OTEL_EXPORTER_OTLP_HEADERS" ||
   telemetryManifest.configuration.insecure_env !== "CURVE_OTEL_EXPORTER_OTLP_INSECURE" ||
+  telemetryManifest.configuration.certificate_env !== "CURVE_OTEL_EXPORTER_OTLP_CERTIFICATE" ||
+  telemetryManifest.configuration.client_certificate_env !== "CURVE_OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE" ||
+  telemetryManifest.configuration.client_key_env !== "CURVE_OTEL_EXPORTER_OTLP_CLIENT_KEY" ||
   JSON.stringify(telemetryManifest.configuration.allowed_protocols) !== JSON.stringify(["grpc", "http/protobuf"]) ||
   JSON.stringify(telemetryManifest.configuration.endpoint_schemes) !== JSON.stringify(["http", "https"]) ||
   telemetryManifest.configuration.endpoint_userinfo_allowed !== false ||
@@ -275,6 +278,11 @@ if (
   telemetryManifest.configuration.http_signal_path_mode !== "APPEND_STANDARD_PATHS" ||
   telemetryManifest.configuration.headers_format !== "URL_ENCODED_COMMA_SEPARATED_KEY_VALUE" ||
   JSON.stringify(telemetryManifest.configuration.insecure_boolean_values) !== JSON.stringify(["true", "false"]) ||
+  telemetryManifest.configuration.tls_file_path_mode !== "ABSOLUTE_READ_ONLY" ||
+  telemetryManifest.configuration.tls_client_pair_mode !== "BOTH_OR_NEITHER" ||
+  telemetryManifest.configuration.tls_maximum_file_bytes !== 1048576 ||
+  telemetryManifest.configuration.system_trust_store_allowed !== true ||
+  telemetryManifest.configuration.compression !== "NONE" ||
   telemetryManifest.configuration.workspace_scope_key_input_encoding !== "BASE64URL_NO_PADDING" ||
   telemetryManifest.configuration.workspace_scope_key_id_pattern !== "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$" ||
   telemetryManifest.configuration.explicit_endpoint_required !== true ||
@@ -300,14 +308,54 @@ if (
   telemetryManifest.propagation.baggage_allowed !== false ||
   telemetryManifest.propagation.invalid_traceparent_behavior !== "START_NEW_TRACE" ||
   telemetryManifest.workspace_scope.minimum_key_bytes !== 32 ||
+  telemetryManifest.workspace_scope.maximum_key_bytes !== 64 ||
   telemetryManifest.workspace_scope.digest_encoding !== "BASE64URL_NO_PADDING" ||
   telemetryManifest.workspace_scope.raw_workspace_id_export_allowed !== false ||
   telemetryManifest.instrumentation.scope !== "CURVE_ONLY_MANUAL" ||
   telemetryManifest.instrumentation.global_django_instrumentation_allowed !== false ||
   telemetryManifest.instrumentation.global_provider_registration_allowed !== false ||
+  telemetryManifest.instrumentation.generic_otel_configuration_override_allowed !== false ||
+  telemetryManifest.instrumentation.otel_sdk_disabled_fail_closed !== true ||
   telemetryManifest.instrumentation.api_initialization !== "LAZY_PROCESS_LOCAL" ||
   telemetryManifest.instrumentation.worker_initialization !== "EXPLICIT_BEFORE_TEMPORAL_CONNECT" ||
   telemetryManifest.instrumentation.workflow_exporter_io_allowed !== false ||
+  telemetryManifest.instrumentation.resource_construction !== "STATIC_CURVE_RESOURCE_ONLY" ||
+  JSON.stringify(telemetryManifest.instrumentation.resource_attributes_by_component) !==
+    JSON.stringify({
+      API: {
+        "service.name": "curve-api",
+        "service.namespace": "curve",
+        "deployment.environment.name": "local",
+      },
+      TEMPORAL_WORKER: {
+        "service.name": "curve-temporal-worker",
+        "service.namespace": "curve",
+        "deployment.environment.name": "local",
+      },
+    }) ||
+  telemetryManifest.instrumentation.sampler !== "PARENT_BASED_ALWAYS_ON" ||
+  telemetryManifest.instrumentation.shutdown_on_exit !== false ||
+  JSON.stringify(telemetryManifest.instrumentation.span_limits) !==
+    JSON.stringify({
+      max_attributes: 16,
+      max_span_attributes: 16,
+      max_events: 0,
+      max_event_attributes: 0,
+      max_links: 0,
+      max_link_attributes: 0,
+      max_attribute_length: 128,
+      max_span_attribute_length: 128,
+    }) ||
+  telemetryManifest.instrumentation.automatic_exception_recording_allowed !== false ||
+  telemetryManifest.instrumentation.metric_exemplar_filter !== "ALWAYS_OFF" ||
+  telemetryManifest.instrumentation.metric_temporality !== "CUMULATIVE" ||
+  telemetryManifest.instrumentation.metric_default_view !== "DROP_UNDECLARED" ||
+  telemetryManifest.instrumentation.histogram_boundaries_source !== "MANIFEST_EXPLICIT_VIEW" ||
+  telemetryManifest.attribute_policy.free_form_runtime_strings_allowed !== false ||
+  telemetryManifest.attribute_policy.maximum_string_value_bytes !== 128 ||
+  telemetryManifest.attribute_policy.maximum_collection_items !== 16 ||
+  telemetryManifest.logs.message_mode !== "STATIC_EVENT_CODE_TEMPLATE" ||
+  telemetryManifest.logs.maximum_serialized_bytes !== 2048 ||
   telemetryManifest.correlation.workspace_scope_algorithm !== "HMAC-SHA256" ||
   telemetryManifest.correlation.workspace_scope_domain !== "curve-workspace-scope:v1" ||
   telemetryManifest.correlation.metric_identifiers_allowed !== false ||

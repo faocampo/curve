@@ -10,6 +10,9 @@
     "protocol_env": "CURVE_OTEL_EXPORTER_OTLP_PROTOCOL",
     "headers_env": "CURVE_OTEL_EXPORTER_OTLP_HEADERS",
     "insecure_env": "CURVE_OTEL_EXPORTER_OTLP_INSECURE",
+    "certificate_env": "CURVE_OTEL_EXPORTER_OTLP_CERTIFICATE",
+    "client_certificate_env": "CURVE_OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE",
+    "client_key_env": "CURVE_OTEL_EXPORTER_OTLP_CLIENT_KEY",
     "workspace_scope_key_env": "CURVE_TELEMETRY_SCOPE_HMAC_KEY",
     "workspace_scope_key_id_env": "CURVE_TELEMETRY_SCOPE_KEY_ID",
     "allowed_protocols": ["grpc", "http/protobuf"],
@@ -21,6 +24,11 @@
     "http_signal_path_mode": "APPEND_STANDARD_PATHS",
     "headers_format": "URL_ENCODED_COMMA_SEPARATED_KEY_VALUE",
     "insecure_boolean_values": ["true", "false"],
+    "tls_file_path_mode": "ABSOLUTE_READ_ONLY",
+    "tls_client_pair_mode": "BOTH_OR_NEITHER",
+    "tls_maximum_file_bytes": 1048576,
+    "system_trust_store_allowed": true,
+    "compression": "NONE",
     "workspace_scope_key_input_encoding": "BASE64URL_NO_PADDING",
     "workspace_scope_key_id_pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
     "explicit_endpoint_required": true,
@@ -63,6 +71,7 @@
   },
   "workspace_scope": {
     "minimum_key_bytes": 32,
+    "maximum_key_bytes": 64,
     "digest_encoding": "BASE64URL_NO_PADDING",
     "rotation_behavior": "RESTART_WITH_NEW_KEY_ID",
     "raw_workspace_id_export_allowed": false
@@ -71,9 +80,41 @@
     "scope": "CURVE_ONLY_MANUAL",
     "global_django_instrumentation_allowed": false,
     "global_provider_registration_allowed": false,
+    "generic_otel_configuration_override_allowed": false,
+    "otel_sdk_disabled_fail_closed": true,
     "api_initialization": "LAZY_PROCESS_LOCAL",
     "worker_initialization": "EXPLICIT_BEFORE_TEMPORAL_CONNECT",
     "workflow_exporter_io_allowed": false,
+    "resource_construction": "STATIC_CURVE_RESOURCE_ONLY",
+    "resource_attributes_by_component": {
+      "API": {
+        "service.name": "curve-api",
+        "service.namespace": "curve",
+        "deployment.environment.name": "local"
+      },
+      "TEMPORAL_WORKER": {
+        "service.name": "curve-temporal-worker",
+        "service.namespace": "curve",
+        "deployment.environment.name": "local"
+      }
+    },
+    "sampler": "PARENT_BASED_ALWAYS_ON",
+    "shutdown_on_exit": false,
+    "span_limits": {
+      "max_attributes": 16,
+      "max_span_attributes": 16,
+      "max_events": 0,
+      "max_event_attributes": 0,
+      "max_links": 0,
+      "max_link_attributes": 0,
+      "max_attribute_length": 128,
+      "max_span_attribute_length": 128
+    },
+    "automatic_exception_recording_allowed": false,
+    "metric_exemplar_filter": "ALWAYS_OFF",
+    "metric_temporality": "CUMULATIVE",
+    "metric_default_view": "DROP_UNDECLARED",
+    "histogram_boundaries_source": "MANIFEST_EXPLICIT_VIEW",
     "bootstrap_components": ["API", "TEMPORAL_WORKER"]
   },
   "correlation": {
@@ -139,7 +180,10 @@
       "RAW_IDEMPOTENCY_KEY",
       "REQUEST_OR_RESPONSE_BODY",
       "TOOL_OUTPUT"
-    ]
+    ],
+    "free_form_runtime_strings_allowed": false,
+    "maximum_string_value_bytes": 128,
+    "maximum_collection_items": 16
   },
   "metric_attributes": [
     {
@@ -351,6 +395,8 @@
     }
   ],
   "logs": {
+    "message_mode": "STATIC_EVENT_CODE_TEMPLATE",
+    "maximum_serialized_bytes": 2048,
     "common_required_fields": [
       "curve.component",
       "curve.event.code",

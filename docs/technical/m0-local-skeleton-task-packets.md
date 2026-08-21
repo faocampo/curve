@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Status | M0-S1, M0-S2, M0-03, and M0-S3 completed; M0-S4 implementation is in human review; M0-S5 contracts are proposed for material approval |
-| Version | 2.2 |
+| Version | 2.3 |
 | Date | 2026-08-21 |
 | Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, effective D-003 local profile, and accepted M0-S3 evidence) |
 | Contract baseline floor | Accepted Curve `main` commit `42ea32981a3d5ce814a74c18e458ac8152a7e2fa` containing the approved M0-S4 Definition/UX artifacts; each coding attempt refreshes and pins the current merged Curve context before mutation |
@@ -305,7 +305,7 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Outcome | Correlate the local Operation across HTTP, database, relay, workflow, and UI without leaking protected or credential data. |
 | Traceability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 |
 | Delivery split | M0-S5A (telemetry kernel and static observability assets) is independently reviewable after M0-S4; M0-S5B (X3M local observability integration proof) additionally requires OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding) |
-| In scope | Structured safe logs; OpenTelemetry spans; bounded Prometheus metrics; audit completeness; redaction tests; local Grafana dashboard definition; four application/worker alerts; process-local exporter diagnostics |
+| In scope | Curve-private providers with explicit static resources, sampler, span limits, TLS inputs, temporality, views, and shutdown; structured safe logs with byte limits; bounded Prometheus metrics; audit completeness; redaction tests; local Grafana dashboard definition; four application/worker alerts; repository-local asset checker; process-local exporter diagnostics |
 | Out of scope | Raw prompt/code/evidence telemetry, Langfuse model traces, production SLO approval, production dashboard deployment |
 | Contracts | [Telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (exporter, metrics, spans, logs, dashboard, four alerts, and redaction); [telemetry manifest schema](../../contracts/schemas/telemetry-manifest.schema.json) (machine validation and fail-closed defaults); [operation event v2 schema](../../contracts/schemas/operation-event-v2.schema.json) (optional validated trace carrier without migration); Audit, Access Envelope, Event, and Operation schemas; [Security and operations](security-and-operations.md) (telemetry, redaction, and incident controls) |
 | Migration | No migration expected. Stop for contract review if new persisted telemetry fields are proposed. |
@@ -324,10 +324,15 @@ owner-approved OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding).
 
 ```text
 git diff --check
+pnpm check:contracts
+node apps/api/plane/curve/contracts/check-integrity.mjs
+node apps/api/plane/curve/observability/check-assets.mjs
 docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests -k "audit or telemetry or redaction or correlation"
+docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/curve/tests
 pnpm check
 pnpm build
 docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
+docker compose -f docker-compose-test.yml down -v
 ```
 
 The M0-S5B (X3M local observability integration proof) commands are added from

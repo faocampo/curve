@@ -42,6 +42,9 @@
         "protocol_env",
         "headers_env",
         "insecure_env",
+        "certificate_env",
+        "client_certificate_env",
+        "client_key_env",
         "workspace_scope_key_env",
         "workspace_scope_key_id_env",
         "allowed_protocols",
@@ -53,6 +56,11 @@
         "http_signal_path_mode",
         "headers_format",
         "insecure_boolean_values",
+        "tls_file_path_mode",
+        "tls_client_pair_mode",
+        "tls_maximum_file_bytes",
+        "system_trust_store_allowed",
+        "compression",
         "workspace_scope_key_input_encoding",
         "workspace_scope_key_id_pattern",
         "explicit_endpoint_required",
@@ -65,6 +73,9 @@
         "protocol_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_PROTOCOL" },
         "headers_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_HEADERS" },
         "insecure_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_INSECURE" },
+        "certificate_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_CERTIFICATE" },
+        "client_certificate_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE" },
+        "client_key_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_CLIENT_KEY" },
         "workspace_scope_key_env": { "const": "CURVE_TELEMETRY_SCOPE_HMAC_KEY" },
         "workspace_scope_key_id_env": { "const": "CURVE_TELEMETRY_SCOPE_KEY_ID" },
         "allowed_protocols": { "const": ["grpc", "http/protobuf"] },
@@ -76,6 +87,11 @@
         "http_signal_path_mode": { "const": "APPEND_STANDARD_PATHS" },
         "headers_format": { "const": "URL_ENCODED_COMMA_SEPARATED_KEY_VALUE" },
         "insecure_boolean_values": { "const": ["true", "false"] },
+        "tls_file_path_mode": { "const": "ABSOLUTE_READ_ONLY" },
+        "tls_client_pair_mode": { "const": "BOTH_OR_NEITHER" },
+        "tls_maximum_file_bytes": { "const": 1048576 },
+        "system_trust_store_allowed": { "const": true },
+        "compression": { "const": "NONE" },
         "workspace_scope_key_input_encoding": { "const": "BASE64URL_NO_PADDING" },
         "workspace_scope_key_id_pattern": { "const": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$" },
         "explicit_endpoint_required": { "const": true },
@@ -126,6 +142,7 @@
     "workspace_scope": {
       "const": {
         "minimum_key_bytes": 32,
+        "maximum_key_bytes": 64,
         "digest_encoding": "BASE64URL_NO_PADDING",
         "rotation_behavior": "RESTART_WITH_NEW_KEY_ID",
         "raw_workspace_id_export_allowed": false
@@ -136,9 +153,41 @@
         "scope": "CURVE_ONLY_MANUAL",
         "global_django_instrumentation_allowed": false,
         "global_provider_registration_allowed": false,
+        "generic_otel_configuration_override_allowed": false,
+        "otel_sdk_disabled_fail_closed": true,
         "api_initialization": "LAZY_PROCESS_LOCAL",
         "worker_initialization": "EXPLICIT_BEFORE_TEMPORAL_CONNECT",
         "workflow_exporter_io_allowed": false,
+        "resource_construction": "STATIC_CURVE_RESOURCE_ONLY",
+        "resource_attributes_by_component": {
+          "API": {
+            "service.name": "curve-api",
+            "service.namespace": "curve",
+            "deployment.environment.name": "local"
+          },
+          "TEMPORAL_WORKER": {
+            "service.name": "curve-temporal-worker",
+            "service.namespace": "curve",
+            "deployment.environment.name": "local"
+          }
+        },
+        "sampler": "PARENT_BASED_ALWAYS_ON",
+        "shutdown_on_exit": false,
+        "span_limits": {
+          "max_attributes": 16,
+          "max_span_attributes": 16,
+          "max_events": 0,
+          "max_event_attributes": 0,
+          "max_links": 0,
+          "max_link_attributes": 0,
+          "max_attribute_length": 128,
+          "max_span_attribute_length": 128
+        },
+        "automatic_exception_recording_allowed": false,
+        "metric_exemplar_filter": "ALWAYS_OFF",
+        "metric_temporality": "CUMULATIVE",
+        "metric_default_view": "DROP_UNDECLARED",
+        "histogram_boundaries_source": "MANIFEST_EXPLICIT_VIEW",
         "bootstrap_components": ["API", "TEMPORAL_WORKER"]
       }
     },
@@ -171,7 +220,10 @@
         "trace_allowlist",
         "log_allowlist",
         "forbidden_name_patterns",
-        "forbidden_value_classes"
+        "forbidden_value_classes",
+        "free_form_runtime_strings_allowed",
+        "maximum_string_value_bytes",
+        "maximum_collection_items"
       ],
       "properties": {
         "trace_allowlist": { "$ref": "#/$defs/uniqueNames" },
@@ -187,7 +239,10 @@
           "minItems": 1,
           "uniqueItems": true,
           "items": { "$ref": "#/$defs/stableName" }
-        }
+        },
+        "free_form_runtime_strings_allowed": { "const": false },
+        "maximum_string_value_bytes": { "const": 128 },
+        "maximum_collection_items": { "const": 16 }
       }
     },
     "metric_attributes": {
@@ -222,12 +277,16 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "message_mode",
+        "maximum_serialized_bytes",
         "common_required_fields",
         "workspace_required_fields",
         "workspace_scoped_event_codes",
         "event_codes"
       ],
       "properties": {
+        "message_mode": { "const": "STATIC_EVENT_CODE_TEMPLATE" },
+        "maximum_serialized_bytes": { "const": 2048 },
         "common_required_fields": { "$ref": "#/$defs/uniqueNames" },
         "workspace_required_fields": { "$ref": "#/$defs/uniqueNames" },
         "workspace_scoped_event_codes": {
