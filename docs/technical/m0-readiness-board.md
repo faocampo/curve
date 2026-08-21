@@ -4,13 +4,13 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Active readiness control; D-001 (Plane upstream foundation decision) and D-003 (runtime topology and trust-zone decision) local profile are decided; M0-S3 is implemented; remaining scoped approvals pending |
-| Version | 1.12 |
-| Date | 2026-08-20 |
-| Normative product baseline | [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (current product requirements, decision register, and accepted local Temporal proof) |
+| Status | Active readiness control; D-001 (Plane upstream foundation decision) and D-003 (runtime topology and trust-zone decision) local profile are decided; M0-S3 is implemented; M0-S4 Definition/UX gate is approved and implementation remains open |
+| Version | 1.13 |
+| Date | 2026-08-21 |
+| Normative product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, decision register, and accepted local Temporal proof) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Accepted Plane baseline | Fork `preview` at M0-S3 merge `d99342f589db4eb488695487d3ae3f2c16bf0874`; preserves the approved upstream candidate, M0-S1, M0-S2, M0-03, and M0-S3 in its ancestry |
-| Published Curve baseline | Curve PR #15 merged the effective D-003 shared-network amendment and M0-S3 context to `main` at `aece53943525c6e7f7993551453954fe27b00746` |
+| Published Curve baseline | Curve PR #17 merged the approved Curve-first shell and M0-S4 Definition/UX artifacts to `main` at `42ea32981a3d5ce814a74c18e458ac8152a7e2fa` |
 | Published Plane implementation | Plane PR #5 merged exact M0-S3 head `7fd231b062dc485b37078979a78ec83618be78d8` into fork `preview` at `d99342f589db4eb488695487d3ae3f2c16bf0874` |
 
 ## Readiness rule
@@ -64,7 +64,8 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | M0-S2 local operation/delivery packet | DONE | Contract revision `ab2c81a...`, context digest `sha256:45c266e1...`, approved implementation head `f520075...`, and Plane merge `eff8686a...` are bound in [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) (post-merge acceptance record). |
 | M0-S3 local Temporal round trip | DONE | Plane PR #5 merged approved head `7fd231b...` as `d99342f...`; context, tests, runtime, security, migration, replay, restart, cancellation, and rollback are accepted in [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (post-merge acceptance record). Project status is `Done`. |
 | M0-06 Temporal skeleton | IN_PROGRESS / DECOMPOSED | M0-S3 completed the executable first slice. Broader parent/child, continue-as-new, provider-attempt, and reconciliation behavior remains later M0-06 scope. |
-| M0-07 API/SSE | READY_FOR_PACKET_RECONCILIATION | M0-02, M0-03, M0-05, and M0-S3 are satisfied. M0-S4 requires its own owner/reviewer, exact `d99342f...` descendant base, context, Project item, commands, and user-facing experience-gate evidence. |
+| M0-07 API/SSE | IN_PROGRESS | M0-02, M0-03, M0-05, and M0-S3 are satisfied. API, Problem Details, ETag/If-Match, idempotency, pagination, SSE resume, OpenAPI generation, and their acceptance evidence remain engineering work. |
+| M0-S4 API/SSE/minimal UI checkpoint | READY_FOR_IMPLEMENTATION | Federico Ocampo owns and reviews the package. UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) were approved at `a463876...` and merged as `42ea329...`. The Definition/UX gate is complete; API, SSE, Plane UI, tests, and package acceptance remain pending. |
 | M0-08 audit/observability | BLOCKED | Requires the implemented M0 foundation packages. |
 | M0-09 provider registry | BLOCKED | M0-05 is satisfied; M0-03, M0-07, and D-007 remain required before MCP enablement. |
 

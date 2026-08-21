@@ -82,9 +82,53 @@ export const M0_S3_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const M0_S4_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/openapi/curve-v1.openapi.yaml",
+    "contracts/policy/core-policy-v1.json",
+    "contracts/schemas/common.schema.json",
+    "contracts/schemas/event-envelope.schema.json",
+    "contracts/schemas/examples/event-envelope.invalid.json",
+    "contracts/schemas/examples/event-envelope.valid.json",
+    "contracts/schemas/examples/operation-event-v1.invalid.json",
+    "contracts/schemas/examples/operation-event-v1.valid.json",
+    "contracts/schemas/examples/operation.invalid.json",
+    "contracts/schemas/examples/operation.valid.json",
+    "contracts/schemas/operation-event-v1.schema.json",
+    "contracts/schemas/operation-summary.schema.json",
+    "contracts/schemas/operation.schema.json",
+    "contracts/schemas/semantic-fixtures/idempotency-completed.valid.json",
+    "contracts/schemas/semantic-fixtures/idempotency-raw-key.invalid.json",
+    "contracts/schemas/semantic-fixtures/idempotency-terminal-null.invalid.json",
+    "contracts/schemas/semantic-fixtures/operation-terminal-null.invalid.json",
+    "contracts/schemas/semantic-fixtures/operation-terminal.valid.json",
+    "contracts/schemas/sse-event.schema.json",
+    "contracts/temporal/m0-workflow-contract.md",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/design/curve-brand.md",
+    "docs/design/mockups/curve-foundation-probe-v2.png",
+    "docs/design/prototypes/m0-s4-foundation-probe/curve-logo-light-ui-v1.webp",
+    "docs/design/prototypes/m0-s4-foundation-probe/index.html",
+    "docs/technical/adr-003-runtime-topology.md",
+    "docs/technical/architecture.md",
+    "docs/technical/curve-experience-blueprint.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/integration-contracts.md",
+    "docs/technical/m0-authorization-and-state-matrices.md",
+    "docs/technical/m0-local-skeleton-task-packets.md",
+    "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-s3-implementation-evidence.md",
+    "docs/technical/security-and-operations.md",
+    "docs/technical/ux-m0-s4-foundation-probe.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ].sort(),
+);
+
 const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
   ["M0-S3", M0_S3_CONTEXT_PATHS],
+  ["M0-S4", M0_S4_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {

@@ -6,8 +6,8 @@
 | ----- | ----- |
 | Status | Living retrospective and engineering rationale |
 | Product | Curve |
-| Period covered | From the initial Plane license question through 2026-08-18 |
-| Last updated | 2026-08-18 |
+| Period covered | From the initial Plane license question through 2026-08-21 |
+| Last updated | 2026-08-21 |
 | Audience | X3M product, engineering, architecture, security, operations, legal, and AI agents |
 | Normative authority | Informational only; the PRD and approved ADRs take precedence |
 
@@ -1227,9 +1227,9 @@ checks before the preview image was captured.
 The proposal is recorded in the [M0-S4 foundation probe experience contract](../technical/ux-m0-s4-foundation-probe.md)
 (UX-004/UX-005 flow, state, accessibility, prototype-review, and browser-test
 contract), the clickable HTML prototype, and the generated success-state
-preview. Its status remains `PROPOSED_REVIEW_REQUIRED`. Federico Ocampo must
-complete the seven task prompts and approve the exact Curve revision before the
-user-facing portion of M0-S4 can enter implementation.
+preview. At publication, its status was `PROPOSED_REVIEW_REQUIRED`, pending
+Federico Ocampo's exact-revision disposition. The later approval record below
+supersedes that pending status.
 
 ### Curve-first product shell decision
 
@@ -1255,7 +1255,21 @@ Plane authority boundary), the [Curve Experience Blueprint](../technical/curve-e
 (Curve-first foundation flow, prototype review, and browser acceptance).
 
 This product decision supersedes the Plane-first shell in the v1 M0-S4 concept.
-The revised clickable prototype and v2 screenshot remain
-`PROPOSED_REVIEW_REQUIRED` until Federico completes the task-based screen review
-and approves their exact Curve commit. Plane application implementation remains
-the next gated step after that artifact review.
+The revised clickable prototype and v2 screenshot were submitted for
+exact-revision review in Curve PR #17.
+
+### M0-S4 Definition/UX gate approval
+
+On 2026-08-21 Federico Ocampo approved Curve PR #17 at exact head
+`a4638761bcbdb8e522e8db0af5a2ae00cb6480a8`, approved UX-004-M0-S4
+(clickable prototype and task-based review) and UX-005-M0-S4
+(work-package-linked screen contract), and authorized the PR's squash merge
+while CI remained green. GitHub recorded the successful validation and merged
+the approved head into Curve `main` as
+`42ea32981a3d5ce814a74c18e458ac8152a7e2fa`.
+
+This completes the M0-S4 Definition/UX gate. M0-S4 (API, SSE, and minimal UI
+implementation packet) remains open and is ready for implementation. M0-07
+(public API/SSE contract package) and the Plane UI/API/SSE engineering work
+remain incomplete until their executable acceptance criteria pass. Neither
+M0-S4 nor M0-07 is complete because of the Definition/UX approval alone.

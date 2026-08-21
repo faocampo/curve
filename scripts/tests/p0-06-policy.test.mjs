@@ -18,6 +18,7 @@ import {
 import {
   M0_03_CONTEXT_PATHS,
   M0_S3_CONTEXT_PATHS,
+  M0_S4_CONTEXT_PATHS,
   contextPathsFor,
   digestContextEntries,
 } from "../lib/context-pack.mjs";
@@ -95,6 +96,40 @@ test("M0-S3 context pins the approved topology, workflow, delivery, policy, and 
   assert.deepEqual(M0_S3_CONTEXT_PATHS, [...M0_S3_CONTEXT_PATHS].sort());
   assert.deepEqual(contextPathsFor("M0-S3"), M0_S3_CONTEXT_PATHS);
   assert.equal(contextPathsFor("UNREGISTERED"), null);
+});
+
+test("M0-S4 context pins the API, SSE, policy, runtime, UX, and implementation contracts", () => {
+  const requiredPaths = [
+    "contracts/openapi/curve-v1.openapi.yaml",
+    "contracts/policy/core-policy-v1.json",
+    "contracts/schemas/common.schema.json",
+    "contracts/schemas/event-envelope.schema.json",
+    "contracts/schemas/operation-event-v1.schema.json",
+    "contracts/schemas/operation-summary.schema.json",
+    "contracts/schemas/operation.schema.json",
+    "contracts/schemas/sse-event.schema.json",
+    "contracts/temporal/m0-workflow-contract.md",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/design/curve-brand.md",
+    "docs/design/mockups/curve-foundation-probe-v2.png",
+    "docs/design/prototypes/m0-s4-foundation-probe/curve-logo-light-ui-v1.webp",
+    "docs/design/prototypes/m0-s4-foundation-probe/index.html",
+    "docs/technical/architecture.md",
+    "docs/technical/curve-experience-blueprint.md",
+    "docs/technical/integration-contracts.md",
+    "docs/technical/m0-authorization-and-state-matrices.md",
+    "docs/technical/m0-local-skeleton-task-packets.md",
+    "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-s3-implementation-evidence.md",
+    "docs/technical/security-and-operations.md",
+    "docs/technical/ux-m0-s4-foundation-probe.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ];
+  for (const path of requiredPaths) assert.ok(M0_S4_CONTEXT_PATHS.includes(path), path);
+  assert.equal(new Set(M0_S4_CONTEXT_PATHS).size, M0_S4_CONTEXT_PATHS.length);
+  assert.deepEqual(M0_S4_CONTEXT_PATHS, [...M0_S4_CONTEXT_PATHS].sort());
+  assert.deepEqual(contextPathsFor("M0-S4"), M0_S4_CONTEXT_PATHS);
 });
 
 test("the live P0-06 projection is terminal and points to M0-S3", () => {

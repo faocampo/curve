@@ -5,9 +5,9 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 1.0 |
-| Last updated | 2026-08-20 |
-| Source | [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (product requirements, lifecycle, security invariants, acceptance criteria, and accepted D-003 local implementation) |
+| Version | 1.1 |
+| Last updated | 2026-08-21 |
+| Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, lifecycle, security invariants, acceptance criteria, and accepted D-003 local implementation) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
 
@@ -166,10 +166,11 @@ context, Plane implementation/merge, validation, security acceptance, and
 rollback). M0-S3 (local Temporal round-trip implementation packet) is accepted
 through [M0-S3 implementation evidence](m0-s3-implementation-evidence.md)
 (exact context, Plane head/merge, tests, runtime proof, security acceptance, and
-rollback). M0-S4 (API, SSE, and minimal UI implementation packet) is the next
-candidate for packet reconciliation; its user-facing scope requires an approved
-[Curve Experience Blueprint](curve-experience-blueprint.md) (screen flow,
-states, prototype, and task-based usability review) record before coding. The
+rollback). M0-S4 (API, SSE, and minimal UI implementation packet) is
+`READY_FOR_IMPLEMENTATION`: Federico approved UX-004-M0-S4 (clickable prototype
+and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) at
+exact Curve head `a463876...`, merged through Curve PR #17 as `42ea329...`.
+Implementation and technical acceptance remain pending. The
 five-packet local M0 checkpoint remains packet-scoped. Downstream packets
 consume the decided D-003 shared local profile and accepted M0-S3 runtime proof. D-007
 does not gate M0-S1 through M0-S5 because those packets expose no
