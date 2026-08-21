@@ -32,6 +32,8 @@ paths:
           $ref: '#/components/responses/Problem'
         '403':
           $ref: '#/components/responses/Problem'
+        '404':
+          $ref: '#/components/responses/Problem'
   /workspaces/{workspace_slug}/curve/operations/{operation_id}:
     get:
       operationId: getCurveOperation
@@ -68,6 +70,10 @@ paths:
       responses:
         '202':
           description: Cancellation accepted or replayed idempotently
+          headers:
+            ETag:
+              schema:
+                type: string
           content:
             application/json:
               schema:
@@ -81,6 +87,8 @@ paths:
         '409':
           $ref: '#/components/responses/Problem'
         '412':
+          $ref: '#/components/responses/Problem'
+        '428':
           $ref: '#/components/responses/Problem'
         '422':
           $ref: '#/components/responses/Problem'
@@ -105,6 +113,8 @@ paths:
         '401':
           $ref: '#/components/responses/Problem'
         '403':
+          $ref: '#/components/responses/Problem'
+        '404':
           $ref: '#/components/responses/Problem'
         '410':
           description: Resume cursor is outside the retained stream window
@@ -158,6 +168,8 @@ paths:
         '404':
           $ref: '#/components/responses/Problem'
         '409':
+          $ref: '#/components/responses/Problem'
+        '422':
           $ref: '#/components/responses/Problem'
 components:
   securitySchemes:
