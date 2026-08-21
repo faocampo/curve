@@ -69,6 +69,60 @@ for (const file of markdownFiles) {
 
 const laterPacketCatalogPath = join(root, "docs/technical/m1-m7-task-packets.md");
 const laterPacketCatalog = readFileSync(laterPacketCatalogPath, "utf8");
+const onyxDecisionPacketPath = join(
+  root,
+  "docs/technical/d002-onyx-delegated-identity-decision-packet.md",
+);
+const onyxDecisionPacket = readFileSync(onyxDecisionPacketPath, "utf8");
+const m1TaskPacketPath = join(root, "docs/technical/m1-alignment-evidence-prd-task-packet.md");
+const m1TaskPacket = readFileSync(m1TaskPacketPath, "utf8");
+
+function requireDocumentTokens(documentPath, document, tokens) {
+  for (const token of tokens) {
+    if (!document.includes(token)) {
+      failures.push(`${relative(root, documentPath)}: missing required contract token ${token}`);
+    }
+  }
+}
+
+requireDocumentTokens(onyxDecisionPacketPath, onyxDecisionPacket, [
+  "# D-002 Onyx Delegated-Identity Decision Packet",
+  "`PROPOSED`; evidence-ready decision packet; no Onyx activation authority",
+  "## Verified upstream boundary",
+  "https://docs.onyx.app/developers/overview",
+  "https://docs.onyx.app/deployment/authentication/oidc",
+  "## Bounded proof plan",
+  "## Decision outcome template",
+]);
+
+const expectedM1SliceIds = [
+  "M1-01A",
+  "M1-01B",
+  "M1-02A",
+  "M1-02B",
+  "M1-03A",
+  "M1-03B",
+  "M1-04A",
+  "M1-04B",
+  "M1-05A",
+  "M1-05B",
+  "M1-06A",
+  "M1-06B",
+  "M1-06C",
+  "M1-07A",
+  "M1-07B",
+];
+requireDocumentTokens(m1TaskPacketPath, m1TaskPacket, [
+  "# M1 Alignment, Evidence, and PRD Task Packet",
+  "`PREPARED_NOT_DISPATCHABLE`",
+  "## Delivery lanes",
+  "| Manual-first |",
+  "| Delegated knowledge |",
+  "| Model-assisted |",
+  "## Normative contract set to publish before dispatch",
+  "## Dispatch readiness matrix",
+  ...expectedM1SliceIds.map((sliceId) => `| ${sliceId} (`),
+]);
 const expectedLaterPacketIds = [
   ...Array.from({ length: 7 }, (_, index) => `M1-${String(index + 1).padStart(2, "0")}`),
   ...Array.from({ length: 6 }, (_, index) => `M2-${String(index + 1).padStart(2, "0")}`),
