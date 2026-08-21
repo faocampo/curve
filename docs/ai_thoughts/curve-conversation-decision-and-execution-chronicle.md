@@ -1271,10 +1271,13 @@ the approved head into Curve `main` as
 This completes the M0-S4 Definition/UX gate. M0-S4 (API, SSE, and minimal UI
 implementation packet) remains open; Plane PR #6 now carries the implementation
 at exact head `a1748c7...`. Twenty-seven focused Curve web tests plus type, lint,
-and format checks pass; repository CI and Federico's human review remain
-pending. M0-07 (public API/SSE contract package) and the Plane UI/API/SSE
-engineering work remain incomplete until the implementation is accepted and
-merged.
+and format checks pass. [CodeQL](https://github.com/faocampo/plane/actions/runs/32527413261)
+(exact-head Python/JavaScript analysis) and
+[copyright](https://github.com/faocampo/plane/actions/runs/32527415252)
+(exact-head Python/TypeScript license-header check) are green; Federico's human
+review remains pending. M0-07 (public API/SSE contract package) and the Plane
+UI/API/SSE engineering work remain incomplete until the implementation is
+accepted and merged.
 
 ### M0-S5 (local audit and observability) codeability contract
 

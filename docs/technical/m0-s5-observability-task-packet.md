@@ -6,13 +6,13 @@
 | --- | --- |
 | Package | M0-S5 (local audit and observability implementation packet) / M0-08 (audit and observability foundation work package) |
 | Status | `PROPOSED_FOR_MATERIAL_APPROVAL_AND_EXACT_HEAD_REVIEW`; M0-S5A implementation and M0-S5B platform binding remain gated |
-| Version | 1.7 |
+| Version | 1.8 |
 | Date | 2026-08-21 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Minimum Plane ancestor | `preview` merge `d99342f589db4eb488695487d3ae3f2c16bf0874` containing accepted M0-S3 (local Temporal round-trip implementation packet) evidence |
-| Implementation base | The future squash merge of Plane PR #6 (M0-S4 API, SSE, and Curve-first UI implementation) into `preview`; current exact candidate head `a1748c790a060434928b8ed521692b13b3f9739e` has green focused local evidence and must receive green repository CI plus Federico's exact-head acceptance before it can become a dispatch base |
+| Implementation base | The future squash merge of Plane PR #6 (M0-S4 API, SSE, and Curve-first UI implementation) into `preview`; current exact candidate head `a1748c790a060434928b8ed521692b13b3f9739e` has green focused local evidence, [CodeQL](https://github.com/faocampo/plane/actions/runs/32527413261) (Python/JavaScript analysis), and [copyright](https://github.com/faocampo/plane/actions/runs/32527415252) (Python/TypeScript license-header check); Federico's exact-head acceptance and merge remain required before it can become a dispatch base |
 | Context readiness | Fail closed until Plane PR #6 is human-approved and merged and a follow-up Curve revision adds its accepted M0-S4 (API, SSE, and minimal UI implementation packet) evidence to the M0-08 context manifest; no current context digest authorizes implementation |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Risk | `STANDARD`, with telemetry treated as a data-exfiltration boundary |
