@@ -41,6 +41,10 @@ The two supplied assets are the approved color variations:
 
 New treatments, including icon-only, stacked, monochrome, animated, co-branded, or campaign-specific lockups, require an explicit design decision and a new versioned asset.
 
+## UI delivery derivative
+
+The [Curve UI lockup](prototypes/m0-s4-foundation-probe/curve-logo-light-ui-v1.webp) (cropped and web-optimized light-background Curve lockup) is a delivery derivative of `curve-logo-light-v1.png` for the M0-S4 clickable prototype. It preserves the complete symbol-and-wordmark lockup, colors, geometry, proportions, and clear space while removing unused canvas and reducing transfer size. Production implementation still requires the planned vector source derived from the approved geometry.
+
 ## Prohibited changes
 
 - Changing the `Curve` spelling, capitalization, type treatment, or symbol geometry.

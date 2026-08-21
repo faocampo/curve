@@ -77,7 +77,7 @@ be produced by M0-S3 itself against its exact dispatched Plane base.
 | --- | --- | --- |
 | Temporal CLI development image | `docker.io/temporalio/temporal:1.8.1@sha256:59561b9ef060eaeb1f46cb6a1842d6cbdd8a393eb3b6d315ecef5fe2f0b1d7a6` | [Temporal CLI v1.8.1](https://github.com/temporalio/cli/releases/tag/v1.8.1); multi-architecture index pinned by digest. |
 | Embedded Temporal Server | `1.31.2` | [Temporal Server v1.31.2](https://github.com/temporalio/temporal/releases/tag/v1.31.2); local development only. |
-| Temporal Python SDK | `temporalio==1.31.0` | [Temporal Python SDK v1.31.0](https://github.com/temporalio/sdk-python/releases/tag/v1.31.0) and [PyPI 1.31.0](https://pypi.org/project/temporalio/1.31.0/); Python 3.10+ and musllinux wheels for x86-64 and ARM64. |
+| Temporal Python SDK | `temporalio==1.31.0` | [Temporal Python SDK repository](https://github.com/temporalio/sdk-python) and [PyPI 1.31.0](https://pypi.org/project/temporalio/1.31.0/); Python 3.10+ and musllinux wheels for x86-64 and ARM64. |
 
 ### Approved shared-network Compose-overlay topology
 

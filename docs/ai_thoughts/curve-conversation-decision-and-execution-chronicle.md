@@ -1189,6 +1189,7 @@ and decision register), [ADR-003](../technical/adr-003-runtime-topology.md)
 effective only after Federico approves its exact PR head and it merges to
 Curve `main`; M0-S3 then rematerializes its deterministic context before Plane
 source changes continue.
+
 ### M0-S4 (API, SSE, and minimal UI) experience readiness
 
 After the M0-S2 (operation and delivery kernel implementation packet) merge,
@@ -1229,3 +1230,32 @@ contract), the clickable HTML prototype, and the generated success-state
 preview. Its status remains `PROPOSED_REVIEW_REQUIRED`. Federico Ocampo must
 complete the seven task prompts and approve the exact Curve revision before the
 user-facing portion of M0-S4 can enter implementation.
+
+### Curve-first product shell decision
+
+On 2026-08-21 Federico Ocampo identified that the M0-S4 v1 sidebar represented
+Plane as the primary product and Curve as one workspace module. He confirmed
+the intended hierarchy: Curve is the user-facing product and Plane is the
+embedded work-management foundation.
+
+The approved product decision gives Curve ownership of the logo, application
+shell, global navigation, breadcrumbs, lifecycle terminology, and integrated
+experience. Plane remains authoritative for its native projects, work items,
+cycles, views, analytics, collaboration data, and behavior. Those capabilities
+appear under the `Work management` navigation group with visible Plane-backed
+attribution. Foundation status moves under `Platform`, and the standalone
+`Curve` sidebar item is removed because the full shell represents Curve.
+
+The decision is recorded in the [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md)
+(product contract and Curve-first shell invariant), the [Curve technical
+architecture v0.6](../technical/architecture.md) (product-surface ownership and
+Plane authority boundary), the [Curve Experience Blueprint](../technical/curve-experience-blueprint.md)
+(global information architecture and user-facing implementation gate), and the
+[M0-S4 foundation probe experience contract](../technical/ux-m0-s4-foundation-probe.md)
+(Curve-first foundation flow, prototype review, and browser acceptance).
+
+This product decision supersedes the Plane-first shell in the v1 M0-S4 concept.
+The revised clickable prototype and v2 screenshot remain
+`PROPOSED_REVIEW_REQUIRED` until Federico completes the task-based screen review
+and approves their exact Curve commit. Plane application implementation remains
+the next gated step after that artifact review.

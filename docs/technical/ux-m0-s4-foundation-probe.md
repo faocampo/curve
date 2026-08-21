@@ -9,8 +9,8 @@
 | Status | `PROPOSED_REVIEW_REQUIRED` |
 | Owner and approver | Federico Ocampo, CTO at X3M |
 | Target implementation repository | `github.com/faocampo/plane`, branch created from the exact accepted M0-S3 (local Temporal round-trip implementation packet) merge |
-| Source baseline | Curve commit containing this record and the linked prototype; Plane `preview` currently includes merge `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` |
-| Last updated | 2026-08-18 |
+| Source baseline | Curve commit containing this record and the linked prototype; Plane `preview` includes accepted M0-S3 merge `d99342f589db4eb488695487d3ae3f2c16bf0874` |
+| Last updated | 2026-08-21 |
 
 This record satisfies the artifact requirements of the [Curve Experience Blueprint](curve-experience-blueprint.md) (user-facing flow approval gate) for the M0-S4 (API, SSE, and minimal UI implementation packet) surface. It remains a proposal until the task-based review is completed and Federico records `APPROVED` against the exact Curve commit.
 
@@ -31,11 +31,11 @@ The experience is deliberately narrow. It validates M0 plumbing before later ini
 | Concern | Contract |
 | --- | --- |
 | Target role | Authorized workspace engineer or platform operator validating a local Curve development environment |
-| Entry point | Existing Plane workspace sidebar item `Curve`, route `/:workspaceSlug/curve` |
+| Entry point | Curve product shell, `Platform` group, `Foundation status` item; M0 route `/:workspaceSlug/curve` |
 | Availability | Curve module enabled, local environment, authenticated workspace member, and `operation.create` authorization for the synthetic foundation-probe target |
 | Read access | Workspace member authorized for `operation.read` can inspect the current probe and its safe event projection |
 | Cancel access | Actor authorized for `operation.cancel`, with the current Operation ETag |
-| Disabled behavior | The existing Curve sidebar item remains hidden and direct navigation returns to the workspace home |
+| Disabled behavior | The Curve product profile remains disabled, existing Plane behavior is unchanged, and direct navigation returns to the workspace home |
 | Non-local behavior | The probe action is absent and the probe command remains unavailable in staging and production |
 | Permission-limited behavior | The page explains that the current user cannot run the check; it never reveals whether another workspace contains a matching Operation |
 
@@ -43,11 +43,14 @@ Authorization follows the [M0 authorization and state matrices](m0-authorization
 
 ## Information architecture
 
-The foundation probe lives inside the existing Plane-hosted `Curve` workspace page. It is a temporary M0 foundation surface, not a new top-level product area.
+The foundation probe lives under `Platform` in the Curve-owned product shell. It is a temporary M0 operational-verification surface. Plane-backed work-management capabilities remain available as one grouped area inside Curve.
 
 ```text
-Plane workspace
-└── Curve
+Curve product shell
+├── Product
+├── Delivery
+├── Work management (Plane-backed)
+└── Platform
     └── Foundation status
         ├── Readiness summary and current connection
         ├── Current or latest probe progress
@@ -55,13 +58,13 @@ Plane workspace
         └── Technical details (collapsed by default)
 ```
 
-The page header uses `Curve / Foundation`, the page title `Foundation status`, and the environment label `Local environment`. Provider configuration, policy administration, raw event bodies, database topology, credentials, and Temporal internals are excluded from the surface.
+The shell uses the approved Curve logo and name as its primary identity. The page header uses `Platform / Foundation status`, the page title `Foundation status`, and the environment label `Local environment`. The sidebar contains Product, Delivery, Work management, and Platform groups; `Foundation status` is active under Platform. Plane attribution and the exact-version source link remain available in the shell footer. Provider configuration, policy administration, raw event bodies, database topology, credentials, and Temporal internals are excluded from the surface.
 
 ## Primary task flow
 
 ```mermaid
 flowchart TD
-    enter["Open Curve from the workspace sidebar"] --> eligibility{"Module, environment, and permission eligible?"}
+    enter["Open Platform and select Foundation status"] --> eligibility{"Product profile, environment, and permission eligible?"}
     eligibility -- "No module" --> workspace["Return to workspace home"]
     eligibility -- "No permission" --> limited["Show permission-limited state"]
     eligibility -- "Yes" --> idle["Show Foundation status: ready to verify"]
@@ -84,7 +87,7 @@ flowchart TD
 
 ### Happy path
 
-1. The engineer selects `Curve` from the workspace sidebar.
+1. The engineer enters the Curve product and selects `Foundation status` under `Platform`.
 2. The page loads eligibility and the latest local probe projection.
 3. In the idle state, the dominant action is `Run foundation probe`.
 4. Activation gives the button immediate pending feedback and submits one idempotent create command.
@@ -113,7 +116,7 @@ flowchart TD
 | State | Visible content | Dominant action | Accessibility and recovery |
 | --- | --- | --- | --- |
 | Shell loading | Page skeleton for heading, summary, and progress | None | Page title is set; no empty-state announcement occurs before eligibility resolves |
-| Module disabled | Existing Plane workspace home | Existing workspace navigation | Curve navigation is absent; direct route uses the existing safe redirect |
+| Product profile disabled | Existing Plane workspace home | Existing workspace navigation | Existing Plane behavior is unchanged; direct route uses the existing safe redirect |
 | Permission limited | `You do not have permission to run the foundation check` and workspace-admin guidance | `Back to workspace` | Heading receives focus after navigation; no Operation identifiers or cross-workspace detail |
 | Idle/empty | `Ready to verify`, local-environment label, live connection, no prior run | `Run foundation probe` | Button has an explicit accessible name; explanatory copy precedes the action |
 | Create pending | `Starting foundation probe` | Disabled progress button | Button activation is acknowledged immediately; repeated activation is prevented |
@@ -171,11 +174,11 @@ Wire behavior follows the [integration contracts](integration-contracts.md) (Ope
 
 ## Prototype
 
-The self-contained [M0-S4 foundation probe prototype](../design/prototypes/m0-s4-foundation-probe/index.html) (clickable local foundation-status flow) demonstrates the proposed interaction without API or infrastructure side effects.
+The static [M0-S4 foundation probe prototype](../design/prototypes/m0-s4-foundation-probe/index.html) (clickable local foundation-status flow in the Curve-first shell) demonstrates the proposed interaction without API or infrastructure side effects. Its adjacent optimized logo file is a delivery derivative governed by the [Curve brand identity](../design/curve-brand.md) (approved logo assets, usage rules, and derivative policy).
 
 Prototype-only controls in the lower-right corner let a reviewer enter states that would normally be produced by the API or SSE stream. They are labeled `Prototype controls` and are excluded from the production screen contract.
 
-![M0-S4 foundation probe success state](../design/mockups/curve-foundation-probe-v1.png)
+![M0-S4 Curve-first foundation probe success state](../design/mockups/curve-foundation-probe-v2.png)
 
 ## Task-based review script
 
@@ -192,7 +195,7 @@ Prototype-only controls in the lower-right corner let a reviewer enter states th
 
 | Task | Prompt | Pass evidence to record |
 | --- | --- | --- |
-| T1 Discover | “Open Curve and determine whether the local foundation is ready to verify.” | Finds the Curve entry and explains readiness/environment without assistance |
+| T1 Discover | “Open Foundation status and determine whether the local foundation is ready to verify.” | Recognizes Curve as the product, finds Foundation status under Platform, and explains readiness/environment without assistance |
 | T2 Run | “Start the verification and tell me where it is in the process.” | Activates the dominant action, identifies current stage, and distinguishes progress from connection state |
 | T3 Inspect | “Find the operation ID and last event without losing the progress context.” | Opens Technical details and finds both safe values; recognizes details as supporting information |
 | T4 Recover connection | “Live updates were interrupted. Restore the current status.” | Uses reconnect feedback; when shown a stale cursor, selects `Resync status` and explains retained evidence |
@@ -204,6 +207,7 @@ Prototype-only controls in the lower-right corner let a reviewer enter states th
 
 | Finding | Severity | Disposition | Owner |
 | --- | --- | --- | --- |
+| V1 represented Plane as the product shell and Curve as a peer module | Major | `RESOLVED_IN_V2`: Curve owns the logo and shell; Plane-backed capabilities are grouped under Work management; Foundation status is under Platform | Federico Ocampo |
 | Pending task-based review | Blocking | Federico completes T1-T7 and records `PASS` or `REWORK_REQUIRED` against the exact Curve commit | Federico Ocampo |
 
 ## UX-004 and UX-005 approval record
@@ -218,6 +222,7 @@ owner: Federico Ocampo
 approver: Federico Ocampo
 target_role: Authorized workspace engineer or platform operator
 user_job: Verify and recover the local Curve foundation end to end
+information_architecture: Curve product shell > Platform > Foundation status
 prototype_review:
   artifact: docs/design/prototypes/m0-s4-foundation-probe/index.html
   participants:
@@ -236,15 +241,17 @@ approval:
 The following browser tests supplement the M0-S4 executable acceptance in the [M0 local task packets](m0-local-skeleton-task-packets.md) (repository-local implementation packets):
 
 1. Given eligibility is loading, when the route renders, then no idle or permission state flashes before the result.
-2. Given the module is disabled, when the route resolves, then Curve navigation is absent and direct access follows the existing safe redirect.
-3. Given a read-authorized actor without create authorization, when the page loads, then the permission-limited projection contains no hidden Operation data.
-4. Given a create request is pending, when the action is activated repeatedly, then only one idempotent command is issued.
-5. Given ordered progress events, when they render, then the timeline advances monotonically and each meaningful status is announced once.
-6. Given a reconnect from the last acknowledged event, when duplicate and later events arrive, then duplicate events do not change or reannounce the projection.
-7. Given a stale cursor, when the actor resynchronizes, then the UI replaces the stale projection with the authorized current Operation and reconnects from the new cursor.
-8. Given cancellation confirmation, when the actor keeps the run, cancels it, or presses Escape, then focus and command behavior match this screen contract.
-9. Given a safe Problem Details response, when the failure renders, then raw response bodies and stack traces are absent from the DOM, logs, and copy controls.
-10. Given every state in the state contract, when checked with automated accessibility rules and keyboard interaction tests, then names, roles, focus, contrast, and live-region behavior conform to WCAG 2.2 AA.
+2. Given the Curve product profile is disabled, when the route resolves, then existing Plane behavior is unchanged and direct access follows the existing safe redirect.
+3. Given the Curve product profile is enabled, when the shell renders, then the approved Curve logo and name are the primary identity and no peer `Curve` navigation item exists.
+4. Given the shell renders, when navigation is inspected, then Plane-backed capabilities are grouped under `Work management` and `Foundation status` is active under `Platform`.
+5. Given a read-authorized actor without create authorization, when the page loads, then the permission-limited projection contains no hidden Operation data.
+6. Given a create request is pending, when the action is activated repeatedly, then only one idempotent command is issued.
+7. Given ordered progress events, when they render, then the timeline advances monotonically and each meaningful status is announced once.
+8. Given a reconnect from the last acknowledged event, when duplicate and later events arrive, then duplicate events do not change or reannounce the projection.
+9. Given a stale cursor, when the actor resynchronizes, then the UI replaces the stale projection with the authorized current Operation and reconnects from the new cursor.
+10. Given cancellation confirmation, when the actor keeps the run, cancels it, or presses Escape, then focus and command behavior match this screen contract.
+11. Given a safe Problem Details response, when the failure renders, then raw response bodies and stack traces are absent from the DOM, logs, and copy controls.
+12. Given every state in the state contract, when checked with automated accessibility rules and keyboard interaction tests, then names, roles, focus, contrast, and live-region behavior conform to WCAG 2.2 AA.
 
 ## Approval effect and change control
 

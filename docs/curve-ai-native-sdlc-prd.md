@@ -7,8 +7,8 @@
 | Status       | Remediation in progress; D-001 decided; D-003 local shared-network profile decided and implemented; non-local activation and remaining packages retain their prerequisites |
 | Owner        | X3M                                                                        |
 | Audience     | Product, engineering, design, security, operations, and company leadership |
-| Version      | 0.11                                                                       |
-| Last updated | 2026-08-20                                                                 |
+| Version      | 0.12                                                                       |
+| Last updated | 2026-08-21                                                                 |
 | Product      | Curve                                                                      |
 | Foundation   | Plane open-source project management platform                              |
 
@@ -16,6 +16,7 @@
 
 | Version | Date | Summary |
 | ------- | ---- | ------- |
+| 0.12 | 2026-08-21 | Established Curve as the user-facing product shell and brand; grouped Plane-backed capabilities under Work management; placed Foundation status under Platform; and separated product-surface ownership from Plane data and service authority. |
 | 0.11 | 2026-08-20 | Recorded effective D-003 private-platform amendment merge `aece539...` and accepted M0-S3 local Temporal implementation merge `d99342f...`, including deterministic context, replay, restart, cancellation, security, migration, and rollback evidence; retained all non-local activation gates. |
 | 0.10 | 2026-08-20 | Replaced Curve-specific local network segmentation with Plane's shared `dev_env`; selected Kubernetes `ClusterIP`, private EKS/VPC/VPN exposure, a dedicated Curve namespace by default, internal Temporal UI ingress, X3M workload identity/Secrets Manager, and authenticated non-local Temporal clients; removed M0-S3 negative-reachability acceptance while retaining agent-sandbox isolation. Effective after exact-head approval and merge. |
 | 0.9 | 2026-08-18 | Recorded D-003 `LOCAL_ONLY` approval at exact head `7826f403...` and merge `097016f...`; fixed Temporal Python SDK 1.31.0 and the two-network Compose overlay; retired P0-06A/P0-06B as standalone gates; selected M0-S3 as the executable local proof; retained fail-closed staging/production decisions. |
@@ -30,7 +31,7 @@
 
 Curve is an AI-native product development platform for X3M. It will manage the complete product and software-development lifecycle, from long-lived product roadmaps and milestone planning through an initial problem or idea, research, prototyping, product requirements, architecture planning, implementation, automated quality analysis, and creation of a reviewed draft pull or merge request.
 
-Curve will extend [Plane](https://plane.so/) rather than replace its project-management foundation. Plane will remain the collaborative system for projects, work items, pages, views, comments, and human coordination. [Temporal](https://temporal.io/) will execute durable, resumable workflows. X3M's existing on-premise [Onyx](https://www.onyx.app/) deployment will provide permission-aware access to internal knowledge. [OpenHands](https://github.com/OpenHands/OpenHands) is the initial automated coding-agent execution provider. Orca is a developer-operated client that reads approved work and reports bounded workflow updates through authenticated MCP; it is not an automated `AgentExecutionProvider`.
+Curve will present a Curve-branded product shell and extend [Plane](https://plane.so/) as its embedded work-management foundation. Plane will remain authoritative for projects, work items, pages, views, comments, and human coordination. [Temporal](https://temporal.io/) will execute durable, resumable workflows. X3M's existing on-premise [Onyx](https://www.onyx.app/) deployment will provide permission-aware access to internal knowledge. [OpenHands](https://github.com/OpenHands/OpenHands) is the initial automated coding-agent execution provider. Orca is a developer-operated client that reads approved work and reports bounded workflow updates through authenticated MCP; it is not an automated `AgentExecutionProvider`.
 
 Curve will connect Product roadmaps, immutable roadmap snapshots, approved PRD revisions, development schedules, coding-agent runs, and coordinated pull or merge requests. Roadmap-backed Feature Delivery will be governed by a versioned Feature Delivery Contract covering observability, Docusaurus documentation, and OpenFeature-compatible toggling.
 
@@ -77,6 +78,7 @@ R0B validates the first automated-provider path; it does not redefine R1. R1 req
 8. Agents never approve artifacts, grant waivers, reclassify findings, push branches, create PRs or MRs, mark drafts ready, merge, or deploy. Trusted Curve controllers perform authorized VCS mutations.
 9. Full permissioned evidence is never committed to Git. Repositories receive only a sanitized Context Manifest; full context is mounted read-only and ephemerally for an authorized run.
 10. Every Curve aggregate, event, object key, cache key, connection, run, and audit entry is scoped by `workspace_id`.
+11. Curve owns the user-facing product name, logo, application shell, global navigation, breadcrumbs, and end-to-end lifecycle terminology. Plane-backed capabilities appear inside the `Work management` area while Plane remains authoritative for its native data and behavior.
 
 ## Product vision
 
@@ -95,6 +97,17 @@ Curve should make the reasoning behind a product change as inspectable as the re
 - Why is the resulting PR or MR considered ready for human review?
 
 The product should reduce handoffs and repeated context-building without hiding uncertainty or removing human accountability.
+
+### Product shell and embedded work-management boundary
+
+Curve is the product users enter and navigate. Its product surface MUST use the Curve name and approved Curve logo as the primary identity. The top-level information architecture is organized around the complete product-development lifecycle:
+
+- **Product:** Home, Initiatives, and Roadmaps.
+- **Delivery:** Execution, Quality, and Evidence.
+- **Work management:** Plane-backed Projects, Work items, Cycles, Views, and Analytics.
+- **Platform:** Integrations, Policies, Foundation status, and Settings.
+
+Plane remains the implementation and authority foundation for its native work-management concepts. Curve integrates those capabilities through additive bindings, services, routes, and reusable components. Plane attribution, open-source notices, and the exact-version AGPL source link remain accessible from the Curve product surface while Curve remains the primary product identity.
 
 ## X3M context and problem statement
 
@@ -1306,8 +1319,9 @@ The derived plan assigns every risk an owner, likelihood, impact, trigger, leadi
 ## Assumptions
 
 - Curve is the product name.
+- Curve owns the product shell, approved logo, top-level navigation, and lifecycle terminology.
 - R1 is optimized for X3M but enforces workspace and provider boundaries needed for future productization.
-- Plane remains the project-management foundation.
+- Plane remains the embedded project-management foundation and authority for its native work-management concepts.
 - X3M's Onyx instance, knowledge index, MCP server, and SDK documentation remain available.
 - Onyx can authenticate each protected operation through the effective human principal or a secure short-lived delegation selected in D-002.
 - Temporal can be deployed as an additional internal service.
@@ -1338,7 +1352,7 @@ These are controlled prerequisites, not ambiguous product behavior. An architect
 
 | ID | Required decision | Decision/evidence and remaining actions | Owner | Due / blocks | Conservative default until decided | Status |
 | -- | ----------------- | -------------------------------------- | ----- | ------------ | ---------------------------------- | ------ |
-| D-001 | Pin the Plane community-edition commit and complete a reuse-versus-build inventory for work items, pages, estimates, relationships, Gantt, APIs, webhooks, auth, and UI conventions. | Federico Ocampo approved [ADR-001](technical/adr-001-plane-upstream-foundation.md) on 2026-08-15 against content digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`. Official Plane upstream is Curve's updateable baseline; Curve code is implemented/released from the public Plane fork; governance/contracts remain in the separate Curve repository. Official `upstream/preview` base `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` and approved candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` produced accepted fork `preview` merge `549db1aea8f3307b337b3686dbb844a87549cd95`. Curve PR #1 produced governance baseline `1529b8b7f04f226ac8be151f89104b6582650b42`; post-merge CI passed. Community/commercial reuse, AGPL/notices/corresponding-source obligations, ownership, both exact-head dispositions, and review triggers are accepted. M0-01 owns additive migration, disabled-state, and rollback proof. | Federico Ocampo, CTO at X3M | Review at every Plane foundation upgrade, material licensing change, repository-boundary change, or support-owner change | Keep implementation blocked until the consuming package's remaining gates pass. | DECIDED |
+| D-001 | Pin the Plane community-edition commit and complete a reuse-versus-build inventory for work items, pages, estimates, relationships, Gantt, APIs, webhooks, auth, and UI conventions. | Federico Ocampo approved [ADR-001](technical/adr-001-plane-upstream-foundation.md) (Plane baseline, licensing, and upgrade strategy) on 2026-08-15 against content digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`. Official Plane upstream is Curve's updateable baseline; Curve code is implemented/released from the public Plane fork; governance/contracts remain in the separate Curve repository. Official `upstream/preview` base `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` and approved candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` produced accepted fork `preview` merge `549db1aea8f3307b337b3686dbb844a87549cd95`. Curve PR #1 produced governance baseline `1529b8b7f04f226ac8be151f89104b6582650b42`; post-merge CI passed. Community/commercial reuse, AGPL/notices/corresponding-source obligations, ownership, both exact-head dispositions, and review triggers are accepted. M0-01 owns additive migration, disabled-state, and rollback proof. | Federico Ocampo, CTO at X3M | Review at every Plane foundation upgrade, material licensing change, repository-boundary change, or support-owner change | Keep implementation blocked until the consuming package's remaining gates pass. | DECIDED |
 | D-002 | Select and prove Onyx per-operation delegation using a short-lived initiating-user identity. | Use X3M Onyx with initiating-user OAuth delegation and workspace-approved technical sources. Prove issuer, audience, scopes, token exchange or pass-through flow, expiry, revocation, durable-wait reauthorization, source ACLs, and audit; never store user PATs. | Security and identity owner | Before M1; blocks protected M1 retrieval | Do not enable protected retrieval. | PROPOSED |
 | D-003 | Approve development/staging/production topology, trust zones, residency, persistence, backups, secrets, observability, and HA. | The original `LOCAL_ONLY` evidence remains in [ADR-003](technical/adr-003-runtime-topology.md) (live Temporal topology, pins, evidence, and rollback). Federico approved [D-003 private-platform connectivity amendment](technical/d003-private-platform-connectivity-amendment.md) (shared `dev_env`, private EKS/VPC/VPN direction, authenticated non-local Temporal clients, security boundary, and revised M0-S3 proof) at exact head `5e165c...`, merged as `aece539...`: no Curve-specific local or initial-R1 `NetworkPolicy`; dedicated `curve` namespace by default; Kubernetes `ClusterIP`; internal VPN-only Temporal UI ingress; X3M workload identity and Secrets Manager. [M0-S3 implementation evidence](technical/m0-s3-implementation-evidence.md) (exact context, Plane merge, tests, runtime proof, security acceptance, and rollback) accepts the local implementation at `d99342f...`. Detailed Helm values, database/certificate placement, HA, backup/restore, RPO/RTO, cost, and operational ownership remain deployment-package inputs. | Federico Ocampo for connectivity/trust direction; Platform Operations for environment activation | Before every staging/production activation | Synthetic local data only until package gates pass; private connectivity direction grants no deployment, protected-data, or SLA claim. | DECIDED AND IMPLEMENTED for `LOCAL_ONLY`; activation details OPEN |
 | D-004 | Select the model-gateway baseline and approve its release boundary, routing, failure behavior, policy, telemetry, and ownership. | Implement a thin Curve Model Gateway as an additive application component above X3M's approved OpenRouter access; do not provision Portkey or Envoy for R0B. Pin the OpenRouter contract and approved models, prove classification/budget enforcement and fail-closed behavior, and document an exit path to another gateway behind `ModelGateway`. | AI platform and operations | Before model-enabled M1/M3/M5 | Direct provider calls remain disabled outside a development stub. | PROPOSED |
