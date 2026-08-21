@@ -105,6 +105,7 @@ test("M0-S4 context pins the API, SSE, policy, runtime, UX, and implementation c
     "contracts/schemas/common.schema.json",
     "contracts/schemas/event-envelope.schema.json",
     "contracts/schemas/operation-event-v1.schema.json",
+    "contracts/schemas/operation-summary.schema.json",
     "contracts/schemas/operation.schema.json",
     "contracts/schemas/sse-event.schema.json",
     "contracts/temporal/m0-workflow-contract.md",

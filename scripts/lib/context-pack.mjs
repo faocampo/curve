@@ -95,6 +95,7 @@ export const M0_S4_CONTEXT_PATHS = Object.freeze(
     "contracts/schemas/examples/operation.invalid.json",
     "contracts/schemas/examples/operation.valid.json",
     "contracts/schemas/operation-event-v1.schema.json",
+    "contracts/schemas/operation-summary.schema.json",
     "contracts/schemas/operation.schema.json",
     "contracts/schemas/semantic-fixtures/idempotency-completed.valid.json",
     "contracts/schemas/semantic-fixtures/idempotency-raw-key.invalid.json",
