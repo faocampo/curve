@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Status | Active visual-tracking contract |
-| Version | 1.6 |
-| Date | 2026-08-18 |
+| Version | 1.7 |
+| Date | 2026-08-21 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (70-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
-| Last reconciliation | 2026-08-20: packet-checkpoint item `PVTI_lAHOBNjuQc4BgZzOzg3CeqQ` moved to `Done` after Plane PR #5 merged M0-S3 as `d99342f...`; full-catalog ownership/source reconciliation remains the prior 70-item baseline |
+| Last reconciliation | 2026-08-21: M0-S4 item `PVTI_lAHOBNjuQc4BgZzOzg3eZKI` and M0-07 item `PVTI_lAHOBNjuQc4BgZzOzg2nbxU` moved to `Done` after Plane PR #6 merged as `e762fbb...`; M0-S4-UX item `PVTI_lAHOBNjuQc4BgZzOzg3ej-0` remains `Done`; M0-08 item `PVTI_lAHOBNjuQc4BgZzOzg2nbyQ` remains `In review` pending M0-S5 material approval and implementation |
 
 ## Purpose and authority boundary
 
@@ -53,7 +53,10 @@ grant. Execution systems evaluate their own authoritative inputs independently.
 | R1 qualification/rollout | R1-01 through R1-05 | 5 | Backlog |
 | Canonical catalog total |  | **70** |  |
 | M0-S3 packet checkpoint | Decomposed executable slice of M0-06 | 1 | Completed proof projection; Plane merge `d99342f...` |
-| **Current visual total** |  | **71** |  |
+| M0-S4 packet checkpoint | Decomposed executable slice completing local M0-07 | 1 | `Done`; Plane merge `e762fbb...` and accepted post-merge evidence |
+| M0-S4-UX checkpoint | Definition/UX child of M0-S4 | 1 | `Done`; Curve-first shell and Foundation experience approved |
+| M7 intelligence extension issues | M7-01 and M7-02 outside the active 70-row catalog | 2 | Backlog; governed by the separate M7 extension charter |
+| **Current visual total** |  | **75** |  |
 
 ## Field mapping
 
@@ -111,9 +114,15 @@ body and selected status of the existing synchronizer-owned draft item. It does
 not create items or mutate the full catalog.
 
 M0-S3 (local Temporal round-trip implementation packet) is a packet checkpoint
-inside M0-06 rather than a second canonical work package. Its draft item is
-managed directly by Federico Ocampo or authorized automation and is excluded
-from the 70-row catalog synchronizer.
+inside M0-06 rather than a second canonical work package. M0-S4 (API, SSE, and
+minimal Curve-first UI implementation packet) is a checkpoint that completes
+the local M0-07 API/SSE scope, and M0-S4-UX (Definition/UX checkpoint) is its
+child evidence projection. Their draft items are managed directly by Federico
+Ocampo or authorized automation and are excluded from the 70-row catalog
+synchronizer. M7-01/M7-02 are separate GitHub issues governed by the
+[M7 intelligence extension](m7-intelligence-and-automation-extension.md)
+(future AI-expense, attention-intake, and scheduled-agent charter), not by the
+active 70-row catalog.
 
 For write safety, apply mode requires:
 
@@ -146,11 +155,11 @@ implementation packet) owns the executable local proof.
 
 The current governed technical state remains:
 
-- D-003 (runtime topology and trust-zone decision): private-platform connectivity direction owner-approved on 2026-08-20; exact-head amendment merge pending;
+- D-003 (runtime topology and trust-zone decision): `LOCAL_ONLY` profile decided and implemented; private-platform activation inputs remain package-gated;
 - P0-06A (isolated Temporal feasibility proof): `SUPERSEDED_UNISSUED`;
 - P0-06B (least-privilege Plane integration proof): `SUPERSEDED_UNISSUED`; and
 - M0-S3 (local Temporal round-trip implementation packet): executable proof,
-  `In progress` while its exact dispatch revision and context are materialized.
+  accepted and `Done` at Plane merge `d99342f...`.
 
 ## Reconciliation cadence
 
