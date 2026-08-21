@@ -1269,7 +1269,90 @@ the approved head into Curve `main` as
 `42ea32981a3d5ce814a74c18e458ac8152a7e2fa`.
 
 This completes the M0-S4 Definition/UX gate. M0-S4 (API, SSE, and minimal UI
-implementation packet) remains open and is ready for implementation. M0-07
-(public API/SSE contract package) and the Plane UI/API/SSE engineering work
-remain incomplete until their executable acceptance criteria pass. Neither
-M0-S4 nor M0-07 is complete because of the Definition/UX approval alone.
+implementation packet) remains open; Plane PR #6 now carries the implementation
+at exact head `a1748c7...`. Twenty-seven focused Curve web tests plus type, lint,
+and format checks pass. [CodeQL](https://github.com/faocampo/plane/actions/runs/32527413261)
+(exact-head Python/JavaScript analysis) and
+[copyright](https://github.com/faocampo/plane/actions/runs/32527415252)
+(exact-head Python/TypeScript license-header check) are green; Federico's human
+review remains pending. M0-07 (public API/SSE contract package) and the Plane
+UI/API/SSE engineering work remain incomplete until the implementation is
+accepted and merged.
+
+### M0-S5 (local audit and observability) codeability contract
+
+After M0-S3 (local Temporal round-trip implementation packet) merged and Plane
+PR #6 (M0-S4 API/SSE/Curve-first UI implementation) reached a green exact head,
+the next dependency-ordered refinement audited M0-S5. The earlier acceptance
+bullets expressed the intended outcome but did not give a coding agent an exact
+exporter mode, metric/span/log registry, attribute-cardinality ceiling,
+correlation propagation rule, dashboard/alert inventory, exporter-failure
+boundary, or X3M provisioning input contract.
+
+The refinement separates implementation from environment binding. M0-S5A
+(telemetry kernel and static observability assets) uses Plane's pinned
+OpenTelemetry dependencies, defaults to disabled, supports deterministic
+in-memory tests, rejects inherited external endpoints, derives a keyed
+workspace scope, and materializes a bounded metric/span/log plus dashboard and
+four-alert surface. M0-S5B (X3M local observability integration proof) binds those
+assets to X3M's existing collector, Prometheus datasource, Grafana provisioning,
+and alert route only after OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana
+binding) names the exact configuration and owner.
+
+The fail-closed contract preserves PostgreSQL AuditEvent records as
+authoritative evidence. Telemetry export is a derived operational projection:
+audit failure rolls back protected mutation, while exporter failure cannot
+change domain or audit state. The exporter-failure diagnostic stays
+process-local because a failed exporter cannot deliver its own remote alert;
+OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding) must name an independent
+collector/platform path-health signal. Global configuration failures require
+only safe common log fields, while workspace-scoped events add the HMAC-derived
+scope and key ID. Raw workspace and business identifiers are excluded from
+metric labels, and every metric value belongs to a closed set.
+
+The proposal is recorded in the [M0-S5 observability task packet](../technical/m0-s5-observability-task-packet.md)
+(telemetry kernel, X3M integration proof, tests, evidence, and rollback) and the
+[telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json)
+(fail-closed exporter, bounded metrics, spans, logs, dashboard, four alerts,
+redaction, and independent path-health boundary). At publication, M0-S5A
+waited for M0-S4 merge/evidence and exact contract-head approval; the later
+acceptance record below satisfies the M0-S4 dependency. M0-S5B additionally
+waits for the owner-approved OBS-BIND-001 record. No collector, dashboard,
+alert, repository implementation, Docker profile, or infrastructure was changed
+by this preparation step.
+
+### M0-S4 implementation approval, merge, and acceptance
+
+On 2026-08-21 Federico Ocampo approved Curve PR #18 at exact head
+`79c7cd6cced82f8f3dede6cbad2706ae3d7befb8` and Plane PR #6 at exact head
+`a1748c790a060434928b8ed521692b13b3f9739e`. He authorized both draft PRs to be
+marked ready and squash-merged while CI remained green. GitHub merged the Curve
+head into `main` as `ccd3c3aa6de46e0f2ee197905226cb40db0515b3`
+and the Plane head into `preview` as
+`e762fbbd2c1726a2833745add8245a1679c60d88`. Each approved head and its squash
+merge have the same Git tree, so the accepted content is exact.
+
+The post-merge verification ran against the exact Plane merge tree. `pnpm
+check` passed all 60 tasks, `pnpm build` passed all 16 tasks, the Curve frontend
+harness passed 27 tests, the complete Curve backend suite passed 148 tests, the
+complete Plane backend suite passed 664 tests with the repository's 92 existing
+deprecation warnings, and the migration-drift check found no Curve changes.
+Exact-head CodeQL and copyright checks were green.
+
+The first diagnostic backend attempt loaded Curve as disabled before Django URL
+configuration and therefore returned route-level `404` responses for ten API
+tests while 138 other Curve tests passed. The ignored synthetic test environment
+was corrected to enable Curve at process startup for the synthetic workspaces;
+the authoritative full Curve and Plane suites then passed. The disposable
+PostgreSQL, Valkey, RabbitMQ, MinIO, network, volumes, and temporary
+configuration were removed after verification.
+
+The acceptance is recorded in [M0-S4 implementation evidence](../technical/m0-s4-implementation-evidence.md)
+(exact context, approvals, merges, tests, product/security acceptance, and
+rollback). M0-S4 (API, SSE, and minimal Curve-first UI implementation packet)
+and M0-07 (public API and resumable SSE foundation work package) are complete.
+M0-S5A (telemetry kernel and static observability assets) now waits only for its
+own exact Curve contract-head approval, merge, and deterministic M0-08 (audit
+and observability foundation work package) context digest. M0-S5B (X3M local
+observability integration proof) additionally waits for OBS-BIND-001 (local X3M
+OTLP, Prometheus, Grafana, and independent path-health binding).

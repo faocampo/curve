@@ -6,10 +6,10 @@
 | --- | --- |
 | Record IDs | UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) |
 | Work package | CURVE-M0-S4-API-SSE-UI (Operation API, resumable SSE, and minimal workspace UI) |
-| Status | `APPROVED_READY_FOR_IMPLEMENTATION` |
+| Status | `IMPLEMENTED_AND_ACCEPTED` |
 | Owner and approver | Federico Ocampo, CTO at X3M |
 | Target implementation repository | `github.com/faocampo/plane`, branch created from the exact accepted M0-S3 (local Temporal round-trip implementation packet) merge |
-| Source baseline | Curve PR #17 approved at exact head `a4638761bcbdb8e522e8db0af5a2ae00cb6480a8` and squash-merged as `42ea32981a3d5ce814a74c18e458ac8152a7e2fa`; Plane `preview` includes accepted M0-S3 merge `d99342f589db4eb488695487d3ae3f2c16bf0874` |
+| Source baseline | Curve PR #17 approved at exact head `a4638761bcbdb8e522e8db0af5a2ae00cb6480a8` and squash-merged as `42ea32981a3d5ce814a74c18e458ac8152a7e2fa`; Plane PR #6 approved at exact head `a1748c790a060434928b8ed521692b13b3f9739e` and squash-merged into `preview` as `e762fbbd2c1726a2833745add8245a1679c60d88` |
 | Last updated | 2026-08-21 |
 
 This record satisfies the artifact requirements of the [Curve Experience Blueprint](curve-experience-blueprint.md) (user-facing flow approval gate) for the M0-S4 (API, SSE, and minimal UI implementation packet) surface. Federico approved UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) against exact Curve head `a4638761bcbdb8e522e8db0af5a2ae00cb6480a8`. GitHub recorded that head in [Curve PR #17](https://github.com/faocampo/curve/pull/17), whose validation passed before it was squash-merged as `42ea32981a3d5ce814a74c18e458ac8152a7e2fa`.
@@ -256,6 +256,6 @@ The following browser tests supplement the M0-S4 executable acceptance in the [M
 
 ## Approval effect and change control
 
-Approval of this record completes the M0-S4 Definition/UX gate and authorizes implementation of the user experience described here within the existing M0-S4 technical scope. M0-S4 remains open until its API, SSE, Plane UI, tests, and acceptance evidence are implemented and accepted. The approval leaves D-003 (runtime topology and trust-zone decision), the local-only boundary, and the existing API contract unchanged.
+Approval of this record completed the M0-S4 Definition/UX gate and authorized implementation of the user experience described here within the existing M0-S4 technical scope. Plane PR #6 subsequently implemented and accepted the API, SSE, Plane UI, tests, and accessibility behavior; [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (exact context, merges, verification, product/security acceptance, and rollback) is authoritative for completion. The acceptance leaves D-003 (runtime topology and trust-zone decision), the local-only boundary, and the existing API contract unchanged.
 
 A change to route placement, target role, authorization behavior, dominant task, Operation lifecycle presentation, cancellation semantics, SSE recovery, safe-detail boundary, or accessibility behavior supersedes the affected UX-004/UX-005 record and returns the user-facing portion of M0-S4 to `BLOCKED` pending review.

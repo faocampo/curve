@@ -1,0 +1,8 @@
+{
+  "workspace_id": "00000000-0000-4000-8000-000000000001",
+  "operation_id": "00000000-0000-4000-8000-000000000002",
+  "operation_version": 3,
+  "status": "RUNNING",
+  "progress": 50,
+  "traceparent": "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01"
+}

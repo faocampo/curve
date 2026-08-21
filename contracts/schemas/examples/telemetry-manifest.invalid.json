@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "manifest_key": "CURVE_M0_TELEMETRY",
+  "manifest_version": 1,
+  "default_mode": "OTLP",
+  "allowed_modes": ["DISABLED", "IN_MEMORY_TEST", "OTLP"],
+  "configuration": {
+    "mode_env": "CURVE_TELEMETRY_MODE",
+    "endpoint_env": "OTEL_EXPORTER_OTLP_ENDPOINT",
+    "protocol_env": "OTEL_EXPORTER_OTLP_PROTOCOL",
+    "headers_env": "OTEL_EXPORTER_OTLP_HEADERS",
+    "insecure_env": "OTEL_EXPORTER_OTLP_INSECURE",
+    "workspace_scope_key_env": "CURVE_TELEMETRY_SCOPE_HMAC_KEY",
+    "workspace_scope_key_id_env": "CURVE_TELEMETRY_SCOPE_KEY_ID",
+    "allowed_protocols": ["grpc", "http/protobuf"],
+    "endpoint_schemes": ["http", "https"],
+    "endpoint_userinfo_allowed": false,
+    "endpoint_query_allowed": false,
+    "endpoint_fragment_allowed": false,
+    "grpc_endpoint_path_mode": "ROOT_ONLY",
+    "http_signal_path_mode": "APPEND_STANDARD_PATHS",
+    "headers_format": "URL_ENCODED_COMMA_SEPARATED_KEY_VALUE",
+    "insecure_boolean_values": ["true", "false"],
+    "workspace_scope_key_input_encoding": "BASE64URL_NO_PADDING",
+    "workspace_scope_key_id_pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
+    "explicit_endpoint_required": false,
+    "external_default_endpoint_allowed": true,
+    "insecure_allowed_environment": "PRODUCTION"
+  },
+  "export": {
+    "otlp_signals": ["LOGS"],
+    "structured_log_delivery": "OTLP",
+    "otlp_log_export_allowed": true,
+    "exporter_timeout_millis": 0,
+    "span_batch": {
+      "max_queue_size": 0,
+      "schedule_delay_millis": 0,
+      "max_export_batch_size": 0,
+      "export_timeout_millis": 0
+    },
+    "metric_reader": {
+      "export_interval_millis": 0,
+      "export_timeout_millis": 0
+    },
+    "shutdown_timeout_millis": 0
+  },
+  "collection": {
+    "gauge_implementation": "SYNCHRONOUS_GAUGE",
+    "database_query_timeout_millis": 60000,
+    "callback_failure_behavior": "BLOCK_APPLICATION",
+    "heartbeat_update_interval_millis": 60000,
+    "heartbeat_absence_alert_required": false
+  },
+  "propagation": {
+    "inbound_headers": ["traceparent", "tracestate", "baggage"],
+    "outbound_headers": ["traceparent", "tracestate", "baggage"],
+    "temporal_header": "_tracer-data",
+    "tracestate_allowed": true,
+    "baggage_allowed": true,
+    "invalid_traceparent_behavior": "TRUST_INPUT"
+  },
+  "workspace_scope": {
+    "minimum_key_bytes": 1,
+    "digest_encoding": "PLAIN_TEXT",
+    "rotation_behavior": "REUSE_KEY_ID",
+    "raw_workspace_id_export_allowed": true
+  },
+  "instrumentation": {
+    "scope": "GLOBAL",
+    "global_django_instrumentation_allowed": true,
+    "global_provider_registration_allowed": true,
+    "api_initialization": "IMPORT_TIME",
+    "worker_initialization": "IMPORT_TIME",
+    "workflow_exporter_io_allowed": true,
+    "bootstrap_components": ["ALL_PLANE"]
+  },
+  "correlation": {
+    "application_field": "correlation_id",
+    "trace_headers": ["traceparent", "tracestate"],
+    "workspace_scope_algorithm": "HMAC-SHA256",
+    "workspace_scope_domain": "curve-workspace-scope:v1",
+    "metric_identifiers_allowed": true,
+    "audit_bridge_fields": ["workspace_id", "correlation_id", "target_ref", "policy_decision_ref"]
+  },
+  "attribute_policy": {
+    "trace_allowlist": ["curve.secret"],
+    "log_allowlist": ["curve.secret"],
+    "forbidden_name_patterns": ["secret"],
+    "forbidden_value_classes": ["CREDENTIAL"]
+  },
+  "metric_attributes": [
+    {
+      "name": "curve.operation.id",
+      "allowed_values": ["ANY"]
+    }
+  ],
+  "metrics": [],
+  "spans": [],
+  "logs": {
+    "common_required_fields": ["curve.secret"],
+    "workspace_required_fields": ["curve.secret"],
+    "event_codes": ["CURVE_SECRET_LEAK"]
+  },
+  "dashboard": {
+    "implementation_path": "dashboard.json",
+    "datasource_variable": "PROMETHEUS",
+    "metric_translation_strategy": "NoTranslation",
+    "panels": []
+  },
+  "alerts": {
+    "implementation_path": "alerts.yaml",
+    "rules": []
+  }
+}
