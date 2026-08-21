@@ -25,6 +25,20 @@
 }
 ```
 
+## Trace-context header compatibility
+
+M0-S5 (observability kernel and X3M binding) adds the optional Temporal header
+`_curve_traceparent_v1`. Its payload is one lowercase W3C version `00`
+`traceparent` with non-zero trace and parent IDs. A Curve-owned header-only
+client/worker interceptor injects it on workflow start/signal, copies it
+deterministically from workflow inbound context to activity commands, and
+extracts it only in non-workflow activity code. The workflow input and activity
+input dataclasses remain unchanged.
+
+Header absence preserves replay of pre-M0-S5 histories. `tracestate` and
+`baggage` are unsupported and rejected. Workflow code copies opaque validated
+header bytes and performs no OpenTelemetry API call or exporter I/O.
+
 ## Commands and signals
 
 | Name | Kind | Required fields | Behavior |
@@ -35,7 +49,7 @@
 
 ## Activity contract
 
-Activities call application-service commands; they do not write domain tables directly. Every activity receives an idempotency key derived from workflow ID, workflow run ID, activity name, and logical command ID. Retryable errors are typed; authorization, policy, validation, and version conflicts are not retried blindly.
+Activities call application-service commands; they do not write domain tables directly. Every activity receives an idempotency key derived from workflow ID, workflow run ID, activity name, and logical command ID. The activity interceptor extracts `_curve_traceparent_v1`, creates the allowlisted child span with the Curve-private tracer, and injects that child context into any new operation-event v2 payload. Retryable errors are typed; authorization, policy, validation, and version conflicts are not retried blindly.
 
 The M0 probe activities are `mark_operation_running` and `mark_operation_succeeded`. Default start-to-close timeout is 30 seconds, schedule-to-close timeout is two minutes, and maximum retry attempts are three with bounded exponential backoff. These values are local proof defaults, not production SLO decisions.
 
@@ -64,6 +78,10 @@ Terminal states never transition. Duplicate signals and duplicate outbox deliver
 ## Versioning and replay
 
 - Workflow code uses explicit Temporal patch/version markers for incompatible control-flow changes.
+- Adding optional `_curve_traceparent_v1` headers is a compatible history change:
+  old histories replay with no header, while new histories copy the validated
+  header deterministically. Replay fixtures cover both shapes before the worker
+  can poll v1.
 - CI replays a retained synthetic history corpus against the candidate worker.
 - A new worker build may poll the v1 queue only when replay passes.
 - Long-running incompatible histories remain pinned to the compatible worker build or follow an approved continue-as-new/migration procedure.

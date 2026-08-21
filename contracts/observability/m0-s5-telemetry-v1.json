@@ -6,19 +6,79 @@
   "allowed_modes": ["DISABLED", "IN_MEMORY_TEST", "OTLP"],
   "configuration": {
     "mode_env": "CURVE_TELEMETRY_MODE",
-    "endpoint_env": "OTEL_EXPORTER_OTLP_ENDPOINT",
-    "protocol_env": "OTEL_EXPORTER_OTLP_PROTOCOL",
-    "headers_env": "OTEL_EXPORTER_OTLP_HEADERS",
-    "insecure_env": "OTEL_EXPORTER_OTLP_INSECURE",
+    "endpoint_env": "CURVE_OTEL_EXPORTER_OTLP_ENDPOINT",
+    "protocol_env": "CURVE_OTEL_EXPORTER_OTLP_PROTOCOL",
+    "headers_env": "CURVE_OTEL_EXPORTER_OTLP_HEADERS",
+    "insecure_env": "CURVE_OTEL_EXPORTER_OTLP_INSECURE",
     "workspace_scope_key_env": "CURVE_TELEMETRY_SCOPE_HMAC_KEY",
     "workspace_scope_key_id_env": "CURVE_TELEMETRY_SCOPE_KEY_ID",
+    "allowed_protocols": ["grpc", "http/protobuf"],
+    "endpoint_schemes": ["http", "https"],
+    "endpoint_userinfo_allowed": false,
+    "endpoint_query_allowed": false,
+    "endpoint_fragment_allowed": false,
+    "grpc_endpoint_path_mode": "ROOT_ONLY",
+    "http_signal_path_mode": "APPEND_STANDARD_PATHS",
+    "headers_format": "URL_ENCODED_COMMA_SEPARATED_KEY_VALUE",
+    "insecure_boolean_values": ["true", "false"],
+    "workspace_scope_key_input_encoding": "BASE64URL_NO_PADDING",
+    "workspace_scope_key_id_pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
     "explicit_endpoint_required": true,
     "external_default_endpoint_allowed": false,
     "insecure_allowed_environment": "LOCAL"
   },
+  "export": {
+    "otlp_signals": ["TRACES", "METRICS"],
+    "structured_log_delivery": "STDOUT_JSON",
+    "otlp_log_export_allowed": false,
+    "local_only_metrics": ["curve.telemetry.export.failure"],
+    "remote_path_failure_detection": "OBS_BIND_001_PLATFORM_SIGNAL",
+    "exporter_timeout_millis": 10000,
+    "span_batch": {
+      "max_queue_size": 2048,
+      "schedule_delay_millis": 5000,
+      "max_export_batch_size": 512,
+      "export_timeout_millis": 10000
+    },
+    "metric_reader": {
+      "export_interval_millis": 60000,
+      "export_timeout_millis": 10000
+    },
+    "shutdown_timeout_millis": 10000
+  },
+  "collection": {
+    "gauge_implementation": "OBSERVABLE_GAUGE",
+    "database_query_timeout_millis": 1000,
+    "callback_failure_behavior": "OMIT_OBSERVATION_AND_LOG_BOUNDED",
+    "heartbeat_update_interval_millis": 500,
+    "heartbeat_absence_alert_required": true
+  },
+  "propagation": {
+    "inbound_headers": ["traceparent"],
+    "outbound_headers": ["traceparent"],
+    "temporal_header": "_curve_traceparent_v1",
+    "tracestate_allowed": false,
+    "baggage_allowed": false,
+    "invalid_traceparent_behavior": "START_NEW_TRACE"
+  },
+  "workspace_scope": {
+    "minimum_key_bytes": 32,
+    "digest_encoding": "BASE64URL_NO_PADDING",
+    "rotation_behavior": "RESTART_WITH_NEW_KEY_ID",
+    "raw_workspace_id_export_allowed": false
+  },
+  "instrumentation": {
+    "scope": "CURVE_ONLY_MANUAL",
+    "global_django_instrumentation_allowed": false,
+    "global_provider_registration_allowed": false,
+    "api_initialization": "LAZY_PROCESS_LOCAL",
+    "worker_initialization": "EXPLICIT_BEFORE_TEMPORAL_CONNECT",
+    "workflow_exporter_io_allowed": false,
+    "bootstrap_components": ["API", "TEMPORAL_WORKER"]
+  },
   "correlation": {
     "application_field": "correlation_id",
-    "trace_headers": ["traceparent", "tracestate"],
+    "trace_headers": ["traceparent"],
     "workspace_scope_algorithm": "HMAC-SHA256",
     "workspace_scope_domain": "curve-workspace-scope:v1",
     "metric_identifiers_allowed": false,
@@ -30,7 +90,6 @@
       "curve.cancel.requested",
       "curve.command.type",
       "curve.component",
-      "curve.correlation_id",
       "curve.error.code",
       "curve.event.id",
       "curve.operation.id",
@@ -42,7 +101,6 @@
       "curve.result",
       "curve.retry.attempt",
       "curve.telemetry.scope_key_id",
-      "curve.workflow.id",
       "curve.workflow.type",
       "curve.workspace.scope"
     ],
@@ -50,7 +108,6 @@
       "curve.activity.type",
       "curve.command.type",
       "curve.component",
-      "curve.correlation_id",
       "curve.error.code",
       "curve.event.code",
       "curve.event.id",
@@ -63,7 +120,6 @@
       "curve.result",
       "curve.retry.attempt",
       "curve.telemetry.scope_key_id",
-      "curve.workflow.id",
       "curve.workflow.type",
       "curve.workspace.scope",
       "log.level",
@@ -88,7 +144,7 @@
   "metric_attributes": [
     {
       "name": "curve.activity.type",
-      "allowed_values": ["COMPLETE_PROBE", "START_PROBE", "TRANSITION_OPERATION"]
+      "allowed_values": ["MARK_OPERATION_CANCELLED", "MARK_OPERATION_RUNNING", "MARK_OPERATION_SUCCEEDED"]
     },
     {
       "name": "curve.component",
@@ -122,7 +178,7 @@
     },
     {
       "name": "curve.operation.type",
-      "allowed_values": ["FOUNDATION_PROBE", "PROVIDER_RECONCILIATION", "WORKFLOW_COMMAND"]
+      "allowed_values": ["FOUNDATION_PROBE"]
     },
     {
       "name": "curve.outbox.destination_kind",
@@ -249,7 +305,6 @@
       "allowed_attributes": [
         "curve.command.type",
         "curve.component",
-        "curve.correlation_id",
         "curve.error.code",
         "curve.operation.id",
         "curve.operation.type",
@@ -262,7 +317,6 @@
       "kind": "PRODUCER",
       "allowed_attributes": [
         "curve.component",
-        "curve.correlation_id",
         "curve.event.id",
         "curve.operation.id",
         "curve.outbox.destination_kind",
@@ -272,25 +326,11 @@
       ]
     },
     {
-      "name": "curve.workflow.run",
-      "kind": "CONSUMER",
-      "allowed_attributes": [
-        "curve.component",
-        "curve.correlation_id",
-        "curve.operation.id",
-        "curve.result",
-        "curve.workflow.id",
-        "curve.workflow.type",
-        "curve.workspace.scope"
-      ]
-    },
-    {
       "name": "curve.activity.run",
       "kind": "INTERNAL",
       "allowed_attributes": [
         "curve.activity.type",
         "curve.component",
-        "curve.correlation_id",
         "curve.error.code",
         "curve.operation.id",
         "curve.result",
@@ -303,7 +343,6 @@
       "kind": "PRODUCER",
       "allowed_attributes": [
         "curve.component",
-        "curve.correlation_id",
         "curve.event.id",
         "curve.operation.id",
         "curve.result",
@@ -312,13 +351,27 @@
     }
   ],
   "logs": {
-    "required_fields": [
+    "common_required_fields": [
       "curve.component",
-      "curve.correlation_id",
       "curve.event.code",
-      "curve.telemetry.scope_key_id",
-      "curve.workspace.scope",
       "log.level"
+    ],
+    "workspace_required_fields": [
+      "curve.telemetry.scope_key_id",
+      "curve.workspace.scope"
+    ],
+    "workspace_scoped_event_codes": [
+      "CURVE_ACTIVITY_COMPLETED",
+      "CURVE_ACTIVITY_FAILED",
+      "CURVE_AUDIT_APPEND_FAILED",
+      "CURVE_COMMAND_ACCEPTED",
+      "CURVE_COMMAND_DENIED",
+      "CURVE_OPERATION_TERMINAL",
+      "CURVE_OUTBOX_DELIVERED",
+      "CURVE_OUTBOX_RETRY_SCHEDULED",
+      "CURVE_SSE_RESUMED",
+      "CURVE_WORKFLOW_COMPLETED",
+      "CURVE_WORKFLOW_STARTED"
     ],
     "event_codes": [
       "CURVE_ACTIVITY_COMPLETED",
@@ -339,6 +392,7 @@
   "dashboard": {
     "implementation_path": "apps/api/plane/curve/observability/grafana/curve-m0-dashboard.json",
     "datasource_variable": "DS_PROMETHEUS",
+    "metric_translation_strategy": "UnderscoreEscapingWithSuffixes",
     "panels": [
       {
         "id": 1,
@@ -377,8 +431,8 @@
       },
       {
         "id": 8,
-        "title": "SSE connections and resumes",
-        "query": "sum(curve_sse_connections) or sum(rate(curve_sse_resume_total[5m]))"
+        "title": "Active SSE connections",
+        "query": "sum(curve_sse_connections)"
       },
       {
         "id": 9,
@@ -387,8 +441,8 @@
       },
       {
         "id": 10,
-        "title": "Telemetry export failures",
-        "query": "sum(rate(curve_telemetry_export_failure_total[5m]))"
+        "title": "SSE resume rate",
+        "query": "sum(rate(curve_sse_resume_total[5m]))"
       }
     ]
   },
@@ -412,23 +466,16 @@
       {
         "id": "CURVE_WORKER_HEARTBEAT_STALE",
         "severity": "CRITICAL",
-        "expression": "max(curve_worker_heartbeat_age_seconds) > 30",
+        "expression": "max(curve_worker_heartbeat_age_seconds) > 30 or absent(curve_worker_heartbeat_age_seconds)",
         "for": "2m",
         "summary": "The trusted local Curve worker heartbeat is stale."
       },
       {
         "id": "CURVE_OPERATION_FAILURE_RATIO",
         "severity": "WARNING",
-        "expression": "sum(rate(curve_operation_completed_total{curve_result=\"FAILED\"}[5m])) / clamp_min(sum(rate(curve_operation_completed_total[5m])), 1) > 0.05",
+        "expression": "sum(increase(curve_operation_completed_total{curve_result=\"FAILED\"}[5m])) / clamp_min(sum(increase(curve_operation_completed_total[5m])), 1) > 0.05",
         "for": "5m",
         "summary": "The local Curve operation failure ratio exceeds five percent."
-      },
-      {
-        "id": "CURVE_TELEMETRY_EXPORT_FAILURE",
-        "severity": "WARNING",
-        "expression": "sum(increase(curve_telemetry_export_failure_total[5m])) > 0",
-        "for": "5m",
-        "summary": "Curve telemetry export is failing while domain audit remains authoritative."
       }
     ]
   }

@@ -65,7 +65,7 @@ identifiers are:
 | [M0 readiness board](m0-readiness-board.md) | Decision, package, owner, evidence, and blocking-state control | Operational coding-readiness source |
 | [M0 authorization/state matrices](m0-authorization-and-state-matrices.md) | Core roles, authorization inputs, operation transitions, and Orca tool effects | M0 policy/state contract |
 | [M0 traceability](m0-traceability.md) | Requirement-to-contract-to-test ownership | M0 verification control |
-| [M0 local task packets](m0-local-skeleton-task-packets.md) | Independently reviewable Plane-fork implementation packages | M0-S1, M0-S2, M0-03, and M0-S3 complete; M0-S4 Definition/UX gate approved and implementation ready to begin |
+| [M0 local task packets](m0-local-skeleton-task-packets.md) (dependency-ordered local implementation packages and acceptance commands) | Independently reviewable Plane-fork implementation packages | M0-S1, M0-S2, M0-03, and M0-S3 complete; M0-S4 implementation is in human review; M0-S5 contracts are proposed for material approval |
 | [M0-S2 relational contract](../../contracts/database/m0-s2-relational-contract.md) | Physical persistence, uniqueness, lifecycle checks, transaction boundaries, relay recovery, and migration obligations for the operation and delivery kernel | Normative M0-S2 database contract |
 | [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) | Exact Curve contract revision, Plane base/head/merge, context digest, accepted tests, tree equivalence, status, and rollback | Accepted post-merge evidence for M0-02 and M0-05 |
 | [M0-03 core policy task packet](m0-03-core-policy-task-packet.md) (dispatch contract for the authorization/policy kernel) | Exact Plane base, security decisions, scope, acceptance scenarios, commands, stop conditions, and rollback | `COMPLETED`; Plane PR #4 merged approved head `a807dd7...` as `922dd6d...` |
@@ -74,8 +74,8 @@ identifiers are:
 | [M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md) (decision persistence, evaluation order, transactions, migration, and rollback) | Physical append-only policy-decision and audit-binding contract | Implemented in Plane merge `922dd6d...`; provider-specific extensions require their consuming decisions |
 | [Core policy manifest](../../contracts/policy/core-policy-v1.json) (immutable v1 action allowlist and deny precedence) | Provider-neutral roles, classifications, environments, ACL/assignment requirements, target policy, and safe projections | Implemented immutable v1 policy ceiling; provider-specific policy remains gated |
 | [M0-S4 foundation probe experience](ux-m0-s4-foundation-probe.md) (clickable local foundation-status flow, state contract, and review script) | Approved UX-004-M0-S4/UX-005-M0-S4 contract for the Operation API, resumable SSE, cancellation, recovery, and minimal workspace UI | `APPROVED_READY_FOR_IMPLEMENTATION`; PR #17 head `a463876...` merged as `42ea329...`; implementation and acceptance remain pending |
-| [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) | Independently reviewable M0-S5A telemetry-kernel and M0-S5B local-integration changes | `READY_FOR_PLATFORM_BINDING_REVIEW`; implementation dependencies and OBS-BIND-001 remain gated |
-| [M0-S5 telemetry manifest](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboards, alerts, and redaction contract) | Normative v1 instrumentation and operational-asset surface | Export defaults to disabled; X3M endpoint/datasource/alert binding is supplied separately |
+| [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) | Independently reviewable M0-S5A telemetry-kernel and M0-S5B local-integration changes | `PROPOSED_FOR_MATERIAL_APPROVAL`; M0-S4 merge/evidence, exact-head approval, and OBS-BIND-001 remain gated |
+| [M0-S5 telemetry manifest](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboard, four alerts, and redaction contract) | Normative v1 instrumentation and operational-asset surface | Export defaults to disabled; exporter-failure diagnostics stay process-local; X3M endpoint/datasource/alert/path-health binding is supplied separately |
 | [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
 | [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | Historical P0-06A/P0-06B standalone-proof design and supersession record | `SUPERSEDED`; retained for audit, with M0-S3 as the executable proof |
 | [P0-06 stage record](proofs/p0-06-stage-record.json) | `curve.proof-stage-projection/v3` terminal supersession binding | `P0-06_SUPERSEDED`; D-003 `LOCAL_ONLY` and replacement M0-S3 are machine validated |
@@ -105,7 +105,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 
 ```mermaid
 flowchart TD
-    prd["Curve PRD v0.11"] --> decisions["D-001 through D-016 and ADRs"]
+    prd["Curve PRD v0.12"] --> decisions["D-001 through D-016 and ADRs"]
     prd --> architecture[Architecture]
     architecture --> c4["C4 architecture views"]
     prd --> domain[Domain model]

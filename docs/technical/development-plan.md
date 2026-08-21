@@ -152,7 +152,7 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-05 | M | Transactional outbox, inbox, idempotency store, Operation resource, dead-letter state, and replay-safe relay | M0-02 | FR-021, FR-023, FR-044, NFR-004-NFR-005, AC-26, AC-33 | Duplicate/lost/out-of-order test suite with no duplicate effects. |
 | M0-06 | L | Temporal parent-workflow skeleton, version markers, child-attempt workflow, signals, timers, cancellation, continue-as-new, and replay corpus | M0-05, M0-03, D-003 | FR-015, FR-022, NFR-004, AC-17-AC-21, AC-58 | M0-S3 (local Temporal round-trip implementation packet) is `DONE` at Plane merge `d99342f...`: SDK 1.31.0, shared-`dev_env` Compose overlay, direct loopback ports, duplicate/restart/replay/cancellation/leakage/dependency-connectivity proof, and disablement rollback are accepted in [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact context, merge, tests, runtime proof, security acceptance, and rollback). Broader parent/child behavior remains later M0-06 scope. |
 | M0-07 | M | Public API conventions, Problem Details, ETag/If-Match, idempotency headers, cursor pagination, SSE resume, and OpenAPI generation | M0-02, M0-03, M0-05 | FR-023, NFR-002-NFR-005, NFR-013, AC-35 | API contract tests and generated client fixture. |
-| M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07; OBS-BIND-001 for local X3M export/provisioning only | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (M0-S5A telemetry kernel, M0-S5B X3M integration proof, tests, evidence, and rollback) and [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter and closed instrumentation/dashboard/alert surface). M0-S5A proves audit completeness, redaction/cardinality, exporter failure, and in-memory telemetry; M0-S5B proves the owner-approved local binding. |
+| M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07; OBS-BIND-001 for local X3M export/provisioning only | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (M0-S5A telemetry kernel, M0-S5B X3M integration proof, tests, evidence, and rollback) and [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter and closed instrumentation/dashboard/four-alert surface). M0-S5A proves audit completeness, redaction/cardinality, process-local exporter-failure handling, and in-memory telemetry; M0-S5B proves the owner-approved local binding and independent platform path-health signal. |
 | M0-09 | M | Provider registry, connection lifecycle, capability documents, common error taxonomy, callback ingress, outgoing webhooks, and reconciliation scheduler | M0-03, M0-05, M0-07, D-007 | FR-003, FR-023, FR-044, NFR-005, NFR-008, NFR-013, AC-33, AC-57 | Fake-provider conformance suite and 15-minute reconciliation proof. |
 
 The current Plane implementation base is M0-S3 merge
@@ -167,10 +167,11 @@ rollback). M0-S3 (local Temporal round-trip implementation packet) is accepted
 through [M0-S3 implementation evidence](m0-s3-implementation-evidence.md)
 (exact context, Plane head/merge, tests, runtime proof, security acceptance, and
 rollback). M0-S4 (API, SSE, and minimal UI implementation packet) is
-`READY_FOR_IMPLEMENTATION`: Federico approved UX-004-M0-S4 (clickable prototype
+`IN_REVIEW`: Federico approved UX-004-M0-S4 (clickable prototype
 and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) at
 exact Curve head `a463876...`, merged through Curve PR #17 as `42ea329...`.
-Implementation and technical acceptance remain pending. The
+Plane PR #6 (M0-S4 API/SSE/Curve-first UI implementation) is green at exact
+head `4803893...`; Federico's exact-head acceptance and merge remain pending. The
 five-packet local M0 checkpoint remains packet-scoped. Downstream packets
 consume the decided D-003 shared local profile and accepted M0-S3 runtime proof. D-007
 does not gate M0-S1 through M0-S5 because those packets expose no

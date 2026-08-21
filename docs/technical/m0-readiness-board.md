@@ -4,14 +4,10 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Active readiness control; D-001 (Plane upstream foundation decision) and D-003 (runtime topology and trust-zone decision) local profile are decided; M0-S3 is implemented; M0-S4 Definition/UX gate is approved and implementation remains open |
-| Version | 1.13 |
+| Status | Active readiness control; D-001 (Plane upstream foundation decision) and D-003 (runtime topology and trust-zone decision) local profile are decided; M0-S3 is implemented; M0-S4 implementation is in human review; M0-S5 observability contracts are proposed for material approval |
+| Version | 1.14 |
 | Date | 2026-08-21 |
 | Normative product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, decision register, and accepted local Temporal proof) |
-| Status | Active readiness control; D-001 (Plane upstream foundation decision) merged; D-003 (runtime topology and trust-zone decision) two-stage local proof direction approved and both executions gated; remaining scoped approvals pending |
-| Version | 1.9 |
-| Date | 2026-08-18 |
-| Normative product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Accepted Plane baseline | Fork `preview` at M0-S3 merge `d99342f589db4eb488695487d3ae3f2c16bf0874`; preserves the approved upstream candidate, M0-S1, M0-S2, M0-03, and M0-S3 in its ancestry |
 | Published Curve baseline | Curve PR #17 merged the approved Curve-first shell and M0-S4 Definition/UX artifacts to `main` at `42ea32981a3d5ce814a74c18e458ac8152a7e2fa` |
@@ -70,7 +66,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | M0-06 Temporal skeleton | IN_PROGRESS / DECOMPOSED | M0-S3 completed the executable first slice. Broader parent/child, continue-as-new, provider-attempt, and reconciliation behavior remains later M0-06 scope. |
 | M0-07 API/SSE | IN_PROGRESS | M0-02, M0-03, M0-05, and M0-S3 are satisfied. API, Problem Details, ETag/If-Match, idempotency, pagination, SSE resume, OpenAPI generation, and their acceptance evidence remain engineering work. |
 | M0-S4 API/SSE/minimal UI checkpoint | IN_REVIEW | Federico Ocampo owns and reviews the package. UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) were approved at `a463876...` and merged as `42ea329...`. Plane PR #6 implements API, SSE, Curve-first UI, tests, and acceptance evidence at exact head `4803893...`; automated checks are green and human exact-head acceptance remains pending. |
-| M0-08 audit/observability | READY_FOR_PLATFORM_BINDING_REVIEW | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) and [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboard, and alerts) are materialized. M0-S5A waits for M0-03/M0-S3/M0-S4 implementation and exact contract-head approval. M0-S5B additionally waits for OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding). |
+| M0-08 audit/observability | PROPOSED_FOR_MATERIAL_APPROVAL | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) and [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboard, and four application alerts) are materialized for exact-head review. M0-S5A waits for M0-S4 merge/evidence and Federico's exact-head contract approval. M0-S5B additionally waits for OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding and independent path-health signal). GitHub Project `In review` is visual metadata. |
 | M0-09 provider registry | BLOCKED | M0-05 is satisfied; M0-03, M0-07, and D-007 remain required before MCP enablement. |
 
 ## Interim repository-governance configuration

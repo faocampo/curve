@@ -4,7 +4,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | M0-S1, M0-S2, M0-03, and M0-S3 completed; M0-S4 Definition/UX gate completed and implementation ready to begin |
+| Status | M0-S1, M0-S2, M0-03, and M0-S3 completed; M0-S4 implementation is in human review; M0-S5 contracts are proposed for material approval |
 | Version | 2.2 |
 | Date | 2026-08-21 |
 | Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, effective D-003 local profile, and accepted M0-S3 evidence) |
@@ -300,14 +300,14 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S5-OBSERVABILITY` |
-| Status | `READY_FOR_PLATFORM_BINDING_REVIEW`: [standalone M0-S5 task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) is materialized; code remains blocked by its entry gates |
+| Status | `PROPOSED_FOR_MATERIAL_APPROVAL`: [standalone M0-S5 task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) is materialized for exact-head review; code remains blocked by M0-S4 merge/evidence and contract approval |
 | Risk | `STANDARD`; telemetry is a potential data-exfiltration boundary |
 | Outcome | Correlate the local Operation across HTTP, database, relay, workflow, and UI without leaking protected or credential data. |
 | Traceability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 |
 | Delivery split | M0-S5A (telemetry kernel and static observability assets) is independently reviewable after M0-S4; M0-S5B (X3M local observability integration proof) additionally requires OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding) |
-| In scope | Structured safe logs; OpenTelemetry spans; bounded Prometheus metrics; audit completeness; redaction tests; local Grafana dashboard definition; stuck/failed Operation and worker-health alerts |
+| In scope | Structured safe logs; OpenTelemetry spans; bounded Prometheus metrics; audit completeness; redaction tests; local Grafana dashboard definition; four application/worker alerts; process-local exporter diagnostics |
 | Out of scope | Raw prompt/code/evidence telemetry, Langfuse model traces, production SLO approval, production dashboard deployment |
-| Contracts | [Telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (exporter, metrics, spans, logs, dashboard, alerts, and redaction); [telemetry manifest schema](../../contracts/schemas/telemetry-manifest.schema.json) (machine validation and fail-closed defaults); Audit, Access Envelope, Event, and Operation schemas; [Security and operations](security-and-operations.md) (telemetry, redaction, and incident controls) |
+| Contracts | [Telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (exporter, metrics, spans, logs, dashboard, four alerts, and redaction); [telemetry manifest schema](../../contracts/schemas/telemetry-manifest.schema.json) (machine validation and fail-closed defaults); [operation event v2 schema](../../contracts/schemas/operation-event-v2.schema.json) (optional validated trace carrier without migration); Audit, Access Envelope, Event, and Operation schemas; [Security and operations](security-and-operations.md) (telemetry, redaction, and incident controls) |
 | Migration | No migration expected. Stop for contract review if new persisted telemetry fields are proposed. |
 | Rollback | Disable Curve exporters and remove the dashboard definition while retaining minimum application audit records; revert the packet commit. |
 

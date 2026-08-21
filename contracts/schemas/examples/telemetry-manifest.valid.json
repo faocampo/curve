@@ -6,27 +6,87 @@
   "allowed_modes": ["DISABLED", "IN_MEMORY_TEST", "OTLP"],
   "configuration": {
     "mode_env": "CURVE_TELEMETRY_MODE",
-    "endpoint_env": "OTEL_EXPORTER_OTLP_ENDPOINT",
-    "protocol_env": "OTEL_EXPORTER_OTLP_PROTOCOL",
-    "headers_env": "OTEL_EXPORTER_OTLP_HEADERS",
-    "insecure_env": "OTEL_EXPORTER_OTLP_INSECURE",
+    "endpoint_env": "CURVE_OTEL_EXPORTER_OTLP_ENDPOINT",
+    "protocol_env": "CURVE_OTEL_EXPORTER_OTLP_PROTOCOL",
+    "headers_env": "CURVE_OTEL_EXPORTER_OTLP_HEADERS",
+    "insecure_env": "CURVE_OTEL_EXPORTER_OTLP_INSECURE",
     "workspace_scope_key_env": "CURVE_TELEMETRY_SCOPE_HMAC_KEY",
     "workspace_scope_key_id_env": "CURVE_TELEMETRY_SCOPE_KEY_ID",
+    "allowed_protocols": ["grpc", "http/protobuf"],
+    "endpoint_schemes": ["http", "https"],
+    "endpoint_userinfo_allowed": false,
+    "endpoint_query_allowed": false,
+    "endpoint_fragment_allowed": false,
+    "grpc_endpoint_path_mode": "ROOT_ONLY",
+    "http_signal_path_mode": "APPEND_STANDARD_PATHS",
+    "headers_format": "URL_ENCODED_COMMA_SEPARATED_KEY_VALUE",
+    "insecure_boolean_values": ["true", "false"],
+    "workspace_scope_key_input_encoding": "BASE64URL_NO_PADDING",
+    "workspace_scope_key_id_pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
     "explicit_endpoint_required": true,
     "external_default_endpoint_allowed": false,
     "insecure_allowed_environment": "LOCAL"
   },
+  "export": {
+    "otlp_signals": ["TRACES", "METRICS"],
+    "structured_log_delivery": "STDOUT_JSON",
+    "otlp_log_export_allowed": false,
+    "local_only_metrics": ["curve.telemetry.export.failure"],
+    "remote_path_failure_detection": "OBS_BIND_001_PLATFORM_SIGNAL",
+    "exporter_timeout_millis": 10000,
+    "span_batch": {
+      "max_queue_size": 2048,
+      "schedule_delay_millis": 5000,
+      "max_export_batch_size": 512,
+      "export_timeout_millis": 10000
+    },
+    "metric_reader": {
+      "export_interval_millis": 60000,
+      "export_timeout_millis": 10000
+    },
+    "shutdown_timeout_millis": 10000
+  },
+  "collection": {
+    "gauge_implementation": "OBSERVABLE_GAUGE",
+    "database_query_timeout_millis": 1000,
+    "callback_failure_behavior": "OMIT_OBSERVATION_AND_LOG_BOUNDED",
+    "heartbeat_update_interval_millis": 500,
+    "heartbeat_absence_alert_required": true
+  },
+  "propagation": {
+    "inbound_headers": ["traceparent"],
+    "outbound_headers": ["traceparent"],
+    "temporal_header": "_curve_traceparent_v1",
+    "tracestate_allowed": false,
+    "baggage_allowed": false,
+    "invalid_traceparent_behavior": "START_NEW_TRACE"
+  },
+  "workspace_scope": {
+    "minimum_key_bytes": 32,
+    "digest_encoding": "BASE64URL_NO_PADDING",
+    "rotation_behavior": "RESTART_WITH_NEW_KEY_ID",
+    "raw_workspace_id_export_allowed": false
+  },
+  "instrumentation": {
+    "scope": "CURVE_ONLY_MANUAL",
+    "global_django_instrumentation_allowed": false,
+    "global_provider_registration_allowed": false,
+    "api_initialization": "LAZY_PROCESS_LOCAL",
+    "worker_initialization": "EXPLICIT_BEFORE_TEMPORAL_CONNECT",
+    "workflow_exporter_io_allowed": false,
+    "bootstrap_components": ["API", "TEMPORAL_WORKER"]
+  },
   "correlation": {
     "application_field": "correlation_id",
-    "trace_headers": ["traceparent", "tracestate"],
+    "trace_headers": ["traceparent"],
     "workspace_scope_algorithm": "HMAC-SHA256",
     "workspace_scope_domain": "curve-workspace-scope:v1",
     "metric_identifiers_allowed": false,
     "audit_bridge_fields": ["workspace_id", "correlation_id", "target_ref", "policy_decision_ref"]
   },
   "attribute_policy": {
-    "trace_allowlist": ["curve.correlation_id"],
-    "log_allowlist": ["curve.correlation_id"],
+    "trace_allowlist": ["curve.workspace.scope"],
+    "log_allowlist": ["curve.component", "curve.workspace.scope"],
     "forbidden_name_patterns": ["secret"],
     "forbidden_value_classes": ["CREDENTIAL"]
   },
@@ -49,16 +109,19 @@
     {
       "name": "curve.http.command",
       "kind": "SERVER",
-      "allowed_attributes": ["curve.correlation_id"]
+      "allowed_attributes": ["curve.workspace.scope"]
     }
   ],
   "logs": {
-    "required_fields": ["curve.correlation_id"],
+    "common_required_fields": ["curve.component"],
+    "workspace_required_fields": ["curve.workspace.scope"],
+    "workspace_scoped_event_codes": ["CURVE_COMMAND_ACCEPTED"],
     "event_codes": ["CURVE_COMMAND_ACCEPTED"]
   },
   "dashboard": {
     "implementation_path": "apps/api/plane/curve/observability/grafana/curve-m0-dashboard.json",
     "datasource_variable": "DS_PROMETHEUS",
+    "metric_translation_strategy": "UnderscoreEscapingWithSuffixes",
     "panels": [
       {
         "id": 1,

@@ -11,6 +11,11 @@
     "default_mode",
     "allowed_modes",
     "configuration",
+    "export",
+    "collection",
+    "propagation",
+    "workspace_scope",
+    "instrumentation",
     "correlation",
     "attribute_policy",
     "metric_attributes",
@@ -39,21 +44,102 @@
         "insecure_env",
         "workspace_scope_key_env",
         "workspace_scope_key_id_env",
+        "allowed_protocols",
+        "endpoint_schemes",
+        "endpoint_userinfo_allowed",
+        "endpoint_query_allowed",
+        "endpoint_fragment_allowed",
+        "grpc_endpoint_path_mode",
+        "http_signal_path_mode",
+        "headers_format",
+        "insecure_boolean_values",
+        "workspace_scope_key_input_encoding",
+        "workspace_scope_key_id_pattern",
         "explicit_endpoint_required",
         "external_default_endpoint_allowed",
         "insecure_allowed_environment"
       ],
       "properties": {
-        "mode_env": { "$ref": "#/$defs/envName" },
-        "endpoint_env": { "$ref": "#/$defs/envName" },
-        "protocol_env": { "$ref": "#/$defs/envName" },
-        "headers_env": { "$ref": "#/$defs/envName" },
-        "insecure_env": { "$ref": "#/$defs/envName" },
-        "workspace_scope_key_env": { "$ref": "#/$defs/envName" },
-        "workspace_scope_key_id_env": { "$ref": "#/$defs/envName" },
+        "mode_env": { "const": "CURVE_TELEMETRY_MODE" },
+        "endpoint_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_ENDPOINT" },
+        "protocol_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_PROTOCOL" },
+        "headers_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_HEADERS" },
+        "insecure_env": { "const": "CURVE_OTEL_EXPORTER_OTLP_INSECURE" },
+        "workspace_scope_key_env": { "const": "CURVE_TELEMETRY_SCOPE_HMAC_KEY" },
+        "workspace_scope_key_id_env": { "const": "CURVE_TELEMETRY_SCOPE_KEY_ID" },
+        "allowed_protocols": { "const": ["grpc", "http/protobuf"] },
+        "endpoint_schemes": { "const": ["http", "https"] },
+        "endpoint_userinfo_allowed": { "const": false },
+        "endpoint_query_allowed": { "const": false },
+        "endpoint_fragment_allowed": { "const": false },
+        "grpc_endpoint_path_mode": { "const": "ROOT_ONLY" },
+        "http_signal_path_mode": { "const": "APPEND_STANDARD_PATHS" },
+        "headers_format": { "const": "URL_ENCODED_COMMA_SEPARATED_KEY_VALUE" },
+        "insecure_boolean_values": { "const": ["true", "false"] },
+        "workspace_scope_key_input_encoding": { "const": "BASE64URL_NO_PADDING" },
+        "workspace_scope_key_id_pattern": { "const": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$" },
         "explicit_endpoint_required": { "const": true },
         "external_default_endpoint_allowed": { "const": false },
         "insecure_allowed_environment": { "const": "LOCAL" }
+      }
+    },
+    "export": {
+      "const": {
+        "otlp_signals": ["TRACES", "METRICS"],
+        "structured_log_delivery": "STDOUT_JSON",
+        "otlp_log_export_allowed": false,
+        "local_only_metrics": ["curve.telemetry.export.failure"],
+        "remote_path_failure_detection": "OBS_BIND_001_PLATFORM_SIGNAL",
+        "exporter_timeout_millis": 10000,
+        "span_batch": {
+          "max_queue_size": 2048,
+          "schedule_delay_millis": 5000,
+          "max_export_batch_size": 512,
+          "export_timeout_millis": 10000
+        },
+        "metric_reader": {
+          "export_interval_millis": 60000,
+          "export_timeout_millis": 10000
+        },
+        "shutdown_timeout_millis": 10000
+      }
+    },
+    "collection": {
+      "const": {
+        "gauge_implementation": "OBSERVABLE_GAUGE",
+        "database_query_timeout_millis": 1000,
+        "callback_failure_behavior": "OMIT_OBSERVATION_AND_LOG_BOUNDED",
+        "heartbeat_update_interval_millis": 500,
+        "heartbeat_absence_alert_required": true
+      }
+    },
+    "propagation": {
+      "const": {
+        "inbound_headers": ["traceparent"],
+        "outbound_headers": ["traceparent"],
+        "temporal_header": "_curve_traceparent_v1",
+        "tracestate_allowed": false,
+        "baggage_allowed": false,
+        "invalid_traceparent_behavior": "START_NEW_TRACE"
+      }
+    },
+    "workspace_scope": {
+      "const": {
+        "minimum_key_bytes": 32,
+        "digest_encoding": "BASE64URL_NO_PADDING",
+        "rotation_behavior": "RESTART_WITH_NEW_KEY_ID",
+        "raw_workspace_id_export_allowed": false
+      }
+    },
+    "instrumentation": {
+      "const": {
+        "scope": "CURVE_ONLY_MANUAL",
+        "global_django_instrumentation_allowed": false,
+        "global_provider_registration_allowed": false,
+        "api_initialization": "LAZY_PROCESS_LOCAL",
+        "worker_initialization": "EXPLICIT_BEFORE_TEMPORAL_CONNECT",
+        "workflow_exporter_io_allowed": false,
+        "bootstrap_components": ["API", "TEMPORAL_WORKER"]
       }
     },
     "correlation": {
@@ -69,7 +155,7 @@
       ],
       "properties": {
         "application_field": { "const": "correlation_id" },
-        "trace_headers": { "const": ["traceparent", "tracestate"] },
+        "trace_headers": { "const": ["traceparent"] },
         "workspace_scope_algorithm": { "const": "HMAC-SHA256" },
         "workspace_scope_domain": { "const": "curve-workspace-scope:v1" },
         "metric_identifiers_allowed": { "const": false },
@@ -135,9 +221,21 @@
     "logs": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["required_fields", "event_codes"],
+      "required": [
+        "common_required_fields",
+        "workspace_required_fields",
+        "workspace_scoped_event_codes",
+        "event_codes"
+      ],
       "properties": {
-        "required_fields": { "$ref": "#/$defs/uniqueNames" },
+        "common_required_fields": { "$ref": "#/$defs/uniqueNames" },
+        "workspace_required_fields": { "$ref": "#/$defs/uniqueNames" },
+        "workspace_scoped_event_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableName" }
+        },
         "event_codes": {
           "type": "array",
           "minItems": 1,
@@ -149,10 +247,11 @@
     "dashboard": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["implementation_path", "datasource_variable", "panels"],
+      "required": ["implementation_path", "datasource_variable", "metric_translation_strategy", "panels"],
       "properties": {
         "implementation_path": { "$ref": "#/$defs/repositoryPath" },
         "datasource_variable": { "const": "DS_PROMETHEUS" },
+        "metric_translation_strategy": { "const": "UnderscoreEscapingWithSuffixes" },
         "panels": {
           "type": "array",
           "minItems": 1,
