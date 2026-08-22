@@ -61,6 +61,8 @@ const telemetryManifestSchema = join(root, "contracts/schemas/telemetry-manifest
 const telemetryManifestPath = join(root, "contracts/observability/m0-s5-telemetry-v1.json");
 const observabilityBindingSchema = join(root, "contracts/schemas/observability-binding.schema.json");
 const observabilityBindingPath = join(root, "contracts/observability/obs-bind-001-local-v1.json");
+const testStrategyMatrixSchema = join(root, "contracts/schemas/test-strategy-matrix.schema.json");
+const testStrategyMatrixPath = join(root, "contracts/testing/ac-test-matrix-v1.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -71,6 +73,7 @@ const fixtureSpecs = [
   ["contracts/policy/core-policy-v1.json", corePolicyManifestSchema, true],
   ["contracts/observability/m0-s5-telemetry-v1.json", telemetryManifestSchema, true],
   ["contracts/observability/obs-bind-001-local-v1.json", observabilityBindingSchema, true],
+  ["contracts/testing/ac-test-matrix-v1.json", testStrategyMatrixSchema, true],
   ["contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json", observabilityBindingSchema, false],
   ["contracts/schemas/semantic-fixtures/operation-event-v2-tracestate.invalid.json", operationEventV2Schema, false],
   ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
@@ -105,6 +108,130 @@ for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".jso
   const match = fixtureName.match(/\/([^/]+)\.(valid|invalid)\.json$/);
   if (!match) throw new Error(`Unexpected schema fixture name: ${fixtureName}`);
   fixtureSpecs.push([fixtureName, join(root, `contracts/schemas/${match[1]}.schema.json`), match[2] === "valid"]);
+}
+
+const testStrategyMatrix = JSON.parse(readFileSync(testStrategyMatrixPath, "utf8"));
+const expectedAcceptanceCriteria = Array.from(
+  { length: 60 },
+  (_, index) => `AC-${String(index + 1).padStart(2, "0")}`,
+);
+const prdText = readFileSync(join(root, testStrategyMatrix.source.document), "utf8");
+const acceptanceSectionStart = prdText.indexOf(
+  `## ${testStrategyMatrix.source.section}`,
+);
+const acceptanceSectionEnd = prdText.indexOf("\n## ", acceptanceSectionStart + 4);
+if (acceptanceSectionStart === -1 || acceptanceSectionEnd === -1) {
+  throw new Error(
+    `${relative(root, testStrategyMatrixPath)} cannot resolve its PRD acceptance section`,
+  );
+}
+const prdAcceptanceCriteria = [
+  ...prdText.slice(acceptanceSectionStart, acceptanceSectionEnd).matchAll(/^\| (AC-\d{2}) \|/gm),
+].map((match) => match[1]);
+if (JSON.stringify(prdAcceptanceCriteria) !== JSON.stringify(expectedAcceptanceCriteria)) {
+  throw new Error(
+    "docs/curve-ai-native-sdlc-prd.md acceptance criteria differ from the required ordered AC-01 through AC-60 set",
+  );
+}
+
+function uniqueCatalog(catalog, name) {
+  const identifiers = catalog.map((entry) => entry.id);
+  if (new Set(identifiers).size !== identifiers.length) {
+    throw new Error(`${relative(root, testStrategyMatrixPath)} contains duplicate ${name} identifiers`);
+  }
+  return new Map(catalog.map((entry) => [entry.id, entry]));
+}
+
+const testSuites = uniqueCatalog(testStrategyMatrix.suites, "suite");
+const testEnvironments = uniqueCatalog(testStrategyMatrix.environments, "environment");
+const testCommands = uniqueCatalog(testStrategyMatrix.commands, "command");
+const matrixAcceptanceCriteria = testStrategyMatrix.acceptance_criteria.map((entry) => entry.ac_id);
+if (JSON.stringify(matrixAcceptanceCriteria) !== JSON.stringify(expectedAcceptanceCriteria)) {
+  throw new Error(
+    `${relative(root, testStrategyMatrixPath)} must contain each ordered AC-01 through AC-60 exactly once`,
+  );
+}
+
+for (const suite of testStrategyMatrix.suites) {
+  for (const commandId of suite.command_ids) {
+    if (!testCommands.has(commandId)) {
+      throw new Error(
+        `${relative(root, testStrategyMatrixPath)} suite ${suite.id} references unknown command ${commandId}`,
+      );
+    }
+  }
+}
+
+for (const criterion of testStrategyMatrix.acceptance_criteria) {
+  const primarySuite = testSuites.get(criterion.primary_suite);
+  if (!primarySuite) {
+    throw new Error(
+      `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} references unknown primary suite ${criterion.primary_suite}`,
+    );
+  }
+  if (criterion.supporting_suites.includes(criterion.primary_suite)) {
+    throw new Error(
+      `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} repeats its primary suite as supporting evidence`,
+    );
+  }
+  const referencedSuites = [
+    primarySuite,
+    ...criterion.supporting_suites.map((suiteId) => {
+      const suite = testSuites.get(suiteId);
+      if (!suite) {
+        throw new Error(
+          `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} references unknown supporting suite ${suiteId}`,
+        );
+      }
+      return suite;
+    }),
+  ];
+  const environment = testEnvironments.get(criterion.environment);
+  if (!environment) {
+    throw new Error(
+      `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} references unknown environment ${criterion.environment}`,
+    );
+  }
+  const suiteCommandIds = new Set(referencedSuites.flatMap((suite) => suite.command_ids));
+  const criterionCommands = criterion.command_ids.map((commandId) => {
+    const command = testCommands.get(commandId);
+    if (!command) {
+      throw new Error(
+        `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} references unknown command ${commandId}`,
+      );
+    }
+    if (!suiteCommandIds.has(commandId)) {
+      throw new Error(
+        `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} command ${commandId} is not owned by a referenced suite`,
+      );
+    }
+    return command;
+  });
+  if (
+    criterion.coverage_state === "ENVIRONMENT_BLOCKED" &&
+    environment.availability === "AVAILABLE"
+  ) {
+    throw new Error(
+      `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} claims an environment block in available ${environment.id}`,
+    );
+  }
+  if (
+    criterion.coverage_state === "PARTIAL" &&
+    !criterionCommands.some((command) => command.state === "AVAILABLE")
+  ) {
+    throw new Error(
+      `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} claims partial coverage without an available evidence command`,
+    );
+  }
+  if (
+    criterion.coverage_state === "IMPLEMENTED_PASSING" &&
+    (environment.availability !== "AVAILABLE" ||
+      criterionCommands.some((command) => command.state !== "AVAILABLE"))
+  ) {
+    throw new Error(
+      `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} claims passing coverage with planned evidence`,
+    );
+  }
 }
 
 const corePolicyManifest = JSON.parse(readFileSync(corePolicyManifestPath, "utf8"));

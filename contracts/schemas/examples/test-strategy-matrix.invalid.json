@@ -1,0 +1,22 @@
+{
+  "schema_version": "curve.test-strategy-matrix/v1",
+  "matrix_id": "P0-05",
+  "matrix_version": 1,
+  "status": "APPROVED_WITHOUT_REVIEW",
+  "source": {
+    "prd_version": "0.12",
+    "document": "docs/curve-ai-native-sdlc-prd.md",
+    "section": "Acceptance criteria for R1, the first usable release",
+    "first_ac": "AC-01",
+    "last_ac": "AC-60",
+    "ac_count": 60
+  },
+  "owners": {
+    "engineering_owner": "fixture-owner",
+    "human_reviewer": "fixture-reviewer"
+  },
+  "suites": [],
+  "environments": [],
+  "commands": [],
+  "acceptance_criteria": []
+}
