@@ -179,3 +179,9 @@ M0-S5A (telemetry kernel and static observability assets) is complete. M0-08
 requires OBS-BIND-001 (X3M OTLP, Prometheus, Grafana, alert-routing, and
 independent path-health binding). This evidence does not authorize live export,
 staging/production activation, infrastructure mutation, or M0-08 completion.
+
+The paragraph above preserves the dependency state at M0-S5A acceptance.
+[OBS-BIND-001](obs-bind-001-local-observability-binding.md) (decided local
+Docker OTLP, Prometheus, Grafana, and path-health binding) was subsequently
+selected on 2026-08-22. M0-S5B now awaits exact merged context publication and
+implementation; M0-08 remains open until its local acceptance evidence passes.
