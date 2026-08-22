@@ -5,12 +5,12 @@
 | Field | Value |
 | --- | --- |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.0 |
+| Version | 1.1 |
 | Date | 2026-08-22 |
 | Work package | M0-S9A (provider-neutral registry and reconciliation foundation) |
 | Owner and reviewer | Federico Ocampo (`faocampo`) |
 | Applies to | Curve-owned PostgreSQL tables in the public Plane fork |
-| Plane base | `preview` at `1b06153f6f49848f208808f4f09385a581a55d26` |
+| Plane base | Exact future `preview` merge descendant of `a7cf44b0e01a470c94b59f1c2ce5297dacd81d45` that contains Plane PR #9's policy timestamp-ordering fix |
 
 ## Purpose and boundary
 
@@ -223,9 +223,11 @@ workspace, or capability label.
 The Plane implementation must provide:
 
 1. One additive Curve migration named
-   `0004_providerconnection_providercapability.py` for the two tables, indexes, foreign key,
+   `0005_providerconnection_providercapability.py`, with
+   `0004_policydecision_recorded_at_default.py` as its exact predecessor, for
+   the two tables, indexes, foreign key,
    uniqueness, positive-version, fake-local, lifecycle, and JSON-array checks.
-2. Forward to `0004`, backward to `0003`, and forward again to `0004` against disposable
+2. Forward to `0005`, backward to `0004`, and forward again to `0005` against disposable
    PostgreSQL. Persistent rollback uses feature disablement and leaves the
    additive tables intact until the rollback window closes.
 3. Model/repository/service tests for immutable capability history, optimistic

@@ -6,13 +6,13 @@
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.0 |
+| Version | 1.1 |
 | Date | 2026-08-22 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Target branch | `preview` |
-| Minimum Plane base | `1b06153f6f49848f208808f4f09385a581a55d26` |
+| Minimum Plane base | Exact future `preview` merge descendant of `a7cf44b0e01a470c94b59f1c2ce5297dacd81d45` that contains Plane PR #9's policy timestamp-ordering fix |
 | Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | One AI coding agent distinct from the human reviewer |
@@ -69,7 +69,7 @@ Implementation remains blocked until all rows are satisfied:
 | --- | --- | --- |
 | P0-05 (R1 acceptance-test strategy and acceptance-criteria ownership) | Draft PR under review | Merged Curve revision establishing test ownership and exact suite commands |
 | M0-S9A contract publication | This review draft | Exact Curve merge SHA and context-pack digest |
-| Plane base | Satisfied candidate | Confirm `preview` still contains `1b06153...` and record exact dispatch base SHA |
+| Plane base | Pending | Merge Plane PR #9's policy timestamp-ordering fix, confirm the resulting `preview` contains `a7cf44b...`, and record that exact dispatch base SHA |
 | Owner/reviewer | Satisfied | Federico Ocampo |
 | Material decisions | Satisfied for this local subset | No network, credentials, protected body, public admin API, scheduler, or external mutation; D-007 remains MCP-specific |
 | Exact-head implementation authorization | Pending | Federico Ocampo approves the final merged contract revision and dispatch base |
@@ -255,8 +255,8 @@ docker compose -f docker-compose-test.yml up -d test-db test-redis test-mq test-
 docker compose -f docker-compose-test.yml run --rm --build api-tests python manage.py migrate
 docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/curve/tests
 docker compose -f docker-compose-test.yml run --rm api-tests python manage.py makemigrations curve --check --dry-run
-docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve 0003
 docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve 0004
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve 0005
 docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
 pnpm check
 pnpm build
@@ -264,7 +264,9 @@ docker compose -f docker-compose-test.yml down -v
 ```
 
 The implementation migration is exactly
-`apps/api/plane/curve/migrations/0004_providerconnection_providercapability.py`;
+`apps/api/plane/curve/migrations/0005_providerconnection_providercapability.py`
+and its predecessor is exactly
+`apps/api/plane/curve/migrations/0004_policydecision_recorded_at_default.py`;
 any changed predecessor/name stops for contract revision. P0-05 (R1
 acceptance-test strategy and acceptance-criteria ownership) may add stricter
 commands; it cannot remove the repository-native full backend command above.
