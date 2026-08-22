@@ -5,16 +5,16 @@
 | Field | Value |
 | --- | --- |
 | Package | M0-S5 (local audit and observability implementation packet) / M0-08 (audit and observability foundation work package) |
-| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_CONTEXT_PENDING`; M0-S5A is bound by its post-merge evidence; the local binding is decided and M0-S5B awaits exact merged context publication |
-| Version | 1.11 |
+| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_LOCAL_ACCEPTANCE_PASSED / CURVE_EVIDENCE_REVIEW_PENDING` |
+| Version | 1.12 |
 | Date | 2026-08-22 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Minimum Plane ancestor | `preview` merge `39920769daf78fce29a10c7f4e4bb8779671b004` containing accepted M0-S3 (local Temporal round-trip packet), M0-S4 (API, SSE, and minimal Curve-first UI packet), and M0-S5A (telemetry kernel and static assets) |
+| Minimum Plane ancestor | `preview` merge `1b06153f6f49848f208808f4f09385a581a55d26` containing accepted M0-S3 (local Temporal round-trip packet), M0-S4 (API, SSE, and minimal Curve-first UI packet), M0-S5A (telemetry kernel and static assets), and locally verified M0-S5B (local observability integration) |
 | Implementation base | M0-S5B starts from Plane `preview` at M0-S5A merge `39920769daf78fce29a10c7f4e4bb8779671b004`; the approved Plane PR #7 head `c258ef12221964dae67286e0f6a6c2dc58b997fe` and merge share Git tree `87db1b646cd473f1c407b8aebbc43c27e62d9f8c` |
-| Context readiness | Satisfied for M0-S5A by Curve merge `a23dab9...` and context digest `sha256:720a70bb9146761e7b4f1852e889127460812d25d84cbafd1304e20caa18ac1a`. [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (approval, merge, complete dual-mode regression, security acceptance, and rollback) records completion. [OBS-BIND-001](obs-bind-001-local-observability-binding.md) (decided local Docker OTLP, Prometheus, Grafana, health, and cleanup binding) closes the M0-S5B platform decision; dispatch records the exact merged Curve revision and refreshed context digest. |
-| Implementation evidence | [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (exact Curve/Plane revisions, Git-tree equivalence, tests, security controls, rollback, and remaining M0-S5B boundary) |
+| Context readiness | Satisfied for M0-S5A by Curve merge `a23dab9...` and digest `sha256:720a70...`; satisfied for M0-S5B by Curve merge `43480ca...` and digest `sha256:36933053249f2159d2b768e3ff62c3e114a587a5fa650df9b262b4f7d9b28d3b`. |
+| Implementation evidence | [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (telemetry kernel acceptance) and [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (local platform binding, CI, live proof, security, cleanup, and rollback) |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Risk | `STANDARD`, with telemetry treated as a data-exfiltration boundary |
 | Implementation branches | `curve/m0-s5a-observability-kernel` and, after OBS-BIND-001 approval, `curve/m0-s5b-x3m-observability-binding` |
@@ -369,9 +369,14 @@ the exact dispatch packet.
 | M0-S5A-4 (SSE, metrics, and static assets) | Instrument resumable SSE, observable gauges, dashboard JSON, Prometheus rules, and the repository-local asset checker | SSE resume, gauge timeout/omission, absent worker, bounded failure-ratio inputs, exact queries/identifiers, and disabled rollback |
 | M0-S5A-5 (integrated local acceptance) | Run the complete Curve and Plane suites with `IN_MEMORY_TEST`, then repeat with telemetry disabled | All M0-S5A acceptance scenarios, migration statement `NONE`, deterministic cleanup, and a reviewable evidence report |
 
-M0-S5B (local observability integration proof) remains a separate Plane PR. Its
-platform decision is complete; dispatch follows exact-head Curve publication
-and deterministic M0-S5B context pinning.
+M0-S5B (local observability integration proof) was delivered as separate
+[Plane PR #8](https://github.com/faocampo/plane/pull/8) (local Collector,
+Prometheus, Grafana, dashboards, alerts, path health, disablement, and cleanup).
+It consumed Curve revision `43480ca...` and deterministic context digest
+`sha256:36933053249f2159d2b768e3ff62c3e114a587a5fa650df9b262b4f7d9b28d3b`,
+then merged into `preview` at `1b06153...`. The exact results are recorded in
+[M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (CI,
+merged-tree equivalence, live acceptance, security, cleanup, and rollback).
 
 ## Acceptance scenarios
 

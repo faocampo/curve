@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 1.5 |
+| Version | 1.6 |
 | Last updated | 2026-08-22 |
 | Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, lifecycle, security invariants, acceptance criteria, and accepted D-003 local implementation) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
@@ -152,12 +152,13 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-05 | M | Transactional outbox, inbox, idempotency store, Operation resource, dead-letter state, and replay-safe relay | M0-02 | FR-021, FR-023, FR-044, NFR-004-NFR-005, AC-26, AC-33 | Duplicate/lost/out-of-order test suite with no duplicate effects. |
 | M0-06 | L | Temporal parent-workflow skeleton, version markers, child-attempt workflow, signals, timers, cancellation, continue-as-new, and replay corpus | M0-05, M0-03, D-003 | FR-015, FR-022, NFR-004, AC-17-AC-21, AC-58 | M0-S3 (local Temporal round-trip implementation packet) is `DONE` at Plane merge `d99342f...`: SDK 1.31.0, shared-`dev_env` Compose overlay, direct loopback ports, duplicate/restart/replay/cancellation/leakage/dependency-connectivity proof, and disablement rollback are accepted in [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact context, merge, tests, runtime proof, security acceptance, and rollback). Broader parent/child behavior remains later M0-06 scope. |
 | M0-07 | M | Public API conventions, Problem Details, ETag/If-Match, idempotency headers, cursor pagination, SSE resume, and OpenAPI generation | M0-02, M0-03, M0-05 | FR-023, NFR-002-NFR-005, NFR-013, AC-35 | API contract tests and generated client fixture. |
-| M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07; OBS-BIND-001 for local export/provisioning | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | M0-S5A is accepted in [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (exact context, merge, dual-mode full regression, security controls, and rollback). [OBS-BIND-001](obs-bind-001-local-observability-binding.md) (decided local Docker OTLP, Prometheus, Grafana, and path-health binding), the [M0-S5 task packet](m0-s5-observability-task-packet.md) (kernel/integration split), and [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (closed signal and static asset surface) make M0-S5B codeable after its exact context pin. M0-08 closes only after live telemetry, dashboards, six alerts, disablement, regression, and cleanup pass. |
+| M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07; OBS-BIND-001 for local export/provisioning | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | M0-S5A is accepted in [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (telemetry kernel, dual-mode regression, security, and rollback). M0-S5B merged at Plane `1b06153...`; [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (exact context, CI, live telemetry, dashboards, six alerts, path recovery, redaction, disablement, regression, cleanup, and rollback) records passed local acceptance. Keep M0-08 `In review` until this Curve evidence revision is reviewed and merged. |
 | M0-09 | M | Provider registry, connection lifecycle, capability documents, common error taxonomy, callback ingress, outgoing webhooks, and reconciliation scheduler | M0-03, M0-05, M0-07, D-007 | FR-003, FR-023, FR-044, NFR-005, NFR-008, NFR-013, AC-33, AC-57 | Fake-provider conformance suite and 15-minute reconciliation proof. |
 
-The current Plane implementation base is M0-S5A merge
-`39920769daf78fce29a10c7f4e4bb8779671b004`; M0-S1, M0-S2, M0-03, M0-S3,
-M0-S4, and M0-S5A are complete.
+The current Plane implementation base is M0-S5B merge
+`1b06153f6f49848f208808f4f09385a581a55d26`; M0-S1, M0-S2, M0-03, M0-S3,
+M0-S4, and M0-S5A are complete, while M0-S5B has passed local acceptance and
+awaits review of its Curve evidence record.
 M0-S2 satisfies M0-02 (core aggregate persistence) and M0-05 (transactional
 delivery kernel) through [M0-S2 implementation evidence](m0-s2-implementation-evidence.md)
 (exact contract, context, implementation, validation, and merge binding).
