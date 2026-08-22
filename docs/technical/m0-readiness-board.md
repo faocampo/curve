@@ -4,13 +4,13 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Active readiness control; D-001 (Plane upstream foundation decision), D-003 (runtime topology and trust-zone decision), and OBS-BIND-001 (local observability binding) are decided for local scope; M0-S3, M0-S4, and M0-S5A are accepted; M0-S5B is merged and locally verified with Curve acceptance-evidence review pending |
-| Version | 1.19 |
+| Status | Active readiness control; D-001 (Plane upstream foundation decision), D-003 (runtime topology and trust-zone decision), and OBS-BIND-001 (local observability binding) are decided for local scope; M0-S3, M0-S4, M0-S5A, and M0-S5B are accepted and merged; M0-08 is complete for `LOCAL_ONLY` |
+| Version | 1.20 |
 | Date | 2026-08-22 |
 | Normative product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, decision register, and accepted local Temporal proof) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Accepted Plane baseline | Fork `preview` at M0-S5B merge `1b06153f6f49848f208808f4f09385a581a55d26`; preserves the approved upstream candidate and M0-S1 through M0-S5B in its ancestry |
-| Published Curve baseline | Curve PR #24 merged exact OBS-BIND-001 head `5a3ab82d7b960c862ea83c6ebf89e086be19b758` to `main` at `43480ca8463d0b40d436145aeb19fbbc8c2be472` |
+| Published Curve baseline | Curve PR #25 merged exact M0-S5B evidence head `b261de697c18c903e3fcbdaf5ca356436f8206f1` to `main` at `590a52ef006fd1d83bef5c76dfdab9ce9080a168`; both revisions share Git tree `c58b15d490fd65ed75c04b838f64af665e10d026` |
 | Published Plane implementation | Plane PR #8 merged exact M0-S5B head `320c4b92b6c9e417410e32a83409a33a64518df0` into fork `preview` at `1b06153f6f49848f208808f4f09385a581a55d26`; both revisions share Git tree `cffc6ed3be2d0faad8c6fcddcd14a5fd023db7fb` |
 
 ## Readiness rule
@@ -67,7 +67,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | M0-06 Temporal skeleton | IN_PROGRESS / DECOMPOSED | M0-S3 completed the executable first slice. Broader parent/child, continue-as-new, provider-attempt, and reconciliation behavior remains later M0-06 scope. |
 | M0-07 API/SSE | DONE | Plane PR #6 merged the authorized Operation API, Problem Details, ETag/If-Match, digest-only idempotency, bounded pagination, resumable SSE, and generated TypeScript client surface. [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (exact contract, merge, full regression, security/UX acceptance, and rollback) records `148` Curve backend, `664` Plane backend, and `27` Curve frontend passing tests with no migration drift. |
 | M0-S4 API/SSE/minimal UI checkpoint | DONE | Federico Ocampo approved exact Plane head `a1748c7...`; Plane PR #6 squash-merged it as `e762fbb...`, preserving Git tree `3f63bac...`. UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract), the Curve-first product shell, API/SSE behavior, accessibility, safe projections, CodeQL, copyright, full regression, and rollback are accepted in [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (post-merge acceptance record). |
-| M0-08 audit/observability | M0-S5A_DONE / M0-S5B_LOCAL_ACCEPTANCE_PASSED / EVIDENCE_REVIEW_PENDING | M0-S5A is accepted at Plane merge `3992076...`. Plane PR #8 merged M0-S5B at `1b06153...`; [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (exact context, CI, merged tree, live OTLP, dashboards, alerts, redaction, disablement, regression, cleanup, and rollback) records the passed local proof. Keep M0-08 visually `In review` until that exact Curve evidence revision is reviewed and merged. |
+| M0-08 audit/observability | DONE_LOCAL | M0-S5A is accepted at Plane merge `3992076...`. Plane PR #8 merged M0-S5B at `1b06153...`; Curve PR #25 merged the accepted evidence at `590a52e...`. [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (exact context, CI, merged trees, live OTLP, dashboards, alerts, redaction, disablement, regression, cleanup, and rollback) binds completion. Staging and production observability remain separately gated. |
 | M0-09 provider registry | BLOCKED | M0-05 is satisfied; M0-03, M0-07, and D-007 remain required before MCP enablement. |
 
 ## Interim repository-governance configuration

@@ -1475,6 +1475,23 @@ Git tree `cffc6ed3be2d0faad8c6fcddcd14a5fd023db7fb`, and the merge is on
 The result is recorded in [M0-S5B implementation evidence](../technical/m0-s5b-implementation-evidence.md)
 (exact context, CI, merged tree, live OTLP, dashboards, alerts, redaction,
 disablement, regression, cleanup, security boundary, and rollback). M0-08
-(audit and observability foundation) remains visually `In review` until this
-exact Curve evidence revision is reviewed and merged. Staging observability
-activation remains a separate material decision.
+(audit and observability foundation) remained visually `In review` at that
+evidence-publication point. Staging observability activation remained a
+separate material decision.
+
+### M0-S5B evidence merge and M0-08 local completion
+
+Federico Ocampo approved Curve PR #25 at exact head
+`b261de697c18c903e3fcbdaf5ca356436f8206f1`. Its documentation-contract
+validation passed in
+[run 32593279087](https://github.com/faocampo/curve/actions/runs/32593279087),
+and GitHub squash-merged it into Curve `main` on 2026-08-22 as
+`590a52ef006fd1d83bef5c76dfdab9ce9080a168`. The approved evidence head and
+merge share Git tree `c58b15d490fd65ed75c04b838f64af665e10d026`.
+
+The existing M0-08 (audit and observability foundation) GitHub Project item was
+updated in place from `In review` to `Done`; its body now binds the Plane
+implementation and Curve acceptance merges, both tree-equivalence proofs, CI,
+live local evidence, and cleanup. No duplicate item was created. This completes
+M0-08 for `LOCAL_ONLY`; staging and production observability remain separate
+material decisions and delivery packages.

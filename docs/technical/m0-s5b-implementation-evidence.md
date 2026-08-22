@@ -4,7 +4,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `IMPLEMENTED_MERGED_AND_LOCALLY_VERIFIED / CURVE_ACCEPTANCE_REVIEW_PENDING` |
+| Status | `ACCEPTED_AND_MERGED` |
 | Evidence date | 2026-08-22 |
 | Task | M0-S5B (local observability integration) |
 | Parent work package | M0-08 (audit and observability foundation) |
@@ -18,6 +18,10 @@
 | Plane merge | `1b06153f6f49848f208808f4f09385a581a55d26` on `preview` |
 | Curve PR | [Curve PR #24](https://github.com/faocampo/curve/pull/24) (OBS-BIND-001 local binding decision and machine contract) |
 | Plane PR | [Plane PR #8](https://github.com/faocampo/plane/pull/8) (M0-S5B local observability integration) |
+| Curve acceptance PR | [Curve PR #25](https://github.com/faocampo/curve/pull/25) (post-merge M0-S5B evidence and M0-08 reconciliation) |
+| Approved Curve evidence head | `b261de697c18c903e3fcbdaf5ca356436f8206f1` |
+| Curve evidence merge | `590a52ef006fd1d83bef5c76dfdab9ce9080a168` on `main` |
+| Curve validation | [Documentation contracts run 32593279087](https://github.com/faocampo/curve/actions/runs/32593279087) (Markdown, Mermaid, OpenAPI, schemas, fixtures, and Project-policy checks) |
 | Scope and data | `LOCAL_ONLY`; synthetic `INTERNAL` data |
 
 ## Verified outcome
@@ -81,6 +85,14 @@ The squash merge preserves the exact approved implementation:
 | Plane merge `1b06153...` | `cffc6ed3be2d0faad8c6fcddcd14a5fd023db7fb` |
 
 The merge commit is the current `origin/preview` revision at evidence creation.
+
+Federico Ocampo approved exact Curve evidence head
+`b261de697c18c903e3fcbdaf5ca356436f8206f1`. The Curve validation job passed,
+and GitHub subsequently squash-merged
+[Curve PR #25](https://github.com/faocampo/curve/pull/25) (post-merge M0-S5B
+acceptance evidence) on 2026-08-22 at `2026-08-22T19:51:54Z` as
+`590a52ef006fd1d83bef5c76dfdab9ce9080a168`. The approved evidence head and
+merge share Git tree `c58b15d490fd65ed75c04b838f64af665e10d026`.
 
 ## Live local proof
 
@@ -175,8 +187,7 @@ mutation, or production operation is part of M0-S5B rollback.
 | AC-36 | Dashboard, alert, path-health, failure, recovery, and operator inspection evidence passed. |
 | AC-53 | Disabled telemetry, exporter-path failure, complete workflow behavior, and no protected-value leakage passed. |
 
-The implementation and local acceptance criteria are satisfied. M0-08 (audit
-and observability foundation) remains visually `In review` until this exact
-Curve evidence revision is reviewed and merged. After that merge, the final
-documentation and GitHub Project reconciliation can record `Done`. Staging or
-production observability activation remains separately gated.
+The implementation and local acceptance criteria are accepted and merged.
+M0-08 (audit and observability foundation) is `DONE` for the approved
+`LOCAL_ONLY` scope. Staging or production observability activation remains
+separately gated.

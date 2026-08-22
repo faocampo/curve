@@ -5,8 +5,8 @@
 | Field | Value |
 | --- | --- |
 | Package | M0-S5 (local audit and observability implementation packet) / M0-08 (audit and observability foundation work package) |
-| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_LOCAL_ACCEPTANCE_PASSED / CURVE_EVIDENCE_REVIEW_PENDING` |
-| Version | 1.12 |
+| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_ACCEPTED_AND_MERGED` |
+| Version | 1.13 |
 | Date | 2026-08-22 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |

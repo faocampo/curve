@@ -187,5 +187,6 @@ selected on 2026-08-22. M0-S5B subsequently consumed Curve revision
 `43480ca...`, merged into Plane `preview` at `1b06153...`, and passed its local
 acceptance proof. [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md)
 (exact context, CI, live OTLP, dashboards, alerts, redaction, disablement,
-cleanup, and rollback) records the current result; M0-08 remains `In review`
-until that exact Curve evidence revision is reviewed and merged.
+cleanup, and rollback) records the current result. Curve PR #25 merged that
+accepted evidence at `590a52e...`; M0-08 is now `DONE_LOCAL`, while non-local
+observability activation remains separately gated.
