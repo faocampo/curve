@@ -16,6 +16,7 @@
     "allowed_value_types": [
       "UUID",
       "POSITIVE_INTEGER",
+      "NON_NEGATIVE_INTEGER",
       "SHA256_DIGEST",
       "BOUNDED_ENUM",
       "OPAQUE_REFERENCE"
@@ -46,9 +47,11 @@
     "uuid_pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
     "positive_integer_minimum": 1,
     "positive_integer_maximum": 2147483647,
+    "non_negative_integer_minimum": 0,
+    "non_negative_integer_maximum": 2147483647,
     "sha256_digest_pattern": "^sha256:[0-9a-f]{64}$",
     "opaque_reference_pattern": "^[a-z][a-z0-9._:/-]{0,127}$",
-    "command_record_fields": ["command_id", "payload_digest"],
+    "command_record_fields": ["command_id", "payload_digest", "disposition", "rejection_code"],
     "state_dependent_null_fields": [
       "active_question_ref",
       "active_question_digest",
@@ -59,6 +62,30 @@
       "last_command_rejection_code"
     ],
     "unknown_fields_allowed": false
+  },
+  "initialization": {
+    "workflow_kind": "PARENT",
+    "continued_run_detection_api": "workflow.info().continued_run_id",
+    "external_preloaded_state_allowed": false,
+    "initial_defaults": {
+      "phase": "RUNNING",
+      "state_version": 1,
+      "completed_slice_ids": [],
+      "failed_slice_ids": [],
+      "cancelled_slice_ids": [],
+      "next_wave_index": 0,
+      "processed_commands": [],
+      "continue_as_new_count": 0,
+      "last_rejected_command_id": null,
+      "last_command_rejection_code": null
+    },
+    "continued_run_requirements": [
+      "CONTINUED_RUN_ID_PRESENT",
+      "EXACT_CARRY_FORWARD_FIELDS",
+      "PLAN_IDENTITY_UNCHANGED",
+      "STATE_VERSION_MONOTONIC",
+      "CONTINUE_AS_NEW_COUNT_INCREMENTED_ONCE"
+    ]
   },
   "workflow_types": [
     {
@@ -223,6 +250,7 @@
     }
   ],
   "command_codes": {
+    "command_dispositions": ["ACCEPTED", "REJECTED"],
     "cancel_reason_codes": ["USER_REQUESTED", "POLICY_REQUESTED", "SUPERSEDED"],
     "completion_outcomes": ["SUCCEEDED", "FAILED_RETRYABLE", "FAILED_TERMINAL"],
     "failure_codes": [
@@ -257,6 +285,8 @@
     "cycle_behavior": "REJECT_BEFORE_CHILD_START",
     "duplicate_slice_behavior": "REJECT_BEFORE_CHILD_START",
     "child_start_api": "workflow.start_child_workflow",
+    "workflow_id_reuse_policy": "WorkflowIDReusePolicy.REJECT_DUPLICATE",
+    "duplicate_start_behavior": "WORKFLOW_ALREADY_STARTED_NO_SECOND_EXECUTION",
     "parent_close_policy": "REQUEST_CANCEL",
     "child_cancellation_type": "WAIT_CANCELLATION_COMPLETED",
     "provider_dispatch_allowed": false

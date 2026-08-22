@@ -7,13 +7,13 @@
 | Package | M0-S6A (model-free parent/child Temporal orchestration substrate), an independently reviewable slice of M0-06 (Temporal workflow-skeleton work package) |
 | Task ID | `CURVE-M0-S6A-DURABLE-ORCHESTRATION` |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 0.1 |
+| Version | 0.2 |
 | Date | 2026-08-22 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Curve base | `main` at `590a52ef006fd1d83bef5c76dfdab9ce9080a168` |
-| Plane base | `preview` at `1b06153f6f49848f208808f4f09385a581a55d26` |
+| Curve base | `main` at `590a52ef006fd1d83bef5c76dfdab9ce9080a168`, stacked on P0-05 (acceptance-test strategy) candidate `aa82735eaa02995116e6671d1a52b087db084068` until that prerequisite merges |
+| Plane base | `preview` at `a7cf44b0e01a470c94b59f1c2ce5297dacd81d45` |
 | Proposed Plane branch | `curve/m0-s6a-durable-orchestration` |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | One AI coding agent distinct from the human reviewer |
@@ -44,7 +44,7 @@ All rows must be satisfied before an AI coding agent mutates Plane.
 | --- | --- |
 | `B-CURVE` (approved contract revision) | Exact merged Curve commit containing this packet, [M0-S6A orchestration manifest](../../contracts/temporal/m0-orchestration-v1.json) (machine workflow, payload, scheduling, cancellation, and replay contract), its schema, fixtures, validator, and context-pack manifest |
 | `B-P005` (accepted test-strategy baseline) | P0-05 (R1 acceptance-test strategy and AC-01 through AC-60 ownership) merged into Curve `main`; its matrix may remain broader than this packet but cannot contradict M0-06 ownership |
-| `B-PLANE` (implementation base) | Plane `preview` resolves to `1b06153f6f49848f208808f4f09385a581a55d26` or a reviewed descendant; existing M0-S3 (local Temporal round-trip implementation) and M0-S5B (local observability integration) behavior remains present |
+| `B-PLANE` (implementation base) | Plane `preview` resolves to `a7cf44b0e01a470c94b59f1c2ce5297dacd81d45` or a reviewed descendant; existing M0-S3 (local Temporal round-trip implementation) and M0-S5B (local observability integration) behavior remains present |
 | `B-D003` (local runtime authority) | D-003 (local runtime topology and trust-zone decision) remains `DECIDED / LOCAL_ONLY`; `temporalio==1.31.0`, namespace `curve-local`, and task queue `curve-control-plane-v1` remain unchanged |
 | `B-OWNER` (human accountability) | Federico Ocampo remains named owner and reviewer; the coding agent is the separate implementer |
 | `B-CONTEXT` (immutable dispatch context) | The dispatcher records the exact Curve commit, every M0-S6A context path and SHA-256, and the aggregate context digest before Plane mutation |
@@ -95,12 +95,12 @@ later documentation change cannot alter an active coding-agent instruction.
 | FR-015 (durable execution, retries, questions, and cancellation) | Prove parent/child control, reference-only question/answer, pause/resume, bounded timers, and cancellation without a provider |
 | FR-022 (durable workflow and event orchestration) | Register additive Temporal workflows on the accepted task queue and preserve deterministic state across restart and continue-as-new |
 | NFR-004 (durability and recovery) | Replay old and new histories, tolerate worker restart, deduplicate commands, and end cancellation without active children |
-| AC-17 (dependency-aware slice dispatch) | Start a slice only after all declared dependencies return `SUCCEEDED` |
-| AC-18 (parallel independent work) | Start all slices in the same topological wave in deterministic slice-ID order |
-| AC-19 (durable human question) | Retain only question/answer references and digests across worker restart and continue the same child after a matching answer |
-| AC-20 (authorized execution control) | Accept only typed, target-bound, expected-version control signals supplied by the already-authorized application boundary |
-| AC-21 (cancellation and cleanup) | Stop new starts, cancel active children, wait for their terminal state, and finish the parent as `CANCELLED` |
-| AC-58 (dependency disruption recovery) | Replay retained histories and recover after worker restart without duplicate children or effects |
+| AC-17 (same durable workflow resumes after a human answer) | Partial enabling evidence only: retain reference/digest-only question and answer state, survive restart, and resume the same synthetic child. M4-05 (provider-backed slice execution) retains ownership of authorized-human attribution and exact context-version proof. |
+| AC-18 (bounded retry and visible pause after delegation/provider failure) | No claim. M0-S6A has no delegation, provider activity, or retry policy; M4-05 (provider-backed slice execution) owns the criterion. |
+| AC-19 (budget exhaustion pauses without silent substitution) | No claim. M0-S6A has no budget, model, or provider selection; M6-05 (budget administration and capacity optimization) owns the criterion. |
+| AC-20 (cancellation revokes authority and reconciles runtimes/VCS) | Partial enabling evidence only: stop synthetic child starts, propagate Temporal cancellation, and settle the parent deterministically. M4-04 (trusted runner lifecycle and cleanup) owns JIT revocation, sandbox/preview termination, push prevention, and VCS reconciliation. |
+| AC-21 (lost runner quarantine and distinct retry attempt) | No claim. M0-S6A has no runner lease, quarantine, concurrent resume, or retry-attempt creation; M4-04 (trusted runner lifecycle and cleanup) owns the criterion. |
+| AC-58 (cross-dependency recovery meets RPO/RTO and reconciliation behavior) | Partial enabling evidence only: replay retained Temporal histories and recover the local worker without duplicate child starts. R1-03 (disaster recovery and reconciliation exercise) owns database, gateway, Onyx, runner, VCS, measured RPO/RTO, and complete recovery proof. |
 
 ## Scope
 
@@ -167,6 +167,12 @@ Both use namespace `curve-local` and task queue `curve-control-plane-v1`. The
 worker registers them next to `CurveOperationWorkflowV1`; it does not replace
 or dynamically route the accepted operation workflow.
 
+The parent start uses `WorkflowIDReusePolicy.REJECT_DUPLICATE`. A duplicate
+start for either an open or closed stable parent ID returns Temporal's
+already-started failure and creates no second execution. A later trusted
+application package may attach to the existing handle after validating the
+workspace and plan binding; this packet exposes no API and performs no attach.
+
 ### Input and history policy
 
 The [M0-S6A orchestration manifest](../../contracts/temporal/m0-orchestration-v1.json)
@@ -177,23 +183,42 @@ validation in both the caller-facing constructor and workflow entry path.
 | Primitive | Exact contract |
 | --- | --- |
 | UUID | Canonical lowercase RFC 4122 textual form matching the machine-manifest regex |
-| Positive integer | Inclusive range `1` through `2147483647` |
+| Positive integer | Inclusive range `1` through `2147483647`; used for versions and generations |
+| Non-negative integer | Inclusive range `0` through `2147483647`; used for zero-based wave indices and continue-as-new counters |
 | Digest | `sha256:` followed by exactly 64 lowercase hexadecimal characters |
 | Opaque reference or command ID | Lowercase letter followed by at most 127 lowercase letters, digits, `.`, `_`, `:`, `/`, or `-` |
 | Enum | One exact value from `phase_values` or `command_codes` in the machine manifest |
-| Processed command | Ordered `{command_id, payload_digest}` pair; `payload_digest` hashes canonical JSON for the complete validated signal |
+| Processed command | Ordered `{command_id, payload_digest, disposition, rejection_code}` record; `payload_digest` hashes canonical JSON for the complete validated signal, `disposition` is `ACCEPTED` or `REJECTED`, and `rejection_code` is null only for an accepted command |
 | Nullable state | Only the fields in `primitive_contracts.state_dependent_null_fields` may be null, and only when their lifecycle prerequisite is absent |
 
-Every accepted signal appends one processed-command pair up to the manifest
-limit. An identical command ID and payload digest is a no-op. A reused command
-ID with another digest or a stale expected state version records
-`last_rejected_command_id` and `last_command_rejection_code` without changing
-the workflow phase or dispatching a command. Callers observe asynchronous
-signal rejection through the safe `state` query and the authoritative
-application command audit; signals do not provide a synchronous result.
-Signal handling checks an existing command ID and matching payload digest
-before expected-version validation, so delivery of the same accepted signal
-remains idempotent after its original transition increments `state_version`.
+Every first-seen, structurally valid signal appends one processed-command
+record up to the manifest limit, including a signal rejected for target,
+expected-version, or transition state. Its accepted transition or first
+rejection increments `state_version` exactly once. An identical command ID and
+payload digest is a no-op after either disposition. A reused command ID with a
+different digest is a conflict: it never dispatches or changes workflow state,
+and the application command boundary records the bounded conflict. Callers
+observe a first-seen asynchronous rejection through the safe `state` query and
+the authoritative application command audit; signals provide no synchronous
+result. Signal handling checks an existing command ID and matching payload
+digest before expected-version validation, preserving idempotency after the
+original accepted or rejected command increments `state_version`.
+
+### Authoritative initialization and continuation
+
+The parent distinguishes a new execution from continue-as-new using
+`workflow.info().continued_run_id`; a caller-supplied flag cannot establish
+continuation authority. A new execution accepts plan identity and immutable
+slice descriptors, then initializes all lifecycle state internally to the
+manifest defaults: `RUNNING`, state version 1, empty terminal/command lists,
+zero next-wave index, zero continue-as-new count, and null rejection metadata.
+Externally preloaded lifecycle state is rejected.
+
+A continued execution requires a non-null server-provided continued-run ID and
+the exact manifest carry-forward fields. The plan identity and immutable slices
+remain unchanged, state version is monotonic, and `continue_as_new_count`
+increases exactly once. Tests reject initial inputs that forge completion,
+failure, cancellation, wave position, processed commands, or continuation.
 
 `slices` is an ordered tuple of at most 64 immutable descriptors:
 
@@ -336,12 +361,12 @@ Each commit is independently reviewable and keeps the existing worker usable.
 | --- | --- |
 | `M0-S6A-AT-01` | Given two independent root slices and one dependent slice, when the parent runs, then both roots start in the first wave in ascending `slice_id` order and the dependent starts only after both succeed. |
 | `M0-S6A-AT-02` | Given a missing dependency, duplicate slice, self-dependency, cycle, more than 64 slices, or more than 16 dependencies, when input is validated, then no child starts and a bounded validation code is returned. |
-| `M0-S6A-AT-03` | Given the same parent start is delivered twice, when stable workflow identity is applied, then one workflow execution and one child per attempt exist. |
-| `M0-S6A-AT-04` | Given an identical signal command is replayed, when its command ID and digest match, then control state changes once; a conflicting reuse or stale expected version dispatches nothing and records only its bounded rejection metadata. |
+| `M0-S6A-AT-03` | Given the same parent start is delivered twice for an open or closed stable workflow ID, when `WorkflowIDReusePolicy.REJECT_DUPLICATE` is applied, then the second start fails as already started, one workflow execution exists, and each attempt has at most one child. |
+| `M0-S6A-AT-04` | Given accepted and first-seen rejected signal commands, when either is delivered identically again, then its processed record and state-version change occur once; a reused ID with another digest, stale expected version, target mismatch, or invalid transition dispatches nothing. |
 | `M0-S6A-AT-05` | Given a running child asks a question by reference and digest, when the worker restarts and a matching answer arrives, then the same child resumes without any question/answer body in history. |
 | `M0-S6A-AT-06` | Given the parent is paused between waves, when root children finish, then no next-wave child starts until a valid resume command arrives. |
 | `M0-S6A-AT-07` | Given active children, when a valid parent cancel arrives, then no new child starts, every active child reaches `CANCELLED`, and the parent reaches `CANCELLED` within the configured timer. |
-| `M0-S6A-AT-08` | Given ten completed waves and remaining work, when the parent reaches the wave barrier, then it continues as new once, carries the exact safe state, and starts no duplicate child. |
+| `M0-S6A-AT-08` | Given ten completed waves and remaining work, when the parent reaches the wave barrier, then it continues as new once, the server-provided continued-run ID authorizes exact carry-forward, plan identity/slices remain unchanged, the count increments once, and no duplicate child starts. |
 | `M0-S6A-AT-09` | Given the Curve worker stops while children wait or a parent is between waves, when it restarts, then all workflows recover from history without duplicate state or commands. |
 | `M0-S6A-AT-10` | Given the retained operation, parent, child, and continued-parent histories, when the candidate `Replayer` runs, then all replay with zero nondeterminism errors. |
 | `M0-S6A-AT-11` | Given protected-field negative fixtures and the sentinel, when contracts and runtime evidence are inspected, then forbidden fields and sentinel values are absent from history, queries, outputs, logs, traces, metrics, and safe errors. |
@@ -354,8 +379,12 @@ Run from the Plane repository root at the pinned implementation head.
 ```text
 git diff --check
 node apps/api/plane/curve/contracts/check-integrity.mjs
+docker compose -f docker-compose-test.yml run --rm api-tests ruff check plane/curve
+docker compose -f docker-compose-test.yml run --rm api-tests ruff format --check plane/curve
 docker compose -f docker-compose-test.yml run --rm --build api-tests pytest plane/curve/tests/test_temporal_contracts.py plane/curve/tests/test_temporal_orchestration.py plane/curve/tests/test_temporal_replay.py
 docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/curve/tests
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py makemigrations --check --dry-run
+docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve config
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve build api curve-worker
 docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve up -d

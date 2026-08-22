@@ -173,12 +173,15 @@ test("M0-08 context pins the observability contract, packet, fixtures, and valid
   assert.deepEqual(contextPathsFor("M0-S5B"), M0_08_CONTEXT_PATHS);
 });
 
-test("M0-S6A context pins durable orchestration, local runtime, telemetry, and replay contracts", () => {
+test("M0-S6A context pins orchestration, test strategy, local runtime, telemetry, and replay contracts", () => {
   const requiredPaths = [
     "contracts/observability/m0-s5-telemetry-v1.json",
     "contracts/schemas/examples/temporal-orchestration.invalid.json",
+    "contracts/schemas/examples/test-strategy-matrix.invalid.json",
     "contracts/schemas/telemetry-manifest.schema.json",
     "contracts/schemas/temporal-orchestration.schema.json",
+    "contracts/schemas/test-strategy-matrix.schema.json",
+    "contracts/testing/ac-test-matrix-v1.json",
     "contracts/temporal/m0-orchestration-v1.json",
     "contracts/temporal/m0-workflow-contract.md",
     "docs/curve-ai-native-sdlc-prd.md",
@@ -188,10 +191,15 @@ test("M0-S6A context pins durable orchestration, local runtime, telemetry, and r
     "docs/technical/m0-s3-implementation-evidence.md",
     "docs/technical/m0-s5b-implementation-evidence.md",
     "docs/technical/m0-s6a-durable-orchestration-task-packet.md",
+    "docs/technical/m0-test-strategy.md",
     "docs/technical/m0-traceability.md",
     "docs/technical/security-and-operations.md",
     "docs/technical/workflows-and-sequences.md",
     "scripts/lib/context-pack.mjs",
+    "scripts/lib/temporal-orchestration.mjs",
+    "scripts/lib/test-strategy.mjs",
+    "scripts/tests/temporal-orchestration.test.mjs",
+    "scripts/tests/test-strategy.test.mjs",
     "scripts/validate-contracts.mjs",
   ];
   for (const path of requiredPaths) assert.ok(M0_S6A_CONTEXT_PATHS.includes(path), path);

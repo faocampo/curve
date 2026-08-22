@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 
 import { validateTestStrategyMatrixSemantics } from "./lib/test-strategy.mjs";
+import { validateTemporalOrchestrationSemantics } from "./lib/temporal-orchestration.mjs";
 
 const root = process.cwd();
 
@@ -552,127 +553,7 @@ if (
 }
 
 const temporalOrchestration = JSON.parse(readFileSync(temporalOrchestrationPath, "utf8"));
-const expectedTemporalWorkflowTypes = new Map([
-  [
-    "PARENT",
-    {
-      name: "CurveInitiativeOrchestrationWorkflowV1",
-      workflowId: "curve:{workspace_id}:initiative:{initiative_id}:plan:{plan_generation}",
-      phases: ["RUNNING", "PAUSED", "CANCEL_REQUESTED", "SUCCEEDED", "FAILED", "CANCELLED"],
-    },
-  ],
-  [
-    "CHILD",
-    {
-      name: "CurveSliceAttemptWorkflowV1",
-      workflowId:
-        "curve:{workspace_id}:initiative:{initiative_id}:plan:{plan_generation}:slice:{slice_id}:attempt:{attempt_id}",
-      phases: [
-        "QUEUED",
-        "RUNNING",
-        "WAITING_FOR_HUMAN",
-        "SUCCEEDED",
-        "FAILED_RETRYABLE",
-        "FAILED_TERMINAL",
-        "CANCELLED",
-      ],
-    },
-  ],
-]);
-if (
-  temporalOrchestration.workflow_types.length !== expectedTemporalWorkflowTypes.size ||
-  new Set(temporalOrchestration.workflow_types.map((workflowType) => workflowType.kind)).size !==
-    expectedTemporalWorkflowTypes.size
-) {
-  throw new Error("contracts/temporal/m0-orchestration-v1.json must define one parent and one child workflow");
-}
-for (const workflowType of temporalOrchestration.workflow_types) {
-  const expected = expectedTemporalWorkflowTypes.get(workflowType.kind);
-  if (
-    !expected ||
-    workflowType.name !== expected.name ||
-    workflowType.workflow_id_template !== expected.workflowId ||
-    JSON.stringify(workflowType.phase_values) !== JSON.stringify(expected.phases) ||
-    !workflowType.input_fields.includes("workspace_id") ||
-    !workflowType.state_fields.includes("workspace_id") ||
-    !workflowType.output_fields.includes("workspace_id")
-  ) {
-    throw new Error(`${workflowType.kind} workflow identity, phases, or workspace scope differs from immutable v1`);
-  }
-}
-const expectedTemporalSignals = new Map([
-  ["PARENT", ["pause", "request_cancel", "resume"]],
-  ["CHILD", ["answer_question", "ask_question", "complete_attempt", "report_started"]],
-]);
-const expectedTemporalQueries = new Map([
-  ["PARENT", ["state"]],
-  ["CHILD", ["state"]],
-]);
-for (const [kind, expectedNames] of expectedTemporalSignals) {
-  const actualNames = temporalOrchestration.signals
-    .filter((handler) => handler.workflow_kind === kind)
-    .map((handler) => handler.name)
-    .sort();
-  if (JSON.stringify(actualNames) !== JSON.stringify(expectedNames)) {
-    throw new Error(`${kind} signal set differs from immutable v1`);
-  }
-}
-for (const [kind, expectedNames] of expectedTemporalQueries) {
-  const actualNames = temporalOrchestration.queries
-    .filter((handler) => handler.workflow_kind === kind)
-    .map((handler) => handler.name)
-    .sort();
-  if (JSON.stringify(actualNames) !== JSON.stringify(expectedNames)) {
-    throw new Error(`${kind} query set differs from immutable v1`);
-  }
-}
-for (const signal of temporalOrchestration.signals) {
-  for (const requiredField of ["schema_version", "workspace_id", "command_id", "expected_state_version"]) {
-    if (!signal.fields.includes(requiredField)) {
-      throw new Error(`${signal.workflow_kind}.${signal.name} omits ${requiredField}`);
-    }
-  }
-}
-const forbiddenTemporalFieldFragments = temporalOrchestration.payload_policy.forbidden_field_fragments;
-const temporalHistoryFields = [
-  ...temporalOrchestration.workflow_types.flatMap((workflowType) => [
-    ...workflowType.input_fields,
-    ...workflowType.state_fields,
-    ...workflowType.output_fields,
-  ]),
-  ...temporalOrchestration.signals.flatMap((signal) => signal.fields),
-  ...temporalOrchestration.queries.flatMap((query) => query.fields),
-];
-for (const field of temporalHistoryFields) {
-  const matchedFragment = forbiddenTemporalFieldFragments.find((fragment) => field.includes(fragment));
-  if (matchedFragment) {
-    throw new Error(`Temporal history field ${field} contains forbidden fragment ${matchedFragment}`);
-  }
-}
-const expectedTemporalAcceptanceTests = Array.from(
-  { length: 12 },
-  (_, index) => `M0-S6A-AT-${String(index + 1).padStart(2, "0")}`,
-);
-if (
-  JSON.stringify(temporalOrchestration.acceptance_tests) !==
-  JSON.stringify(expectedTemporalAcceptanceTests)
-) {
-  throw new Error("contracts/temporal/m0-orchestration-v1.json acceptance-test set differs from v1");
-}
-if (
-  temporalOrchestration.authority.external_side_effects_allowed !== false ||
-  temporalOrchestration.scheduling.provider_dispatch_allowed !== false ||
-  temporalOrchestration.payload_policy.protected_payloads_allowed !== false ||
-  temporalOrchestration.payload_policy.free_text_allowed !== false ||
-  temporalOrchestration.payload_policy.credentials_allowed !== false ||
-  temporalOrchestration.scheduling.child_start_api !== "workflow.start_child_workflow" ||
-  temporalOrchestration.continue_as_new.required_barrier !==
-    "BETWEEN_WAVES_WITH_ZERO_ACTIVE_CHILDREN" ||
-  temporalOrchestration.continue_as_new.wait_for_handlers_api !==
-    "workflow.all_handlers_finished()"
-) {
-  throw new Error("contracts/temporal/m0-orchestration-v1.json weakens the local safe-control boundary");
-}
+validateTemporalOrchestrationSemantics(temporalOrchestration);
 
 for (const [fixtureName, schema, shouldBeValid] of fixtureSpecs) {
   const fixture = join(root, fixtureName);
