@@ -6,8 +6,8 @@
 | ----- | ----- |
 | Status | Living retrospective and engineering rationale |
 | Product | Curve |
-| Period covered | From the initial Plane license question through 2026-08-21 |
-| Last updated | 2026-08-21 |
+| Period covered | From the initial Plane license question through 2026-08-22 |
+| Last updated | 2026-08-22 |
 | Audience | X3M product, engineering, architecture, security, operations, legal, and AI agents |
 | Normative authority | Informational only; the PRD and approved ADRs take precedence |
 
@@ -1351,8 +1351,55 @@ The acceptance is recorded in [M0-S4 implementation evidence](../technical/m0-s4
 (exact context, approvals, merges, tests, product/security acceptance, and
 rollback). M0-S4 (API, SSE, and minimal Curve-first UI implementation packet)
 and M0-07 (public API and resumable SSE foundation work package) are complete.
-M0-S5A (telemetry kernel and static observability assets) now waits only for its
+At that point, M0-S5A (telemetry kernel and static observability assets) waited only for its
 own exact Curve contract-head approval, merge, and deterministic M0-08 (audit
 and observability foundation work package) context digest. M0-S5B (X3M local
 observability integration proof) additionally waits for OBS-BIND-001 (local X3M
 OTLP, Prometheus, Grafana, and independent path-health binding).
+
+### M0-S5A implementation approval, merge, and acceptance
+
+On 2026-08-21 Federico Ocampo approved Curve PR #19 at exact head
+`fa6fd677fc41d0bc73a8587e78d33d55a6824429` and authorized its squash merge
+while validation remained green. GitHub merged the approved contract into
+Curve `main` as `a23dab99e9afcc9dbfad7f5a3dc8b394ef60e529`. The merged contract
+produced the deterministic 31-file M0-08 (audit and observability foundation
+work package) context digest
+`sha256:720a70bb9146761e7b4f1852e889127460812d25d84cbafd1304e20caa18ac1a`.
+
+The Plane implementation added a private, disabled-by-default OpenTelemetry
+runtime; strict Curve-owned configuration; closed metrics, spans, and
+structured logs; keyed workspace scope; operation-event v2 trace propagation;
+audit/outbox/Temporal/SSE instrumentation; bounded exporter and gauge failure
+handling; and repository-owned dashboard and four-alert assets. It retained
+operation-event v1 compatibility, added no migration, and made no live X3M
+collector, Grafana, Prometheus, alert-route, infrastructure, or production
+change.
+
+Federico approved Plane PR #7 at exact head
+`c258ef12221964dae67286e0f6a6c2dc58b997fe` and authorized marking it ready and
+squash-merging it into `preview` while CI remained green. GitHub exposed no
+configured workflow runs or required branch checks for that PR. The
+repository-local evidence was therefore authoritative: both 191-test Curve
+suites passed with telemetry disabled and in private in-memory mode; `pnpm
+check` passed 60 of 60 tasks; `pnpm build` passed 16 of 16 tasks; Ruff,
+contract, static-asset, secret-pattern, diff, and migration-drift checks passed.
+GitHub merged the approved head on 2026-08-22 as
+`39920769daf78fce29a10c7f4e4bb8779671b004`. The approved head and squash merge
+share Git tree `87db1b646cd473f1c407b8aebbc43c27e62d9f8c`.
+
+The final task-packet audit found that M0-S5A-5 (integrated local acceptance)
+also required the complete Plane backend suite in both telemetry modes. That
+proof was run after the merge against the same accepted Git tree. The disabled
+run passed all 707 tests in 109.82 seconds; the private in-memory run passed all
+707 tests in 104.85 seconds. Both reported the same 92 existing deprecation
+warnings. The disposable PostgreSQL, Valkey, RabbitMQ, MinIO, network, volumes,
+and synthetic configuration were removed after verification.
+
+The result is recorded in [M0-S5A implementation evidence](../technical/m0-s5a-implementation-evidence.md)
+(exact context, approvals, merge, dual-mode full regression, security controls,
+and rollback). M0-S5A (telemetry kernel and static observability assets) is
+complete. M0-08 (audit and observability foundation work package) remains open
+and visually `In progress` because M0-S5B (X3M local observability integration
+proof) still requires OBS-BIND-001 (X3M OTLP, Prometheus, Grafana, alert
+routing, and independent path-health binding).

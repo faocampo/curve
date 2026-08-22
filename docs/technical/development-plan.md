@@ -5,8 +5,8 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 1.3 |
-| Last updated | 2026-08-21 |
+| Version | 1.4 |
+| Last updated | 2026-08-22 |
 | Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, lifecycle, security invariants, acceptance criteria, and accepted D-003 local implementation) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
@@ -33,7 +33,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 
 ## Planning assumptions
 
-- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` remains the historical foundation, and accepted descendant `e762fbbd2c1726a2833745add8245a1679c60d88` is the current post-M0-S4 implementation base.
+- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` remains the historical foundation, and accepted descendant `39920769daf78fce29a10c7f4e4bb8779671b004` is the current post-M0-S5A implementation base.
 - Federico Ocampo decided the original D-003 (runtime topology and trust-zone decision) local scope at approved head `7826f403...`, merged as `097016f...`, and approved the [private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, service identity, controls, and revised proof) at head `5e165c...`, merged as `aece539...`. Temporal Python SDK 1.31.0 remains fixed. M0-S3 (local Temporal round-trip implementation packet) accepted Plane `dev_env`, direct loopback ports, replay, restart, cancellation, security, and rollback at merge `d99342f...`; P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane integration proof) remain superseded standalone gates. Environment activation remains package-gated.
 - Component names in this plan are logical. The architecture may co-deploy compatible components, but ownership, contracts, trust boundaries, and failure isolation remain distinct.
 - Relative sizes are planning signals: `S` is a bounded adapter/schema/UI slice, `M` is a component with several contracts, and `L` must be decomposed before dispatch. They are not calendar estimates.
@@ -152,12 +152,12 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-05 | M | Transactional outbox, inbox, idempotency store, Operation resource, dead-letter state, and replay-safe relay | M0-02 | FR-021, FR-023, FR-044, NFR-004-NFR-005, AC-26, AC-33 | Duplicate/lost/out-of-order test suite with no duplicate effects. |
 | M0-06 | L | Temporal parent-workflow skeleton, version markers, child-attempt workflow, signals, timers, cancellation, continue-as-new, and replay corpus | M0-05, M0-03, D-003 | FR-015, FR-022, NFR-004, AC-17-AC-21, AC-58 | M0-S3 (local Temporal round-trip implementation packet) is `DONE` at Plane merge `d99342f...`: SDK 1.31.0, shared-`dev_env` Compose overlay, direct loopback ports, duplicate/restart/replay/cancellation/leakage/dependency-connectivity proof, and disablement rollback are accepted in [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact context, merge, tests, runtime proof, security acceptance, and rollback). Broader parent/child behavior remains later M0-06 scope. |
 | M0-07 | M | Public API conventions, Problem Details, ETag/If-Match, idempotency headers, cursor pagination, SSE resume, and OpenAPI generation | M0-02, M0-03, M0-05 | FR-023, NFR-002-NFR-005, NFR-013, AC-35 | API contract tests and generated client fixture. |
-| M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07; OBS-BIND-001 for local X3M export/provisioning only | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (five M0-S5A implementation checkpoints, M0-S5B X3M integration proof, tests, evidence, and rollback) and [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (Curve-owned TLS/configuration, static private-provider controls, bounded instrumentation/dashboard/four-alert surface). M0-S5A proves generic OTel isolation, audit completeness, redaction/cardinality limits, process-local exporter-failure handling, repository-only asset correctness, and in-memory telemetry; M0-S5B proves the owner-approved live binding and independent platform path-health signal. |
+| M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07; OBS-BIND-001 for local X3M export/provisioning only | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | M0-S5A is accepted in [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (exact context, merge, dual-mode full regression, security controls, and rollback). [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (telemetry-kernel and X3M integration split) and [telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (closed telemetry and static asset surface) remain normative. M0-S5B still proves the owner-approved live binding and independent platform path-health signal. |
 | M0-09 | M | Provider registry, connection lifecycle, capability documents, common error taxonomy, callback ingress, outgoing webhooks, and reconciliation scheduler | M0-03, M0-05, M0-07, D-007 | FR-003, FR-023, FR-044, NFR-005, NFR-008, NFR-013, AC-33, AC-57 | Fake-provider conformance suite and 15-minute reconciliation proof. |
 
-The current Plane implementation base is M0-S4 merge
-`e762fbbd2c1726a2833745add8245a1679c60d88`; M0-S1, M0-S2, M0-03, M0-S3,
-and M0-S4 are complete.
+The current Plane implementation base is M0-S5A merge
+`39920769daf78fce29a10c7f4e4bb8779671b004`; M0-S1, M0-S2, M0-03, M0-S3,
+M0-S4, and M0-S5A are complete.
 M0-S2 satisfies M0-02 (core aggregate persistence) and M0-05 (transactional
 delivery kernel) through [M0-S2 implementation evidence](m0-s2-implementation-evidence.md)
 (exact contract, context, implementation, validation, and merge binding).
