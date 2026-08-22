@@ -20,6 +20,7 @@ import {
   M0_08_CONTEXT_PATHS,
   M0_S3_CONTEXT_PATHS,
   M0_S4_CONTEXT_PATHS,
+  M0_S6A_CONTEXT_PATHS,
   contextPathsFor,
   digestContextEntries,
 } from "../lib/context-pack.mjs";
@@ -170,6 +171,33 @@ test("M0-08 context pins the observability contract, packet, fixtures, and valid
   assert.deepEqual(M0_08_CONTEXT_PATHS, [...M0_08_CONTEXT_PATHS].sort());
   assert.deepEqual(contextPathsFor("M0-08"), M0_08_CONTEXT_PATHS);
   assert.deepEqual(contextPathsFor("M0-S5B"), M0_08_CONTEXT_PATHS);
+});
+
+test("M0-S6A context pins durable orchestration, local runtime, telemetry, and replay contracts", () => {
+  const requiredPaths = [
+    "contracts/observability/m0-s5-telemetry-v1.json",
+    "contracts/schemas/examples/temporal-orchestration.invalid.json",
+    "contracts/schemas/telemetry-manifest.schema.json",
+    "contracts/schemas/temporal-orchestration.schema.json",
+    "contracts/temporal/m0-orchestration-v1.json",
+    "contracts/temporal/m0-workflow-contract.md",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/adr-003-runtime-topology.md",
+    "docs/technical/architecture.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/m0-s3-implementation-evidence.md",
+    "docs/technical/m0-s5b-implementation-evidence.md",
+    "docs/technical/m0-s6a-durable-orchestration-task-packet.md",
+    "docs/technical/m0-traceability.md",
+    "docs/technical/security-and-operations.md",
+    "docs/technical/workflows-and-sequences.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ];
+  for (const path of requiredPaths) assert.ok(M0_S6A_CONTEXT_PATHS.includes(path), path);
+  assert.equal(new Set(M0_S6A_CONTEXT_PATHS).size, M0_S6A_CONTEXT_PATHS.length);
+  assert.deepEqual(M0_S6A_CONTEXT_PATHS, [...M0_S6A_CONTEXT_PATHS].sort());
+  assert.deepEqual(contextPathsFor("M0-S6A"), M0_S6A_CONTEXT_PATHS);
 });
 
 test("the live P0-06 projection is terminal and points to M0-S3", () => {

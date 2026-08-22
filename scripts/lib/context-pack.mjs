@@ -167,12 +167,36 @@ export const M0_S4_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const M0_S6A_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/observability/m0-s5-telemetry-v1.json",
+    "contracts/schemas/examples/temporal-orchestration.invalid.json",
+    "contracts/schemas/telemetry-manifest.schema.json",
+    "contracts/schemas/temporal-orchestration.schema.json",
+    "contracts/temporal/m0-orchestration-v1.json",
+    "contracts/temporal/m0-workflow-contract.md",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/adr-003-runtime-topology.md",
+    "docs/technical/architecture.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/m0-s3-implementation-evidence.md",
+    "docs/technical/m0-s5b-implementation-evidence.md",
+    "docs/technical/m0-s6a-durable-orchestration-task-packet.md",
+    "docs/technical/m0-traceability.md",
+    "docs/technical/security-and-operations.md",
+    "docs/technical/workflows-and-sequences.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ].sort(),
+);
+
 const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
   ["M0-S3", M0_S3_CONTEXT_PATHS],
   ["M0-S4", M0_S4_CONTEXT_PATHS],
   ["M0-08", M0_08_CONTEXT_PATHS],
   ["M0-S5B", M0_08_CONTEXT_PATHS],
+  ["M0-S6A", M0_S6A_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {

@@ -1,0 +1,35 @@
+{
+  "schema_version": "curve.temporal-orchestration/v1",
+  "contract_key": "CURVE_M0_S6A_DURABLE_ORCHESTRATION",
+  "contract_version": 1,
+  "authority": {
+    "environment": "LOCAL_ONLY",
+    "temporal_python_sdk": "1.31.0",
+    "namespace": "curve-local",
+    "task_queue": "curve-control-plane-v1",
+    "domain_truth": "POSTGRESQL_APPLICATION_SERVICES",
+    "orchestration_truth": "TEMPORAL_HISTORY_CONTROL_STATE_ONLY",
+    "execution_mode": "PROVIDER_DISPATCH",
+    "external_side_effects_allowed": true
+  },
+  "payload_policy": {
+    "allowed_value_types": ["UUID", "FREE_TEXT"],
+    "maximum_slices": 64,
+    "maximum_dependencies_per_slice": 16,
+    "maximum_processed_command_ids": 256,
+    "maximum_questions_per_attempt": 32,
+    "forbidden_field_fragments": ["secret"],
+    "protected_payloads_allowed": true,
+    "free_text_allowed": true,
+    "credentials_allowed": true
+  },
+  "workflow_types": [],
+  "signals": [],
+  "queries": [],
+  "scheduling": {},
+  "timeouts": {},
+  "cancellation": {},
+  "continue_as_new": {},
+  "versioning": {},
+  "acceptance_tests": []
+}
