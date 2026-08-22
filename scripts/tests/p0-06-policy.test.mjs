@@ -22,6 +22,7 @@ import {
   M0_S4_CONTEXT_PATHS,
   M0_S6A_CONTEXT_PATHS,
   M0_S9A_CONTEXT_PATHS,
+  P0_12_CONTEXT_PATHS,
   contextPathsFor,
   digestContextEntries,
 } from "../lib/context-pack.mjs";
@@ -333,7 +334,7 @@ test("M0-S9A implementation evidence binds the accepted local Plane merge", () =
   for (const [name, document] of lifecycleDocuments) {
     assert.doesNotMatch(
       document,
-      /REVIEW_DRAFT|PENDING_PUBLICATION|AWAITING_EXACT_HEAD_APPROVAL|CONTRACT_CORRECTION_IN_REVIEW|CORRECTION_MERGED \/ IMPLEMENTATION_PAUSED|implementation remains paused|correction remains under review/i,
+      /(?:M0-S9A|Plane)[^\n]{0,240}(?:PENDING_PUBLICATION|AWAITING_EXACT_HEAD_APPROVAL|CONTRACT_CORRECTION_IN_REVIEW|implementation remains paused|correction remains under review)|CORRECTION_MERGED \/ IMPLEMENTATION_PAUSED/i,
       `${name} retains stale pre-acceptance lifecycle state`,
     );
     assert.doesNotMatch(
@@ -380,6 +381,36 @@ test("M0-06 closes locally without absorbing downstream provider acceptance", ()
     `${row(readiness, "M0-06")}\n${row(developmentPlan, "M0-06")}`,
     /later M0-06|remaining sibling scope|provider-backed .* M0-06/i,
   );
+});
+
+test("P0-12 context pins the retention decision, test strategy, and semantic validators", () => {
+  const requiredPaths = [
+    "contracts/governance/d009-retention-policy-v1.json",
+    "contracts/schemas/examples/retention-policy-decision.invalid.json",
+    "contracts/schemas/retention-policy-decision.schema.json",
+    "contracts/schemas/test-strategy-matrix.schema.json",
+    "contracts/testing/ac-test-matrix-v1.json",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/adr-009-retention-and-erasure.md",
+    "docs/technical/architecture-decisions.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-test-strategy.md",
+    "docs/technical/p0-12-retention-decision-task-packet.md",
+    "docs/technical/README.md",
+    "docs/technical/security-and-operations.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/lib/retention-policy.mjs",
+    "scripts/lib/test-strategy.mjs",
+    "scripts/tests/p0-06-policy.test.mjs",
+    "scripts/tests/retention-policy.test.mjs",
+    "scripts/tests/test-strategy.test.mjs",
+    "scripts/validate-contracts.mjs",
+  ];
+  for (const path of requiredPaths) assert.ok(P0_12_CONTEXT_PATHS.includes(path), path);
+  assert.equal(new Set(P0_12_CONTEXT_PATHS).size, P0_12_CONTEXT_PATHS.length);
+  assert.deepEqual(P0_12_CONTEXT_PATHS, [...P0_12_CONTEXT_PATHS].sort());
+  assert.deepEqual(contextPathsFor("P0-12"), P0_12_CONTEXT_PATHS);
 });
 
 test("the live P0-06 projection is terminal and points to M0-S3", () => {

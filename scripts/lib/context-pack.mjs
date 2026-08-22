@@ -329,6 +329,34 @@ export const M0_S9C_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const P0_12_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/README.md",
+    "contracts/governance/d009-retention-policy-v1.json",
+    "contracts/schemas/examples/retention-policy-decision.invalid.json",
+    "contracts/schemas/examples/test-strategy-matrix.invalid.json",
+    "contracts/schemas/retention-policy-decision.schema.json",
+    "contracts/schemas/test-strategy-matrix.schema.json",
+    "contracts/testing/ac-test-matrix-v1.json",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/adr-009-retention-and-erasure.md",
+    "docs/technical/architecture-decisions.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-test-strategy.md",
+    "docs/technical/p0-12-retention-decision-task-packet.md",
+    "docs/technical/README.md",
+    "docs/technical/security-and-operations.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/lib/retention-policy.mjs",
+    "scripts/lib/test-strategy.mjs",
+    "scripts/tests/p0-06-policy.test.mjs",
+    "scripts/tests/retention-policy.test.mjs",
+    "scripts/tests/test-strategy.test.mjs",
+    "scripts/validate-contracts.mjs",
+  ].sort(),
+);
+
 const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
   ["M0-S3", M0_S3_CONTEXT_PATHS],
@@ -339,6 +367,7 @@ const CONTEXT_PATHS = new Map([
   ["M0-S9A", M0_S9A_CONTEXT_PATHS],
   ["M0-S9B", M0_S9B_CONTEXT_PATHS],
   ["M0-S9C", M0_S9C_CONTEXT_PATHS],
+  ["P0-12", P0_12_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {

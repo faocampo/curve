@@ -45,6 +45,7 @@ identifiers are:
 - D-003 (runtime topology and trust-zone decision).
 - D-007 (MCP trust and authorization decision).
 - D-009 (retention, legal-hold, backup, and erasure decision).
+- P0-12 (retention-policy decision and approval package).
 - P0-06 (historical two-stage local Temporal proof work package).
 - P0-06A (superseded isolated Temporal feasibility proof).
 - P0-06B (superseded least-privilege Plane integration proof).
@@ -86,7 +87,7 @@ identifiers are:
 | [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) | Shared local network, private EKS deployment direction, service identity, security boundary, revised M0-S3 proof, and activation inputs | `EFFECTIVE`; approved head `5e165c...` merged as `aece539...` |
 | [ADR-006: Orca human assistance](adr-006-orca-human-assistance.md) | Proposed developer-operated Orca MCP integration boundary | D-006 decision packet; owner/licensing approval pending |
 | [ADR-007: MCP and Orca profile](adr-007-mcp-trust-and-orca-profile.md) | Proposed MCP trust registry and developer-operated Orca write-back allowlist | D-007 decision packet; security/platform approval pending |
-| [ADR-009: Retention and erasure](adr-009-retention-and-erasure.md) | Required data-class/asset retention, hold, backup, and erasure decision | D-009 remains open and blocks protected storage/non-local activation |
+| [ADR-009: Retention and erasure](adr-009-retention-and-erasure.md) (class-by-asset policy, controlled-copy inventory, hold/erasure state machine, and fail-closed behavior) | Required data-class/asset retention, hold, backup, and erasure decision | D-009 remains open; its machine proposal is prepared and protected storage/non-local activation remain blocked |
 | [M0 readiness board](m0-readiness-board.md) | Decision, package, owner, evidence, and blocking-state control | Operational coding-readiness source |
 | [M0 authorization/state matrices](m0-authorization-and-state-matrices.md) | Core roles, authorization inputs, operation transitions, and Orca tool effects | M0 policy/state contract |
 | [M0 traceability](m0-traceability.md) | Requirement-to-contract-to-test ownership | M0 verification control |
@@ -115,6 +116,8 @@ identifiers are:
 | [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
 | [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | Historical P0-06A/P0-06B standalone-proof design and supersession record | `SUPERSEDED`; retained for audit, with M0-S3 as the executable proof |
 | [P0-06 stage record](proofs/p0-06-stage-record.json) | `curve.proof-stage-projection/v3` terminal supersession binding | `P0-06_SUPERSEDED`; D-003 `LOCAL_ONLY` and replacement M0-S3 are machine validated |
+| [P0-12 retention decision packet](p0-12-retention-decision-task-packet.md) (owner inputs, machine worksheet, approval protocol, acceptance tests, and handoff) | Decision-readiness package for D-009 retention, backup, hold, tombstone, and erasure policy | `REVIEW_DRAFT / PROPOSED / NOT_DECIDED`; 39 policy cells, eight controlled-copy entries, six material blocks, and six named-person approvals remain required |
+| [D-009 retention worksheet](../../contracts/governance/d009-retention-policy-v1.json) (machine policy cells, storage inventory, decision blocks, digest-bound approvals, and activation guard) | Normative owner-fillable D-009 decision instance | `PROPOSED / NONE_FAIL_CLOSED`; grants no implementation or activation authority |
 | [GitHub Project tracking map](github-project-execution-map.md) | Seventy-package visual catalog plus explicit packet checkpoints, read-only context inspection, and bounded status reconciliation | Administrative status tracking; status is informational, while task packets and execution controls remain authoritative |
 | [Machine-readable contracts](../../contracts/README.md) | OpenAPI, JSON Schema, MCP, SSE, provider, operation, and Temporal contracts | Normative wire/schema source |
 
