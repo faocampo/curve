@@ -116,6 +116,12 @@ const expectedAcceptanceCriteria = Array.from(
   (_, index) => `AC-${String(index + 1).padStart(2, "0")}`,
 );
 const prdText = readFileSync(join(root, testStrategyMatrix.source.document), "utf8");
+const developmentPlanText = readFileSync(join(root, "docs/technical/development-plan.md"), "utf8");
+const developmentPlanPackages = new Set(
+  [...developmentPlanText.matchAll(/^\| ((?:P0|M[0-7]|R1)-\d{2}) \|/gm)].map(
+    (match) => match[1],
+  ),
+);
 const acceptanceSectionStart = prdText.indexOf(
   `## ${testStrategyMatrix.source.section}`,
 );
@@ -163,6 +169,17 @@ for (const suite of testStrategyMatrix.suites) {
 }
 
 for (const criterion of testStrategyMatrix.acceptance_criteria) {
+  if (!developmentPlanPackages.has(criterion.owning_package)) {
+    throw new Error(
+      `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} references owning package ${criterion.owning_package} absent from the development plan`,
+    );
+  }
+  const owningMilestone = criterion.owning_package.split("-")[0];
+  if (criterion.milestone !== owningMilestone) {
+    throw new Error(
+      `${relative(root, testStrategyMatrixPath)} ${criterion.ac_id} milestone ${criterion.milestone} differs from owning package ${criterion.owning_package}`,
+    );
+  }
   const primarySuite = testSuites.get(criterion.primary_suite);
   if (!primarySuite) {
     throw new Error(

@@ -79,7 +79,7 @@ environment authorization, and package-level acceptance result.
 | `PARTIAL` | Available evidence proves a bounded subset of the complete R1 scenario. | Complete the remaining surfaces and run the aggregate criterion suite. |
 | `IMPLEMENTED_PASSING` | The complete criterion passed on the exact accepted head in an available authoritative environment. | Any relevant head, contract, policy, tool, or environment change invalidates the result and requires rerun. |
 
-The initial v1 matrix contains 16 `SPECIFIED`, 34 `DECISION_BLOCKED`, seven
+The initial v1 matrix contains 15 `SPECIFIED`, 35 `DECISION_BLOCKED`, seven
 `ENVIRONMENT_BLOCKED`, and three `PARTIAL` criteria. Promotion counts are
 computed from the machine contract rather than edited in dashboards by hand.
 
@@ -228,15 +228,15 @@ is:
 
 | Owning milestone | Criteria |
 | --- | ---: |
-| P0 | 1 |
-| M0 | 2 |
+| P0 | 0 |
+| M0 | 4 |
 | M1 | 8 |
 | M2 | 8 |
-| M3 | 5 |
-| M4 | 8 |
-| M5 | 21 |
+| M3 | 6 |
+| M4 | 5 |
+| M5 | 20 |
 | M6 | 4 |
-| Cross-cutting | 3 |
+| R1 | 5 |
 | **Total** | **60** |
 
 The contract validator also reads the acceptance section from the [Curve PRD
