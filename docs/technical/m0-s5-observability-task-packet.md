@@ -5,15 +5,16 @@
 | Field | Value |
 | --- | --- |
 | Package | M0-S5 (local audit and observability implementation packet) / M0-08 (audit and observability foundation work package) |
-| Status | `PROPOSED_FOR_MATERIAL_APPROVAL_AND_EXACT_HEAD_REVIEW`; M0-S5A waits for this packet's exact-head approval and context digest; M0-S5B also waits for the platform binding |
-| Version | 1.9 |
-| Date | 2026-08-21 |
+| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_BLOCKED`; M0-S5A is bound by its post-merge evidence; M0-S5B waits for the platform binding |
+| Version | 1.10 |
+| Date | 2026-08-22 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Minimum Plane ancestor | `preview` merge `e762fbbd2c1726a2833745add8245a1679c60d88` containing accepted M0-S3 (local Temporal round-trip implementation packet) and M0-S4 (API, SSE, and minimal Curve-first UI implementation packet) evidence |
 | Implementation base | Plane PR #6 (M0-S4 API, SSE, and Curve-first UI implementation) approved head `a1748c790a060434928b8ed521692b13b3f9739e`, squash-merged into `preview` as `e762fbbd2c1726a2833745add8245a1679c60d88`; the approved head and merge share Git tree `3f63bac0db7290bb614829ad9305c1f68a2d4159`; [CodeQL](https://github.com/faocampo/plane/actions/runs/32527413261) (Python/JavaScript analysis) and [copyright](https://github.com/faocampo/plane/actions/runs/32527415252) (Python/TypeScript license-header check) are green |
-| Context readiness | The M0-08 context path set now includes [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (exact context, approvals, merge, tests, UX/security acceptance, and rollback). Implementation remains fail closed until Federico approves this exact Curve contract head, it is merged, and the deterministic context pack is generated at that final revision; no earlier digest authorizes mutation. |
+| Context readiness | Satisfied for M0-S5A by Curve merge `a23dab9...` and context digest `sha256:720a70bb9146761e7b4f1852e889127460812d25d84cbafd1304e20caa18ac1a`. [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (approval, merge, complete dual-mode regression, security acceptance, and rollback) records completion. M0-S5B materializes a new exact context only after OBS-BIND-001 approval. |
+| Implementation evidence | [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (exact Curve/Plane revisions, Git-tree equivalence, tests, security controls, rollback, and remaining M0-S5B boundary) |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Risk | `STANDARD`, with telemetry treated as a data-exfiltration boundary |
 | Implementation branches | `curve/m0-s5a-observability-kernel` and, after OBS-BIND-001 approval, `curve/m0-s5b-x3m-observability-binding` |

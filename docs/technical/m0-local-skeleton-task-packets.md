@@ -4,12 +4,12 @@
 
 | Field | Value |
 | --- | --- |
-| Status | M0-S1, M0-S2, M0-03, M0-S3, and M0-S4 completed; M0-S5 contracts are proposed for material approval |
-| Version | 2.4 |
-| Date | 2026-08-21 |
-| Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, effective D-003 local profile, and accepted M0-S3/M0-S4 evidence) |
-| Contract baseline floor | Accepted Curve `main` commit `ccd3c3aa6de46e0f2ee197905226cb40db0515b3` containing the approved M0-S4 Definition/UX lifecycle and implementation-readiness reconciliation; each coding attempt refreshes and pins the current merged Curve context before mutation |
-| Plane implementation base | M0-S4 merge commit `e762fbbd2c1726a2833745add8245a1679c60d88` on fork `preview` |
+| Status | M0-S1, M0-S2, M0-03, M0-S3, M0-S4, and M0-S5A completed; M0-S5B waits for its X3M binding decision |
+| Version | 2.5 |
+| Date | 2026-08-22 |
+| Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, effective D-003 local profile, and accepted M0-S3/M0-S4/M0-S5A evidence) |
+| Contract baseline floor | Accepted Curve `main` commit `a23dab99e9afcc9dbfad7f5a3dc8b394ef60e529` containing the approved M0-S5 observability contract and deterministic M0-08 context; each coding attempt refreshes and pins the current merged Curve context before mutation |
+| Plane implementation base | M0-S5A merge commit `39920769daf78fce29a10c7f4e4bb8779671b004` on fork `preview` |
 
 ## Purpose
 
@@ -25,8 +25,8 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | --- | --- |
 | Repository | `git@github.com:faocampo/plane.git` |
 | Base branch | Fork `preview` |
-| Base SHA | Current accepted `preview` `e762fbbd2c1726a2833745add8245a1679c60d88`; every later packet verifies the live base or records a separately reviewed descendant |
-| Curve revision | At least accepted Curve baseline `ccd3c3aa6de46e0f2ee197905226cb40db0515b3`; every materialization records the exact merged Curve revision containing its packet and deterministic context digest |
+| Base SHA | Current accepted `preview` `39920769daf78fce29a10c7f4e4bb8779671b004`; every later packet verifies the live base or records a separately reviewed descendant |
+| Curve revision | At least accepted Curve baseline `a23dab99e9afcc9dbfad7f5a3dc8b394ef60e529`; every materialization records the exact merged Curve revision containing its packet and deterministic context digest |
 | GitHub Project item | Exact visual-tracking item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and maintained during delivery |
 | Branch | One feature branch per packet, created from the exact accepted Plane base recorded at dispatch |
 | Human owner | Federico Ocampo for M0-S1 through M0-S5 unless reassigned; every packet records its named person at dispatch; role-only values are invalid |
@@ -48,9 +48,9 @@ overwrite an existing environment file.
 
 | Blocker | Required resolution |
 | --- | --- |
-| `B-PUBLISH` | Satisfied through M0-S4: Curve planning merge `ccd3c3a...` and Plane implementation merge `e762fbb...` are published. Each later packet still requires its exact Curve context publication. |
-| `B-REVIEW` | Satisfied through M0-S4: Federico approved Plane PR #6 exact head `a1748c7...`, merged as `e762fbb...`. Each later implementation output still requires its own exact-head review. |
-| `B-BASE` | Satisfied through M0-S4: reviewed upstream-sync, M0-S1, M0-S2, M0-03, M0-S3, and M0-S4 are preserved in fork history; current accepted `preview` is `e762fbbd2c1726a2833745add8245a1679c60d88`. |
+| `B-PUBLISH` | Satisfied through M0-S5A: Curve planning merge `a23dab9...` and Plane implementation merge `3992076...` are published. Each later packet still requires its exact Curve context publication. |
+| `B-REVIEW` | Satisfied through M0-S5A: Federico approved Plane PR #7 exact head `c258ef1...`, merged as `3992076...`. Each later implementation output still requires its own exact-head review. |
+| `B-BASE` | Satisfied through M0-S5A: reviewed upstream-sync, M0-S1, M0-S2, M0-03, M0-S3, M0-S4, and M0-S5A are preserved in fork history; current accepted `preview` is `39920769daf78fce29a10c7f4e4bb8779671b004`. |
 | `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Federico Ocampo against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
 | `B-P002` | Satisfied for `LOCAL_ONLY`: Curve PR #9 merged the original decision as `097016f...`; Curve PR #15 merged its shared-network amendment as `aece539...`. |
 | `B-D003` | Satisfied for local M0-S3: the effective [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, EKS direction, controls, and revised proof) selects Plane `dev_env`, direct loopback Temporal ports, and the private-EKS connectivity/security model. Environment activation still requires its reviewable operations package. |
@@ -300,7 +300,7 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S5-OBSERVABILITY` |
-| Status | `PROPOSED_FOR_MATERIAL_APPROVAL`: [standalone M0-S5 task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, X3M binding proof, tests, evidence, and rollback) is materialized for exact-head review; M0-S4 merge/evidence is satisfied, while M0-S5A code remains blocked by exact-head contract approval and its final M0-08 context digest |
+| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_BLOCKED`: [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (exact context, approval, merge, dual-mode full regression, security acceptance, and rollback) closes the telemetry kernel; M0-S5B still waits for OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding) |
 | Risk | `STANDARD`; telemetry is a potential data-exfiltration boundary |
 | Outcome | Correlate the local Operation across HTTP, database, relay, workflow, and UI without leaking protected or credential data. |
 | Traceability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 |
