@@ -7,7 +7,7 @@
 | Product | Curve |
 | Work package | P0-05 (test-harness strategy and R1 acceptance traceability) |
 | Status | `IN_REVIEW` |
-| Version | 1.0 |
+| Version | 1.1 |
 | Owner | Federico Ocampo, CTO at X3M |
 | Human reviewer | Federico Ocampo |
 | Last updated | 2026-08-22 |
@@ -79,7 +79,7 @@ environment authorization, and package-level acceptance result.
 | `PARTIAL` | Available evidence proves a bounded subset of the complete R1 scenario. | Complete the remaining surfaces and run the aggregate criterion suite. |
 | `IMPLEMENTED_PASSING` | The complete criterion passed on the exact accepted head in an available authoritative environment. | Any relevant head, contract, policy, tool, or environment change invalidates the result and requires rerun. |
 
-The initial v1 matrix contains 15 `SPECIFIED`, 35 `DECISION_BLOCKED`, seven
+The initial v1 matrix contains 16 `SPECIFIED`, 34 `DECISION_BLOCKED`, seven
 `ENVIRONMENT_BLOCKED`, and three `PARTIAL` criteria. Promotion counts are
 computed from the machine contract rather than edited in dashboards by hand.
 
@@ -101,7 +101,7 @@ computed from the machine contract rather than edited in dashboards by hand.
 | `S-CHAOS-RECOVERY` | Database, Temporal, gateway, Onyx, runner, and VCS disruption and reconciliation | Local deterministic failure injection plus authorized staging faults | Partial; local Temporal restart/replay exists |
 | `S-SANDBOX` | gVisor escape, egress, metadata, secret, resource, cross-run, cleanup, and quarantine controls | Dedicated staging `RuntimeClass` and disposable hostile-workload corpus | Environment-blocked |
 | `S-MANUAL-EVIDENCE` | Deployment observation, adjacent regression, and other irreducibly human checks | Versioned scripts and immutable evidence records | Planned per consuming packet |
-| `S-RELEASE-COMPLIANCE` | AGPL source link, exact public tag, notices, SBOM, provenance, and build/install proof | Public release CI plus attributed verification | Planned in P0-04 (AGPL compliance implementation package) |
+| `S-RELEASE-COMPLIANCE` | AGPL source link, exact public tag, notices, SBOM, provenance, and build/install proof | Public release CI plus attributed verification | Planned in R1-04 (release licensing, SBOM, provenance, and source qualification) |
 
 ## Environment model
 
@@ -116,7 +116,7 @@ computed from the machine contract rather than edited in dashboards by hand.
 | `E-DISPOSABLE-PROVIDER` | Provider, GitHub, GitLab, Onyx, MCP, and ambiguity conformance | Synthetic only | Provider decision, scoped identity, cleanup, and external-write authorization required |
 | `E-GVISOR-STAGING` | Runner and preview containment | Approved staging data only | Platform activation plus applicable D-003 (runtime topology), D-009 (retention), and D-014 (budget) decisions |
 | `E-X3M-STAGING` | Integrated recovery, monitoring, flags, evidence, and release-readiness proof | Approved staging data only | Consuming decision set and Platform Operations activation required |
-| `E-RELEASE-CI` | Public deployed-release compliance | Public release metadata | P0-04 (AGPL compliance implementation package) publishes the exact command and evidence contract |
+| `E-RELEASE-CI` | Public deployed-release compliance | Public release metadata | R1-04 (release licensing, SBOM, provenance, and source qualification) publishes the exact command and evidence contract |
 
 Local proof uses X3M's approved Docker topology and disposable volumes.
 Staging fault or sandbox tests require explicit infrastructure authorization,
@@ -241,8 +241,19 @@ is:
 
 The contract validator also reads the acceptance section from the [Curve PRD
 v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, lifecycle,
-decisions, and AC-01 through AC-60). Any missing, duplicated, reordered, or
-renamed AC fails validation until this strategy is intentionally versioned.
+decisions, and AC-01 through AC-60). It recalculates
+`sha256:0115c788d369b6063282a4549ff8fc7b011727be13f6f882b004fd9920b33a20`
+over each ordered AC identifier and its exact criterion text. Any missing,
+duplicated, reordered, renamed, or text-modified AC fails validation until this
+strategy is intentionally versioned.
+
+AC-57 (model-failover policy and actual-routing evidence) remains assigned to
+the M0-09 (provider registry, callback, capability, and reconciliation
+foundation) aggregate until the Model Gateway consuming package is decomposed.
+M0-S9A (provider registry and deterministic fake-provider foundation) performs
+no model call and therefore cannot complete AC-57. D-004 (model catalog and
+data-policy decision) and D-005 (model task-routing decision) remain its exact
+material blockers.
 
 ## Change and versioning rules
 
@@ -269,6 +280,10 @@ git diff --check
 ```
 
 Acceptance requires the contract validator to report the matrix schema and
-fixture totals, verify AC-01 through AC-60 against the PRD, and reject the
-negative matrix fixture. The PR diff must remain limited to the P0-05 strategy,
-contract, fixtures, validator, and contract index.
+fixture totals, verify AC-01 through AC-60 and their exact text digest against
+the PRD, validate each owning package's development-plan trace, and reject the
+negative matrix fixture. The semantic test suite must also reject source drift,
+owner-trace drift, cross-repository suite drift, invalid command ownership,
+false coverage promotion, duplicate catalogs, and reordered criteria. The PR
+diff must remain limited to the P0-05 strategy, contract, fixtures, validator,
+and contract index.

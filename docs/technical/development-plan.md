@@ -282,13 +282,13 @@ M5 exit proves the entire supported flow through both VCS providers, both agent 
 
 ### R1: Qualification and controlled rollout
 
-| ID | Size | Deliverable | Dependencies | Completion evidence |
-| -- | ---- | ----------- | ------------ | ------------------- |
-| R1-01 | M | Full AC-01-AC-60 trace run in production-like environment with evidence archive | M0-M6 | Every AC passes or the PRD is revised; no blanket waiver. |
-| R1-02 | M | Security assessment, threat-model closure, runner/preview isolation test, IDOR/DLP/webhook/SSRF/secret fixtures, and residual-risk acceptance | R1-01 | No open Critical/Major security finding and non-waivable controls proven. |
-| R1-03 | M | Disaster recovery, Temporal replay/upgrade, provider outage, reconciliation, backup/restore, and cancellation cleanup exercise | R1-01 | RPO/RTO and NFR-004/NFR-008 pass with runbook evidence. |
-| R1-04 | M | AGPL corresponding-source workflow, third-party notices, dependency manifest, SBOMs, provenance, generated-code IP checks, and release-owner sign-off | P0-01, all build artifacts | AC-59 passes and counsel-approved process is documented. |
-| R1-05 | S | R0A/R0B pilot comparison, KPI baseline/targets, operating ownership, support/runbooks, training, and gradual workspace enablement | R1-01-R1-04, D-015-D-016 | Product, engineering, security, operations, and licensing sign-off. |
+| ID | Size | Deliverable | Dependencies | PRD trace | Completion evidence |
+| -- | ---- | ----------- | ------------ | --------- | ------------------- |
+| R1-01 | M | Full AC-01-AC-60 trace run in production-like environment with evidence archive | M0-M6 | AC-01-AC-60 | Every AC passes or the PRD is revised; no blanket waiver. |
+| R1-02 | M | Security assessment, threat-model closure, runner/preview isolation test, IDOR/DLP/webhook/SSRF/secret fixtures, and residual-risk acceptance | R1-01 | AC-52, AC-53, AC-55 | No open Critical/Major security finding and non-waivable controls proven. |
+| R1-03 | M | Disaster recovery, Temporal replay/upgrade, provider outage, reconciliation, backup/restore, and cancellation cleanup exercise | R1-01 | AC-58 | RPO/RTO and NFR-004/NFR-008 pass with runbook evidence. |
+| R1-04 | M | AGPL corresponding-source workflow, third-party notices, dependency manifest, SBOMs, provenance, generated-code IP checks, and release-owner sign-off | P0-01, all build artifacts | AC-59 | AC-59 passes and counsel-approved process is documented. |
+| R1-05 | S | R0A/R0B pilot comparison, KPI baseline/targets, operating ownership, support/runbooks, training, and gradual workspace enablement | R1-01-R1-04, D-015-D-016 | G-09, D-015-D-016 | Product, engineering, security, operations, and licensing sign-off. |
 
 ### M7: Future integration expansion
 

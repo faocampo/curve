@@ -24,11 +24,12 @@
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["prd_version", "document", "section", "first_ac", "last_ac", "ac_count"],
+      "required": ["prd_version", "document", "section", "acceptance_criteria_digest", "first_ac", "last_ac", "ac_count"],
       "properties": {
         "prd_version": { "const": "0.12" },
         "document": { "const": "docs/curve-ai-native-sdlc-prd.md" },
         "section": { "const": "Acceptance criteria for R1, the first usable release" },
+        "acceptance_criteria_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
         "first_ac": { "const": "AC-01" },
         "last_ac": { "const": "AC-60" },
         "ac_count": { "const": 60 }
@@ -74,7 +75,7 @@
     "suite": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "name", "kind", "repository", "implementation_state", "command_ids"],
+      "required": ["id", "name", "kind", "repositories", "implementation_state", "command_ids"],
       "properties": {
         "id": { "$ref": "#/$defs/stableId" },
         "name": { "type": "string", "minLength": 1, "maxLength": 200 },
@@ -97,7 +98,12 @@
             "RELEASE_COMPLIANCE"
           ]
         },
-        "repository": { "enum": ["CURVE", "PLANE", "TARGET_REPOSITORY", "EXTERNAL_HARNESS"] },
+        "repositories": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["CURVE", "PLANE", "TARGET_REPOSITORY", "EXTERNAL_HARNESS"] }
+        },
         "implementation_state": { "enum": ["AVAILABLE", "PARTIAL", "PLANNED", "DECISION_BLOCKED"] },
         "command_ids": {
           "type": "array",
