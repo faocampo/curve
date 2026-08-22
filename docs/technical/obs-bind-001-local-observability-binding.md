@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Decision | OBS-BIND-001 (local Docker OTLP, Prometheus, Grafana, and path-health binding) |
-| Status | `DECIDED_LOCAL_ONLY`; publication at an exact reviewed Curve head is required before M0-S5B dispatch |
+| Status | `DECIDED_LOCAL_ONLY`; published at Curve merge `43480ca8463d0b40d436145aeb19fbbc8c2be472` and consumed by M0-S5B at Plane merge `1b06153f6f49848f208808f4f09385a581a55d26` |
 | Version | 1.0 |
 | Date | 2026-08-22 |
 | Product | Curve |

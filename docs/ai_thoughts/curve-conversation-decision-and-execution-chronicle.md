@@ -1432,3 +1432,49 @@ rollback) and [OBS-BIND-001 v1](../../contracts/observability/obs-bind-001-local
 observability integration proof) may be dispatched after these exact bytes are
 merged and the refreshed M0-08 context revision/digest is pinned. M0-08 remains
 visually `In progress` until implementation and local acceptance finish.
+
+### M0-S5B implementation, live proof, approval, and merge
+
+Curve PR #24 merged OBS-BIND-001 (local Docker OTLP, Prometheus, Grafana,
+alert, path-health, persistence, and cleanup binding) into `main` at
+`43480ca8463d0b40d436145aeb19fbbc8c2be472`. The resulting M0-S5B (local
+observability integration) dispatch pinned 36 contract and planning inputs at
+context digest
+`sha256:36933053249f2159d2b768e3ff62c3e114a587a5fa650df9b262b4f7d9b28d3b`
+and Plane base `39920769daf78fce29a10c7f4e4bb8779671b004`.
+
+The Plane implementation added the three digest-pinned observability services
+to the existing local Compose stack, the `prometheus-local` datasource, the
+`Curve` Grafana folder, a ten-panel dashboard, four application alerts, two
+independent path-health alerts, and a deterministic proof runner. The live
+proof verified service and scrape health, a successful and cancelled
+Foundation workflow, real metrics through the Collector, all dashboard
+queries, all alert rules, independent failure/recovery, protected-value
+absence, telemetry disablement, full repository regression, and cleanup that
+preserved the existing Plane data and runtime services.
+
+Federico Ocampo approved Plane PR #8 at exact head
+`320c4b92b6c9e417410e32a83409a33a64518df0` and authorized marking it ready and
+squash-merging it into `preview` while CI remained green. GitHub created no
+pull-request check suite after `ready_for_review` or a bounded close/reopen
+retrigger. The active CodeQL and copyright workflows were therefore dispatched
+directly against the exact approved commit. CodeQL passed for JavaScript and
+Python in [run 32592365475](https://github.com/faocampo/plane/actions/runs/32592365475),
+and license-header validation passed in
+[run 32592367086](https://github.com/faocampo/plane/actions/runs/32592367086).
+The API workflow dispatch was skipped because that job requires a pull-request
+event payload; Ruff and all 707 Plane backend tests had already passed locally
+against the approved tree.
+
+GitHub squash-merged [Plane PR #8](https://github.com/faocampo/plane/pull/8)
+(M0-S5B local observability integration) on 2026-08-22 as
+`1b06153f6f49848f208808f4f09385a581a55d26`. The approved head and merge share
+Git tree `cffc6ed3be2d0faad8c6fcddcd14a5fd023db7fb`, and the merge is on
+`origin/preview`.
+
+The result is recorded in [M0-S5B implementation evidence](../technical/m0-s5b-implementation-evidence.md)
+(exact context, CI, merged tree, live OTLP, dashboards, alerts, redaction,
+disablement, regression, cleanup, security boundary, and rollback). M0-08
+(audit and observability foundation) remains visually `In review` until this
+exact Curve evidence revision is reviewed and merged. Staging observability
+activation remains a separate material decision.

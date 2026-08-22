@@ -183,5 +183,9 @@ staging/production activation, infrastructure mutation, or M0-08 completion.
 The paragraph above preserves the dependency state at M0-S5A acceptance.
 [OBS-BIND-001](obs-bind-001-local-observability-binding.md) (decided local
 Docker OTLP, Prometheus, Grafana, and path-health binding) was subsequently
-selected on 2026-08-22. M0-S5B now awaits exact merged context publication and
-implementation; M0-08 remains open until its local acceptance evidence passes.
+selected on 2026-08-22. M0-S5B subsequently consumed Curve revision
+`43480ca...`, merged into Plane `preview` at `1b06153...`, and passed its local
+acceptance proof. [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md)
+(exact context, CI, live OTLP, dashboards, alerts, redaction, disablement,
+cleanup, and rollback) records the current result; M0-08 remains `In review`
+until that exact Curve evidence revision is reviewed and merged.
