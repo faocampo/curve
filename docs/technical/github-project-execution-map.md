@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Status | Active visual-tracking contract |
-| Version | 1.8 |
+| Version | 1.9 |
 | Date | 2026-08-22 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (70-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
-| Last reconciliation | 2026-08-22: M0-08 item `PVTI_lAHOBNjuQc4BgZzOzg2nbyQ` remains `In progress`; M0-S5A is approved and merged in Plane PR #7 as `3992076...`, while M0-S5B remains blocked by OBS-BIND-001 (X3M local telemetry binding). No duplicate item was created. |
+| Last reconciliation | 2026-08-22: M0-08 item `PVTI_lAHOBNjuQc4BgZzOzg2nbyQ` remains `In progress`; M0-S5A is accepted at Plane merge `3992076...`; OBS-BIND-001 (local Docker OTLP, Prometheus, Grafana, and path-health binding) is decided; M0-S5B awaits exact context publication and implementation. No duplicate item is required. |
 
 ## Purpose and authority boundary
 

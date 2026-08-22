@@ -5,21 +5,21 @@
 | Field | Value |
 | --- | --- |
 | Package | M0-S5 (local audit and observability implementation packet) / M0-08 (audit and observability foundation work package) |
-| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_BLOCKED`; M0-S5A is bound by its post-merge evidence; M0-S5B waits for the platform binding |
-| Version | 1.10 |
+| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_CONTEXT_PENDING`; M0-S5A is bound by its post-merge evidence; the local binding is decided and M0-S5B awaits exact merged context publication |
+| Version | 1.11 |
 | Date | 2026-08-22 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Minimum Plane ancestor | `preview` merge `e762fbbd2c1726a2833745add8245a1679c60d88` containing accepted M0-S3 (local Temporal round-trip implementation packet) and M0-S4 (API, SSE, and minimal Curve-first UI implementation packet) evidence |
-| Implementation base | Plane PR #6 (M0-S4 API, SSE, and Curve-first UI implementation) approved head `a1748c790a060434928b8ed521692b13b3f9739e`, squash-merged into `preview` as `e762fbbd2c1726a2833745add8245a1679c60d88`; the approved head and merge share Git tree `3f63bac0db7290bb614829ad9305c1f68a2d4159`; [CodeQL](https://github.com/faocampo/plane/actions/runs/32527413261) (Python/JavaScript analysis) and [copyright](https://github.com/faocampo/plane/actions/runs/32527415252) (Python/TypeScript license-header check) are green |
-| Context readiness | Satisfied for M0-S5A by Curve merge `a23dab9...` and context digest `sha256:720a70bb9146761e7b4f1852e889127460812d25d84cbafd1304e20caa18ac1a`. [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (approval, merge, complete dual-mode regression, security acceptance, and rollback) records completion. M0-S5B materializes a new exact context only after OBS-BIND-001 approval. |
+| Minimum Plane ancestor | `preview` merge `39920769daf78fce29a10c7f4e4bb8779671b004` containing accepted M0-S3 (local Temporal round-trip packet), M0-S4 (API, SSE, and minimal Curve-first UI packet), and M0-S5A (telemetry kernel and static assets) |
+| Implementation base | M0-S5B starts from Plane `preview` at M0-S5A merge `39920769daf78fce29a10c7f4e4bb8779671b004`; the approved Plane PR #7 head `c258ef12221964dae67286e0f6a6c2dc58b997fe` and merge share Git tree `87db1b646cd473f1c407b8aebbc43c27e62d9f8c` |
+| Context readiness | Satisfied for M0-S5A by Curve merge `a23dab9...` and context digest `sha256:720a70bb9146761e7b4f1852e889127460812d25d84cbafd1304e20caa18ac1a`. [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (approval, merge, complete dual-mode regression, security acceptance, and rollback) records completion. [OBS-BIND-001](obs-bind-001-local-observability-binding.md) (decided local Docker OTLP, Prometheus, Grafana, health, and cleanup binding) closes the M0-S5B platform decision; dispatch records the exact merged Curve revision and refreshed context digest. |
 | Implementation evidence | [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (exact Curve/Plane revisions, Git-tree equivalence, tests, security controls, rollback, and remaining M0-S5B boundary) |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Risk | `STANDARD`, with telemetry treated as a data-exfiltration boundary |
 | Implementation branches | `curve/m0-s5a-observability-kernel` and, after OBS-BIND-001 approval, `curve/m0-s5b-x3m-observability-binding` |
 | Data and tool policy | Synthetic `INTERNAL` fixtures only; no customer/protected bodies, model/provider calls, dependency upgrade, repository mutation outside the Plane branch, or GitHub/infrastructure write by the coding agent |
-| Budget and sandbox | M0-S5A uses repository-local/CI resource limits with outbound telemetry and network disabled; M0-S5B uses only the time-bounded endpoint, credentials, namespace, and cleanup window approved in OBS-BIND-001 |
+| Budget and sandbox | M0-S5A uses repository-local/CI resource limits with outbound telemetry and network disabled; M0-S5B uses only the local `dev_env`, loopback host ports, no OTLP credential, synthetic data, bounded proof lifetime, and cleanup contract in OBS-BIND-001 |
 | Product trace | FR-021 and FR-024 (audit and measurable lifecycle requirements); NFR-001 through NFR-014 (performance, reliability, security, privacy, and operations requirements); AC-34, AC-36, and AC-53 (audit, KPI, and protected-data acceptance criteria) |
 
 ## Outcome
@@ -38,10 +38,11 @@ This packet divides delivery into two independently reviewable changes:
    instrumentation, deterministic in-memory tests, the Grafana dashboard
    definition, and Prometheus alert-rule definition. It requires M0-S4 (API,
    SSE, and minimal approved UI packet) and the approved Curve contract head.
-2. M0-S5B (X3M local observability integration proof) binds the kernel to the
-   approved local X3M collector, Prometheus datasource, Grafana provisioning,
-   and alert route. It additionally requires OBS-BIND-001 (local X3M
-   OTLP/Prometheus/Grafana binding) to be complete.
+2. M0-S5B (local observability integration proof) binds the kernel to the
+   digest-pinned local Collector, Prometheus datasource, Grafana provisioning,
+   application/path-health rules, and disposable cleanup selected by
+   [OBS-BIND-001](obs-bind-001-local-observability-binding.md) (exact local
+   topology, configuration, commands, acceptance, and promotion boundary).
 
 ## Normative sources
 
@@ -54,6 +55,9 @@ This packet divides delivery into two independently reviewable changes:
 | [Security and operations](security-and-operations.md) (identity, redaction, data handling, observability, and incident controls) | Telemetry allowlist, secret/protected-data exclusion, and operational response |
 | [Telemetry manifest v1](../../contracts/observability/m0-s5-telemetry-v1.json) (metric, span, log, dashboard, alert, redaction, and exporter contract) | Normative instrumentation surface |
 | [Telemetry manifest schema](../../contracts/schemas/telemetry-manifest.schema.json) (machine validation of fail-closed telemetry configuration) | Contract shape and fail-closed constants |
+| [OBS-BIND-001 local observability binding](obs-bind-001-local-observability-binding.md) (decided Compose topology, versions, endpoints, provisioning, health, commands, acceptance, and rollback) | Normative M0-S5B implementation and proof values |
+| [OBS-BIND-001 v1](../../contracts/observability/obs-bind-001-local-v1.json) (machine-readable local authority and configuration contract) | Exact local service, network, endpoint, image, health, cleanup, and promotion values |
+| [Observability binding schema](../../contracts/schemas/observability-binding.schema.json) (machine validation and local-only authority constants) | Rejects non-local scope, non-loopback exposure, changed topology, or external alert delivery |
 | [Operation event v2 schema](../../contracts/schemas/operation-event-v2.schema.json) (v1 lifecycle fields plus optional validated `traceparent`) | Dual-read v1/v2 persistence boundary for durable trace propagation without a database migration |
 | [M0 Temporal workflow contract](../../contracts/temporal/m0-workflow-contract.md) (workflow/activity inputs, trace header, signals, retry, and replay) | Backward-compatible header-only Temporal trace propagation rule |
 | [Audit event schema](../../contracts/schemas/audit-event.schema.json) (immutable attributed audit evidence) | Authoritative application evidence |
@@ -82,7 +86,7 @@ later documentation commit cannot silently change an active implementation.
 | Model policy | Dispatcher-approved coding model; no runtime model call, silent model/provider substitution, or Curve Model Gateway dependency |
 | Cost limit | US$25 maximum automated attempt; pause before exceeding the limit |
 | Repository authority | Read/write only on the named Plane feature branch; the agent does not merge, deploy, change GitHub Project state, or mutate X3M infrastructure |
-| Network policy | M0-S5A permits repository dependency/build traffic only when the pinned Plane lock and image inputs require it; all telemetry export is disabled. M0-S5B permits only the endpoint and verification window approved in OBS-BIND-001. |
+| Network policy | M0-S5A permits repository dependency/build traffic only when the pinned Plane lock and image inputs require it; all telemetry export is disabled. M0-S5B uses the shared local `dev_env`, Docker service discovery, and loopback-only host ports in OBS-BIND-001; no external telemetry or alert destination is configured. |
 | Data policy | Synthetic `INTERNAL` values and the sentinel corpus only; no customer, credential, protected, source-body, prompt, response, patch, evidence-body, or tool-output value enters telemetry or PR evidence |
 | Stop behavior | Missing owner, reviewer, exact base/context, command, budget, or policy value stops before mutation |
 
@@ -109,25 +113,26 @@ All conditions must be true before code mutation:
 
 ### M0-S5B entry gates
 
-M0-S5B (X3M local observability integration proof) additionally requires an
-owner-approved OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding) record
-with every field below:
+M0-S5B (local observability integration proof) consumes the decided
+[OBS-BIND-001](obs-bind-001-local-observability-binding.md) (local Docker OTLP,
+Prometheus, Grafana, path-health, cleanup, and promotion binding). The exact
+merged record and context digest are the remaining dispatch inputs:
 
 | Required field | Required value or evidence |
 | --- | --- |
-| Platform Operations owner | Named person accountable for local collector, datasource, dashboard, and alert routing |
-| OTLP endpoint | Local endpoint or X3M Secrets Manager/configuration reference; no credential value in Git |
-| OTLP protocol | Exact `grpc` or `http/protobuf` value supported by the local collector |
-| OTLP transport policy | Local TLS/insecure rule and certificate/CA reference where applicable |
-| TLS material mapping | Exact mapping from approved read-only CA/client-certificate/client-key mounts to the Curve-owned TLS environment names; a client certificate and key are supplied together or omitted together |
-| Workspace-scope key | Secrets Manager reference, stable key ID, rotation owner, and overlapping-key rotation procedure |
-| Prometheus datasource | Grafana datasource UID and approved dashboard variable binding |
-| Prometheus metric translation | Exact configuration evidence that the approved path produces `UnderscoreEscapingWithSuffixes` metric and label names, including contracted type/unit suffixes |
-| Grafana provisioning | Folder UID and repository/provisioning path or named API owner |
-| Prometheus rule provisioning | Approved repository path or Kubernetes namespace/configuration owner |
-| Alert route | Contact-point/routing identifier and named response owner |
-| Independent telemetry-path health | Existing collector/platform receiver, exporter, or no-data signal that detects a complete Curve OTLP-path outage without depending on Curve's failed exporter; exact query/health endpoint and owner required |
-| Local verification window | Start/end time, cleanup/disablement rule, and expected evidence destination |
+| Environment owner | Developer running the disposable local stack; no Platform Operations approval is required for local proof |
+| OTLP endpoint | `http://otel-collector:4317` in Docker and `http://localhost:4317` from a host process |
+| OTLP protocol and transport | `grpc`; TLS disabled and `insecure=true` for local scope only; no OTLP authentication secret |
+| Workspace-scope key | Ephemeral base64url key in an ignored owner-only local environment file; key ID `local-dev-v1`; removed during cleanup |
+| Prometheus datasource | Grafana UID `prometheus-local` bound to `http://prometheus:9090`; dashboard variable `DS_PROMETHEUS` |
+| Prometheus metric translation | Collector Prometheus exporter with `UnderscoreEscapingWithSuffixes`; Prometheus scrapes `otel-collector:8889` |
+| Grafana provisioning | Default organization; folder title/UID `Curve`/`curve`; repository-owned file provisioning under `deployments/curve-observability` |
+| Prometheus rule provisioning | Existing four-rule M0-S5A file plus two local path-health rules, loaded from repository mounts |
+| Alert route | Prometheus evaluates; Grafana is the local viewing surface; external notification delivery is disabled; local developer owns response |
+| Independent telemetry-path health | Collector health on `13133`, self-metrics on `8888`, and Prometheus `up` for `otel-collector-self` and `curve-otel-metrics` |
+| Local verification window | Begins when the proof runner starts the profile; ends when it records sanitized results and runs the required `down -v` cleanup |
+| Supply chain | Collector `0.159.0`, Prometheus `3.10.0`, and Grafana `13.1.0` use the exact multi-architecture digests in OBS-BIND-001 v1 |
+| Remaining dispatch record | Exact merged Curve SHA plus deterministic `M0-S5B` context digest containing the binding, schema, fixtures, packet, and M0-S5A evidence |
 
 Absent or partial values leave OTLP export disabled. They do not block M0-S5A
 (telemetry kernel and static observability assets).
@@ -178,14 +183,17 @@ Absent or partial values leave OTLP export disabled. They do not block M0-S5A
 
 ### M0-S5B in scope
 
-- Local X3M configuration binding from OBS-BIND-001 (local X3M
-  OTLP/Prometheus/Grafana binding).
+- [OBS-BIND-001 local binding](obs-bind-001-local-observability-binding.md)
+  (decided Docker OTLP, Prometheus, Grafana, health, cleanup, and promotion
+  contract).
 - Existing local Plane Docker-stack configuration needed to opt in to the
   approved local endpoint.
-- Standard connectivity through the approved shared local Plane network and
-  private X3M platform services; M0-S5 adds no bespoke container network or
-  proxy layer.
-- Prometheus/Grafana import or provisioning proof using X3M's existing services.
+- Standard connectivity through the approved shared local Plane `dev_env`;
+  M0-S5 adds no bespoke container network or proxy layer.
+- Digest-pinned disposable local Collector, Prometheus, and Grafana services
+  within the opt-in `curve-observability` profile.
+- File-based Prometheus/Grafana provisioning proof using repository-owned
+  configuration and existing M0-S5A assets.
 - Synthetic successful, denied, failed, retried, cancelled, resumed, and stuck
   operation observations.
 - Alert evaluation/routing proof without sending production notifications.
@@ -195,8 +203,8 @@ Absent or partial values leave OTLP export disabled. They do not block M0-S5A
 
 ### Excluded
 
-- New observability infrastructure or a second collector, Prometheus, Grafana,
-  log store, or trace store.
+- Staging/production observability infrastructure, any service outside the
+  approved disposable local profile, or a trace/log backend.
 - Raw workspace IDs in metric labels; raw protected bodies, prompts, responses,
   patches, source, credentials, evidence, tool output, cookies, tokens, or
   idempotency keys on any telemetry surface.
@@ -361,8 +369,9 @@ the exact dispatch packet.
 | M0-S5A-4 (SSE, metrics, and static assets) | Instrument resumable SSE, observable gauges, dashboard JSON, Prometheus rules, and the repository-local asset checker | SSE resume, gauge timeout/omission, absent worker, bounded failure-ratio inputs, exact queries/identifiers, and disabled rollback |
 | M0-S5A-5 (integrated local acceptance) | Run the complete Curve and Plane suites with `IN_MEMORY_TEST`, then repeat with telemetry disabled | All M0-S5A acceptance scenarios, migration statement `NONE`, deterministic cleanup, and a reviewable evidence report |
 
-M0-S5B (X3M local observability integration proof) remains a separate packet and
-PR after OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding) is approved.
+M0-S5B (local observability integration proof) remains a separate Plane PR. Its
+platform decision is complete; dispatch follows exact-head Curve publication
+and deterministic M0-S5B context pinning.
 
 ## Acceptance scenarios
 
@@ -494,10 +503,13 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 docker compose -f docker-compose-test.yml down -v
 ```
 
-M0-S5B (X3M local observability integration proof) additionally executes the
-exact local stack commands recorded by OBS-BIND-001 (local X3M
-OTLP/Prometheus/Grafana binding), captures target health/query/rule evidence,
-then disables the profile and verifies the Plane stack remains healthy.
+M0-S5B (local observability integration proof) additionally executes the
+`prepare`, `up`, `verify-health`, `run-foundation`, `verify-telemetry`,
+`verify-alerts`, `verify-path-failure`, `verify-disablement`, and `cleanup`
+commands in [OBS-BIND-001](obs-bind-001-local-observability-binding.md)
+(exact local implementation and acceptance contract). It captures sanitized
+health/query/rule evidence, disables telemetry, removes the profile/volumes,
+and verifies the Plane stack remains healthy.
 
 ## Evidence and PR contract
 
@@ -515,13 +527,13 @@ Each implementation PR records:
 - Sentinel and metric-cardinality test evidence.
 - Disabled-state and exporter-failure evidence.
 - Migration statement (`NONE`) and rollback/disablement proof.
-- M0-S5B only: approved OBS-BIND-001 (local X3M
-  OTLP/Prometheus/Grafana binding), sanitized endpoint/datasource/rule/alert
+- M0-S5B only: approved [OBS-BIND-001](obs-bind-001-local-observability-binding.md)
+  (local Docker OTLP/Prometheus/Grafana/path-health binding), sanitized endpoint/datasource/rule/alert
   evidence, metric-translation and independent path-health proof, test window,
   and cleanup receipt.
 
-M0-S5A (telemetry kernel and static observability assets) and M0-S5B (X3M local
-observability integration proof) use separate Plane PRs so X3M binding changes
+M0-S5A (telemetry kernel and static observability assets) and M0-S5B (local
+observability integration proof) use separate Plane PRs so binding changes
 cannot silently alter the telemetry contract.
 
 ## Stop conditions

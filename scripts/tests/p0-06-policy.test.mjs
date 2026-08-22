@@ -135,6 +135,7 @@ test("M0-S4 context pins the API, SSE, policy, runtime, UX, and implementation c
 
 test("M0-08 context pins the observability contract, packet, fixtures, and validators", () => {
   const requiredPaths = [
+    "contracts/observability/obs-bind-001-local-v1.json",
     "contracts/observability/m0-s5-telemetry-v1.json",
     "contracts/openapi/curve-v1.openapi.yaml",
     "contracts/schemas/common.schema.json",
@@ -145,9 +146,11 @@ test("M0-08 context pins the observability contract, packet, fixtures, and valid
     "contracts/schemas/examples/telemetry-manifest.valid.json",
     "contracts/schemas/operation-event-v1.schema.json",
     "contracts/schemas/operation-event-v2.schema.json",
+    "contracts/schemas/observability-binding.schema.json",
     "contracts/schemas/operation-summary.schema.json",
     "contracts/schemas/operation.schema.json",
     "contracts/schemas/semantic-fixtures/operation-event-v2-tracestate.invalid.json",
+    "contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json",
     "contracts/schemas/sse-event.schema.json",
     "contracts/schemas/telemetry-manifest.schema.json",
     "contracts/temporal/m0-workflow-contract.md",
@@ -155,7 +158,9 @@ test("M0-08 context pins the observability contract, packet, fixtures, and valid
     "docs/technical/m0-readiness-board.md",
     "docs/technical/m0-s4-implementation-evidence.md",
     "docs/technical/m0-s5-observability-task-packet.md",
+    "docs/technical/m0-s5a-implementation-evidence.md",
     "docs/technical/m0-traceability.md",
+    "docs/technical/obs-bind-001-local-observability-binding.md",
     "docs/technical/ux-m0-s4-foundation-probe.md",
     "scripts/lib/context-pack.mjs",
     "scripts/validate-contracts.mjs",
@@ -164,6 +169,7 @@ test("M0-08 context pins the observability contract, packet, fixtures, and valid
   assert.equal(new Set(M0_08_CONTEXT_PATHS).size, M0_08_CONTEXT_PATHS.length);
   assert.deepEqual(M0_08_CONTEXT_PATHS, [...M0_08_CONTEXT_PATHS].sort());
   assert.deepEqual(contextPathsFor("M0-08"), M0_08_CONTEXT_PATHS);
+  assert.deepEqual(contextPathsFor("M0-S5B"), M0_08_CONTEXT_PATHS);
 });
 
 test("the live P0-06 projection is terminal and points to M0-S3", () => {

@@ -59,6 +59,8 @@ const policyEvaluationSchema = join(root, "contracts/schemas/policy-evaluation.s
 const policyDecisionSchema = join(root, "contracts/schemas/policy-decision.schema.json");
 const telemetryManifestSchema = join(root, "contracts/schemas/telemetry-manifest.schema.json");
 const telemetryManifestPath = join(root, "contracts/observability/m0-s5-telemetry-v1.json");
+const observabilityBindingSchema = join(root, "contracts/schemas/observability-binding.schema.json");
+const observabilityBindingPath = join(root, "contracts/observability/obs-bind-001-local-v1.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -68,6 +70,8 @@ const fixtureSpecs = [
   ["docs/technical/proofs/p0-06-stage-record.json", p0_06StageProjectionSchema, true],
   ["contracts/policy/core-policy-v1.json", corePolicyManifestSchema, true],
   ["contracts/observability/m0-s5-telemetry-v1.json", telemetryManifestSchema, true],
+  ["contracts/observability/obs-bind-001-local-v1.json", observabilityBindingSchema, true],
+  ["contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json", observabilityBindingSchema, false],
   ["contracts/schemas/semantic-fixtures/operation-event-v2-tracestate.invalid.json", operationEventV2Schema, false],
   ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
   ["contracts/schemas/semantic-fixtures/operation-terminal-null.invalid.json", operationSchema, false],
@@ -234,6 +238,34 @@ if (telemetryManifestDigest !== "611bf0f8760af2c9110eaded2b812d1203af31b813542fa
   throw new Error(
     "contracts/observability/m0-s5-telemetry-v1.json changed without a new reviewed contract version",
   );
+}
+const observabilityBinding = JSON.parse(readFileSync(observabilityBindingPath, "utf8"));
+const observabilityBindingSchemaDocument = JSON.parse(readFileSync(observabilityBindingSchema, "utf8"));
+const observabilityBindingSchemaDigest = createHash("sha256")
+  .update(JSON.stringify(canonicalJson(observabilityBindingSchemaDocument)))
+  .digest("hex");
+if (observabilityBindingSchemaDigest !== "589b9facb39efaa47ed0277ec9e8c31ed9b4106cd7ae8da5f0e5d4bccf085602") {
+  throw new Error(
+    "contracts/schemas/observability-binding.schema.json changed without a new reviewed contract version",
+  );
+}
+const observabilityBindingDigest = createHash("sha256")
+  .update(JSON.stringify(canonicalJson(observabilityBinding)))
+  .digest("hex");
+if (observabilityBindingDigest !== "8cd9f61e3abd88a7f4cc7557650915c341f323863df0a9953aeda9c9420bcbc2") {
+  throw new Error(
+    "contracts/observability/obs-bind-001-local-v1.json changed without a new reviewed contract version",
+  );
+}
+if (
+  observabilityBinding.decision.status !== "DECIDED_LOCAL_ONLY" ||
+  observabilityBinding.topology.network !== "dev_env" ||
+  observabilityBinding.topology.host_bind_address !== "127.0.0.1" ||
+  observabilityBinding.otlp.authentication_secret_reference !== null ||
+  observabilityBinding.grafana.external_alert_delivery !== "DISABLED" ||
+  observabilityBinding.promotion.staging_authority !== "SEPARATE_MATERIAL_DECISION_REQUIRED"
+) {
+  throw new Error("OBS-BIND-001 differs from the approved local-only authority boundary");
 }
 const expectedTelemetryMetrics = [
   "curve.activity.execution",

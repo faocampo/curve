@@ -1398,8 +1398,37 @@ and synthetic configuration were removed after verification.
 
 The result is recorded in [M0-S5A implementation evidence](../technical/m0-s5a-implementation-evidence.md)
 (exact context, approvals, merge, dual-mode full regression, security controls,
-and rollback). M0-S5A (telemetry kernel and static observability assets) is
-complete. M0-08 (audit and observability foundation work package) remains open
-and visually `In progress` because M0-S5B (X3M local observability integration
-proof) still requires OBS-BIND-001 (X3M OTLP, Prometheus, Grafana, alert
-routing, and independent path-health binding).
+and rollback). M0-S5A (telemetry kernel and static observability assets) was
+complete. At that acceptance point, M0-08 (audit and observability foundation
+work package) remained open and visually `In progress` because M0-S5B (local
+observability integration proof) still required OBS-BIND-001 (OTLP,
+Prometheus, Grafana, alert routing, and independent path-health binding).
+
+### OBS-BIND-001 local observability decision
+
+On 2026-08-22 Federico Ocampo supplied the complete local binding for
+OBS-BIND-001 (Docker OTLP, Prometheus, Grafana, alert, health, persistence, and
+promotion decision). Curve uses the existing Plane Compose stack and `dev_env`
+network. API and worker export OTLP/gRPC to `otel-collector:4317` without local
+TLS or authentication. A local Prometheus container scrapes the Collector's
+application and self-metric endpoints; Grafana provisions datasource UID
+`prometheus-local`, folder `Curve`, and the M0-S5A dashboard from repository
+files. Prometheus evaluates the four application rules and two independent
+path-health rules, while Grafana remains the local viewing surface and no
+external alert delivery is configured.
+
+The local services use digest-pinned multi-architecture images, loopback-only
+host ports, named volumes, synthetic `INTERNAL` data, an ephemeral untracked
+workspace-scope HMAC key, 24-hour Prometheus retention, and explicit
+`docker compose ... down -v` cleanup. The decision requires eight executable
+acceptance scenarios spanning real telemetry, dashboards, alerts, path failure,
+redaction, disablement, regression, and cleanup. Staging remains a separate
+material decision.
+
+The result is recorded in [OBS-BIND-001 local observability binding](../technical/obs-bind-001-local-observability-binding.md)
+(decided topology, configuration, implementation checkpoints, acceptance, and
+rollback) and [OBS-BIND-001 v1](../../contracts/observability/obs-bind-001-local-v1.json)
+(machine-readable local authority and configuration contract). M0-S5B (local
+observability integration proof) may be dispatched after these exact bytes are
+merged and the refreshed M0-08 context revision/digest is pinned. M0-08 remains
+visually `In progress` until implementation and local acceptance finish.
