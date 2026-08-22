@@ -6,7 +6,7 @@
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.1 |
+| Version | 1.2 |
 | Date | 2026-08-22 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
@@ -17,7 +17,7 @@
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | One AI coding agent distinct from the human reviewer |
 | Risk | `STANDARD`; local synthetic provider metadata only |
-| Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; AC-33 and AC-57 |
+| Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
 
 ## Outcome
 
@@ -33,6 +33,13 @@ the human administration API/role source, credentials, authenticated callback
 ingress, outgoing webhooks, scheduled reconciliation, and real adapters under
 their applicable decisions. D-007 (MCP/Orca trust policy) applies to MCP-enabled
 work only and is not an M0-S9A dependency.
+
+AC-57 (model-failover policy and actual-routing evidence) stays at the M0-09
+(provider integration foundation) parent until a dedicated Model Gateway child
+package is defined under D-004 (model catalog and data-policy decision) and
+D-005 (model task-routing decision). M0-S9A performs no model call, selects no
+model or provider, and produces no routing decision; its fake-provider tests
+cannot satisfy any part of AC-57.
 
 ## Normative sources
 
@@ -297,5 +304,7 @@ Project state, X3M infrastructure, and external systems unchanged.
 M0-S9A is complete only when the exact implementation head passes all scenarios
 and its post-merge evidence is accepted. M0-09 remains open until M0-S9B proves
 the applicable administration/transport, real adapter, callback/webhook, and
-scheduled reconciliation behaviors. M0-S9A completion grants no MCP, Orca,
-OpenHands, Onyx, model, VCS, credential, staging, or production authority.
+scheduled reconciliation behaviors and a separately defined Model Gateway
+child proves AC-57 (model-failover policy and actual-routing evidence). M0-S9A
+completion grants no MCP, Orca, OpenHands, Onyx, model, VCS, credential,
+staging, or production authority.
