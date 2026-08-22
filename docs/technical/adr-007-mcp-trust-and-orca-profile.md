@@ -5,7 +5,7 @@
 - Owner: Security and Platform Administration
 - Reviewers: Identity, Agent Platform, Curve engineering
 - Decision date: Pending named-owner approval
-- Required by: MCP-enabled M0/M1/M4
+- Required by: MCP/Orca-enabled M0-S9B/M1/M4
 - Supersedes: Read-only-only MCP proposal in PRD v0.5
 
 ## Context and constraints
@@ -81,7 +81,17 @@ The entire Orca write profile has a deny-by-default workspace feature toggle. Di
 
 ## Implementation consequences and affected work packages
 
-D-007 supplies the generic registry contract for M0-09 and the Orca profile for M4-02. D-006 separately approves Orca ownership, supported client/version, and license classification.
+M0-S9A (provider-neutral registry and reconciliation foundation) owns the
+workspace-scoped connection/capability persistence, typed adapter port, common
+error taxonomy, and local fake-provider conformance without MCP transport,
+identity, credentials, network access, or external effects. It does not depend
+on D-007.
+
+D-007 supplies the MCP-specific trust record, transport/authentication profile,
+and Orca tool policy consumed by the applicable M0-S9B (external provider
+transport and administration) slice and M4-02 (developer-operated Orca MCP
+workflow). D-006 separately approves Orca ownership, supported client/version,
+and license classification.
 
 ## Validation and review date
 

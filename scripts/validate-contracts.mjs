@@ -68,6 +68,9 @@ const testStrategyMatrixSchema = join(root, "contracts/schemas/test-strategy-mat
 const testStrategyMatrixPath = join(root, "contracts/testing/ac-test-matrix-v1.json");
 const temporalOrchestrationSchema = join(root, "contracts/schemas/temporal-orchestration.schema.json");
 const temporalOrchestrationPath = join(root, "contracts/temporal/m0-orchestration-v1.json");
+const providerConnectionSchema = join(root, "contracts/schemas/provider-connection.schema.json");
+const providerRegistryManifestSchema = join(root, "contracts/schemas/provider-registry-manifest.schema.json");
+const providerRegistryManifestPath = join(root, "contracts/providers/m0-s9a-provider-registry-v1.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -81,6 +84,9 @@ const fixtureSpecs = [
   ["contracts/testing/ac-test-matrix-v1.json", testStrategyMatrixSchema, true],
   ["contracts/temporal/m0-orchestration-v1.json", temporalOrchestrationSchema, true],
   ["contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json", observabilityBindingSchema, false],
+  ["contracts/schemas/semantic-fixtures/provider-connection-active.valid.json", providerConnectionSchema, true],
+  ["contracts/schemas/semantic-fixtures/provider-connection-active-null.invalid.json", providerConnectionSchema, false],
+  ["contracts/schemas/semantic-fixtures/provider-connection-revoked-next.invalid.json", providerConnectionSchema, false],
   ["contracts/schemas/semantic-fixtures/operation-event-v2-tracestate.invalid.json", operationEventV2Schema, false],
   ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
   ["contracts/schemas/semantic-fixtures/operation-terminal-null.invalid.json", operationSchema, false],
@@ -108,6 +114,10 @@ const fixtureSpecs = [
   ["contracts/schemas/semantic-fixtures/policy-decision-human-recorder.invalid.json", policyDecisionSchema, false],
   ["contracts/schemas/semantic-fixtures/policy-decision-allow-reason.invalid.json", policyDecisionSchema, false],
 ];
+
+fixtureSpecs.push(
+  ["contracts/providers/m0-s9a-provider-registry-v1.json", providerRegistryManifestSchema, true],
+);
 
 for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".json").sort()) {
   const fixtureName = relative(root, fixture);
@@ -284,6 +294,67 @@ if (
   observabilityBinding.promotion.staging_authority !== "SEPARATE_MATERIAL_DECISION_REQUIRED"
 ) {
   throw new Error("OBS-BIND-001 differs from the approved local-only authority boundary");
+}
+const providerRegistryManifest = JSON.parse(readFileSync(providerRegistryManifestPath, "utf8"));
+const expectedProviderStates = [
+  "PENDING_VALIDATION",
+  "ACTIVE",
+  "DEGRADED",
+  "DISABLED",
+  "REVOKED",
+];
+const expectedProviderTransitions = [
+  ["PENDING_VALIDATION", "VALIDATION_SUCCEEDED", "ACTIVE"],
+  ["PENDING_VALIDATION", "VALIDATION_FAILED", "PENDING_VALIDATION"],
+  ["ACTIVE", "RECONCILIATION_FAILED", "DEGRADED"],
+  ["DEGRADED", "RECONCILIATION_SUCCEEDED", "ACTIVE"],
+  ["PENDING_VALIDATION", "DISABLE", "DISABLED"],
+  ["ACTIVE", "DISABLE", "DISABLED"],
+  ["DEGRADED", "DISABLE", "DISABLED"],
+  ["DISABLED", "ENABLE", "PENDING_VALIDATION"],
+  ["PENDING_VALIDATION", "REVOKE", "REVOKED"],
+  ["ACTIVE", "REVOKE", "REVOKED"],
+  ["DEGRADED", "REVOKE", "REVOKED"],
+  ["DISABLED", "REVOKE", "REVOKED"],
+];
+const actualProviderTransitions = providerRegistryManifest.transitions.map((transition) => [
+  transition.from,
+  transition.command,
+  transition.to,
+]);
+const expectedProviderEvents = [
+  "curve.provider_connection.registered",
+  "curve.provider_connection.validated",
+  "curve.provider_connection.degraded",
+  "curve.provider_connection.disabled",
+  "curve.provider_connection.enabled",
+  "curve.provider_connection.revoked",
+  "curve.provider_reconciliation.completed",
+  "curve.provider_reconciliation.failed",
+];
+if (
+  providerRegistryManifest.authority.environment !== "LOCAL" ||
+  providerRegistryManifest.authority.data_classification !== "INTERNAL" ||
+  Object.entries(providerRegistryManifest.authority)
+    .filter(([key]) => !["environment", "data_classification"].includes(key))
+    .some(([, value]) => value !== "DISABLED") ||
+  providerRegistryManifest.provider.provider_type !== "FAKE_LOCAL" ||
+  providerRegistryManifest.provider.adapter_key !== "curve.fake-local" ||
+  JSON.stringify(providerRegistryManifest.provider.enabled_capability_risks) !== JSON.stringify(["READ"]) ||
+  JSON.stringify(providerRegistryManifest.provider.allowed_classifications) !== JSON.stringify(["INTERNAL"]) ||
+  JSON.stringify(providerRegistryManifest.connection_states) !== JSON.stringify(expectedProviderStates) ||
+  JSON.stringify(actualProviderTransitions) !== JSON.stringify(expectedProviderTransitions) ||
+  providerRegistryManifest.adapter_contract.maximum_attempts !== 3 ||
+  providerRegistryManifest.adapter_contract.deadline_seconds !== 15 ||
+  providerRegistryManifest.adapter_contract.ambiguous_mutation_rule !== "RECONCILE_BEFORE_RETRY" ||
+  providerRegistryManifest.reconciliation.trigger !== "EXPLICIT_APPLICATION_SERVICE_CALL" ||
+  providerRegistryManifest.reconciliation.same_command_replay !== "RETURN_ORIGINAL_RESOURCE_REF" ||
+  providerRegistryManifest.reconciliation.changed_digest_replay !== "REJECT_CONFLICT" ||
+  providerRegistryManifest.reconciliation.workspace_mismatch !== "NOT_FOUND" ||
+  providerRegistryManifest.reconciliation.ambiguous_observation !== "RECORD_CONFLICT_WITHOUT_OVERWRITE" ||
+  JSON.stringify(providerRegistryManifest.required_events) !== JSON.stringify(expectedProviderEvents)
+) {
+  throw new Error("M0-S9A provider-registry manifest differs from the reviewed local-only boundary");
 }
 const expectedTelemetryMetrics = [
   "curve.activity.execution",

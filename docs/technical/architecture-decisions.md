@@ -5,8 +5,8 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Decision index; D-001 (Plane upstream foundation decision) is decided; D-003 (runtime topology and trust-zone decision) local private-platform profile is decided and implemented; remaining activation scopes require owner approval and applicable proof |
-| Version | 1.0 |
-| Source | [Curve PRD v0.11 decision register](../curve-ai-native-sdlc-prd.md#decision-register) (controlled product and architecture decisions plus accepted local Temporal proof) |
+| Version | 1.1 |
+| Source | [Curve PRD v0.12 decision register](../curve-ai-native-sdlc-prd.md#decision-register) (controlled product and architecture decisions, Curve-first shell, and accepted local Temporal proof) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
 ## Purpose
@@ -25,7 +25,7 @@ An AI agent may draft an ADR, gather evidence, run non-destructive proofs, and r
 | D-004 | PROPOSED | Thin Curve Model Gateway over approved OpenRouter access | Model-enabled M1/M3/M5 | Versioned contract, failure behavior, policy enforcement, telemetry, HA impact, license/supply chain, operations proof, replacement strategy. |
 | D-005 | PROPOSED | Approved models/providers and data policy | M1/M3/M5 | Task evaluations, classification/residency/training/retention terms, ZDR proof, fallback equivalence, costs, red-team results, owner. |
 | D-006 | PROPOSED | Orca developer-operated MCP profile, support, and license | Orca-enabled M4/R1 | Supported client/version, delegated auth, bounded read/write capabilities, ownership, support and license classification, conformance proof. |
-| D-007 | PROPOSED | MCP registry, Streamable HTTP, trust, delegation, and pre-authorization | M0/M1/M4 | Protocol/version/transport, server identity, delegated auth, tool risk model, scopes, idempotency, state transitions, injection controls, allowlist proof, and dependency ordering with D-006. |
+| D-007 | PROPOSED | MCP registry, Streamable HTTP, trust, delegation, and pre-authorization | MCP/Orca portions of M0-S9B/M1/M4 | Protocol/version/transport, server identity, delegated auth, tool risk model, scopes, idempotency, state transitions, injection controls, allowlist proof, and dependency ordering with D-006. M0-S9A's local fake-provider substrate is independent. |
 | D-008 | PROPOSED | GitHub App and GitLab project-token controller identities and scopes | M3/M5 | Repository scopes, signing/attribution, rotation/revocation, webhook model, allowlists, proof. |
 | D-009 | OPEN | Retention, deletion, backup, and legal hold | M0-04 protected storage; protected M1/M4/M6 capabilities; every staging/production activation | Data inventory/classes, regulatory/legal input, periods, erasure feasibility, immutable audit split, backup expiry, cost. |
 | D-010 | PROPOSED | X3M quality, security, and license baseline | M5 | Licensed tool selection, pinned images/rules, normalized thresholds, non-waivable matrix, suppressions, false-positive baseline, prohibited licenses, update owner. |

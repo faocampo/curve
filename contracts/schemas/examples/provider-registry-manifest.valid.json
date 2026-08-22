@@ -1,0 +1,70 @@
+{
+  "schema_version": "curve.provider-registry/v1",
+  "package": "M0-S9A",
+  "authority": {
+    "environment": "LOCAL",
+    "data_classification": "INTERNAL",
+    "external_network": "DISABLED",
+    "credential_access": "DISABLED",
+    "callback_ingress": "DISABLED",
+    "outgoing_webhooks": "DISABLED",
+    "public_administration_api": "DISABLED",
+    "scheduler": "DISABLED",
+    "external_mutation": "DISABLED"
+  },
+  "provider": {
+    "provider_type": "FAKE_LOCAL",
+    "adapter_key": "curve.fake-local",
+    "adapter_version": "1.0.0",
+    "protocol_versions": ["curve.fake-local/v1"],
+    "enabled_capability_risks": ["READ"],
+    "allowed_classifications": ["INTERNAL"]
+  },
+  "connection_states": ["PENDING_VALIDATION", "ACTIVE", "DEGRADED", "DISABLED", "REVOKED"],
+  "transitions": [
+    {"from": "PENDING_VALIDATION", "command": "VALIDATION_SUCCEEDED", "to": "ACTIVE"},
+    {"from": "PENDING_VALIDATION", "command": "VALIDATION_FAILED", "to": "PENDING_VALIDATION"},
+    {"from": "ACTIVE", "command": "RECONCILIATION_FAILED", "to": "DEGRADED"},
+    {"from": "DEGRADED", "command": "RECONCILIATION_SUCCEEDED", "to": "ACTIVE"},
+    {"from": "PENDING_VALIDATION", "command": "DISABLE", "to": "DISABLED"},
+    {"from": "ACTIVE", "command": "DISABLE", "to": "DISABLED"},
+    {"from": "DEGRADED", "command": "DISABLE", "to": "DISABLED"},
+    {"from": "DISABLED", "command": "ENABLE", "to": "PENDING_VALIDATION"},
+    {"from": "PENDING_VALIDATION", "command": "REVOKE", "to": "REVOKED"},
+    {"from": "ACTIVE", "command": "REVOKE", "to": "REVOKED"},
+    {"from": "DEGRADED", "command": "REVOKE", "to": "REVOKED"},
+    {"from": "DISABLED", "command": "REVOKE", "to": "REVOKED"}
+  ],
+  "adapter_contract": {
+    "methods": ["describe_capabilities", "reconcile"],
+    "error_codes": ["AUTHENTICATION", "AUTHORIZATION", "POLICY", "NOT_SUPPORTED", "RATE_LIMIT", "TRANSIENT", "AMBIGUOUS_MUTATION", "TERMINAL"],
+    "maximum_attempts": 3,
+    "deadline_seconds": 15,
+    "ambiguous_mutation_rule": "RECONCILE_BEFORE_RETRY"
+  },
+  "reconciliation": {
+    "operation_type": "PROVIDER_RECONCILIATION",
+    "trigger": "EXPLICIT_APPLICATION_SERVICE_CALL",
+    "same_command_replay": "RETURN_ORIGINAL_RESOURCE_REF",
+    "changed_digest_replay": "REJECT_CONFLICT",
+    "workspace_mismatch": "NOT_FOUND",
+    "ambiguous_observation": "RECORD_CONFLICT_WITHOUT_OVERWRITE"
+  },
+  "persistence": {
+    "connection_table": "curve_provider_connection",
+    "capability_table": "curve_provider_capability",
+    "capability_history": "APPEND_ONLY",
+    "connection_uniqueness": ["workspace_id", "environment", "adapter_key"],
+    "capability_uniqueness": ["workspace_id", "connection_id", "capability_version"]
+  },
+  "required_events": [
+    "curve.provider_connection.registered",
+    "curve.provider_connection.validated",
+    "curve.provider_connection.degraded",
+    "curve.provider_connection.disabled",
+    "curve.provider_connection.enabled",
+    "curve.provider_connection.revoked",
+    "curve.provider_reconciliation.completed",
+    "curve.provider_reconciliation.failed"
+  ]
+}

@@ -4,25 +4,31 @@
   "title": "Curve provider capability document",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "workspace_id", "connection_id", "provider_type", "adapter_version", "capabilities", "validated_at"],
+  "required": ["schema_version", "id", "workspace_id", "connection_id", "connection_version", "capability_version", "provider_type", "adapter_key", "adapter_version", "protocol_versions", "capabilities", "allowed_classifications", "observed_at", "validated_at", "expires_at"],
   "properties": {
-    "schema_version": { "const": "1.0" },
+    "schema_version": { "const": "2.0" },
+    "id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
     "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
     "connection_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+    "connection_version": { "$ref": "common.schema.json#/$defs/AggregateVersion" },
+    "capability_version": { "$ref": "common.schema.json#/$defs/AggregateVersion" },
     "provider_type": {
       "type": "string",
-      "enum": ["ONYX", "MCP", "ORCA_HUMAN_ASSISTANCE", "MODEL_GATEWAY", "OPENHANDS", "GITHUB", "GITLAB", "QUALITY", "FEATURE_FLAG", "DOCUMENTATION", "MONITORING", "PROTOTYPE"]
+      "enum": ["FAKE_LOCAL", "ONYX", "MCP", "ORCA_HUMAN_ASSISTANCE", "MODEL_GATEWAY", "OPENHANDS", "GITHUB", "GITLAB", "QUALITY", "FEATURE_FLAG", "DOCUMENTATION", "MONITORING", "PROTOTYPE"]
     },
-    "adapter_version": { "type": "string", "minLength": 1 },
-    "protocol_versions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "adapter_key": {"type": "string", "pattern": "^[a-z][a-z0-9.-]{0,99}$"},
+    "adapter_version": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "protocol_versions": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
     "capabilities": {
       "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
       "items": {
         "type": "object",
         "additionalProperties": false,
         "required": ["name", "risk", "enabled"],
         "properties": {
-          "name": { "type": "string" },
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$" },
           "risk": { "type": "string", "enum": ["READ", "WORKFLOW_WRITE", "EXTERNAL_MUTATION"] },
           "enabled": { "type": "boolean" },
           "schema_uri": { "type": "string", "format": "uri-reference" }
@@ -32,8 +38,10 @@
     "allowed_classifications": {
       "type": "array",
       "items": { "$ref": "common.schema.json#/$defs/DataClassification" },
+      "minItems": 1,
       "uniqueItems": true
     },
+    "observed_at": { "$ref": "common.schema.json#/$defs/Instant" },
     "validated_at": { "$ref": "common.schema.json#/$defs/Instant" },
     "expires_at": {
       "oneOf": [
@@ -41,5 +49,20 @@
         { "type": "null" }
       ]
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"provider_type": {"const": "FAKE_LOCAL"}}},
+      "then": {
+        "properties": {
+          "adapter_key": {"const": "curve.fake-local"},
+          "protocol_versions": {"const": ["curve.fake-local/v1"]},
+          "allowed_classifications": {"const": ["INTERNAL"]},
+          "capabilities": {
+            "items": {"properties": {"risk": {"const": "READ"}}}
+          }
+        }
+      }
+    }
+  ]
 }

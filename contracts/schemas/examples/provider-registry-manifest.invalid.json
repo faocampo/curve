@@ -1,0 +1,48 @@
+{
+  "schema_version": "curve.provider-registry/v1",
+  "package": "M0-S9A",
+  "authority": {
+    "environment": "LOCAL",
+    "data_classification": "INTERNAL",
+    "external_network": "ENABLED",
+    "credential_access": "DISABLED",
+    "callback_ingress": "DISABLED",
+    "outgoing_webhooks": "DISABLED",
+    "public_administration_api": "DISABLED",
+    "scheduler": "DISABLED",
+    "external_mutation": "DISABLED"
+  },
+  "provider": {
+    "provider_type": "OPENHANDS",
+    "adapter_key": "curve.fake-local",
+    "adapter_version": "1.0.0",
+    "protocol_versions": ["curve.fake-local/v1"],
+    "enabled_capability_risks": ["EXTERNAL_MUTATION"],
+    "allowed_classifications": ["INTERNAL"]
+  },
+  "connection_states": [],
+  "transitions": [],
+  "adapter_contract": {
+    "methods": ["invoke"],
+    "error_codes": [],
+    "maximum_attempts": 4,
+    "deadline_seconds": 60,
+    "ambiguous_mutation_rule": "RETRY"
+  },
+  "reconciliation": {
+    "operation_type": "PROVIDER_RECONCILIATION",
+    "trigger": "SCHEDULED",
+    "same_command_replay": "REPEAT",
+    "changed_digest_replay": "ACCEPT",
+    "workspace_mismatch": "RETURN_RESOURCE",
+    "ambiguous_observation": "OVERWRITE"
+  },
+  "persistence": {
+    "connection_table": "curve_provider_connection",
+    "capability_table": "curve_provider_capability",
+    "capability_history": "MUTABLE",
+    "connection_uniqueness": ["adapter_key"],
+    "capability_uniqueness": ["connection_id"]
+  },
+  "required_events": []
+}

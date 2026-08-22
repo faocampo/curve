@@ -21,6 +21,7 @@ import {
   M0_S3_CONTEXT_PATHS,
   M0_S4_CONTEXT_PATHS,
   M0_S6A_CONTEXT_PATHS,
+  M0_S9A_CONTEXT_PATHS,
   contextPathsFor,
   digestContextEntries,
 } from "../lib/context-pack.mjs";
@@ -206,6 +207,37 @@ test("M0-S6A context pins orchestration, test strategy, local runtime, telemetry
   assert.equal(new Set(M0_S6A_CONTEXT_PATHS).size, M0_S6A_CONTEXT_PATHS.length);
   assert.deepEqual(M0_S6A_CONTEXT_PATHS, [...M0_S6A_CONTEXT_PATHS].sort());
   assert.deepEqual(contextPathsFor("M0-S6A"), M0_S6A_CONTEXT_PATHS);
+});
+
+test("M0-S9A context pins the local provider registry, persistence, fixtures, and boundaries", () => {
+  const requiredPaths = [
+    "contracts/database/m0-s9a-provider-registry-contract.md",
+    "contracts/providers/m0-s9a-provider-registry-v1.json",
+    "contracts/schemas/examples/provider-capability.invalid.json",
+    "contracts/schemas/examples/provider-capability.valid.json",
+    "contracts/schemas/examples/provider-connection.invalid.json",
+    "contracts/schemas/examples/provider-connection.valid.json",
+    "contracts/schemas/examples/provider-registry-manifest.invalid.json",
+    "contracts/schemas/examples/provider-registry-manifest.valid.json",
+    "contracts/schemas/provider-capability.schema.json",
+    "contracts/schemas/provider-connection.schema.json",
+    "contracts/schemas/provider-registry-manifest.schema.json",
+    "contracts/schemas/semantic-fixtures/provider-connection-active-null.invalid.json",
+    "contracts/schemas/semantic-fixtures/provider-connection-active.valid.json",
+    "contracts/schemas/semantic-fixtures/provider-connection-revoked-next.invalid.json",
+    "docs/technical/adr-007-mcp-trust-and-orca-profile.md",
+    "docs/technical/integration-contracts.md",
+    "docs/technical/m0-s5a-implementation-evidence.md",
+    "docs/technical/m0-s5b-implementation-evidence.md",
+    "docs/technical/m0-s9a-provider-registry-task-packet.md",
+    "docs/technical/m0-traceability.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ];
+  for (const path of requiredPaths) assert.ok(M0_S9A_CONTEXT_PATHS.includes(path), path);
+  assert.equal(new Set(M0_S9A_CONTEXT_PATHS).size, M0_S9A_CONTEXT_PATHS.length);
+  assert.deepEqual(M0_S9A_CONTEXT_PATHS, [...M0_S9A_CONTEXT_PATHS].sort());
+  assert.deepEqual(contextPathsFor("M0-S9A"), M0_S9A_CONTEXT_PATHS);
 });
 
 test("the live P0-06 projection is terminal and points to M0-S3", () => {

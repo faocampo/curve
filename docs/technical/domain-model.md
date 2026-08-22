@@ -4,15 +4,15 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; remaining capabilities stay gated by the PRD decision register |
-| Source | [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (product, lifecycle, security, private-platform connectivity, accepted local Temporal proof, and acceptance contract) |
+| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; M0-S9A local provider substrate prepared for review; remaining capabilities stay packet/decision gated |
+| Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product, Curve-first shell, lifecycle, security, private-platform connectivity, accepted local Temporal proof, and acceptance contract) |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
-| Last updated | 2026-08-20 |
+| Last updated | 2026-08-22 |
 | Scope | Logical domain and persistence model for Curve R1 |
 
 ## 1. Purpose and precedence
 
-This document derives the logical domain model required by [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (current product and acceptance contract). It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests. D-001 fixes the Plane/Curve repository and authority boundary; D-003 fixes the implemented local shared-network and private-platform connectivity direction while retaining environment-package activation inputs. The document does not select the remaining database topology details, object-storage product, identity mechanism, provider version, retention period, or other owner-gated decisions D-002 through D-016.
+This document derives the logical domain model required by [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product and acceptance contract). It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests. D-001 fixes the Plane/Curve repository and authority boundary; D-003 fixes the implemented local shared-network and private-platform connectivity direction while retaining environment-package activation inputs. The document does not select the remaining database topology details, object-storage product, identity mechanism, real-provider version, retention period, or other owner-gated decisions D-002 through D-016.
 
 The PRD remains authoritative. Its scope invariants, lifecycle transitions, numbered functional requirements (FR), non-functional requirements (NFR), acceptance criteria (AC), and decision register take precedence over this document. If this document cannot be implemented without changing one of those contracts, the implementation MUST stop and propose a PRD revision; it MUST NOT silently reinterpret the requirement.
 
@@ -337,16 +337,23 @@ The repository-safe `ContextManifest` is a different schema containing only: sch
 
 | Entity.attribute | Type | Nullable | Lifecycle ownership and constraint |
 | --- | --- | --- | --- |
-| `ProviderConnection.provider_type` | stable code | NO | Onyx, general MCP, Orca human-assistance MCP profile, model gateway, OpenHands execution, GitHub, GitLab, prototype, quality, feature flag, documentation, monitoring, or another registered adapter type. Orca is never represented as `AgentExecutionProvider`. |
+| `ProviderConnection.provider_type` | stable code | NO | `FAKE_LOCAL` is the M0-S9A synthetic-only type. Later types include Onyx, general MCP, Orca human-assistance MCP profile, model gateway, OpenHands execution, GitHub, GitLab, prototype, quality, feature flag, documentation, and monitoring. Orca is never represented as `AgentExecutionProvider`. |
+| `ProviderConnection.adapter_key`, `adapter_version` | stable code, version | NO | Exact statically registered adapter implementation; an unknown/dynamic module path is rejected. |
+| `ProviderConnection.environment` | environment code | NO | M0-S9A accepts only `LOCAL`; staging/production require their package/decision activation evidence. |
 | `ProviderConnection.display_name` | text | NO | Workspace-visible label; not an authorization input. |
 | `ProviderConnection.external_tenant_ref` | text | YES | Organization/account/project scope in provider. Never globally unique by itself. |
-| `ProviderConnection.configuration` | protected `ObjectRef` or validated JSON | NO | Non-secret configuration only; secret values live behind `secret_reference`. |
+| `ProviderConnection.configuration` | protected `ObjectRef`, validated JSON, or absent for a configuration-free adapter | CONDITIONAL | Non-secret configuration only; M0-S9A persists only the canonical empty-configuration digest. Secret values live behind `secret_reference`. |
 | `ProviderConnection.configuration_digest` | `Digest` | NO | Pinned by plans/attempts when behavior depends on it. |
 | `ProviderConnection.secret_reference` | opaque secret-broker reference | CONDITIONAL | Required when adapter authentication needs a service credential. D-002/D-008 select identity forms. |
-| `ProviderConnection.capabilities` | schema-versioned JSON | NO | Adapter operations and protocol/API versions last verified. Unsupported capability blocks Gate 2. |
-| `ProviderConnection.allowed_classifications` | set of `DataClassification` | NO | D-005/D-007 policy output. Empty denies protected data. |
+| `ProviderConnection.current_capability_id` | immutable `ProviderCapability` reference | CONDITIONAL | Required for `ACTIVE` and `DEGRADED`; exact same-workspace capability/connection version. Prior versions remain append-only. |
+| `ProviderConnection.allowed_classifications` | set of `DataClassification` | NO | M0-S9A fixes `INTERNAL`; real provider policy consumes its applicable D-005/D-007 or provider-specific decision. Empty denies use. |
 | `ProviderConnection.status` | `ProviderConnectionState` | NO | `PENDING_VALIDATION`, `ACTIVE`, `DEGRADED`, `DISABLED`, or `REVOKED`. `DISABLED`/`REVOKED` connections cannot start new activity; `DEGRADED` requires per-capability policy revalidation. |
-| `ProviderConnection.validated_at`, `validation_result` | `Instant`, schema-versioned JSON | YES | Required before production use. |
+| `ProviderConnection.validated_at`, `validation_result_ref`, `last_reconciled_at` | `Instant`, versioned `ResourceRef`, `Instant` | YES | All are required for `ACTIVE`/`DEGRADED`; the result references the exact reconciliation Operation. |
+| `ProviderConnection.next_reconcile_at`, `last_error` | `Instant`, `SafeError` | YES | Active connections carry an advisory next time; disabled/revoked connections do not. Degraded connections carry a safe normalized error. |
+| `ProviderCapability.connection_id`, `connection_version`, `capability_version` | IDs and positive versions | NO | Unique by workspace/connection/capability version; history is append-only. |
+| `ProviderCapability.adapter_key`, `adapter_version`, `protocol_versions` | stable/versioned values | NO | Exact implementation/protocol observation; cannot silently downgrade. |
+| `ProviderCapability.capabilities`, `allowed_classifications` | closed versioned records and set | NO | Each capability has name/risk/enabled/schema reference; a document cannot widen the connection classification ceiling. |
+| `ProviderCapability.observed_at`, `validated_at`, `expires_at` | instants | NO, NO, YES | Trusted receipt/validation times; freshness is adapter-policy controlled. |
 | `RepositoryBinding.provider_connection_id` | `OpaqueId` | NO | GitHub or GitLab connection in same workspace. |
 | `RepositoryBinding.external_repository_id` | text | NO | Provider-authoritative stable ID; repository name/URL is not sufficient identity. |
 | `RepositoryBinding.canonical_url` | URI | YES | Display/navigation only. |
