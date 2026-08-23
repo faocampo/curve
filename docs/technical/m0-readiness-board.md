@@ -4,7 +4,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Active readiness control; D-001 (Plane upstream foundation decision), D-003 (runtime topology and trust-zone decision), and OBS-BIND-001 (local observability binding) are decided for local scope; M0-S3, M0-S4, M0-S5A, M0-S5B, M0-S6A, and M0-S9A are accepted and merged for `LOCAL_ONLY`; M0-06 and M0-08 are complete for `LOCAL_ONLY`; M0-S9B external transport/administration and M0-S9C Model Gateway are decomposed but blocked on named decisions |
+| Status | Active readiness control; D-001 (Plane upstream foundation decision), D-003 (runtime topology and trust-zone decision), and OBS-BIND-001 (local observability binding) are decided for local scope; M0-S3, M0-S4, M0-S5A, M0-S5B, M0-S6A, and M0-S9A are accepted and merged for `LOCAL_ONLY`; M0-06 and M0-08 are complete for `LOCAL_ONLY`; M0-S9B external transport/administration and M0-S9C Model Gateway are decomposed but blocked on named decisions; the P0-12/D-009 retention proposal is prepared and fail closed |
 | Version | 1.30 |
 | Date | 2026-08-28 |
 | Normative product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, decision register, and accepted local Temporal proof) |

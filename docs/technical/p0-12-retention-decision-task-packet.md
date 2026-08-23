@@ -7,11 +7,11 @@
 | Package | P0-12 (retention, backup, legal-hold, tombstone, and erasure decision package) |
 | Decision | D-009 (retention, deletion, backup, and legal-hold policy) |
 | Status | `REVIEW_DRAFT / PROPOSED / NOT_DECIDED` |
-| Version | 1.0 |
-| Date | 2026-08-22 |
+| Version | 1.1 |
+| Date | 2026-08-23 |
 | Product | Curve |
 | Repository | `git@github.com:faocampo/curve.git` |
-| Curve review base | `main` at `590a52ef006fd1d83bef5c76dfdab9ce9080a168`, stacked on P0-05 (acceptance-test strategy) candidate `aa82735eaa02995116e6671d1a52b087db084068` until that prerequisite merges |
+| Curve review base | `main` at `fdae85b33a235cd494dd36565698b2b5033a3389`; P0-05 (test strategy and audit closure) is merged and satisfied at that revision |
 | Prepared for | Named Security, Privacy, Legal, Platform Operations, Database Operations, and Curve Engineering approvers |
 | Interim owner/reviewer | Federico Ocampo, CTO at X3M |
 | Risk | `MATERIAL`; data-governance, deletion, backup, legal-hold, cryptographic-erasure, and non-local activation boundary |
