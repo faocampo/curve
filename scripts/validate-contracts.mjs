@@ -8,6 +8,12 @@ import { validateTestStrategyMatrixSemantics } from "./lib/test-strategy.mjs";
 import { validateTemporalOrchestrationSemantics } from "./lib/temporal-orchestration.mjs";
 import { validateRetentionPolicyDecisionSemantics } from "./lib/retention-policy.mjs";
 import { validateOnyxDelegationDecision } from "./lib/onyx-delegation.mjs";
+import {
+  validateProductCoreDecision,
+  validateProductEventSemantics,
+  validateProductPolicy,
+  validateProductRecordSemantics,
+} from "./lib/product-core.mjs";
 
 const root = process.cwd();
 
@@ -97,6 +103,16 @@ const onyxDelegationDecisionPath = join(
   root,
   "contracts/governance/d002-onyx-delegation-v1.json",
 );
+const productCoreDecisionPath = join(
+  root,
+  "contracts/governance/m1-00a-product-core-v1.json",
+);
+const productPolicyPath = join(root, "contracts/policy/product-policy-v1.json");
+const productFixturePath = join(root, "contracts/schemas/examples/product.valid.json");
+const productEventFixturePath = join(
+  root,
+  "contracts/schemas/examples/product-event-v1.valid.json",
+);
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -178,6 +194,11 @@ const onyxValidation = validateOnyxDelegationDecision(onyxDelegationDecision);
 if (onyxValidation.dispatchable !== false || onyxValidation.unresolved.length === 0) {
   throw new Error("the canonical D-002 proposal must remain fail-closed until owner proof and approval");
 }
+
+validateProductCoreDecision(JSON.parse(readFileSync(productCoreDecisionPath, "utf8")));
+validateProductPolicy(JSON.parse(readFileSync(productPolicyPath, "utf8")));
+validateProductRecordSemantics(JSON.parse(readFileSync(productFixturePath, "utf8")));
+validateProductEventSemantics(JSON.parse(readFileSync(productEventFixturePath, "utf8")));
 
 const corePolicyManifest = JSON.parse(readFileSync(corePolicyManifestPath, "utf8"));
 const corePolicyManifestV1Digest = createHash("sha256")

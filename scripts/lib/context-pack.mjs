@@ -380,6 +380,48 @@ export const P0_09_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const M1_00A_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/database/m1-00a-product-core-relational-contract.md",
+    "contracts/governance/m1-00a-product-core-v1.json",
+    "contracts/openapi/curve-v1.openapi.yaml",
+    "contracts/policy/product-policy-v1.json",
+    "contracts/schemas/common.schema.json",
+    "contracts/schemas/event-envelope.schema.json",
+    "contracts/schemas/examples/product-core-decision.invalid.json",
+    "contracts/schemas/examples/product-core-decision.valid.json",
+    "contracts/schemas/examples/product-create-request.invalid.json",
+    "contracts/schemas/examples/product-create-request.valid.json",
+    "contracts/schemas/examples/product-event-v1.invalid.json",
+    "contracts/schemas/examples/product-event-v1.valid.json",
+    "contracts/schemas/examples/product-policy-manifest.invalid.json",
+    "contracts/schemas/examples/product-policy-manifest.valid.json",
+    "contracts/schemas/examples/product-reassign-owner-request.invalid.json",
+    "contracts/schemas/examples/product-reassign-owner-request.valid.json",
+    "contracts/schemas/examples/product-update-request.invalid.json",
+    "contracts/schemas/examples/product-update-request.valid.json",
+    "contracts/schemas/examples/product.invalid.json",
+    "contracts/schemas/examples/product.valid.json",
+    "contracts/schemas/product-core-decision.schema.json",
+    "contracts/schemas/product-create-request.schema.json",
+    "contracts/schemas/product-event-v1.schema.json",
+    "contracts/schemas/product-policy-manifest.schema.json",
+    "contracts/schemas/product-reassign-owner-request.schema.json",
+    "contracts/schemas/product-update-request.schema.json",
+    "contracts/schemas/product.schema.json",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/domain-model.md",
+    "docs/technical/m1-00a-product-core-task-packet.md",
+    "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/lib/product-core.mjs",
+    "scripts/tests/product-core.test.mjs",
+    "scripts/validate-contracts.mjs",
+    "scripts/validate-docs.mjs",
+  ].sort(),
+);
+
 const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
   ["M0-S3", M0_S3_CONTEXT_PATHS],
@@ -394,6 +436,7 @@ const CONTEXT_PATHS = new Map([
   ["P0-09", P0_09_CONTEXT_PATHS],
   ["D-002", P0_09_CONTEXT_PATHS],
   ["M1-03B", P0_09_CONTEXT_PATHS],
+  ["M1-00A", M1_00A_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {

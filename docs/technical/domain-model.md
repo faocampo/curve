@@ -94,7 +94,7 @@ Append-only records instead carry `id`, `workspace_id`, a parent aggregate ident
 
 | Aggregate root | Owned records or immutable children | Lifecycle owner | Transactional boundary and invariant |
 | --- | --- | --- | --- |
-| `Product` | Product configuration references | Product administrator / Roadmap owner | Product timezone and configured integration references change with optimistic concurrency. |
+| `Product` | Product identity, mutable metadata, one human owner, lifecycle, and later M2 configuration references | Product owner / workspace administrator | Key is immutable and workspace-unique. Metadata, ownership, archive, and restore commands use optimistic concurrency and append Product events atomically. |
 | `Roadmap` | Roadmap metadata | Roadmap owner | Milestones, Features, and Items are separately versioned roots to avoid one large concurrent aggregate; publication validates a consistent version set. |
 | `Milestone` | Milestone placement metadata | Roadmap owner | Belongs to one Roadmap and Product; position changes append roadmap history. |
 | `Feature` | Feature identity and description | Product contributor | Belongs to one Product; it is reusable across Roadmap Items. |
@@ -118,17 +118,21 @@ Append-only records instead carry `id`, `workspace_id`, a parent aggregate ident
 
 Commands that must coordinate several roots use one PostgreSQL transaction only when the selected D-003 topology permits it. Otherwise the architecture MUST use an explicit saga with fail-closed intermediate states; it MUST NOT relax the invariant.
 
-## 5. Roadmap and product entities
+## 5. Product core and roadmap entities
 
 All mutable roots include the common fields in section 3.1.
 
 | Entity.attribute | Type | Nullable | Lifecycle ownership and constraint |
 | --- | --- | --- | --- |
+| `Product.key` | lowercase key | NO | Immutable and unique by `(workspace_id, key)`; matches `[a-z0-9][a-z0-9-]{0,49}`. |
 | `Product.name` | text | NO | Human-visible long-lived product name. |
-| `Product.description` | `RichTextRef` | YES | Curve-owned content. |
-| `Product.timezone` | IANA timezone code | NO | Interprets roadmap `LocalDate` values; changing it never rewrites persisted dates or published snapshots. |
-| `Product.documentation_repository_binding_id` | `OpaqueId` | CONDITIONAL | Required before applicable Docusaurus checks can pass; concrete configuration blocked by D-012. |
-| `Product.feature_flag_connection_id` | `OpaqueId` | CONDITIONAL | Required before applicable OpenFeature delivery can pass; backend choice blocked by D-011. |
+| `Product.description` | text | YES | Optional mutable Product description in M1-00A. Rich Product content remains a later additive contract. |
+| `Product.timezone` | IANA timezone code | NO | Required and mutable. A change applies prospectively and never rewrites persisted dates, events, schedules, or snapshots. |
+| `Product.state` | `ProductState` | NO | `ACTIVE` or `ARCHIVED`; R1 retirement is reversible archival. |
+| `Product.owner` | `ActorRef` | NO | Exactly one active human. Initially the authenticated creator; only a workspace administrator reassigns it. |
+| `Product.archived_at`, `archived_by` | `Instant`, `ActorRef` | CONDITIONAL | Both required only while `ARCHIVED`; both null while `ACTIVE`. |
+| `Product.documentation_repository_binding_id` | `OpaqueId` | CONDITIONAL | M2/later delivery configuration required before applicable Docusaurus checks can pass; concrete configuration blocked by D-012. |
+| `Product.feature_flag_connection_id` | `OpaqueId` | CONDITIONAL | M2/later delivery configuration required before applicable OpenFeature delivery can pass; backend choice blocked by D-011. |
 | `Roadmap.product_id` | `OpaqueId` | NO | Same-workspace Product. |
 | `Roadmap.name` | text | NO | Planning-horizon label. |
 | `Roadmap.horizon_start`, `horizon_end` | `LocalDate` | YES | If both are present, start MUST NOT follow end. The PRD permits different planning horizons but does not require dates for all Roadmaps. |
@@ -172,6 +176,11 @@ All mutable roots include the common fields in section 3.1.
 | `RoadmapSnapshot.pdf_export`, `image_export` | `ObjectRef` | YES | Immutable derived exports with renderer/schema version recorded in payload metadata. |
 
 Execution Completion implements FR-028 and AC-38: use estimate weighting only when every included non-cancelled leaf has a positive estimate; otherwise use item count and label the result `COUNT_BASED`. Blocked items remain in the denominator.
+
+Product archival locks the Product and checks its same-workspace Initiatives in
+the same transaction. Only `READY_FOR_REPOSITORY_REVIEW` and `CANCELLED` are
+terminal for this guard; recoverable `FAILED` blocks archival. Archived Products
+remain readable and the Initiative creation service rejects them until restore.
 
 ## 6. Initiative, workflow, artifact, and approval entities
 

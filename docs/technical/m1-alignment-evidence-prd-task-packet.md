@@ -6,8 +6,8 @@
 | --- | --- |
 | Milestone | M1 (alignment, evidence, immutable PRD versions, and Gate 1) |
 | Status | `PREPARED_NOT_DISPATCHABLE`; task decomposition is complete; M0 dependencies and named material decisions remain open |
-| Version | 1.2 |
-| Date | 2026-08-22 |
+| Version | 1.3 |
+| Date | 2026-08-23 |
 | Product | Curve |
 | Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell, lifecycle, identity, evidence, and Gate 1 acceptance) |
 | Architecture baseline | [Architecture](architecture.md) (definition domain, trust boundaries, asynchronous commands, and Temporal ownership) and [Domain model](domain-model.md) (Product, Initiative, Activity, ArtifactVersion, Evidence, AccessEnvelope, and Gate entities) |
@@ -90,7 +90,7 @@ approval and cannot cross a material activation boundary.
 
 | Packet | Scope | Dependencies and material gates | Required evidence |
 | --- | --- | --- | --- |
-| M1-00A (minimal Product core) | Add the workspace-scoped Product aggregate and API required to own Initiatives: stable key, name, optional description, IANA timezone, lifecycle, ownership, optimistic concurrency, audit/outbox events, and OpenAPI. Roadmaps, Milestones, Features, Roadmap Items, schedules, and snapshots remain M2. | Accepted M0 core/API/audit foundation; final Product/OpenAPI/event/policy contracts | Migration forward/reverse, same-workspace key uniqueness, IANA timezone, authorization, idempotency, optimistic concurrency, lifecycle, audit/outbox, and OpenAPI tests |
+| M1-00A (minimal Product core) | Implement the [dedicated Product packet](m1-00a-product-core-task-packet.md) (approved exact semantics, API, persistence, policy, guard, tests, and rollback). Roadmaps, Milestones, Features, Roadmap Items, schedules, and snapshots remain M2. | Accepted M0 core/API/audit foundation; merged Product/OpenAPI/event/policy contracts; exact context and dispatch | P-01-P-18 plus migration forward/reverse, same-workspace key uniqueness, IANA timezone history, exact human authorization, idempotency, optimistic concurrency, lifecycle guard, audit/outbox, and OpenAPI tests |
 | M1-01A (Initiative domain/API) | Add workspace-scoped Initiative, required same-workspace Product reference, three GateAssignments, lifecycle commands, optimistic concurrency, audit/outbox events, and OpenAPI | M1-00A (minimal Product core); accepted M0 core/API/Temporal/audit foundation; final M1 contracts | Migration forward/reverse, Product-reference integrity, uniqueness, workspace isolation, actor/role denial, idempotency, state, pause/resume/cancel, and OpenAPI tests |
 | M1-01B (Initiative shell) | Curve-first Initiatives list/create/detail experience with assignment and lifecycle controls | M1-01A (Initiative domain/API); approved screen contract | Browser, keyboard, screen-reader, responsive, error/retry, empty/loading, disabled-state, and role-visibility tests |
 | M1-02A (manual Idea Brief) | `IDEA_BRIEF` Artifact and immutable/manual draft versions with attributed structured edits for problem, users, outcomes, assumptions, contradictions, blockers, and unknowns | M1-01A (Initiative domain/API); no model gate | Schema, attribution, concurrent edit, canonical digest, diff, validation, browser, and accessibility tests |
@@ -114,7 +114,9 @@ records the exact merged Curve revision and generated-client digest.
 
 | Contract | Minimum content |
 | --- | --- |
-| Product JSON Schema | Workspace record, stable key, name, optional description, IANA timezone, lifecycle, owner, optimistic version, timestamps, and no roadmap-specific fields |
+| Product JSON Schema | Published [Product resource and request schemas](../../contracts/schemas/product.schema.json) (immutable key, mutable metadata, IANA timezone, one human owner, lifecycle, optimistic version, state-dependent archival fields, and no roadmap entities) |
+| Product decision/policy | Published [M1-00A machine decision](../../contracts/governance/m1-00a-product-core-v1.json) (approved exact semantics) and [Product policy v1](../../contracts/policy/product-policy-v1.json) (Plane Admin mapping, owner authority, human-only actions, and archive guard) |
+| Product relational contract | Published [M1-00A persistence contract](../../contracts/database/m1-00a-product-core-relational-contract.md) (table, constraints, transactions, Initiative guard, migration, and verification) |
 | Initiative JSON Schema | Common workspace record, mode, Product reference, keyword/title/description, risk, lifecycle, paused-from state, workflow version, creator, current artifact pointers, three assignments, optimistic version, timestamps |
 | Artifact and ArtifactVersion JSON Schemas | Stable kind, immutable numbered version, state, body schema/version/ref/digest, evidence snapshot, parent, provenance, submit/supersede invariants |
 | Idea Brief body schema | Problem, affected users, desired outcomes, non-goals, constraints, assumptions, contradictions, blockers, unknowns, attribution, validation action, owner, and due stage |
@@ -198,7 +200,7 @@ not invented by the coding agent.
 
 | Packet group | Current state | Missing evidence before `READY` |
 | --- | --- | --- |
-| M1-00A (minimal Product core) | `PREPARED` | Accepted consuming M0 base; Product/OpenAPI/event/policy contracts; exact base, commands, and context digest |
+| M1-00A (minimal Product core) | `PREPARED_NOT_DISPATCHABLE` | Product semantics and contracts are complete on the review branch; merge the exact Curve revision, merge P0-05, verify Plane base/migration chain, generate the authoritative context digest, and obtain explicit dispatch |
 | M1-01A/B (Initiative) | `PREPARED` | M1-00A; accepted consuming M0 base; Initiative/OpenAPI/event/state contracts; exact UI contract; commands and context digest |
 | M1-02A (manual Idea Brief) | `PREPARED` | M1-01A; Idea Brief/ArtifactVersion contracts; UI contract; exact dispatch values |
 | M1-02B and M1-06C (model authoring) | `BLOCKED_MATERIAL_DECISIONS` | D-004 (model-gateway decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), evaluations, and exact model/prompt/tool/budget pins |

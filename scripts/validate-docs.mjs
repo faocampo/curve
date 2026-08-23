@@ -76,6 +76,8 @@ const onyxDecisionPacketPath = join(
 const onyxDecisionPacket = readFileSync(onyxDecisionPacketPath, "utf8");
 const m1TaskPacketPath = join(root, "docs/technical/m1-alignment-evidence-prd-task-packet.md");
 const m1TaskPacket = readFileSync(m1TaskPacketPath, "utf8");
+const m1ProductPacketPath = join(root, "docs/technical/m1-00a-product-core-task-packet.md");
+const m1ProductPacket = readFileSync(m1ProductPacketPath, "utf8");
 
 function requireDocumentTokens(documentPath, document, tokens) {
   for (const token of tokens) {
@@ -96,6 +98,7 @@ requireDocumentTokens(onyxDecisionPacketPath, onyxDecisionPacket, [
 ]);
 
 const expectedM1SliceIds = [
+  "M1-00A",
   "M1-01A",
   "M1-01B",
   "M1-02A",
@@ -122,6 +125,15 @@ requireDocumentTokens(m1TaskPacketPath, m1TaskPacket, [
   "## Normative contract set to publish before dispatch",
   "## Dispatch readiness matrix",
   ...expectedM1SliceIds.map((sliceId) => `| ${sliceId} (`),
+]);
+requireDocumentTokens(m1ProductPacketPath, m1ProductPacket, [
+  "# M1-00A Minimal Product Core Task Packet",
+  "`PREPARED_NOT_DISPATCHABLE`",
+  "## Approved outcome",
+  "## Authorization matrix",
+  "## Given/When/Then acceptance cases",
+  "| P-18 |",
+  "## Dispatch blockers",
 ]);
 const expectedLaterPacketIds = [
   "M1-00A",
