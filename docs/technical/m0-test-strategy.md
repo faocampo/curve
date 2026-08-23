@@ -7,7 +7,7 @@
 | Product | Curve |
 | Work package | P0-05 (test-harness strategy and R1 acceptance traceability) |
 | Status | `IN_REVIEW` |
-| Version | 1.1 |
+| Version | 1.2 |
 | Owner | Federico Ocampo, CTO at X3M |
 | Human reviewer | Federico Ocampo |
 | Last updated | 2026-08-22 |
@@ -254,6 +254,12 @@ M0-S9A (provider registry and deterministic fake-provider foundation) performs
 no model call and therefore cannot complete AC-57. D-004 (model catalog and
 data-policy decision) and D-005 (model task-routing decision) remain its exact
 material blockers.
+
+AC-04 (initiating-user Onyx and MCP retrieval isolation) is gated by D-002
+(Onyx delegated-identity decision) and D-007 (MCP trust and delegated
+write-back decision). D-005 (model/provider data-policy decision) applies only
+when a separately tested operation sends retrieved content to a model; it does
+not gate read-only retrieval or source-ACL conformance.
 
 ## Change and versioning rules
 

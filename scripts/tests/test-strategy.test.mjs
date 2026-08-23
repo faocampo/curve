@@ -87,6 +87,15 @@ test("implemented-passing coverage rejects planned suites or commands", () => {
   assert.throws(() => validate(matrix), /claims passing coverage with planned evidence/);
 });
 
+test("read-only Onyx and MCP retrieval does not inherit the model destination decision", () => {
+  const matrix = structuredClone(MATRIX);
+  criterion(matrix, "AC-04").blocking_decisions.push("D-005");
+  assert.throws(
+    () => validate(matrix),
+    /AC-04 read-only retrieval must be gated by D-002 and D-007 only/,
+  );
+});
+
 test("duplicate catalog identifiers are rejected", () => {
   const matrix = structuredClone(MATRIX);
   matrix.suites.push(structuredClone(matrix.suites[0]));

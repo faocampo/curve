@@ -189,6 +189,18 @@ export function validateTestStrategyMatrixSemantics({ matrix, prdText, developme
     }
   }
 
+  const retrievalCriterion = matrix.acceptance_criteria.find(
+    (criterion) => criterion.ac_id === "AC-04",
+  );
+  if (
+    JSON.stringify(retrievalCriterion?.blocking_decisions) !==
+    JSON.stringify(["D-002", "D-007"])
+  ) {
+    throw new Error(
+      "AC-04 read-only retrieval must be gated by D-002 and D-007 only; D-005 applies only to a model destination",
+    );
+  }
+
   return {
     acceptanceCriteriaCount: prdCriteria.length,
     acceptanceCriteriaDigest: calculatedDigest,
