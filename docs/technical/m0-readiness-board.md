@@ -39,7 +39,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 
 | Decision | Required before | Current state | Accountable role |
 | --- | --- | --- | --- |
-| D-002 | Protected Onyx retrieval in M1 | PROPOSED | Security and identity owner |
+| D-002 | Protected Onyx retrieval in M1 | PROPOSED; machine decision record is fail-closed with every unresolved input enumerated | Named Security/Identity and Onyx Operations owners; Federico Ocampo is Curve Product approver |
 | D-004/D-005 | First model-enabled M1 package | PROPOSED | AI platform, AI governance, security |
 | [D-006](adr-006-orca-human-assistance.md) | Orca-enabled M4 | PROPOSED | Agent platform owner |
 | D-008 | VCS-specific M3 work | PROPOSED | Developer platform and security |

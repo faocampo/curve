@@ -14,7 +14,7 @@ import { contextPathsFor, digestContextEntries } from "./lib/context-pack.mjs";
 
 const OWNER = "faocampo";
 const PROJECT_NUMBER = "2";
-const EXPECTED_TASK_COUNT = 70;
+const EXPECTED_TASK_COUNT = 71;
 const DEVELOPMENT_PLAN = resolve("docs/technical/development-plan.md");
 const P0_06_STAGE_RECORD_PATH = "docs/technical/proofs/p0-06-stage-record.json";
 const MERGED_SOURCE_REF = "origin/main";
@@ -157,7 +157,7 @@ function phaseFor(id) {
 function parseTasks(markdown) {
   const tasks = [];
   for (const line of markdown.split(/\r?\n/)) {
-    if (!/^\| (?:P0|M[0-7]|R1)-\d{2} \|/.test(line)) continue;
+    if (!/^\| (?:P0|M[0-7]|R1)-\d{2}[A-Z]? \|/.test(line)) continue;
     const cells = line.split("|").slice(1, -1).map((cell) => cell.trim());
     if (cells.length !== 5 && cells.length !== 6) {
       throw new Error(`Unexpected work-package row shape: ${line}`);

@@ -357,6 +357,29 @@ export const P0_12_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const P0_09_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/governance/d002-onyx-delegation-v1.json",
+    "contracts/schemas/access-envelope.schema.json",
+    "contracts/schemas/examples/onyx-delegation-decision.invalid.json",
+    "contracts/schemas/examples/onyx-delegation-decision.valid.json",
+    "contracts/schemas/onyx-delegation-decision.schema.json",
+    "contracts/schemas/provider-capability.schema.json",
+    "contracts/schemas/provider-connection.schema.json",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/architecture.md",
+    "docs/technical/d002-onyx-delegated-identity-decision-packet.md",
+    "docs/technical/domain-model.md",
+    "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+    "docs/technical/m1-m7-task-packets.md",
+    "docs/technical/security-and-operations.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/lib/onyx-delegation.mjs",
+    "scripts/tests/onyx-delegation.test.mjs",
+    "scripts/validate-contracts.mjs",
+  ].sort(),
+);
+
 const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
   ["M0-S3", M0_S3_CONTEXT_PATHS],
@@ -368,6 +391,9 @@ const CONTEXT_PATHS = new Map([
   ["M0-S9B", M0_S9B_CONTEXT_PATHS],
   ["M0-S9C", M0_S9C_CONTEXT_PATHS],
   ["P0-12", P0_12_CONTEXT_PATHS],
+  ["P0-09", P0_09_CONTEXT_PATHS],
+  ["D-002", P0_09_CONTEXT_PATHS],
+  ["M1-03B", P0_09_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {

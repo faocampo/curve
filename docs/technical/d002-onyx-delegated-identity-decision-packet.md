@@ -6,8 +6,8 @@
 | --- | --- |
 | Decision | D-002 (Onyx delegated-identity decision) |
 | Status | `PROPOSED`; evidence-ready decision packet; no Onyx activation authority |
-| Version | 1.0 |
-| Date | 2026-08-21 |
+| Version | 1.1 |
+| Date | 2026-08-22 |
 | Product | Curve |
 | Required owner | Named X3M Security and Identity owner; a role label alone cannot decide the record |
 | Product approver | Federico Ocampo, CTO at X3M |
@@ -44,6 +44,24 @@ Public upstream documentation does not establish a general short-lived OAuth
 token-exchange endpoint for third-party API callers. D-002 (Onyx
 delegated-identity decision) therefore remains `PROPOSED` until the X3M
 deployment proves one exact supported mechanism.
+
+The normative [D-002 machine decision record](../../contracts/governance/d002-onyx-delegation-v1.json)
+(deployed boundary, principal binding, credential lifecycle, API profile,
+proofs, owners, approvals, and activation state) and its
+[JSON Schema](../../contracts/schemas/onyx-delegation-decision.schema.json)
+(closed v1 decision vocabulary) make that boundary executable. The validator
+recomputes unresolved requirements from record content. Editing the displayed
+gap list cannot make the decision dispatchable.
+
+### Current proposal state
+
+The versioned proposal intentionally records the deployed Onyx version, image,
+OpenAPI, configuration, supported delegation mechanism, identity bindings,
+endpoints, timeouts, owners, proof results, and approvals as unresolved. Its
+adapter and live-retrieval activation flags are `false`. D-009 (retention and
+erasure decision) separately controls protected-body persistence, and D-005
+(model/provider data-policy decision) separately controls any model destination;
+D-002 cannot grant either authority.
 
 ## Non-negotiable product and security invariants
 
@@ -135,6 +153,12 @@ two synthetic users with intentionally different access.
 - All negative identity and prompt-injection fixtures fail closed.
 - Credential/source-body scans return zero findings.
 - Named owners approve the exact evidence and residual risk.
+
+The machine record becomes dispatchable only when all of these criteria are
+represented by the exact closed proof-case set, every case is `PASS` with an
+evidence digest, the supported read-only endpoint profile is pinned, the gap
+list is empty, and Security/Identity, Onyx Operations, and Curve Product each
+approve the same computed decision-payload digest.
 
 ## Stop conditions
 

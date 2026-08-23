@@ -124,6 +124,7 @@ requireDocumentTokens(m1TaskPacketPath, m1TaskPacket, [
   ...expectedM1SliceIds.map((sliceId) => `| ${sliceId} (`),
 ]);
 const expectedLaterPacketIds = [
+  "M1-00A",
   ...Array.from({ length: 7 }, (_, index) => `M1-${String(index + 1).padStart(2, "0")}`),
   ...Array.from({ length: 6 }, (_, index) => `M2-${String(index + 1).padStart(2, "0")}`),
   ...Array.from({ length: 6 }, (_, index) => `M3-${String(index + 1).padStart(2, "0")}`),
@@ -133,14 +134,14 @@ const expectedLaterPacketIds = [
   ...Array.from({ length: 5 }, (_, index) => `M7-${String(index + 1).padStart(2, "0")}`),
 ];
 const laterPacketRowIds = Array.from(
-  laterPacketCatalog.matchAll(/^\| (M[1-7]-\d{2})(?: [^|]*)? \|/gm),
+  laterPacketCatalog.matchAll(/^\| (M[1-7]-\d{2}[A-Z]?)(?: [^|]*)? \|/gm),
   (match) => match[1],
 );
 const laterPacketRows = laterPacketCatalog
   .split(/\r?\n/)
-  .filter((line) => /^\| M[1-7]-\d{2}/.test(line));
+  .filter((line) => /^\| M[1-7]-\d{2}[A-Z]?/.test(line));
 for (const row of laterPacketRows) {
-  if (!/^\| M[1-7]-\d{2} \([^)]+\) \|/.test(row)) {
+  if (!/^\| M[1-7]-\d{2}[A-Z]? \([^)]+\) \|/.test(row)) {
     failures.push(
       "docs/technical/m1-m7-task-packets.md: every packet row must place its short description in parentheses immediately after the identifier",
     );

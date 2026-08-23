@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/onyx-delegation-decision.schema.json",
+  "title": "D-002 Onyx delegated-identity decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "status",
+    "source_boundary",
+    "mechanism",
+    "principal_binding",
+    "credential_lifecycle",
+    "api_profile",
+    "proof_cases",
+    "security_invariants",
+    "owners",
+    "approvals",
+    "activation",
+    "unresolved_requirements",
+    "decision_payload_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.onyx-delegation-decision/v1" },
+    "decision_id": { "const": "D-002" },
+    "status": {
+      "enum": ["PROPOSED", "DECIDED", "REJECTED", "MORE_EVIDENCE_REQUIRED"]
+    },
+    "source_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "official_docs_checked_at",
+        "official_documentation",
+        "deployed_version",
+        "image_digest",
+        "openapi_digest",
+        "sanitized_configuration_digest"
+      ],
+      "properties": {
+        "official_docs_checked_at": { "$ref": "common.schema.json#/$defs/Instant" },
+        "official_documentation": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": { "type": "string", "format": "uri" }
+        },
+        "deployed_version": { "$ref": "#/$defs/nullableText" },
+        "image_digest": { "$ref": "#/$defs/nullableDigest" },
+        "openapi_digest": { "$ref": "#/$defs/nullableDigest" },
+        "sanitized_configuration_digest": { "$ref": "#/$defs/nullableDigest" }
+      }
+    },
+    "mechanism": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected", "protocol_version", "silent_fallback_allowed"],
+      "properties": {
+        "selected": {
+          "type": ["string", "null"],
+          "enum": [
+            null,
+            "IDP_TOKEN_EXCHANGE",
+            "TRUSTED_DELEGATION_PROXY",
+            "ONYX_SESSION_FORWARD",
+            "EPHEMERAL_OPERATION_TOKEN"
+          ]
+        },
+        "protocol_version": { "$ref": "#/$defs/nullableText" },
+        "silent_fallback_allowed": { "const": false }
+      }
+    },
+    "principal_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor_semantics",
+        "issuer",
+        "audience",
+        "subject_mapping",
+        "workspace_claim",
+        "operation_claim",
+        "purpose_claim"
+      ],
+      "properties": {
+        "actor_semantics": { "const": "INITIATING_HUMAN" },
+        "issuer": { "$ref": "#/$defs/nullableText" },
+        "audience": { "$ref": "#/$defs/nullableText" },
+        "subject_mapping": { "$ref": "#/$defs/nullableText" },
+        "workspace_claim": { "$ref": "#/$defs/nullableText" },
+        "operation_claim": { "$ref": "#/$defs/nullableText" },
+        "purpose_claim": { "$ref": "#/$defs/nullableText" }
+      }
+    },
+    "credential_lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximum_ttl_seconds",
+        "refresh_policy",
+        "durable_wait_policy",
+        "revocation_maximum_seconds",
+        "reusable_human_credential_persisted",
+        "refresh_token_persisted",
+        "temporal_history_contains_credential"
+      ],
+      "properties": {
+        "maximum_ttl_seconds": { "type": ["integer", "null"], "minimum": 1, "maximum": 3600 },
+        "refresh_policy": { "const": "REAUTHORIZE_CURRENT_HUMAN" },
+        "durable_wait_policy": { "const": "REAUTHORIZE_AFTER_WAIT_OR_RETRY" },
+        "revocation_maximum_seconds": { "type": ["integer", "null"], "minimum": 0, "maximum": 3600 },
+        "reusable_human_credential_persisted": { "const": false },
+        "refresh_token_persisted": { "const": false },
+        "temporal_history_contains_credential": { "const": false }
+      }
+    },
+    "api_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "per_user_delegated_api_support",
+        "search",
+        "access_check",
+        "allowed_capabilities",
+        "prohibited_capabilities",
+        "timeout_milliseconds",
+        "retry_policy",
+        "rate_limit_contract"
+      ],
+      "properties": {
+        "per_user_delegated_api_support": { "enum": ["UNPROVEN", "PROVEN", "UNSUPPORTED"] },
+        "search": { "$ref": "#/$defs/endpoint" },
+        "access_check": { "$ref": "#/$defs/endpoint" },
+        "allowed_capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["DOCUMENT_SEARCH", "SOURCE_ACCESS_CHECK", "SOURCE_METADATA_READ"] }
+        },
+        "prohibited_capabilities": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,79}$" }
+        },
+        "timeout_milliseconds": { "type": ["integer", "null"], "minimum": 100, "maximum": 60000 },
+        "retry_policy": { "$ref": "#/$defs/nullableText" },
+        "rate_limit_contract": { "$ref": "#/$defs/nullableText" }
+      }
+    },
+    "proof_cases": {
+      "type": "array",
+      "minItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "evidence_digest"],
+        "properties": {
+          "id": {
+            "enum": [
+              "TWO_USER_ACL",
+              "SUBJECT_SWAP",
+              "WORKSPACE_MISMATCH",
+              "AUDIENCE_MISMATCH",
+              "EXPIRED_GRANT",
+              "REVOKED_GRANT",
+              "DURABLE_WAIT_REAUTHORIZATION",
+              "SOURCE_DELETION_OR_ACCESS_CHANGE",
+              "PROMPT_INJECTION_CONTAINMENT",
+              "CREDENTIAL_AND_BODY_LEAK_SCAN",
+              "AUDIT_ATTRIBUTION",
+              "OUTAGE_RATE_LIMIT_CANCELLATION_RECONCILIATION"
+            ]
+          },
+          "status": { "enum": ["NOT_RUN", "PASS", "FAIL"] },
+          "evidence_digest": { "$ref": "#/$defs/nullableDigest" }
+        }
+      }
+    },
+    "security_invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_receives_delegation",
+        "service_admin_identity_for_protected_search",
+        "credential_in_logs_or_telemetry",
+        "credential_in_provider_payload_or_evidence",
+        "source_content_can_expand_authority",
+        "access_rechecked_at_material_use"
+      ],
+      "properties": {
+        "agent_receives_delegation": { "const": false },
+        "service_admin_identity_for_protected_search": { "const": false },
+        "credential_in_logs_or_telemetry": { "const": false },
+        "credential_in_provider_payload_or_evidence": { "const": false },
+        "source_content_can_expand_authority": { "const": false },
+        "access_rechecked_at_material_use": { "const": true }
+      }
+    },
+    "owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["security_identity", "onyx_operations", "curve_product"],
+      "properties": {
+        "security_identity": { "$ref": "#/$defs/nullableText" },
+        "onyx_operations": { "$ref": "#/$defs/nullableText" },
+        "curve_product": { "const": "Federico Ocampo" }
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "approved_by", "approved_at", "decision_payload_digest"],
+        "properties": {
+          "role": { "enum": ["SECURITY_IDENTITY", "ONYX_OPERATIONS", "CURVE_PRODUCT"] },
+          "approved_by": { "$ref": "#/$defs/nullableText" },
+          "approved_at": { "oneOf": [{ "$ref": "common.schema.json#/$defs/Instant" }, { "type": "null" }] },
+          "decision_payload_digest": { "$ref": "#/$defs/nullableDigest" }
+        }
+      }
+    },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter_implementation_authorized",
+        "live_retrieval_authorized",
+        "protected_body_persistence_authorized",
+        "model_destination_authorized"
+      ],
+      "properties": {
+        "adapter_implementation_authorized": { "type": "boolean" },
+        "live_retrieval_authorized": { "type": "boolean" },
+        "protected_body_persistence_authorized": { "const": false },
+        "model_destination_authorized": { "const": false }
+      }
+    },
+    "unresolved_requirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_.-]{2,99}$" }
+    },
+    "decision_payload_digest": { "$ref": "#/$defs/nullableDigest" }
+  },
+  "$defs": {
+    "nullableText": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "nullableDigest": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Digest" },
+        { "type": "null" }
+      ]
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "path", "response_schema_digest"],
+      "properties": {
+        "method": { "type": ["string", "null"], "enum": [null, "GET", "POST"] },
+        "path": { "type": ["string", "null"], "pattern": "^/api/" },
+        "response_schema_digest": { "$ref": "#/$defs/nullableDigest" }
+      }
+    }
+  }
+}

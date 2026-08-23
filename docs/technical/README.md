@@ -66,6 +66,7 @@ identifiers are:
 - M0-03 (core authorization and policy kernel work package).
 - M0-08 (audit and observability foundation work package).
 - M1 (alignment, evidence, immutable PRD versions, and Gate 1 milestone).
+- M1-00A (minimal Product core required before Initiative implementation).
 - OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding).
 
 ## Document set
@@ -82,7 +83,7 @@ identifiers are:
 | [Architecture decisions](architecture-decisions.md) | D-001-D-016 evidence, ownership, decision, and supersession process | ADR prerequisites and decision governance |
 | [Development plan](development-plan.md) | Milestones, work packages, dependencies, traceability, tests, task packets, and AI-agent protocol | Delivery sequencing and Definition of Done |
 | [Kanban delivery lifecycle](kanban-delivery-lifecycle.md) | User-facing delivery-board statuses from definition through monitored customer use and closure | Kanban projection and state-transition evidence |
-| [M7 intelligence and automation extension](m7-intelligence-and-automation-extension.md) | Post-R1 charter for AI-expense governance, Gmail/Slack attention intake, and scheduled AI-agent jobs | Future-extension scope and entry gates; does not expand the active 70-item catalog |
+| [M7 intelligence and automation extension](m7-intelligence-and-automation-extension.md) | Post-R1 charter for AI-expense governance, Gmail/Slack attention intake, and scheduled AI-agent jobs | Future-extension scope and entry gates; does not expand the active 71-item catalog |
 | [Implementation-readiness review](review-analysis-and-remediation.md) | Prioritized gaps, closure evidence, owners, dependencies, and remediation status | Review record; never overrides the PRD or approved ADRs |
 | [Plane foundation inventory](plane-foundation-inventory.md) (upstream, licensing, fork lineage, and accepted implementation base) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; foundation `549db1a...`; current post-M0-S9A `preview` base `af7187d...` |
 | [ADR-001: Plane upstream foundation](adr-001-plane-upstream-foundation.md) | Decided updateable upstream baseline, fork workflow, proof results, consequences, rollback, approval, and review triggers | D-001 decision record; `DECIDED` on 2026-08-15 |
@@ -93,6 +94,7 @@ identifiers are:
 | [ADR-007: MCP and Orca profile](adr-007-mcp-trust-and-orca-profile.md) | Proposed MCP trust registry and developer-operated Orca write-back allowlist | D-007 decision packet; security/platform approval pending |
 | [ADR-009: Retention and erasure](adr-009-retention-and-erasure.md) (class-by-asset policy, controlled-copy inventory, hold/erasure state machine, and fail-closed behavior) | Required data-class/asset retention, hold, backup, and erasure decision | D-009 remains open; its machine proposal is prepared and protected storage/non-local activation remain blocked |
 | [D-002 Onyx delegation decision packet](d002-onyx-delegated-identity-decision-packet.md) (deployed Onyx auth proof, mechanism options, two-user ACL test, revocation, and decision template) | Evidence-complete process for selecting initiating-user Onyx delegation without a reusable PAT or broad service identity | `PROPOSED`; requires named Security/Identity owner and exact X3M Onyx proof |
+| [D-002 machine decision record](../../contracts/governance/d002-onyx-delegation-v1.json) (deployed boundary, principal, credential, endpoint, proof, owner, approval, and activation fields) | Machine-readable fail-closed proposal with computed gap equivalence and digest-bound approvals | `PROPOSED`; adapter implementation and live retrieval remain unauthorized |
 | [M0 readiness board](m0-readiness-board.md) | Decision, package, owner, evidence, and blocking-state control | Operational coding-readiness source |
 | [M0 authorization/state matrices](m0-authorization-and-state-matrices.md) | Core roles, authorization inputs, operation transitions, and Orca tool effects | M0 policy/state contract |
 | [M0 traceability](m0-traceability.md) | Requirement-to-contract-to-test ownership | M0 verification control |
@@ -124,7 +126,7 @@ identifiers are:
 | [P0-06 stage record](proofs/p0-06-stage-record.json) | `curve.proof-stage-projection/v3` terminal supersession binding | `P0-06_SUPERSEDED`; D-003 `LOCAL_ONLY` and replacement M0-S3 are machine validated |
 | [P0-12 retention decision packet](p0-12-retention-decision-task-packet.md) (owner inputs, machine worksheet, approval protocol, acceptance tests, and handoff) | Decision-readiness package for D-009 retention, backup, hold, tombstone, and erasure policy | `REVIEW_DRAFT / PROPOSED / NOT_DECIDED`; 39 policy cells, eight controlled-copy entries, six material blocks, and six named-person approvals remain required |
 | [D-009 retention worksheet](../../contracts/governance/d009-retention-policy-v1.json) (machine policy cells, storage inventory, decision blocks, digest-bound approvals, and activation guard) | Normative owner-fillable D-009 decision instance | `PROPOSED / NONE_FAIL_CLOSED`; grants no implementation or activation authority |
-| [GitHub Project tracking map](github-project-execution-map.md) | Seventy-package visual catalog plus explicit packet checkpoints, read-only context inspection, and bounded status reconciliation | Administrative status tracking; status is informational, while task packets and execution controls remain authoritative |
+| [GitHub Project tracking map](github-project-execution-map.md) | Seventy-one-package visual catalog plus explicit packet checkpoints, read-only context inspection, and bounded status reconciliation | Administrative status tracking; status is informational, while task packets and execution controls remain authoritative |
 | [Machine-readable contracts](../../contracts/README.md) | OpenAPI, JSON Schema, MCP, SSE, provider, operation, and Temporal contracts | Normative wire/schema source |
 
 ## Authority and conflict order

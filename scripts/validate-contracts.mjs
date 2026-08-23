@@ -7,6 +7,7 @@ import { join, relative } from "node:path";
 import { validateTestStrategyMatrixSemantics } from "./lib/test-strategy.mjs";
 import { validateTemporalOrchestrationSemantics } from "./lib/temporal-orchestration.mjs";
 import { validateRetentionPolicyDecisionSemantics } from "./lib/retention-policy.mjs";
+import { validateOnyxDelegationDecision } from "./lib/onyx-delegation.mjs";
 
 const root = process.cwd();
 
@@ -88,6 +89,14 @@ const providerRegistryManifestSchema = join(root, "contracts/schemas/provider-re
 const providerRegistryManifestPath = join(root, "contracts/providers/m0-s9a-provider-registry-v1.json");
 const retentionPolicyDecisionSchema = join(root, "contracts/schemas/retention-policy-decision.schema.json");
 const retentionPolicyDecisionPath = join(root, "contracts/governance/d009-retention-policy-v1.json");
+const onyxDelegationDecisionSchema = join(
+  root,
+  "contracts/schemas/onyx-delegation-decision.schema.json",
+);
+const onyxDelegationDecisionPath = join(
+  root,
+  "contracts/governance/d002-onyx-delegation-v1.json",
+);
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -102,6 +111,7 @@ const fixtureSpecs = [
   ["contracts/testing/ac-test-matrix-v1.json", testStrategyMatrixSchema, true],
   ["contracts/temporal/m0-orchestration-v1.json", temporalOrchestrationSchema, true],
   ["contracts/governance/d009-retention-policy-v1.json", retentionPolicyDecisionSchema, true],
+  ["contracts/governance/d002-onyx-delegation-v1.json", onyxDelegationDecisionSchema, true],
   ["contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json", observabilityBindingSchema, false],
   ["contracts/schemas/semantic-fixtures/provider-connection-active.valid.json", providerConnectionSchema, true],
   ["contracts/schemas/semantic-fixtures/provider-connection-active-null.invalid.json", providerConnectionSchema, false],
@@ -163,6 +173,11 @@ validateTestStrategyMatrixSemantics({
 
 const retentionPolicyDecision = JSON.parse(readFileSync(retentionPolicyDecisionPath, "utf8"));
 validateRetentionPolicyDecisionSemantics(retentionPolicyDecision);
+const onyxDelegationDecision = JSON.parse(readFileSync(onyxDelegationDecisionPath, "utf8"));
+const onyxValidation = validateOnyxDelegationDecision(onyxDelegationDecision);
+if (onyxValidation.dispatchable !== false || onyxValidation.unresolved.length === 0) {
+  throw new Error("the canonical D-002 proposal must remain fail-closed until owner proof and approval");
+}
 
 const corePolicyManifest = JSON.parse(readFileSync(corePolicyManifestPath, "utf8"));
 const corePolicyManifestV1Digest = createHash("sha256")

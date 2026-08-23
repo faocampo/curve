@@ -6,13 +6,13 @@
 | --- | --- |
 | Milestone | M1 (alignment, evidence, immutable PRD versions, and Gate 1) |
 | Status | `PREPARED_NOT_DISPATCHABLE`; task decomposition is complete; M0 dependencies and named material decisions remain open |
-| Version | 1.0 |
-| Date | 2026-08-21 |
+| Version | 1.2 |
+| Date | 2026-08-22 |
 | Product | Curve |
 | Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell, lifecycle, identity, evidence, and Gate 1 acceptance) |
-| Architecture baseline | [Architecture](architecture.md) (definition domain, trust boundaries, asynchronous commands, and Temporal ownership) and [Domain model](domain-model.md) (Initiative, Activity, ArtifactVersion, Evidence, AccessEnvelope, and Gate entities) |
+| Architecture baseline | [Architecture](architecture.md) (definition domain, trust boundaries, asynchronous commands, and Temporal ownership) and [Domain model](domain-model.md) (Product, Initiative, Activity, ArtifactVersion, Evidence, AccessEnvelope, and Gate entities) |
 | Delivery baseline | [Development plan](development-plan.md) (M1 dependencies, traceability, and completion evidence) and [M1-M7 packet catalog](m1-m7-task-packets.md) (later-milestone materialization controls) |
-| Minimum Curve ancestor | `e8dc8a32f884d6b9e5601e3cf44fab3859e05eac`, containing the proposed M0-S5 observability contract; dispatch pins the eventual merged Curve revision and context digest |
+| Minimum Curve ancestor | `ce7b4663f3d28da21d23c75d98c1a62f04800a9d`, containing the accepted local M0 observability evidence and reconciliation; P0-05 is bound to candidate `7d2794bad87a6e2e733ee8a53a650d8ea7658d22` until it merges, and dispatch pins the eventual merged Curve revision and context digest |
 | Implementation repository | `git@github.com:faocampo/plane.git`, target `preview`, exact live base assigned only after the consuming M0 evidence merges |
 | Owner and reviewer | Federico Ocampo (`faocampo`) until explicitly reassigned; the coding agent cannot satisfy human review |
 | Default data | Synthetic `INTERNAL` fixtures; protected bodies and live provider access disabled |
@@ -21,12 +21,13 @@
 
 ## Outcome
 
-Deliver the Curve product-definition path from a workspace-scoped Initiative to
-an exact-version PRD Approval decision:
+Deliver the Curve product-definition path from a workspace-scoped Product and
+Initiative to an exact-version PRD Approval decision:
 
 ```mermaid
 flowchart LR
-    create["Create Initiative"] --> align["Manual Idea Brief"]
+    product["Select or create Product"] --> create["Create Initiative"]
+    create --> align["Manual Idea Brief"]
     align --> evidence["Authorized evidence"]
     align --> research{"Research selected?"}
     research -->|Skip| prd["Immutable PRD version"]
@@ -57,13 +58,15 @@ activate only after their material decision and exact provider contract pass.
 | Curve contracts | One merged Curve revision containing the final M1 schemas, OpenAPI, event, workflow, authorization, and state-transition contracts plus a deterministic context digest |
 | Human ownership | Federico Ocampo or a recorded replacement owns and reviews each exact packet |
 | Runtime | Curve-enabled local Plane stack healthy; feature disabled by default; no live provider or model credential in the coding-agent environment |
+| Provider foundation | Accepted M0-09 (provider registry and reconciliation) evidence before M1-03A (fake KnowledgeProvider) or any live provider packet; it does not gate Product, Initiative, manual artifact authoring, metadata-only evidence, research-skip, PRD, or Gate 1 packets |
 | Protected evidence | D-009 (retention and erasure decision) `DECIDED` plus accepted M0-04 (protected storage) evidence before any protected body is persisted |
-| Onyx | D-002 (Onyx delegated-identity decision) `DECIDED` and its two-user ACL/revocation proof accepted before live retrieval |
+| Onyx | D-002 (Onyx delegated-identity decision) `DECIDED`; its [machine record](../../contracts/governance/d002-onyx-delegation-v1.json) (deployed profile, exact proof set, digest-bound approvals, and activation) reports zero computed gaps; and its two-user ACL/revocation proof is accepted before live retrieval |
 | Models | D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) `DECIDED` before any model call |
 
 ### Exit evidence
 
-An authorized X3M user creates an Initiative, authors an attributed Idea Brief,
+An authorized X3M user creates or selects a Product, creates an Initiative,
+authors an attributed Idea Brief,
 uses currently authorized evidence, creates and submits an immutable PRD version,
 and receives a human Gate 1 decision bound to that exact version and evidence
 snapshot. Two permitted users prove source-access isolation. Revoked evidence
@@ -87,7 +90,8 @@ approval and cannot cross a material activation boundary.
 
 | Packet | Scope | Dependencies and material gates | Required evidence |
 | --- | --- | --- | --- |
-| M1-01A (Initiative domain/API) | Add workspace-scoped Initiative, three GateAssignments, lifecycle commands, optimistic concurrency, audit/outbox events, and OpenAPI | Accepted M0 core/API/Temporal/audit foundation; final M1 contracts | Migration forward/reverse, uniqueness, workspace isolation, actor/role denial, idempotency, state, pause/resume/cancel, and OpenAPI tests |
+| M1-00A (minimal Product core) | Add the workspace-scoped Product aggregate and API required to own Initiatives: stable key, name, optional description, IANA timezone, lifecycle, ownership, optimistic concurrency, audit/outbox events, and OpenAPI. Roadmaps, Milestones, Features, Roadmap Items, schedules, and snapshots remain M2. | Accepted M0 core/API/audit foundation; final Product/OpenAPI/event/policy contracts | Migration forward/reverse, same-workspace key uniqueness, IANA timezone, authorization, idempotency, optimistic concurrency, lifecycle, audit/outbox, and OpenAPI tests |
+| M1-01A (Initiative domain/API) | Add workspace-scoped Initiative, required same-workspace Product reference, three GateAssignments, lifecycle commands, optimistic concurrency, audit/outbox events, and OpenAPI | M1-00A (minimal Product core); accepted M0 core/API/Temporal/audit foundation; final M1 contracts | Migration forward/reverse, Product-reference integrity, uniqueness, workspace isolation, actor/role denial, idempotency, state, pause/resume/cancel, and OpenAPI tests |
 | M1-01B (Initiative shell) | Curve-first Initiatives list/create/detail experience with assignment and lifecycle controls | M1-01A (Initiative domain/API); approved screen contract | Browser, keyboard, screen-reader, responsive, error/retry, empty/loading, disabled-state, and role-visibility tests |
 | M1-02A (manual Idea Brief) | `IDEA_BRIEF` Artifact and immutable/manual draft versions with attributed structured edits for problem, users, outcomes, assumptions, contradictions, blockers, and unknowns | M1-01A (Initiative domain/API); no model gate | Schema, attribution, concurrent edit, canonical digest, diff, validation, browser, and accessibility tests |
 | M1-02B (model refinement) | Generate/regenerate a new Idea Brief version without overwriting human edits | M1-02A; D-004 (model-gateway decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision) | Prompt/model/policy/budget pins, no silent fallback, provenance, cancellation, redaction, diff, and failure tests |
@@ -110,6 +114,7 @@ records the exact merged Curve revision and generated-client digest.
 
 | Contract | Minimum content |
 | --- | --- |
+| Product JSON Schema | Workspace record, stable key, name, optional description, IANA timezone, lifecycle, owner, optimistic version, timestamps, and no roadmap-specific fields |
 | Initiative JSON Schema | Common workspace record, mode, Product reference, keyword/title/description, risk, lifecycle, paused-from state, workflow version, creator, current artifact pointers, three assignments, optimistic version, timestamps |
 | Artifact and ArtifactVersion JSON Schemas | Stable kind, immutable numbered version, state, body schema/version/ref/digest, evidence snapshot, parent, provenance, submit/supersede invariants |
 | Idea Brief body schema | Problem, affected users, desired outcomes, non-goals, constraints, assumptions, contradictions, blockers, unknowns, attribution, validation action, owner, and due stage |
@@ -193,7 +198,8 @@ not invented by the coding agent.
 
 | Packet group | Current state | Missing evidence before `READY` |
 | --- | --- | --- |
-| M1-01A/B (Initiative) | `PREPARED` | Accepted consuming M0 base; Initiative/OpenAPI/event/state contracts; exact UI contract; commands and context digest |
+| M1-00A (minimal Product core) | `PREPARED` | Accepted consuming M0 base; Product/OpenAPI/event/policy contracts; exact base, commands, and context digest |
+| M1-01A/B (Initiative) | `PREPARED` | M1-00A; accepted consuming M0 base; Initiative/OpenAPI/event/state contracts; exact UI contract; commands and context digest |
 | M1-02A (manual Idea Brief) | `PREPARED` | M1-01A; Idea Brief/ArtifactVersion contracts; UI contract; exact dispatch values |
 | M1-02B and M1-06C (model authoring) | `BLOCKED_MATERIAL_DECISIONS` | D-004 (model-gateway decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), evaluations, and exact model/prompt/tool/budget pins |
 | M1-03A (fake KnowledgeProvider) | `PREPARED` | M0-09; provider contract and fixtures; exact dispatch values |

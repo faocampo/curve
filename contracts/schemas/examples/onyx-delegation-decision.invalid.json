@@ -1,0 +1,11 @@
+{
+  "schema_version": "curve.onyx-delegation-decision/v1",
+  "decision_id": "D-002",
+  "status": "PROPOSED",
+  "activation": {
+    "adapter_implementation_authorized": true,
+    "live_retrieval_authorized": true,
+    "protected_body_persistence_authorized": true,
+    "model_destination_authorized": true
+  }
+}

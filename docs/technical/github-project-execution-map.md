@@ -8,7 +8,7 @@
 | Version | 1.11 |
 | Date | 2026-08-22 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
-| Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (70-package delivery catalog, dependencies, and evidence) |
+| Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (71-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
 | Last reconciliation | 2026-08-22: M0-08 item `PVTI_lAHOBNjuQc4BgZzOzg2nbyQ` is `Done`; Plane PR #8 merged M0-S5B at `1b06153...`; Curve PR #25 merged accepted evidence at `590a52e...`; both approved/merge tree pairs match and validation is green. Non-local activation remains separately gated. No duplicate item is required. |
@@ -17,7 +17,7 @@
 
 GitHub Project #2 is a visual index for Curve development. It helps the team see
 the current phase, locate the normative task packet, and follow progress across
-the 70 planned work packages plus explicit packet-level checkpoints used to
+the 71 planned work packages plus explicit packet-level checkpoints used to
 decompose a large package.
 
 The development plan, approved product decisions, architecture decisions, task
@@ -44,19 +44,19 @@ grant. Execution systems evaluate their own authoritative inputs independently.
 | P0A foundation readiness | P0-01 through P0-06 (foundation-readiness packages) | 6 | Current working projection |
 | P0B just-in-time proofs | P0-07 through P0-12 (integration-readiness packages) | 6 | Backlog |
 | M0 foundation/control plane | M0-01 through M0-09 | 9 | Backlog |
-| M1 alignment/evidence/PRD | M1-01 through M1-07 | 7 | Backlog |
+| M1 alignment/evidence/PRD | M1-00A plus M1-01 through M1-07 | 8 | Backlog |
 | M2 roadmap/schedule | M2-01 through M2-06 | 6 | Backlog |
 | M3 repository/planning | M3-01 through M3-06 | 6 | Backlog |
 | M4 agents/runners | M4-01 through M4-06 | 6 | Backlog |
 | M5 quality/VCS/readiness | M5-01 through M5-14 | 14 | Backlog |
 | M6 prototypes/KPIs | M6-01 through M6-05 | 5 | Backlog |
 | R1 qualification/rollout | R1-01 through R1-05 | 5 | Backlog |
-| Canonical catalog total |  | **70** |  |
+| Canonical catalog total |  | **71** |  |
 | M0-S3 packet checkpoint | Decomposed executable slice of M0-06 | 1 | Completed proof projection; Plane merge `d99342f...` |
 | M0-S4 packet checkpoint | Decomposed executable slice completing local M0-07 | 1 | `Done`; Plane merge `e762fbb...` and accepted post-merge evidence |
 | M0-S4-UX checkpoint | Definition/UX child of M0-S4 | 1 | `Done`; Curve-first shell and Foundation experience approved |
-| M7 intelligence extension issues | M7-01 and M7-02 outside the active 70-row catalog | 2 | Backlog; governed by the separate M7 extension charter |
-| **Current visual total** |  | **75** |  |
+| M7 intelligence extension issues | M7-01 and M7-02 outside the active 71-row catalog | 2 | Backlog; governed by the separate M7 extension charter |
+| **Current visual total** |  | **76** |  |
 
 ## Field mapping
 
@@ -100,7 +100,7 @@ pnpm project:sync -- --status M0-01="In review"
 pnpm project:sync -- --status M0-01="Done"
 ```
 
-`project:check` parses the 70-row canonical catalog and reports its default visual
+`project:check` parses the 71-row canonical catalog and reports its default visual
 projection. It performs no GitHub request. `--context` computes registered
 context and stage-record digests for a whitelisted catalog or packet identifier
 such as M0-S3 and remains read-only.
@@ -118,11 +118,11 @@ inside M0-06 rather than a second canonical work package. M0-S4 (API, SSE, and
 minimal Curve-first UI implementation packet) is a checkpoint that completes
 the local M0-07 API/SSE scope, and M0-S4-UX (Definition/UX checkpoint) is its
 child evidence projection. Their draft items are managed directly by Federico
-Ocampo or authorized automation and are excluded from the 70-row catalog
+Ocampo or authorized automation and are excluded from the 71-row catalog
 synchronizer. M7-01/M7-02 are separate GitHub issues governed by the
 [M7 intelligence extension](m7-intelligence-and-automation-extension.md)
 (future AI-expense, attention-intake, and scheduled-agent charter), not by the
-active 70-row catalog.
+active 71-row catalog.
 
 For write safety, apply mode requires:
 
@@ -170,7 +170,7 @@ links back to the development plan so every visual item remains traceable.
 
 GitHub Project #2 is private. The unauthenticated external-link checker excludes
 this exact URL because anonymous access returns 404. Authenticated verification
-uses `gh project view 2 --owner faocampo` and the 70-item reconciliation.
+uses `gh project view 2 --owner faocampo` and the 71-item reconciliation.
 
 ## References
 
