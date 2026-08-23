@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Status | Active visual-tracking contract |
-| Version | 1.11 |
-| Date | 2026-08-22 |
+| Version | 1.13 |
+| Date | 2026-08-23 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (71-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
-| Last reconciliation | 2026-08-22: M0-08 item `PVTI_lAHOBNjuQc4BgZzOzg2nbyQ` is `Done`; Plane PR #8 merged M0-S5B at `1b06153...`; Curve PR #25 merged accepted evidence at `590a52e...`; both approved/merge tree pairs match and validation is green. Non-local activation remains separately gated. No duplicate item is required. |
+| Last reconciliation | 2026-08-23: Project #2 has 79 unique items. M0-08 (audit and observability foundation) remains `Done`; M0-03A (policy timestamp-ordering fix) moved to `Done` after Plane PR #9 merged; P0-05 (R1 acceptance-test strategy) remains `In review` at rebased head `7d2794b...` with green CI; M1-00A (minimal Product core) moved to `In progress` while its approved contracts are prepared; and no duplicate item was created. |
 
 ## Purpose and authority boundary
 
@@ -55,8 +55,11 @@ grant. Execution systems evaluate their own authoritative inputs independently.
 | M0-S3 packet checkpoint | Decomposed executable slice of M0-06 | 1 | Completed proof projection; Plane merge `d99342f...` |
 | M0-S4 packet checkpoint | Decomposed executable slice completing local M0-07 | 1 | `Done`; Plane merge `e762fbb...` and accepted post-merge evidence |
 | M0-S4-UX checkpoint | Definition/UX child of M0-S4 | 1 | `Done`; Curve-first shell and Foundation experience approved |
+| M0-03A checkpoint | Core-policy timestamp-ordering regression child of M0-03 | 1 | `In review`; Plane PR #9 evidence |
+| M0-S6A checkpoint | Durable parent/child Temporal orchestration readiness child of M0-06 | 1 | `In review`; Curve PR #28 evidence |
+| M0-S9A checkpoint | Provider-neutral registry and reconciliation readiness child of M0-09 | 1 | `In review`; Curve PR #29 evidence |
 | M7 intelligence extension issues | M7-01 and M7-02 outside the active 71-row catalog | 2 | Backlog; governed by the separate M7 extension charter |
-| **Current visual total** |  | **76** |  |
+| **Current visual total** |  | **79** |  |
 
 ## Field mapping
 
