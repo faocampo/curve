@@ -27,6 +27,8 @@
     "error_codes": [],
     "maximum_attempts": 4,
     "deadline_seconds": 60,
+    "deadline_scope": "PER_ATTEMPT",
+    "retryable_error_codes": ["TERMINAL"],
     "ambiguous_mutation_rule": "RETRY"
   },
   "reconciliation": {
@@ -35,7 +37,8 @@
     "same_command_replay": "REPEAT",
     "changed_digest_replay": "ACCEPT",
     "workspace_mismatch": "RETURN_RESOURCE",
-    "ambiguous_observation": "OVERWRITE"
+    "ambiguous_observation": "OVERWRITE",
+    "advisory_interval_seconds": 60
   },
   "persistence": {
     "connection_table": "curve_provider_connection",

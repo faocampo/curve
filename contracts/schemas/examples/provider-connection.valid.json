@@ -9,11 +9,6 @@
   "environment": "LOCAL",
   "display_name": "Synthetic local provider",
   "configuration_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-  "capability_document_ref": {
-    "resource_type": "PROVIDER_CAPABILITY",
-    "resource_id": "13000000-0000-4000-8000-000000000002",
-    "resource_version": 1
-  },
   "allowed_classifications": ["INTERNAL"],
   "secret_reference": null,
   "status": "PENDING_VALIDATION",

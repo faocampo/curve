@@ -306,8 +306,10 @@ const expectedProviderStates = [
 const expectedProviderTransitions = [
   ["PENDING_VALIDATION", "VALIDATION_SUCCEEDED", "ACTIVE"],
   ["PENDING_VALIDATION", "VALIDATION_FAILED", "PENDING_VALIDATION"],
+  ["ACTIVE", "RECONCILIATION_SUCCEEDED", "ACTIVE"],
   ["ACTIVE", "RECONCILIATION_FAILED", "DEGRADED"],
   ["DEGRADED", "RECONCILIATION_SUCCEEDED", "ACTIVE"],
+  ["DEGRADED", "RECONCILIATION_FAILED", "DEGRADED"],
   ["PENDING_VALIDATION", "DISABLE", "DISABLED"],
   ["ACTIVE", "DISABLE", "DISABLED"],
   ["DEGRADED", "DISABLE", "DISABLED"],
@@ -346,12 +348,16 @@ if (
   JSON.stringify(actualProviderTransitions) !== JSON.stringify(expectedProviderTransitions) ||
   providerRegistryManifest.adapter_contract.maximum_attempts !== 3 ||
   providerRegistryManifest.adapter_contract.deadline_seconds !== 15 ||
+  providerRegistryManifest.adapter_contract.deadline_scope !== "TOTAL_RECONCILIATION" ||
+  JSON.stringify(providerRegistryManifest.adapter_contract.retryable_error_codes) !==
+    JSON.stringify(["RATE_LIMIT", "TRANSIENT"]) ||
   providerRegistryManifest.adapter_contract.ambiguous_mutation_rule !== "RECONCILE_BEFORE_RETRY" ||
   providerRegistryManifest.reconciliation.trigger !== "EXPLICIT_APPLICATION_SERVICE_CALL" ||
   providerRegistryManifest.reconciliation.same_command_replay !== "RETURN_ORIGINAL_RESOURCE_REF" ||
   providerRegistryManifest.reconciliation.changed_digest_replay !== "REJECT_CONFLICT" ||
   providerRegistryManifest.reconciliation.workspace_mismatch !== "NOT_FOUND" ||
   providerRegistryManifest.reconciliation.ambiguous_observation !== "RECORD_CONFLICT_WITHOUT_OVERWRITE" ||
+  providerRegistryManifest.reconciliation.advisory_interval_seconds !== 900 ||
   JSON.stringify(providerRegistryManifest.required_events) !== JSON.stringify(expectedProviderEvents)
 ) {
   throw new Error("M0-S9A provider-registry manifest differs from the reviewed local-only boundary");

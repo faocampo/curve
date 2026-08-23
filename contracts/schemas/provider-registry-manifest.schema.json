@@ -70,8 +70,8 @@
     },
     "transitions": {
       "type": "array",
-      "minItems": 12,
-      "maxItems": 12,
+      "minItems": 14,
+      "maxItems": 14,
       "uniqueItems": true,
       "items": {
         "type": "object",
@@ -87,26 +87,29 @@
     "adapter_contract": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["methods", "error_codes", "maximum_attempts", "deadline_seconds", "ambiguous_mutation_rule"],
+      "required": ["methods", "error_codes", "maximum_attempts", "deadline_seconds", "deadline_scope", "retryable_error_codes", "ambiguous_mutation_rule"],
       "properties": {
         "methods": {"const": ["describe_capabilities", "reconcile"]},
         "error_codes": {"const": ["AUTHENTICATION", "AUTHORIZATION", "POLICY", "NOT_SUPPORTED", "RATE_LIMIT", "TRANSIENT", "AMBIGUOUS_MUTATION", "TERMINAL"]},
         "maximum_attempts": {"const": 3},
         "deadline_seconds": {"const": 15},
+        "deadline_scope": {"const": "TOTAL_RECONCILIATION"},
+        "retryable_error_codes": {"const": ["RATE_LIMIT", "TRANSIENT"]},
         "ambiguous_mutation_rule": {"const": "RECONCILE_BEFORE_RETRY"}
       }
     },
     "reconciliation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["operation_type", "trigger", "same_command_replay", "changed_digest_replay", "workspace_mismatch", "ambiguous_observation"],
+      "required": ["operation_type", "trigger", "same_command_replay", "changed_digest_replay", "workspace_mismatch", "ambiguous_observation", "advisory_interval_seconds"],
       "properties": {
         "operation_type": {"const": "PROVIDER_RECONCILIATION"},
         "trigger": {"const": "EXPLICIT_APPLICATION_SERVICE_CALL"},
         "same_command_replay": {"const": "RETURN_ORIGINAL_RESOURCE_REF"},
         "changed_digest_replay": {"const": "REJECT_CONFLICT"},
         "workspace_mismatch": {"const": "NOT_FOUND"},
-        "ambiguous_observation": {"const": "RECORD_CONFLICT_WITHOUT_OVERWRITE"}
+        "ambiguous_observation": {"const": "RECORD_CONFLICT_WITHOUT_OVERWRITE"},
+        "advisory_interval_seconds": {"const": 900}
       }
     },
     "persistence": {

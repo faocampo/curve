@@ -5,8 +5,8 @@
 | Field | Value |
 | --- | --- |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.1 |
-| Date | 2026-08-22 |
+| Version | 1.2 |
+| Date | 2026-08-23 |
 | Work package | M0-S9A (provider-neutral registry and reconciliation foundation) |
 | Owner and reviewer | Federico Ocampo (`faocampo`) |
 | Applies to | Curve-owned PostgreSQL tables in the public Plane fork |
@@ -57,7 +57,7 @@ existing `WorkspaceScopedModel` fields. It adds:
 | `configuration_ref` | nullable JSON | Always null until protected storage is authorized. |
 | `configuration_digest` | digest text | SHA-256 of adapter-validated canonical non-secret configuration. |
 | `secret_reference` | nullable text | Database check requires null for `FAKE_LOCAL`. |
-| `current_capability_id` | nullable UUID foreign key | Same-workspace immutable `ProviderCapability`; required in `ACTIVE` and `DEGRADED`. |
+| `current_capability_id` | nullable UUID foreign key | Same-workspace immutable `ProviderCapability`; required in `ACTIVE` and `DEGRADED`. The wire projection serializes this field as `capability_document_ref` with resource type, ID, and capability version. |
 | `allowed_classifications` | JSON array | Exactly `['INTERNAL']` for `FAKE_LOCAL`; array type, unique known values. |
 | `status` | bounded text | `PENDING_VALIDATION`, `ACTIVE`, `DEGRADED`, `DISABLED`, or `REVOKED`. |
 | `validated_at` | nullable timestamp | Required for `ACTIVE` and `DEGRADED`. |
@@ -139,8 +139,10 @@ stateDiagram-v2
     [*] --> PENDING_VALIDATION: register
     PENDING_VALIDATION --> ACTIVE: validation succeeded
     PENDING_VALIDATION --> PENDING_VALIDATION: validation failed
+    ACTIVE --> ACTIVE: reconciliation succeeded
     ACTIVE --> DEGRADED: reconciliation failed
     DEGRADED --> ACTIVE: reconciliation succeeded
+    DEGRADED --> DEGRADED: reconciliation failed
     PENDING_VALIDATION --> DISABLED: disable
     ACTIVE --> DISABLED: disable
     DEGRADED --> DISABLED: disable
@@ -155,7 +157,10 @@ stateDiagram-v2
 `REVOKED` is terminal. Enabling a disabled connection returns it to
 `PENDING_VALIDATION`; previous capability history remains immutable and cannot
 make the connection active. Invalid transitions return a stable conflict and
-write safe no-effect audit evidence.
+write safe no-effect audit evidence. Successful reconciliation of an already
+active connection is an accepted `ACTIVE` to `ACTIVE` transition. An exhausted
+retry while already degraded is an accepted `DEGRADED` to `DEGRADED`
+transition. Both advance the aggregate version and append exact result evidence.
 
 ## Command and transaction boundaries
 
@@ -163,10 +168,11 @@ write safe no-effect audit evidence.
 
 One atomic application transaction:
 
-1. Requires a previously issued authorized policy receipt for
-   `CURVE.PROVIDER_CONNECTION.ADMINISTER`; M0-S9A tests supply a synthetic
-   receipt through the internal service boundary because the human role source
-   and public endpoint are deferred.
+1. Runs inside the existing `execute_authorized_mutation` policy-owned
+   transaction for `CURVE.PROVIDER_CONNECTION.ADMINISTER`. That wrapper alone
+   issues the active, unforgeable receipt consumed by the mutation primitive.
+   M0-S9A tests provide a synthetic local caller/resource context to the real
+   wrapper; they never construct, serialize, or inject a receipt.
 2. Requires `workspace_id`, exact fake adapter code/version, `LOCAL`, synthetic
    actor/effective principal, canonical empty configuration, raw idempotency key
    in memory, and correlation ID.
@@ -194,15 +200,20 @@ Reconciliation has no database transaction around the adapter call:
 4. Byte-equivalent capability observations do not append duplicate capability
    history. The connection still records the successful reconciliation time
    and advances its aggregate version.
-5. A transient/terminal error records only the safe taxonomy, follows the
-   bounded three-attempt policy at the application-service boundary, and moves
-   a previously active connection to `DEGRADED` after exhaustion.
+5. One reconciliation has a single 15-second monotonic deadline across all
+   adapter attempts and permits at most three attempts. Only `RATE_LIMIT` and
+   `TRANSIENT` are retryable while time remains. `AUTHENTICATION`,
+   `AUTHORIZATION`, `POLICY`, `NOT_SUPPORTED`, `AMBIGUOUS_MUTATION`, `TERMINAL`,
+   cancellation, and deadline exhaustion stop immediately. Exhausted retry
+   moves an active connection to `DEGRADED` and keeps a degraded connection
+   `DEGRADED`, recording only the safe taxonomy.
 6. An ambiguous observation records conflict evidence and does not replace the
    current capability. No mutation is retried until explicit reconciliation.
 
-M0-S9A exposes explicit application-service invocation only. `next_reconcile_at`
-is computed for future consumers; no Celery, Temporal schedule, cron, or network
-callback is activated by this contract.
+M0-S9A exposes explicit application-service invocation only. On successful
+reconciliation, `next_reconcile_at` is the trusted result-acceptance time plus
+exactly 900 seconds. It is advisory for future consumers; no Celery, Temporal
+schedule, cron, or network callback is activated by this contract.
 
 ## Events, audit, and telemetry
 

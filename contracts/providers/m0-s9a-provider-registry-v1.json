@@ -30,8 +30,10 @@
   "transitions": [
     {"from": "PENDING_VALIDATION", "command": "VALIDATION_SUCCEEDED", "to": "ACTIVE"},
     {"from": "PENDING_VALIDATION", "command": "VALIDATION_FAILED", "to": "PENDING_VALIDATION"},
+    {"from": "ACTIVE", "command": "RECONCILIATION_SUCCEEDED", "to": "ACTIVE"},
     {"from": "ACTIVE", "command": "RECONCILIATION_FAILED", "to": "DEGRADED"},
     {"from": "DEGRADED", "command": "RECONCILIATION_SUCCEEDED", "to": "ACTIVE"},
+    {"from": "DEGRADED", "command": "RECONCILIATION_FAILED", "to": "DEGRADED"},
     {"from": "PENDING_VALIDATION", "command": "DISABLE", "to": "DISABLED"},
     {"from": "ACTIVE", "command": "DISABLE", "to": "DISABLED"},
     {"from": "DEGRADED", "command": "DISABLE", "to": "DISABLED"},
@@ -55,6 +57,8 @@
     ],
     "maximum_attempts": 3,
     "deadline_seconds": 15,
+    "deadline_scope": "TOTAL_RECONCILIATION",
+    "retryable_error_codes": ["RATE_LIMIT", "TRANSIENT"],
     "ambiguous_mutation_rule": "RECONCILE_BEFORE_RETRY"
   },
   "reconciliation": {
@@ -63,7 +67,8 @@
     "same_command_replay": "RETURN_ORIGINAL_RESOURCE_REF",
     "changed_digest_replay": "REJECT_CONFLICT",
     "workspace_mismatch": "NOT_FOUND",
-    "ambiguous_observation": "RECORD_CONFLICT_WITHOUT_OVERWRITE"
+    "ambiguous_observation": "RECORD_CONFLICT_WITHOUT_OVERWRITE",
+    "advisory_interval_seconds": 900
   },
   "persistence": {
     "connection_table": "curve_provider_connection",

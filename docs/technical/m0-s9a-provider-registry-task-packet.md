@@ -6,12 +6,12 @@
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.4 |
+| Version | 1.5 |
 | Date | 2026-08-23 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Curve review base | `main` at `fdae85b33a235cd494dd36565698b2b5033a3389`, containing accepted P0-05 (test strategy and audit closure) |
+| Curve review base | `main` at `d97cc053a5d0eac7bc2aa9bebe263a245c95894f`, containing accepted P0-05 (test strategy and audit closure) and M0-S6A (durable parent/child Temporal orchestration contract) |
 | Target branch | `preview` |
 | Plane base | Exact `preview` commit `cb17734280260361cc3c8eccf44170a4bfbcb840`, containing Plane PR #9 (policy timestamp-ordering regression fix) and reserving provider migration `0005` after policy migration `0004` |
 | Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
@@ -20,10 +20,12 @@
 | Risk | `STANDARD`; local synthetic provider metadata only |
 | Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
 
-Version 1.4 was reconstructed from the package-only commits after P0-05
-(test strategy and audit closure) was squash-merged. The recorded Curve and
-Plane bases are exact review inputs; the dispatcher fetches and re-verifies
-both remote heads before any Plane mutation and stops if either has advanced.
+Version 1.5 rebases the package onto Curve `main` after M0-S6A (durable
+parent/child Temporal orchestration contract) and closes the lifecycle,
+authorization-receipt, retry/deadline, reconciliation-interval, and persistence-
+projection ambiguities found during codeability review. The recorded Curve and
+Plane bases are exact review inputs; the dispatcher fetches and re-verifies both
+remote heads before any Plane mutation and stops if either has advanced.
 
 ## Outcome
 
@@ -165,12 +167,15 @@ keeping one active PR at a time and preserving the same exact context revision.
 | --- | --- |
 | Models | Add only under `apps/api/plane/curve`; no Plane model change or hard FK to Plane workspace tables |
 | Repository lookup | Every method requires `workspace_id` and uses it in the first query predicate; absent/wrong-workspace IDs share the same result |
-| Policy | Services accept only an unforgeable authorized policy receipt from the existing kernel; public role resolution/API stays absent |
+| Policy | Services run through the existing `execute_authorized_mutation` wrapper, which alone issues the active unforgeable receipt; tests supply synthetic local policy context, never a constructed receipt; public role resolution/API stays absent |
 | Transactions | Adapter calls never occur inside `transaction.atomic()`; each accepted state mutation atomically writes domain event, outbox, audit, and aggregate version |
 | Idempotency | Store only key/request digests and replay the original PostgreSQL `ResourceRef`; changed digest conflicts without another effect |
 | Capability history | Append-only; byte-equivalent observations reuse current capability; changed valid observations append the next version |
 | Registry | Exact static mapping for `curve.fake-local`; no dynamic import, entry-point discovery, arbitrary class path, or configuration-selected module |
 | Fake adapter | Pure deterministic in-memory implementation; no socket, filesystem, environment, subprocess, Docker, or credential access |
+| Retry and time | One 15-second monotonic deadline covers at most three attempts; only `RATE_LIMIT` and `TRANSIENT` retry while time remains; all other normalized errors, ambiguity, cancellation, and deadline exhaustion stop immediately |
+| Reconciliation cadence | Successful result acceptance sets advisory `next_reconcile_at` to trusted acceptance time plus exactly 900 seconds; no scheduler consumes it in M0-S9A |
+| Projection | Database `current_capability_id` serializes as wire `capability_document_ref`; absent nullable resource references are omitted, while state-required references are non-null |
 | Observability | Existing M0-S5 redaction/correlation helpers; bounded state/error code only; no raw IDs, configuration, capabilities, or exception text in telemetry |
 | Disablement | Registry service unavailable when Curve is disabled; existing Plane and Curve operation behavior unchanged |
 
@@ -188,7 +193,7 @@ sequenceDiagram
     participant F as Fake adapter
 
     T->>S: register(workspace, fake config, idempotency)
-    S->>P: validate existing authorized receipt
+    S->>P: execute policy-owned wrapper, receive active receipt
     S->>DB: Atomic connection + event + outbox + audit + replay record
     DB-->>S: PENDING_VALIDATION ResourceRef
     T->>S: reconcile(connection, expected version, idempotency)
