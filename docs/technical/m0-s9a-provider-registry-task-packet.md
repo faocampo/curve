@@ -20,6 +20,11 @@
 | Risk | `STANDARD`; local synthetic provider metadata only |
 | Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
 
+Version 1.4 was reconstructed from the package-only commits after P0-05
+(test strategy and audit closure) was squash-merged. The recorded Curve and
+Plane bases are exact review inputs; the dispatcher fetches and re-verifies
+both remote heads before any Plane mutation and stops if either has advanced.
+
 ## Outcome
 
 Implement a provider-neutral registry substrate in Plane's additive
