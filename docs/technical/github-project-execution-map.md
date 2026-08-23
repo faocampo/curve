@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Status | Active visual-tracking contract |
-| Version | 1.10 |
+| Version | 1.11 |
 | Date | 2026-08-22 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (70-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
-| Last reconciliation | 2026-08-22: M0-08 item `PVTI_lAHOBNjuQc4BgZzOzg2nbyQ` remains `In review`; Plane PR #8 merged M0-S5B at `1b06153...` after exact-head approval and green CodeQL/copyright validation; the approved and merged trees match; Curve acceptance-evidence review and final reconciliation remain. No duplicate item is required. |
+| Last reconciliation | 2026-08-22: M0-08 item `PVTI_lAHOBNjuQc4BgZzOzg2nbyQ` is `Done`; Plane PR #8 merged M0-S5B at `1b06153...`; Curve PR #25 merged accepted evidence at `590a52e...`; both approved/merge tree pairs match and validation is green. Non-local activation remains separately gated. No duplicate item is required. |
 
 ## Purpose and authority boundary
 

@@ -4,10 +4,10 @@
 
 | Field | Value |
 | --- | --- |
-| Status | M0-S1, M0-S2, M0-03, M0-S3, M0-S4, and M0-S5A completed; M0-S5B is merged and locally verified with Curve acceptance-evidence review pending |
-| Version | 2.7 |
+| Status | M0-S1, M0-S2, M0-03, M0-S3, M0-S4, M0-S5A, and M0-S5B completed for the local skeleton |
+| Version | 2.8 |
 | Date | 2026-08-22 |
-| Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, effective D-003 local profile, accepted M0-S3/M0-S4/M0-S5A evidence, and locally verified M0-S5B integration) |
+| Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, effective D-003 local profile, and accepted M0-S3 through M0-S5B evidence) |
 | Contract baseline floor | Accepted Curve `main` commit `43480ca8463d0b40d436145aeb19fbbc8c2be472` containing OBS-BIND-001 and the deterministic M0-S5B context source; each coding attempt refreshes and pins the current merged Curve context before mutation |
 | Plane implementation base | M0-S5B merge commit `1b06153f6f49848f208808f4f09385a581a55d26` on fork `preview` |
 
@@ -300,7 +300,7 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S5-OBSERVABILITY` |
-| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_LOCAL_ACCEPTANCE_PASSED / CURVE_EVIDENCE_REVIEW_PENDING`: [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (exact context, CI, merged tree, live telemetry, alert/path failure, redaction, disablement, regression, cleanup, and rollback) records the integrated result |
+| Status | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_ACCEPTED_AND_MERGED`: [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (exact context, CI, merged trees, live telemetry, alert/path failure, redaction, disablement, regression, cleanup, and rollback) records the integrated result |
 | Risk | `STANDARD`; telemetry is a potential data-exfiltration boundary |
 | Outcome | Correlate the local Operation across HTTP, database, relay, workflow, and UI without leaking protected or credential data. |
 | Traceability | FR-021, FR-024; NFR-001-NFR-014; AC-34, AC-36, AC-53 |
