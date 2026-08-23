@@ -6,14 +6,14 @@
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.3 |
-| Date | 2026-08-22 |
+| Version | 1.4 |
+| Date | 2026-08-23 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Curve review base | `main` at `590a52ef006fd1d83bef5c76dfdab9ce9080a168`, stacked on P0-05 (acceptance-test strategy) candidate `aa82735eaa02995116e6671d1a52b087db084068` until that prerequisite merges |
+| Curve review base | `main` at `fdae85b33a235cd494dd36565698b2b5033a3389`, containing accepted P0-05 (test strategy and audit closure) |
 | Target branch | `preview` |
-| Minimum Plane base | Exact future `preview` merge descendant of `a7cf44b0e01a470c94b59f1c2ce5297dacd81d45` that contains Plane PR #9's policy timestamp-ordering fix |
+| Plane base | Exact `preview` commit `cb17734280260361cc3c8eccf44170a4bfbcb840`, containing Plane PR #9 (policy timestamp-ordering regression fix) and reserving provider migration `0005` after policy migration `0004` |
 | Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | One AI coding agent distinct from the human reviewer |
@@ -77,9 +77,9 @@ Implementation remains blocked until all rows are satisfied:
 
 | Gate | Current state | Required evidence |
 | --- | --- | --- |
-| P0-05 (R1 acceptance-test strategy and acceptance-criteria ownership) | Draft PR under review | Merged Curve revision establishing test ownership and exact suite commands |
+| P0-05 (test strategy and audit closure) | Satisfied | Curve `main` `fdae85b33a235cd494dd36565698b2b5033a3389` establishes exact AC-01 through AC-60 ownership and suite commands |
 | M0-S9A contract publication | This review draft | Exact Curve merge SHA and context-pack digest |
-| Plane base | Pending | Merge Plane PR #9's policy timestamp-ordering fix, confirm the resulting `preview` contains `a7cf44b...`, and record that exact dispatch base SHA |
+| Plane base | Satisfied | Plane `preview` `cb17734280260361cc3c8eccf44170a4bfbcb840` contains Plane PR #9 (policy timestamp-ordering regression fix); dispatch stops if `preview` advances before implementation authorization |
 | Owner/reviewer | Satisfied | Federico Ocampo |
 | Material decisions | Satisfied for this local subset | No network, credentials, protected body, public admin API, scheduler, or external mutation; D-007 remains MCP-specific |
 | Exact-head implementation authorization | Pending | Federico Ocampo approves the final merged contract revision and dispatch base |
@@ -277,8 +277,8 @@ The implementation migration is exactly
 `apps/api/plane/curve/migrations/0005_providerconnection_providercapability.py`
 and its predecessor is exactly
 `apps/api/plane/curve/migrations/0004_policydecision_recorded_at_default.py`;
-any changed predecessor/name stops for contract revision. P0-05 (R1
-acceptance-test strategy and acceptance-criteria ownership) may add stricter
+any changed predecessor/name stops for contract revision. The accepted P0-05
+(test strategy and audit closure) baseline may add stricter
 commands; it cannot remove the repository-native full backend command above.
 
 ## Required PR evidence

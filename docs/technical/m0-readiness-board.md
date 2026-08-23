@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Status | Active readiness control; D-001 (Plane upstream foundation decision), D-003 (runtime topology and trust-zone decision), and OBS-BIND-001 (local observability binding) are decided for local scope; M0-S3, M0-S4, M0-S5A, and M0-S5B are accepted and merged; M0-08 is complete for `LOCAL_ONLY`; M0-S9A (local provider-registry substrate) is prepared for review |
-| Version | 1.20 |
-| Date | 2026-08-22 |
+| Version | 1.21 |
+| Date | 2026-08-23 |
 | Normative product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, decision register, and accepted local Temporal proof) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Accepted Plane baseline | Fork `preview` at M0-S5B merge `1b06153f6f49848f208808f4f09385a581a55d26`; preserves the approved upstream candidate and M0-S1 through M0-S5B in its ancestry |
-| Published Curve baseline | Curve PR #25 merged exact M0-S5B evidence head `b261de697c18c903e3fcbdaf5ca356436f8206f1` to `main` at `590a52ef006fd1d83bef5c76dfdab9ce9080a168`; both revisions share Git tree `c58b15d490fd65ed75c04b838f64af665e10d026` |
-| Published Plane implementation | Plane PR #8 merged exact M0-S5B head `320c4b92b6c9e417410e32a83409a33a64518df0` into fork `preview` at `1b06153f6f49848f208808f4f09385a581a55d26`; both revisions share Git tree `cffc6ed3be2d0faad8c6fcddcd14a5fd023db7fb` |
+| Accepted Plane baseline | Fork `preview` at `cb17734280260361cc3c8eccf44170a4bfbcb840`; preserves M0-S1 through M0-S5B and adds Plane PR #9 (policy timestamp-ordering regression fix) after M0-S5B merge `1b06153f6f49848f208808f4f09385a581a55d26` |
+| Published Curve baseline | Curve `main` at `fdae85b33a235cd494dd36565698b2b5033a3389`, containing accepted P0-05 (test strategy and audit closure); accepted M0-S5B evidence remains bound at `590a52ef006fd1d83bef5c76dfdab9ce9080a168` |
+| Published Plane implementation | Plane `preview` at `cb17734280260361cc3c8eccf44170a4bfbcb840`; Plane PR #9 added the policy timestamp-ordering regression fix after accepted M0-S5B merge `1b06153f6f49848f208808f4f09385a581a55d26` |
 
 ## Readiness rule
 
@@ -55,7 +55,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | P0-02 topology | DONE_LOCAL / NON_LOCAL_INPUTS_OPEN | The shared-network amendment and M0-S3 implementation are accepted. Non-local activation retains its environment-package inputs. |
 | P0-03 ADR set | IN_PROGRESS | D-001 and D-003 `LOCAL_ONLY` are decided; D-007 and D-009 still require named decisions; D-002/D-004-D-006/D-008/D-010-D-016 close just in time. |
 | P0-04 documentation/contracts validation | DONE | PRD v0.8 and the accompanying contract/governance suite are merged through Curve PR #2 at `fe8664a...`; post-merge `validate` passed in [run 31888595658](https://github.com/faocampo/curve/actions/runs/31888595658). |
-| P0-05 test strategy | READY_FOR_IMPLEMENTATION | May proceed using synthetic fixtures. |
+| P0-05 test strategy | DONE | Curve PR #27 merged approved head `7d2794b...` as `fdae85b...`; the exact AC-01 through AC-60 matrix, semantic validation, and CI evidence are accepted. |
 | P0-06 (historical two-stage local Temporal proof) | DONE / SUPERSEDED | Curve PR #9 retired P0-06A and P0-06B as standalone gates. Their historical packet and Git record remain available; M0-S3 supplies the executable local proof. |
 | M0-01 module shell | DONE | Plane PR #2 merged at `7685bbc...`; additive migration, disabled-state, workspace isolation, full regression, local-stack restart, and rollback/disablement evidence passed. Project item M0-01 is `Done`. |
 | M0-02 core persistence | DONE | Plane PR #3 merged the accepted M0-S2 implementation at `eff8686a...`; workspace-scoped models, migrations, constraints, versioning, and immutable-history tests passed. Project item M0-02 is `Done`. See [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) (exact contract, implementation, tests, and merge binding). |
@@ -69,7 +69,7 @@ The local M0 skeleton uses synthetic data and excludes protected-object storage.
 | M0-S4 API/SSE/minimal UI checkpoint | DONE | Federico Ocampo approved exact Plane head `a1748c7...`; Plane PR #6 squash-merged it as `e762fbb...`, preserving Git tree `3f63bac...`. UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract), the Curve-first product shell, API/SSE behavior, accessibility, safe projections, CodeQL, copyright, full regression, and rollback are accepted in [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (post-merge acceptance record). |
 | M0-08 audit/observability | DONE_LOCAL | M0-S5A is accepted at Plane merge `3992076...`. Plane PR #8 merged M0-S5B at `1b06153...`; Curve PR #25 merged the accepted evidence at `590a52e...`. [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (exact context, CI, merged trees, live OTLP, dashboards, alerts, redaction, disablement, regression, cleanup, and rollback) binds completion. Staging and production observability remain separately gated. |
 | M0-09 provider integration foundation | PARTIALLY_DECOMPOSED / IN_PROGRESS | M0-S9A is a prepared local substrate packet; M0-S9B contains decision-bound administration, transport, callbacks/webhooks, scheduling, and real adapters. AC-57 (model-failover policy and actual-routing evidence) remains fail-closed at the parent until a dedicated Model Gateway child is defined after D-004 (model catalog and data-policy decision) and D-005 (model task-routing decision). Parent remains open. |
-| M0-S9A local provider-registry substrate | REVIEW_DRAFT / NOT_DISPATCHABLE | M0-03, M0-05, and M0-07 are satisfied. Dispatch waits for Plane PR #9's merged policy timestamp-ordering fix and resulting exact `preview` base, merged P0-05, the exact merged [M0-S9A task packet](m0-s9a-provider-registry-task-packet.md) (scope, contracts, tests, stop conditions, and rollback), its context digest, and exact-head implementation authorization. Its provider migration is reserved as `0005` after the policy fix's `0004`. D-007 is not a dependency. |
+| M0-S9A local provider-registry substrate | REVIEW_DRAFT / NOT_DISPATCHABLE | M0-03, M0-05, M0-07, Plane PR #9, and P0-05 are satisfied. Dispatch waits for the exact merged [M0-S9A task packet](m0-s9a-provider-registry-task-packet.md) (scope, contracts, tests, stop conditions, and rollback), its canonical context digest, and exact-head implementation authorization against Plane `preview` `cb177342...`. Provider migration is `0005` after policy migration `0004`. D-007 is not a dependency. |
 | M0-S9B external provider transport/administration | BLOCKED / NOT_PREPARED | Requires M0-S9A plus each real adapter's applicable decided identity, security, data, infrastructure, and external-side-effect record. D-007 applies only to MCP/Orca activation. |
 
 ## Interim repository-governance configuration
