@@ -7,19 +7,19 @@
 | Package | M0-S6A (model-free parent/child Temporal orchestration substrate), an independently reviewable slice of M0-06 (Temporal workflow-skeleton work package) |
 | Task ID | `CURVE-M0-S6A-DURABLE-ORCHESTRATION` |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 0.2 |
-| Date | 2026-08-22 |
+| Version | 0.3 |
+| Date | 2026-08-23 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Curve base | `main` at `590a52ef006fd1d83bef5c76dfdab9ce9080a168`, stacked on P0-05 (acceptance-test strategy) candidate `aa82735eaa02995116e6671d1a52b087db084068` until that prerequisite merges |
-| Plane base | `preview` at `a7cf44b0e01a470c94b59f1c2ce5297dacd81d45` |
+| Curve base | `main` at `fdae85b33a235cd494dd36565698b2b5033a3389`, containing accepted P0-05 (test strategy and audit closure) |
+| Plane base | `preview` at `cb17734280260361cc3c8eccf44170a4bfbcb840`, containing accepted M0-S1 through M0-S5B plus M0-03A (policy timestamp-ordering regression fix) |
 | Proposed Plane branch | `curve/m0-s6a-durable-orchestration` |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | One AI coding agent distinct from the human reviewer |
 | Risk | `STANDARD`; durable asynchronous state and cancellation, using synthetic `INTERNAL` data only |
 | Product decisions | No new material product decision; D-003 (local runtime topology and trust-zone decision) is already `DECIDED / LOCAL_ONLY` |
-| Blocking readiness | The exact Curve packet head requires Federico approval and merge; P0-05 (R1 acceptance-test strategy and AC-01 through AC-60 ownership) must be merged; the Plane base must still equal or descend from the pinned SHA |
+| Blocking readiness | The exact Curve packet head requires Federico approval and merge; P0-05 (test strategy and audit closure) is satisfied at Curve `main` `fdae85b...`; Plane `preview` must still equal the pinned SHA when implementation is dispatched |
 
 ## Outcome
 
@@ -43,8 +43,8 @@ All rows must be satisfied before an AI coding agent mutates Plane.
 | Gate | Required evidence |
 | --- | --- |
 | `B-CURVE` (approved contract revision) | Exact merged Curve commit containing this packet, [M0-S6A orchestration manifest](../../contracts/temporal/m0-orchestration-v1.json) (machine workflow, payload, scheduling, cancellation, and replay contract), its schema, fixtures, validator, and context-pack manifest |
-| `B-P005` (accepted test-strategy baseline) | P0-05 (R1 acceptance-test strategy and AC-01 through AC-60 ownership) merged into Curve `main`; its matrix may remain broader than this packet but cannot contradict M0-06 ownership |
-| `B-PLANE` (implementation base) | Plane `preview` resolves to `a7cf44b0e01a470c94b59f1c2ce5297dacd81d45` or a reviewed descendant; existing M0-S3 (local Temporal round-trip implementation) and M0-S5B (local observability integration) behavior remains present |
+| `B-P005` (accepted test-strategy baseline) | Satisfied by P0-05 (test strategy and audit closure) at Curve `main` `fdae85b33a235cd494dd36565698b2b5033a3389`; its matrix remains broader than this packet and assigns only partial AC-17, AC-20, and AC-58 evidence here |
+| `B-PLANE` (implementation base) | Plane `preview` resolves exactly to `cb17734280260361cc3c8eccf44170a4bfbcb840`; existing M0-S3 (local Temporal round-trip implementation), M0-S5B (local observability integration), and M0-03A (policy timestamp-ordering regression fix) behavior remains present |
 | `B-D003` (local runtime authority) | D-003 (local runtime topology and trust-zone decision) remains `DECIDED / LOCAL_ONLY`; `temporalio==1.31.0`, namespace `curve-local`, and task queue `curve-control-plane-v1` remain unchanged |
 | `B-OWNER` (human accountability) | Federico Ocampo remains named owner and reviewer; the coding agent is the separate implementer |
 | `B-CONTEXT` (immutable dispatch context) | The dispatcher records the exact Curve commit, every M0-S6A context path and SHA-256, and the aggregate context digest before Plane mutation |
