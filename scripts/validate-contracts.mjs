@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 
 import { validateTestStrategyMatrixSemantics } from "./lib/test-strategy.mjs";
+import { validateTemporalOrchestrationSemantics } from "./lib/temporal-orchestration.mjs";
 
 const root = process.cwd();
 
@@ -65,6 +66,8 @@ const observabilityBindingSchema = join(root, "contracts/schemas/observability-b
 const observabilityBindingPath = join(root, "contracts/observability/obs-bind-001-local-v1.json");
 const testStrategyMatrixSchema = join(root, "contracts/schemas/test-strategy-matrix.schema.json");
 const testStrategyMatrixPath = join(root, "contracts/testing/ac-test-matrix-v1.json");
+const temporalOrchestrationSchema = join(root, "contracts/schemas/temporal-orchestration.schema.json");
+const temporalOrchestrationPath = join(root, "contracts/temporal/m0-orchestration-v1.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -76,6 +79,7 @@ const fixtureSpecs = [
   ["contracts/observability/m0-s5-telemetry-v1.json", telemetryManifestSchema, true],
   ["contracts/observability/obs-bind-001-local-v1.json", observabilityBindingSchema, true],
   ["contracts/testing/ac-test-matrix-v1.json", testStrategyMatrixSchema, true],
+  ["contracts/temporal/m0-orchestration-v1.json", temporalOrchestrationSchema, true],
   ["contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json", observabilityBindingSchema, false],
   ["contracts/schemas/semantic-fixtures/operation-event-v2-tracestate.invalid.json", operationEventV2Schema, false],
   ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
@@ -547,6 +551,9 @@ if (
 ) {
   throw new Error("a Curve exporter cannot be the remote signal for its own delivery-path failure");
 }
+
+const temporalOrchestration = JSON.parse(readFileSync(temporalOrchestrationPath, "utf8"));
+validateTemporalOrchestrationSemantics(temporalOrchestration);
 
 for (const [fixtureName, schema, shouldBeValid] of fixtureSpecs) {
   const fixture = join(root, fixtureName);
