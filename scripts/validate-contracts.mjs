@@ -4,6 +4,8 @@ import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "n
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 
+import { validateTestStrategyMatrixSemantics } from "./lib/test-strategy.mjs";
+
 const root = process.cwd();
 
 function canonicalJson(value) {
@@ -61,6 +63,8 @@ const telemetryManifestSchema = join(root, "contracts/schemas/telemetry-manifest
 const telemetryManifestPath = join(root, "contracts/observability/m0-s5-telemetry-v1.json");
 const observabilityBindingSchema = join(root, "contracts/schemas/observability-binding.schema.json");
 const observabilityBindingPath = join(root, "contracts/observability/obs-bind-001-local-v1.json");
+const testStrategyMatrixSchema = join(root, "contracts/schemas/test-strategy-matrix.schema.json");
+const testStrategyMatrixPath = join(root, "contracts/testing/ac-test-matrix-v1.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -71,6 +75,7 @@ const fixtureSpecs = [
   ["contracts/policy/core-policy-v1.json", corePolicyManifestSchema, true],
   ["contracts/observability/m0-s5-telemetry-v1.json", telemetryManifestSchema, true],
   ["contracts/observability/obs-bind-001-local-v1.json", observabilityBindingSchema, true],
+  ["contracts/testing/ac-test-matrix-v1.json", testStrategyMatrixSchema, true],
   ["contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json", observabilityBindingSchema, false],
   ["contracts/schemas/semantic-fixtures/operation-event-v2-tracestate.invalid.json", operationEventV2Schema, false],
   ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
@@ -106,6 +111,15 @@ for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".jso
   if (!match) throw new Error(`Unexpected schema fixture name: ${fixtureName}`);
   fixtureSpecs.push([fixtureName, join(root, `contracts/schemas/${match[1]}.schema.json`), match[2] === "valid"]);
 }
+
+const testStrategyMatrix = JSON.parse(readFileSync(testStrategyMatrixPath, "utf8"));
+const prdText = readFileSync(join(root, testStrategyMatrix.source.document), "utf8");
+const developmentPlanText = readFileSync(join(root, "docs/technical/development-plan.md"), "utf8");
+validateTestStrategyMatrixSemantics({
+  matrix: testStrategyMatrix,
+  prdText,
+  developmentPlanText,
+});
 
 const corePolicyManifest = JSON.parse(readFileSync(corePolicyManifestPath, "utf8"));
 const expectedCorePolicyDenyPrecedence = [

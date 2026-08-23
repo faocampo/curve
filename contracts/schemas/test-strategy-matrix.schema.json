@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/test-strategy-matrix.schema.json",
+  "title": "Curve acceptance-criteria test strategy matrix",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "matrix_id",
+    "matrix_version",
+    "status",
+    "source",
+    "owners",
+    "suites",
+    "environments",
+    "commands",
+    "acceptance_criteria"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.test-strategy-matrix/v1" },
+    "matrix_id": { "const": "P0-05" },
+    "matrix_version": { "const": 1 },
+    "status": { "enum": ["DRAFT", "IN_REVIEW", "APPROVED"] },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prd_version", "document", "section", "acceptance_criteria_digest", "first_ac", "last_ac", "ac_count"],
+      "properties": {
+        "prd_version": { "const": "0.12" },
+        "document": { "const": "docs/curve-ai-native-sdlc-prd.md" },
+        "section": { "const": "Acceptance criteria for R1, the first usable release" },
+        "acceptance_criteria_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "first_ac": { "const": "AC-01" },
+        "last_ac": { "const": "AC-60" },
+        "ac_count": { "const": 60 }
+      }
+    },
+    "owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engineering_owner", "human_reviewer"],
+      "properties": {
+        "engineering_owner": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "human_reviewer": { "type": "string", "minLength": 1, "maxLength": 200 }
+      }
+    },
+    "suites": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/suite" }
+    },
+    "environments": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/environment" }
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/command" }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 60,
+      "maxItems": 60,
+      "items": { "$ref": "#/$defs/acceptanceCriterion" }
+    }
+  },
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$",
+      "maxLength": 80
+    },
+    "suite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "kind", "repositories", "implementation_state", "command_ids"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "kind": {
+          "enum": [
+            "UNIT",
+            "DATABASE",
+            "CONTRACT",
+            "FAKE_PROVIDER",
+            "TEMPORAL_REPLAY",
+            "COMPONENT",
+            "BROWSER_E2E",
+            "ACCESSIBILITY",
+            "SECURITY",
+            "MIGRATION",
+            "LOAD",
+            "CHAOS_RECOVERY",
+            "SANDBOX",
+            "MANUAL_EVIDENCE",
+            "RELEASE_COMPLIANCE"
+          ]
+        },
+        "repositories": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["CURVE", "PLANE", "TARGET_REPOSITORY", "EXTERNAL_HARNESS"] }
+        },
+        "implementation_state": { "enum": ["AVAILABLE", "PARTIAL", "PLANNED", "DECISION_BLOCKED"] },
+        "command_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "scope", "availability", "data_policy", "owner"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "scope": { "enum": ["DOCUMENTATION_CI", "PLANE_CI", "LOCAL", "STAGING", "DISPOSABLE_EXTERNAL", "RELEASE_CI"] },
+        "availability": { "enum": ["AVAILABLE", "PARTIAL", "PLANNED", "DECISION_BLOCKED"] },
+        "data_policy": { "enum": ["SYNTHETIC_ONLY", "SANITIZED_FIXTURES", "APPROVED_STAGING_DATA", "PUBLIC_RELEASE_METADATA"] },
+        "owner": { "type": "string", "minLength": 1, "maxLength": 200 }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "repository", "state", "working_directory", "command", "readiness_rule"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "repository": { "enum": ["CURVE", "PLANE", "TARGET_REPOSITORY", "EXTERNAL_HARNESS"] },
+        "state": { "enum": ["AVAILABLE", "PLANNED"] },
+        "working_directory": { "type": ["string", "null"], "maxLength": 300 },
+        "command": { "type": ["string", "null"], "maxLength": 1000 },
+        "readiness_rule": { "type": "string", "minLength": 1, "maxLength": 500 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "AVAILABLE" } }, "required": ["state"] },
+          "then": {
+            "properties": {
+              "working_directory": { "type": "string", "minLength": 1 },
+              "command": { "type": "string", "minLength": 1 }
+            }
+          },
+          "else": {
+            "properties": {
+              "working_directory": { "const": null },
+              "command": { "const": null }
+            }
+          }
+        }
+      ]
+    },
+    "acceptanceCriterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ac_id",
+        "objective",
+        "milestone",
+        "owning_package",
+        "primary_suite",
+        "supporting_suites",
+        "environment",
+        "command_ids",
+        "automation",
+        "coverage_state",
+        "blocking_decisions",
+        "evidence_requirement"
+      ],
+      "properties": {
+        "ac_id": { "type": "string", "pattern": "^AC-(0[1-9]|[1-5][0-9]|60)$" },
+        "objective": { "type": "string", "minLength": 8, "maxLength": 300 },
+        "milestone": { "type": "string", "pattern": "^(P0|M[0-7]|R1|CROSSCUTTING)$" },
+        "owning_package": { "type": "string", "pattern": "^(P0-[0-9]{2}|M[0-7]-[0-9]{2}|R1-[0-9]{2})$" },
+        "primary_suite": { "$ref": "#/$defs/stableId" },
+        "supporting_suites": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        },
+        "environment": { "$ref": "#/$defs/stableId" },
+        "command_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        },
+        "automation": { "enum": ["AUTOMATED", "HYBRID", "MANUAL"] },
+        "coverage_state": { "enum": ["IMPLEMENTED_PASSING", "PARTIAL", "SPECIFIED", "DECISION_BLOCKED", "ENVIRONMENT_BLOCKED"] },
+        "blocking_decisions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^D-(00[1-9]|01[0-6])$" }
+        },
+        "evidence_requirement": { "type": "string", "minLength": 8, "maxLength": 500 }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "coverage_state": { "const": "DECISION_BLOCKED" } },
+            "required": ["coverage_state"]
+          },
+          "then": { "properties": { "blocking_decisions": { "minItems": 1 } } }
+        }
+      ]
+    }
+  }
+}
