@@ -23,6 +23,30 @@
     "enabled_capability_risks": ["READ"],
     "allowed_classifications": ["INTERNAL"]
   },
+  "registration_authorization": {
+    "policy_key": "CURVE_CORE_POLICY",
+    "policy_version": 2,
+    "action": "CURVE.PROVIDER_CONNECTION.REGISTER",
+    "resource_type": "WORKSPACE",
+    "resource_version": 1,
+    "trusted_role": "PLATFORM_ADMINISTRATOR",
+    "trusted_role_source": "PLANE_WORKSPACE_MEMBERSHIP",
+    "trusted_role_allowed_actions": [
+      "CURVE.PROVIDER_CONNECTION.REGISTER",
+      "CURVE.PROVIDER_CONNECTION.ADMINISTER"
+    ],
+    "plane_role": 20,
+    "membership_active": true,
+    "workspace_match": "REQUIRED",
+    "caller_supplied_role": "REJECT",
+    "target_id": "curve.fake-local@1.0.0",
+    "target_allowlist": "REQUIRED",
+    "configuration_ref": {
+      "resource_type": "PROVIDER_REGISTRY_MANIFEST",
+      "resource_id": "M0-S9A",
+      "resource_version": 1
+    }
+  },
   "connection_states": ["PENDING_VALIDATION", "ACTIVE", "DEGRADED", "DISABLED", "REVOKED"],
   "transitions": [
     {"from": "PENDING_VALIDATION", "command": "VALIDATION_SUCCEEDED", "to": "ACTIVE"},

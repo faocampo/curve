@@ -6,7 +6,7 @@
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.6 |
+| Version | 1.7 |
 | Date | 2026-08-25 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
@@ -20,13 +20,15 @@
 | Risk | `STANDARD`; local synthetic provider metadata only |
 | Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
 
-Version 1.6 repins the package after merged Plane PR #10 (M0-S6A durable
+Version 1.7 repins the package after merged Plane PR #10 (M0-S6A durable
 parent/child Temporal orchestration implementation) and closes the local
 provider-event delivery decision. Provider commands are synchronous; committed
 provider events use destination `CURVE_PROVIDER_LOCAL_V1`, consumer
-`curve-provider-local-v1`, and explicit post-commit/next-command drains. The
-registration-authorization source remains unresolved and blocks Plane dispatch.
-The recorded Curve and Plane bases are exact review inputs; the dispatcher
+`curve-provider-local-v1`, and explicit post-commit/next-command drains. It also
+records approved Option B: active Plane workspace role `20` in the exact target
+workspace is the trusted source of Curve `PLATFORM_ADMINISTRATOR`, and a new
+registration action targets the existing workspace. The recorded Curve and
+Plane bases are exact review inputs; the dispatcher
 fetches and re-verifies both remote heads before any Plane mutation and stops if
 either has advanced.
 
@@ -61,7 +63,10 @@ cannot satisfy any part of AC-57.
 | [Architecture](architecture.md) (logical components, trust zones, and PostgreSQL/Temporal ownership) | Provider adapter boundary and authoritative state ownership |
 | [Domain model](domain-model.md) (workspace-scoped ProviderConnection and immutable history rules) | Aggregate and reference semantics |
 | [Integration contracts](integration-contracts.md) (provider call context, normalized errors, adapter ports, callbacks, and reconciliation) | Shared provider behavior; M0-S9A consumes only the local subset |
-| [M0 authorization and state matrices](m0-authorization-and-state-matrices.md) (core policy actions, roles, and fail-closed evaluation) | Existing provider-administration permission ceiling; public role resolution remains later scope |
+| [M0 authorization and state matrices](m0-authorization-and-state-matrices.md) (core policy actions, trusted role sources, and fail-closed evaluation) | Core v1 permission ceiling plus the approved local M0-S9A Option B extension |
+| [M0-S9A registration authorization decision](m0-s9a-registration-authorization-decision.md) (approved Plane workspace-admin role mapping and registration resource) | Exact Option B role source and deny boundary |
+| [Core policy v2 manifest](../../contracts/policy/core-policy-v2.json) (Option B trusted role source and provider-registration action) | Exact versioned policy consumed by registration |
+| [Core policy v2 schema](../../contracts/schemas/core-policy-manifest-v2.schema.json) (closed machine validation for the Option B policy extension) | Prevents role-source or action widening |
 | [M0-S9A relational contract](../../contracts/database/m0-s9a-provider-registry-contract.md) (tables, constraints, transactions, adapter port, state machine, migration, and rollback) | Normative Plane implementation contract |
 | [M0-S9A provider-registry manifest](../../contracts/providers/m0-s9a-provider-registry-v1.json) (machine-readable local authority, lifecycle, adapter, retry, persistence, and events) | Fail-closed constants |
 | [Provider-registry manifest schema](../../contracts/schemas/provider-registry-manifest.schema.json) (machine validation of the local-only package boundary) | Rejects external access, real providers, wider capability risk, and changed lifecycle |
@@ -92,7 +97,7 @@ Implementation remains blocked until all rows are satisfied:
 | M0-S9A contract publication | This review draft | Exact Curve merge SHA and context-pack digest |
 | Plane base | Satisfied | Plane `preview` `ad5772c0565c934e64ea90f892be1374819979be` contains merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation); dispatch stops if `preview` advances before implementation authorization |
 | Owner/reviewer | Satisfied | Federico Ocampo |
-| Material decisions | `PARTIAL / BLOCKED` | The explicit local outbox/inbox delivery model is approved. A named decision must still define the registration action, existing target resource, and trusted source that proves `PLATFORM_ADMINISTRATOR`; no test or service may invent it. D-007 (MCP trust model and Orca access profile) remains MCP-specific. |
+| Material decisions | `APPROVED_OPTION_B / PENDING_PUBLICATION` | The local outbox/inbox delivery model and Option B registration authority are approved. Publication requires the exact reviewed Curve head to merge. D-007 (MCP trust model and Orca access profile) remains MCP-specific. |
 | Exact-head implementation authorization | Pending | Federico Ocampo approves the final merged contract revision and dispatch base |
 
 No coding agent mutates Plane while any row is pending.
@@ -137,8 +142,8 @@ No coding agent mutates Plane while any row is pending.
 ### Excluded
 
 - Public REST/GraphQL/UI provider administration or a new user-facing flow.
-- Persistence/resolution of `PLATFORM_ADMINISTRATOR`; provider-specific policy
-  adapters; any caller-supplied role/target/authorization context.
+- A dedicated Curve platform-administrator assignment aggregate or public role
+  administration surface; any caller-supplied role/target/authorization context.
 - Onyx, MCP, Orca, OpenHands, model, VCS, quality, flag, documentation,
   monitoring, or prototype adapter implementation.
 - Credentials, Secrets Manager, delegated OAuth, tokens, endpoint/origin/TLS
@@ -176,7 +181,7 @@ keeping one active PR at a time and preserving the same exact context revision.
 | --- | --- |
 | Models | Add only under `apps/api/plane/curve`; no Plane model change or hard FK to Plane workspace tables |
 | Repository lookup | Every method requires `workspace_id` and uses it in the first query predicate; absent/wrong-workspace IDs share the same result |
-| Policy | Services run through the existing `execute_authorized_mutation` wrapper, which alone issues an active unforgeable receipt. Plane implementation waits for a published registration action, existing target resource, and trusted `PLATFORM_ADMINISTRATOR` source; tests may not synthesize the missing authority or construct a receipt. |
+| Policy | Services run through the existing `execute_authorized_mutation` wrapper, which alone issues an active unforgeable receipt. Registration pins core policy v2 digest `sha256:2895b63392236afa07e6f0572d6ddb1c91aa7f40d37282f250019d2829ed5787` and action `CURVE.PROVIDER_CONNECTION.REGISTER` against the existing `WORKSPACE` version `1`; an authenticated human's live active Plane role `20` in that exact workspace derives `PLATFORM_ADMINISTRATOR` only for the register/administer actions; static target is `curve.fake-local@1.0.0`. Caller-supplied roles/targets, roles `15`/`5`, inactive/wrong-workspace membership, agent/service actors, unrelated actions, non-local environment, and non-internal classification deny. Existing connection commands retain `CURVE.PROVIDER_CONNECTION.ADMINISTER`. |
 | Transactions | Adapter calls never occur inside `transaction.atomic()`; each accepted state mutation atomically writes domain event, outbox, audit, and aggregate version |
 | Idempotency | Store only key/request digests and replay the original PostgreSQL `ResourceRef`; changed digest conflicts without another effect |
 | Capability history | Append-only; byte-equivalent observations reuse current capability; changed valid observations append the next version |
@@ -306,6 +311,23 @@ sequenceDiagram
     outbox, the local provider consumer claims only
     `CURVE_PROVIDER_LOCAL_V1`; no Temporal workflow, Celery task, scheduler, or
     background loop starts.
+23. **Registration authorization allow.** Given an authenticated human with
+    active Plane role `20` in the exact target workspace, `LOCAL`, `INTERNAL`,
+    and the static `curve.fake-local@1.0.0` target, registration evaluates the
+    existing workspace at resource version `1` and records an allow receipt
+    pinned to core policy v2.
+24. **Workspace-role denial.** Plane roles `15` and `5`, inactive membership,
+    absent membership, or role `20` in another workspace deny before any
+    connection, event, outbox, inbox, idempotency-completion, or audit-success
+    effect.
+25. **Authority forgery denial.** Caller-supplied
+    `PLATFORM_ADMINISTRATOR`, caller-selected target, agent, service, unknown
+    adapter, non-provider action, non-local environment, or wider
+    classification denies with stable safe evidence.
+26. **Resource lifecycle authorization.** Registration evaluates an existing
+    `WORKSPACE`; validate/reconcile/disable/enable/revoke evaluate the persisted
+    workspace-scoped `PROVIDER_CONNECTION` through the unchanged administer
+    action.
 
 ## Exact verification commands
 

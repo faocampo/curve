@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.3 |
+| Version | 1.4 |
 | Date | 2026-08-25 |
 | Work package | M0-S9A (provider-neutral registry and reconciliation foundation) |
 | Owner and reviewer | Federico Ocampo (`faocampo`) |
@@ -35,15 +35,34 @@ scheduler, or background loop.
 
 Plane remains authoritative for workspace identity and membership. Curve stores
 `workspace_id` as an opaque UUID and creates no hard foreign key to a Plane
-table. M0-S9A exposes application-service/repository boundaries only; it does
-not create the unresolved human `PLATFORM_ADMINISTRATOR` role source or a
-public provider-administration API.
+table. For M0-S9A registration, an authenticated human's live, active Plane
+workspace role `20` in the exact target workspace is the trusted source of
+Curve `PLATFORM_ADMINISTRATOR` for provider registration and administration
+actions only. Caller input cannot supply that role. M0-S9A
+exposes application-service/repository boundaries only and creates no public
+provider-administration API.
 
 The ProviderConnection and ProviderCapability wire projections use schema
 version `2.0`. They replace the initial unimplemented v1 drafts before any
 database row, endpoint, generated client, or provider adapter exists. No stored
 data or deployed consumer requires migration. A future incompatible change
 requires a new schema version and compatibility plan.
+
+## Authorization contracts
+
+The [M0-S9A registration authorization decision](../../docs/technical/m0-s9a-registration-authorization-decision.md)
+(approved Option B Plane workspace-admin mapping and existing-workspace
+registration resource) defines the human-readable decision. The
+[core policy v2 manifest](../policy/core-policy-v2.json) (machine-readable
+trusted role source and additive registration action) and
+[core policy v2 schema](../schemas/core-policy-manifest-v2.schema.json) (closed
+validation of the approved extension) are normative.
+
+Core policy v2 supersedes v1 for new evaluations. The
+[core policy v1 manifest](../policy/core-policy-v1.json) (immutable original M0
+action set and deny precedence) remains byte-for-byte unchanged, and every v1
+action is identical in v2. Historical `PolicyDecision` records continue to
+resolve the exact version and manifest digest they captured.
 
 ## Physical records
 
@@ -175,15 +194,15 @@ transition. Both advance the aggregate version and append exact result evidence.
 One atomic application transaction:
 
 1. Runs inside the existing `execute_authorized_mutation` policy-owned
-   transaction. The exact registration action, existing target resource, and
-   trusted source that can prove `PLATFORM_ADMINISTRATOR` remain a material
-   authorization decision. Until that decision is published, neither tests nor
-   implementation may invent a role, construct a receipt, or treat
-   `CURVE.PROVIDER_CONNECTION.ADMINISTER` on a connection that does not yet
-   exist as registration authority.
-2. Requires `workspace_id`, exact fake adapter code/version, `LOCAL`, synthetic
-   actor/effective principal, canonical empty configuration, raw idempotency key
-   in memory, and correlation ID.
+   transaction using core policy v2 action
+   `CURVE.PROVIDER_CONNECTION.REGISTER` against the locked existing
+   `WORKSPACE` at policy resource version `1`. The authenticated human must have live active Plane workspace
+   role `20` in that exact workspace. The trusted static registry supplies
+   allowlisted target `curve.fake-local@1.0.0`. Caller-supplied roles and targets
+   are rejected. The wrapper alone constructs the active receipt.
+2. Requires `workspace_id`, exact fake adapter code/version, `LOCAL`, the
+   authenticated human/effective principal, canonical empty configuration, raw
+   idempotency key in memory, and correlation ID.
 3. Computes and stores only digest material; rejects any secret/configuration
    body outside the adapter's closed empty-object schema.
 4. Locks/creates the idempotency scope.
@@ -191,6 +210,14 @@ One atomic application transaction:
    AuditEvent, and completed IdempotencyRecord atomically.
 6. Replays the original database `ResourceRef` for the same key/request digest;
    a changed request digest returns conflict with no domain/outbox effect.
+
+Plane roles `15` and `5`, inactive membership, a membership in another
+workspace, agent/service principals, non-`LOCAL` environments, non-`INTERNAL`
+classification, and any target other than `curve.fake-local@1.0.0` fail before
+the connection mutation. After registration, disable/enable/revoke/reconcile
+commands use the unchanged
+`CURVE.PROVIDER_CONNECTION.ADMINISTER` action against the persisted
+workspace-scoped connection.
 
 ### Reconcile connection
 
@@ -264,7 +291,8 @@ outcome.
 
 The exact event and local-delivery allowlists are defined by the
 [M0-S9A provider-registry manifest](../providers/m0-s9a-provider-registry-v1.json)
-(local authority, lifecycle, synchronous adapter, delivery, persistence, and event constants). Every
+(local authority, Option B registration authorization, lifecycle, synchronous
+adapter, delivery, persistence, and event constants). Every
 event payload contains safe identifiers, versions, states, and digests only.
 Capability arrays remain in PostgreSQL/resource projections and are not copied
 to generic logs or metrics.

@@ -9,6 +9,7 @@
     "package",
     "authority",
     "provider",
+    "registration_authorization",
     "connection_states",
     "transitions",
     "adapter_contract",
@@ -70,6 +71,55 @@
         "protocol_versions": {"const": ["curve.fake-local/v1"]},
         "enabled_capability_risks": {"const": ["READ"]},
         "allowed_classifications": {"const": ["INTERNAL"]}
+      }
+    },
+    "registration_authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_key",
+        "policy_version",
+        "action",
+        "resource_type",
+        "resource_version",
+        "trusted_role",
+        "trusted_role_source",
+        "trusted_role_allowed_actions",
+        "plane_role",
+        "membership_active",
+        "workspace_match",
+        "caller_supplied_role",
+        "target_id",
+        "target_allowlist",
+        "configuration_ref"
+      ],
+      "properties": {
+        "policy_key": {"const": "CURVE_CORE_POLICY"},
+        "policy_version": {"const": 2},
+        "action": {"const": "CURVE.PROVIDER_CONNECTION.REGISTER"},
+        "resource_type": {"const": "WORKSPACE"},
+        "resource_version": {"const": 1},
+        "trusted_role": {"const": "PLATFORM_ADMINISTRATOR"},
+        "trusted_role_source": {"const": "PLANE_WORKSPACE_MEMBERSHIP"},
+        "trusted_role_allowed_actions": {
+          "const": [
+            "CURVE.PROVIDER_CONNECTION.REGISTER",
+            "CURVE.PROVIDER_CONNECTION.ADMINISTER"
+          ]
+        },
+        "plane_role": {"const": 20},
+        "membership_active": {"const": true},
+        "workspace_match": {"const": "REQUIRED"},
+        "caller_supplied_role": {"const": "REJECT"},
+        "target_id": {"const": "curve.fake-local@1.0.0"},
+        "target_allowlist": {"const": "REQUIRED"},
+        "configuration_ref": {
+          "const": {
+            "resource_type": "PROVIDER_REGISTRY_MANIFEST",
+            "resource_id": "M0-S9A",
+            "resource_version": 1
+          }
+        }
       }
     },
     "connection_states": {

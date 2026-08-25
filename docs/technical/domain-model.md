@@ -4,10 +4,10 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; M0-S9A local provider substrate has an approved bounded delivery model and remains registration-authorization/contract gated; remaining capabilities stay packet/decision gated |
+| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; M0-S9A local provider substrate has approved bounded delivery and Option B registration authority and remains exact-publication/dispatch gated; remaining capabilities stay packet/decision gated |
 | Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product, Curve-first shell, lifecycle, security, private-platform connectivity, accepted local Temporal proof, and acceptance contract) |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
-| Last updated | 2026-08-22 |
+| Last updated | 2026-08-25 |
 | Scope | Logical domain and persistence model for Curve R1 |
 
 ## 1. Purpose and precedence
@@ -337,6 +337,7 @@ The repository-safe `ContextManifest` is a different schema containing only: sch
 
 | Entity.attribute | Type | Nullable | Lifecycle ownership and constraint |
 | --- | --- | --- | --- |
+| `ProviderConnection` registration authority | derived policy context | NO | For local M0-S9A, an authenticated human's active Plane role `20` in the exact target workspace derives Curve `PLATFORM_ADMINISTRATOR` for provider register/administer only; core policy v2 evaluates `CURVE.PROVIDER_CONNECTION.REGISTER` against that existing workspace at resource version `1` and exact static target `curve.fake-local@1.0.0`. Caller-supplied roles/targets are rejected. |
 | `ProviderConnection.provider_type` | stable code | NO | `FAKE_LOCAL` is the M0-S9A synthetic-only type. Later types include Onyx, general MCP, Orca human-assistance MCP profile, model gateway, OpenHands execution, GitHub, GitLab, prototype, quality, feature flag, documentation, and monitoring. Orca is never represented as `AgentExecutionProvider`. |
 | `ProviderConnection.adapter_key`, `adapter_version` | stable code, version | NO | Exact statically registered adapter implementation; an unknown/dynamic module path is rejected. |
 | `ProviderConnection.environment` | environment code | NO | M0-S9A accepts only `LOCAL`; staging/production require their package/decision activation evidence. |

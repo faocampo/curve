@@ -23,6 +23,27 @@
     "enabled_capability_risks": ["EXTERNAL_MUTATION"],
     "allowed_classifications": ["INTERNAL"]
   },
+  "registration_authorization": {
+    "policy_key": "CURVE_CORE_POLICY",
+    "policy_version": 1,
+    "action": "CURVE.PROVIDER_CONNECTION.ADMINISTER",
+    "resource_type": "PROVIDER_CONNECTION",
+    "resource_version": 0,
+    "trusted_role": "WORKSPACE_MEMBER",
+    "trusted_role_source": "CALLER_INPUT",
+    "trusted_role_allowed_actions": ["CURVE.GATE.DECIDE.PRD"],
+    "plane_role": 15,
+    "membership_active": false,
+    "workspace_match": "OPTIONAL",
+    "caller_supplied_role": "ALLOW",
+    "target_id": "curve.dynamic@latest",
+    "target_allowlist": "NOT_APPLICABLE",
+    "configuration_ref": {
+      "resource_type": "PROVIDER_CONNECTION",
+      "resource_id": "untrusted",
+      "resource_version": 0
+    }
+  },
   "connection_states": [],
   "transitions": [],
   "adapter_contract": {
