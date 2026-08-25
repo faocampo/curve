@@ -6,26 +6,29 @@
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.5 |
-| Date | 2026-08-23 |
+| Version | 1.6 |
+| Date | 2026-08-25 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Curve review base | `main` at `d97cc053a5d0eac7bc2aa9bebe263a245c95894f`, containing accepted P0-05 (test strategy and audit closure) and M0-S6A (durable parent/child Temporal orchestration contract) |
 | Target branch | `preview` |
-| Plane base | Exact `preview` commit `cb17734280260361cc3c8eccf44170a4bfbcb840`, containing Plane PR #9 (policy timestamp-ordering regression fix) and reserving provider migration `0005` after policy migration `0004` |
+| Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) and reserving provider migration `0005` after policy migration `0004` |
 | Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | One AI coding agent distinct from the human reviewer |
 | Risk | `STANDARD`; local synthetic provider metadata only |
 | Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
 
-Version 1.5 rebases the package onto Curve `main` after M0-S6A (durable
-parent/child Temporal orchestration contract) and closes the lifecycle,
-authorization-receipt, retry/deadline, reconciliation-interval, and persistence-
-projection ambiguities found during codeability review. The recorded Curve and
-Plane bases are exact review inputs; the dispatcher fetches and re-verifies both
-remote heads before any Plane mutation and stops if either has advanced.
+Version 1.6 repins the package after merged Plane PR #10 (M0-S6A durable
+parent/child Temporal orchestration implementation) and closes the local
+provider-event delivery decision. Provider commands are synchronous; committed
+provider events use destination `CURVE_PROVIDER_LOCAL_V1`, consumer
+`curve-provider-local-v1`, and explicit post-commit/next-command drains. The
+registration-authorization source remains unresolved and blocks Plane dispatch.
+The recorded Curve and Plane bases are exact review inputs; the dispatcher
+fetches and re-verifies both remote heads before any Plane mutation and stops if
+either has advanced.
 
 ## Outcome
 
@@ -33,7 +36,8 @@ Implement a provider-neutral registry substrate in Plane's additive
 `plane.curve` Django application. One workspace can register one deterministic
 local fake-provider connection, validate an immutable capability document, run
 explicit reconciliation through Curve's existing operation/delivery kernel,
-and observe safe lifecycle/audit evidence.
+deliver its committed local events through the outbox/inbox kernel, and observe
+safe lifecycle/audit evidence.
 
 This is the first independently reviewable child of M0-09 (provider integration
 foundation). M0-S9B (external provider transport and administration) later adds
@@ -86,9 +90,9 @@ Implementation remains blocked until all rows are satisfied:
 | --- | --- | --- |
 | P0-05 (test strategy and audit closure) | Satisfied | Curve `main` `fdae85b33a235cd494dd36565698b2b5033a3389` establishes exact AC-01 through AC-60 ownership and suite commands |
 | M0-S9A contract publication | This review draft | Exact Curve merge SHA and context-pack digest |
-| Plane base | Satisfied | Plane `preview` `cb17734280260361cc3c8eccf44170a4bfbcb840` contains Plane PR #9 (policy timestamp-ordering regression fix); dispatch stops if `preview` advances before implementation authorization |
+| Plane base | Satisfied | Plane `preview` `ad5772c0565c934e64ea90f892be1374819979be` contains merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation); dispatch stops if `preview` advances before implementation authorization |
 | Owner/reviewer | Satisfied | Federico Ocampo |
-| Material decisions | Satisfied for this local subset | No network, credentials, protected body, public admin API, scheduler, or external mutation; D-007 remains MCP-specific |
+| Material decisions | `PARTIAL / BLOCKED` | The explicit local outbox/inbox delivery model is approved. A named decision must still define the registration action, existing target resource, and trusted source that proves `PLATFORM_ADMINISTRATOR`; no test or service may invent it. D-007 (MCP trust model and Orca access profile) remains MCP-specific. |
 | Exact-head implementation authorization | Pending | Federico Ocampo approves the final merged contract revision and dispatch base |
 
 No coding agent mutates Plane while any row is pending.
@@ -118,6 +122,9 @@ No coding agent mutates Plane while any row is pending.
 - Application services for register, explicit validate/reconcile, disable,
   enable, and terminal revoke using optimistic concurrency and the existing
   policy/operation/event/outbox/idempotency/audit kernel.
+- Bounded local provider-event delivery through destination
+  `CURVE_PROVIDER_LOCAL_V1`, consumer `curve-provider-local-v1`, and only the
+  explicit post-commit and next-provider-command drain points.
 - Capability validation against exact connection/workspace/adapter/version,
   supported protocol, known risk, classification ceiling, and closed schemas.
 - Explicit fake reconciliation with success, byte-equivalent result, changed
@@ -137,8 +144,9 @@ No coding agent mutates Plane while any row is pending.
 - Credentials, Secrets Manager, delegated OAuth, tokens, endpoint/origin/TLS
   configuration, network egress, callbacks, outgoing webhooks, or third-party
   API calls.
-- Celery Beat, Temporal Schedule, cron, polling loop, or automatic 15-minute
-  reconciliation. The persisted `next_reconcile_at` value is advisory only.
+- Temporal workflow, Celery task or Beat, scheduler, cron, polling/background
+  loop, or automatic 15-minute reconciliation. The persisted
+  `next_reconcile_at` value is advisory only.
 - Protected object storage, evidence bodies, customer data, staging/production
   activation, external mutation, or infrastructure change.
 - New frontend component, navigation item, or screen.
@@ -151,9 +159,10 @@ order:
 1. **Persistence and migration.** Add model enums, `ProviderConnection`,
    `ProviderCapability`, constraints, admin-free repositories, migration, and
    model/migration tests.
-2. **Adapter and lifecycle services.** Add immutable typed values, static
+2. **Adapter, lifecycle, and local delivery services.** Add immutable typed values, static
    registry, fake adapter, normalized errors, register/reconcile/disable/enable/
-   revoke services, and command-kernel/audit tests.
+   revoke services, explicit bounded outbox drain, inbox deduplication, and
+   command-kernel/audit/delivery tests.
 3. **Conformance and observability.** Add the fixture-driven shared suite,
    race/recovery/network-denial tests, safe instrumentation, copied
    context/contract integrity checks, and full regression evidence.
@@ -167,7 +176,7 @@ keeping one active PR at a time and preserving the same exact context revision.
 | --- | --- |
 | Models | Add only under `apps/api/plane/curve`; no Plane model change or hard FK to Plane workspace tables |
 | Repository lookup | Every method requires `workspace_id` and uses it in the first query predicate; absent/wrong-workspace IDs share the same result |
-| Policy | Services run through the existing `execute_authorized_mutation` wrapper, which alone issues the active unforgeable receipt; tests supply synthetic local policy context, never a constructed receipt; public role resolution/API stays absent |
+| Policy | Services run through the existing `execute_authorized_mutation` wrapper, which alone issues an active unforgeable receipt. Plane implementation waits for a published registration action, existing target resource, and trusted `PLATFORM_ADMINISTRATOR` source; tests may not synthesize the missing authority or construct a receipt. |
 | Transactions | Adapter calls never occur inside `transaction.atomic()`; each accepted state mutation atomically writes domain event, outbox, audit, and aggregate version |
 | Idempotency | Store only key/request digests and replay the original PostgreSQL `ResourceRef`; changed digest conflicts without another effect |
 | Capability history | Append-only; byte-equivalent observations reuse current capability; changed valid observations append the next version |
@@ -175,6 +184,8 @@ keeping one active PR at a time and preserving the same exact context revision.
 | Fake adapter | Pure deterministic in-memory implementation; no socket, filesystem, environment, subprocess, Docker, or credential access |
 | Retry and time | One 15-second monotonic deadline covers at most three attempts; only `RATE_LIMIT` and `TRANSIENT` retry while time remains; all other normalized errors, ambiguity, cancellation, and deadline exhaustion stop immediately |
 | Reconciliation cadence | Successful result acceptance sets advisory `next_reconcile_at` to trusted acceptance time plus exactly 900 seconds; no scheduler consumes it in M0-S9A |
+| Local event delivery | Synchronous provider commands; destination `CURVE_PROVIDER_LOCAL_V1`; consumer `curve-provider-local-v1`; explicit drains after commit and before the next provider command; inbox uniqueness `(workspace_id, consumer_id, event_id)`; batch 10; claim lease 30 seconds; retry after five seconds; maximum three delivery attempts; then `DEAD_LETTER` |
+| Runtime exclusion | Provider-event delivery invokes no Temporal workflow, Celery task, scheduler, background loop, network, credential, or external side effect |
 | Projection | Database `current_capability_id` serializes as wire `capability_document_ref`; absent nullable resource references are omitted, while state-required references are non-null |
 | Observability | Existing M0-S5 redaction/correlation helpers; bounded state/error code only; no raw IDs, configuration, capabilities, or exception text in telemetry |
 | Disablement | Registry service unavailable when Curve is disabled; existing Plane and Curve operation behavior unchanged |
@@ -191,16 +202,25 @@ sequenceDiagram
     participant P as Policy receipt
     participant DB as PostgreSQL
     participant F as Fake adapter
+    participant D as Local event drain
 
     T->>S: register(workspace, fake config, idempotency)
+    S->>D: Drain prior due provider events (max 10)
+    D->>DB: Claim CURVE_PROVIDER_LOCAL_V1 with 30s lease
     S->>P: execute policy-owned wrapper, receive active receipt
     S->>DB: Atomic connection + event + outbox + audit + replay record
     DB-->>S: PENDING_VALIDATION ResourceRef
+    S->>D: Explicit post-commit drain
+    D->>DB: Insert inbox tuple and acknowledge delivered event
     T->>S: reconcile(connection, expected version, idempotency)
+    S->>D: Drain prior due provider events (max 10)
     S->>DB: Atomic reconciliation Operation start
+    S->>D: Explicit post-commit drain
     S->>F: describe_capabilities/reconcile outside transaction
     F-->>S: bounded synthetic observation
     S->>DB: Atomic capability + ACTIVE connection + Operation result + evidence
+    S->>D: Explicit post-commit drain
+    D->>DB: Dedupe by workspace, consumer, event, then deliver, retry, or dead-letter
     DB-->>T: Exact connection/capability/operation references
 ```
 
@@ -212,11 +232,15 @@ sequenceDiagram
     participant S as Registry service
     participant DB as PostgreSQL
     participant F as Fake adapter
+    participant D as Local event drain
 
+    S->>D: Drain prior due provider events
     S->>DB: Commit reconciliation Operation start
+    S->>D: Explicit post-commit drain
     S->>F: reconcile with exact context
     F-->>S: AMBIGUOUS_MUTATION
     S->>DB: Record safe conflict and preserve current capability
+    S->>D: Explicit post-commit drain
     DB-->>S: No replacement capability or repeated mutation
 ```
 
@@ -264,6 +288,24 @@ sequenceDiagram
     capability payload, secret, workspace UUID label, or exception text.
 16. **Full regression.** Required Curve/backend/frontend/monorepo/build/security
     suites pass from the exact implementation head.
+17. **Post-commit delivery.** Given an accepted provider mutation, its committed
+    `CURVE_PROVIDER_LOCAL_V1` outbox event is drained immediately after commit,
+    consumed once by `curve-provider-local-v1`, and marked delivered.
+18. **Next-command recovery.** Given a crash or injected failure after commit
+    and before delivery, the durable event stays pending and the next provider
+    command drains it before evaluating the new command.
+19. **Inbox deduplication.** Given duplicate delivery of one event, the unique
+    `(workspace_id, consumer_id, event_id)` inbox tuple permits one local effect
+    and acknowledges every replay safely.
+20. **Bounded claim.** Given more than 10 eligible events, one drain claims at
+    most 10; an abandoned claim becomes eligible after exactly 30 seconds.
+21. **Retry and dead letter.** Given deterministic local-consumer failure, the
+    event is ineligible until five seconds have elapsed, retries at most three
+    times, then enters `DEAD_LETTER` with safe inspectable evidence.
+22. **Destination isolation.** Given provider and Temporal-relay events in the
+    outbox, the local provider consumer claims only
+    `CURVE_PROVIDER_LOCAL_V1`; no Temporal workflow, Celery task, scheduler, or
+    background loop starts.
 
 ## Exact verification commands
 
@@ -300,17 +342,22 @@ commands; it cannot remove the repository-native full backend command above.
 - Named test counts for every acceptance scenario and full Plane regression.
 - Proof that fake adapter runtime cannot open a socket, launch a subprocess,
   read credentials/environment, or call a real provider.
+- Proof of exact destination/consumer routing, post-commit delivery,
+  next-command recovery, inbox deduplication, batch/lease/retry/dead-letter
+  limits, and isolation from Temporal/Celery/background execution.
 - CodeQL/copyright/dependency results and an AGPL source-link regression check.
 - Clean disablement/restart proof and rollback result.
 
 ## Rollback
 
 Turn off the Curve/provider-registry feature and restart API/worker processes.
-No scheduled task or external connection exists to clean up. Persistent rollback
-keeps the additive tables in place until the compatibility window closes; the
-disposable migration proof alone runs the reverse migration. A failed package
-reverts only the Plane feature branch and leaves current `preview`, GitHub
-Project state, X3M infrastructure, and external systems unchanged.
+No scheduled task or external connection exists to clean up. Pending/retry/
+dead-letter local outbox rows remain inspectable and inert while the feature is
+disabled. Persistent rollback keeps the additive tables in place until the
+compatibility window closes; the disposable migration proof alone runs the
+reverse migration. A failed package reverts only the Plane feature branch and
+leaves current `preview`, GitHub Project state, X3M infrastructure, and external
+systems unchanged.
 
 ## Completion boundary
 

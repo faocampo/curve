@@ -5,12 +5,12 @@
 | Field | Value |
 | --- | --- |
 | Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.2 |
-| Date | 2026-08-23 |
+| Version | 1.3 |
+| Date | 2026-08-25 |
 | Work package | M0-S9A (provider-neutral registry and reconciliation foundation) |
 | Owner and reviewer | Federico Ocampo (`faocampo`) |
 | Applies to | Curve-owned PostgreSQL tables in the public Plane fork |
-| Plane base | Exact future `preview` merge descendant of `a7cf44b0e01a470c94b59f1c2ce5297dacd81d45` that contains Plane PR #9's policy timestamp-ordering fix |
+| Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) |
 
 ## Purpose and boundary
 
@@ -26,6 +26,12 @@ performs no network call, credential lookup, callback handling, outgoing
 webhook, scheduled job, MCP operation, model call, repository mutation, or
 external side effect. M0-S9B (external provider transport and administration)
 owns those capabilities after their applicable material decisions.
+
+Provider commands execute synchronously. Their local domain-event delivery uses
+the existing durable outbox/inbox records with two explicit application-service
+drain points: immediately after transaction commit and at the start of the next
+provider command. This package starts no Temporal workflow, Celery task,
+scheduler, or background loop.
 
 Plane remains authoritative for workspace identity and membership. Curve stores
 `workspace_id` as an opaque UUID and creates no hard foreign key to a Plane
@@ -169,10 +175,12 @@ transition. Both advance the aggregate version and append exact result evidence.
 One atomic application transaction:
 
 1. Runs inside the existing `execute_authorized_mutation` policy-owned
-   transaction for `CURVE.PROVIDER_CONNECTION.ADMINISTER`. That wrapper alone
-   issues the active, unforgeable receipt consumed by the mutation primitive.
-   M0-S9A tests provide a synthetic local caller/resource context to the real
-   wrapper; they never construct, serialize, or inject a receipt.
+   transaction. The exact registration action, existing target resource, and
+   trusted source that can prove `PLATFORM_ADMINISTRATOR` remain a material
+   authorization decision. Until that decision is published, neither tests nor
+   implementation may invent a role, construct a receipt, or treat
+   `CURVE.PROVIDER_CONNECTION.ADMINISTER` on a connection that does not yet
+   exist as registration authority.
 2. Requires `workspace_id`, exact fake adapter code/version, `LOCAL`, synthetic
    actor/effective principal, canonical empty configuration, raw idempotency key
    in memory, and correlation ID.
@@ -215,11 +223,48 @@ reconciliation, `next_reconcile_at` is the trusted result-acceptance time plus
 exactly 900 seconds. It is advisory for future consumers; no Celery, Temporal
 schedule, cron, or network callback is activated by this contract.
 
+## Local outbox/inbox delivery
+
+The provider adapter call and event delivery are separate boundaries. Adapter
+commands stay synchronous; the outbox transports only committed, local Curve
+provider events. The provider delivery destination is exactly
+`CURVE_PROVIDER_LOCAL_V1`, and its only consumer ID is exactly
+`curve-provider-local-v1`. The existing Temporal relay never consumes this
+destination.
+
+Every accepted command or result transaction appends its DomainEvent,
+OutboxEvent, AuditEvent, aggregate version, and idempotency outcome atomically.
+After commit, the application service invokes one bounded local drain. Before
+the next provider command is evaluated, the application service invokes the
+same drain for previously due records. Both invocations are explicit call-stack
+work; no process wakes independently.
+
+One drain performs these steps:
+
+1. Claim at most 10 due outbox rows for the current workspace and destination,
+   using a 30-second lease and skip-locked selection.
+2. For each event, attempt to insert an InboxMessage keyed uniquely by
+   `(workspace_id, consumer_id, event_id)`.
+3. If that inbox tuple already exists, acknowledge the outbox record without
+   repeating the local consumer effect.
+4. If local consumption succeeds, mark the inbox processed and the outbox
+   delivered in a transaction.
+5. If local consumption fails, release it for retry exactly five seconds later.
+   After the third delivery attempt, move the outbox record to `DEAD_LETTER` and
+   preserve safe failure metadata for inspection.
+
+A process crash after the provider transaction commits and before the
+post-commit drain leaves a durable pending outbox row. The next provider command
+drains that row. With no later provider command, it remains visibly pending;
+this local proof includes no background latency guarantee. A post-commit drain
+failure never rolls back or changes the already committed provider-command
+outcome.
+
 ## Events, audit, and telemetry
 
-The exact event allowlist is defined by the
+The exact event and local-delivery allowlists are defined by the
 [M0-S9A provider-registry manifest](../providers/m0-s9a-provider-registry-v1.json)
-(local authority, lifecycle, adapter, persistence, and event constants). Every
+(local authority, lifecycle, synchronous adapter, delivery, persistence, and event constants). Every
 event payload contains safe identifiers, versions, states, and digests only.
 Capability arrays remain in PostgreSQL/resource projections and are not copied
 to generic logs or metrics.
@@ -250,7 +295,12 @@ The Plane implementation must provide:
 5. Adapter conformance tests for success, unsupported capability, transient,
    terminal, timeout/cancellation, ambiguity, unknown key, version mismatch,
    and proof that socket/environment/credential access is absent.
-6. Full Plane backend, Curve frontend regression, `pnpm check`, `pnpm build`,
+6. Local-delivery tests for post-commit draining, recovery at the next provider
+   command, workspace/consumer/event deduplication, batch limit 10, 30-second
+   lease expiry/reclaim, five-second retry eligibility, third-attempt
+   `DEAD_LETTER`, destination isolation, and absence of Temporal/Celery/
+   scheduler/background dispatch.
+7. Full Plane backend, Curve frontend regression, `pnpm check`, `pnpm build`,
    migration drift, CodeQL, and copyright checks.
 
 Rollback sets the Curve module/provider-registry feature off. Existing Plane

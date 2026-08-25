@@ -224,8 +224,14 @@ The signature covers timestamp, delivery ID, and exact body. Secrets rotate with
 
 M0-S9A (provider-neutral registry and reconciliation foundation) implements the
 workspace-scoped connection/capability records, typed call context, normalized
-errors, static adapter registry, and explicit reconciliation using only the
-deterministic local fake adapter. M0-S9B (external provider transport and
+errors, static adapter registry, synchronous explicit reconciliation, and
+bounded local event delivery using only the deterministic local fake adapter.
+Committed provider events use destination `CURVE_PROVIDER_LOCAL_V1`, consumer
+`curve-provider-local-v1`, explicit post-commit and next-provider-command
+drains, workspace/consumer/event inbox deduplication, batch 10, a 30-second
+claim lease, five-second retry delay, three attempts, and `DEAD_LETTER` on
+exhaustion. No Temporal workflow, Celery task, scheduler, or background loop
+consumes these events. M0-S9B (external provider transport and
 administration) owns the public administration/role source, credentials,
 network endpoints, callbacks, outgoing webhooks, schedules, and real adapters
 after their applicable decisions. D-007 (MCP/Orca trust policy) gates only the

@@ -10,6 +10,9 @@
     "outgoing_webhooks": "DISABLED",
     "public_administration_api": "DISABLED",
     "scheduler": "DISABLED",
+    "temporal_workflow": "DISABLED",
+    "celery_task": "DISABLED",
+    "background_loop": "DISABLED",
     "external_mutation": "DISABLED"
   },
   "provider": {
@@ -69,6 +72,18 @@
     "workspace_mismatch": "NOT_FOUND",
     "ambiguous_observation": "RECORD_CONFLICT_WITHOUT_OVERWRITE",
     "advisory_interval_seconds": 900
+  },
+  "delivery": {
+    "command_execution": "SYNCHRONOUS",
+    "destination": "CURVE_PROVIDER_LOCAL_V1",
+    "consumer_id": "curve-provider-local-v1",
+    "drain_triggers": ["POST_COMMIT", "NEXT_PROVIDER_COMMAND"],
+    "inbox_deduplication_key": ["workspace_id", "consumer_id", "event_id"],
+    "maximum_batch": 10,
+    "claim_lease_seconds": 30,
+    "retry_delay_seconds": 5,
+    "maximum_attempts": 3,
+    "exhausted_state": "DEAD_LETTER"
   },
   "persistence": {
     "connection_table": "curve_provider_connection",

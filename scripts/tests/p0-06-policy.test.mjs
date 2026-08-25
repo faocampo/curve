@@ -220,6 +220,8 @@ test("M0-S9A context pins the local provider registry, persistence, fixtures, an
     "contracts/schemas/examples/provider-registry-manifest.invalid.json",
     "contracts/schemas/examples/provider-registry-manifest.valid.json",
     "contracts/schemas/examples/test-strategy-matrix.invalid.json",
+    "contracts/schemas/event-envelope.schema.json",
+    "contracts/schemas/inbox-message.schema.json",
     "contracts/schemas/provider-capability.schema.json",
     "contracts/schemas/provider-connection.schema.json",
     "contracts/schemas/provider-registry-manifest.schema.json",

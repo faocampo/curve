@@ -358,6 +358,18 @@ if (
   providerRegistryManifest.reconciliation.workspace_mismatch !== "NOT_FOUND" ||
   providerRegistryManifest.reconciliation.ambiguous_observation !== "RECORD_CONFLICT_WITHOUT_OVERWRITE" ||
   providerRegistryManifest.reconciliation.advisory_interval_seconds !== 900 ||
+  providerRegistryManifest.delivery.command_execution !== "SYNCHRONOUS" ||
+  providerRegistryManifest.delivery.destination !== "CURVE_PROVIDER_LOCAL_V1" ||
+  providerRegistryManifest.delivery.consumer_id !== "curve-provider-local-v1" ||
+  JSON.stringify(providerRegistryManifest.delivery.drain_triggers) !==
+    JSON.stringify(["POST_COMMIT", "NEXT_PROVIDER_COMMAND"]) ||
+  JSON.stringify(providerRegistryManifest.delivery.inbox_deduplication_key) !==
+    JSON.stringify(["workspace_id", "consumer_id", "event_id"]) ||
+  providerRegistryManifest.delivery.maximum_batch !== 10 ||
+  providerRegistryManifest.delivery.claim_lease_seconds !== 30 ||
+  providerRegistryManifest.delivery.retry_delay_seconds !== 5 ||
+  providerRegistryManifest.delivery.maximum_attempts !== 3 ||
+  providerRegistryManifest.delivery.exhausted_state !== "DEAD_LETTER" ||
   JSON.stringify(providerRegistryManifest.required_events) !== JSON.stringify(expectedProviderEvents)
 ) {
   throw new Error("M0-S9A provider-registry manifest differs from the reviewed local-only boundary");

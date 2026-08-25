@@ -9,7 +9,10 @@
     "callback_ingress": "DISABLED",
     "outgoing_webhooks": "DISABLED",
     "public_administration_api": "DISABLED",
-    "scheduler": "DISABLED",
+    "scheduler": "ENABLED",
+    "temporal_workflow": "ENABLED",
+    "celery_task": "ENABLED",
+    "background_loop": "ENABLED",
     "external_mutation": "DISABLED"
   },
   "provider": {
@@ -39,6 +42,18 @@
     "workspace_mismatch": "RETURN_RESOURCE",
     "ambiguous_observation": "OVERWRITE",
     "advisory_interval_seconds": 60
+  },
+  "delivery": {
+    "command_execution": "ASYNCHRONOUS",
+    "destination": "TEMPORAL_RELAY",
+    "consumer_id": "curve-temporal-relay",
+    "drain_triggers": ["SCHEDULED"],
+    "inbox_deduplication_key": ["event_id"],
+    "maximum_batch": 100,
+    "claim_lease_seconds": 300,
+    "retry_delay_seconds": 60,
+    "maximum_attempts": 10,
+    "exhausted_state": "DROP"
   },
   "persistence": {
     "connection_table": "curve_provider_connection",

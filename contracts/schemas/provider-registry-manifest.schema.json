@@ -13,6 +13,7 @@
     "transitions",
     "adapter_contract",
     "reconciliation",
+    "delivery",
     "persistence",
     "required_events"
   ],
@@ -31,6 +32,9 @@
         "outgoing_webhooks",
         "public_administration_api",
         "scheduler",
+        "temporal_workflow",
+        "celery_task",
+        "background_loop",
         "external_mutation"
       ],
       "properties": {
@@ -42,6 +46,9 @@
         "outgoing_webhooks": {"const": "DISABLED"},
         "public_administration_api": {"const": "DISABLED"},
         "scheduler": {"const": "DISABLED"},
+        "temporal_workflow": {"const": "DISABLED"},
+        "celery_task": {"const": "DISABLED"},
+        "background_loop": {"const": "DISABLED"},
         "external_mutation": {"const": "DISABLED"}
       }
     },
@@ -110,6 +117,23 @@
         "workspace_mismatch": {"const": "NOT_FOUND"},
         "ambiguous_observation": {"const": "RECORD_CONFLICT_WITHOUT_OVERWRITE"},
         "advisory_interval_seconds": {"const": 900}
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command_execution", "destination", "consumer_id", "drain_triggers", "inbox_deduplication_key", "maximum_batch", "claim_lease_seconds", "retry_delay_seconds", "maximum_attempts", "exhausted_state"],
+      "properties": {
+        "command_execution": {"const": "SYNCHRONOUS"},
+        "destination": {"const": "CURVE_PROVIDER_LOCAL_V1"},
+        "consumer_id": {"const": "curve-provider-local-v1"},
+        "drain_triggers": {"const": ["POST_COMMIT", "NEXT_PROVIDER_COMMAND"]},
+        "inbox_deduplication_key": {"const": ["workspace_id", "consumer_id", "event_id"]},
+        "maximum_batch": {"const": 10},
+        "claim_lease_seconds": {"const": 30},
+        "retry_delay_seconds": {"const": 5},
+        "maximum_attempts": {"const": 3},
+        "exhausted_state": {"const": "DEAD_LETTER"}
       }
     },
     "persistence": {

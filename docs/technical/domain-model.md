@@ -4,7 +4,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; M0-S9A local provider substrate prepared for review; remaining capabilities stay packet/decision gated |
+| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; M0-S9A local provider substrate has an approved bounded delivery model and remains registration-authorization/contract gated; remaining capabilities stay packet/decision gated |
 | Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product, Curve-first shell, lifecycle, security, private-platform connectivity, accepted local Temporal proof, and acceptance contract) |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
 | Last updated | 2026-08-22 |
