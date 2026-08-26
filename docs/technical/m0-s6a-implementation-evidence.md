@@ -173,10 +173,17 @@ resumes retained histories. Existing Plane behavior and
 
 ## Completion boundary
 
-M0-S6A is complete for its approved local-only scope. M0-06 (Temporal
-workflow-skeleton work package) remains `IN_PROGRESS`: provider-backed
-Initiative/Plan/Slice/Attempt persistence, application-service activities,
-attempt replacement, budgets, and provider reconciliation remain later sibling
-scope. This record does not authorize M0-S9A (provider-neutral registry and
-reconciliation foundation), a real provider, protected storage, staging,
-production, merge automation, or deployment.
+M0-S6A is complete for its approved local-only scope and satisfies the defined
+local M0-06 (Temporal workflow-skeleton work package) deliverable. M0-06 remains
+formally `IN_PROGRESS` only until its shared development-plan, readiness-board,
+traceability, and GitHub Project projections are reconciled after Curve PR #31.
+No M0-S6B provider-backed child is required.
+
+M4-05 (provider-backed slice execution workflow) owns persistent
+Initiative/Plan/Slice/Attempt integration, provider dispatch, retries,
+attributed questions, and application-service writes. M4-04 (trusted runner
+lifecycle) owns attempt replacement, authority revocation, and quarantine.
+M6-05 (budget administration and capacity) owns budget exhaustion. This record
+does not authorize M0-S9A (provider-neutral registry and reconciliation
+foundation), a real provider, protected storage, staging, production, merge
+automation, or deployment.

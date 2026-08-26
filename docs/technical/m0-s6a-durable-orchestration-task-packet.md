@@ -24,7 +24,7 @@
 | Risk | `STANDARD`; durable asynchronous state and cancellation, using synthetic `INTERNAL` data only |
 | Product decisions | No new material product decision; D-003 (local runtime topology and trust-zone decision) is already `DECIDED / LOCAL_ONLY` |
 | Acceptance record | [M0-S6A implementation evidence](m0-s6a-implementation-evidence.md) (approved contract/context, Plane implementation and merge, local runtime proof, CI, security acceptance, and rollback) |
-| Remaining parent scope | M0-06 (Temporal workflow-skeleton work package) remains open for provider-backed attempt and reconciliation integration |
+| Parent closure | The defined local M0-06 (Temporal workflow-skeleton work package) deliverable is satisfied; formal `DONE_LOCAL` projection awaits a non-conflicting post-PR-#31 documentation reconciliation |
 
 Version 0.3 of this packet remains immutable at the approved Curve contract
 revision. Version 0.4 changes no implementation requirement or dispatch
@@ -455,8 +455,12 @@ was green, and Federico Ocampo approved Plane PR #10 at exact head
 (exact contract, context, runtime, CI, approved and merged trees, security
 acceptance, and rollback) is the authoritative post-merge record.
 
-Completion advances M0-06 (Temporal workflow-skeleton work package) by closing
-its model-free parent/child control substrate. It does not close M0-06. M4-05
-(provider-backed slice execution workflow) remains responsible for real
-Initiative/Plan/Slice/Attempt integration, provider dispatch, retries as new
-attempts, budgets, application-service writes, and external reconciliation.
+Completion satisfies the defined local M0-06 (Temporal workflow-skeleton work
+package) deliverable. Its formal Project/readiness projection remains
+`IN_PROGRESS` until a separate reconciliation after Curve PR #31 updates the
+shared development-plan and readiness files. No additional M0-S6B child is
+required. M4-05 (provider-backed slice execution workflow) remains responsible
+for real Initiative/Plan/Slice/Attempt integration, provider dispatch, retries
+as new attempts, attributed questions, application-service writes, and
+external reconciliation; M4-04 (trusted runner lifecycle) and M6-05 (budget
+administration and capacity) retain their declared runtime and budget scope.
