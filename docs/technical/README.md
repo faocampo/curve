@@ -13,7 +13,13 @@ minimal Curve-first UI implementation packet), and M0-S5A (telemetry kernel
 and static observability assets) are accepted and merged. OBS-BIND-001 (local
 Docker OTLP, Prometheus, Grafana, and path-health binding) is decided for local
 development. M0-S5B (local observability integration proof) is accepted and
-merged, completing M0-08 for `LOCAL_ONLY`. An implementation package
+merged, completing M0-08 for `LOCAL_ONLY`. M0-S9A (provider-neutral registry
+and reconciliation foundation) now has an approved synchronous-command and
+explicit local outbox/inbox delivery model. It remains a local synthetic review
+draft with approved Option B registration authority until exact contract
+publication and dispatch authorization are resolved, and
+keeps D-007 (MCP trust-model decision) scoped to MCP/Orca activation. An
+implementation package
 remains blocked until every decision scope named by its exact packet is
 `DECIDED` and its remaining entry criteria pass. A separately authorized P0
 proof may collect decision evidence under its bounded packet.
@@ -40,6 +46,8 @@ identifiers are:
 - M0-S5 (local audit and observability implementation packet).
 - M0-S5A (telemetry kernel and static observability assets).
 - M0-S5B (X3M local observability integration proof).
+- M0-S9A (provider-neutral registry and reconciliation foundation).
+- M0-S9B (external provider transport and administration).
 - M0-03 (core authorization and policy kernel work package).
 - M0-08 (audit and observability foundation work package).
 - OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding).
@@ -82,9 +90,12 @@ identifiers are:
 | [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (exact context, CI, approved/merged trees, live OTLP, dashboard, alerts, redaction, disablement, cleanup, and rollback) | Post-merge acceptance record for the local observability platform binding | `ACCEPTED_AND_MERGED`; Plane `preview` is `1b06153...`; Curve evidence is `590a52e...`; M0-08 is `DONE_LOCAL` |
 | [M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md) (decision persistence, evaluation order, transactions, migration, and rollback) | Physical append-only policy-decision and audit-binding contract | Implemented in Plane merge `922dd6d...`; provider-specific extensions require their consuming decisions |
 | [Core policy manifest](../../contracts/policy/core-policy-v1.json) (immutable v1 action allowlist and deny precedence) | Provider-neutral roles, classifications, environments, ACL/assignment requirements, target policy, and safe projections | Implemented immutable v1 policy ceiling; provider-specific policy remains gated |
+| [Core policy v2 manifest](../../contracts/policy/core-policy-v2.json) (Option B role source and additive provider-registration action) | Plane workspace role `20` derives local M0-S9A `PLATFORM_ADMINISTRATOR`; registration evaluates existing workspace and exact fake-adapter target | Review contract; v1 remains byte-for-byte unchanged |
+| [M0-S9A registration authorization decision](m0-s9a-registration-authorization-decision.md) (approved Option B Plane workspace-admin mapping and existing-workspace registration resource) | Human-readable security decision, exact allow/deny dimensions, alternatives, and implementation evidence | `APPROVED_OPTION_B / PENDING_EXACT_CONTRACT_PUBLICATION` |
 | [M0-S4 foundation probe experience](ux-m0-s4-foundation-probe.md) (clickable local foundation-status flow, state contract, and review script) | Approved UX-004-M0-S4/UX-005-M0-S4 contract for the Operation API, resumable SSE, cancellation, recovery, and minimal workspace UI | `IMPLEMENTED_AND_ACCEPTED`; PR #17 head `a463876...` merged as `42ea329...`; Plane implementation and acceptance are recorded in the M0-S4 evidence document |
 | [OBS-BIND-001 local observability binding](obs-bind-001-local-observability-binding.md) (decided Docker OTLP, Prometheus, Grafana, health, cleanup, and promotion contract) | Exact local platform binding and five-checkpoint M0-S5B implementation handoff | `DECIDED_LOCAL_ONLY`; published at Curve `43480ca...` and consumed by M0-S5B |
 | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, local binding proof, tests, evidence, and rollback) | Independently reviewable M0-S5A telemetry-kernel and M0-S5B local-integration changes | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_ACCEPTED_AND_MERGED` |
+| [M0-S9A provider-registry task packet](m0-s9a-provider-registry-task-packet.md) (local provider persistence, Option B authorization, adapter port, synchronous fake reconciliation, bounded local delivery, acceptance, stop conditions, and rollback) | First independently reviewable child of M0-09; excludes public administration, credentials, callbacks/webhooks, schedules, background execution, and real adapters | `REVIEW_DRAFT / NOT_DISPATCHABLE`; local delivery, Plane base, and registration authority are resolved; exact publication, merged context, revalidation, and exact-head dispatch authorization remain; D-007 is MCP/Orca-specific |
 | [M0-S5 telemetry manifest](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboard, four alerts, and redaction contract) | Normative v1 instrumentation and operational-asset surface | Export defaults to disabled; exporter-failure diagnostics stay process-local; X3M endpoint/datasource/alert/path-health binding is supplied separately |
 | [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
 | [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | Historical P0-06A/P0-06B standalone-proof design and supersession record | `SUPERSEDED`; retained for audit, with M0-S3 as the executable proof |

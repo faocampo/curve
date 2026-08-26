@@ -1,0 +1,392 @@
+# M0-S9A Provider-Neutral Registry and Reconciliation Task Packet
+
+## Document control
+
+| Field | Value |
+| --- | --- |
+| Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
+| Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
+| Version | 1.7 |
+| Date | 2026-08-25 |
+| Product | Curve |
+| Contract repository | `git@github.com:faocampo/curve.git` |
+| Implementation repository | `git@github.com:faocampo/plane.git` |
+| Curve review base | `main` at `d97cc053a5d0eac7bc2aa9bebe263a245c95894f`, containing accepted P0-05 (test strategy and audit closure) and M0-S6A (durable parent/child Temporal orchestration contract) |
+| Target branch | `preview` |
+| Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) and reserving provider migration `0005` after policy migration `0004` |
+| Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
+| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Implementer | One AI coding agent distinct from the human reviewer |
+| Risk | `STANDARD`; local synthetic provider metadata only |
+| Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
+
+Version 1.7 repins the package after merged Plane PR #10 (M0-S6A durable
+parent/child Temporal orchestration implementation) and closes the local
+provider-event delivery decision. Provider commands are synchronous; committed
+provider events use destination `CURVE_PROVIDER_LOCAL_V1`, consumer
+`curve-provider-local-v1`, and explicit post-commit/next-command drains. It also
+records approved Option B: active Plane workspace role `20` in the exact target
+workspace is the trusted source of Curve `PLATFORM_ADMINISTRATOR`, and a new
+registration action targets the existing workspace. The recorded Curve and
+Plane bases are exact review inputs; the dispatcher
+fetches and re-verifies both remote heads before any Plane mutation and stops if
+either has advanced.
+
+## Outcome
+
+Implement a provider-neutral registry substrate in Plane's additive
+`plane.curve` Django application. One workspace can register one deterministic
+local fake-provider connection, validate an immutable capability document, run
+explicit reconciliation through Curve's existing operation/delivery kernel,
+deliver its committed local events through the outbox/inbox kernel, and observe
+safe lifecycle/audit evidence.
+
+This is the first independently reviewable child of M0-09 (provider integration
+foundation). M0-S9B (external provider transport and administration) later adds
+the human administration API/role source, credentials, authenticated callback
+ingress, outgoing webhooks, scheduled reconciliation, and real adapters under
+their applicable decisions. D-007 (MCP/Orca trust policy) applies to MCP-enabled
+work only and is not an M0-S9A dependency.
+
+AC-57 (model-failover policy and actual-routing evidence) stays at the M0-09
+(provider integration foundation) parent until a dedicated Model Gateway child
+package is defined under D-004 (model catalog and data-policy decision) and
+D-005 (model task-routing decision). M0-S9A performs no model call, selects no
+model or provider, and produces no routing decision; its fake-provider tests
+cannot satisfy any part of AC-57.
+
+## Normative sources
+
+| Source | Authority in this packet |
+| --- | --- |
+| [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product integrations, provider isolation, workspace scope, audit, and reconciliation requirements) | Product invariants and acceptance boundaries |
+| [Architecture](architecture.md) (logical components, trust zones, and PostgreSQL/Temporal ownership) | Provider adapter boundary and authoritative state ownership |
+| [Domain model](domain-model.md) (workspace-scoped ProviderConnection and immutable history rules) | Aggregate and reference semantics |
+| [Integration contracts](integration-contracts.md) (provider call context, normalized errors, adapter ports, callbacks, and reconciliation) | Shared provider behavior; M0-S9A consumes only the local subset |
+| [M0 authorization and state matrices](m0-authorization-and-state-matrices.md) (core policy actions, trusted role sources, and fail-closed evaluation) | Core v1 permission ceiling plus the approved local M0-S9A Option B extension |
+| [M0-S9A registration authorization decision](m0-s9a-registration-authorization-decision.md) (approved Plane workspace-admin role mapping and registration resource) | Exact Option B role source and deny boundary |
+| [Core policy v2 manifest](../../contracts/policy/core-policy-v2.json) (Option B trusted role source and provider-registration action) | Exact versioned policy consumed by registration |
+| [Core policy v2 schema](../../contracts/schemas/core-policy-manifest-v2.schema.json) (closed machine validation for the Option B policy extension) | Prevents role-source or action widening |
+| [M0-S9A relational contract](../../contracts/database/m0-s9a-provider-registry-contract.md) (tables, constraints, transactions, adapter port, state machine, migration, and rollback) | Normative Plane implementation contract |
+| [M0-S9A provider-registry manifest](../../contracts/providers/m0-s9a-provider-registry-v1.json) (machine-readable local authority, lifecycle, adapter, retry, persistence, and events) | Fail-closed constants |
+| [Provider-registry manifest schema](../../contracts/schemas/provider-registry-manifest.schema.json) (machine validation of the local-only package boundary) | Rejects external access, real providers, wider capability risk, and changed lifecycle |
+| [Provider connection schema](../../contracts/schemas/provider-connection.schema.json) (workspace-scoped connection metadata and lifecycle requirements) | Safe serialized aggregate projection |
+| [Provider capability schema](../../contracts/schemas/provider-capability.schema.json) (immutable versioned adapter capability observation) | Safe serialized capability projection |
+| [M0-S2 relational contract](../../contracts/database/m0-s2-relational-contract.md) (operation, event, outbox, idempotency, and audit transaction kernel) | Existing delivery/idempotency primitives; no duplicate implementation |
+| [M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md) (authorization receipt and immutable policy evidence) | Existing policy boundary; no parallel authorization path |
+| [M0-S5 task packet](m0-s5-observability-task-packet.md) (redaction, correlation, telemetry, and alert boundaries) | Safe instrumentation rules |
+| [P0-05 test strategy](m0-test-strategy.md) (acceptance-test suites, commands, environments, ownership, and evidence gates) | Exact cross-repository verification baseline and AC-33 ownership boundary |
+| [P0-05 AC test matrix](../../contracts/testing/ac-test-matrix-v1.json) (machine-readable AC-01 through AC-60 ownership and evidence mapping) | Normative acceptance ownership; M0-S9A contributes partial AC-33 evidence only |
+
+The coding agent pins one exact merged Curve commit containing every source
+above and the deterministic M0-S9A context digest. A later documentation edit
+cannot silently change active implementation scope.
+
+The ProviderConnection and ProviderCapability projections use schema version
+`2.0`. They replace unimplemented v1 drafts before any persisted row, endpoint,
+generated client, or adapter exists; there is no data migration. Future
+incompatible changes require a new schema version and compatibility plan.
+
+## Dispatch readiness
+
+Implementation remains blocked until all rows are satisfied:
+
+| Gate | Current state | Required evidence |
+| --- | --- | --- |
+| P0-05 (test strategy and audit closure) | Satisfied | Curve `main` `fdae85b33a235cd494dd36565698b2b5033a3389` establishes exact AC-01 through AC-60 ownership and suite commands |
+| M0-S9A contract publication | This review draft | Exact Curve merge SHA and context-pack digest |
+| Plane base | Satisfied | Plane `preview` `ad5772c0565c934e64ea90f892be1374819979be` contains merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation); dispatch stops if `preview` advances before implementation authorization |
+| Owner/reviewer | Satisfied | Federico Ocampo |
+| Material decisions | `APPROVED_OPTION_B / PENDING_PUBLICATION` | The local outbox/inbox delivery model and Option B registration authority are approved. Publication requires the exact reviewed Curve head to merge. D-007 (MCP trust model and Orca access profile) remains MCP-specific. |
+| Exact-head implementation authorization | Pending | Federico Ocampo approves the final merged contract revision and dispatch base |
+
+No coding agent mutates Plane while any row is pending.
+
+## Dispatch policy
+
+| Field | Required value |
+| --- | --- |
+| Data | Synthetic `INTERNAL` identifiers and fixed fake observations only |
+| Model/tool budget | Maximum US$25 automated attempt; no runtime model/provider call |
+| Repository authority | Named Plane feature branch only; no merge, deployment, GitHub Project, or infrastructure mutation by the coding agent |
+| Network | Repository dependency/build access only when required by the pinned lock; provider runtime network is prohibited and tested |
+| Secrets | No secret reference lookup, value, environment read, token, credential, or protected object body |
+| Sandbox | Repository-local build/test limits; no Docker topology or X3M service change |
+| Stop behavior | Missing exact base/context, owner/reviewer, command, test, budget, policy, or migration value stops before mutation |
+
+## Scope
+
+### Included
+
+- `ProviderConnection` mutable aggregate and append-only `ProviderCapability`
+  history in the dedicated Django `plane.curve` application.
+- One additive Curve migration with workspace-scoped indexes, uniqueness, state
+  checks, and reversible disposable-database proof.
+- A typed provider-adapter protocol, static registry, normalized error types,
+  call context, and deterministic `FAKE_LOCAL` adapter.
+- Application services for register, explicit validate/reconcile, disable,
+  enable, and terminal revoke using optimistic concurrency and the existing
+  policy/operation/event/outbox/idempotency/audit kernel.
+- Bounded local provider-event delivery through destination
+  `CURVE_PROVIDER_LOCAL_V1`, consumer `curve-provider-local-v1`, and only the
+  explicit post-commit and next-provider-command drain points.
+- Capability validation against exact connection/workspace/adapter/version,
+  supported protocol, known risk, classification ceiling, and closed schemas.
+- Explicit fake reconciliation with success, byte-equivalent result, changed
+  result, transient, terminal, timeout/cancellation, unsupported capability,
+  and ambiguous-observation fixtures.
+- Safe correlation, audit, and existing operation telemetry integration.
+- Contract, migration, repository, service, policy-boundary, concurrency,
+  recovery, isolation, redaction, and full regression tests.
+
+### Excluded
+
+- Public REST/GraphQL/UI provider administration or a new user-facing flow.
+- A dedicated Curve platform-administrator assignment aggregate or public role
+  administration surface; any caller-supplied role/target/authorization context.
+- Onyx, MCP, Orca, OpenHands, model, VCS, quality, flag, documentation,
+  monitoring, or prototype adapter implementation.
+- Credentials, Secrets Manager, delegated OAuth, tokens, endpoint/origin/TLS
+  configuration, network egress, callbacks, outgoing webhooks, or third-party
+  API calls.
+- Temporal workflow, Celery task or Beat, scheduler, cron, polling/background
+  loop, or automatic 15-minute reconciliation. The persisted
+  `next_reconcile_at` value is advisory only.
+- Protected object storage, evidence bodies, customer data, staging/production
+  activation, external mutation, or infrastructure change.
+- New frontend component, navigation item, or screen.
+
+## Implementation slices
+
+The Plane work is one independently reviewable PR and must be committed in this
+order:
+
+1. **Persistence and migration.** Add model enums, `ProviderConnection`,
+   `ProviderCapability`, constraints, admin-free repositories, migration, and
+   model/migration tests.
+2. **Adapter, lifecycle, and local delivery services.** Add immutable typed values, static
+   registry, fake adapter, normalized errors, register/reconcile/disable/enable/
+   revoke services, explicit bounded outbox drain, inbox deduplication, and
+   command-kernel/audit/delivery tests.
+3. **Conformance and observability.** Add the fixture-driven shared suite,
+   race/recovery/network-denial tests, safe instrumentation, copied
+   context/contract integrity checks, and full regression evidence.
+
+If review shows these cannot remain one coherent PR, split after slice 1 while
+keeping one active PR at a time and preserving the same exact context revision.
+
+## Required Plane implementation boundaries
+
+| Boundary | Required implementation |
+| --- | --- |
+| Models | Add only under `apps/api/plane/curve`; no Plane model change or hard FK to Plane workspace tables |
+| Repository lookup | Every method requires `workspace_id` and uses it in the first query predicate; absent/wrong-workspace IDs share the same result |
+| Policy | Services run through the existing `execute_authorized_mutation` wrapper, which alone issues an active unforgeable receipt. Registration pins core policy v2 digest `sha256:2895b63392236afa07e6f0572d6ddb1c91aa7f40d37282f250019d2829ed5787` and action `CURVE.PROVIDER_CONNECTION.REGISTER` against the existing `WORKSPACE` version `1`; an authenticated human's live active Plane role `20` in that exact workspace derives `PLATFORM_ADMINISTRATOR` only for the register/administer actions; static target is `curve.fake-local@1.0.0`. Caller-supplied roles/targets, roles `15`/`5`, inactive/wrong-workspace membership, agent/service actors, unrelated actions, non-local environment, and non-internal classification deny. Existing connection commands retain `CURVE.PROVIDER_CONNECTION.ADMINISTER`. |
+| Transactions | Adapter calls never occur inside `transaction.atomic()`; each accepted state mutation atomically writes domain event, outbox, audit, and aggregate version |
+| Idempotency | Store only key/request digests and replay the original PostgreSQL `ResourceRef`; changed digest conflicts without another effect |
+| Capability history | Append-only; byte-equivalent observations reuse current capability; changed valid observations append the next version |
+| Registry | Exact static mapping for `curve.fake-local`; no dynamic import, entry-point discovery, arbitrary class path, or configuration-selected module |
+| Fake adapter | Pure deterministic in-memory implementation; no socket, filesystem, environment, subprocess, Docker, or credential access |
+| Retry and time | One 15-second monotonic deadline covers at most three attempts; only `RATE_LIMIT` and `TRANSIENT` retry while time remains; all other normalized errors, ambiguity, cancellation, and deadline exhaustion stop immediately |
+| Reconciliation cadence | Successful result acceptance sets advisory `next_reconcile_at` to trusted acceptance time plus exactly 900 seconds; no scheduler consumes it in M0-S9A |
+| Local event delivery | Synchronous provider commands; destination `CURVE_PROVIDER_LOCAL_V1`; consumer `curve-provider-local-v1`; explicit drains after commit and before the next provider command; inbox uniqueness `(workspace_id, consumer_id, event_id)`; batch 10; claim lease 30 seconds; retry after five seconds; maximum three delivery attempts; then `DEAD_LETTER` |
+| Runtime exclusion | Provider-event delivery invokes no Temporal workflow, Celery task, scheduler, background loop, network, credential, or external side effect |
+| Projection | Database `current_capability_id` serializes as wire `capability_document_ref`; absent nullable resource references are omitted, while state-required references are non-null |
+| Observability | Existing M0-S5 redaction/correlation helpers; bounded state/error code only; no raw IDs, configuration, capabilities, or exception text in telemetry |
+| Disablement | Registry service unavailable when Curve is disabled; existing Plane and Curve operation behavior unchanged |
+
+## Execution sequences
+
+### Registration and validation
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant T as Contract test
+    participant S as Registry service
+    participant P as Policy receipt
+    participant DB as PostgreSQL
+    participant F as Fake adapter
+    participant D as Local event drain
+
+    T->>S: register(workspace, fake config, idempotency)
+    S->>D: Drain prior due provider events (max 10)
+    D->>DB: Claim CURVE_PROVIDER_LOCAL_V1 with 30s lease
+    S->>P: execute policy-owned wrapper, receive active receipt
+    S->>DB: Atomic connection + event + outbox + audit + replay record
+    DB-->>S: PENDING_VALIDATION ResourceRef
+    S->>D: Explicit post-commit drain
+    D->>DB: Insert inbox tuple and acknowledge delivered event
+    T->>S: reconcile(connection, expected version, idempotency)
+    S->>D: Drain prior due provider events (max 10)
+    S->>DB: Atomic reconciliation Operation start
+    S->>D: Explicit post-commit drain
+    S->>F: describe_capabilities/reconcile outside transaction
+    F-->>S: bounded synthetic observation
+    S->>DB: Atomic capability + ACTIVE connection + Operation result + evidence
+    S->>D: Explicit post-commit drain
+    D->>DB: Dedupe by workspace, consumer, event, then deliver, retry, or dead-letter
+    DB-->>T: Exact connection/capability/operation references
+```
+
+### Ambiguous observation
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant S as Registry service
+    participant DB as PostgreSQL
+    participant F as Fake adapter
+    participant D as Local event drain
+
+    S->>D: Drain prior due provider events
+    S->>DB: Commit reconciliation Operation start
+    S->>D: Explicit post-commit drain
+    S->>F: reconcile with exact context
+    F-->>S: AMBIGUOUS_MUTATION
+    S->>DB: Record safe conflict and preserve current capability
+    S->>D: Explicit post-commit drain
+    DB-->>S: No replacement capability or repeated mutation
+```
+
+## Executable acceptance scenarios
+
+1. **Disabled baseline.** Given Curve/provider registry is disabled, when Plane
+   starts and existing routes/tests run, then no registry background work,
+   route, network access, or behavior change occurs.
+2. **Migration.** Given a disposable PostgreSQL database, forward/backward-one/
+   forward succeeds with exact tables, indexes, constraints, and no migration
+   drift.
+3. **Workspace isolation.** Given connections in workspaces A and B, every
+   read/write/reconcile with a foreign ID returns the same result as absent and
+   writes no cross-workspace evidence.
+4. **Registration replay.** Given a successful registration, the same key and
+   request digest returns the original connection `ResourceRef`; a changed
+   digest conflicts with no second connection/event/outbox effect.
+5. **Exact adapter registry.** Unknown key, provider mismatch, version mismatch,
+   or dynamic module path is rejected before adapter invocation.
+6. **Successful validation.** A valid fake observation appends capability v1,
+   moves the connection to `ACTIVE`, completes the Operation, and atomically
+   records exact event/outbox/audit evidence.
+7. **Equivalent reconciliation.** A byte-equivalent observation updates safe
+   reconciliation timestamps/version without appending capability v2.
+8. **Changed capability.** A valid changed observation appends exactly one next
+   capability version and never rewrites v1.
+9. **Unsupported capability.** Enabled non-`READ`, unknown schema/protocol, or
+   classification beyond `INTERNAL` fails closed and does not make the
+   connection active.
+10. **Failure normalization.** Transient/terminal/timeout failures expose only
+    the stable taxonomy, respect maximum three attempts and 15-second deadline,
+    and move an active connection to `DEGRADED` only after exhaustion.
+11. **Ambiguity.** An ambiguous observation records conflict evidence, retains
+    the prior capability, and performs no blind retry or external mutation.
+12. **Lifecycle.** Disable stops use; enable returns to
+    `PENDING_VALIDATION`; revoke is terminal; invalid/stale-version transitions
+    return stable conflict and safe no-effect audit.
+13. **Race.** Two reconciliations at the same expected version produce one
+    accepted transition and one stale-version no-effect result without duplicate
+    capability/event effects.
+14. **No external access.** Socket, subprocess, filesystem/environment secret,
+    object-store, and credential-broker probes fail the test if called.
+15. **Redaction.** Logs, metrics, traces, Problem Details, audit safe payloads,
+    and test reports contain no raw idempotency key, configuration body,
+    capability payload, secret, workspace UUID label, or exception text.
+16. **Full regression.** Required Curve/backend/frontend/monorepo/build/security
+    suites pass from the exact implementation head.
+17. **Post-commit delivery.** Given an accepted provider mutation, its committed
+    `CURVE_PROVIDER_LOCAL_V1` outbox event is drained immediately after commit,
+    consumed once by `curve-provider-local-v1`, and marked delivered.
+18. **Next-command recovery.** Given a crash or injected failure after commit
+    and before delivery, the durable event stays pending and the next provider
+    command drains it before evaluating the new command.
+19. **Inbox deduplication.** Given duplicate delivery of one event, the unique
+    `(workspace_id, consumer_id, event_id)` inbox tuple permits one local effect
+    and acknowledges every replay safely.
+20. **Bounded claim.** Given more than 10 eligible events, one drain claims at
+    most 10; an abandoned claim becomes eligible after exactly 30 seconds.
+21. **Retry and dead letter.** Given deterministic local-consumer failure, the
+    event is ineligible until five seconds have elapsed, retries at most three
+    times, then enters `DEAD_LETTER` with safe inspectable evidence.
+22. **Destination isolation.** Given provider and Temporal-relay events in the
+    outbox, the local provider consumer claims only
+    `CURVE_PROVIDER_LOCAL_V1`; no Temporal workflow, Celery task, scheduler, or
+    background loop starts.
+23. **Registration authorization allow.** Given an authenticated human with
+    active Plane role `20` in the exact target workspace, `LOCAL`, `INTERNAL`,
+    and the static `curve.fake-local@1.0.0` target, registration evaluates the
+    existing workspace at resource version `1` and records an allow receipt
+    pinned to core policy v2.
+24. **Workspace-role denial.** Plane roles `15` and `5`, inactive membership,
+    absent membership, or role `20` in another workspace deny before any
+    connection, event, outbox, inbox, idempotency-completion, or audit-success
+    effect.
+25. **Authority forgery denial.** Caller-supplied
+    `PLATFORM_ADMINISTRATOR`, caller-selected target, agent, service, unknown
+    adapter, non-provider action, non-local environment, or wider
+    classification denies with stable safe evidence.
+26. **Resource lifecycle authorization.** Registration evaluates an existing
+    `WORKSPACE`; validate/reconcile/disable/enable/revoke evaluate the persisted
+    workspace-scoped `PROVIDER_CONNECTION` through the unchanged administer
+    action.
+
+## Exact verification commands
+
+Run from the Plane repository root using its pinned toolchains:
+
+```bash
+./setup.sh
+docker compose -f docker-compose-test.yml up -d test-db test-redis test-mq test-minio
+docker compose -f docker-compose-test.yml run --rm --build api-tests python manage.py migrate
+docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/curve/tests
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py makemigrations curve --check --dry-run
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve 0004
+docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve 0005
+docker compose -f docker-compose-test.yml up --build --abort-on-container-exit --exit-code-from api-tests
+pnpm check
+pnpm build
+docker compose -f docker-compose-test.yml down -v
+```
+
+The implementation migration is exactly
+`apps/api/plane/curve/migrations/0005_providerconnection_providercapability.py`
+and its predecessor is exactly
+`apps/api/plane/curve/migrations/0004_policydecision_recorded_at_default.py`;
+any changed predecessor/name stops for contract revision. The accepted P0-05
+(test strategy and audit closure) baseline may add stricter
+commands; it cannot remove the repository-native full backend command above.
+
+## Required PR evidence
+
+- Exact Curve contract SHA and deterministic M0-S9A context digest.
+- Exact Plane base/head/tree and changed-file inventory.
+- Generated migration and SQL, forward/backward-one/forward logs, and
+  `makemigrations --check --dry-run` result.
+- Named test counts for every acceptance scenario and full Plane regression.
+- Proof that fake adapter runtime cannot open a socket, launch a subprocess,
+  read credentials/environment, or call a real provider.
+- Proof of exact destination/consumer routing, post-commit delivery,
+  next-command recovery, inbox deduplication, batch/lease/retry/dead-letter
+  limits, and isolation from Temporal/Celery/background execution.
+- CodeQL/copyright/dependency results and an AGPL source-link regression check.
+- Clean disablement/restart proof and rollback result.
+
+## Rollback
+
+Turn off the Curve/provider-registry feature and restart API/worker processes.
+No scheduled task or external connection exists to clean up. Pending/retry/
+dead-letter local outbox rows remain inspectable and inert while the feature is
+disabled. Persistent rollback keeps the additive tables in place until the
+compatibility window closes; the disposable migration proof alone runs the
+reverse migration. A failed package reverts only the Plane feature branch and
+leaves current `preview`, GitHub Project state, X3M infrastructure, and external
+systems unchanged.
+
+## Completion boundary
+
+M0-S9A is complete only when the exact implementation head passes all scenarios
+and its post-merge evidence is accepted. M0-09 remains open until M0-S9B proves
+the applicable administration/transport, real adapter, callback/webhook, and
+scheduled reconciliation behaviors and a separately defined Model Gateway
+child proves AC-57 (model-failover policy and actual-routing evidence). M0-S9A
+completion grants no MCP, Orca, OpenHands, Onyx, model, VCS, credential,
+staging, or production authority.

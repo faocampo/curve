@@ -53,6 +53,8 @@ const resultSchema = join(root, "contracts/mcp/orca-tool-result-v1.schema.json")
 const p0_06StageProjectionSchema = join(root, "contracts/schemas/p0-06-stage-projection-v3.schema.json");
 const corePolicyManifestSchema = join(root, "contracts/schemas/core-policy-manifest.schema.json");
 const corePolicyManifestPath = join(root, "contracts/policy/core-policy-v1.json");
+const corePolicyManifestV2Schema = join(root, "contracts/schemas/core-policy-manifest-v2.schema.json");
+const corePolicyManifestV2Path = join(root, "contracts/policy/core-policy-v2.json");
 const operationSchema = join(root, "contracts/schemas/operation.schema.json");
 const operationEventV2Schema = join(root, "contracts/schemas/operation-event-v2.schema.json");
 const outboxSchema = join(root, "contracts/schemas/outbox-event.schema.json");
@@ -68,6 +70,9 @@ const testStrategyMatrixSchema = join(root, "contracts/schemas/test-strategy-mat
 const testStrategyMatrixPath = join(root, "contracts/testing/ac-test-matrix-v1.json");
 const temporalOrchestrationSchema = join(root, "contracts/schemas/temporal-orchestration.schema.json");
 const temporalOrchestrationPath = join(root, "contracts/temporal/m0-orchestration-v1.json");
+const providerConnectionSchema = join(root, "contracts/schemas/provider-connection.schema.json");
+const providerRegistryManifestSchema = join(root, "contracts/schemas/provider-registry-manifest.schema.json");
+const providerRegistryManifestPath = join(root, "contracts/providers/m0-s9a-provider-registry-v1.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -76,11 +81,15 @@ const fixtureSpecs = [
   ["contracts/mcp/examples/forged-actor.invalid.json", invocationSchema, false],
   ["docs/technical/proofs/p0-06-stage-record.json", p0_06StageProjectionSchema, true],
   ["contracts/policy/core-policy-v1.json", corePolicyManifestSchema, true],
+  ["contracts/policy/core-policy-v2.json", corePolicyManifestV2Schema, true],
   ["contracts/observability/m0-s5-telemetry-v1.json", telemetryManifestSchema, true],
   ["contracts/observability/obs-bind-001-local-v1.json", observabilityBindingSchema, true],
   ["contracts/testing/ac-test-matrix-v1.json", testStrategyMatrixSchema, true],
   ["contracts/temporal/m0-orchestration-v1.json", temporalOrchestrationSchema, true],
   ["contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json", observabilityBindingSchema, false],
+  ["contracts/schemas/semantic-fixtures/provider-connection-active.valid.json", providerConnectionSchema, true],
+  ["contracts/schemas/semantic-fixtures/provider-connection-active-null.invalid.json", providerConnectionSchema, false],
+  ["contracts/schemas/semantic-fixtures/provider-connection-revoked-next.invalid.json", providerConnectionSchema, false],
   ["contracts/schemas/semantic-fixtures/operation-event-v2-tracestate.invalid.json", operationEventV2Schema, false],
   ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
   ["contracts/schemas/semantic-fixtures/operation-terminal-null.invalid.json", operationSchema, false],
@@ -109,6 +118,10 @@ const fixtureSpecs = [
   ["contracts/schemas/semantic-fixtures/policy-decision-allow-reason.invalid.json", policyDecisionSchema, false],
 ];
 
+fixtureSpecs.push(
+  ["contracts/providers/m0-s9a-provider-registry-v1.json", providerRegistryManifestSchema, true],
+);
+
 for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".json").sort()) {
   const fixtureName = relative(root, fixture);
   const match = fixtureName.match(/\/([^/]+)\.(valid|invalid)\.json$/);
@@ -126,6 +139,18 @@ validateTestStrategyMatrixSemantics({
 });
 
 const corePolicyManifest = JSON.parse(readFileSync(corePolicyManifestPath, "utf8"));
+const corePolicyManifestV1Digest = createHash("sha256")
+  .update(readFileSync(corePolicyManifestPath))
+  .digest("hex");
+if (corePolicyManifestV1Digest !== "e0c4a03e27fd2b53b0109856c1599804865469ebebfc480244f4e76f7653cc52") {
+  throw new Error("contracts/policy/core-policy-v1.json changed instead of publishing a new version");
+}
+const corePolicyManifestV1SchemaDigest = createHash("sha256")
+  .update(readFileSync(corePolicyManifestSchema))
+  .digest("hex");
+if (corePolicyManifestV1SchemaDigest !== "bdc10bd52e9189a6d1994248bb791b07c5011eeb1c3ffc668ba44bf8d523f46f") {
+  throw new Error("contracts/schemas/core-policy-manifest.schema.json changed instead of publishing a new version");
+}
 const expectedCorePolicyDenyPrecedence = [
   "POLICY_CONTEXT_INVALID",
   "FEATURE_DISABLED",
@@ -239,6 +264,87 @@ if (
   throw new Error("CURVE.OPERATION.TRANSITION differs from the immutable trusted-service boundary");
 }
 
+const corePolicyManifestV2 = JSON.parse(readFileSync(corePolicyManifestV2Path, "utf8"));
+const corePolicyManifestV2Digest = createHash("sha256")
+  .update(readFileSync(corePolicyManifestV2Path))
+  .digest("hex");
+if (corePolicyManifestV2Digest !== "2895b63392236afa07e6f0572d6ddb1c91aa7f40d37282f250019d2829ed5787") {
+  throw new Error("contracts/policy/core-policy-v2.json changed without a reviewed successor");
+}
+const corePolicyManifestV2SchemaDigest = createHash("sha256")
+  .update(readFileSync(corePolicyManifestV2Schema))
+  .digest("hex");
+if (corePolicyManifestV2SchemaDigest !== "05e77c1f3db002cfc4d26c743d031c71661cf7106f8ac9c27b14a5aacaff38b9") {
+  throw new Error("contracts/schemas/core-policy-manifest-v2.schema.json changed without a reviewed successor");
+}
+const expectedTrustedRoleSources = [
+  {
+    role: "PLATFORM_ADMINISTRATOR",
+    actor_type: "HUMAN",
+    source: "PLANE_WORKSPACE_MEMBERSHIP",
+    plane_role: 20,
+    membership_active: true,
+    workspace_match: "REQUIRED",
+    caller_supplied_role: "REJECT",
+    allowed_actions: [
+      "CURVE.PROVIDER_CONNECTION.REGISTER",
+      "CURVE.PROVIDER_CONNECTION.ADMINISTER",
+    ],
+  },
+];
+if (
+  corePolicyManifestV2.policy_key !== corePolicyManifest.policy_key ||
+  corePolicyManifestV2.policy_version !== 2 ||
+  corePolicyManifestV2.supersedes.policy_version !== 1 ||
+  corePolicyManifestV2.supersedes.manifest_digest !== `sha256:${corePolicyManifestV1Digest}` ||
+  corePolicyManifestV2.default_effect !== corePolicyManifest.default_effect ||
+  corePolicyManifestV2.unknown_classification !== corePolicyManifest.unknown_classification ||
+  corePolicyManifestV2.allow_reason_code !== corePolicyManifest.allow_reason_code ||
+  JSON.stringify(corePolicyManifestV2.deny_precedence) !== JSON.stringify(corePolicyManifest.deny_precedence) ||
+  JSON.stringify(corePolicyManifestV2.trusted_role_sources) !== JSON.stringify(expectedTrustedRoleSources)
+) {
+  throw new Error("contracts/policy/core-policy-v2.json differs from the approved Option B policy boundary");
+}
+const v1ActionsByName = new Map(corePolicyManifest.actions.map((action) => [action.action, action]));
+const v2ActionsByName = new Map(corePolicyManifestV2.actions.map((action) => [action.action, action]));
+if (
+  v2ActionsByName.size !== corePolicyManifestV2.actions.length ||
+  v2ActionsByName.size !== v1ActionsByName.size + 1
+) {
+  throw new Error("contracts/policy/core-policy-v2.json must add exactly one unique action");
+}
+for (const [actionName, v1Action] of v1ActionsByName) {
+  if (JSON.stringify(v2ActionsByName.get(actionName)) !== JSON.stringify(v1Action)) {
+    throw new Error(`${actionName} changed between core policy v1 and v2`);
+  }
+}
+const expectedProviderRegistrationAction = {
+  action: "CURVE.PROVIDER_CONNECTION.REGISTER",
+  allowed_resource_types: ["WORKSPACE"],
+  allowed_actor_types: ["HUMAN"],
+  allowed_roles: ["PLATFORM_ADMINISTRATOR"],
+  allowed_classifications: ["INTERNAL"],
+  allowed_environments: ["LOCAL"],
+  object_acl: "NOT_APPLICABLE",
+  owner_satisfies_acl: false,
+  assignment: "NONE",
+  separation_of_duty: "NONE",
+  target_allowlist: "REQUIRED",
+  external_side_effect: false,
+  permitted_projection: ["NO_BODY"],
+};
+if (
+  JSON.stringify(v2ActionsByName.get(expectedProviderRegistrationAction.action)) !==
+  JSON.stringify(expectedProviderRegistrationAction)
+) {
+  throw new Error("CURVE.PROVIDER_CONNECTION.REGISTER differs from approved Option B");
+}
+for (const action of corePolicyManifestV2.actions) {
+  if (action.allowed_actor_types.includes("AGENT") || action.external_side_effect !== false) {
+    throw new Error(`${action.action} weakens the M0 principal or external-effect boundary`);
+  }
+}
+
 const telemetryManifest = JSON.parse(readFileSync(telemetryManifestPath, "utf8"));
 const telemetryManifestSchemaDocument = JSON.parse(readFileSync(telemetryManifestSchema, "utf8"));
 const telemetryManifestSchemaDigest = createHash("sha256")
@@ -284,6 +390,111 @@ if (
   observabilityBinding.promotion.staging_authority !== "SEPARATE_MATERIAL_DECISION_REQUIRED"
 ) {
   throw new Error("OBS-BIND-001 differs from the approved local-only authority boundary");
+}
+const providerRegistryManifest = JSON.parse(readFileSync(providerRegistryManifestPath, "utf8"));
+const expectedProviderStates = [
+  "PENDING_VALIDATION",
+  "ACTIVE",
+  "DEGRADED",
+  "DISABLED",
+  "REVOKED",
+];
+const expectedProviderTransitions = [
+  ["PENDING_VALIDATION", "VALIDATION_SUCCEEDED", "ACTIVE"],
+  ["PENDING_VALIDATION", "VALIDATION_FAILED", "PENDING_VALIDATION"],
+  ["ACTIVE", "RECONCILIATION_SUCCEEDED", "ACTIVE"],
+  ["ACTIVE", "RECONCILIATION_FAILED", "DEGRADED"],
+  ["DEGRADED", "RECONCILIATION_SUCCEEDED", "ACTIVE"],
+  ["DEGRADED", "RECONCILIATION_FAILED", "DEGRADED"],
+  ["PENDING_VALIDATION", "DISABLE", "DISABLED"],
+  ["ACTIVE", "DISABLE", "DISABLED"],
+  ["DEGRADED", "DISABLE", "DISABLED"],
+  ["DISABLED", "ENABLE", "PENDING_VALIDATION"],
+  ["PENDING_VALIDATION", "REVOKE", "REVOKED"],
+  ["ACTIVE", "REVOKE", "REVOKED"],
+  ["DEGRADED", "REVOKE", "REVOKED"],
+  ["DISABLED", "REVOKE", "REVOKED"],
+];
+const actualProviderTransitions = providerRegistryManifest.transitions.map((transition) => [
+  transition.from,
+  transition.command,
+  transition.to,
+]);
+const expectedProviderEvents = [
+  "curve.provider_connection.registered",
+  "curve.provider_connection.validated",
+  "curve.provider_connection.degraded",
+  "curve.provider_connection.disabled",
+  "curve.provider_connection.enabled",
+  "curve.provider_connection.revoked",
+  "curve.provider_reconciliation.completed",
+  "curve.provider_reconciliation.failed",
+];
+const expectedProviderRegistrationAuthorization = {
+  policy_key: "CURVE_CORE_POLICY",
+  policy_version: 2,
+  action: "CURVE.PROVIDER_CONNECTION.REGISTER",
+  resource_type: "WORKSPACE",
+  resource_version: 1,
+  trusted_role: "PLATFORM_ADMINISTRATOR",
+  trusted_role_source: "PLANE_WORKSPACE_MEMBERSHIP",
+  trusted_role_allowed_actions: [
+    "CURVE.PROVIDER_CONNECTION.REGISTER",
+    "CURVE.PROVIDER_CONNECTION.ADMINISTER",
+  ],
+  plane_role: 20,
+  membership_active: true,
+  workspace_match: "REQUIRED",
+  caller_supplied_role: "REJECT",
+  target_id: "curve.fake-local@1.0.0",
+  target_allowlist: "REQUIRED",
+  configuration_ref: {
+    resource_type: "PROVIDER_REGISTRY_MANIFEST",
+    resource_id: "M0-S9A",
+    resource_version: 1,
+  },
+};
+if (
+  providerRegistryManifest.authority.environment !== "LOCAL" ||
+  providerRegistryManifest.authority.data_classification !== "INTERNAL" ||
+  Object.entries(providerRegistryManifest.authority)
+    .filter(([key]) => !["environment", "data_classification"].includes(key))
+    .some(([, value]) => value !== "DISABLED") ||
+  providerRegistryManifest.provider.provider_type !== "FAKE_LOCAL" ||
+  providerRegistryManifest.provider.adapter_key !== "curve.fake-local" ||
+  JSON.stringify(providerRegistryManifest.registration_authorization) !==
+    JSON.stringify(expectedProviderRegistrationAuthorization) ||
+  JSON.stringify(providerRegistryManifest.provider.enabled_capability_risks) !== JSON.stringify(["READ"]) ||
+  JSON.stringify(providerRegistryManifest.provider.allowed_classifications) !== JSON.stringify(["INTERNAL"]) ||
+  JSON.stringify(providerRegistryManifest.connection_states) !== JSON.stringify(expectedProviderStates) ||
+  JSON.stringify(actualProviderTransitions) !== JSON.stringify(expectedProviderTransitions) ||
+  providerRegistryManifest.adapter_contract.maximum_attempts !== 3 ||
+  providerRegistryManifest.adapter_contract.deadline_seconds !== 15 ||
+  providerRegistryManifest.adapter_contract.deadline_scope !== "TOTAL_RECONCILIATION" ||
+  JSON.stringify(providerRegistryManifest.adapter_contract.retryable_error_codes) !==
+    JSON.stringify(["RATE_LIMIT", "TRANSIENT"]) ||
+  providerRegistryManifest.adapter_contract.ambiguous_mutation_rule !== "RECONCILE_BEFORE_RETRY" ||
+  providerRegistryManifest.reconciliation.trigger !== "EXPLICIT_APPLICATION_SERVICE_CALL" ||
+  providerRegistryManifest.reconciliation.same_command_replay !== "RETURN_ORIGINAL_RESOURCE_REF" ||
+  providerRegistryManifest.reconciliation.changed_digest_replay !== "REJECT_CONFLICT" ||
+  providerRegistryManifest.reconciliation.workspace_mismatch !== "NOT_FOUND" ||
+  providerRegistryManifest.reconciliation.ambiguous_observation !== "RECORD_CONFLICT_WITHOUT_OVERWRITE" ||
+  providerRegistryManifest.reconciliation.advisory_interval_seconds !== 900 ||
+  providerRegistryManifest.delivery.command_execution !== "SYNCHRONOUS" ||
+  providerRegistryManifest.delivery.destination !== "CURVE_PROVIDER_LOCAL_V1" ||
+  providerRegistryManifest.delivery.consumer_id !== "curve-provider-local-v1" ||
+  JSON.stringify(providerRegistryManifest.delivery.drain_triggers) !==
+    JSON.stringify(["POST_COMMIT", "NEXT_PROVIDER_COMMAND"]) ||
+  JSON.stringify(providerRegistryManifest.delivery.inbox_deduplication_key) !==
+    JSON.stringify(["workspace_id", "consumer_id", "event_id"]) ||
+  providerRegistryManifest.delivery.maximum_batch !== 10 ||
+  providerRegistryManifest.delivery.claim_lease_seconds !== 30 ||
+  providerRegistryManifest.delivery.retry_delay_seconds !== 5 ||
+  providerRegistryManifest.delivery.maximum_attempts !== 3 ||
+  providerRegistryManifest.delivery.exhausted_state !== "DEAD_LETTER" ||
+  JSON.stringify(providerRegistryManifest.required_events) !== JSON.stringify(expectedProviderEvents)
+) {
+  throw new Error("M0-S9A provider-registry manifest differs from the reviewed local-only boundary");
 }
 const expectedTelemetryMetrics = [
   "curve.activity.execution",

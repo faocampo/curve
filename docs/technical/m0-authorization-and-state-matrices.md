@@ -5,11 +5,11 @@
 | Field | Value |
 | --- | --- |
 | Status | `IMPLEMENTED_FOR_M0`; provider-specific extensions remain gated by their consuming decisions |
-| Version | 1.2 |
+| Version | 1.3 |
 | Last updated | 2026-08-20 |
 | Owner and reviewer | Federico Ocampo, CTO at X3M (`faocampo`) |
 | Product source | [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (product requirements, risk roles, accepted local Temporal proof, and acceptance scenarios) |
-| Machine contracts | [Core policy manifest](../../contracts/policy/core-policy-v1.json) (immutable action allowlist and deny precedence), [policy evaluation schema](../../contracts/schemas/policy-evaluation.schema.json) (safe evaluator input), and [policy decision schema](../../contracts/schemas/policy-decision.schema.json) (immutable decision output) |
+| Machine contracts | [Core policy v1 manifest](../../contracts/policy/core-policy-v1.json) (immutable original action allowlist and deny precedence), [core policy v2 manifest](../../contracts/policy/core-policy-v2.json) (Option B role source and provider-registration action), [policy evaluation schema](../../contracts/schemas/policy-evaluation.schema.json) (safe evaluator input), and [policy decision schema](../../contracts/schemas/policy-decision.schema.json) (immutable decision output) |
 
 ## Authorization boundary
 
@@ -69,7 +69,7 @@ owner, assignment, classification, or policy internals.
 | `PRODUCT_APPROVER` | Current versioned Gate 1 assignment | May decide PRD gate only when exact assignment, access, and separation pass | Plane admin/member role |
 | `TECHNICAL_APPROVER` | Current versioned Gate 2 assignment or later policy-limited finding assignment | May decide Plan gate and permitted non-security findings | Plane admin/member role |
 | `CODE_APPROVER` | Current versioned Gate 3 assignment | May decide Code Readiness for the exact governed subject | Repository membership alone |
-| `PLATFORM_ADMINISTRATOR` | Versioned workspace/platform assignment implemented by its owning package | May administer approved provider configuration subject to exact target policy | Plane admin role by default |
+| `PLATFORM_ADMINISTRATOR` | For M0-S9A provider actions only: authenticated human with live active Plane workspace role `20` in the exact target workspace | May register the static local fake provider and administer its workspace-scoped connection subject to exact target policy | Caller input, Plane roles `15`/`5`, inactive membership, membership in another workspace, or evaluation of a non-provider action |
 | `TRUSTED_SERVICE` | Curve service identity plus exact unexpired service authorization | May execute only listed controller/compensation actions | Process location, hostname, or caller-supplied claim |
 
 Only a `HUMAN` actor may hold an approver role. `SERVICE`, `SYSTEM`, and `AGENT`
@@ -85,7 +85,7 @@ packages persist their own assignments.
 | Policy recorder | Required process configuration `CURVE_POLICY_RECORDER_ACTOR_ID`; converted to trusted `SERVICE` ActorRef outside caller input |
 | Evaluation time | One aware UTC time from the trusted request/controller adapter; the evaluator reads no clock |
 | Feature state | Existing global Curve enablement plus exact workspace-slug allowlist |
-| Human/membership | Plane authentication and live active membership for exact workspace; Plane 20/15/5 remains membership metadata and grants only `WORKSPACE_MEMBER` |
+| Human/membership | Plane authentication and live active membership for exact workspace. All active roles yield `WORKSPACE_MEMBER`; for M0-S9A provider registration/administration actions only, role `20` additionally yields `PLATFORM_ADMINISTRATOR` under core policy v2. |
 | Workspace metadata | Exact Plane Workspace; owner from `owner_id`; M0 classification `INTERNAL` |
 | Operation metadata | `(workspace_id, operation_id)` only; owner from validated `created_by`; version from `aggregate_version`; M0 classification `INTERNAL` |
 | Other resource types | No M0 runtime resolver; manifest entries remain inactive permission ceilings until their owning package supplies a reviewed resolver |
@@ -97,8 +97,11 @@ or a non-`INTERNAL` M0 resource requires a later reviewed contract and migration
 ## Core action matrix
 
 The exact machine-readable values live in the
-[core policy manifest](../../contracts/policy/core-policy-v1.json) (immutable v1
-action allowlist and deny precedence). This table is the human-readable view.
+[core policy v1 manifest](../../contracts/policy/core-policy-v1.json) (immutable
+original action allowlist and deny precedence) and the
+[core policy v2 manifest](../../contracts/policy/core-policy-v2.json) (Option B
+trusted-role source and one additive registration action). This table is the
+human-readable view.
 
 | Action | Resource type | Actor/role floor | Classification/environment | ACL/assignment/target | Projection or effect |
 | --- | --- | --- | --- | --- | --- |
@@ -107,6 +110,7 @@ action allowlist and deny precedence). This table is the human-readable view.
 | `CURVE.OPERATION.CANCEL` | `OPERATION` | Same role floor as read | Any known class; enabled environment | ACL required; operation must separately be cancellable/current | No protected body |
 | `CURVE.FOUNDATION_PROBE.START` | `WORKSPACE` | Human active workspace member or assigned/admin role | `INTERNAL`; `LOCAL` only | ACL/assignment/target N/A | Safe Operation metadata |
 | `CURVE.OPERATION.TRANSITION` | `OPERATION` | Exact service with only `TRUSTED_SERVICE` | Any known class; enabled environment | ACL/assignment/target N/A; exact versioned service authorization | No body; domain transition/version guard remains authoritative |
+| `CURVE.PROVIDER_CONNECTION.REGISTER` | `WORKSPACE` | Authenticated human with active Plane role `20` in exact workspace, derived as `PLATFORM_ADMINISTRATOR` | `INTERNAL`; `LOCAL` only | ACL/assignment N/A; required exact static target `curve.fake-local@1.0.0` | No body; provider row is created only after allow |
 | `CURVE.PROVIDER_CONNECTION.ADMINISTER` | `PROVIDER_CONNECTION` | Human `PLATFORM_ADMINISTRATOR` | Any known class; enabled environment | Optional narrowing ACL; exact non-empty target allowlist | No body; provider adapter remains unimplemented |
 | `CURVE.GATE.DECIDE.PRD` | `ARTIFACT_VERSION` | Assigned human `PRODUCT_APPROVER` | Any known class; enabled environment | ACL, exact assignment, and risk separation required | No body |
 | `CURVE.GATE.DECIDE.PLAN` | `EXECUTION_PLAN` | Assigned human `TECHNICAL_APPROVER` | Any known class; enabled environment | ACL, exact assignment, and risk separation required | No body |
