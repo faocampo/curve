@@ -4,13 +4,15 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.4 |
-| Date | 2026-08-25 |
+| Status | `READY / AWAITING_EXPLICIT_DISPATCH` |
+| Version | 1.5 |
+| Date | 2026-08-26 |
 | Work package | M0-S9A (provider-neutral registry and reconciliation foundation) |
 | Owner and reviewer | Federico Ocampo (`faocampo`) |
 | Applies to | Curve-owned PostgreSQL tables in the public Plane fork |
 | Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) |
+| Published Curve contract | Curve PR #29 approved head `075985a01dd2cac30423d7bc239407ef191da7a2`, squash commit `7ea91188525c63d699e551910834f4602536f082` |
+| Remaining gate | Human-approved dispatch binding the exact merged readiness revision, canonical context digest, and still-current Plane base |
 
 ## Purpose and boundary
 
