@@ -4,11 +4,12 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `APPROVED_OPTION_B / PENDING_EXACT_CONTRACT_PUBLICATION` |
-| Date | 2026-08-25 |
+| Status | `PUBLISHED` |
+| Date | 2026-08-26 |
 | Decision owner | Federico Ocampo, X3M CTO |
 | Decision | Plane workspace administrator as Curve platform administrator for the target workspace |
 | Applies to | M0-S9A (provider-neutral registry and reconciliation foundation), local-only registration |
+| Publication | Curve PR #29 approved head `075985a01dd2cac30423d7bc239407ef191da7a2`, squash commit `7ea91188525c63d699e551910834f4602536f082` |
 
 ## Decision
 
@@ -79,6 +80,6 @@ unchanged for historical decisions.
 - Option C introduced a dedicated Curve platform-administrator assignment
   aggregate and administration lifecycle.
 
-Federico Ocampo approved Option B for simplification on 2026-08-25. Status
-becomes `PUBLISHED` only when the exact contract head is merged into Curve
-`main`; implementation authorization remains a separate gate.
+Federico Ocampo approved Option B for simplification on 2026-08-25. Curve PR
+number 29 published the exact contract on 2026-08-26. Implementation
+authorization remains a separate gate.

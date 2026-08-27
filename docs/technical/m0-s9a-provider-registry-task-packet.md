@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
-| Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 1.7 |
-| Date | 2026-08-25 |
+| Status | `READY / AWAITING_EXPLICIT_DISPATCH` |
+| Version | 1.8 |
+| Date | 2026-08-26 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Curve review base | `main` at `d97cc053a5d0eac7bc2aa9bebe263a245c95894f`, containing accepted P0-05 (test strategy and audit closure) and M0-S6A (durable parent/child Temporal orchestration contract) |
+| Published Curve contract baseline | `main` at `7ea91188525c63d699e551910834f4602536f082`, containing accepted P0-05 (test strategy and audit closure), M0-S6A (durable parent/child Temporal orchestration contract), and the approved M0-S9A contract publication |
 | Target branch | `preview` |
 | Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) and reserving provider migration `0005` after policy migration `0004` |
 | Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
@@ -20,17 +20,20 @@
 | Risk | `STANDARD`; local synthetic provider metadata only |
 | Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
 
-Version 1.7 repins the package after merged Plane PR #10 (M0-S6A durable
-parent/child Temporal orchestration implementation) and closes the local
-provider-event delivery decision. Provider commands are synchronous; committed
-provider events use destination `CURVE_PROVIDER_LOCAL_V1`, consumer
-`curve-provider-local-v1`, and explicit post-commit/next-command drains. It also
-records approved Option B: active Plane workspace role `20` in the exact target
-workspace is the trusted source of Curve `PLATFORM_ADMINISTRATOR`, and a new
-registration action targets the existing workspace. The recorded Curve and
-Plane bases are exact review inputs; the dispatcher
-fetches and re-verifies both remote heads before any Plane mutation and stops if
-either has advanced.
+Version 1.8 records publication of the approved M0-S9A contract through Curve
+PR #29 at squash commit `7ea91188525c63d699e551910834f4602536f082`.
+Provider commands remain synchronous; committed provider events use destination
+`CURVE_PROVIDER_LOCAL_V1`, consumer `curve-provider-local-v1`, and explicit
+post-commit/next-command drains. Approved Option B derives
+`PLATFORM_ADMINISTRATOR` from active Plane workspace role `20` in the exact
+target workspace only for provider registration/administration actions.
+
+All product, architecture, security, data, licensing, infrastructure, scope,
+test, budget, and rollback inputs required by this package are resolved. The
+package is ready for implementation but grants no execution authority. The
+dispatcher pins the exact merged readiness revision and canonical M0-S9A
+context digest in a separate human-approved authorization, fetches both remotes,
+and stops before Plane mutation if either base has advanced.
 
 ## Outcome
 
@@ -94,10 +97,10 @@ Implementation remains blocked until all rows are satisfied:
 | Gate | Current state | Required evidence |
 | --- | --- | --- |
 | P0-05 (test strategy and audit closure) | Satisfied | Curve `main` `fdae85b33a235cd494dd36565698b2b5033a3389` establishes exact AC-01 through AC-60 ownership and suite commands |
-| M0-S9A contract publication | This review draft | Exact Curve merge SHA and context-pack digest |
+| M0-S9A contract publication | Satisfied | Curve PR #29 approved head `075985a01dd2cac30423d7bc239407ef191da7a2` squash-merged as `7ea91188525c63d699e551910834f4602536f082`; the dispatch authorization pins the final merged readiness revision and regenerated context digest |
 | Plane base | Satisfied | Plane `preview` `ad5772c0565c934e64ea90f892be1374819979be` contains merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation); dispatch stops if `preview` advances before implementation authorization |
 | Owner/reviewer | Satisfied | Federico Ocampo |
-| Material decisions | `APPROVED_OPTION_B / PENDING_PUBLICATION` | The local outbox/inbox delivery model and Option B registration authority are approved. Publication requires the exact reviewed Curve head to merge. D-007 (MCP trust model and Orca access profile) remains MCP-specific. |
+| Material decisions | `PUBLISHED / SATISFIED` | The local outbox/inbox delivery model and Option B registration authority are published. D-007 (MCP trust model and Orca access profile) remains MCP-specific and is not a dependency. |
 | Exact-head implementation authorization | Pending | Federico Ocampo approves the final merged contract revision and dispatch base |
 
 No coding agent mutates Plane while any row is pending.

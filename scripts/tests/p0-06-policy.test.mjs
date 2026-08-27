@@ -253,6 +253,28 @@ test("M0-S9A context pins the local provider registry, persistence, fixtures, an
   assert.deepEqual(contextPathsFor("M0-S9A"), M0_S9A_CONTEXT_PATHS);
 });
 
+test("M0-S9A is publication-complete and still requires explicit dispatch", () => {
+  const taskPacket = readFileSync(
+    new URL("../../docs/technical/m0-s9a-provider-registry-task-packet.md", import.meta.url),
+    "utf8",
+  );
+  const relationalContract = readFileSync(
+    new URL("../../contracts/database/m0-s9a-provider-registry-contract.md", import.meta.url),
+    "utf8",
+  );
+  const authorizationDecision = readFileSync(
+    new URL("../../docs/technical/m0-s9a-registration-authorization-decision.md", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(taskPacket, /\| Status \| `READY \/ AWAITING_EXPLICIT_DISPATCH` \|/);
+  assert.match(taskPacket, /\| Material decisions \| `PUBLISHED \/ SATISFIED` \|/);
+  assert.match(taskPacket, /\| Exact-head implementation authorization \| Pending \|/);
+  assert.doesNotMatch(taskPacket, /REVIEW_DRAFT|PENDING_PUBLICATION/);
+  assert.match(relationalContract, /\| Status \| `READY \/ AWAITING_EXPLICIT_DISPATCH` \|/);
+  assert.match(authorizationDecision, /\| Status \| `PUBLISHED` \|/);
+});
+
 test("the live P0-06 projection is terminal and points to M0-S3", () => {
   assert.equal(STAGE_RECORD.schema_version, "curve.proof-stage-projection/v3");
   assert.equal(STAGE_RECORD.current_stage, "P0-06_SUPERSEDED");
