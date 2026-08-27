@@ -275,6 +275,44 @@ test("M0-S9A is publication-complete and still requires explicit dispatch", () =
   assert.match(authorizationDecision, /\| Status \| `PUBLISHED` \|/);
 });
 
+test("M0-06 closes locally without absorbing downstream provider acceptance", () => {
+  const readiness = readFileSync(
+    new URL("../../docs/technical/m0-readiness-board.md", import.meta.url),
+    "utf8",
+  );
+  const developmentPlan = readFileSync(
+    new URL("../../docs/technical/development-plan.md", import.meta.url),
+    "utf8",
+  );
+  const traceability = readFileSync(
+    new URL("../../docs/technical/m0-traceability.md", import.meta.url),
+    "utf8",
+  );
+  const evidence = readFileSync(
+    new URL("../../docs/technical/m0-s6a-implementation-evidence.md", import.meta.url),
+    "utf8",
+  );
+
+  const row = (document, identifier) => document
+    .split(/\r?\n/)
+    .find((line) => line.startsWith(`| ${identifier} `));
+
+  assert.match(row(readiness, "M0-06"), /\| DONE_LOCAL \|/);
+  assert.match(row(developmentPlan, "M0-06"), /`DONE_LOCAL`/);
+  assert.match(row(traceability, "M0-06"), /m0-s6a-implementation-evidence\.md/);
+  assert.match(evidence, /satisfies the defined\s+local M0-06/);
+  assert.match(evidence, /No M0-S6B provider-backed child is required\./);
+
+  assert.match(row(developmentPlan, "M4-04"), /AC-20-AC-22/);
+  assert.match(row(developmentPlan, "M4-05"), /AC-17-AC-21/);
+  assert.match(row(developmentPlan, "M6-05"), /AC-19/);
+  assert.match(row(developmentPlan, "R1-03"), /AC-58/);
+  assert.doesNotMatch(
+    `${row(readiness, "M0-06")}\n${row(developmentPlan, "M0-06")}`,
+    /later M0-06|remaining sibling scope|provider-backed .* M0-06/i,
+  );
+});
+
 test("the live P0-06 projection is terminal and points to M0-S3", () => {
   assert.equal(STAGE_RECORD.schema_version, "curve.proof-stage-projection/v3");
   assert.equal(STAGE_RECORD.current_stage, "P0-06_SUPERSEDED");
