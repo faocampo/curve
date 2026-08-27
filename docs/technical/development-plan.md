@@ -5,8 +5,8 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 1.10 |
-| Last updated | 2026-08-25 |
+| Version | 1.11 |
+| Last updated | 2026-08-27 |
 | Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, lifecycle, security invariants, acceptance criteria, and accepted D-003 local implementation) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
@@ -150,7 +150,7 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-03 | M | Core authorization/policy kernel for roles, object ACLs, risk tier, assignments, separation of duties, classification, trusted evaluation time, versioned contexts, and deny-by-default generic allowlists | M0-01 | FR-043, NFR-009-NFR-012, AC-09, AC-35, AC-52 | `DONE`: Plane PR #4 merged approved head `a807dd7...` as `922dd6d...`. [M0-03 implementation evidence](m0-03-implementation-evidence.md) (exact context, implementation tree, tests, security acceptance, and rollback) records reversible migration, 113 Curve tests, 629 Plane tests, and equivalent approved/merge trees. Provider-specific policy follows its decided ADR. |
 | M0-04 | M | Workspace-scoped object storage, AccessEnvelope, digest service, retention hooks, upload/download intents, and cryptographic-erasure workflow | M0-02, M0-03, D-009 | FR-004, FR-021, NFR-010-NFR-011, NFR-018, NFR-020, AC-53, AC-56 | Classification, ACL, integrity, size, tombstone, erasure, and backup tests. |
 | M0-05 | M | Transactional outbox, inbox, idempotency store, Operation resource, dead-letter state, and replay-safe relay | M0-02 | FR-021, FR-023, FR-044, NFR-004-NFR-005, AC-26, AC-33 | Duplicate/lost/out-of-order test suite with no duplicate effects. |
-| M0-06 | L | Temporal parent-workflow skeleton, version markers, child-attempt workflow, signals, timers, cancellation, continue-as-new, and replay corpus | M0-05, M0-03, D-003 | FR-015, FR-022, NFR-004, AC-17-AC-21, AC-58 | M0-S3 (local Temporal round-trip implementation packet) is `DONE` at Plane merge `d99342f...`. M0-S6A (durable parent/child Temporal orchestration) is accepted and merged through Plane PR #10 (M0-S6A durable orchestration implementation) at `ad5772c...`, with deterministic waves, typed/idempotent reference-only signals, pause/resume, cancellation propagation, restart recovery, Continue-As-New, and four replay histories. Provider-backed attempt/reconciliation integration remains later M0-06/M0-09 scope. |
+| M0-06 | L | Temporal parent-workflow skeleton, version markers, child-attempt workflow, signals, timers, cancellation, continue-as-new, and replay corpus | M0-05, M0-03, D-003 | FR-015, FR-022, NFR-004, AC-17-AC-21, AC-58 | `DONE_LOCAL`: M0-S3 (local Temporal round-trip implementation packet) is accepted at Plane merge `d99342f...`; M0-S6A (durable parent/child Temporal orchestration) is accepted at Plane merge `ad5772c...`. [M0-S6A implementation evidence](m0-s6a-implementation-evidence.md) (exact contract, Plane head/merge, CI, runtime proof, acceptance boundary, and rollback) binds deterministic waves, typed/idempotent reference-only signals, pause/resume, cancellation settlement, restart recovery, Continue-As-New, and four replay histories. This closes the defined model-free local skeleton. Provider-backed dispatch remains M4-05 (slice dispatch workflow), runner revocation/cleanup remains M4-04 (trusted runner lifecycle), budget exhaustion remains M6-05 (budget administration and capacity), and full recovery qualification remains R1-03 (disaster-recovery exercise). |
 | M0-07 | M | Public API conventions, Problem Details, ETag/If-Match, idempotency headers, cursor pagination, SSE resume, and OpenAPI generation | M0-02, M0-03, M0-05 | FR-023, NFR-002-NFR-005, NFR-013, AC-35 | API contract tests and generated client fixture. |
 | M0-08 | M | Audit and observability foundation with safe correlation, classification-aware redaction, metrics, traces, alerts, and operational dashboards | M0-03-M0-07; OBS-BIND-001 for local export/provisioning | FR-021, FR-024, NFR-001-NFR-014, AC-34, AC-36, AC-53 | `DONE_LOCAL`: M0-S5A is accepted in [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (telemetry kernel, dual-mode regression, security, and rollback). M0-S5B merged at Plane `1b06153...`; Curve PR #25 merged its accepted evidence at `590a52e...`. [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (exact context, CI, merged trees, live telemetry, dashboards, six alerts, path recovery, redaction, disablement, regression, cleanup, and rollback) binds completion. Staging and production observability remain separately gated. |
 | M0-09 | M | Provider integration foundation, decomposed into M0-S9A local substrate and decision-bound M0-S9B transport/activation; dedicated Model Gateway child remains to be defined | M0-03, M0-05, M0-07 | FR-003, FR-023, FR-044, NFR-005, NFR-008, NFR-013, AC-33, AC-57 | S9A/S9B complete provider registration and transport; every real adapter passes applicable policy/conformance; a separate Model Gateway child bound to the model catalog/data-policy and task-routing decisions proves AC-57. |
@@ -161,8 +161,9 @@ The current Plane implementation base is `preview`
 `ad5772c0565c934e64ea90f892be1374819979be`, which includes accepted M0-S6A
 (durable parent/child Temporal orchestration) from Plane PR #10 and descends
 from M0-S5B merge `1b06153f6f49848f208808f4f09385a581a55d26`;
-M0-S1, M0-S2, M0-03, M0-S3, M0-S4, M0-S5A, M0-S5B, and M0-S6A are complete for
-their approved local scopes.
+M0-S1, M0-S2, M0-03, M0-S3, M0-S4, M0-S5A, M0-S5B, M0-S6A, and the defined
+M0-06 (Temporal workflow-skeleton work package) are complete for their approved
+local scopes.
 M0-S2 satisfies M0-02 (core aggregate persistence) and M0-05 (transactional
 delivery kernel) through [M0-S2 implementation evidence](m0-s2-implementation-evidence.md)
 (exact contract, context, implementation, validation, and merge binding).

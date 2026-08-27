@@ -13,7 +13,9 @@ minimal Curve-first UI implementation packet), and M0-S5A (telemetry kernel
 and static observability assets) are accepted and merged. OBS-BIND-001 (local
 Docker OTLP, Prometheus, Grafana, and path-health binding) is decided for local
 development. M0-S5B (local observability integration proof) is accepted and
-merged, completing M0-08 for `LOCAL_ONLY`. M0-S9A (provider-neutral registry
+merged, completing M0-08 for `LOCAL_ONLY`. M0-S6A (durable parent/child
+Temporal orchestration) is accepted and merged, completing the defined M0-06
+(Temporal workflow-skeleton work package) for `LOCAL_ONLY`. M0-S9A (provider-neutral registry
 and reconciliation foundation) now has an approved synchronous-command and
 explicit local outbox/inbox delivery model and published Option B registration
 authority. Its contract is ready and awaits a separate explicit Plane
@@ -46,6 +48,7 @@ identifiers are:
 - M0-S5 (local audit and observability implementation packet).
 - M0-S5A (telemetry kernel and static observability assets).
 - M0-S5B (X3M local observability integration proof).
+- M0-S6A (durable parent/child Temporal orchestration).
 - M0-S9A (provider-neutral registry and reconciliation foundation).
 - M0-S9B (external provider transport and administration).
 - M0-03 (core authorization and policy kernel work package).
@@ -88,6 +91,7 @@ identifiers are:
 | [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (exact context, Curve/Plane approvals and merges, API/SSE/UI tests, security/UX acceptance, and rollback) | Post-merge acceptance record for the Operation API, resumable SSE, and Curve-first Foundation experience | `ACCEPTED_AND_MERGED`; Plane `preview` is `e762fbb...`; M0-07 is complete and M0-S5A consumes this evidence |
 | [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (exact context, Curve/Plane approvals and merges, dual-mode full regression, telemetry security controls, and rollback) | Post-merge acceptance record for the local telemetry kernel and static observability assets | `ACCEPTED_AND_MERGED`; Plane `preview` is `3992076...`; M0-08 remains open for M0-S5B |
 | [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (exact context, CI, approved/merged trees, live OTLP, dashboard, alerts, redaction, disablement, cleanup, and rollback) | Post-merge acceptance record for the local observability platform binding | `ACCEPTED_AND_MERGED`; Plane `preview` is `1b06153...`; Curve evidence is `590a52e...`; M0-08 is `DONE_LOCAL` |
+| [M0-S6A implementation evidence](m0-s6a-implementation-evidence.md) (exact contract, Plane head/merge, CI, runtime proof, acceptance boundary, and rollback) | Post-merge acceptance record for the model-free durable parent/child Temporal skeleton | `ACCEPTED_AND_MERGED / LOCAL_ONLY`; Plane `preview` is `ad5772c...`; M0-06 is `DONE_LOCAL` |
 | [M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md) (decision persistence, evaluation order, transactions, migration, and rollback) | Physical append-only policy-decision and audit-binding contract | Implemented in Plane merge `922dd6d...`; provider-specific extensions require their consuming decisions |
 | [Core policy manifest](../../contracts/policy/core-policy-v1.json) (immutable v1 action allowlist and deny precedence) | Provider-neutral roles, classifications, environments, ACL/assignment requirements, target policy, and safe projections | Implemented immutable v1 policy ceiling; provider-specific policy remains gated |
 | [Core policy v2 manifest](../../contracts/policy/core-policy-v2.json) (Option B role source and additive provider-registration action) | Plane workspace role `20` derives local M0-S9A `PLATFORM_ADMINISTRATOR`; registration evaluates existing workspace and exact fake-adapter target | Published by Curve PR #29; v1 remains byte-for-byte unchanged |
