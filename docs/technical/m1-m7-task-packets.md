@@ -5,10 +5,11 @@
 | Field | Value |
 | --- | --- |
 | Status | Deterministic materialization catalog; every package has an exact dependency/trace record and becomes `READY` only after its listed material gates, contracts, base SHA, commands, and context digest are satisfied |
-| Version | 1.1 |
-| Date | 2026-08-18 |
+| Version | 1.2 |
+| Date | 2026-08-27 |
 | Product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) (product requirements, lifecycle, security invariants, and acceptance criteria) |
 | Delivery baseline | [Development plan](development-plan.md) (milestones, package dependencies, product trace, and completion evidence) |
+| Decision readiness | [Later-milestone decision-readiness index](later-milestone-decision-readiness-index.md) (D-002 (Onyx delegation) through D-016 (KPI and rollout guardrails) owner inputs, machine contracts, acceptance evidence, and fail-closed milestone effects) |
 | Default owner and reviewer | Federico Ocampo (`faocampo`) until explicitly reassigned |
 | Implementation repository | `git@github.com:faocampo/plane.git`, except an approved repository-specific delivery slice |
 
@@ -182,7 +183,7 @@ a value that the dispatcher may invent.
 | M2-02 (Delivery identity) | M1-01 (Initiative), M1-06 (PRD versions), M1-07 (Gate 1), M2-01 (Roadmap domain) | FR-026, FR-032, FR-038; AC-02, AC-43-AC-44, AC-51 (roadmap-backed initiative linkage and one delivery identity) |
 | M2-03 (Plane projection) | M0-09 (provider registry), M2-01 (Roadmap domain), D-001 (Plane foundation, licensing, fork, and upgrade decision) | FR-028, FR-037; AC-38, AC-42 (one-way work-item binding and execution-completion formula) |
 | M2-04 (Portfolio UI) | M2-01 (Roadmap domain), M2-02 (Delivery identity), M2-03 (Plane projection), P0-01 (Plane foundation inventory), approved Curve Experience Blueprint (screen-flow and usability gate) | FR-030-FR-031; NFR-015; AC-37-AC-42 (roadmap/Gantt, dependency, schedule impact, confidence, and critical path) |
-| M2-05 (Roadmap snapshot) | M0-04 (protected storage), M2-01-M2-04 (Roadmap domain through Portfolio UI), D-009 (retention and erasure decision) for protected exports | FR-029; NFR-018; AC-39-AC-40 (immutable copied snapshot and reproducible exports) |
+| M2-05 (Roadmap snapshot) | M0-04 (protected storage), M2-01 (Roadmap domain) through M2-04 (Portfolio UI), D-009 (retention and erasure decision) for protected exports | FR-029; NFR-018; AC-39-AC-40 (immutable copied snapshot and reproducible exports) |
 | M2-06 (Import) | M2-01 (Roadmap domain), D-013 (no-migration and manual-import decision) | AC-37 and migration assumptions (validated manual/import workflow and reconciliation) |
 | M3-01 (Repository discovery) | M0-09 (provider registry), D-008 (VCS identity, credential, signing, allowlist, and controller-scope decision) | FR-008-FR-009, FR-043; AC-10, AC-52 (read-only GitHub/GitLab discovery and workspace allowlists) |
 | M3-02 (Repository analyzer) | M3-01 (Repository discovery), D-001 (Plane foundation, licensing, fork, and upgrade decision), approved dependency/license inventory | FR-009-FR-010; AC-10 (deterministic repository structure, symbol, schema, migration, and dependency analysis) |
@@ -194,7 +195,7 @@ a value that the dispatcher may invent.
 | M4-02 (Orca MCP) | M0-09 (provider registry), M3-04 (Execution plan), D-006 (Orca support and license decision), D-007 (MCP trust and delegated write-back decision) | FR-013-FR-015; AC-16-AC-21 (developer-delegated reads and narrow attributed workflow updates) |
 | M4-03 (OpenHands) | M4-01 (Execution SDK), D-003 (runtime topology and trust-zone decision), approved OpenHands version/license/security profile | FR-013-FR-015; AC-16 (first automated coding-provider adapter) |
 | M4-04 (Runner controller) | M0-03 (core policy), M0-04 (protected storage), M3-03 (Context Pack), M4-01 (Execution SDK), D-003 (runtime topology and trust-zone decision), D-014 (budget-policy decision) | FR-013-FR-015, FR-042-FR-043; NFR-007-NFR-010; AC-20-AC-22, AC-52-AC-55 (gVisor runner lifecycle, JIT authority, quotas, egress, cleanup, and quarantine) |
-| M4-05 (Slice workflow) | M0-06 (Temporal skeleton), M3-05 (Gate 2), M4-01-M4-04 (Execution SDK through Runner controller) | FR-013-FR-015, FR-042; AC-17-AC-21 (durable dependency dispatch, retries, questions, budgets, and cancellation) |
+| M4-05 (Slice workflow) | M0-06 (Temporal skeleton), M3-05 (Gate 2), M4-01 (Execution SDK) through M4-04 (Runner controller) | FR-013-FR-015, FR-042; AC-17-AC-21 (durable dependency dispatch, retries, questions, budgets, and cancellation) |
 | M4-06 (Execution Console) | M4-05 (Slice workflow), M0-07 (API/SSE), M0-08 (audit and observability), approved Curve Experience Blueprint (screen-flow and usability gate) | FR-014-FR-015, FR-024; NFR-012, NFR-015; AC-17-AC-21 (authorized redacted live execution UI) |
 | M5-01 (Quality policy) | M0-02 (core persistence), M3-01 (Repository discovery), D-010 (quality, security, license, waiver, and severity decision) | FR-016-FR-018; NFR-013; AC-23-AC-25 (policy precedence, pins, applicability, and non-waivable rules) |
 | M5-02 (Isolated preflight) | M4-04 (Runner controller), M4-05 (Slice workflow), M5-01 (Quality policy) | FR-016, FR-018; NFR-009-NFR-011; AC-23-AC-25, AC-55 (isolated repository-equivalent and security checks bound to exact SHA) |
@@ -203,14 +204,14 @@ a value that the dispatcher may invent.
 | M5-05 (GitHub VCS controller) | M3-01 (Repository discovery), M4-04 (Runner controller), M4-05 (Slice workflow), M5-02 (Isolated preflight), D-008 (VCS identity, credential, signing, allowlist, and controller-scope decision) | FR-018-FR-020, FR-044; AC-22, AC-25-AC-33 (trusted candidate commit, draft PR lifecycle, and reconciliation) |
 | M5-06 (GitLab VCS adapter) | M5-05 (GitHub VCS controller), D-008 (VCS identity, credential, signing, allowlist, and controller-scope decision) | FR-008, FR-019-FR-020, FR-044; AC-26-AC-33 (GitLab behavior parity and provider-specific mapping) |
 | M5-07 (Post-draft validation) | M5-05 (GitHub VCS controller), M5-06 (GitLab VCS adapter) | FR-020, FR-041, FR-044; AC-25, AC-27-AC-28, AC-31-AC-33 (CI/protection/CODEOWNERS/mergeability projection and invalidation) |
-| M5-08 (Review rework) | M5-03 (Independent review), M5-05-M5-07 (VCS controller through Post-draft validation) | FR-041; AC-31 (authorized review-comment synchronization and same-binding rework) |
-| M5-09 (Code Readiness) | M5-03-M5-08 (Independent review through Review rework), M0-06 (Temporal skeleton) | FR-020, FR-037; AC-25, AC-27-AC-30 (exact-head Gate 3 and explicit draft-to-ready) |
-| M5-10 (Delivery contract) | M2-02 (Delivery identity), M3-05 (Gate 2), M5-04-M5-09 (Waivers/applicability through Code Readiness) | FR-032-FR-040; AC-32, AC-42, AC-44-AC-51 (Feature Delivery, Pull Request Set, evidence, and release readiness) |
+| M5-08 (Review rework) | M5-03 (Independent review), M5-05 (GitHub VCS controller) through M5-07 (Post-draft validation) | FR-041; AC-31 (authorized review-comment synchronization and same-binding rework) |
+| M5-09 (Code Readiness) | M5-03 (Independent review) through M5-08 (Review rework), M0-06 (Temporal skeleton) | FR-020, FR-037; AC-25, AC-27-AC-30 (exact-head Gate 3 and explicit draft-to-ready) |
+| M5-10 (Delivery contract) | M2-02 (Delivery identity), M3-05 (Gate 2), M5-04 (Waivers/applicability) through M5-09 (Code Readiness) | FR-032-FR-040; AC-32, AC-42, AC-44-AC-51 (Feature Delivery, Pull Request Set, evidence, and release readiness) |
 | M5-11 (Monitoring contract) | M5-10 (Delivery contract), approved MonitoringProvider access/data policy | FR-033; AC-45, AC-49-AC-50 (pre-release observability and manual post-release evidence) |
 | M5-12 (Documentation) | M3-01 (Repository discovery), M5-10 (Delivery contract), D-012 (documentation-provider, repository, branch, preview, and applicability decision) | FR-034, FR-036; AC-46, AC-49 (Docusaurus slices, build, link, navigation, and coordinated evidence) |
 | M5-13 (Feature flags) | M5-10 (Delivery contract), D-011 (feature-flag backend and delivery decision) | FR-035-FR-036; AC-47-AC-49 (OpenFeature validation, flag lifecycle, dual-path evidence, and cleanup) |
-| M5-14 (Quality UI) | M5-03-M5-13 (Independent review through Feature flags), approved Curve Experience Blueprint (screen-flow and usability gate) | FR-019-FR-021, FR-036-FR-040; NFR-012, NFR-015; AC-29-AC-34, AC-44-AC-51 (quality, contract, PR-set, waiver, and current-head UI) |
-| M6-01 (Preview runtime) | M0-03-M0-09 (core policy through provider registry), M1-06 (PRD versions), D-003 (runtime topology and trust-zone decision), D-014 (budget-policy decision) | FR-006; NFR-019; AC-06, AC-55 (authenticated isolated TTL preview runtime) |
+| M5-14 (Quality UI) | M5-03 (Independent review) through M5-13 (Feature flags), approved Curve Experience Blueprint (screen-flow and usability gate) | FR-019-FR-021, FR-036-FR-040; NFR-012, NFR-015; AC-29-AC-34, AC-44-AC-51 (quality, contract, PR-set, waiver, and current-head UI) |
+| M6-01 (Preview runtime) | M0-03 (core policy) through M0-09 (provider registry), M1-06 (PRD versions), D-003 (runtime topology and trust-zone decision), D-014 (budget-policy decision) | FR-006; NFR-019; AC-06, AC-55 (authenticated isolated TTL preview runtime) |
 | M6-02 (Lovable export) | M1-04 (Evidence), M1-06 (PRD versions), D-005 (model, provider, and data-policy decision) | FR-006; AC-07 (redacted versioned prompt-package export and untrusted return) |
 | M6-03 (Prototype feedback) | M6-01 (Preview runtime), M6-02 (Lovable export), M1-06 (PRD versions) | FR-006-FR-007; AC-06-AC-08 (attributed feedback and selective promotion to a new PRD version) |
 | M6-04 (KPI computation) | M0-08 (audit and observability), M1-01 (Initiative), M5-10 (Delivery contract), D-016 (KPI and rollout decision) | FR-024; G-09; AC-36 (versioned KPI events, formulas, baselines, and immutable history) |
