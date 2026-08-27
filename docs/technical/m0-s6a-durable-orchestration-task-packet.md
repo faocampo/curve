@@ -6,20 +6,30 @@
 | --- | --- |
 | Package | M0-S6A (model-free parent/child Temporal orchestration substrate), an independently reviewable slice of M0-06 (Temporal workflow-skeleton work package) |
 | Task ID | `CURVE-M0-S6A-DURABLE-ORCHESTRATION` |
-| Status | `REVIEW_DRAFT / NOT_DISPATCHABLE` |
-| Version | 0.3 |
-| Date | 2026-08-23 |
+| Status | `ACCEPTED_AND_MERGED / LOCAL_ONLY` |
+| Version | 0.4 (post-merge lifecycle reconciliation; dispatch contract remains pinned to v0.3) |
+| Date | 2026-08-26 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Curve base | `main` at `fdae85b33a235cd494dd36565698b2b5033a3389`, containing accepted P0-05 (test strategy and audit closure) |
+| Approved Curve contract | `d97cc053a5d0eac7bc2aa9bebe263a245c95894f` |
+| Canonical context digest | `sha256:fcde6b95800c6bf657afe0cdf10cc28e1ddbb44aa16257833ca84f43714eedde` |
 | Plane base | `preview` at `cb17734280260361cc3c8eccf44170a4bfbcb840`, containing accepted M0-S1 through M0-S5B plus M0-03A (policy timestamp-ordering regression fix) |
-| Proposed Plane branch | `curve/m0-s6a-durable-orchestration` |
+| Plane branch | `curve/m0-s6a-durable-orchestration` |
+| Approved Plane head | `af8335c42fa3c57e66f76c6ebd80220640630cf8` |
+| Plane squash merge | `ad5772c0565c934e64ea90f892be1374819979be` on `preview` |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
-| Implementer | One AI coding agent distinct from the human reviewer |
+| Implementer | Codex, distinct from the human reviewer |
 | Risk | `STANDARD`; durable asynchronous state and cancellation, using synthetic `INTERNAL` data only |
 | Product decisions | No new material product decision; D-003 (local runtime topology and trust-zone decision) is already `DECIDED / LOCAL_ONLY` |
-| Blocking readiness | The exact Curve packet head requires Federico approval and merge; P0-05 (test strategy and audit closure) is satisfied at Curve `main` `fdae85b...`; Plane `preview` must still equal the pinned SHA when implementation is dispatched |
+| Acceptance record | [M0-S6A implementation evidence](m0-s6a-implementation-evidence.md) (approved contract/context, Plane implementation and merge, local runtime proof, CI, security acceptance, and rollback) |
+| Parent closure | The defined local M0-06 (Temporal workflow-skeleton work package) deliverable is satisfied; formal `DONE_LOCAL` projection awaits a non-conflicting post-PR-#31 documentation reconciliation |
+
+Version 0.3 of this packet remains immutable at the approved Curve contract
+revision. Version 0.4 changes no implementation requirement or dispatch
+authority. It records the completed lifecycle and points to the separately
+reviewable acceptance evidence after Plane PR #10 merged.
 
 ## Outcome
 
@@ -34,11 +44,14 @@ Temporal history contains only orchestration state. The implementation creates
 no new business aggregate, API, migration, provider connection, sandbox, VCS
 mutation, protected evidence persistence, or production/staging activation.
 
-## Readiness and stop conditions
+## Historical readiness and stop conditions
 
 ### Entry gates
 
-All rows must be satisfied before an AI coding agent mutates Plane.
+The following rows governed the authorized implementation dispatch. Their
+satisfaction is recorded in the
+[M0-S6A implementation evidence](m0-s6a-implementation-evidence.md)
+(approved inputs, implementation, verification, merge, and rollback record).
 
 | Gate | Required evidence |
 | --- | --- |
@@ -432,13 +445,22 @@ remain unpolled until the compatible worker is restored.
 
 ## Completion and handoff
 
-M0-S6A is complete only when all twelve acceptance tests pass, the replay corpus
-is committed and deterministic, the local restart/cancellation/continue-as-new
-proof passes, the complete Plane regression is green, the implementation PR is
-approved at its exact head, and its merge evidence is recorded in Curve.
+M0-S6A was accepted after all twelve acceptance tests passed, the replay corpus
+was committed and replayed deterministically, the local
+restart/cancellation/continue-as-new proof passed, the complete Plane regression
+was green, and Federico Ocampo approved Plane PR #10 at exact head
+`af8335c42fa3c57e66f76c6ebd80220640630cf8`. The PR squash-merged into
+`preview` as `ad5772c0565c934e64ea90f892be1374819979be`; the
+[M0-S6A implementation evidence](m0-s6a-implementation-evidence.md)
+(exact contract, context, runtime, CI, approved and merged trees, security
+acceptance, and rollback) is the authoritative post-merge record.
 
-Completion advances M0-06 (Temporal workflow-skeleton work package) by closing
-its model-free parent/child control substrate. It does not close M0-06. M4-05
-(provider-backed slice execution workflow) remains responsible for real
-Initiative/Plan/Slice/Attempt integration, provider dispatch, retries as new
-attempts, budgets, application-service writes, and external reconciliation.
+Completion satisfies the defined local M0-06 (Temporal workflow-skeleton work
+package) deliverable. Its formal Project/readiness projection remains
+`IN_PROGRESS` until a separate reconciliation after Curve PR #31 updates the
+shared development-plan and readiness files. No additional M0-S6B child is
+required. M4-05 (provider-backed slice execution workflow) remains responsible
+for real Initiative/Plan/Slice/Attempt integration, provider dispatch, retries
+as new attempts, attributed questions, application-service writes, and
+external reconciliation; M4-04 (trusted runner lifecycle) and M6-05 (budget
+administration and capacity) retain their declared runtime and budget scope.
