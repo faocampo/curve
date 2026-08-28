@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
@@ -31,22 +31,28 @@ const STAGE_RECORD = JSON.parse(
 );
 const SYNCHRONIZER_PATH = fileURLToPath(new URL("../sync-github-project.mjs", import.meta.url));
 
-test("M0-03 context pins every policy contract fixture and its deterministic digest algorithm", () => {
-  const fixtureDirectories = [
-    {
-      url: new URL("../../contracts/schemas/examples/", import.meta.url),
-      prefix: "contracts/schemas/examples/",
-      matches: (name) => /^(core-policy-manifest|policy-decision|policy-evaluation)\.(valid|invalid)\.json$/.test(name),
-    },
-    {
-      url: new URL("../../contracts/schemas/semantic-fixtures/", import.meta.url),
-      prefix: "contracts/schemas/semantic-fixtures/",
-      matches: (name) => /^policy-.*\.json$/.test(name),
-    },
+test("M0-03 context pins its frozen policy-v1 fixture set and deterministic digest algorithm", () => {
+  const expectedFixtures = [
+    "contracts/schemas/examples/core-policy-manifest.invalid.json",
+    "contracts/schemas/examples/core-policy-manifest.valid.json",
+    "contracts/schemas/examples/policy-decision.invalid.json",
+    "contracts/schemas/examples/policy-decision.valid.json",
+    "contracts/schemas/examples/policy-evaluation.invalid.json",
+    "contracts/schemas/examples/policy-evaluation.valid.json",
+    "contracts/schemas/semantic-fixtures/policy-decision-allow-reason.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-decision-human-recorder.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-gate-assignment.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-gate-assignment.valid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-human-service-auth.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-human-service-role.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-service-human-role.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-service-membership.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-service-version.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-service.valid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-target-version.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-target-version.valid.json",
+    "contracts/schemas/semantic-fixtures/policy-evaluation-transition-service.valid.json",
   ];
-  const expectedFixtures = fixtureDirectories.flatMap(({ url, prefix, matches }) =>
-    readdirSync(url).filter(matches).map((name) => `${prefix}${name}`),
-  );
   for (const path of expectedFixtures) assert.ok(M0_03_CONTEXT_PATHS.includes(path), path);
   assert.ok(M0_03_CONTEXT_PATHS.includes("scripts/lib/context-pack.mjs"));
   assert.ok(M0_03_CONTEXT_PATHS.includes("scripts/validate-contracts.mjs"));
@@ -233,6 +239,8 @@ test("M0-S9A context pins the local provider registry, persistence, fixtures, an
     "contracts/schemas/semantic-fixtures/provider-connection-active-null.invalid.json",
     "contracts/schemas/semantic-fixtures/provider-connection-active.valid.json",
     "contracts/schemas/semantic-fixtures/provider-connection-revoked-next.invalid.json",
+    "contracts/schemas/semantic-fixtures/policy-decision-provider-registration-v2.valid.json",
+    "contracts/schemas/semantic-fixtures/policy-decision-provider-registration-v3.invalid.json",
     "contracts/testing/ac-test-matrix-v1.json",
     "docs/technical/adr-007-mcp-trust-and-orca-profile.md",
     "docs/technical/integration-contracts.md",
@@ -244,6 +252,7 @@ test("M0-S9A context pins the local provider registry, persistence, fixtures, an
     "docs/technical/m0-traceability.md",
     "scripts/lib/context-pack.mjs",
     "scripts/lib/test-strategy.mjs",
+    "scripts/tests/p0-06-policy.test.mjs",
     "scripts/tests/test-strategy.test.mjs",
     "scripts/validate-contracts.mjs",
   ];
