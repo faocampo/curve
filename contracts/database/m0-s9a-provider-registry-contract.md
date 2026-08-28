@@ -4,15 +4,20 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `REVIEW / AWAITING_EXACT_HEAD_APPROVAL` |
-| Version | 1.6 |
+| Status | `CORRECTION_MERGED / IMPLEMENTATION_PAUSED` |
+| Version | 1.7 |
 | Date | 2026-08-28 |
 | Work package | M0-S9A (provider-neutral registry and reconciliation foundation) |
 | Owner and reviewer | Federico Ocampo (`faocampo`) |
 | Applies to | Curve-owned PostgreSQL tables in the public Plane fork |
 | Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) |
-| Published Curve baseline | `main` at `13cec5e99889c68b885a57a8a98609885b1e27b3`, containing the approved M0-S9A publication and policy-v2 contract correction |
-| Remaining gate | Green correction PR, exact-head approval, squash merge, canonical context regeneration, and renewed human-approved Plane resumption binding the still-current base |
+| Published Curve correction baseline | Curve `main` contains [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction), approved at exact head `737c52c52f6f8f8b5f59ec4c69450b2edcacea8d` and squash-merged as `da44d27c3bde73b11640b165d3ddbca8451cd1f6`; both commits share Git tree `3596a70feecb6fd72f65e3394d7091141b3bbba8` |
+| Dispatch-time requirements | An immutable external resumption record binds the canonical M0-S9A context digest from the exact merged Curve `origin/main` revision selected for resumed dispatch, Plane-base revalidation, and renewed human-approved Plane resumption by Federico Ocampo; recording it requires no contract edit or redigest |
+
+Version 1.7 reconciles only post-merge lifecycle and evidence metadata after
+Curve PR #36 (six-finding M0-S9A contract correction); it changes no table,
+constraint, transaction, replay, delivery, event, migration, or rollback
+semantic.
 
 Version 1.6 resolves the six findings from the independent implementation
 review without widening the local provider-registry package. It fixes command
@@ -20,9 +25,9 @@ authorization/drain order, pending reconciliation replay, guarded ORM bulk
 writes, abandoned-claim exhaustion, stale result normalization, and versioned
 aggregate-aware provider event payload contracts.
 
-Plane implementation remains paused pending the green correction PR, exact-head
-approval, squash merge, canonical context regeneration, and renewed resumption
-authorization recorded above.
+The six-finding correction is merged. Plane implementation remains paused
+until the immutable external resumption record satisfies the dispatch-time
+requirements recorded above.
 
 ## Purpose and boundary
 
