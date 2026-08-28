@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
-| Status | `REVIEW / AWAITING_EXACT_HEAD_APPROVAL` |
-| Version | 1.9 |
+| Status | `CORRECTION_MERGED / IMPLEMENTATION_PAUSED` |
+| Version | 1.10 |
 | Date | 2026-08-28 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Published Curve contract baseline | `main` at `13cec5e99889c68b885a57a8a98609885b1e27b3`, containing accepted P0-05 (test strategy and audit closure), M0-S6A (durable parent/child Temporal orchestration contract), the approved M0-S9A contract publication, and the policy-v2 contract correction |
+| Published Curve correction baseline | Curve `main` contains [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction), approved at exact head `737c52c52f6f8f8b5f59ec4c69450b2edcacea8d` and squash-merged as `da44d27c3bde73b11640b165d3ddbca8451cd1f6`; both commits share Git tree `3596a70feecb6fd72f65e3394d7091141b3bbba8` |
 | Target branch | `preview` |
 | Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) and reserving provider migration `0005` after policy migration `0004` |
 | Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
@@ -19,6 +19,11 @@
 | Implementer | One AI coding agent distinct from the human reviewer |
 | Risk | `STANDARD`; local synthetic provider metadata only |
 | Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
+
+Version 1.10 reconciles only post-merge lifecycle and evidence metadata after
+Curve PR #36 (six-finding M0-S9A contract correction); it changes no
+implementation semantic, schema, fixture, scope, budget, branch, migration, or
+rollback rule.
 
 Version 1.9 resolves the six findings from the independent implementation
 review without expanding M0-S9A scope. It requires authorization before the
@@ -34,14 +39,14 @@ post-commit/authorized-next-command drains. Approved Option B derives
 target workspace only for provider registration/administration actions.
 
 All product, architecture, security, data, licensing, infrastructure, scope,
-test, budget, and rollback inputs required by this package are resolved. This
-correction remains under review and grants no renewed Plane execution authority
-until its exact head is approved, CI is green, it is merged, and a replacement
-canonical M0-S9A context digest is generated. The dispatcher pins that exact
-merged revision and digest, fetches both remotes, and stops before Plane
-mutation if either base has advanced.
-
-Plane implementation remains paused pending those correction gates.
+test, budget, and rollback inputs required by this package are resolved. Curve
+PR #36 (six-finding M0-S9A contract correction) is approved, green, and merged.
+Its merge grants no renewed Plane execution authority. Plane implementation
+remains paused until a canonical M0-S9A context digest is generated from the
+exact merged Curve `origin/main` revision selected for resumed dispatch, the
+Plane base is revalidated, and Federico Ocampo explicitly authorizes
+resumption. The dispatcher pins that exact merged revision and digest, fetches
+both remotes, and stops before Plane mutation if either base has advanced.
 
 ## Outcome
 
@@ -102,18 +107,25 @@ incompatible changes require a new schema version and compatibility plan.
 
 ## Dispatch readiness
 
-Implementation remains blocked until all rows are satisfied:
+The publication state is fixed in this versioned packet. Requirements marked
+`Required at dispatch` are satisfied by the execution protocol's immutable
+external resumption record rather than by editing this packet:
 
-| Gate | Current state | Required evidence |
+| Gate | Publication state | Dispatch-time evidence |
 | --- | --- | --- |
 | P0-05 (test strategy and audit closure) | Satisfied | Curve `main` `fdae85b33a235cd494dd36565698b2b5033a3389` establishes exact AC-01 through AC-60 ownership and suite commands |
-| M0-S9A independent-review correction | Pending exact-head approval | The correction PR must be green, approved at its exact head, squash-merged, and present on `origin/main`; a replacement canonical M0-S9A context digest must then be generated from that merge |
-| Plane base | Satisfied | Plane `preview` `ad5772c0565c934e64ea90f892be1374819979be` contains merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation); dispatch stops if `preview` advances before implementation authorization |
+| M0-S9A independent-review correction | Satisfied | [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction) passed [Curve CI run 33181156641](https://github.com/faocampo/curve/actions/runs/33181156641) (contract and documentation validation), was approved at exact head `737c52c52f6f8f8b5f59ec4c69450b2edcacea8d`, and squash-merged as `da44d27c3bde73b11640b165d3ddbca8451cd1f6`; both commits share Git tree `3596a70feecb6fd72f65e3394d7091141b3bbba8` |
+| Canonical M0-S9A context | Required at dispatch | Generate the canonical context digest from the exact merged Curve `origin/main` revision selected for resumed dispatch; a candidate branch digest grants no execution authority |
+| Plane base revalidation | Required at dispatch | Revalidate Plane `preview` immediately before dispatch against the exact Curve `origin/main` revision and context digest; the last verified expected base is `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) |
 | Owner/reviewer | Satisfied | Federico Ocampo |
 | Material decisions | `PUBLISHED / SATISFIED` | The local outbox/inbox delivery model and Option B registration authority are published. D-007 (MCP trust model and Orca access profile) remains MCP-specific and is not a dependency. |
-| Renewed exact-head implementation authorization | Pending | After the correction merge and context regeneration, Federico Ocampo approves resumption against the final merged contract revision, canonical digest, and still-current Plane base |
+| Renewed exact-revision and context-digest implementation authorization | Required at dispatch | After canonical context generation and Plane-base revalidation, Federico Ocampo approves resumption against the exact merged contract revision, canonical digest, and still-current Plane base |
 
-No coding agent mutates Plane while any row is pending.
+The immutable external resumption record binds the exact merged Curve revision,
+canonical context digest, revalidated Plane base, owner/reviewer, authorized
+scope, exclusions, budget, and rollback. Recording it does not require editing
+or redigesting this packet. No coding agent mutates Plane until that record
+proves every dispatch-time requirement.
 
 ## Dispatch policy
 

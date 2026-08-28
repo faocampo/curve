@@ -269,7 +269,7 @@ test("M0-S9A context pins the local provider registry, persistence, fixtures, an
   assert.deepEqual(contextPathsFor("M0-S9A"), M0_S9A_CONTEXT_PATHS);
 });
 
-test("M0-S9A correction awaits exact-head approval while Plane implementation stays paused", () => {
+test("M0-S9A correction is merged while Plane implementation requires external resumption evidence", () => {
   const taskPacket = readFileSync(
     new URL("../../docs/technical/m0-s9a-provider-registry-task-packet.md", import.meta.url),
     "utf8",
@@ -282,15 +282,46 @@ test("M0-S9A correction awaits exact-head approval while Plane implementation st
     new URL("../../docs/technical/m0-s9a-registration-authorization-decision.md", import.meta.url),
     "utf8",
   );
+  const lifecycleDocuments = [
+    ["task packet", taskPacket],
+    ["relational contract", relationalContract],
+    ["contract catalog", readFileSync(new URL("../../contracts/README.md", import.meta.url), "utf8")],
+    ["technical catalog", readFileSync(new URL("../../docs/technical/README.md", import.meta.url), "utf8")],
+    ["development plan", readFileSync(new URL("../../docs/technical/development-plan.md", import.meta.url), "utf8")],
+    ["domain model", readFileSync(new URL("../../docs/technical/domain-model.md", import.meta.url), "utf8")],
+    ["completion audit", readFileSync(new URL("../../docs/technical/m0-completion-audit.md", import.meta.url), "utf8")],
+    ["readiness board", readFileSync(new URL("../../docs/technical/m0-readiness-board.md", import.meta.url), "utf8")],
+  ];
 
-  assert.match(taskPacket, /\| Status \| `REVIEW \/ AWAITING_EXACT_HEAD_APPROVAL` \|/);
+  assert.match(taskPacket, /\| Status \| `CORRECTION_MERGED \/ IMPLEMENTATION_PAUSED` \|/);
+  assert.match(taskPacket, /\| M0-S9A independent-review correction \| Satisfied \|/);
+  assert.match(taskPacket, /737c52c52f6f8f8b5f59ec4c69450b2edcacea8d/);
+  assert.match(taskPacket, /da44d27c3bde73b11640b165d3ddbca8451cd1f6/);
+  assert.match(taskPacket, /3596a70feecb6fd72f65e3394d7091141b3bbba8/);
+  assert.match(taskPacket, /33181156641/);
+  assert.match(taskPacket, /\| Canonical M0-S9A context \| Required at dispatch \|/);
+  assert.match(taskPacket, /\| Plane base revalidation \| Required at dispatch \|/);
   assert.match(taskPacket, /\| Material decisions \| `PUBLISHED \/ SATISFIED` \|/);
-  assert.match(taskPacket, /\| Renewed exact-head implementation authorization \| Pending \|/);
+  assert.match(taskPacket, /\| Renewed exact-revision and context-digest implementation authorization \| Required at dispatch \|/);
+  assert.match(taskPacket, /immutable external resumption record/i);
+  assert.match(taskPacket, /does not require editing\s+or redigesting this packet/i);
   assert.match(taskPacket, /grants no renewed Plane execution authority/i);
-  assert.doesNotMatch(taskPacket, /REVIEW_DRAFT|PENDING_PUBLICATION/);
-  assert.match(relationalContract, /\| Status \| `REVIEW \/ AWAITING_EXACT_HEAD_APPROVAL` \|/);
+  assert.match(relationalContract, /\| Status \| `CORRECTION_MERGED \/ IMPLEMENTATION_PAUSED` \|/);
   assert.match(relationalContract, /human-approved Plane resumption/i);
   assert.match(authorizationDecision, /\| Status \| `PUBLISHED` \|/);
+
+  for (const [name, document] of lifecycleDocuments) {
+    assert.doesNotMatch(
+      document,
+      /REVIEW_DRAFT|PENDING_PUBLICATION|AWAITING_EXACT_HEAD_APPROVAL|CONTRACT_CORRECTION_IN_REVIEW|correction remains under review/i,
+      `${name} retains stale pre-merge lifecycle state`,
+    );
+    assert.doesNotMatch(
+      document,
+      /this (?:lifecycle-)?reconciled (?:packet|contract|audit)|lifecycle-reconciliation revision/i,
+      `${name} defines dispatch through a self-referential lifecycle artifact`,
+    );
+  }
 });
 
 test("M0-06 closes locally without absorbing downstream provider acceptance", () => {
