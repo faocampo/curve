@@ -7,7 +7,7 @@
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
 | Version | 1.14 |
 | Last updated | 2026-08-28 |
-| Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, lifecycle, security invariants, acceptance criteria, and accepted D-003 local implementation) |
+| Source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, approved Product core, Curve-first shell invariant, lifecycle, security invariants, acceptance criteria, and accepted D-003 local implementation) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
 

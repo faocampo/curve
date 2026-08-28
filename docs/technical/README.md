@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This directory is the architecture and implementation handoff derived from the [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product vision, Curve-first shell invariant, requirements, acceptance criteria, rollout, decision register, and accepted local Temporal proof). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
+This directory is the architecture and implementation handoff derived from the [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product vision, approved Product core, Curve-first shell invariant, requirements, acceptance criteria, rollout, decision register, and accepted local Temporal proof). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
 
 The suite is implementation-oriented. D-001 (Plane foundation, licensing, and
 upgrade-boundary decision) is decided. D-003 (runtime topology and trust-zone
@@ -153,7 +153,7 @@ A lower item cannot weaken a higher item. When a conflict is found, implementati
 
 ```mermaid
 flowchart TD
-    prd["Curve PRD v0.12"] --> decisions["D-001 through D-016 and ADRs"]
+    prd["Curve PRD v0.13"] --> decisions["D-001 through D-016 and ADRs"]
     prd --> architecture[Architecture]
     architecture --> c4["C4 architecture views"]
     prd --> domain[Domain model]

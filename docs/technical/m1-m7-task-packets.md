@@ -7,7 +7,7 @@
 | Status | Deterministic materialization catalog; every package has an exact dependency/trace record and becomes `READY` only after its listed material gates, contracts, base SHA, commands, and context digest are satisfied |
 | Version | 1.5 |
 | Date | 2026-08-28 |
-| Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell, lifecycle, security invariants, and acceptance criteria) |
+| Product baseline | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, approved Product core, Curve-first shell, lifecycle, security invariants, and acceptance criteria) |
 | Delivery baseline | [Development plan](development-plan.md) (milestones, package dependencies, product trace, and completion evidence) and [M1 task packet](m1-alignment-evidence-prd-task-packet.md) (manual-first/provider-enhanced lanes, implementation slices, contracts, tests, and readiness gates) |
 | Decision readiness | [Later-milestone decision-readiness index](later-milestone-decision-readiness-index.md) (D-002 (Onyx delegation) through D-016 (KPI and rollout guardrails) owner inputs, machine contracts, acceptance evidence, and fail-closed milestone effects) |
 | Default owner and reviewer | Federico Ocampo (`faocampo`) until explicitly reassigned |

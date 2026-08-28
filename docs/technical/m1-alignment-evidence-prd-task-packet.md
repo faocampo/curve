@@ -6,13 +6,13 @@
 | --- | --- |
 | Milestone | M1 (alignment, evidence, immutable PRD versions, and Gate 1) |
 | Status | `PREPARED_NOT_DISPATCHABLE`; task decomposition is complete; M0 dependencies and named material decisions remain open |
-| Version | 1.3 |
-| Date | 2026-08-23 |
+| Version | 1.4 |
+| Date | 2026-08-28 |
 | Product | Curve |
-| Product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell, lifecycle, identity, evidence, and Gate 1 acceptance) |
+| Product baseline | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, approved Product core, Curve-first shell, lifecycle, identity, evidence, and Gate 1 acceptance) |
 | Architecture baseline | [Architecture](architecture.md) (definition domain, trust boundaries, asynchronous commands, and Temporal ownership) and [Domain model](domain-model.md) (Product, Initiative, Activity, ArtifactVersion, Evidence, AccessEnvelope, and Gate entities) |
 | Delivery baseline | [Development plan](development-plan.md) (M1 dependencies, traceability, and completion evidence) and [M1-M7 packet catalog](m1-m7-task-packets.md) (later-milestone materialization controls) |
-| Minimum Curve ancestor | `ce7b4663f3d28da21d23c75d98c1a62f04800a9d`, containing the accepted local M0 observability evidence and reconciliation; P0-05 is bound to candidate `7d2794bad87a6e2e733ee8a53a650d8ea7658d22` until it merges, and dispatch pins the eventual merged Curve revision and context digest |
+| Minimum published Curve ancestor | `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`, containing accepted M0-S9A lifecycle evidence and P0-05 in its ancestry; publication pins the merged Product-contract revision, and dispatch pins that exact Curve revision plus its context digest |
 | Implementation repository | `git@github.com:faocampo/plane.git`, target `preview`, exact live base assigned only after the consuming M0 evidence merges |
 | Owner and reviewer | Federico Ocampo (`faocampo`) until explicitly reassigned; the coding agent cannot satisfy human review |
 | Default data | Synthetic `INTERNAL` fixtures; protected bodies and live provider access disabled |
@@ -200,7 +200,7 @@ not invented by the coding agent.
 
 | Packet group | Current state | Missing evidence before `READY` |
 | --- | --- | --- |
-| M1-00A (minimal Product core) | `PREPARED_NOT_DISPATCHABLE` | Product semantics and contracts are complete on the review branch; merge the exact Curve revision, merge P0-05, verify Plane base/migration chain, generate the authoritative context digest, and obtain explicit dispatch |
+| M1-00A (minimal Product core) | `PREPARED_NOT_DISPATCHABLE` | Product semantics and contracts are complete on the review branch and P0-05 is satisfied; merge the exact Curve revision, verify the live Plane base/migration chain, generate the authoritative context digest, and obtain explicit dispatch |
 | M1-01A/B (Initiative) | `PREPARED` | M1-00A; accepted consuming M0 base; Initiative/OpenAPI/event/state contracts; exact UI contract; commands and context digest |
 | M1-02A (manual Idea Brief) | `PREPARED` | M1-01A; Idea Brief/ArtifactVersion contracts; UI contract; exact dispatch values |
 | M1-02B and M1-06C (model authoring) | `BLOCKED_MATERIAL_DECISIONS` | D-004 (model-gateway decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), evaluations, and exact model/prompt/tool/budget pins |

@@ -5,14 +5,14 @@
 | Field | Value |
 | --- | --- |
 | Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel are implemented; M0-S9A local provider persistence, bounded delivery, Option B registration authority, and deterministic fake-adapter reconciliation are implemented and accepted at Plane `preview` `af7187d...`; remaining provider, model, protected-storage, and non-local capabilities stay packet/decision gated |
-| Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product, Curve-first shell, lifecycle, security, private-platform connectivity, accepted local Temporal proof, and acceptance contract) |
+| Source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product, approved Product core, Curve-first shell, lifecycle, security, private-platform connectivity, accepted local Temporal proof, and acceptance contract) |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
 | Last updated | 2026-08-28 |
 | Scope | Logical domain and persistence model for Curve R1 |
 
 ## 1. Purpose and precedence
 
-This document derives the logical domain model required by [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product and acceptance contract). It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests. D-001 fixes the Plane/Curve repository and authority boundary; D-003 fixes the implemented local shared-network and private-platform connectivity direction while retaining environment-package activation inputs. The document does not select the remaining database topology details, object-storage product, identity mechanism, real-provider version, retention period, or other owner-gated decisions D-002 through D-016.
+This document derives the logical domain model required by [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current product, approved Product core, and acceptance contract). It is sufficiently precise to drive an ERD, migrations, API schemas, workflow code, repositories, and tests. D-001 fixes the Plane/Curve repository and authority boundary; D-003 fixes the implemented local shared-network and private-platform connectivity direction while retaining environment-package activation inputs. The document does not select the remaining database topology details, object-storage product, identity mechanism, real-provider version, retention period, or other owner-gated decisions D-002 through D-016.
 
 The PRD remains authoritative. Its scope invariants, lifecycle transitions, numbered functional requirements (FR), non-functional requirements (NFR), acceptance criteria (AC), and decision register take precedence over this document. If this document cannot be implemented without changing one of those contracts, the implementation MUST stop and propose a PRD revision; it MUST NOT silently reinterpret the requirement.
 

@@ -6,7 +6,7 @@
 | ----- | ----- |
 | Status | Decision index; D-001 (Plane upstream foundation decision) is decided; D-003 (runtime topology and trust-zone decision) local private-platform profile is decided and implemented; remaining activation scopes require owner approval and applicable proof |
 | Version | 1.2 |
-| Source | [Curve PRD v0.12 decision register](../curve-ai-native-sdlc-prd.md#decision-register) (controlled product and architecture decisions, Curve-first shell, and accepted local Temporal proof) |
+| Source | [Curve PRD v0.13 decision register](../curve-ai-native-sdlc-prd.md#decision-register) (controlled product and architecture decisions, approved Product core, Curve-first shell, and accepted local Temporal proof) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
 ## Purpose

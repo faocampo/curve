@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Status | `PREPARED_NOT_DISPATCHABLE`; Product semantics are approved; contract publication, final context digest, and exact dispatch approval remain pending |
-| Version | 1.0 |
-| Date | 2026-08-23 |
+| Version | 1.1 |
+| Date | 2026-08-28 |
 | Product | Curve |
 | Work package | M1-00A (minimal Product core) |
 | Owner and human reviewer | Federico Ocampo (`faocampo`) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Candidate target/base | `preview` at `cb17734280260361cc3c8eccf44170a4bfbcb840`; dispatch re-verifies the live base |
+| Candidate target/base | `preview` at `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; dispatch re-verifies the live base and migration chain |
 | Risk classification | Medium; workspace authorization, ownership, lifecycle, and additive persistence |
 | Data classification | Synthetic `INTERNAL` test data only |
 | Model/tool policy | No model, provider, protected data, or external service |

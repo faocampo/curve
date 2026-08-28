@@ -5,13 +5,14 @@
 | Field | Value |
 | --- | --- |
 | Status | Active visual-tracking contract |
-| Version | 1.14 |
-| Date | 2026-08-23 |
+| Version | 1.15 |
+| Date | 2026-08-28 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (71-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
-| Last reconciliation | 2026-08-23: Project #2 has 79 unique items. M0-08 (audit and observability foundation), M0-03A (policy timestamp-ordering fix), and P0-05 (test strategy and audit closure) are `Done`; M1-00A (minimal Product core) remains `In progress` while its approved contracts await publication and dispatch; M0-S6A (durable Temporal orchestration readiness), M0-S9A (provider registry readiness), and P0-12 (retention-policy decision package) are `In review`; no duplicate item was created. |
+| Last verified live reconciliation | 2026-08-23: Project #2 had 79 unique items; M0-08 (audit and observability foundation), M0-03A (policy timestamp-ordering fix), and P0-05 (test strategy and audit closure) were `Done`; M1-00A (minimal Product core) was `In progress`; M0-S6A (durable Temporal orchestration readiness), M0-S9A (provider registry readiness), and P0-12 (retention-policy decision package) were `In review`; no duplicate item was created. |
+| Required publication-time reconciliation | Verify the existing items without duplication; set M0-S6A (durable Temporal orchestration readiness) and M0-S9A (provider registry readiness) to `Done` from accepted Plane implementation evidence; retain M1-00A (minimal Product core) as `In progress` until its Curve contracts publish and as ready only after exact dispatch materialization; preserve P0-12 (retention-policy decision package) according to its live PR state. |
 
 ## Purpose and authority boundary
 
@@ -56,8 +57,8 @@ grant. Execution systems evaluate their own authoritative inputs independently.
 | M0-S4 packet checkpoint | Decomposed executable slice completing local M0-07 | 1 | `Done`; Plane merge `e762fbb...` and accepted post-merge evidence |
 | M0-S4-UX checkpoint | Definition/UX child of M0-S4 | 1 | `Done`; Curve-first shell and Foundation experience approved |
 | M0-03A checkpoint | Core-policy timestamp-ordering regression child of M0-03 | 1 | `Done`; Plane PR #9 merged at `cb177342...` |
-| M0-S6A checkpoint | Durable parent/child Temporal orchestration readiness child of M0-06 | 1 | `In review`; Curve PR #28 evidence |
-| M0-S9A checkpoint | Provider-neutral registry and reconciliation readiness child of M0-09 | 1 | `In review`; Curve PR #29 evidence |
+| M0-S6A checkpoint | Durable parent/child Temporal orchestration readiness child of M0-06 | 1 | Engineering lifecycle `Done`; accepted Plane PR #10 and M0-S6A implementation evidence; live Project status must be reconciled after publication |
+| M0-S9A checkpoint | Provider-neutral registry and reconciliation readiness child of M0-09 | 1 | Engineering lifecycle `Done`; accepted Plane PR #12 and M0-S9A implementation evidence; live Project status must be reconciled after publication |
 | M7 intelligence extension issues | M7-01 and M7-02 outside the active 71-row catalog | 2 | Backlog; governed by the separate M7 extension charter |
 | **Current visual total** |  | **79** |  |
 
