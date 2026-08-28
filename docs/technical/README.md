@@ -23,8 +23,9 @@ accepted, and merged for `LOCAL_ONLY` through [Plane PR #12](https://github.com/
 tests, security checks, inherited dependency disposition, regression
 comparison, and rollback are bound by [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md)
 (post-merge local acceptance record). M0-09 (provider integration foundation)
-remains open for M0-S9B (external provider transport and administration) and
-the future Model Gateway child. D-007 (MCP trust-model
+remains open for prepared M0-S9B (external provider transport and
+administration) and M0-S9C (Model Gateway policy, OpenRouter transport, and
+failover). D-007 (MCP trust-model
 decision) stays scoped to
 MCP/Orca activation. An
 implementation package
@@ -57,6 +58,7 @@ identifiers are:
 - M0-S6A (durable parent/child Temporal orchestration).
 - M0-S9A (provider-neutral registry and reconciliation foundation).
 - M0-S9B (external provider transport and administration).
+- M0-S9C (Model Gateway policy, OpenRouter transport, and failover).
 - M0-03 (core authorization and policy kernel work package).
 - M0-08 (audit and observability foundation work package).
 - OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding).
@@ -77,7 +79,7 @@ identifiers are:
 | [Kanban delivery lifecycle](kanban-delivery-lifecycle.md) | User-facing delivery-board statuses from definition through monitored customer use and closure | Kanban projection and state-transition evidence |
 | [M7 intelligence and automation extension](m7-intelligence-and-automation-extension.md) | Post-R1 charter for AI-expense governance, Gmail/Slack attention intake, and scheduled AI-agent jobs | Future-extension scope and entry gates; does not expand the active 70-item catalog |
 | [Implementation-readiness review](review-analysis-and-remediation.md) | Prioritized gaps, closure evidence, owners, dependencies, and remediation status | Review record; never overrides the PRD or approved ADRs |
-| [Plane foundation inventory](plane-foundation-inventory.md) (upstream, licensing, fork lineage, and accepted implementation base) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; foundation `549db1a...`; current post-M0-S5A `preview` base `3992076...` |
+| [Plane foundation inventory](plane-foundation-inventory.md) (upstream, licensing, fork lineage, and accepted implementation base) | Selected upstream strategy, exact fork/upstream pins, candidate verification, community reuse/build matrix, commercial safeguards, and closure checks | Approved D-001 evidence; foundation `549db1a...`; current post-M0-S9A `preview` base `af7187d...` |
 | [ADR-001: Plane upstream foundation](adr-001-plane-upstream-foundation.md) | Decided updateable upstream baseline, fork workflow, proof results, consequences, rollback, approval, and review triggers | D-001 decision record; `DECIDED` on 2026-08-15 |
 | [ADR-003: Runtime topology](adr-003-runtime-topology.md) | Local/non-local Temporal and Curve runtime boundary | SDK 1.31.0; shared local `dev_env`; direct loopback ports; private EKS/`ClusterIP`/VPN direction; authenticated non-local clients; M0-S3 proof and rollback |
 | [D-003 local topology decision packet](d003-local-topology-decision-packet.md) | Historical 2026-08-18 least-privilege local network approval, proof, acceptance, and rollback evidence | `APPROVED_AND_MERGED` historical record; its two-network implementation contract is superseded by the amendment when effective |
@@ -106,7 +108,9 @@ identifiers are:
 | [OBS-BIND-001 local observability binding](obs-bind-001-local-observability-binding.md) (decided Docker OTLP, Prometheus, Grafana, health, cleanup, and promotion contract) | Exact local platform binding and five-checkpoint M0-S5B implementation handoff | `DECIDED_LOCAL_ONLY`; published at Curve `43480ca...` and consumed by M0-S5B |
 | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, local binding proof, tests, evidence, and rollback) | Independently reviewable M0-S5A telemetry-kernel and M0-S5B local-integration changes | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_ACCEPTED_AND_MERGED` |
 | [M0-S9A provider-registry task packet](m0-s9a-provider-registry-task-packet.md) (local provider persistence, Option B authorization, synchronous reconciliation, delivery ordering/recovery, replay, event payloads, acceptance, stop conditions, and rollback) | First independently reviewable child of M0-09; excludes public administration, credentials, callbacks/webhooks, schedules, background execution, and real adapters | `ACCEPTED_AND_MERGED / LOCAL_ONLY`; Plane PR #12 merged accepted tree `d43bdc2...` into `preview` as `af7187d...`; D-007 is MCP/Orca-specific |
-| [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md) (exact contract, Plane head/merge/tree, CI, regression, dependency disposition, security boundary, and rollback) | Post-merge acceptance record for the local fake-provider registry and reconciliation substrate | `ACCEPTED_AND_MERGED / LOCAL_ONLY`; M0-09 remains open for M0-S9B and the future Model Gateway child |
+| [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md) (exact contract, Plane head/merge/tree, CI, regression, dependency disposition, security boundary, and rollback) | Post-merge acceptance record for the local fake-provider registry and reconciliation substrate | `ACCEPTED_AND_MERGED / LOCAL_ONLY`; M0-09 remains open for prepared M0-S9B and M0-S9C children |
+| [M0-S9B task packet](m0-s9b-provider-transport-task-packet.md) (decision-gated provider administration, credentials, endpoints, callbacks, webhooks, schedules, activation, tests, and rollback) | Six independently reviewable external-transport children completing AC-33 | `PREPARED / BLOCKED`; no child dispatch or external effect until its named decisions and exact contract are approved |
+| [M0-S9C task packet](m0-s9c-model-gateway-task-packet.md) (decision-gated model policy, budget, OpenRouter transport, usage, failover, actual-route evidence, tests, and rollback) | Four independently reviewable Model Gateway children completing AC-57 | `PREPARED / BLOCKED`; D-004, D-005, D-014, and applicable D-009 inputs remain required |
 | [M0-S5 telemetry manifest](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboard, four alerts, and redaction contract) | Normative v1 instrumentation and operational-asset surface | Export defaults to disabled; exporter-failure diagnostics stay process-local; X3M endpoint/datasource/alert/path-health binding is supplied separately |
 | [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
 | [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | Historical P0-06A/P0-06B standalone-proof design and supersession record | `SUPERSEDED`; retained for audit, with M0-S3 as the executable proof |

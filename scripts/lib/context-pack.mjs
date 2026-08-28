@@ -270,6 +270,65 @@ export const M0_S9A_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const M0_S9B_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/openapi/curve-v1.openapi.yaml",
+    "contracts/policy/core-policy-v2.json",
+    "contracts/schemas/audit-event.schema.json",
+    "contracts/schemas/event-envelope.schema.json",
+    "contracts/schemas/idempotency-record.schema.json",
+    "contracts/schemas/inbox-message.schema.json",
+    "contracts/schemas/operation.schema.json",
+    "contracts/schemas/outbox-event.schema.json",
+    "contracts/schemas/provider-capability.schema.json",
+    "contracts/schemas/provider-connection-event-v1.schema.json",
+    "contracts/schemas/provider-connection.schema.json",
+    "contracts/schemas/provider-reconciliation-event-v1.schema.json",
+    "contracts/testing/ac-test-matrix-v1.json",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/architecture-decisions.md",
+    "docs/technical/architecture.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/domain-model.md",
+    "docs/technical/integration-contracts.md",
+    "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-s9a-implementation-evidence.md",
+    "docs/technical/m0-s9b-provider-transport-task-packet.md",
+    "docs/technical/m0-test-strategy.md",
+    "docs/technical/m0-traceability.md",
+    "docs/technical/security-and-operations.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ].sort(),
+);
+
+export const M0_S9C_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/policy/core-policy-v2.json",
+    "contracts/schemas/audit-event.schema.json",
+    "contracts/schemas/event-envelope.schema.json",
+    "contracts/schemas/idempotency-record.schema.json",
+    "contracts/schemas/operation.schema.json",
+    "contracts/schemas/provider-capability.schema.json",
+    "contracts/schemas/provider-connection.schema.json",
+    "contracts/testing/ac-test-matrix-v1.json",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/architecture-decisions.md",
+    "docs/technical/architecture.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/domain-model.md",
+    "docs/technical/integration-contracts.md",
+    "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-s9a-implementation-evidence.md",
+    "docs/technical/m0-s9c-model-gateway-task-packet.md",
+    "docs/technical/m0-test-strategy.md",
+    "docs/technical/m0-traceability.md",
+    "docs/technical/security-and-operations.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/validate-contracts.mjs",
+  ].sort(),
+);
+
 const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
   ["M0-S3", M0_S3_CONTEXT_PATHS],
@@ -278,6 +337,8 @@ const CONTEXT_PATHS = new Map([
   ["M0-S5B", M0_08_CONTEXT_PATHS],
   ["M0-S6A", M0_S6A_CONTEXT_PATHS],
   ["M0-S9A", M0_S9A_CONTEXT_PATHS],
+  ["M0-S9B", M0_S9B_CONTEXT_PATHS],
+  ["M0-S9C", M0_S9C_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {
