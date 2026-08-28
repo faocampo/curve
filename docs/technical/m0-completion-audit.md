@@ -5,12 +5,12 @@
 | Field | Value |
 | --- | --- |
 | Status | `AUDITED / M0 INCOMPLETE / M0-S9A ACCEPTED_LOCAL / M0-S9B-S9C PREPARED_BLOCKED / NOT_IMPLEMENTATION_AUTHORITY` |
-| Version | 1.5 |
-| Date | 2026-08-28 |
+| Version | 1.6 |
+| Date | 2026-08-29 |
 | Product | Curve |
 | Owner and human reviewer | Federico Ocampo |
 | Audit scope | M0 (foundation and control plane), its P0 (foundation-readiness) decisions/proofs, Plane implementation evidence, and the next executable package |
-| Audited Curve contract baseline | `02d383ada3941cdebc1939a1d7990f8ea7ff50d4`, the squash merge of Curve PR #40 (M0-S9B/M0-S9C definition gates) |
+| Audited Curve contract baseline | `45590d356fa813a7407f624ee47d1c0ab3bc4cf2`, the squash merge of Curve PR #30 (P0-12 retention-policy decision package), including Curve PR #40 (M0-S9B/M0-S9C definition gates) |
 | Merged Plane `preview` baseline | `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, the squash merge of Plane PR #12 (M0-S9A local provider-registry implementation) |
 | Authority boundary | This audit records evidence and gaps. It authorizes no decision transition, code mutation, provider access, credential use, infrastructure change, deployment, or merge. |
 
@@ -48,7 +48,8 @@ remaining rows below satisfy their own completion boundaries.
 | [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction) | Approved head `737c52c52f6f8f8b5f59ec4c69450b2edcacea8d` squash-merged as `da44d27c3bde73b11640b165d3ddbca8451cd1f6`; both commits share Git tree `3596a70feecb6fd72f65e3394d7091141b3bbba8`; [Curve CI run 33181156641](https://github.com/faocampo/curve/actions/runs/33181156641) (contract and documentation validation) passed. | Accepted correction source; grants no Plane resumption authority |
 | [Curve PR #37](https://github.com/faocampo/curve/pull/37) (M0-S9A post-correction lifecycle reconciliation) | Approved head `cf1ffb696b30f45e71a6edcaba062f67a3de7b8e` squash-merged as `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`; CI passed. | Canonical implementation contract and context source |
 | [Curve PR #39](https://github.com/faocampo/curve/pull/39) (M0-S9A implementation-evidence reconciliation) | Approved head `05e759f6749861f3332bb124d5dca703f304726a` squash-merged as `03b26cdb576962fad8e2047fedcfafa2636bfc23`; CI passed. | Canonical post-implementation evidence |
-| [Curve PR #40](https://github.com/faocampo/curve/pull/40) (M0-S9B/M0-S9C definition gates) | Approved head `8db2b1cbf29632c64b9498fb05925934d7ddd3ff` squash-merged as `02d383ada3941cdebc1939a1d7990f8ea7ff50d4`; CI passed. | Current Curve baseline; canonical definition packages and context source |
+| [Curve PR #40](https://github.com/faocampo/curve/pull/40) (M0-S9B/M0-S9C definition gates) | Approved head `8db2b1cbf29632c64b9498fb05925934d7ddd3ff` squash-merged as `02d383ada3941cdebc1939a1d7990f8ea7ff50d4`; CI passed. | Canonical definition packages and context source |
+| [Curve PR #30](https://github.com/faocampo/curve/pull/30) (P0-12 retention-policy decision package) | Rebased head `b538d06c4e3392a574fafbef7184b24497c7d48b` squash-merged as `45590d356fa813a7407f624ee47d1c0ab3bc4cf2`; CI passed. | Current Curve baseline; canonical fail-closed D-009 proposal and context source, without decision or implementation authority |
 | [Plane PR #10](https://github.com/faocampo/plane/pull/10) (M0-S6A durable orchestration implementation) | Approved head `af8335c42fa3c57e66f76c6ebd80220640630cf8` squash-merged as `ad5772c0565c934e64ea90f892be1374819979be`. Both commits resolve to Git tree `dde7e50afa1710b729ab86f9ed99e4c462c763d0`. | Canonical merged Plane baseline |
 | [Plane API and Curve CI](https://github.com/faocampo/plane/actions/runs/32844162011) (M0-S6A API, Curve, replay, and migration validation) | Passed. | Accepted implementation evidence |
 | [Plane CodeQL](https://github.com/faocampo/plane/actions/runs/32844164027) (M0-S6A security analysis) | Passed. | Accepted security evidence |
@@ -71,7 +72,7 @@ remaining rows below satisfy their own completion boundaries.
 | M0-01 (Curve module shell) | Additive, disabled-by-default, workspace-scoped Plane module | Accepted Plane implementation and migration evidence | `ACCEPTED` | None for local M0 (foundation and control plane). |
 | M0-02 (core persistence) | Workspace-scoped records, immutable history, concurrency, and migration contracts | Accepted Plane implementation and M0-S2 (operation and delivery kernel) evidence | `ACCEPTED` | None for local M0 (foundation and control plane). |
 | M0-03 (core authorization and policy) | Deny-by-default core policy, trusted-role derivation, separation, classification, and audit | Accepted Plane implementation through migration `0004_policydecision_recorded_at_default.py` | `ACCEPTED` | Add provider-specific policy only with its consuming decision and packet. |
-| M0-04 (protected storage and erasure) | AccessEnvelope, object integrity, classification, retention, hold, tombstone, erasure, and backup behavior | D-009 (retention and erasure) owner workshop packet published in [Curve PR #33](https://github.com/faocampo/curve/pull/33) (later-milestone decision-readiness packets); [P0-12 decision packet](p0-12-retention-decision-task-packet.md) (machine-verifiable owner inputs, policy cells, approvals, tests, and fail-closed handoff) is prepared in this review package | `BLOCKED_DECISION` | Publish the P0-12 proposal, then named Security, Privacy, Legal, Platform Operations, Database Operations, and Curve Engineering approvers complete D-009; materialize M0-04 only after the decision is `DECIDED`. |
+| M0-04 (protected storage and erasure) | AccessEnvelope, object integrity, classification, retention, hold, tombstone, erasure, and backup behavior | D-009 (retention and erasure) owner workshop published in [Curve PR #33](https://github.com/faocampo/curve/pull/33) (later-milestone decision-readiness packets); [Curve PR #30](https://github.com/faocampo/curve/pull/30) (P0-12 machine decision package) is merged, validated, and remains `PROPOSED` | `BLOCKED_DECISION` | Named Security, Privacy, Legal, Platform Operations, Database Operations, and Curve Engineering approvers complete D-009; then materialize a separate M0-04 implementation packet. |
 | M0-05 (delivery kernel) | Transactional outbox/inbox, idempotency, operation, audit, dead letter, and replay-safe relay | Accepted M0-S2 (operation and delivery kernel) implementation | `ACCEPTED` | Extend only through packet-bound destinations/consumers. |
 | M0-06 (local Temporal skeleton) | Deterministic parent/child orchestration, signals, pause/resume, cancellation, replay, restart recovery, and Continue-As-New | [Plane PR #10](https://github.com/faocampo/plane/pull/10) (durable orchestration implementation) merged with identical approved/merge tree and green CI; [Curve PR #32](https://github.com/faocampo/curve/pull/32) (durable-orchestration acceptance evidence) is canonical on `main` | `DONE_LOCAL` | Keep provider dispatch, runner lifecycle, budget exhaustion, and full recovery qualification in M4-05 (slice dispatch workflow), M4-04 (trusted runner lifecycle), M6-05 (budget administration and capacity), and R1-03 (disaster-recovery exercise). |
 | M0-07 (Operation API, SSE, and minimal UI) | Problem Details, ETag/If-Match, idempotency, pagination, resume, generated client, and Curve-first workspace page | Accepted M0-S4 (Operation API/SSE/minimal UI) implementation evidence | `ACCEPTED` | None for local M0 (foundation and control plane). |
@@ -82,8 +83,8 @@ remaining rows below satisfy their own completion boundaries.
 
 ## Next executable sequence
 
-1. Publish and review P0-12 (retention-policy decision package), complete D-009
-   (retention, backup, legal-hold, tombstone, and erasure decision), then
+1. Complete D-009 (retention, backup, legal-hold, tombstone, and erasure
+   decision) using the published P0-12 (retention-policy decision package), then
    materialize the separately reviewable M0-04 (protected object storage and
    erasure) task packet.
 2. Materialize an M0-S9B (external provider transport and administration)
