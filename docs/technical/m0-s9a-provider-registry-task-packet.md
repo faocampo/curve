@@ -5,20 +5,25 @@
 | Field | Value |
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
-| Status | `CORRECTION_MERGED / IMPLEMENTATION_PAUSED` |
-| Version | 1.10 |
+| Status | `ACCEPTED_AND_MERGED / LOCAL_ONLY` |
+| Version | 1.11 |
 | Date | 2026-08-28 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Published Curve correction baseline | Curve `main` contains [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction), approved at exact head `737c52c52f6f8f8b5f59ec4c69450b2edcacea8d` and squash-merged as `da44d27c3bde73b11640b165d3ddbca8451cd1f6`; both commits share Git tree `3596a70feecb6fd72f65e3394d7091141b3bbba8` |
+| Published Curve contract baseline | Curve `main` `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`, the squash merge of [Curve PR #37](https://github.com/faocampo/curve/pull/37) (M0-S9A post-correction lifecycle reconciliation) |
 | Target branch | `preview` |
 | Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) and reserving provider migration `0005` after policy migration `0004` |
 | Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
+| Accepted Plane implementation | [Plane PR #12](https://github.com/faocampo/plane/pull/12) (M0-S9A local provider-registry implementation) approved at exact head `d48a7d09f6824f045a1077ce2de256bd3dcde5d4` and squash-merged into `preview` as `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; both commits share Git tree `d43bdc22413627399f2232f1b17e2092d9e31cb1` |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | One AI coding agent distinct from the human reviewer |
 | Risk | `STANDARD`; local synthetic provider metadata only |
 | Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
+
+Version 1.11 binds the completed local Plane implementation and accepted
+post-merge evidence. It changes no implementation semantic, schema, fixture,
+scope, budget, branch, migration, or rollback rule.
 
 Version 1.10 reconciles only post-merge lifecycle and evidence metadata after
 Curve PR #36 (six-finding M0-S9A contract correction); it changes no
@@ -39,14 +44,14 @@ post-commit/authorized-next-command drains. Approved Option B derives
 target workspace only for provider registration/administration actions.
 
 All product, architecture, security, data, licensing, infrastructure, scope,
-test, budget, and rollback inputs required by this package are resolved. Curve
-PR #36 (six-finding M0-S9A contract correction) is approved, green, and merged.
-Its merge grants no renewed Plane execution authority. Plane implementation
-remains paused until a canonical M0-S9A context digest is generated from the
-exact merged Curve `origin/main` revision selected for resumed dispatch, the
-Plane base is revalidated, and Federico Ocampo explicitly authorizes
-resumption. The dispatcher pins that exact merged revision and digest, fetches
-both remotes, and stops before Plane mutation if either base has advanced.
+test, budget, and rollback inputs required by this package were resolved before
+dispatch. Federico Ocampo authorized the exact Curve contract revision
+`e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`, canonical context digest
+`sha256:9e07550799a6e4d88a6734f9a98e0de59812402d983bc7291396332a6b214cb0`,
+and Plane base `ad5772c0565c934e64ea90f892be1374819979be`. He later approved the
+exact implementation head. [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md)
+(exact contract, implementation, CI, regression, security, dependency, and
+rollback record) binds the accepted squash merge.
 
 ## Outcome
 
@@ -107,25 +112,23 @@ incompatible changes require a new schema version and compatibility plan.
 
 ## Dispatch readiness
 
-The publication state is fixed in this versioned packet. Requirements marked
-`Required at dispatch` are satisfied by the execution protocol's immutable
-external resumption record rather than by editing this packet:
+The publication and accepted-dispatch evidence are fixed below:
 
 | Gate | Publication state | Dispatch-time evidence |
 | --- | --- | --- |
 | P0-05 (test strategy and audit closure) | Satisfied | Curve `main` `fdae85b33a235cd494dd36565698b2b5033a3389` establishes exact AC-01 through AC-60 ownership and suite commands |
 | M0-S9A independent-review correction | Satisfied | [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction) passed [Curve CI run 33181156641](https://github.com/faocampo/curve/actions/runs/33181156641) (contract and documentation validation), was approved at exact head `737c52c52f6f8f8b5f59ec4c69450b2edcacea8d`, and squash-merged as `da44d27c3bde73b11640b165d3ddbca8451cd1f6`; both commits share Git tree `3596a70feecb6fd72f65e3394d7091141b3bbba8` |
-| Canonical M0-S9A context | Required at dispatch | Generate the canonical context digest from the exact merged Curve `origin/main` revision selected for resumed dispatch; a candidate branch digest grants no execution authority |
-| Plane base revalidation | Required at dispatch | Revalidate Plane `preview` immediately before dispatch against the exact Curve `origin/main` revision and context digest; the last verified expected base is `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) |
+| Canonical M0-S9A context | Satisfied | Curve contract revision `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`; context digest `sha256:9e07550799a6e4d88a6734f9a98e0de59812402d983bc7291396332a6b214cb0` |
+| Plane base revalidation | Satisfied | Plane `preview` base `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation), was revalidated at dispatch |
 | Owner/reviewer | Satisfied | Federico Ocampo |
 | Material decisions | `PUBLISHED / SATISFIED` | The local outbox/inbox delivery model and Option B registration authority are published. D-007 (MCP trust model and Orca access profile) remains MCP-specific and is not a dependency. |
-| Renewed exact-revision and context-digest implementation authorization | Required at dispatch | After canonical context generation and Plane-base revalidation, Federico Ocampo approves resumption against the exact merged contract revision, canonical digest, and still-current Plane base |
+| Renewed exact-revision and context-digest implementation authorization | Satisfied | Federico Ocampo authorized the exact contract revision, digest, base, branch, scope, exclusions, synthetic data, US$25 budget, and rollback, then approved exact implementation head `d48a7d09f6824f045a1077ce2de256bd3dcde5d4` for squash merge |
+| Post-merge implementation evidence | Satisfied | [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md) (accepted local implementation, exact revisions, CI, regression, dependency disposition, and rollback) binds Plane merge `af7187d049c6ee6d0c82a5c70b686d4c444e9b63` |
 
-The immutable external resumption record binds the exact merged Curve revision,
+The immutable authorization record bound the exact merged Curve revision,
 canonical context digest, revalidated Plane base, owner/reviewer, authorized
-scope, exclusions, budget, and rollback. Recording it does not require editing
-or redigesting this packet. No coding agent mutates Plane until that record
-proves every dispatch-time requirement.
+scope, exclusions, budget, and rollback before Plane mutation. The accepted
+evidence record preserves those bindings after merge.
 
 ## Dispatch policy
 
@@ -499,8 +502,9 @@ systems unchanged.
 
 ## Completion boundary
 
-M0-S9A is complete only when the exact implementation head passes all scenarios
-and its post-merge evidence is accepted. M0-09 remains open until M0-S9B proves
+M0-S9A is complete for its approved local-only scope: the exact implementation
+head passed the scoped scenarios, was approved and merged, and its post-merge
+evidence is accepted. M0-09 remains open until M0-S9B proves
 the applicable administration/transport, real adapter, callback/webhook, and
 scheduled reconciliation behaviors and a separately defined Model Gateway
 child proves AC-57 (model-failover policy and actual-routing evidence). M0-S9A

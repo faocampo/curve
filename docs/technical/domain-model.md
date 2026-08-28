@@ -4,7 +4,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; M0-S9A local provider substrate has published bounded delivery and Option B registration authority, and its six-finding correction is merged; the previously dispatched Plane implementation is paused until an immutable external resumption record binds the canonical M0-S9A context digest, revalidated Plane base, and explicit Federico authorization; remaining capabilities stay packet/decision gated |
+| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel are implemented; M0-S9A local provider persistence, bounded delivery, Option B registration authority, and deterministic fake-adapter reconciliation are implemented and accepted at Plane `preview` `af7187d...`; remaining provider, model, protected-storage, and non-local capabilities stay packet/decision gated |
 | Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product, Curve-first shell, lifecycle, security, private-platform connectivity, accepted local Temporal proof, and acceptance contract) |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
 | Last updated | 2026-08-28 |
