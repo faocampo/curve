@@ -5,12 +5,12 @@
 | Field | Value |
 | --- | --- |
 | Status | Active readiness control; D-001 (Plane upstream foundation decision), D-003 (runtime topology and trust-zone decision), and OBS-BIND-001 (local observability binding) are decided for local scope; M0-S3, M0-S4, M0-S5A, M0-S5B, M0-S6A, and M0-S9A are accepted and merged for `LOCAL_ONLY`; M0-06 and M0-08 are complete for `LOCAL_ONLY`; M0-S9B external transport/administration and M0-S9C Model Gateway are decomposed but blocked on named decisions; the P0-12/D-009 retention proposal is prepared and fail closed |
-| Version | 1.30 |
+| Version | 1.31 |
 | Date | 2026-08-28 |
 | Normative product baseline | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (current product requirements, Curve-first shell invariant, decision register, and accepted local Temporal proof) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Accepted Plane baseline | Fork `preview` at `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; preserves accepted M0-S1 through M0-S6A and adds accepted M0-S9A (provider-neutral registry and reconciliation foundation) |
-| Published Curve contract baseline | Curve `main` at `03b26cdb576962fad8e2047fedcfafa2636bfc23`, the squash merge of [Curve PR #39](https://github.com/faocampo/curve/pull/39) (M0-S9A implementation-evidence reconciliation); accepted M0-S5B evidence remains bound at `590a52ef006fd1d83bef5c76dfdab9ce9080a168` |
+| Published Curve contract baseline | Curve `main` at `02d383ada3941cdebc1939a1d7990f8ea7ff50d4`, the squash merge of [Curve PR #40](https://github.com/faocampo/curve/pull/40) (M0-S9B/M0-S9C definition gates); accepted M0-S9A implementation evidence remains bound through Curve PR #39 at `03b26cdb...`, and accepted M0-S5B evidence remains bound at `590a52ef...` |
 | Published Plane implementation | Plane `preview` at `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; [Plane PR #12](https://github.com/faocampo/plane/pull/12) (M0-S9A local provider-registry implementation) is accepted and merged |
 
 ## Readiness rule

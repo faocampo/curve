@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Decision index; D-001 (Plane upstream foundation decision) is decided; D-003 (runtime topology and trust-zone decision) local private-platform profile is decided and implemented; remaining activation scopes require owner approval and applicable proof |
-| Version | 1.1 |
+| Version | 1.2 |
 | Source | [Curve PRD v0.12 decision register](../curve-ai-native-sdlc-prd.md#decision-register) (controlled product and architecture decisions, Curve-first shell, and accepted local Temporal proof) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
@@ -19,7 +19,7 @@ An AI agent may draft an ADR, gather evidence, run non-destructive proofs, and r
 
 | PRD ID | Status | ADR subject | Blocks | Minimum evidence before decision |
 | ------ | ------ | ----------- | ------ | -------------------------------- |
-| D-001 | DECIDED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) (approved fork, licensing, reuse, and upgrade strategy) | P0/M0 | Federico Ocampo approved ADR digest `0c780a...`, both exact foundation PR heads, the reuse/license boundary, and the repository/upgrade strategy. Plane foundation `549db1a...` and Curve governance baseline `fe8664a...` are merged. M0-01, M0-S2, M0-03, M0-S3, and M0-S4 advanced current Plane `preview` to `e762fbb...`. |
+| D-001 | DECIDED | [Plane upstream foundation and reuse-versus-build boundary](adr-001-plane-upstream-foundation.md) (approved fork, licensing, reuse, and upgrade strategy) | P0/M0 | Federico Ocampo approved ADR digest `0c780a...`, both exact foundation PR heads, the reuse/license boundary, and the repository/upgrade strategy. Plane foundation `549db1a...` and Curve governance baseline `fe8664a...` are merged. Accepted M0 packages through M0-S9A advanced current Plane `preview` to `af7187d...`. |
 | D-002 | PROPOSED | Onyx per-operation delegated identity | M1 | Supported OAuth mechanism, issuer/audience/scopes, token lifetime/revocation, source ACL behavior, durable-wait reauthorization, audit, threat model, proof. |
 | D-003 | DECIDED and implemented for `LOCAL_ONLY`; environment activation inputs OPEN | [Development/staging/production topology and trust zones](adr-003-runtime-topology.md) (runtime topology, Temporal pins, connectivity, and activation boundary) | M0-S3 (local Temporal round trip)/M0-06 (Temporal workflow skeleton); non-local M0/M4/M6 activation | Temporal Python SDK 1.31.0 remains fixed. The effective 2026-08-20 amendment selects shared Plane `dev_env`, direct loopback ports, private EKS/VPC/VPN, `ClusterIP`, a dedicated namespace by default, internal UI ingress, workload identity/Secrets Manager, and authenticated non-local Temporal clients. [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact context, merge, tests, runtime proof, security acceptance, and rollback) accepts the local proof at Plane merge `d99342f...`. Environment activation still requires persistence, certificate, HA, backup/recovery, capacity, cost, and ownership evidence. |
 | D-004 | PROPOSED | Thin Curve Model Gateway over approved OpenRouter access | Model-enabled M1/M3/M5 | Versioned contract, failure behavior, policy enforcement, telemetry, HA impact, license/supply chain, operations proof, replacement strategy. |
