@@ -16,10 +16,12 @@ development. M0-S5B (local observability integration proof) is accepted and
 merged, completing M0-08 for `LOCAL_ONLY`. M0-S6A (durable parent/child
 Temporal orchestration) is accepted and merged, completing the defined M0-06
 (Temporal workflow-skeleton work package) for `LOCAL_ONLY`. M0-S9A (provider-neutral registry
-and reconciliation foundation) now has an approved synchronous-command and
-explicit local outbox/inbox delivery model and published Option B registration
-authority. Its contract is ready and awaits a separate explicit Plane
-implementation dispatch. D-007 (MCP trust-model decision) stays scoped to
+and reconciliation foundation) has an approved synchronous-command and
+explicit local outbox/inbox delivery model, published Option B registration
+authority, and a previously authorized Plane implementation. That implementation
+is paused while the six-finding contract correction passes CI, exact-head
+approval, squash merge, canonical context regeneration, and authorized
+resumption. D-007 (MCP trust-model decision) stays scoped to
 MCP/Orca activation. An
 implementation package
 remains blocked until every decision scope named by its exact packet is
@@ -99,7 +101,7 @@ identifiers are:
 | [M0-S4 foundation probe experience](ux-m0-s4-foundation-probe.md) (clickable local foundation-status flow, state contract, and review script) | Approved UX-004-M0-S4/UX-005-M0-S4 contract for the Operation API, resumable SSE, cancellation, recovery, and minimal workspace UI | `IMPLEMENTED_AND_ACCEPTED`; PR #17 head `a463876...` merged as `42ea329...`; Plane implementation and acceptance are recorded in the M0-S4 evidence document |
 | [OBS-BIND-001 local observability binding](obs-bind-001-local-observability-binding.md) (decided Docker OTLP, Prometheus, Grafana, health, cleanup, and promotion contract) | Exact local platform binding and five-checkpoint M0-S5B implementation handoff | `DECIDED_LOCAL_ONLY`; published at Curve `43480ca...` and consumed by M0-S5B |
 | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, local binding proof, tests, evidence, and rollback) | Independently reviewable M0-S5A telemetry-kernel and M0-S5B local-integration changes | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_ACCEPTED_AND_MERGED` |
-| [M0-S9A provider-registry task packet](m0-s9a-provider-registry-task-packet.md) (local provider persistence, Option B authorization, adapter port, synchronous fake reconciliation, bounded local delivery, acceptance, stop conditions, and rollback) | First independently reviewable child of M0-09; excludes public administration, credentials, callbacks/webhooks, schedules, background execution, and real adapters | `READY / AWAITING_EXPLICIT_DISPATCH`; contract publication, local delivery, Plane base, and registration authority are resolved; dispatch binds the exact merged readiness revision and canonical context digest; D-007 is MCP/Orca-specific |
+| [M0-S9A provider-registry task packet](m0-s9a-provider-registry-task-packet.md) (corrected local provider persistence, Option B authorization, synchronous reconciliation, delivery ordering/recovery, replay, event payloads, acceptance, stop conditions, and rollback) | First independently reviewable child of M0-09; excludes public administration, credentials, callbacks/webhooks, schedules, background execution, and real adapters | `REVIEW / AWAITING_EXACT_HEAD_APPROVAL`; the previously authorized Plane implementation is paused until the correction is green, approved, squash-merged, canonically digested, and explicitly resumed; D-007 is MCP/Orca-specific |
 | [M0-S5 telemetry manifest](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboard, four alerts, and redaction contract) | Normative v1 instrumentation and operational-asset surface | Export defaults to disabled; exporter-failure diagnostics stay process-local; X3M endpoint/datasource/alert/path-health binding is supplied separately |
 | [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
 | [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | Historical P0-06A/P0-06B standalone-proof design and supersession record | `SUPERSEDED`; retained for audit, with M0-S3 as the executable proof |
