@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) / child of M0-09 (provider integration foundation) |
-| Status | `READY / AWAITING_EXPLICIT_DISPATCH` |
-| Version | 1.8 |
-| Date | 2026-08-26 |
+| Status | `REVIEW / AWAITING_EXACT_HEAD_APPROVAL` |
+| Version | 1.9 |
+| Date | 2026-08-28 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Published Curve contract baseline | `main` at `7ea91188525c63d699e551910834f4602536f082`, containing accepted P0-05 (test strategy and audit closure), M0-S6A (durable parent/child Temporal orchestration contract), and the approved M0-S9A contract publication |
+| Published Curve contract baseline | `main` at `13cec5e99889c68b885a57a8a98609885b1e27b3`, containing accepted P0-05 (test strategy and audit closure), M0-S6A (durable parent/child Temporal orchestration contract), the approved M0-S9A contract publication, and the policy-v2 contract correction |
 | Target branch | `preview` |
 | Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) and reserving provider migration `0005` after policy migration `0004` |
 | Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
@@ -20,20 +20,28 @@
 | Risk | `STANDARD`; local synthetic provider metadata only |
 | Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
 
-Version 1.8 records publication of the approved M0-S9A contract through Curve
-PR #29 at squash commit `7ea91188525c63d699e551910834f4602536f082`.
-Provider commands remain synchronous; committed provider events use destination
+Version 1.9 resolves the six findings from the independent implementation
+review without expanding M0-S9A scope. It requires authorization before the
+next-command drain, zero delivery mutation on denial, resumption of a replayed
+pending reconciliation, guarded ORM bulk writes for workspace-bound provider
+references, dead-lettering after the third abandoned claim, one
+`OPTIMISTIC_CONCURRENCY` result for stale success or failure, and a closed
+versioned payload schema for every provider event. Provider commands remain
+synchronous; committed provider events use destination
 `CURVE_PROVIDER_LOCAL_V1`, consumer `curve-provider-local-v1`, and explicit
-post-commit/next-command drains. Approved Option B derives
+post-commit/authorized-next-command drains. Approved Option B derives
 `PLATFORM_ADMINISTRATOR` from active Plane workspace role `20` in the exact
 target workspace only for provider registration/administration actions.
 
 All product, architecture, security, data, licensing, infrastructure, scope,
-test, budget, and rollback inputs required by this package are resolved. The
-package is ready for implementation but grants no execution authority. The
-dispatcher pins the exact merged readiness revision and canonical M0-S9A
-context digest in a separate human-approved authorization, fetches both remotes,
-and stops before Plane mutation if either base has advanced.
+test, budget, and rollback inputs required by this package are resolved. This
+correction remains under review and grants no renewed Plane execution authority
+until its exact head is approved, CI is green, it is merged, and a replacement
+canonical M0-S9A context digest is generated. The dispatcher pins that exact
+merged revision and digest, fetches both remotes, and stops before Plane
+mutation if either base has advanced.
+
+Plane implementation remains paused pending those correction gates.
 
 ## Outcome
 
@@ -75,6 +83,8 @@ cannot satisfy any part of AC-57.
 | [Provider-registry manifest schema](../../contracts/schemas/provider-registry-manifest.schema.json) (machine validation of the local-only package boundary) | Rejects external access, real providers, wider capability risk, and changed lifecycle |
 | [Provider connection schema](../../contracts/schemas/provider-connection.schema.json) (workspace-scoped connection metadata and lifecycle requirements) | Safe serialized aggregate projection |
 | [Provider capability schema](../../contracts/schemas/provider-capability.schema.json) (immutable versioned adapter capability observation) | Safe serialized capability projection |
+| [Provider connection event schema](../../contracts/schemas/provider-connection-event-v1.schema.json) (versioned payload contract for connection lifecycle and reconciliation-result events) | Closed payload validation for `PROVIDER_CONNECTION` events |
+| [Provider reconciliation event schema](../../contracts/schemas/provider-reconciliation-event-v1.schema.json) (versioned payload contract for reconciliation-operation result events) | Closed payload validation for `OPERATION` reconciliation events |
 | [M0-S2 relational contract](../../contracts/database/m0-s2-relational-contract.md) (operation, event, outbox, idempotency, and audit transaction kernel) | Existing delivery/idempotency primitives; no duplicate implementation |
 | [M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md) (authorization receipt and immutable policy evidence) | Existing policy boundary; no parallel authorization path |
 | [M0-S5 task packet](m0-s5-observability-task-packet.md) (redaction, correlation, telemetry, and alert boundaries) | Safe instrumentation rules |
@@ -97,11 +107,11 @@ Implementation remains blocked until all rows are satisfied:
 | Gate | Current state | Required evidence |
 | --- | --- | --- |
 | P0-05 (test strategy and audit closure) | Satisfied | Curve `main` `fdae85b33a235cd494dd36565698b2b5033a3389` establishes exact AC-01 through AC-60 ownership and suite commands |
-| M0-S9A contract publication | Satisfied | Curve PR #29 approved head `075985a01dd2cac30423d7bc239407ef191da7a2` squash-merged as `7ea91188525c63d699e551910834f4602536f082`; the dispatch authorization pins the final merged readiness revision and regenerated context digest |
+| M0-S9A independent-review correction | Pending exact-head approval | The correction PR must be green, approved at its exact head, squash-merged, and present on `origin/main`; a replacement canonical M0-S9A context digest must then be generated from that merge |
 | Plane base | Satisfied | Plane `preview` `ad5772c0565c934e64ea90f892be1374819979be` contains merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation); dispatch stops if `preview` advances before implementation authorization |
 | Owner/reviewer | Satisfied | Federico Ocampo |
 | Material decisions | `PUBLISHED / SATISFIED` | The local outbox/inbox delivery model and Option B registration authority are published. D-007 (MCP trust model and Orca access profile) remains MCP-specific and is not a dependency. |
-| Exact-head implementation authorization | Pending | Federico Ocampo approves the final merged contract revision and dispatch base |
+| Renewed exact-head implementation authorization | Pending | After the correction merge and context regeneration, Federico Ocampo approves resumption against the final merged contract revision, canonical digest, and still-current Plane base |
 
 No coding agent mutates Plane while any row is pending.
 
@@ -134,7 +144,12 @@ No coding agent mutates Plane while any row is pending.
   policy/operation/event/outbox/idempotency/audit kernel.
 - Bounded local provider-event delivery through destination
   `CURVE_PROVIDER_LOCAL_V1`, consumer `curve-provider-local-v1`, and only the
-  explicit post-commit and next-provider-command drain points.
+  explicit post-commit and authorized-next-provider-command drain points.
+- Closed versioned event payloads: `PROVIDER_CONNECTION` events validate
+  against `provider-connection-event-v1.schema.json`, and reconciliation
+  `OPERATION` events validate against
+  `provider-reconciliation-event-v1.schema.json`, through the manifest's
+  aggregate-aware `event_payload_contracts` mapping.
 - Capability validation against exact connection/workspace/adapter/version,
   supported protocol, known risk, classification ceiling, and closed schemas.
 - Explicit fake reconciliation with success, byte-equivalent result, changed
@@ -185,16 +200,18 @@ keeping one active PR at a time and preserving the same exact context revision.
 | Boundary | Required implementation |
 | --- | --- |
 | Models | Add only under `apps/api/plane/curve`; no Plane model change or hard FK to Plane workspace tables |
-| Repository lookup | Every method requires `workspace_id` and uses it in the first query predicate; absent/wrong-workspace IDs share the same result |
-| Policy | Services run through the existing `execute_authorized_mutation` wrapper, which alone issues an active unforgeable receipt. Registration pins core policy v2 digest `sha256:2895b63392236afa07e6f0572d6ddb1c91aa7f40d37282f250019d2829ed5787` and action `CURVE.PROVIDER_CONNECTION.REGISTER` against the existing `WORKSPACE` version `1`; an authenticated human's live active Plane role `20` in that exact workspace derives `PLATFORM_ADMINISTRATOR` only for the register/administer actions; static target is `curve.fake-local@1.0.0`. Caller-supplied roles/targets, roles `15`/`5`, inactive/wrong-workspace membership, agent/service actors, unrelated actions, non-local environment, and non-internal classification deny. Existing connection commands retain `CURVE.PROVIDER_CONNECTION.ADMINISTER`. |
+| Repository lookup | Every method requires `workspace_id` and uses it in the first query predicate; absent/wrong-workspace IDs share the same result. Enforce manifest `workspace_reference_guard = INSTANCE_AND_QUERYSET` and `bulk_workspace_reference_mutation = PROHIBITED`: `ProviderCapability` rejects `bulk_create`, `bulk_update`, `update`, and delete; `ProviderConnection` rejects `bulk_create` and any `bulk_update`/`update` of `workspace_id` or `current_capability_id`. Repository writes lock and validate both sides before assigning a provider reference. |
+| Policy and command ordering | Services use the existing policy-owned authorization boundary, which alone issues an active unforgeable receipt. Registration pins core policy v2 digest `sha256:2895b63392236afa07e6f0572d6ddb1c91aa7f40d37282f250019d2829ed5787` and action `CURVE.PROVIDER_CONNECTION.REGISTER` against the existing `WORKSPACE` version `1`; an authenticated human's live active Plane role `20` in that exact workspace derives `PLATFORM_ADMINISTRATOR` only for the register/administer actions; static target is `curve.fake-local@1.0.0`. Caller-supplied roles/targets, roles `15`/`5`, inactive/wrong-workspace membership, agent/service actors, unrelated actions, non-local environment, and non-internal classification deny. Existing connection commands retain `CURVE.PROVIDER_CONNECTION.ADMINISTER`. Enforce manifest `next_command_drain_order = AFTER_ALLOW_RECEIPT_BEFORE_COMMAND_MUTATION` and `denied_command_delivery_mutation = NONE`: the `ALLOW` callback invokes the drain before provider mutation, while denial returns before any provider outbox claim, inbox insert/update, retry scheduling, delivery acknowledgement, or dead-letter mutation. Denial-policy and safe denial-audit evidence remain permitted. |
 | Transactions | Adapter calls never occur inside `transaction.atomic()`; each accepted state mutation atomically writes domain event, outbox, audit, and aggregate version |
-| Idempotency | Store only key/request digests and replay the original PostgreSQL `ResourceRef`; changed digest conflicts without another effect |
+| Idempotency and reconciliation replay | Store only key/request digests and replay the original PostgreSQL `ResourceRef`; changed digest conflicts without another effect. Enforce manifest `same_command_replay = RETURN_TERMINAL_OR_RESUME_PENDING` and `pending_command_replay = RESUME_FROM_DURABLE_PHASE`: a terminal reconciliation Operation returns its original result, while a matching replay of a `PENDING` Operation resumes adapter execution and compare-and-set result application instead of returning early. Concurrent resumptions may invoke the deterministic local adapter more than once but apply one terminal result. |
 | Capability history | Append-only; byte-equivalent observations reuse current capability; changed valid observations append the next version |
 | Registry | Exact static mapping for `curve.fake-local`; no dynamic import, entry-point discovery, arbitrary class path, or configuration-selected module |
 | Fake adapter | Pure deterministic in-memory implementation; no socket, filesystem, environment, subprocess, Docker, or credential access |
 | Retry and time | One 15-second monotonic deadline covers at most three attempts; only `RATE_LIMIT` and `TRANSIENT` retry while time remains; all other normalized errors, ambiguity, cancellation, and deadline exhaustion stop immediately |
 | Reconciliation cadence | Successful result acceptance sets advisory `next_reconcile_at` to trusted acceptance time plus exactly 900 seconds; no scheduler consumes it in M0-S9A |
-| Local event delivery | Synchronous provider commands; destination `CURVE_PROVIDER_LOCAL_V1`; consumer `curve-provider-local-v1`; explicit drains after commit and before the next provider command; inbox uniqueness `(workspace_id, consumer_id, event_id)`; batch 10; claim lease 30 seconds; retry after five seconds; maximum three delivery attempts; then `DEAD_LETTER` |
+| Result concurrency | Success and failure use the same result compare-and-set. Enforce manifest `stale_result_outcomes = [SUCCESS, FAILURE]`, `stale_result_error_code = OPTIMISTIC_CONCURRENCY`, and `stale_result_provider_mutation = NONE`; never expose the stale adapter result as the governing error. If the Operation version/status is stale, enforce `stale_operation_result = OPTIMISTIC_CONCURRENCY_NO_MUTATION`: preserve provider and Operation state and append only safe no-effect audit. If the Operation is current `PENDING` but the connection is stale, enforce `stale_connection_operation_settlement = FAIL_PENDING_WITH_OPTIMISTIC_CONCURRENCY`: preserve connection/capability/last-error state, terminalize only the Operation as `FAILED`, and emit its `OPERATION` reconciliation-failed event/outbox plus safe audit; emit no `PROVIDER_CONNECTION` event. |
+| Local event delivery | Synchronous provider commands; destination `CURVE_PROVIDER_LOCAL_V1`; consumer `curve-provider-local-v1`; explicit drains after commit and after `ALLOW` but before the next provider mutation; inbox uniqueness `(workspace_id, consumer_id, event_id)`; batch 10; claim lease 30 seconds; retry after five seconds. Claiming atomically increments the attempt count; expired claims one and two may be reclaimed. Enforce manifest `expired_claim_at_maximum_attempts = DEAD_LETTER`: expiry of claim three moves directly to `DEAD_LETTER` and no fourth claim is permitted. Explicit consumer failure on attempt three also dead-letters. |
+| Event payload contracts | Manifest `required_events` remains the eight-name allowlist. Its `event_payload_contracts` maps `PROVIDER_CONNECTION` to `provider-connection-event-v1.schema.json` for the six lifecycle events plus reconciliation completed/failed, and maps `OPERATION` to `provider-reconciliation-event-v1.schema.json` for reconciliation completed/failed. The registered connection payload includes its `configuration_digest`; active connection payloads include the accepted capability digest/version pair. Validate the closed versioned payload before DomainEvent/outbox persistence; an event-name array is not a payload schema. |
 | Runtime exclusion | Provider-event delivery invokes no Temporal workflow, Celery task, scheduler, background loop, network, credential, or external side effect |
 | Projection | Database `current_capability_id` serializes as wire `capability_document_ref`; absent nullable resource references are omitted, while state-required references are non-null |
 | Observability | Existing M0-S5 redaction/correlation helpers; bounded state/error code only; no raw IDs, configuration, capabilities, or exception text in telemetry |
@@ -215,23 +232,50 @@ sequenceDiagram
     participant D as Local event drain
 
     T->>S: register(workspace, fake config, idempotency)
-    S->>D: Drain prior due provider events (max 10)
-    D->>DB: Claim CURVE_PROVIDER_LOCAL_V1 with 30s lease
-    S->>P: execute policy-owned wrapper, receive active receipt
-    S->>DB: Atomic connection + event + outbox + audit + replay record
-    DB-->>S: PENDING_VALIDATION ResourceRef
-    S->>D: Explicit post-commit drain
-    D->>DB: Insert inbox tuple and acknowledge delivered event
+    S->>P: Evaluate exact workspace, actor, action, and target
+    alt Policy denies
+        P-->>S: DENY decision and safe denial evidence
+        S-->>T: Denied with zero provider-delivery mutation
+    else Policy allows
+        P-->>S: Active ALLOW receipt
+        Note over P,DB: ALLOW callback remains in policy-owned transaction
+        S->>D: Drain prior due provider events (max 10)
+        D->>DB: Claim CURVE_PROVIDER_LOCAL_V1 with 30s lease
+        S->>DB: Atomic connection + event + outbox + audit + replay record
+        DB-->>S: PENDING_VALIDATION ResourceRef
+        S->>D: Explicit post-commit drain
+        D->>DB: Validate event schema, dedupe inbox, acknowledge delivery
+    end
     T->>S: reconcile(connection, expected version, idempotency)
+    S->>P: Evaluate ADMINISTER authorization
+    P-->>S: Active ALLOW receipt
     S->>D: Drain prior due provider events (max 10)
-    S->>DB: Atomic reconciliation Operation start
-    S->>D: Explicit post-commit drain
-    S->>F: describe_capabilities/reconcile outside transaction
-    F-->>S: bounded synthetic observation
-    S->>DB: Atomic capability + ACTIVE connection + Operation result + evidence
-    S->>D: Explicit post-commit drain
-    D->>DB: Dedupe by workspace, consumer, event, then deliver, retry, or dead-letter
-    DB-->>T: Exact connection/capability/operation references
+    S->>DB: Create or replay reconciliation Operation
+    alt Matching Operation is terminal
+        DB-->>S: Original terminal ResourceRef/result
+        S-->>T: Idempotent terminal replay
+    else Operation is PENDING or new
+        alt Matching Operation is PENDING
+            DB-->>S: Existing Operation and expected versions
+        else New Operation
+            DB-->>S: Committed PENDING Operation
+            S->>D: Explicit post-commit drain
+        end
+        S->>F: describe_capabilities/reconcile outside transaction
+        F-->>S: bounded synthetic observation
+        S->>DB: Compare-and-set connection and PENDING Operation
+        alt Both expected versions are current
+            DB-->>S: Atomic capability + state + result + evidence
+        else Operation version or status is stale
+            DB-->>S: OPTIMISTIC_CONCURRENCY with no state/event mutation
+        else Operation is PENDING and connection is stale
+            DB-->>S: Fail Operation with OPTIMISTIC_CONCURRENCY
+            Note over DB,D: OPERATION failed event only, provider state unchanged
+        end
+        S->>D: Explicit post-commit drain
+        D->>DB: Schema validate, dedupe, deliver, retry, or dead-letter
+        DB-->>T: Exact connection/capability/operation references
+    end
 ```
 
 ### Ambiguous observation
@@ -244,6 +288,7 @@ sequenceDiagram
     participant F as Fake adapter
     participant D as Local event drain
 
+    Note over S,D: Exact command authorization is already ALLOW
     S->>D: Drain prior due provider events
     S->>DB: Commit reconciliation Operation start
     S->>D: Explicit post-commit drain
@@ -291,9 +336,14 @@ sequenceDiagram
 12. **Lifecycle.** Disable stops use; enable returns to
     `PENDING_VALIDATION`; revoke is terminal; invalid/stale-version transitions
     return stable conflict and safe no-effect audit.
-13. **Race.** Two reconciliations at the same expected version produce one
-    accepted transition and one stale-version no-effect result without duplicate
-    capability/event effects.
+13. **Race and stale result normalization.** Two reconciliations at the same
+    expected version produce one accepted provider transition. Whether the
+    later adapter result is success or failure, a stale Operation version/status
+    produces `OPTIMISTIC_CONCURRENCY` with no state/event mutation. A still-
+    `PENDING` current Operation with a stale connection also produces
+    `OPTIMISTIC_CONCURRENCY`, preserves connection capability/last-error state,
+    terminalizes only that Operation as `FAILED`, emits exactly its `OPERATION`
+    reconciliation-failed event, and emits no provider-connection event.
 14. **No external access.** Socket, subprocess, filesystem/environment secret,
     object-store, and credential-broker probes fail the test if called.
 15. **Redaction.** Logs, metrics, traces, Problem Details, audit safe payloads,
@@ -304,17 +354,22 @@ sequenceDiagram
 17. **Post-commit delivery.** Given an accepted provider mutation, its committed
     `CURVE_PROVIDER_LOCAL_V1` outbox event is drained immediately after commit,
     consumed once by `curve-provider-local-v1`, and marked delivered.
-18. **Next-command recovery.** Given a crash or injected failure after commit
-    and before delivery, the durable event stays pending and the next provider
-    command drains it before evaluating the new command.
+18. **Authorized next-command recovery.** Given a crash or injected failure
+    after commit and before delivery, the durable event stays pending. After the
+    next provider command receives `ALLOW`, it drains the old event before its
+    new provider mutation.
 19. **Inbox deduplication.** Given duplicate delivery of one event, the unique
     `(workspace_id, consumer_id, event_id)` inbox tuple permits one local effect
     and acknowledges every replay safely.
-20. **Bounded claim.** Given more than 10 eligible events, one drain claims at
-    most 10; an abandoned claim becomes eligible after exactly 30 seconds.
+20. **Bounded claim and abandoned-claim exhaustion.** Given more than 10
+    eligible events, one drain claims at most 10 and increments each claimed
+    row's attempt count atomically. Abandoned claims one and two become eligible
+    after their 30-second leases expire. Expiry of claim three moves the event
+    directly to `DEAD_LETTER`; the selector never grants a fourth claim.
 21. **Retry and dead letter.** Given deterministic local-consumer failure, the
-    event is ineligible until five seconds have elapsed, retries at most three
-    times, then enters `DEAD_LETTER` with safe inspectable evidence.
+    event is ineligible until five seconds have elapsed after attempts one and
+    two. Failure on attempt three enters `DEAD_LETTER` with safe inspectable
+    evidence and permits no fourth attempt.
 22. **Destination isolation.** Given provider and Temporal-relay events in the
     outbox, the local provider consumer claims only
     `CURVE_PROVIDER_LOCAL_V1`; no Temporal workflow, Celery task, scheduler, or
@@ -326,16 +381,41 @@ sequenceDiagram
     pinned to core policy v2.
 24. **Workspace-role denial.** Plane roles `15` and `5`, inactive membership,
     absent membership, or role `20` in another workspace deny before any
-    connection, event, outbox, inbox, idempotency-completion, or audit-success
-    effect.
+    connection, event, provider outbox claim/update, inbox insert/update,
+    retry/dead-letter, idempotency-completion, or audit-success effect. A
+    pre-existing due provider event remains byte-equivalent and unclaimed.
 25. **Authority forgery denial.** Caller-supplied
     `PLATFORM_ADMINISTRATOR`, caller-selected target, agent, service, unknown
     adapter, non-provider action, non-local environment, or wider
-    classification denies with stable safe evidence.
+    classification denies with stable safe evidence and zero provider-delivery
+    mutation.
 26. **Resource lifecycle authorization.** Registration evaluates an existing
     `WORKSPACE`; validate/reconcile/disable/enable/revoke evaluate the persisted
     workspace-scoped `PROVIDER_CONNECTION` through the unchanged administer
     action.
+27. **Pending reconciliation replay.** Given a matching idempotency key and
+    request digest whose original reconciliation Operation remains `PENDING`,
+    replay returns that Operation identity and resumes the adapter/result path.
+    Concurrent resumptions may execute the deterministic fake adapter more than
+    once, but compare-and-set accepts one terminal result and emits no duplicate
+    capability or result events. A terminal Operation replays its original
+    terminal result without adapter invocation. After a stale-connection
+    conflict settles a current `PENDING` Operation as
+    `FAILED/OPTIMISTIC_CONCURRENCY`, replay returns that terminal result and
+    never invokes the adapter again.
+28. **ORM bulk-write defense.** Direct `bulk_create`, `bulk_update`,
+    `QuerySet.update`, or delete paths that could bypass append-only or
+    same-workspace connection/capability validation are rejected. Repository
+    writes lock both workspace-bound records and reject foreign-workspace
+    references before persistence.
+29. **Versioned event payload contracts.** Every required event validates
+    before persistence against the manifest's aggregate-aware
+    `event_payload_contracts`: `PROVIDER_CONNECTION` uses
+    `provider-connection-event-v1.schema.json` for six lifecycle events and
+    reconciliation completed/failed; reconciliation `OPERATION` uses
+    `provider-reconciliation-event-v1.schema.json` for completed/failed. An
+    unknown event, aggregate/event mismatch, absent schema reference, or
+    schema-invalid payload fails before DomainEvent/outbox creation.
 
 ## Exact verification commands
 
@@ -346,6 +426,7 @@ Run from the Plane repository root using its pinned toolchains:
 docker compose -f docker-compose-test.yml up -d test-db test-redis test-mq test-minio
 docker compose -f docker-compose-test.yml run --rm --build api-tests python manage.py migrate
 docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/curve/tests
+node apps/api/plane/curve/contracts/check-integrity.mjs
 docker compose -f docker-compose-test.yml run --rm api-tests python manage.py makemigrations curve --check --dry-run
 docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve 0004
 docker compose -f docker-compose-test.yml run --rm api-tests python manage.py migrate curve 0005
@@ -376,8 +457,20 @@ commands; it cannot remove the repository-native full backend command above.
 - Proof that fake adapter runtime cannot open a socket, launch a subprocess,
   read credentials/environment, or call a real provider.
 - Proof of exact destination/consumer routing, post-commit delivery,
-  next-command recovery, inbox deduplication, batch/lease/retry/dead-letter
-  limits, and isolation from Temporal/Celery/background execution.
+  authorization-before-next-command recovery, denial with byte-equivalent
+  delivery rows, inbox deduplication, batch/lease/retry/dead-letter limits,
+  third-abandoned-claim exhaustion without a fourth claim, and isolation from
+  Temporal/Celery/background execution.
+- Proof that matching `PENDING` reconciliation replay resumes and accepts one
+  result, ORM bulk paths cannot bypass same-workspace/append-only checks, and
+  stale success and stale failure both normalize to
+  `OPTIMISTIC_CONCURRENCY` without provider-state mutation. The proof separates
+  stale-Operation no-mutation from current-Operation/stale-connection terminal
+  settlement and verifies terminal replay after settlement.
+- Contract-integrity and negative-validation evidence for both versioned event
+  payload schemas, every aggregate/event mapping in
+  `event_payload_contracts`, unknown events, mismatched aggregates, and invalid
+  payloads.
 - CodeQL/copyright/dependency results and an AGPL source-link regression check.
 - Clean disablement/restart proof and rollback result.
 

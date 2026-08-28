@@ -79,6 +79,10 @@ const testStrategyMatrixPath = join(root, "contracts/testing/ac-test-matrix-v1.j
 const temporalOrchestrationSchema = join(root, "contracts/schemas/temporal-orchestration.schema.json");
 const temporalOrchestrationPath = join(root, "contracts/temporal/m0-orchestration-v1.json");
 const providerConnectionSchema = join(root, "contracts/schemas/provider-connection.schema.json");
+const providerConnectionEventV1Schema = join(
+  root,
+  "contracts/schemas/provider-connection-event-v1.schema.json",
+);
 const providerRegistryManifestSchema = join(root, "contracts/schemas/provider-registry-manifest.schema.json");
 const providerRegistryManifestPath = join(root, "contracts/providers/m0-s9a-provider-registry-v1.json");
 const fixtureSpecs = [
@@ -98,6 +102,11 @@ const fixtureSpecs = [
   ["contracts/schemas/semantic-fixtures/provider-connection-active.valid.json", providerConnectionSchema, true],
   ["contracts/schemas/semantic-fixtures/provider-connection-active-null.invalid.json", providerConnectionSchema, false],
   ["contracts/schemas/semantic-fixtures/provider-connection-revoked-next.invalid.json", providerConnectionSchema, false],
+  [
+    "contracts/schemas/semantic-fixtures/provider-connection-event-registered.valid.json",
+    providerConnectionEventV1Schema,
+    true,
+  ],
   ["contracts/schemas/semantic-fixtures/operation-event-v2-tracestate.invalid.json", operationEventV2Schema, false],
   ["contracts/schemas/semantic-fixtures/operation-terminal.valid.json", operationSchema, true],
   ["contracts/schemas/semantic-fixtures/operation-terminal-null.invalid.json", operationSchema, false],
@@ -482,6 +491,18 @@ const expectedProviderEvents = [
   "curve.provider_reconciliation.completed",
   "curve.provider_reconciliation.failed",
 ];
+const expectedProviderEventPayloadContracts = [
+  {
+    aggregate_type: "PROVIDER_CONNECTION",
+    payload_schema: "https://curve.x3m.internal/contracts/schemas/provider-connection-event-v1.schema.json",
+    event_types: expectedProviderEvents,
+  },
+  {
+    aggregate_type: "OPERATION",
+    payload_schema: "https://curve.x3m.internal/contracts/schemas/provider-reconciliation-event-v1.schema.json",
+    event_types: ["curve.provider_reconciliation.completed", "curve.provider_reconciliation.failed"],
+  },
+];
 const expectedProviderRegistrationAuthorization = {
   policy_key: "CURVE_CORE_POLICY",
   policy_version: 2,
@@ -527,10 +548,19 @@ if (
     JSON.stringify(["RATE_LIMIT", "TRANSIENT"]) ||
   providerRegistryManifest.adapter_contract.ambiguous_mutation_rule !== "RECONCILE_BEFORE_RETRY" ||
   providerRegistryManifest.reconciliation.trigger !== "EXPLICIT_APPLICATION_SERVICE_CALL" ||
-  providerRegistryManifest.reconciliation.same_command_replay !== "RETURN_ORIGINAL_RESOURCE_REF" ||
+  providerRegistryManifest.reconciliation.same_command_replay !== "RETURN_TERMINAL_OR_RESUME_PENDING" ||
+  providerRegistryManifest.reconciliation.pending_command_replay !== "RESUME_FROM_DURABLE_PHASE" ||
   providerRegistryManifest.reconciliation.changed_digest_replay !== "REJECT_CONFLICT" ||
   providerRegistryManifest.reconciliation.workspace_mismatch !== "NOT_FOUND" ||
   providerRegistryManifest.reconciliation.ambiguous_observation !== "RECORD_CONFLICT_WITHOUT_OVERWRITE" ||
+  JSON.stringify(providerRegistryManifest.reconciliation.stale_result_outcomes) !==
+    JSON.stringify(["SUCCESS", "FAILURE"]) ||
+  providerRegistryManifest.reconciliation.stale_result_error_code !== "OPTIMISTIC_CONCURRENCY" ||
+  providerRegistryManifest.reconciliation.stale_result_provider_mutation !== "NONE" ||
+  providerRegistryManifest.reconciliation.stale_connection_operation_settlement !==
+    "FAIL_PENDING_WITH_OPTIMISTIC_CONCURRENCY" ||
+  providerRegistryManifest.reconciliation.stale_operation_result !==
+    "OPTIMISTIC_CONCURRENCY_NO_MUTATION" ||
   providerRegistryManifest.reconciliation.advisory_interval_seconds !== 900 ||
   providerRegistryManifest.delivery.command_execution !== "SYNCHRONOUS" ||
   providerRegistryManifest.delivery.destination !== "CURVE_PROVIDER_LOCAL_V1" ||
@@ -544,6 +574,14 @@ if (
   providerRegistryManifest.delivery.retry_delay_seconds !== 5 ||
   providerRegistryManifest.delivery.maximum_attempts !== 3 ||
   providerRegistryManifest.delivery.exhausted_state !== "DEAD_LETTER" ||
+  providerRegistryManifest.delivery.next_command_drain_order !==
+    "AFTER_ALLOW_RECEIPT_BEFORE_COMMAND_MUTATION" ||
+  providerRegistryManifest.delivery.denied_command_delivery_mutation !== "NONE" ||
+  providerRegistryManifest.delivery.expired_claim_at_maximum_attempts !== "DEAD_LETTER" ||
+  providerRegistryManifest.persistence.workspace_reference_guard !== "INSTANCE_AND_QUERYSET" ||
+  providerRegistryManifest.persistence.bulk_workspace_reference_mutation !== "PROHIBITED" ||
+  JSON.stringify(providerRegistryManifest.event_payload_contracts) !==
+    JSON.stringify(expectedProviderEventPayloadContracts) ||
   JSON.stringify(providerRegistryManifest.required_events) !== JSON.stringify(expectedProviderEvents)
 ) {
   throw new Error("M0-S9A provider-registry manifest differs from the reviewed local-only boundary");

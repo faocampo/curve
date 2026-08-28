@@ -16,6 +16,7 @@
     "reconciliation",
     "delivery",
     "persistence",
+    "event_payload_contracts",
     "required_events"
   ],
   "properties": {
@@ -158,21 +159,27 @@
     "reconciliation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["operation_type", "trigger", "same_command_replay", "changed_digest_replay", "workspace_mismatch", "ambiguous_observation", "advisory_interval_seconds"],
+      "required": ["operation_type", "trigger", "same_command_replay", "pending_command_replay", "changed_digest_replay", "workspace_mismatch", "ambiguous_observation", "stale_result_outcomes", "stale_result_error_code", "stale_result_provider_mutation", "stale_connection_operation_settlement", "stale_operation_result", "advisory_interval_seconds"],
       "properties": {
         "operation_type": {"const": "PROVIDER_RECONCILIATION"},
         "trigger": {"const": "EXPLICIT_APPLICATION_SERVICE_CALL"},
-        "same_command_replay": {"const": "RETURN_ORIGINAL_RESOURCE_REF"},
+        "same_command_replay": {"const": "RETURN_TERMINAL_OR_RESUME_PENDING"},
+        "pending_command_replay": {"const": "RESUME_FROM_DURABLE_PHASE"},
         "changed_digest_replay": {"const": "REJECT_CONFLICT"},
         "workspace_mismatch": {"const": "NOT_FOUND"},
         "ambiguous_observation": {"const": "RECORD_CONFLICT_WITHOUT_OVERWRITE"},
+        "stale_result_outcomes": {"const": ["SUCCESS", "FAILURE"]},
+        "stale_result_error_code": {"const": "OPTIMISTIC_CONCURRENCY"},
+        "stale_result_provider_mutation": {"const": "NONE"},
+        "stale_connection_operation_settlement": {"const": "FAIL_PENDING_WITH_OPTIMISTIC_CONCURRENCY"},
+        "stale_operation_result": {"const": "OPTIMISTIC_CONCURRENCY_NO_MUTATION"},
         "advisory_interval_seconds": {"const": 900}
       }
     },
     "delivery": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["command_execution", "destination", "consumer_id", "drain_triggers", "inbox_deduplication_key", "maximum_batch", "claim_lease_seconds", "retry_delay_seconds", "maximum_attempts", "exhausted_state"],
+      "required": ["command_execution", "destination", "consumer_id", "drain_triggers", "inbox_deduplication_key", "maximum_batch", "claim_lease_seconds", "retry_delay_seconds", "maximum_attempts", "exhausted_state", "next_command_drain_order", "denied_command_delivery_mutation", "expired_claim_at_maximum_attempts"],
       "properties": {
         "command_execution": {"const": "SYNCHRONOUS"},
         "destination": {"const": "CURVE_PROVIDER_LOCAL_V1"},
@@ -183,20 +190,51 @@
         "claim_lease_seconds": {"const": 30},
         "retry_delay_seconds": {"const": 5},
         "maximum_attempts": {"const": 3},
-        "exhausted_state": {"const": "DEAD_LETTER"}
+        "exhausted_state": {"const": "DEAD_LETTER"},
+        "next_command_drain_order": {"const": "AFTER_ALLOW_RECEIPT_BEFORE_COMMAND_MUTATION"},
+        "denied_command_delivery_mutation": {"const": "NONE"},
+        "expired_claim_at_maximum_attempts": {"const": "DEAD_LETTER"}
       }
     },
     "persistence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["connection_table", "capability_table", "capability_history", "connection_uniqueness", "capability_uniqueness"],
+      "required": ["connection_table", "capability_table", "capability_history", "workspace_reference_guard", "bulk_workspace_reference_mutation", "connection_uniqueness", "capability_uniqueness"],
       "properties": {
         "connection_table": {"const": "curve_provider_connection"},
         "capability_table": {"const": "curve_provider_capability"},
         "capability_history": {"const": "APPEND_ONLY"},
+        "workspace_reference_guard": {"const": "INSTANCE_AND_QUERYSET"},
+        "bulk_workspace_reference_mutation": {"const": "PROHIBITED"},
         "connection_uniqueness": {"const": ["workspace_id", "environment", "adapter_key"]},
         "capability_uniqueness": {"const": ["workspace_id", "connection_id", "capability_version"]}
       }
+    },
+    "event_payload_contracts": {
+      "const": [
+        {
+          "aggregate_type": "PROVIDER_CONNECTION",
+          "payload_schema": "https://curve.x3m.internal/contracts/schemas/provider-connection-event-v1.schema.json",
+          "event_types": [
+            "curve.provider_connection.registered",
+            "curve.provider_connection.validated",
+            "curve.provider_connection.degraded",
+            "curve.provider_connection.disabled",
+            "curve.provider_connection.enabled",
+            "curve.provider_connection.revoked",
+            "curve.provider_reconciliation.completed",
+            "curve.provider_reconciliation.failed"
+          ]
+        },
+        {
+          "aggregate_type": "OPERATION",
+          "payload_schema": "https://curve.x3m.internal/contracts/schemas/provider-reconciliation-event-v1.schema.json",
+          "event_types": [
+            "curve.provider_reconciliation.completed",
+            "curve.provider_reconciliation.failed"
+          ]
+        }
+      ]
     },
     "required_events": {
       "type": "array",

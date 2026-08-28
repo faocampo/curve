@@ -4,10 +4,10 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; M0-S9A local provider substrate has published bounded delivery and Option B registration authority and awaits explicit implementation dispatch; remaining capabilities stay packet/decision gated |
+| Status | Architecture input; M0-S2 relational decisions and M0-03 policy kernel implemented; M0-S9A local provider substrate has published bounded delivery and Option B registration authority, while its previously dispatched Plane implementation is paused for the six-finding correction, canonical context regeneration, and explicit resumption; remaining capabilities stay packet/decision gated |
 | Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product, Curve-first shell, lifecycle, security, private-platform connectivity, accepted local Temporal proof, and acceptance contract) |
 | Audience | Architecture, backend, workflow, security, data, and AI coding agents |
-| Last updated | 2026-08-25 |
+| Last updated | 2026-08-28 |
 | Scope | Logical domain and persistence model for Curve R1 |
 
 ## 1. Purpose and precedence

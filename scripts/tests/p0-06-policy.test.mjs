@@ -222,22 +222,29 @@ test("M0-S9A context pins the local provider registry, persistence, fixtures, an
     "contracts/providers/m0-s9a-provider-registry-v1.json",
     "contracts/schemas/examples/provider-capability.invalid.json",
     "contracts/schemas/examples/provider-capability.valid.json",
+    "contracts/schemas/examples/provider-connection-event-v1.invalid.json",
+    "contracts/schemas/examples/provider-connection-event-v1.valid.json",
     "contracts/schemas/examples/provider-connection.invalid.json",
     "contracts/schemas/examples/provider-connection.valid.json",
     "contracts/schemas/examples/core-policy-manifest-v2.invalid.json",
     "contracts/schemas/examples/core-policy-manifest-v2.valid.json",
     "contracts/schemas/examples/provider-registry-manifest.invalid.json",
     "contracts/schemas/examples/provider-registry-manifest.valid.json",
+    "contracts/schemas/examples/provider-reconciliation-event-v1.invalid.json",
+    "contracts/schemas/examples/provider-reconciliation-event-v1.valid.json",
     "contracts/schemas/examples/test-strategy-matrix.invalid.json",
     "contracts/schemas/event-envelope.schema.json",
     "contracts/schemas/inbox-message.schema.json",
     "contracts/schemas/core-policy-manifest-v2.schema.json",
     "contracts/schemas/provider-capability.schema.json",
+    "contracts/schemas/provider-connection-event-v1.schema.json",
     "contracts/schemas/provider-connection.schema.json",
     "contracts/schemas/provider-registry-manifest.schema.json",
+    "contracts/schemas/provider-reconciliation-event-v1.schema.json",
     "contracts/schemas/test-strategy-matrix.schema.json",
     "contracts/schemas/semantic-fixtures/provider-connection-active-null.invalid.json",
     "contracts/schemas/semantic-fixtures/provider-connection-active.valid.json",
+    "contracts/schemas/semantic-fixtures/provider-connection-event-registered.valid.json",
     "contracts/schemas/semantic-fixtures/provider-connection-revoked-next.invalid.json",
     "contracts/schemas/semantic-fixtures/policy-decision-provider-registration-v2.valid.json",
     "contracts/schemas/semantic-fixtures/policy-decision-provider-registration-v3.invalid.json",
@@ -262,7 +269,7 @@ test("M0-S9A context pins the local provider registry, persistence, fixtures, an
   assert.deepEqual(contextPathsFor("M0-S9A"), M0_S9A_CONTEXT_PATHS);
 });
 
-test("M0-S9A is publication-complete and still requires explicit dispatch", () => {
+test("M0-S9A correction awaits exact-head approval while Plane implementation stays paused", () => {
   const taskPacket = readFileSync(
     new URL("../../docs/technical/m0-s9a-provider-registry-task-packet.md", import.meta.url),
     "utf8",
@@ -276,11 +283,13 @@ test("M0-S9A is publication-complete and still requires explicit dispatch", () =
     "utf8",
   );
 
-  assert.match(taskPacket, /\| Status \| `READY \/ AWAITING_EXPLICIT_DISPATCH` \|/);
+  assert.match(taskPacket, /\| Status \| `REVIEW \/ AWAITING_EXACT_HEAD_APPROVAL` \|/);
   assert.match(taskPacket, /\| Material decisions \| `PUBLISHED \/ SATISFIED` \|/);
-  assert.match(taskPacket, /\| Exact-head implementation authorization \| Pending \|/);
+  assert.match(taskPacket, /\| Renewed exact-head implementation authorization \| Pending \|/);
+  assert.match(taskPacket, /grants no renewed Plane execution authority/i);
   assert.doesNotMatch(taskPacket, /REVIEW_DRAFT|PENDING_PUBLICATION/);
-  assert.match(relationalContract, /\| Status \| `READY \/ AWAITING_EXPLICIT_DISPATCH` \|/);
+  assert.match(relationalContract, /\| Status \| `REVIEW \/ AWAITING_EXACT_HEAD_APPROVAL` \|/);
+  assert.match(relationalContract, /human-approved Plane resumption/i);
   assert.match(authorizationDecision, /\| Status \| `PUBLISHED` \|/);
 });
 
