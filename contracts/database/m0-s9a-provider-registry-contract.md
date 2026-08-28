@@ -308,11 +308,15 @@ workspace, or capability label.
 
 The Plane implementation must provide:
 
-1. One additive Curve migration named
+1. One additive Curve feature migration named
    `0005_providerconnection_providercapability.py`, with
    `0004_policydecision_recorded_at_default.py` as its exact predecessor, for
-   the two tables, indexes, foreign key,
-   uniqueness, positive-version, fake-local, lifecycle, and JSON-array checks.
+   the two tables, indexes, foreign key, uniqueness, positive-version,
+   fake-local, lifecycle, and JSON-array checks. The same migration replaces
+   `curve_policy_identity_ck` with the backward-compatible identity constraint
+   `policy_key = CURVE_CORE_POLICY AND policy_version IN (1, 2)`. The immutable
+   PolicyDecision envelope remains schema version `1.0`, the model default
+   remains policy version `1`, and policy version `3` or greater is rejected.
 2. Forward to `0005`, backward to `0004`, and forward again to `0005` against disposable
    PostgreSQL. Persistent rollback uses feature disablement and leaves the
    additive tables intact until the rollback window closes.

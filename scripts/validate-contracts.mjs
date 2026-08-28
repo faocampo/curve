@@ -62,6 +62,14 @@ const inboxSchema = join(root, "contracts/schemas/inbox-message.schema.json");
 const idempotencySchema = join(root, "contracts/schemas/idempotency-record.schema.json");
 const policyEvaluationSchema = join(root, "contracts/schemas/policy-evaluation.schema.json");
 const policyDecisionSchema = join(root, "contracts/schemas/policy-decision.schema.json");
+const providerRegistrationPolicyDecisionV2Path = join(
+  root,
+  "contracts/schemas/semantic-fixtures/policy-decision-provider-registration-v2.valid.json",
+);
+const providerRegistrationPolicyDecisionV3Path = join(
+  root,
+  "contracts/schemas/semantic-fixtures/policy-decision-provider-registration-v3.invalid.json",
+);
 const telemetryManifestSchema = join(root, "contracts/schemas/telemetry-manifest.schema.json");
 const telemetryManifestPath = join(root, "contracts/observability/m0-s5-telemetry-v1.json");
 const observabilityBindingSchema = join(root, "contracts/schemas/observability-binding.schema.json");
@@ -116,6 +124,8 @@ const fixtureSpecs = [
   ["contracts/schemas/semantic-fixtures/policy-evaluation-gate-assignment.invalid.json", policyEvaluationSchema, false],
   ["contracts/schemas/semantic-fixtures/policy-decision-human-recorder.invalid.json", policyDecisionSchema, false],
   ["contracts/schemas/semantic-fixtures/policy-decision-allow-reason.invalid.json", policyDecisionSchema, false],
+  ["contracts/schemas/semantic-fixtures/policy-decision-provider-registration-v2.valid.json", policyDecisionSchema, true],
+  ["contracts/schemas/semantic-fixtures/policy-decision-provider-registration-v3.invalid.json", policyDecisionSchema, false],
 ];
 
 fixtureSpecs.push(
@@ -343,6 +353,48 @@ for (const action of corePolicyManifestV2.actions) {
   if (action.allowed_actor_types.includes("AGENT") || action.external_side_effect !== false) {
     throw new Error(`${action.action} weakens the M0 principal or external-effect boundary`);
   }
+}
+const providerRegistrationPolicyDecisionV2 = JSON.parse(
+  readFileSync(providerRegistrationPolicyDecisionV2Path, "utf8"),
+);
+const providerRegistrationPolicyDecisionV3 = JSON.parse(
+  readFileSync(providerRegistrationPolicyDecisionV3Path, "utf8"),
+);
+if (
+  providerRegistrationPolicyDecisionV2.schema_version !== "1.0" ||
+  providerRegistrationPolicyDecisionV2.action !== "CURVE.PROVIDER_CONNECTION.REGISTER" ||
+  providerRegistrationPolicyDecisionV2.resource_ref.resource_type !== "WORKSPACE" ||
+  providerRegistrationPolicyDecisionV2.resource_ref.resource_id !==
+    providerRegistrationPolicyDecisionV2.workspace_id ||
+  providerRegistrationPolicyDecisionV2.resource_ref.resource_version !== 1 ||
+  providerRegistrationPolicyDecisionV2.subject.actor_type !== "HUMAN" ||
+  JSON.stringify(providerRegistrationPolicyDecisionV2.effective_principal) !==
+    JSON.stringify(providerRegistrationPolicyDecisionV2.subject) ||
+  providerRegistrationPolicyDecisionV2.effect !== "ALLOW" ||
+  JSON.stringify(providerRegistrationPolicyDecisionV2.reason_codes) !==
+    JSON.stringify(["POLICY_ALLOWED"]) ||
+  providerRegistrationPolicyDecisionV2.policy_key !== "CURVE_CORE_POLICY" ||
+  providerRegistrationPolicyDecisionV2.policy_version !== 2 ||
+  providerRegistrationPolicyDecisionV2.policy_manifest_digest !==
+    `sha256:${corePolicyManifestV2Digest}` ||
+  providerRegistrationPolicyDecisionV2.normalized_classification !== "INTERNAL" ||
+  JSON.stringify(providerRegistrationPolicyDecisionV2.permitted_projection) !==
+    JSON.stringify(["NO_BODY"])
+) {
+  throw new Error(
+    "policy-decision-provider-registration-v2.valid.json differs from the approved M0-S9A receipt",
+  );
+}
+if (
+  providerRegistrationPolicyDecisionV3.policy_version !== 3 ||
+  JSON.stringify(canonicalJson({
+    ...providerRegistrationPolicyDecisionV3,
+    policy_version: 2,
+  })) !== JSON.stringify(canonicalJson(providerRegistrationPolicyDecisionV2))
+) {
+  throw new Error(
+    "policy-decision-provider-registration-v3.invalid.json must differ from the valid v2 receipt only by policy_version",
+  );
 }
 
 const telemetryManifest = JSON.parse(readFileSync(telemetryManifestPath, "utf8"));

@@ -123,8 +123,10 @@ No coding agent mutates Plane while any row is pending.
 
 - `ProviderConnection` mutable aggregate and append-only `ProviderCapability`
   history in the dedicated Django `plane.curve` application.
-- One additive Curve migration with workspace-scoped indexes, uniqueness, state
-  checks, and reversible disposable-database proof.
+- One additive Curve feature migration with workspace-scoped indexes,
+  uniqueness, state checks, the backward-compatible policy identity expansion
+  from policy version `1` to reviewed versions `1` and `2`, and reversible
+  disposable-database proof.
 - A typed provider-adapter protocol, static registry, normalized error types,
   call context, and deterministic `FAKE_LOCAL` adapter.
 - Application services for register, explicit validate/reconcile, disable,
@@ -259,7 +261,10 @@ sequenceDiagram
    route, network access, or behavior change occurs.
 2. **Migration.** Given a disposable PostgreSQL database, forward/backward-one/
    forward succeeds with exact tables, indexes, constraints, and no migration
-   drift.
+   drift. Migration `0005` replaces `curve_policy_identity_ck` with an exact
+   `CURVE_CORE_POLICY` version-in-`[1, 2]` constraint, preserves PolicyDecision
+   schema version `1.0` and model default `1`, and rejects version `3` or
+   greater.
 3. **Workspace isolation.** Given connections in workspaces A and B, every
    read/write/reconcile with a foreign ID returns the same result as absent and
    writes no cross-workspace evidence.
@@ -354,7 +359,10 @@ The implementation migration is exactly
 `apps/api/plane/curve/migrations/0005_providerconnection_providercapability.py`
 and its predecessor is exactly
 `apps/api/plane/curve/migrations/0004_policydecision_recorded_at_default.py`;
-any changed predecessor/name stops for contract revision. The accepted P0-05
+the migration also replaces `curve_policy_identity_ck` with the exact
+policy-version-`1`-or-`2` constraint described above. Any changed
+predecessor/name or wider accepted policy version stops for contract revision.
+The accepted P0-05
 (test strategy and audit closure) baseline may add stricter
 commands; it cannot remove the repository-native full backend command above.
 
