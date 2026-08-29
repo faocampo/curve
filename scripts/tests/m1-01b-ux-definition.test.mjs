@@ -1,0 +1,47 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import test from "node:test";
+
+const contract = fs.readFileSync(
+  new URL("../../docs/technical/ux-m1-01b-initiative-shell.md", import.meta.url),
+  "utf8",
+);
+const readiness = fs.readFileSync(
+  new URL("../../docs/technical/m1-alignment-evidence-prd-task-packet.md", import.meta.url),
+  "utf8",
+);
+const prototype = fs.readFileSync(
+  new URL("../../docs/design/prototypes/m1-01b-initiative-shell/index.html", import.meta.url),
+  "utf8",
+);
+
+test("M1-01B stays in manual UX review and does not authorize Plane implementation", () => {
+  const readinessRow = readiness
+    .split("\n")
+    .find(
+      (line) =>
+        line.startsWith("| M1-01B (Initiative shell) |") &&
+        line.includes("`IN_UX_REVIEW`"),
+    );
+
+  assert.ok(readinessRow, "M1-01B readiness row must exist");
+  assert.match(contract, /status: REVIEW_REQUIRED/);
+  assert.match(contract, /implementation_authorized: false/);
+  assert.match(contract, /reviewed_curve_commit: null/);
+  assert.match(contract, /result: null/);
+  assert.match(readinessRow, /`IN_UX_REVIEW`/);
+  assert.doesNotMatch(readinessRow, /`DONE/);
+});
+
+test("M1-01B binds the complete task-based prototype review", () => {
+  for (let task = 1; task <= 10; task += 1) {
+    assert.match(contract, new RegExp(`\\| T${task} \\|`));
+  }
+  assert.match(contract, /UX-006-M1-01B/);
+  assert.match(contract, /UX-007-M1-01B/);
+  assert.match(prototype, /Prototype controls/);
+  assert.match(prototype, /Create initiative/);
+  assert.match(prototype, /Product Approver/);
+  assert.match(prototype, /Technical Approver/);
+  assert.match(prototype, /Code Approver/);
+});
