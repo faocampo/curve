@@ -201,8 +201,8 @@ not invented by the coding agent.
 | Packet group | Current state | Missing evidence before `READY` |
 | --- | --- | --- |
 | M1-00A (minimal Product core) | `DONE_LOCAL` | Plane PR #13 merged accepted implementation and commit-bound CI to `preview` as `afdb593...` |
-| M1-01A (Initiative domain/API) | `PREPARED_NOT_DISPATCHABLE` | Merge the exact Curve contract revision, verify the live Plane base/migration chain, and generate the authoritative context digest and dispatch |
-| M1-01B (Initiative shell) | `PREPARED` | M1-01A; approved screen contract; exact UI commands and context digest |
+| M1-01A (Initiative domain/API) | `DONE_LOCAL` | Plane PR #14 merged reviewed head `7e712e0...` as `99a73b4...`; [implementation evidence](m1-01a-initiative-core-implementation-evidence.md) (exact context, CI, tests, merge tree, data boundary, and rollback) binds acceptance |
+| M1-01B (Initiative shell) | `PREPARED / UX_GATE_REQUIRED` | Approved screen contract; exact UI commands and context digest; browser, accessibility, and Federico Ocampo manual UX acceptance |
 | M1-02A (manual Idea Brief) | `PREPARED` | M1-01A; Idea Brief/ArtifactVersion contracts; UI contract; exact dispatch values |
 | M1-02B and M1-06C (model authoring) | `BLOCKED_MATERIAL_DECISIONS` | D-004 (model-gateway decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), evaluations, and exact model/prompt/tool/budget pins |
 | M1-03A (fake KnowledgeProvider) | `PREPARED` | M0-09; provider contract and fixtures; exact dispatch values |
