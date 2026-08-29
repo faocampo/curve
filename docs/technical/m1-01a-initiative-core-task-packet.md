@@ -4,7 +4,7 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PREPARED_NOT_DISPATCHABLE`; merge, canonical digest, and exact Plane dispatch remain pending |
+| Status | `ACCEPTED_AND_MERGED / LOCAL_ONLY`; Plane PR #14 merged reviewed head `7e712e0...` as `99a73b4...` |
 | Version | 1.0 |
 | Date | 2026-08-29 |
 | Product | Curve |
@@ -17,6 +17,7 @@
 | Data classification | Synthetic `INTERNAL` test data only |
 | Model/tool policy | No model, provider, protected data, Temporal change, or external service |
 | Budget | US$0 external spend |
+| Accepted implementation | [M1-01A implementation evidence](m1-01a-initiative-core-implementation-evidence.md) (exact context, Plane head/merge/tree, CI, tests, data boundary, and rollback) |
 
 ## Outcome
 
@@ -142,9 +143,17 @@ branch. After merge, `CURVE_ENABLED=0` disables routes and the existing Plane UI
 and workers continue unchanged. Reverse migration is limited to the disposable
 proof; once Initiative data is relied on, preserve it and use an additive fix.
 
-## Dispatch readiness
+## Dispatch and completion record
 
-This packet becomes `READY` only when the contracts merge to Curve `main`, CI is
-green, the M1-01A context digest is regenerated from canonical bytes, the live
-Plane `preview` base and migration chain are pinned, and an exact dispatch record
-is materialized. GitHub Project status is visual metadata, not dispatch authority.
+Curve PR #41 merged the contract source as
+`ebbf22745e7939a633dd667246e7207a57ef526a`, and the canonical context digest
+remained
+`sha256:d2aa09a76f13ac840a846d25db5470e412c58f26828952f559763d506b3ceba8`.
+Plane PR #14 implemented that context from base `afdb593...`, passed
+commit-bound CI at reviewed head `7e712e0...`, and squash-merged to
+`preview` as `99a73b4...`. The reviewed and merged trees are identical.
+
+[M1-01A implementation evidence](m1-01a-initiative-core-implementation-evidence.md)
+(exact dispatch, implementation, verification, merge, security boundary, and
+rollback) is the acceptance record. M1-01B (Curve-first Initiative shell)
+remains open and requires an approved screen contract plus manual UX acceptance.
