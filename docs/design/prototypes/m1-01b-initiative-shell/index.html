@@ -142,10 +142,11 @@
       }
       .sidebar-footer { margin-top: auto; padding: 15px 10px 0; border-top: 1px solid var(--line); }
       .identity { display: flex; align-items: center; gap: 10px; }
-      .avatar { display: grid; place-items: center; width: 34px; height: 34px; color: #353db1; background: #e2e6ff; border-radius: 50%; font-size: 12px; font-weight: 800; }
-      .identity strong, .identity span { display: block; }
-      .identity strong { font-size: 13px; }
-      .identity span { margin-top: 2px; color: var(--quiet); font-size: 11px; }
+      .avatar { display: inline-flex; flex: 0 0 34px; align-items: center; justify-content: center; width: 34px; height: 34px; margin: 0; color: #353db1; background: #e2e6ff; border-radius: 50%; font-size: 12px; font-weight: 800; line-height: 1; text-align: center; }
+      .identity-copy, .identity-copy strong, .identity-copy span { display: block; }
+      .identity-copy { min-width: 0; }
+      .identity-copy strong { overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+      .identity-copy span { margin-top: 2px; color: var(--quiet); font-size: 11px; }
       .source-link { display: inline-flex; margin-top: 12px; color: #697189; font-size: 10px; text-underline-offset: 2px; }
 
       .main { min-width: 0; }
@@ -176,7 +177,7 @@
         border-radius: 10px;
       }
       .icon-button:hover { background: #f2f4f8; border-color: var(--line); }
-      .icon-button svg { width: 18px; height: 18px; }
+      .icon-button svg { width: 18px; height: 18px; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
 
       .page { max-width: 1580px; margin: 0 auto; padding: 34px 34px 56px; }
       .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 26px; }
@@ -286,6 +287,7 @@
       .badge {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 6px;
         min-height: 24px;
         padding: 4px 8px;
@@ -293,8 +295,10 @@
         font-size: 10px;
         font-weight: 750;
         letter-spacing: 0.025em;
+        line-height: 1;
         white-space: nowrap;
       }
+      .initiative-row > .badge { min-width: 76px; justify-self: end; align-self: start; }
       .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
       .badge.draft { color: #596174; background: #eceff4; }
       .badge.aligning { color: var(--blue); background: var(--blue-soft); }
@@ -327,10 +331,11 @@
         background: #f7f8fb;
         border-radius: 11px;
       }
-      .gate-avatar { display: grid; place-items: center; width: 33px; height: 33px; color: #353db1; background: #e2e6ff; border-radius: 50%; font-size: 10px; font-weight: 800; }
-      .gate strong, .gate span { display: block; }
-      .gate strong { font-size: 12px; }
-      .gate span { margin-top: 2px; color: var(--quiet); font-size: 10px; }
+      .gate-avatar { display: inline-flex; flex: 0 0 33px; align-items: center; justify-content: center; width: 33px; height: 33px; margin: 0; color: #353db1; background: #e2e6ff; border-radius: 50%; font-size: 10px; font-weight: 800; line-height: 1; text-align: center; }
+      .gate-copy, .gate-copy strong, .gate-copy span { display: block; }
+      .gate-copy { min-width: 0; }
+      .gate-copy strong { font-size: 12px; }
+      .gate-copy span { margin-top: 2px; color: var(--quiet); font-size: 10px; }
       .gate .active-human { color: var(--green); font-size: 10px; font-weight: 700; }
       .timeline { margin: 0; padding: 0; list-style: none; }
       .timeline li { position: relative; padding: 0 0 19px 25px; color: var(--muted); font-size: 12px; line-height: 1.45; }
@@ -378,6 +383,7 @@
       .field textarea { min-height: 118px; resize: vertical; padding: 10px 11px; line-height: 1.5; }
       .field input:hover, .field textarea:hover, .field select:hover { border-color: #aab2c2; }
       .form-note { margin: 18px 0 0; padding: 13px 14px; color: #4d5569; background: #f2f4ff; border-radius: 10px; font-size: 11px; line-height: 1.5; }
+      .form-error { margin: 10px 0 0; padding: 11px 13px; color: var(--red); background: var(--red-soft); border: 1px solid #f4c7c2; border-radius: 10px; font-size: 11px; font-weight: 650; line-height: 1.45; }
       .form-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
       .field-error { display: none; margin-top: 5px; color: var(--red); font-size: 10px; }
       .field.invalid .field-error { display: block; }
@@ -504,7 +510,7 @@
           </div>
         </nav>
         <footer class="sidebar-footer">
-          <div class="identity"><span class="avatar" aria-hidden="true">FO</span><span><strong>Federico Ocampo</strong><span>Workspace administrator</span></span></div>
+          <div class="identity"><span class="avatar" aria-hidden="true">FO</span><span class="identity-copy"><strong>Federico Ocampo</strong><span>Workspace administrator</span></span></div>
           <a class="source-link" href="https://github.com/faocampo/plane">AGPL source · exact release</a>
         </footer>
       </aside>
@@ -513,7 +519,7 @@
         <header class="topbar">
           <div class="crumbs"><strong>Product</strong><span aria-hidden="true">/</span><span>Initiatives</span></div>
           <div class="top-actions">
-            <button class="icon-button" type="button" aria-label="Help"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .7-1.7 1.2-1.7 2.6M12 17h.01"/></svg></button>
+            <button class="icon-button" type="button" aria-label="Help"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.2a2.6 2.6 0 1 1 4.35 1.92C12.86 12 12 12.55 12 14"/><circle cx="12" cy="17.25" r="0.8" fill="currentColor" stroke="none"/></svg></button>
             <button class="icon-button" type="button" aria-label="Notifications"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></button>
           </div>
         </header>
@@ -559,14 +565,15 @@
             <div class="field full"><label for="title">Title <span>Required</span></label><input id="title" name="title" autocomplete="off" value="Improve experiment rollout confidence" required aria-describedby="title-error" /><span class="field-error" id="title-error">Enter a title.</span></div>
             <div class="field"><label for="product">Product <span>Active only</span></label><select id="product" name="product"><option>Loomit</option><option>X3M Platform</option><option>Sachiel</option></select></div>
             <div class="field"><label for="keyword">Keyword <span>Workspace unique</span></label><input id="keyword" name="keyword" autocomplete="off" value="rollout-confidence" pattern="[A-Za-z0-9][A-Za-z0-9-]{0,49}" required aria-describedby="keyword-error" /><span class="field-error" id="keyword-error">Use letters, numbers, and hyphens.</span></div>
-            <div class="field"><label for="risk">Risk tier</label><select id="risk" name="risk"><option>STANDARD</option><option>LOW</option><option>HIGH</option></select></div>
+            <div class="field"><label for="risk">Risk tier</label><select id="risk" name="risk" aria-describedby="approver-rule"><option>STANDARD</option><option>LOW</option><option>HIGH</option></select></div>
             <div class="field"><label for="mode">Mode</label><select id="mode" name="mode"><option>STANDALONE</option><option disabled>ROADMAP — available in M2</option></select></div>
             <div class="field full"><label for="description">Problem and intended outcome <span>Required · Markdown</span></label><textarea id="description" name="description" required aria-describedby="description-error">Reduce uncertainty when product teams move validated experiments toward a staged rollout, while keeping every human decision and rollback condition visible.</textarea><span class="field-error" id="description-error">Describe the problem and intended outcome.</span></div>
-            <div class="field"><label for="product-approver">Product Approver</label><select id="product-approver"><option>Paula Ortega · PO</option><option>Federico Ocampo · CTO</option></select></div>
-            <div class="field"><label for="technical-approver">Technical Approver</label><select id="technical-approver"><option>Tomás López · TL</option><option>Federico Ocampo · CTO</option></select></div>
-            <div class="field full"><label for="code-approver">Code Approver</label><select id="code-approver"><option>Diego Vega · Dev</option><option>Federico Ocampo · CTO</option></select></div>
+            <div class="field"><label for="product-approver">Product Approver</label><select id="product-approver" aria-describedby="approver-rule approver-error"><option value="paula-ortega" data-initials="PO" data-name="Paula Ortega">Paula Ortega · PO</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
+            <div class="field"><label for="technical-approver">Technical Approver</label><select id="technical-approver" aria-describedby="approver-rule approver-error"><option value="tomas-lopez" data-initials="TL" data-name="Tomás López">Tomás López · TL</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
+            <div class="field full"><label for="code-approver">Code Approver</label><select id="code-approver" aria-describedby="approver-rule approver-error"><option value="diego-vega" data-initials="DV" data-name="Diego Vega">Diego Vega · Dev</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
           </div>
-          <p class="form-note">STANDARD and HIGH risk require three distinct active humans. Creating the Initiative records the initial DRAFT state and its three gate assignments atomically.</p>
+          <p class="form-note" id="approver-rule">Only active humans are listed. STANDARD and HIGH risk require a different person for each gate. Creating the Initiative records the initial DRAFT state and all three assignments atomically.</p>
+          <p class="form-error" id="approver-error" role="alert" hidden>Choose three different people for Product, Technical, and Code approval at STANDARD or HIGH risk.</p>
           <div class="form-actions"><button class="button" id="cancel-create" type="button">Cancel</button><button class="button primary" type="submit">Create initiative</button></div>
         </form>
       </section>
@@ -606,7 +613,7 @@
 
       let selectedId = "init-1";
       let previousFocus = null;
-      const el = Object.fromEntries(["initiative-rows","detail","workbench","state-panel","search","state-filter","risk-filter","result-count","active-count","paused-count","new-initiative","drawer-backdrop","close-drawer","cancel-create","initiative-form","title","keyword","description","cancel-dialog","keep-initiative","confirm-cancel","scenario","show-scenario","live-region"].map(id => [id, document.getElementById(id)]));
+      const el = Object.fromEntries(["initiative-rows","detail","workbench","state-panel","search","state-filter","risk-filter","result-count","active-count","paused-count","new-initiative","drawer-backdrop","close-drawer","cancel-create","initiative-form","title","keyword","description","product","risk","product-approver","technical-approver","code-approver","approver-error","cancel-dialog","keep-initiative","confirm-cancel","scenario","show-scenario","live-region"].map(id => [id, document.getElementById(id)]));
 
       const label = (state) => state.charAt(0) + state.slice(1).toLowerCase();
       const announce = (message) => { el["live-region"].textContent = ""; window.setTimeout(() => el["live-region"].textContent = message, 20); };
@@ -637,7 +644,7 @@
         return `<header class="detail-head"><div class="detail-headline"><div><span class="badge ${item.state.toLowerCase()}">${label(item.state)}</span><h2>${item.title}</h2><div class="detail-sub"><span>${item.product}</span><code>#${item.keyword}</code><span class="risk ${item.risk === "HIGH" ? "high" : ""}">${item.risk} risk</span></div></div></div><div class="detail-actions">${primary}${pause}${cancel}</div></header>
           <div class="detail-body"><div class="detail-main">
             <section class="section"><h3>Problem and intended outcome</h3><p class="description">${item.description}</p></section>
-            <section class="section"><h3>Mandatory human gates</h3><div class="gate-list">${item.approvers.map(([initials,name,role]) => `<div class="gate"><span class="gate-avatar" aria-hidden="true">${initials}</span><span><strong>${role}</strong><span>${name}</span></span><span class="active-human">Active human</span></div>`).join("")}</div></section>
+            <section class="section"><h3>Mandatory human gates</h3><div class="gate-list">${item.approvers.map(([initials,name,role]) => `<div class="gate"><span class="gate-avatar" aria-hidden="true">${initials}</span><span class="gate-copy"><strong>${role}</strong><span>${name}</span></span><span class="active-human">Active human</span></div>`).join("")}</div></section>
             <section class="section"><h3>Recent history</h3><ol class="timeline"><li><strong>${item.updated}</strong><span>Federico Ocampo · ${item.time}</span></li><li><strong>Gate assignments verified</strong><span>Curve policy · ${item.time}</span></li><li><strong>Initiative created</strong><span>Federico Ocampo · 29 Aug 2026</span></li></ol></section>
           </div><aside class="detail-aside"><dl><div class="fact"><dt>Mode</dt><dd>Standalone</dd></div><div class="fact"><dt>Workflow</dt><dd>${item.state === "DRAFT" ? "Pins after refinement" : "Manual-first v1"}</dd></div><div class="fact"><dt>Creator</dt><dd>Federico Ocampo</dd></div><div class="fact"><dt>Optimistic version</dt><dd>v${item.state === "DRAFT" ? 2 : 4} · current</dd></div><div class="fact"><dt>External resources</dt><dd>None linked</dd></div><div class="fact"><dt>Data classification</dt><dd>Internal · synthetic prototype</dd></div></dl></aside></div>`;
       }
@@ -726,6 +733,27 @@
         if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
       }
 
+      function validateApprovers({ announceError = false } = {}) {
+        const selects = [el["product-approver"], el["technical-approver"], el["code-approver"]];
+        const personIds = selects.map(select => select.value);
+        const elevatedRisk = ["STANDARD", "HIGH"].includes(el.risk.value);
+        const hasDuplicates = elevatedRisk && new Set(personIds).size !== personIds.length;
+
+        selects.forEach((select, index) => {
+          const duplicated = hasDuplicates && personIds.indexOf(personIds[index]) !== personIds.lastIndexOf(personIds[index]);
+          select.closest(".field").classList.toggle("invalid", duplicated);
+          select.setAttribute("aria-invalid", String(duplicated));
+        });
+        el["approver-error"].hidden = !hasDuplicates;
+        if (hasDuplicates && announceError) announce("Choose three different active humans for Standard or High risk");
+        return !hasDuplicates;
+      }
+
+      function selectedApprover(select, role) {
+        const option = select.selectedOptions[0];
+        return [option.dataset.initials, option.dataset.name, role];
+      }
+
       el["new-initiative"].addEventListener("click", openDrawer);
       el["close-drawer"].addEventListener("click", closeDrawer);
       el["cancel-create"].addEventListener("click", closeDrawer);
@@ -734,6 +762,7 @@
       el["confirm-cancel"].addEventListener("click", () => { closeCancelDialog(); changeState("CANCELLED", "Initiative cancelled"); });
       el["cancel-dialog"].addEventListener("click", event => { if (event.target === el["cancel-dialog"]) closeCancelDialog(); });
       [el.search, el["state-filter"], el["risk-filter"]].forEach(control => control.addEventListener("input", render));
+      [el.risk, el["product-approver"], el["technical-approver"], el["code-approver"]].forEach(control => control.addEventListener("change", () => validateApprovers()));
       el["show-scenario"].addEventListener("click", () => showState(el.scenario.value));
       el["initiative-form"].addEventListener("submit", event => {
         event.preventDefault();
@@ -746,7 +775,11 @@
           if (invalid) valid = false;
         });
         if (!valid) { fields.find(field => field.closest(".field").classList.contains("invalid"))?.focus(); announce("Review the highlighted fields"); return; }
-        const newItem = { id: `init-${Date.now()}`, title: el.title.value.trim(), keyword: el.keyword.value.trim(), product: document.getElementById("product").value, state: "DRAFT", risk: document.getElementById("risk").value, description: el.description.value.trim(), approvers: [["PO","Paula Ortega","Product Approver"],["TL","Tomás López","Technical Approver"],["DV","Diego Vega","Code Approver"]], updated: "Initiative created", time: "Just now" };
+        if (!validateApprovers({ announceError: true })) {
+          [el["product-approver"], el["technical-approver"], el["code-approver"]].find(select => select.getAttribute("aria-invalid") === "true")?.focus();
+          return;
+        }
+        const newItem = { id: `init-${Date.now()}`, title: el.title.value.trim(), keyword: el.keyword.value.trim(), product: el.product.value, state: "DRAFT", risk: el.risk.value, description: el.description.value.trim(), approvers: [selectedApprover(el["product-approver"], "Product Approver"), selectedApprover(el["technical-approver"], "Technical Approver"), selectedApprover(el["code-approver"], "Code Approver")], updated: "Initiative created", time: "Just now" };
         initiatives.unshift(newItem); selectedId = newItem.id; closeDrawer(); showWorkspace(); announce(`${newItem.title} created in Draft`);
       });
 

@@ -44,4 +44,13 @@ test("M1-01B binds the complete task-based prototype review", () => {
   assert.match(prototype, /Product Approver/);
   assert.match(prototype, /Technical Approver/);
   assert.match(prototype, /Code Approver/);
+  assert.match(prototype, /function validateApprovers/);
+  assert.match(prototype, /new Set\(personIds\)\.size !== personIds\.length/);
+  assert.match(prototype, /Choose three different people for Product, Technical, and Code approval/);
+  assert.match(prototype, /function selectedApprover/);
+  assert.match(prototype, /class="identity-copy"/);
+  assert.match(prototype, /class="gate-copy"/);
+  assert.match(prototype, /\.initiative-row > \.badge \{ min-width: 76px/);
+  assert.match(prototype, /aria-label="Help"/);
+  assert.match(prototype, /cy="17\.25" r="0\.8"/);
 });

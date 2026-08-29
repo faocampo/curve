@@ -179,7 +179,7 @@ of the production UI.
 | T1 | Identify the product and explain where Plane-backed work lives | Reviewer identifies Curve as primary and Work management as the Plane-backed component |
 | T2 | Find `SDK Compatibility` using search or filters | Correct Initiative is selected and its Product/state/risk are understandable |
 | T3 | Review all three human gates | Product, Technical, and Code approvers are visible with their roles |
-| T4 | Create a Standard-risk Initiative | Required data is understandable; result appears selected in Draft |
+| T4 | At Standard risk, assign the same person to two gates, attempt creation, then correct the assignments and create the Initiative | Duplicate people are identified and creation is blocked; three distinct people produce a selected Draft with the chosen assignments |
 | T5 | Submit invalid create data | Inline validation, focus, and status announcement identify recovery |
 | T6 | Accept refinement, pause, and resume | State changes and available actions remain consistent with the lifecycle |
 | T7 | Start cancellation and keep the Initiative | Confirmation is clear and focus returns without changing state |
@@ -194,15 +194,34 @@ of the production UI.
 | Desktop render | [Desktop review capture](../../.impeccable/review/desktop.png) (default Initiative list/detail state at the 1440 by 1000 review viewport) |
 | Mobile render | [Mobile review capture](../../.impeccable/review/mobile.png) (default Initiative state at the 390 by 844 review viewport) |
 | Responsive layout | No horizontal overflow at either review width; the mobile shell, portfolio, filters, list/detail stack, drawer, and dialog remain within the viewport |
-| Creation | Required-field validation, accepted keyword-format validation, focus placement, status announcement, successful Draft creation, selection, and count update exercised |
+| Creation | Required-field validation, accepted keyword-format validation, elevated-risk three-person separation, selection-derived gate assignments, focus placement, status announcement, successful Draft creation, selection, and count update exercised |
 | Lifecycle | `DRAFT -> ALIGNING -> PAUSED -> ALIGNING -> CANCELLED` exercised; cancellation confirmation displayed and terminal actions removed |
 | Recovery states | Permission back-navigation, safe-error retry, and empty-state create action exercised |
 | Browser diagnostics | No console warning or error recorded during the exercised paths |
 | Mechanical detector | Regex fallback completed because optional HTML parser modules were unavailable; its Inter warning is an accepted continuation of the approved M0-S4 Curve shell typography rather than a new visual-world decision |
-| Finish review | Prescribed in-thread fallback used because collaboration slots were occupied; initial `fix` findings for a selected-row side stripe and portfolio eyebrow were resolved in recaptures; verdict `ship` |
+| Finish review | Prescribed in-thread fallback used because collaboration slots were occupied; the correction pass rechecked the complete create path, 1440 px desktop and 390 px mobile renders, state-badge geometry, gate/footer initials, and Help icon; no additional blocking defect found |
 
 The finish-review verdict means that the artifact is ready for accountable manual
 UX review. It does not populate the approval record or authorize Plane code.
+
+## Manual review iteration 1
+
+Federico Ocampo reported T1, T2, T3, and T5 as passing on 2026-08-29. T4 was
+reported as passing with pending validation; T6 and the remaining tasks have not
+yet received a final result. The five annotated findings from this review remain
+part of the exact-commit gate until Federico retests the corrected prototype.
+
+| Finding | Reported issue | Correction in this iteration | Retest state |
+| --- | --- | --- | --- |
+| MR-01 | The Standard/High three-distinct-human rule did not block creation | Creation now rejects duplicate people, identifies every duplicated selector, focuses the first invalid selector, announces the recovery, and derives the created gate assignments from the corrected selections | Required |
+| MR-02 | The `Paused` list badge had inconsistent alignment and size | List-state badges now use one centered 76 px geometry and align to the same row edge | Required |
+| MR-03 | Initials were misaligned in mandatory-gate avatars | Gate-avatar layout is isolated from descriptive-text selectors and centers initials with explicit flex geometry and line height | Required |
+| MR-04 | Initials were misaligned in the signed-in-user avatar | Footer identity copy has a dedicated selector; the avatar keeps explicit centered geometry | Required, including Federico's pending validations |
+| MR-05 | The Help icon required verification | The control retains the accessible name `Help` and uses an explicit circle, question curve, and visible dot with consistent authored stroke geometry | Required |
+
+This correction record documents prototype behavior and review evidence. It does
+not mark UX-006-M1-01B (clickable Initiative prototype and task review) or
+UX-007-M1-01B (work-package-linked Initiative screen contract) approved.
 
 ## Review decision record
 
