@@ -9,7 +9,7 @@
 | Last updated | 2026-08-15 |
 | Source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md), M7 integration-expansion scope |
 | Audience | Product, finance, engineering, security, operations, and integration owners |
-| Catalog status | Future scope; outside the active 70-item GitHub Project #2 catalog |
+| Catalog status | Future scope; outside the active 71-item GitHub Project #2 catalog |
 
 ## Purpose and scope
 

@@ -6,7 +6,7 @@
 | ----- | ----- |
 | Status | Architecture baseline; implementation is subject to the PRD decision register |
 | Version | 0.2 |
-| Source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product integration, workspace, lifecycle, security, and acceptance requirements) |
+| Source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product integration, approved Product core, workspace, lifecycle, security, and acceptance requirements) |
 | Audience | API, workflow, integration, platform, security, and test engineers; AI coding agents |
 | Scope | Curve public API, internal commands/events, provider adapters, webhooks, SSE, idempotency, and reconciliation |
 

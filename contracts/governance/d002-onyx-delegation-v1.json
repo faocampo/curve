@@ -1,0 +1,145 @@
+{
+  "schema_version": "curve.onyx-delegation-decision/v1",
+  "decision_id": "D-002",
+  "status": "PROPOSED",
+  "source_boundary": {
+    "official_docs_checked_at": "2026-08-22T22:00:00Z",
+    "official_documentation": [
+      "https://docs.onyx.app/developers/overview",
+      "https://docs.onyx.app/deployment/authentication/oidc",
+      "https://docs.onyx.app/developers/api_reference/search/document_search"
+    ],
+    "deployed_version": null,
+    "image_digest": null,
+    "openapi_digest": null,
+    "sanitized_configuration_digest": null
+  },
+  "mechanism": {
+    "selected": null,
+    "protocol_version": null,
+    "silent_fallback_allowed": false
+  },
+  "principal_binding": {
+    "actor_semantics": "INITIATING_HUMAN",
+    "issuer": null,
+    "audience": null,
+    "subject_mapping": null,
+    "workspace_claim": null,
+    "operation_claim": null,
+    "purpose_claim": null
+  },
+  "credential_lifecycle": {
+    "maximum_ttl_seconds": null,
+    "refresh_policy": "REAUTHORIZE_CURRENT_HUMAN",
+    "durable_wait_policy": "REAUTHORIZE_AFTER_WAIT_OR_RETRY",
+    "revocation_maximum_seconds": null,
+    "reusable_human_credential_persisted": false,
+    "refresh_token_persisted": false,
+    "temporal_history_contains_credential": false
+  },
+  "api_profile": {
+    "per_user_delegated_api_support": "UNPROVEN",
+    "search": {
+      "method": null,
+      "path": null,
+      "response_schema_digest": null
+    },
+    "access_check": {
+      "method": null,
+      "path": null,
+      "response_schema_digest": null
+    },
+    "allowed_capabilities": [],
+    "prohibited_capabilities": [
+      "ADMINISTRATION",
+      "AGENT_WRITE",
+      "CHAT_HISTORY_READ",
+      "CONNECTOR_MANAGEMENT",
+      "DOCUMENT_MUTATION",
+      "USER_MANAGEMENT"
+    ],
+    "timeout_milliseconds": null,
+    "retry_policy": null,
+    "rate_limit_contract": null
+  },
+  "proof_cases": [
+    { "id": "TWO_USER_ACL", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "SUBJECT_SWAP", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "WORKSPACE_MISMATCH", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "AUDIENCE_MISMATCH", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "EXPIRED_GRANT", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "REVOKED_GRANT", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "DURABLE_WAIT_REAUTHORIZATION", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "SOURCE_DELETION_OR_ACCESS_CHANGE", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "PROMPT_INJECTION_CONTAINMENT", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "CREDENTIAL_AND_BODY_LEAK_SCAN", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "AUDIT_ATTRIBUTION", "status": "NOT_RUN", "evidence_digest": null },
+    { "id": "OUTAGE_RATE_LIMIT_CANCELLATION_RECONCILIATION", "status": "NOT_RUN", "evidence_digest": null }
+  ],
+  "security_invariants": {
+    "agent_receives_delegation": false,
+    "service_admin_identity_for_protected_search": false,
+    "credential_in_logs_or_telemetry": false,
+    "credential_in_provider_payload_or_evidence": false,
+    "source_content_can_expand_authority": false,
+    "access_rechecked_at_material_use": true
+  },
+  "owners": {
+    "security_identity": null,
+    "onyx_operations": null,
+    "curve_product": "Federico Ocampo"
+  },
+  "approvals": [
+    {
+      "role": "SECURITY_IDENTITY",
+      "approved_by": null,
+      "approved_at": null,
+      "decision_payload_digest": null
+    },
+    {
+      "role": "ONYX_OPERATIONS",
+      "approved_by": null,
+      "approved_at": null,
+      "decision_payload_digest": null
+    },
+    {
+      "role": "CURVE_PRODUCT",
+      "approved_by": null,
+      "approved_at": null,
+      "decision_payload_digest": null
+    }
+  ],
+  "activation": {
+    "adapter_implementation_authorized": false,
+    "live_retrieval_authorized": false,
+    "protected_body_persistence_authorized": false,
+    "model_destination_authorized": false
+  },
+  "unresolved_requirements": [
+    "ACCESS_CHECK_ENDPOINT",
+    "APPROVALS",
+    "DEPLOYED_ONYX_VERSION",
+    "IDENTITY_AUDIENCE",
+    "IDENTITY_ISSUER",
+    "IMAGE_DIGEST",
+    "MAXIMUM_TTL",
+    "ONYX_OPERATIONS_OWNER",
+    "OPENAPI_DIGEST",
+    "OPERATION_CLAIM",
+    "PER_USER_DELEGATED_API_SUPPORT",
+    "PROTOCOL_VERSION",
+    "PURPOSE_CLAIM",
+    "RATE_LIMIT_CONTRACT",
+    "RETRY_POLICY",
+    "REVOCATION_PROPAGATION",
+    "SANITIZED_CONFIGURATION_DIGEST",
+    "SEARCH_ENDPOINT",
+    "SECURITY_IDENTITY_OWNER",
+    "SUBJECT_MAPPING",
+    "SUPPORTED_DELEGATION_MECHANISM",
+    "TIMEOUT",
+    "TWELVE_PROOF_CASES",
+    "WORKSPACE_CLAIM"
+  ],
+  "decision_payload_digest": null
+}

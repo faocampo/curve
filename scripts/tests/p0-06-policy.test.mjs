@@ -23,6 +23,7 @@ import {
   M0_S6A_CONTEXT_PATHS,
   M0_S9A_CONTEXT_PATHS,
   P0_12_CONTEXT_PATHS,
+  P0_09_CONTEXT_PATHS,
   contextPathsFor,
   digestContextEntries,
 } from "../lib/context-pack.mjs";
@@ -411,6 +412,30 @@ test("P0-12 context pins the retention decision, test strategy, and semantic val
   assert.equal(new Set(P0_12_CONTEXT_PATHS).size, P0_12_CONTEXT_PATHS.length);
   assert.deepEqual(P0_12_CONTEXT_PATHS, [...P0_12_CONTEXT_PATHS].sort());
   assert.deepEqual(contextPathsFor("P0-12"), P0_12_CONTEXT_PATHS);
+});
+
+test("P0-09 context pins the D-002 decision, Onyx proof, provider, and security contracts", () => {
+  const requiredPaths = [
+    "contracts/governance/d002-onyx-delegation-v1.json",
+    "contracts/schemas/access-envelope.schema.json",
+    "contracts/schemas/examples/onyx-delegation-decision.invalid.json",
+    "contracts/schemas/examples/onyx-delegation-decision.valid.json",
+    "contracts/schemas/onyx-delegation-decision.schema.json",
+    "contracts/schemas/provider-capability.schema.json",
+    "contracts/schemas/provider-connection.schema.json",
+    "docs/technical/d002-onyx-delegated-identity-decision-packet.md",
+    "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+    "docs/technical/m1-m7-task-packets.md",
+    "scripts/lib/onyx-delegation.mjs",
+    "scripts/tests/onyx-delegation.test.mjs",
+    "scripts/validate-contracts.mjs",
+  ];
+  for (const path of requiredPaths) assert.ok(P0_09_CONTEXT_PATHS.includes(path), path);
+  assert.equal(new Set(P0_09_CONTEXT_PATHS).size, P0_09_CONTEXT_PATHS.length);
+  assert.deepEqual(P0_09_CONTEXT_PATHS, [...P0_09_CONTEXT_PATHS].sort());
+  assert.deepEqual(contextPathsFor("P0-09"), P0_09_CONTEXT_PATHS);
+  assert.deepEqual(contextPathsFor("D-002"), P0_09_CONTEXT_PATHS);
+  assert.deepEqual(contextPathsFor("M1-03B"), P0_09_CONTEXT_PATHS);
 });
 
 test("the live P0-06 projection is terminal and points to M0-S3", () => {

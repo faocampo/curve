@@ -7,8 +7,8 @@
 | Status       | Remediation in progress; D-001 decided; D-003 local shared-network profile decided and implemented; non-local activation and remaining packages retain their prerequisites |
 | Owner        | X3M                                                                        |
 | Audience     | Product, engineering, design, security, operations, and company leadership |
-| Version      | 0.12                                                                       |
-| Last updated | 2026-08-21                                                                 |
+| Version      | 0.13                                                                       |
+| Last updated | 2026-08-23                                                                 |
 | Product      | Curve                                                                      |
 | Foundation   | Plane open-source project management platform                              |
 
@@ -16,6 +16,7 @@
 
 | Version | Date | Summary |
 | ------- | ---- | ------- |
+| 0.13 | 2026-08-23 | Approved the M1-00A minimal Product core: immutable workspace-unique lowercase key, mutable metadata and prospective IANA timezone, one human owner, reversible ACTIVE/ARCHIVED lifecycle, archive guard, archived historical reads, Initiative rejection, and exact administrator/owner authority; retained all roadmap entities in M2. |
 | 0.12 | 2026-08-21 | Established Curve as the user-facing product shell and brand; grouped Plane-backed capabilities under Work management; placed Foundation status under Platform; and separated product-surface ownership from Plane data and service authority. |
 | 0.11 | 2026-08-20 | Recorded effective D-003 private-platform amendment merge `aece539...` and accepted M0-S3 local Temporal implementation merge `d99342f...`, including deterministic context, replay, restart, cancellation, security, migration, and rollback evidence; retained all non-local activation gates. |
 | 0.10 | 2026-08-20 | Replaced Curve-specific local network segmentation with Plane's shared `dev_env`; selected Kubernetes `ClusterIP`, private EKS/VPC/VPN exposure, a dedicated Curve namespace by default, internal Temporal UI ingress, X3M workload identity/Secrets Manager, and authenticated non-local Temporal clients; removed M0-S3 negative-reachability acceptance while retaining agent-sandbox isolation. Effective after exact-head approval and merge. |
@@ -426,6 +427,28 @@ The PRD contains at least:
 
 Approval applies to one immutable PRD version. A later edit creates a new version and records its relationship to the approved version.
 
+### Minimal Product core
+
+M1-00A establishes the Product identity required before Initiative creation.
+The following rules are normative:
+
+| Concern | Requirement |
+| --- | --- |
+| Key | Required, immutable, lowercase, unique within one workspace, and matching `[a-z0-9][a-z0-9-]{0,49}`. |
+| Name | Required and mutable. |
+| Description | Optional and mutable. |
+| Timezone | Required explicit IANA timezone. An accepted change applies prospectively and never rewrites historical events, dates, snapshots, schedules, or timestamps. |
+| Ownership | Exactly one active human owner. Creation assigns the authenticated creating user. |
+| Lifecycle | `ACTIVE` or `ARCHIVED`; R1 retirement is reversible archival. |
+| Archive guard | Archive succeeds only when the Product has no non-terminal Initiative. `READY_FOR_REPOSITORY_REVIEW` and `CANCELLED` are the only terminal R1 Initiative states. |
+| Archived behavior | Historical reads remain available. New Initiative creation is rejected until an administrator restores the Product. |
+| Administrator authority | An active workspace administrator may create, archive, restore, and reassign Products. |
+| Metadata authority | The active Product owner or an active workspace administrator may edit name, description, and timezone. |
+
+Product actions use current Plane workspace membership and a human principal.
+Agents and service identities cannot exercise Product authority. Roadmaps,
+Milestones, Features, Roadmap Items, schedules, and snapshots remain M2 scope.
+
 ### Product roadmaps and execution schedules
 
 Curve treats a Product as a long-lived system or platform that develops continuously. Each Product can have one or more working Roadmaps covering different planning horizons. A Roadmap contains ordered, typed Milestones and milestone-specific Roadmap Items.
@@ -521,7 +544,7 @@ The configured human code approver decides Code Readiness for each required curr
 | FR-022 | Support versioned X3M workflow templates without requiring a general visual workflow builder.                          |
 | FR-023 | Expose signed Curve webhooks and versioned APIs for integrations.                                                      |
 | FR-024 | Measure idea-to-draft, idea-to-ready, observed idea-to-merge, active human effort, quality outcomes, cost, and evidence coverage. |
-| FR-025 | Create and manage Products, working Roadmaps, typed Milestones, Features, and milestone-specific Roadmap Items.          |
+| FR-025 | Create and manage the approved minimal Product identity, ownership, timezone, and reversible lifecycle; M2 extends it with working Roadmaps, typed Milestones, Features, and milestone-specific Roadmap Items. |
 | FR-026 | Link each committed Roadmap Item to the exact approved PRD revision that defines its scope.                            |
 | FR-027 | Preserve audited scope-movement history when a Roadmap Item changes Milestones.                                      |
 | FR-028 | Maintain declared manual progress separately from task-derived Execution Completion.                                  |

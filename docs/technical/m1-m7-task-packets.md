@@ -5,10 +5,10 @@
 | Field | Value |
 | --- | --- |
 | Status | Deterministic materialization catalog; every package has an exact dependency/trace record and becomes `READY` only after its listed material gates, contracts, base SHA, commands, and context digest are satisfied |
-| Version | 1.2 |
-| Date | 2026-08-27 |
-| Product baseline | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) (product requirements, lifecycle, security invariants, and acceptance criteria) |
-| Delivery baseline | [Development plan](development-plan.md) (milestones, package dependencies, product trace, and completion evidence) |
+| Version | 1.5 |
+| Date | 2026-08-28 |
+| Product baseline | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, approved Product core, Curve-first shell, lifecycle, security invariants, and acceptance criteria) |
+| Delivery baseline | [Development plan](development-plan.md) (milestones, package dependencies, product trace, and completion evidence) and [M1 task packet](m1-alignment-evidence-prd-task-packet.md) (manual-first/provider-enhanced lanes, implementation slices, contracts, tests, and readiness gates) |
 | Decision readiness | [Later-milestone decision-readiness index](later-milestone-decision-readiness-index.md) (D-002 (Onyx delegation) through D-016 (KPI and rollout guardrails) owner inputs, machine contracts, acceptance evidence, and fail-closed milestone effects) |
 | Default owner and reviewer | Federico Ocampo (`faocampo`) until explicitly reassigned |
 | Implementation repository | `git@github.com:faocampo/plane.git`, except an approved repository-specific delivery slice |
@@ -62,7 +62,7 @@ revision.
 | Repository/branch | Public Plane fork `git@github.com:faocampo/plane.git`, target `preview`; a repository-specific delivery slice requires its approved binding and base SHA. |
 | Owner/reviewer | Federico Ocampo (`faocampo`) for both roles until an explicit replacement is recorded; the implementer cannot satisfy human review. |
 | Data | Synthetic `INTERNAL` data only by default. Protected or permissioned data requires its classification, AccessEnvelope, D-009 (retention and erasure decision), and destination policy. |
-| Runtime model | None by default. Model-enabled work requires D-005 (model, provider, and data-policy decision) plus exact model/provider/prompt/tool versions and budget. |
+| Runtime model | None by default. Model-enabled work requires D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision), plus exact model/provider/prompt/tool versions and budget. |
 | Network/egress | Dependency/build access only by default. Provider or destination traffic requires an exact workspace allowlist, approved connection, and package-specific conformance tests. |
 | External effects | None by default. Any VCS, notification, provider write, preview, deployment, or production-system effect must be named in the packet and use the approved trusted controller. |
 | Sandbox | Repository worktree and existing Plane test stack by default. Executable provider/quality/preview work requires the approved gVisor/runtime profile and JIT credentials. |
@@ -74,16 +74,20 @@ revision.
 
 | Packet | Repository-local outcome | Material gates | Executable completion evidence | Rollback or disablement |
 | --- | --- | --- | --- | --- |
-| M1-01 (Initiative) | Workspace-scoped Initiative aggregate, API, lifecycle, ownership, assignments, pause, and cancel | M0 core/API/Temporal dependencies complete | State, authorization, cancellation, uniqueness, migration, and API contract tests | Disable routes/navigation; reverse unshipped additive migration |
-| M1-02 (Idea Brief) | Versioned Idea Brief and attributed conversation/artifact UI | D-005 (model, provider, and data-policy decision) before model execution | Browser/accessibility, attribution, blocker/assumption/contradiction, and regeneration-diff tests | Disable model generation while preserving manual editing |
-| M1-03 (Onyx delegation) | Onyx adapter with initiating-user delegation and source-access recheck | D-002 (Onyx delegated-identity decision) and D-005 (model, provider, and data-policy decision) | Adapter conformance, revoked token, inaccessible approver, injection, workspace-isolation, and redaction tests | Revoke connection; disable retrieval; preserve metadata-only audit |
-| M1-04 (Evidence) | Evidence Snapshot/Item, AccessEnvelope propagation, citations, DLP, freshness, and evidence UI | D-009 (retention and erasure decision) before protected persistence | Claim-to-evidence, ACL propagation, destination leakage, citation, digest, and erasure-state tests | Disable protected ingestion and retain permitted tombstone/audit records |
-| M1-05 (Research) | Optional bounded research with skip, budget, sources, stop conditions, and partial results | D-014 (budget-policy decision); D-005 (model, provider, and data-policy decision) for selected models | Budget exhaustion, skip, cancellation, provider failure, and fact/inference tests | Disable activity; keep explicit skipped/partial disposition |
-| M1-06 (PRD versions) | Immutable PRD versions, structural diff, edit/generate, submit, supersede, and approval UI | D-005 (model, provider, and data-policy decision) only for model generation | Immutable version, source access, concurrent edit, completeness, diff, and supersession tests | Disable generation; preserve manual versioning and prior immutable versions |
+| M1-00A (minimal Product core) | Workspace-scoped Product aggregate/API with approved immutable key, mutable metadata, prospective IANA timezone, one human owner, ACTIVE/ARCHIVED lifecycle, Initiative archive guard, audit/outbox events, and no roadmap-specific behavior | M0 core/API/audit dependencies complete; merged Product decision/schema/OpenAPI/policy/persistence contracts; exact context and dispatch | P-01-P-18: workspace isolation, exact authority, uniqueness, timezone history, concurrency, lifecycle/guard, migration, atomic audit/outbox, and API contract tests | Disable routes; reverse unshipped additive migration; preserve rows after reliance |
+| M1-01 (Initiative) | Workspace-scoped Initiative aggregate, required same-workspace Product reference, API, lifecycle, ownership, assignments, pause, and cancel | M1-00A (minimal Product core); M0 core/API/Temporal dependencies complete | Product-reference, state, authorization, cancellation, uniqueness, migration, and API contract tests | Disable routes/navigation; reverse unshipped additive migration |
+| M1-02 (Idea Brief) | Versioned manual Idea Brief and attributed conversation/artifact UI; model refinement is a separately activated sub-packet | D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) only before model execution | Browser/accessibility, attribution, blocker/assumption/contradiction, manual diff, and model-regeneration provenance tests as applicable | Disable model generation while preserving manual editing |
+| M1-03 (Onyx delegation) | KnowledgeProvider contract/fake plus a separately activated Onyx adapter with initiating-user delegation and source-access recheck | D-002 (Onyx delegated-identity decision) before live retrieval; D-009 (retention and erasure decision) plus M0-04 before protected persistence; D-005 (model/provider data-policy decision) only before content is sent to a model | Provider conformance, two-user ACL, revoked token, inaccessible approver, injection, workspace-isolation, redaction, and credential-leakage tests | Revoke connection; disable retrieval; preserve metadata-only audit |
+| M1-04 (Evidence) | Manually attributable Evidence metadata/snapshots plus separately activated provider ingestion and protected bodies | M1-03 (KnowledgeProvider) before provider-derived evidence; D-009 (retention and erasure decision) and M0-04 (protected storage) before protected persistence; no provider gate for metadata-only manual references | Claim-to-evidence, ACL propagation, metadata-only manual path, destination leakage, citation, digest, and erasure-state tests | Disable protected/provider ingestion and retain permitted metadata/tombstone/audit records |
+| M1-05 (Research) | Optional research lifecycle with manual skip/partial disposition and separately activated provider and model execution | M1-03 plus protected M1-04 before live provider research; D-002 (Onyx delegated-identity decision) for live Onyx; D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) before model execution; no material gate for the manual/skip state | Budget exhaustion, skip, cancellation, provider failure, citation, and fact/inference tests | Disable provider activity; keep explicit skipped/partial disposition |
+| M1-06 (PRD versions) | Immutable manual PRD versions, structural diff, submit/supersede/review UI, and separately activated model generation | D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) only for model generation | Immutable version, source access, concurrent edit, completeness, diff, provenance, and supersession tests | Disable generation; preserve manual versioning and prior immutable versions |
 | M1-07 (Gate 1) | Exact-version Product Approval workflow with changes requested and rejection | Product authority/role policy from approved PRD | Unauthorized/agent decision denial, evidence accessibility, risk confirmation, notification, and exact-version invalidation tests | Disable submission; leave draft PRDs editable and decisions immutable |
 
 M1 exits when an authorized X3M user completes an evidence-backed PRD and each
 material approver can access every cited evidence item through their own identity.
+The [M1 task packet](m1-alignment-evidence-prd-task-packet.md)
+(manual-first/provider-enhanced lanes, implementation slices, contracts, tests,
+and readiness gates) is the normative decomposition for materialization.
 
 ## M2 (product roadmap and schedule)
 
@@ -149,7 +153,7 @@ material approver can access every cited evidence item through their own identit
 
 ## M7 (post-R1 intelligence and automation)
 
-M7 remains outside the active 70-item catalog. Materialization requires an
+M7 remains outside the active 71-item catalog. Materialization requires an
 approved catalog revision and the extension decision described in the
 [M7 charter](m7-intelligence-and-automation-extension.md) (post-R1 expense,
 attention-intake, and scheduled-job product boundaries).
@@ -172,14 +176,15 @@ a value that the dispatcher may invent.
 
 | Packet | Exact dependencies | Product trace and short scope |
 | --- | --- | --- |
-| M1-01 (Initiative) | M0-02 (core persistence), M0-03 (core policy), M0-06 (Temporal skeleton), M0-07 (API/SSE) | FR-001, FR-042-FR-043; AC-01-AC-02, AC-20 (initiative lifecycle, ownership, execution control, and tenant authorization) |
-| M1-02 (Idea Brief) | M1-01 (Initiative), D-005 (model, provider, and data-policy decision) for model execution | FR-002; G-01; AC-03 (alignment conversation, attributed brief, blockers, assumptions, and contradictions) |
-| M1-03 (Onyx delegation) | M0-09 (provider registry), D-002 (Onyx delegated-identity decision), D-005 (model, provider, and data-policy decision) | FR-003-FR-004, FR-043; AC-04, AC-09, AC-53-AC-54, AC-60 (permission-aware knowledge retrieval and evidence access) |
-| M1-04 (Evidence) | M0-04 (protected storage), M1-03 (Onyx delegation) | FR-004, FR-021; NFR-010-NFR-012; AC-09, AC-34, AC-53 (evidence lineage, access, classification, and audit) |
-| M1-05 (Research) | M1-03 (Onyx delegation), M1-04 (Evidence), D-014 (budget-policy decision), D-005 (model, provider, and data-policy decision) when model-enabled | FR-005; AC-05 (optional bounded research, skip, source quality, and partial results) |
-| M1-06 (PRD versions) | M0-02 (core persistence), M1-02 (Idea Brief), M1-04 (Evidence), D-005 (model, provider, and data-policy decision) for generation | FR-007, FR-021; AC-08-AC-09 (immutable PRD versions, completeness, evidence, diff, and supersession) |
+| M1-00A (minimal Product core) | M0-02 (core persistence), M0-03 (core policy), M0-07 (API/SSE) | FR-025, AC-35, AC-52, and P-01-P-18 (the approved Product identity, ownership, prospective timezone, reversible lifecycle, and Initiative guard required before an Initiative can exist) |
+| M1-01 (Initiative) | M1-00A (minimal Product core), M0-02 (core persistence), M0-03 (core policy), M0-06 (Temporal skeleton), M0-07 (API/SSE) | FR-001, FR-042-FR-043; AC-01-AC-02, AC-20 (initiative lifecycle, Product binding, ownership, execution control, and tenant authorization) |
+| M1-02 (Idea Brief) | M1-01 (Initiative); D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) only for model refinement | FR-002; G-01; AC-03 (alignment conversation, attributed brief, blockers, assumptions, and contradictions) |
+| M1-03 (Onyx delegation) | M0-09 (provider registry), D-002 (Onyx delegated-identity decision) for live retrieval; D-009 (retention and erasure decision) plus M0-04 before protected body persistence; D-005 (model/provider data-policy decision) only before a model destination | FR-003-FR-004, FR-043; AC-04, AC-09, AC-53-AC-54, AC-60 (permission-aware knowledge retrieval and evidence access) |
+| M1-04 (Evidence) | M0-02 (core persistence), M0-03 (core policy), M0-07 (API/SSE), M1-01 (Initiative); M1-03 (KnowledgeProvider) before provider-derived evidence; D-009 (retention and erasure decision) and M0-04 (protected storage) before protected bodies | FR-004, FR-021; NFR-010-NFR-012; AC-09, AC-34, AC-53 (manual metadata, evidence lineage, access, classification, and protected-body audit) |
+| M1-05 (Research) | M1-01 (Initiative), M1-02 (Idea Brief), metadata-only M1-04 (Evidence); M1-03 plus protected M1-04 before live provider research; D-002 (Onyx delegated-identity decision) for live Onyx; D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) before model execution; the manual/skip path needs no provider decision | FR-005; AC-05 (optional bounded research, skip, source quality, and partial results) |
+| M1-06 (PRD versions) | M0-02 (core persistence), M1-02 (Idea Brief), metadata-only M1-04 (Evidence); protected M1-04 when cited; D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) only for generation | FR-007, FR-021; AC-08-AC-09 (immutable PRD versions, completeness, evidence, diff, and supersession) |
 | M1-07 (Gate 1) | M1-06 (PRD versions), M0-06 (Temporal skeleton), M0-03 (core policy) | FR-007, FR-015; AC-08-AC-09 (exact-version Product Approval and evidence accessibility) |
-| M2-01 (Roadmap domain) | M0-02 (core persistence), M0-03 (core policy), D-013 (no-migration and manual-import decision) | FR-025-FR-027; AC-02, AC-37, AC-40 (Product, Roadmap, Milestone, Feature, item, and movement history) |
+| M2-01 (roadmap planning domain) | M1-00A (minimal Product core), M0-02 (core persistence), M0-03 (core policy), D-013 (no-migration and manual-import decision) | FR-025-FR-027; AC-02, AC-37, AC-40 (Roadmap, Milestone, Feature, item, schedule, and movement history extending the existing Product) |
 | M2-02 (Delivery identity) | M1-01 (Initiative), M1-06 (PRD versions), M1-07 (Gate 1), M2-01 (Roadmap domain) | FR-026, FR-032, FR-038; AC-02, AC-43-AC-44, AC-51 (roadmap-backed initiative linkage and one delivery identity) |
 | M2-03 (Plane projection) | M0-09 (provider registry), M2-01 (Roadmap domain), D-001 (Plane foundation, licensing, fork, and upgrade decision) | FR-028, FR-037; AC-38, AC-42 (one-way work-item binding and execution-completion formula) |
 | M2-04 (Portfolio UI) | M2-01 (Roadmap domain), M2-02 (Delivery identity), M2-03 (Plane projection), P0-01 (Plane foundation inventory), approved Curve Experience Blueprint (screen-flow and usability gate) | FR-030-FR-031; NFR-015; AC-37-AC-42 (roadmap/Gantt, dependency, schedule impact, confidence, and critical path) |
