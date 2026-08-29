@@ -232,13 +232,30 @@ the New Initiative form retained values from the prior creation attempt.
 
 | Finding | Reported issue | Correction in this iteration | Retest state |
 | --- | --- | --- | --- |
-| MR-06 | Mobile displayed only the selected Initiative | The mobile rule that hid every non-selected row is removed; all search/filter matches remain visible before the stacked detail | Required |
-| MR-07 | New Initiative retained prior values | Every drawer opening resets authored fields, selector defaults, validation classes, `aria-invalid`, and the approver error before focus enters the form | Required |
-| MR-08 | Recovery states passed functionally with visual issues | Empty, permission, and error states now use compact state-specific icon containers, consistent authored strokes, stronger heading rhythm, and reduced mobile panel height | Required |
+| MR-06 | Mobile displayed only the selected Initiative | The mobile rule that hid every non-selected row is removed; all search/filter matches remain visible before the stacked detail | Passed by Codex at `ea1500a759d290283157686788c3a5a0547581ca` |
+| MR-07 | New Initiative retained prior values | Every drawer opening resets authored fields, selector defaults, validation classes, `aria-invalid`, and the approver error before focus enters the form | Passed by Codex at `ea1500a759d290283157686788c3a5a0547581ca` |
+| MR-08 | Recovery states passed functionally with visual issues | Empty, permission, and error states now use compact state-specific icon containers, consistent authored strokes, stronger heading rhythm, and reduced mobile panel height | Passed by Codex at `ea1500a759d290283157686788c3a5a0547581ca` |
 
-T9 remains functionally passed with visual retest required. T10 remains failed
-until Federico confirms the corrected mobile list and completes the remaining
-mobile and keyboard checks.
+## Independent execution verification
+
+Codex executed T9 and T10 on 2026-08-29 against exact Curve commit
+`ea1500a759d290283157686788c3a5a0547581ca`. This verification closes the
+reported correction retests while keeping Federico Ocampo's accountable Product
+approval separate.
+
+| Check | Result and evidence |
+| --- | --- |
+| T9 recovery states | Passed loading, empty, permission, and error differentiation; heading focus; state-specific icons; recovery actions; fresh empty-state creation; desktop fit; and 390 px mobile fit |
+| T10 mobile list | Passed at 390 by 844: all four unfiltered Initiatives remain visible, Paused returns one row, Standard risk returns two rows, `Loomit` returns two rows, and every row selects its matching stacked detail |
+| T10 keyboard semantics | Passed native-button focusability, deterministic tab order, reverse-Tab focus containment, Escape closure/focus return, invalid-submit focus recovery, and keyboard-reachable create/cancel paths |
+| Approver invariant | Passed: Standard risk marks all three duplicate approver controls invalid and exposes the recovery message; distinct defaults permit Draft creation |
+| Form reset | Passed before and after successful creation: authored fields are blank, validation is cleared, risk returns to Standard, and three distinct approver defaults are restored |
+| Browser and layout diagnostics | Passed with zero application exceptions and zero horizontal overflow; the local server's absent favicon was excluded from application diagnostics |
+| Repository validation | Passed 71 Markdown files, 48 Mermaid diagrams, 47 JSON Schemas with 126 fixtures, 106 contract/project tests, and GitHub Project dry-run consistency |
+
+The execution verdict for T9 and T10 is `PASS`. The Product review record below
+remains `REVIEW_REQUIRED` until Federico binds an approval to an exact Curve
+commit.
 
 ## Review decision record
 
@@ -250,6 +267,9 @@ status: REVIEW_REQUIRED
 reviewer: Federico Ocampo
 reviewed_curve_commit: null
 result: null
+test_executor: Codex
+tested_curve_commit: ea1500a759d290283157686788c3a5a0547581ca
+test_result: PASS
 approved_assumptions: []
 required_changes: []
 implementation_authorized: false
