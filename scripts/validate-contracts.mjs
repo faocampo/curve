@@ -6,6 +6,7 @@ import { join, relative } from "node:path";
 
 import { validateTestStrategyMatrixSemantics } from "./lib/test-strategy.mjs";
 import { validateTemporalOrchestrationSemantics } from "./lib/temporal-orchestration.mjs";
+import { validateRetentionPolicyDecisionSemantics } from "./lib/retention-policy.mjs";
 
 const root = process.cwd();
 
@@ -85,6 +86,8 @@ const providerConnectionEventV1Schema = join(
 );
 const providerRegistryManifestSchema = join(root, "contracts/schemas/provider-registry-manifest.schema.json");
 const providerRegistryManifestPath = join(root, "contracts/providers/m0-s9a-provider-registry-v1.json");
+const retentionPolicyDecisionSchema = join(root, "contracts/schemas/retention-policy-decision.schema.json");
+const retentionPolicyDecisionPath = join(root, "contracts/governance/d009-retention-policy-v1.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -98,6 +101,7 @@ const fixtureSpecs = [
   ["contracts/observability/obs-bind-001-local-v1.json", observabilityBindingSchema, true],
   ["contracts/testing/ac-test-matrix-v1.json", testStrategyMatrixSchema, true],
   ["contracts/temporal/m0-orchestration-v1.json", temporalOrchestrationSchema, true],
+  ["contracts/governance/d009-retention-policy-v1.json", retentionPolicyDecisionSchema, true],
   ["contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json", observabilityBindingSchema, false],
   ["contracts/schemas/semantic-fixtures/provider-connection-active.valid.json", providerConnectionSchema, true],
   ["contracts/schemas/semantic-fixtures/provider-connection-active-null.invalid.json", providerConnectionSchema, false],
@@ -156,6 +160,9 @@ validateTestStrategyMatrixSemantics({
   prdText,
   developmentPlanText,
 });
+
+const retentionPolicyDecision = JSON.parse(readFileSync(retentionPolicyDecisionPath, "utf8"));
+validateRetentionPolicyDecisionSemantics(retentionPolicyDecision);
 
 const corePolicyManifest = JSON.parse(readFileSync(corePolicyManifestPath, "utf8"));
 const corePolicyManifestV1Digest = createHash("sha256")

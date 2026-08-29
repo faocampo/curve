@@ -1,0 +1,10 @@
+{
+  "schema_version": "curve.retention-policy-decision/v1",
+  "decision_id": "D-009",
+  "decision_state": "DECIDED",
+  "approval_subject_digest": null,
+  "effective_scope": "CURVE_CONTROLLED_COPIES",
+  "source_adr": "docs/technical/adr-009-retention-and-erasure.md",
+  "policy_cells": [],
+  "unresolved_cell_keys": []
+}

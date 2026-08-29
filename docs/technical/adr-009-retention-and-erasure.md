@@ -1,11 +1,11 @@
 # ADR-009: Retention, Legal Hold, Backup, and Erasure
 
 - Status: OPEN
-- PRD decision: D-009
+- PRD decision: D-009 (retention, deletion, backup, and legal-hold policy)
 - Owner: Security, Privacy, and Legal
 - Reviewers: Platform Operations, database operations, Curve engineering
 - Decision date: Pending policy decision
-- Required by: M0-04 and every staging/production activation
+- Required by: M0-04 (protected object-storage foundation) and every staging/production activation
 - Supersedes: None
 
 ## Context and constraints
@@ -26,6 +26,26 @@ Curve may handle evidence, prompts, transcripts, source code, patches, logs, rep
 2. One global retention period: rejected because asset/class obligations differ.
 3. Permanent retention: rejected as the default because it violates minimization.
 4. Ephemeral-only protected data: conservative fallback for approved local proofs, not a production policy.
+
+## Machine decision contract
+
+The owner workshop and approval flow use three versioned artifacts:
+
+- [D-009 decision worksheet](../../contracts/governance/d009-retention-policy-v1.json)
+  (owner-fillable policy cells, copy inventory, material decisions, approvals,
+  and activation guard);
+- [D-009 decision schema](../../contracts/schemas/retention-policy-decision.schema.json)
+  (closed field, enum, coverage, chronology, and named-person approval rules);
+- [P0-12 decision packet](p0-12-retention-decision-task-packet.md)
+  (owner inputs, completion protocol, acceptance tests, and exact validation).
+
+The current worksheet is `PROPOSED / NONE_FAIL_CLOSED`: all 39
+asset/classification cells, all eight controlled-copy inventory entries, and
+all nine decision areas are unresolved. The semantic validator computes those
+unresolved projections from content and rejects premature `DECIDED`, approval,
+implementation-dispatch, or activation claims. Only named people approve the
+stable policy-content digest. The approval digest excludes approval records so
+that the contract has no self-reference cycle.
 
 ## Required decision matrix
 
@@ -86,6 +106,28 @@ Every `TBD` is a deliberate blocking value. Periods use an explicit unit and sta
 | Failed/partial erasure escalation | `TBD` retry schedule, incident severity, owner, customer/data-owner notice and manual recovery. |
 | Cost/capacity | `TBD` estimate for active bodies, versions, backups, quarantine, receipts and deletion scans. |
 
+### AWS implementation constraints
+
+The policy owners select the durations and obligations. Implementation review
+must then prove the selected values are feasible against these upstream facts:
+
+- [Amazon S3 versioning deletion guidance](https://docs.aws.amazon.com/AmazonS3/latest/userguide/troubleshooting-versioning.html)
+  (delete markers and retained noncurrent versions) requires explicit permanent
+  deletion and verification for every covered version;
+- [Amazon S3 multipart-abort guidance](https://docs.aws.amazon.com/AmazonS3/latest/userguide/abort-mpu.html)
+  (incomplete-part storage and abort behavior) requires an abort lifecycle and
+  verification that no upload parts remain;
+- [AWS Backup recovery-point lifecycle API](https://docs.aws.amazon.com/aws-backup/latest/APIReference/API_UpdateRecoveryPointLifecycle.html)
+  (transition, expiry, and cold-storage constraints) requires validating each
+  selected backup period against the configured recovery-point lifecycle; and
+- [AWS KMS key-deletion guidance](https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html)
+  (destructive deletion, 7–30-day waiting period, replicas, and custom-key-store
+  backup considerations) constrains the key-erasure proof and its completion
+  semantics.
+
+These constraints provide feasibility evidence; they select no X3M policy
+value.
+
 ### Erasure state machine
 
 ```mermaid
@@ -133,11 +175,17 @@ Deletion failures retry safely and alert an owner; they never report completion 
 
 ## Implementation consequences and affected work packages
 
-D-009 blocks M0-04, protected M1 evidence, retained M4 artifacts, M6 previews/exports, and every staging/production activation.
+D-009 (retention, deletion, backup, and legal-hold policy) blocks M0-04
+(protected object-storage foundation), protected M1 evidence, retained M4
+artifacts, M6 previews/exports, and every staging/production activation.
 
 ## Validation and review date
 
-The asset inventory, blocking matrix, state machine and proof requirements are ready for an owner workshop. This ADR remains `OPEN` pending all `TBD` cells, cost analysis, and named Security/Privacy/Legal approval.
+The asset inventory, closed decision contract, state machine, and proof
+requirements are ready for an owner workshop. This ADR remains `OPEN` pending
+39 policy cells, eight controlled-copy inventory entries, all material decision
+blocks, cost analysis, and named Security, Privacy, Legal, Platform Operations,
+Database Operations, and Curve Engineering approvals.
 
 Required acceptance evidence before `DECIDED`:
 

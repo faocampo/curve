@@ -7,9 +7,9 @@
 | Status | Derived security and operations baseline; production enablement is blocked by applicable non-decided ADRs |
 | Owner | X3M security, platform operations, and Curve engineering |
 | Audience | Security, identity, platform, SRE, backend, provider-adapter, and AI coding-agent teams |
-| Version | 0.6 |
-| Last updated | 2026-08-20 |
-| Normative source | [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (product requirements, security invariants, acceptance criteria, and accepted local Temporal proof) |
+| Version | 0.7 |
+| Last updated | 2026-08-22 |
+| Normative source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, security invariants, acceptance criteria, and accepted local Temporal proof) |
 | Companion documents | [Architecture](architecture.md) (components and trust boundaries), [Domain model](domain-model.md) (entities, ownership, and persistence invariants), [Workflows and sequences](workflows-and-sequences.md) (durable lifecycle interactions), and [Integration contracts](integration-contracts.md) (provider-neutral interfaces and error behavior) |
 
 ## Purpose and authority
@@ -177,12 +177,17 @@ An `AccessEnvelope` is immutable, versioned metadata recording sources, classifi
 
 ### Retention, legal hold, and erasure
 
-D-009 (retention, deletion, backup, and legal-hold decision) must decide a class-by-asset retention matrix before protected-object
-persistence or any staging or production activation. Local synthetic packages
-may implement policy seams and minimum non-sensitive metadata without embedding
-a retention duration. Each later protected object has a retention policy
-version, deletion eligibility time, legal-hold state, encryption-key reference,
-tombstone state, and corresponding audit entries.
+D-009 (retention, deletion, backup, and legal-hold policy) must decide a
+class-by-asset retention matrix before protected-object persistence or any
+staging or production activation. The [D-009 decision worksheet](../../contracts/governance/d009-retention-policy-v1.json)
+(39 policy cells, eight controlled-copy entries, material blocks, approvals,
+and activation guard) and [P0-12 decision packet](p0-12-retention-decision-task-packet.md)
+(owner inputs, completion protocol, tests, and fail-closed handoff) are prepared
+in `PROPOSED` state. Local synthetic packages may implement policy seams and
+minimum non-sensitive metadata without embedding a retention duration. Each
+later protected object has a retention policy version, deletion eligibility
+time, legal-hold state, encryption-key reference, tombstone state, and
+corresponding audit entries.
 
 The erasure workflow is: authorize request → evaluate legal/operational hold → fence new reads/derivatives → tombstone metadata → cryptographically erase or physically delete body as policy requires → verify non-retrievability → retain only lawful non-sensitive audit metadata. Backups and replicas are governed by the same matrix and report their disposal status. If the system cannot prove required erasure, it reports failure; it does not silently mark the request complete (`AC-56`).
 
@@ -369,7 +374,7 @@ Every release candidate needs a signed evidence index that pins the policy/ADR/d
 | D-006 | Orca client/version, developer-delegation, capability, ownership/support/license proof | OpenHands automation may proceed; Orca MCP remains disabled. |
 | D-007 | MCP registry, transport, read/write risk, delegated auth, idempotency and pre-authorized actions | Only a separately approved read-only MCP profile may operate; the generic registry implementation and all writes remain disabled until their exact D-007 scope is approved. |
 | D-008 | GitHub/GitLab identities, scopes, signing, rotation, repository allowlists | Read-only repository inspection; no push/draft/ready mutation. |
-| D-009 | Retention, backup, legal hold, tombstone and erasure matrix | Protected-body persistence, retention-dependent capabilities, and every staging or production activation remain disabled. Only authorized disposable synthetic proofs and minimum non-sensitive local metadata are allowed. |
+| D-009 (retention, deletion, backup, and legal-hold policy) | [P0-12 decision packet](p0-12-retention-decision-task-packet.md) (39 policy cells, eight controlled-copy entries, material decisions, digest-bound approvals, and tests) | Protected-body persistence, retention-dependent capabilities, and every staging or production activation remain disabled. Only authorized disposable synthetic proofs and minimum non-sensitive local metadata are allowed. |
 | D-010 | Pinned quality/security/license policy, thresholds, waiver/non-waivable rules | Critical/Major and unknown-license findings block. |
 | D-011/D-012 | Flag and docs provider security/ownership/build contracts | Applicable delivery-contract checks cannot pass. |
 | D-014 | Budget limits/reservations/escalation authority | Minimal development limits; exhaustion pauses. |

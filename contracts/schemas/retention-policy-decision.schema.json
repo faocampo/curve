@@ -1,0 +1,445 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/retention-policy-decision.schema.json",
+  "title": "Curve D-009 retention policy decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "decision_state",
+    "approval_subject_digest",
+    "effective_scope",
+    "source_adr",
+    "catalog",
+    "policy_cells",
+    "unresolved_cell_keys",
+    "storage_inventory",
+    "unresolved_storage_keys",
+    "key_erasure",
+    "legal_hold",
+    "restore_re_erasure",
+    "external_copy_deletion",
+    "failure_escalation",
+    "cost_capacity",
+    "approvals",
+    "activation_guard",
+    "unresolved_requirements"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.retention-policy-decision/v1" },
+    "decision_id": { "const": "D-009" },
+    "decision_state": { "enum": ["PROPOSED", "DECIDED"] },
+    "approval_subject_digest": {
+      "anyOf": [
+        { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        { "type": "null" }
+      ]
+    },
+    "effective_scope": { "enum": ["NONE_FAIL_CLOSED", "CURVE_CONTROLLED_COPIES"] },
+    "source_adr": { "const": "docs/technical/adr-009-retention-and-erasure.md" },
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_classes", "classifications", "storage_copy_kinds"],
+      "properties": {
+        "asset_classes": {
+          "type": "array",
+          "minItems": 13,
+          "maxItems": 13,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/assetClass" }
+        },
+        "classifications": {
+          "const": ["INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+        },
+        "storage_copy_kinds": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/storageCopyKind" }
+        }
+      }
+    },
+    "policy_cells": {
+      "type": "array",
+      "maxItems": 39,
+      "items": { "$ref": "#/$defs/policyCell" }
+    },
+    "unresolved_cell_keys": {
+      "type": "array",
+      "maxItems": 39,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/cellKey" }
+    },
+    "storage_inventory": {
+      "type": "array",
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/storageInventoryEntry" }
+    },
+    "unresolved_storage_keys": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/storageCopyKind" }
+    },
+    "key_erasure": { "$ref": "#/$defs/keyErasure" },
+    "legal_hold": { "$ref": "#/$defs/legalHold" },
+    "restore_re_erasure": { "$ref": "#/$defs/restore" },
+    "external_copy_deletion": { "$ref": "#/$defs/externalCopy" },
+    "failure_escalation": { "$ref": "#/$defs/failureEscalation" },
+    "cost_capacity": { "$ref": "#/$defs/costCapacity" },
+    "approvals": { "$ref": "#/$defs/approvals" },
+    "activation_guard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protected_storage_enabled",
+        "staging_enabled",
+        "production_enabled",
+        "implementation_dispatch_allowed"
+      ],
+      "properties": {
+        "protected_storage_enabled": { "const": false },
+        "staging_enabled": { "const": false },
+        "production_enabled": { "const": false },
+        "implementation_dispatch_allowed": { "type": "boolean" }
+      }
+    },
+    "unresolved_requirements": {
+      "type": "array",
+      "maxItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ASSET_POLICY_CELLS",
+          "STORAGE_INVENTORY",
+          "KEY_ERASURE",
+          "LEGAL_HOLD",
+          "RESTORE_RE_ERASURE",
+          "EXTERNAL_COPY_DELETION",
+          "FAILURE_ESCALATION",
+          "COST_CAPACITY",
+          "NAMED_APPROVALS"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "assetClass": {
+      "enum": [
+        "EVIDENCE_RESEARCH_BODY",
+        "DERIVED_ARTIFACT_CONTEXT_BODY",
+        "PROMPT_RESPONSE_MODEL_TRACE",
+        "TRANSCRIPT_QUESTION_BODY",
+        "CANDIDATE_PATCH_SANDBOX_OUTPUT",
+        "QUALITY_LOG_REPORT_BODY",
+        "PREVIEW_BODY_RUNTIME",
+        "EXPORT_STAGING_BODY",
+        "RAW_PROVIDER_PAYLOAD",
+        "AUDIT_LINEAGE_METADATA",
+        "TOMBSTONE_ERASURE_RECEIPT",
+        "DATABASE_BACKUP_OBJECT_VERSION",
+        "FORENSIC_QUARANTINE"
+      ]
+    },
+    "classification": {
+      "enum": ["INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+    },
+    "storageCopyKind": {
+      "enum": [
+        "POSTGRESQL_FULL_INCREMENTAL_PITR",
+        "POSTGRESQL_REPLICA",
+        "S3_CURRENT_OBJECT",
+        "S3_NONCURRENT_VERSION_DELETE_MARKER",
+        "S3_INCOMPLETE_MULTIPART_UPLOAD",
+        "S3_REPLICATION_ARCHIVE",
+        "LOG_SIEM_PROJECTION",
+        "FORENSIC_QUARANTINE_STORE"
+      ]
+    },
+    "cellKey": {
+      "type": "string",
+      "pattern": "^[A-Z_]+:(INTERNAL|CONFIDENTIAL|RESTRICTED)$"
+    },
+    "isoDuration": {
+      "type": "string",
+      "pattern": "^P(?=\\d|T\\d)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$"
+    },
+    "reference": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._:/-]{2,255}$"
+    },
+    "principalReference": {
+      "type": "string",
+      "pattern": "^(person|role):[a-z0-9][a-z0-9._-]{1,126}$"
+    },
+    "personReference": {
+      "type": "string",
+      "pattern": "^person:[a-z0-9][a-z0-9._-]{1,126}$"
+    },
+    "retentionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "duration"],
+      "properties": {
+        "mode": { "enum": ["DURATION", "NOT_APPLICABLE", "DEFAULT_DENIED"] },
+        "duration": {
+          "anyOf": [
+            { "$ref": "#/$defs/isoDuration" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "mode": { "const": "DURATION" } } },
+          "then": { "properties": { "duration": { "$ref": "#/$defs/isoDuration" } } },
+          "else": { "properties": { "duration": { "type": "null" } } }
+        }
+      ]
+    },
+    "policyCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cell_key",
+        "asset_class",
+        "classification",
+        "active_retention",
+        "backup_retention",
+        "start_event",
+        "deletion_trigger",
+        "body_disposition",
+        "minimum_metadata_profile_ref",
+        "legal_hold_behavior",
+        "backup_destruction_verification_required",
+        "accountable_owner_ref",
+        "authority_reference",
+        "review_cadence"
+      ],
+      "properties": {
+        "cell_key": { "$ref": "#/$defs/cellKey" },
+        "asset_class": { "$ref": "#/$defs/assetClass" },
+        "classification": { "$ref": "#/$defs/classification" },
+        "active_retention": { "$ref": "#/$defs/retentionRule" },
+        "backup_retention": { "$ref": "#/$defs/retentionRule" },
+        "start_event": {
+          "enum": [
+            "INITIATIVE_CLOSED",
+            "ARTIFACT_SUPERSEDED",
+            "ATTEMPT_TERMINAL",
+            "QUESTION_ANSWERED",
+            "SANDBOX_TERMINAL",
+            "QUALITY_RUN_TERMINAL",
+            "PREVIEW_CREATED",
+            "PREVIEW_LAST_AUTHORIZED_USE",
+            "EXPORT_COMPLETED",
+            "PROVIDER_PAYLOAD_NORMALIZED",
+            "EVENT_RECORDED",
+            "ERASURE_COMPLETED",
+            "BACKUP_CREATED_OR_VERSION_BECAME_NONCURRENT",
+            "CASE_CLOSED_OR_HOLD_RELEASED"
+          ]
+        },
+        "deletion_trigger": {
+          "enum": [
+            "RETENTION_EXPIRED",
+            "AUTHORIZED_REQUEST_OR_RETENTION_EXPIRY",
+            "CASE_CLOSED_AND_HOLD_RELEASED",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "body_disposition": {
+          "enum": [
+            "PHYSICAL_DELETE",
+            "CRYPTOGRAPHIC_ERASURE",
+            "PHYSICAL_AND_CRYPTOGRAPHIC",
+            "METADATA_MINIMIZATION_ONLY",
+            "DEFAULT_DENIED",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "minimum_metadata_profile_ref": { "$ref": "#/$defs/reference" },
+        "legal_hold_behavior": { "const": "HOLD_BLOCKS_ERASURE_AND_MAY_FENCE_READS" },
+        "backup_destruction_verification_required": { "type": "boolean" },
+        "accountable_owner_ref": { "$ref": "#/$defs/principalReference" },
+        "authority_reference": { "$ref": "#/$defs/reference" },
+        "review_cadence": { "$ref": "#/$defs/isoDuration" }
+      }
+    },
+    "storageInventoryEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "storage_copy_kind",
+        "product_ref",
+        "account_ref",
+        "regions",
+        "catalog_owner_ref",
+        "lifecycle_policy_ref",
+        "destruction_proof_ref"
+      ],
+      "properties": {
+        "storage_copy_kind": { "$ref": "#/$defs/storageCopyKind" },
+        "product_ref": { "$ref": "#/$defs/reference" },
+        "account_ref": { "$ref": "#/$defs/reference" },
+        "regions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z]{2}(?:-gov)?-[a-z]+-\\d$" }
+        },
+        "catalog_owner_ref": { "$ref": "#/$defs/principalReference" },
+        "lifecycle_policy_ref": { "$ref": "#/$defs/reference" },
+        "destruction_proof_ref": { "$ref": "#/$defs/reference" }
+      }
+    },
+    "keyErasure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "key_boundary",
+        "kms_key_type",
+        "deletion_wait_days",
+        "multi_region_replica_handling_ref",
+        "custom_key_store_backup_handling_ref",
+        "destruction_authority_ref",
+        "proof_ref",
+        "unrelated_data_impact_test_ref"
+      ],
+      "properties": {
+        "status": { "enum": ["UNRESOLVED", "DECIDED"] },
+        "key_boundary": {
+          "anyOf": [
+            { "enum": ["WORKSPACE", "WORKSPACE_CLASS", "OBJECT"] },
+            { "type": "null" }
+          ]
+        },
+        "kms_key_type": {
+          "anyOf": [
+            { "enum": ["CUSTOMER_MANAGED_SINGLE_REGION", "CUSTOMER_MANAGED_MULTI_REGION"] },
+            { "type": "null" }
+          ]
+        },
+        "deletion_wait_days": {
+          "anyOf": [
+            { "type": "integer", "minimum": 7, "maximum": 30 },
+            { "type": "null" }
+          ]
+        },
+        "multi_region_replica_handling_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
+        "custom_key_store_backup_handling_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
+        "destruction_authority_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] },
+        "proof_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
+        "unrelated_data_impact_test_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
+      }
+    },
+    "legalHold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "authority_refs",
+        "release_authority_refs",
+        "conflict_authority_ref",
+        "case_id_required",
+        "covers_derivatives",
+        "covers_backups",
+        "read_fencing_supported",
+        "periodic_review",
+        "procedure_ref"
+      ],
+      "properties": {
+        "status": { "enum": ["UNRESOLVED", "DECIDED"] },
+        "authority_refs": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/principalReference" } },
+        "release_authority_refs": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/principalReference" } },
+        "conflict_authority_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] },
+        "case_id_required": { "const": true },
+        "covers_derivatives": { "const": true },
+        "covers_backups": { "const": true },
+        "read_fencing_supported": { "const": true },
+        "periodic_review": { "anyOf": [{ "$ref": "#/$defs/isoDuration" }, { "type": "null" }] },
+        "procedure_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
+      }
+    },
+    "restore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "quarantine_before_service", "ledger_replay_required", "re_erasure_max_duration", "verification_owner_ref", "runbook_ref"],
+      "properties": {
+        "status": { "enum": ["UNRESOLVED", "DECIDED"] },
+        "quarantine_before_service": { "const": true },
+        "ledger_replay_required": { "const": true },
+        "re_erasure_max_duration": { "anyOf": [{ "$ref": "#/$defs/isoDuration" }, { "type": "null" }] },
+        "verification_owner_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] },
+        "runbook_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
+      }
+    },
+    "externalCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "connection_policy_required", "truthful_scope_reporting", "accepted_proof_modes", "owner_ref", "procedure_ref"],
+      "properties": {
+        "status": { "enum": ["UNRESOLVED", "DECIDED"] },
+        "connection_policy_required": { "const": true },
+        "truthful_scope_reporting": { "const": true },
+        "accepted_proof_modes": { "const": ["RECEIPT", "CONTRACT_EVIDENCE", "OUTSIDE_CURVE_CONTROL"] },
+        "owner_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] },
+        "procedure_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
+      }
+    },
+    "failureEscalation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "retry_schedule", "incident_severity", "owner_ref", "notice_policy_ref", "manual_recovery_runbook_ref"],
+      "properties": {
+        "status": { "enum": ["UNRESOLVED", "DECIDED"] },
+        "retry_schedule": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/isoDuration" } },
+        "incident_severity": { "anyOf": [{ "enum": ["CRITICAL", "HIGH", "MEDIUM"] }, { "type": "null" }] },
+        "owner_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] },
+        "notice_policy_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
+        "manual_recovery_runbook_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
+      }
+    },
+    "costCapacity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "currency", "monthly_estimate", "assumptions_ref", "approver_ref"],
+      "properties": {
+        "status": { "enum": ["UNRESOLVED", "DECIDED"] },
+        "currency": { "const": "USD" },
+        "monthly_estimate": { "anyOf": [{ "type": "number", "minimum": 0 }, { "type": "null" }] },
+        "assumptions_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
+        "approver_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] }
+      }
+    },
+    "approvalRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approver_ref", "approved_decision_digest", "approved_at"],
+      "properties": {
+        "approver_ref": { "anyOf": [{ "$ref": "#/$defs/personReference" }, { "type": "null" }] },
+        "approved_decision_digest": { "anyOf": [{ "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }, { "type": "null" }] },
+        "approved_at": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] }
+      }
+    },
+    "approvals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["security", "privacy", "legal", "platform_operations", "database_operations", "curve_engineering", "decision_date", "next_review_at"],
+      "properties": {
+        "security": { "$ref": "#/$defs/approvalRecord" },
+        "privacy": { "$ref": "#/$defs/approvalRecord" },
+        "legal": { "$ref": "#/$defs/approvalRecord" },
+        "platform_operations": { "$ref": "#/$defs/approvalRecord" },
+        "database_operations": { "$ref": "#/$defs/approvalRecord" },
+        "curve_engineering": { "$ref": "#/$defs/approvalRecord" },
+        "decision_date": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] },
+        "next_review_at": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] }
+      }
+    }
+  }
+}
