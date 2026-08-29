@@ -6,13 +6,13 @@
 | --- | --- |
 | Work package | M1-01B (Curve-first Initiative shell) |
 | Records | UX-006-M1-01B (clickable prototype and task-based review); UX-007-M1-01B (work-package-linked screen contract) |
-| Status | `REVIEW_DRAFT / MANUAL_UX_GATE_REQUIRED` |
-| Version | 0.1 |
+| Status | `UX_APPROVED / IMPLEMENTATION_PACKET_REQUIRED` |
+| Version | 0.2 |
 | Date | 2026-08-29 |
 | Product owner and approver | Federico Ocampo |
 | Backend prerequisite | [M1-01A implementation evidence](m1-01a-initiative-core-implementation-evidence.md) (accepted Initiative domain/API implementation, tests, merge tree, data boundary, and rollback) |
 | Prototype | [M1-01B Initiative shell prototype](../design/prototypes/m1-01b-initiative-shell/index.html) (clickable synthetic list, create, detail, lifecycle, and recovery-state review surface) |
-| Implementation authority | `NOT_AUTHORIZED`; approval of this exact UX record is required before Plane implementation |
+| Implementation authority | `NOT_AUTHORIZED`; the approved UX record enables separate Plane implementation-packet finalization and dispatch approval |
 
 ## Product intent
 
@@ -253,9 +253,10 @@ approval separate.
 | Browser and layout diagnostics | Passed with zero application exceptions and zero horizontal overflow; the local server's absent favicon was excluded from application diagnostics |
 | Repository validation | Passed 71 Markdown files, 48 Mermaid diagrams, 47 JSON Schemas with 126 fixtures, 106 contract/project tests, and GitHub Project dry-run consistency |
 
-The execution verdict for T9 and T10 is `PASS`. The Product review record below
-remains `REVIEW_REQUIRED` until Federico binds an approval to an exact Curve
-commit.
+The execution verdict for T9 and T10 is `PASS`. Federico Ocampo approved the
+tested UX record at exact Curve commit
+`656a196aaba884ad297d48d6ed150ef7f246f194` on 2026-08-29. The approval closes
+the UX definition gate and grants no Plane implementation authority.
 
 ## Review decision record
 
@@ -263,10 +264,10 @@ commit.
 records:
   - UX-006-M1-01B
   - UX-007-M1-01B
-status: REVIEW_REQUIRED
+status: APPROVED
 reviewer: Federico Ocampo
-reviewed_curve_commit: null
-result: null
+reviewed_curve_commit: 656a196aaba884ad297d48d6ed150ef7f246f194
+result: PASS
 test_executor: Codex
 tested_curve_commit: ea1500a759d290283157686788c3a5a0547581ca
 test_result: PASS
@@ -275,10 +276,10 @@ required_changes: []
 implementation_authorized: false
 ```
 
-Approval must bind the exact Curve commit containing this contract and the
-prototype. Requested changes keep M1-01B in UX review. Approval moves the
-implementation packet to final dispatch preparation; it does not itself merge
-Plane code.
+This approval binds the exact Curve revision containing the accepted contract,
+prototype, and independent test evidence. M1-01B now moves to final
+implementation-packet preparation. A separate dispatch authorization must bind
+the resulting Curve context digest and Plane base before any Plane mutation.
 
 ## Derived Plane implementation packet
 

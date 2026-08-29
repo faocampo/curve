@@ -15,21 +15,26 @@ const prototype = fs.readFileSync(
   "utf8",
 );
 
-test("M1-01B stays in manual UX review and does not authorize Plane implementation", () => {
+test("M1-01B records exact-commit UX approval without authorizing Plane implementation", () => {
   const readinessRow = readiness
     .split("\n")
     .find(
       (line) =>
         line.startsWith("| M1-01B (Initiative shell) |") &&
-        line.includes("`IN_UX_REVIEW`"),
+        line.includes("`UX_APPROVED / PACKET_FINALIZATION_REQUIRED`"),
     );
 
   assert.ok(readinessRow, "M1-01B readiness row must exist");
-  assert.match(contract, /status: REVIEW_REQUIRED/);
+  assert.match(contract, /status: APPROVED/);
   assert.match(contract, /implementation_authorized: false/);
-  assert.match(contract, /reviewed_curve_commit: null/);
-  assert.match(contract, /result: null/);
-  assert.match(readinessRow, /`IN_UX_REVIEW`/);
+  assert.match(
+    contract,
+    /reviewed_curve_commit: 656a196aaba884ad297d48d6ed150ef7f246f194/,
+  );
+  assert.match(contract, /result: PASS/);
+  assert.match(contract, /test_executor: Codex/);
+  assert.match(contract, /test_result: PASS/);
+  assert.match(readinessRow, /`UX_APPROVED \/ PACKET_FINALIZATION_REQUIRED`/);
   assert.doesNotMatch(readinessRow, /`DONE/);
 });
 
