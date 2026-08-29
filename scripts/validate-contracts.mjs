@@ -14,6 +14,10 @@ import {
   validateProductPolicy,
   validateProductRecordSemantics,
 } from "./lib/product-core.mjs";
+import {
+  validateInitiativePolicy,
+  validateInitiativeRecord,
+} from "./lib/initiative-core.mjs";
 
 const root = process.cwd();
 
@@ -113,6 +117,8 @@ const productEventFixturePath = join(
   root,
   "contracts/schemas/examples/product-event-v1.valid.json",
 );
+const initiativePolicyPath = join(root, "contracts/policy/initiative-policy-v1.json");
+const initiativeFixturePath = join(root, "contracts/schemas/examples/initiative.valid.json");
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -199,6 +205,8 @@ validateProductCoreDecision(JSON.parse(readFileSync(productCoreDecisionPath, "ut
 validateProductPolicy(JSON.parse(readFileSync(productPolicyPath, "utf8")));
 validateProductRecordSemantics(JSON.parse(readFileSync(productFixturePath, "utf8")));
 validateProductEventSemantics(JSON.parse(readFileSync(productEventFixturePath, "utf8")));
+validateInitiativePolicy(JSON.parse(readFileSync(initiativePolicyPath, "utf8")));
+validateInitiativeRecord(JSON.parse(readFileSync(initiativeFixturePath, "utf8")));
 
 const corePolicyManifest = JSON.parse(readFileSync(corePolicyManifestPath, "utf8"));
 const corePolicyManifestV1Digest = createHash("sha256")

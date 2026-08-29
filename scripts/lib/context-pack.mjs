@@ -422,6 +422,49 @@ export const M1_00A_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const M1_01A_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/database/m1-00a-product-core-relational-contract.md",
+    "contracts/database/m1-01a-initiative-core-relational-contract.md",
+    "contracts/openapi/curve-v1.openapi.yaml",
+    "contracts/policy/core-policy-v2.json",
+    "contracts/policy/initiative-policy-v1.json",
+    "contracts/policy/product-policy-v1.json",
+    "contracts/schemas/common.schema.json",
+    "contracts/schemas/event-envelope.schema.json",
+    "contracts/schemas/examples/gate-assignment.invalid.json",
+    "contracts/schemas/examples/gate-assignment.valid.json",
+    "contracts/schemas/examples/initiative-create-request.invalid.json",
+    "contracts/schemas/examples/initiative-create-request.valid.json",
+    "contracts/schemas/examples/initiative-event-v1.invalid.json",
+    "contracts/schemas/examples/initiative-event-v1.valid.json",
+    "contracts/schemas/examples/initiative-transition-request.invalid.json",
+    "contracts/schemas/examples/initiative-transition-request.valid.json",
+    "contracts/schemas/examples/initiative-update-request.invalid.json",
+    "contracts/schemas/examples/initiative-update-request.valid.json",
+    "contracts/schemas/examples/initiative.invalid.json",
+    "contracts/schemas/examples/initiative.valid.json",
+    "contracts/schemas/gate-assignment.schema.json",
+    "contracts/schemas/initiative-create-request.schema.json",
+    "contracts/schemas/initiative-event-v1.schema.json",
+    "contracts/schemas/initiative-transition-request.schema.json",
+    "contracts/schemas/initiative-update-request.schema.json",
+    "contracts/schemas/initiative.schema.json",
+    "contracts/schemas/product.schema.json",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/domain-model.md",
+    "docs/technical/m0-authorization-and-state-matrices.md",
+    "docs/technical/m1-01a-initiative-core-task-packet.md",
+    "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+    "scripts/lib/context-pack.mjs",
+    "scripts/lib/initiative-core.mjs",
+    "scripts/tests/initiative-core.test.mjs",
+    "scripts/validate-contracts.mjs",
+    "scripts/validate-docs.mjs"
+  ].sort(),
+);
+
 const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
   ["M0-S3", M0_S3_CONTEXT_PATHS],
@@ -437,6 +480,7 @@ const CONTEXT_PATHS = new Map([
   ["D-002", P0_09_CONTEXT_PATHS],
   ["M1-03B", P0_09_CONTEXT_PATHS],
   ["M1-00A", M1_00A_CONTEXT_PATHS],
+  ["M1-01A", M1_01A_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {
