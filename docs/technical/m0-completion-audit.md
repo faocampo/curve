@@ -4,13 +4,13 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `AUDITED / M0 INCOMPLETE / M0-S9A ACCEPTED_LOCAL / NOT_IMPLEMENTATION_AUTHORITY` |
-| Version | 1.3 |
+| Status | `AUDITED / M0 INCOMPLETE / M0-S9A ACCEPTED_LOCAL / M0-S9B-S9C PREPARED_BLOCKED / NOT_IMPLEMENTATION_AUTHORITY` |
+| Version | 1.4 |
 | Date | 2026-08-28 |
 | Product | Curve |
 | Owner and human reviewer | Federico Ocampo |
 | Audit scope | M0 (foundation and control plane), its P0 (foundation-readiness) decisions/proofs, Plane implementation evidence, and the next executable package |
-| Audited Curve contract baseline | `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`, the squash merge of Curve PR #37 (M0-S9A post-correction lifecycle reconciliation) |
+| Audited Curve contract baseline | `03b26cdb576962fad8e2047fedcfafa2636bfc23`, the squash merge of Curve PR #39 (M0-S9A implementation-evidence reconciliation) |
 | Merged Plane `preview` baseline | `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, the squash merge of Plane PR #12 (M0-S9A local provider-registry implementation) |
 | Authority boundary | This audit records evidence and gaps. It authorizes no decision transition, code mutation, provider access, credential use, infrastructure change, deployment, or merge. |
 
@@ -23,11 +23,15 @@ as a whole remains incomplete because:
 
 1. M0-04 (protected object storage and erasure) is blocked by D-009 (retention,
    backup, legal-hold, tombstone, and erasure decision).
-2. M0-S9B (external provider transport and administration) remains
-   decision-bound and unprepared for implementation.
-3. The M0-09 (provider integration foundation) Model Gateway child remains
-   undefined until D-004 (Curve Model Gateway decision) and D-005
-   (model/provider data-policy decision) are decided.
+2. M0-S9B (external provider transport and administration) is decomposed into
+   six independently reviewable children, but every external-effect child
+   remains blocked on its applicable identity, security, data,
+   infrastructure, provider, owner, and budget decisions.
+3. M0-S9C (Model Gateway routing and failover) is decomposed into four
+   independently reviewable children, but remains blocked on D-004 (Curve
+   Model Gateway decision), D-005 (model/provider data-policy decision), D-014
+   (budget-policy decision), and D-009 (retention and erasure decision) where
+   protected bodies would persist.
 
 No broad M0 (foundation and control plane) completion claim is valid until the
 remaining rows below satisfy their own completion boundaries.
@@ -43,6 +47,7 @@ remaining rows below satisfy their own completion boundaries.
 | [Curve PR #35](https://github.com/faocampo/curve/pull/35) (M0-S9A policy-v2 contract correction) | Approved head `059e6e7b0185238f095c85e6a6b328accbaa5ecf` squash-merged as `13cec5e99889c68b885a57a8a98609885b1e27b3`; CI passed. | Prior merged policy-v2 baseline |
 | [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction) | Approved head `737c52c52f6f8f8b5f59ec4c69450b2edcacea8d` squash-merged as `da44d27c3bde73b11640b165d3ddbca8451cd1f6`; both commits share Git tree `3596a70feecb6fd72f65e3394d7091141b3bbba8`; [Curve CI run 33181156641](https://github.com/faocampo/curve/actions/runs/33181156641) (contract and documentation validation) passed. | Accepted correction source; grants no Plane resumption authority |
 | [Curve PR #37](https://github.com/faocampo/curve/pull/37) (M0-S9A post-correction lifecycle reconciliation) | Approved head `cf1ffb696b30f45e71a6edcaba062f67a3de7b8e` squash-merged as `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`; CI passed. | Canonical implementation contract and context source |
+| [Curve PR #39](https://github.com/faocampo/curve/pull/39) (M0-S9A implementation-evidence reconciliation) | Approved head `05e759f6749861f3332bb124d5dca703f304726a` squash-merged as `03b26cdb576962fad8e2047fedcfafa2636bfc23`; CI passed. | Canonical post-implementation evidence and current Curve baseline |
 | [Plane PR #10](https://github.com/faocampo/plane/pull/10) (M0-S6A durable orchestration implementation) | Approved head `af8335c42fa3c57e66f76c6ebd80220640630cf8` squash-merged as `ad5772c0565c934e64ea90f892be1374819979be`. Both commits resolve to Git tree `dde7e50afa1710b729ab86f9ed99e4c462c763d0`. | Canonical merged Plane baseline |
 | [Plane API and Curve CI](https://github.com/faocampo/plane/actions/runs/32844162011) (M0-S6A API, Curve, replay, and migration validation) | Passed. | Accepted implementation evidence |
 | [Plane CodeQL](https://github.com/faocampo/plane/actions/runs/32844164027) (M0-S6A security analysis) | Passed. | Accepted security evidence |
@@ -70,21 +75,23 @@ remaining rows below satisfy their own completion boundaries.
 | M0-06 (local Temporal skeleton) | Deterministic parent/child orchestration, signals, pause/resume, cancellation, replay, restart recovery, and Continue-As-New | [Plane PR #10](https://github.com/faocampo/plane/pull/10) (durable orchestration implementation) merged with identical approved/merge tree and green CI; [Curve PR #32](https://github.com/faocampo/curve/pull/32) (durable-orchestration acceptance evidence) is canonical on `main` | `DONE_LOCAL` | Keep provider dispatch, runner lifecycle, budget exhaustion, and full recovery qualification in M4-05 (slice dispatch workflow), M4-04 (trusted runner lifecycle), M6-05 (budget administration and capacity), and R1-03 (disaster-recovery exercise). |
 | M0-07 (Operation API, SSE, and minimal UI) | Problem Details, ETag/If-Match, idempotency, pagination, resume, generated client, and Curve-first workspace page | Accepted M0-S4 (Operation API/SSE/minimal UI) implementation evidence | `ACCEPTED` | None for local M0 (foundation and control plane). |
 | M0-08 (audit and observability) | Redacted logs/metrics/traces, dashboards, alerts, correlation, and local export-path health | Accepted M0-S5A (observability kernel) and M0-S5B (local observability binding) evidence | `ACCEPTED_LOCAL` | Qualify staging/production bindings before non-local activation. |
-| M0-S9A (local provider-registry substrate) | Workspace-scoped connection/capability persistence, typed registry, fake adapter, synchronous reconciliation, bounded local delivery, and Option B authorization | [Plane PR #12](https://github.com/faocampo/plane/pull/12) (M0-S9A local provider-registry implementation) approved and merged; [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md) (exact contract/context, implementation, CI, regression, dependency disposition, security boundary, and rollback) binds local acceptance. | `ACCEPTED_LOCAL` | None for the local synthetic substrate. Keep M0-09 open for M0-S9B and the future Model Gateway child. |
-| M0-S9B (external provider transport and administration) | Human administration, credentials/endpoints, callbacks, webhooks, scheduling, and real adapters | Consumer decision map exists; no implementation packet | `BLOCKED_NOT_PREPARED` | Materialize per-provider children only after applicable identity, security, data, infrastructure, and external-effect decisions. |
-| M0-09 (Model Gateway child) | Model/provider catalog, routing, failover equivalence, actual-route evidence, and no silent fallback | D-004 (Curve Model Gateway decision) and D-005 (model/provider data-policy decision) packets published in [Curve PR #33](https://github.com/faocampo/curve/pull/33) (later-milestone decision-readiness packets) | `BLOCKED_IDENTIFIER_PENDING` | Decide D-004 (Curve Model Gateway decision) and D-005 (model/provider data-policy decision), assign a stable child identifier, publish contracts and a task packet, then dispatch separately. |
+| M0-S9A (local provider-registry substrate) | Workspace-scoped connection/capability persistence, typed registry, fake adapter, synchronous reconciliation, bounded local delivery, and Option B authorization | [Plane PR #12](https://github.com/faocampo/plane/pull/12) (M0-S9A local provider-registry implementation) approved and merged; [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md) (exact contract/context, implementation, CI, regression, dependency disposition, security boundary, and rollback) binds local acceptance. | `ACCEPTED_LOCAL` | None for the local synthetic substrate. Keep M0-09 open for M0-S9B and M0-S9C. |
+| M0-S9B (external provider transport and administration) | Human administration, credentials/endpoints, callbacks, webhooks, scheduling, and real adapters | [M0-S9B task packet](m0-s9b-provider-transport-task-packet.md) (six independently reviewable children for administration, credentials/endpoints, callback ingress, outgoing webhooks, scheduled reconciliation, and named-provider activation) is validated in this publication package | `PREPARED_BLOCKED_DECISIONS` | After this package merges, materialize only a child whose exact identity, security, data, infrastructure, provider, owner, budget, and external-effect decisions are approved. |
+| M0-S9C (Model Gateway routing and failover) | Model/provider catalog, routing, failover equivalence, actual-route evidence, and no silent fallback | [M0-S9C task packet](m0-s9c-model-gateway-task-packet.md) (four independently reviewable children for model contracts, policy/budget, OpenRouter transport, and failover/reconciliation) is validated in this publication package; D-004/D-005/D-014 packets are published through [Curve PR #33](https://github.com/faocampo/curve/pull/33) (later-milestone decision-readiness packets) | `PREPARED_BLOCKED_DECISIONS` | After this package merges, decide D-004 (Curve Model Gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision), then materialize one child at a time. D-009 applies before protected prompt or response persistence. |
 
 ## Next executable sequence
 
 1. Complete D-009 (retention, backup, legal-hold, tombstone, and erasure
    decision), then materialize the separately reviewable M0-04 (protected
    object storage and erasure) task packet.
-2. Prepare M0-S9B (external provider transport and administration) children
-   only after each adapter's applicable identity, security, data,
-   infrastructure, and external-side-effect decision is approved.
-3. Decide D-004 (Curve Model Gateway decision) and D-005 (model/provider
-   data-policy decision), assign the Model Gateway child a stable identifier,
-   and publish its contracts and task packet.
+2. After this publication package merges, materialize an M0-S9B (external
+   provider transport and administration) child only after its applicable
+   identity, security, data, infrastructure, provider, owner, budget, and
+   external-side-effect decisions are approved.
+3. After this publication package merges, decide D-004 (Curve Model Gateway
+   decision), D-005 (model/provider data-policy decision), and D-014
+   (budget-policy decision) before materializing an M0-S9C (Model Gateway
+   routing and failover) child.
 4. Remediate the inherited High production dependency advisories recorded in
    [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md)
    (dependency audit disposition) before pilot release.
@@ -99,6 +106,10 @@ The following narrower statements are currently evidence-backed:
   defined local scope.”
 - “M0-S9A (local provider-registry substrate) is implemented, accepted, and
   merged for its synthetic `LOCAL_ONLY` scope.”
+- “M0-S9B (external provider transport and administration) and M0-S9C (Model
+  Gateway routing and failover) have validated, independently decomposed task
+  packets; their external-effect children remain decision-blocked and
+  unimplemented.”
 - “Later milestone decisions have owner-ready packets on Curve `main` through
   Curve PR #33 (later-milestone decision-readiness packets); the decisions
   remain open.”
