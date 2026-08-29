@@ -192,14 +192,14 @@ of the production UI.
 | Check | Evidence |
 | --- | --- |
 | Desktop render | [Desktop review capture](../../.impeccable/review/desktop.png) (default Initiative list/detail state at the 1440 by 1000 review viewport) |
-| Mobile render | [Mobile review capture](../../.impeccable/review/mobile.png) (default Initiative state at the 390 by 844 review viewport) |
-| Responsive layout | No horizontal overflow at either review width; the mobile shell, portfolio, filters, list/detail stack, drawer, and dialog remain within the viewport |
-| Creation | Required-field validation, accepted keyword-format validation, elevated-risk three-person separation, selection-derived gate assignments, focus placement, status announcement, successful Draft creation, selection, and count update exercised |
+| Mobile render | [Mobile review capture](../../.impeccable/review/mobile.png) (four-row filtered-list and stacked-detail state at the 390 by 844 review viewport) |
+| Responsive layout | No horizontal overflow at either review width; every filtered Initiative remains visible in the mobile list before the stacked detail, and the shell, portfolio, filters, drawer, and dialog remain within the viewport |
+| Creation | Each opening starts with blank authored fields and safe selector defaults; required-field validation, accepted keyword-format validation, elevated-risk three-person separation, selection-derived gate assignments, focus placement, status announcement, successful Draft creation, selection, and count update exercised |
 | Lifecycle | `DRAFT -> ALIGNING -> PAUSED -> ALIGNING -> CANCELLED` exercised; cancellation confirmation displayed and terminal actions removed |
-| Recovery states | Permission back-navigation, safe-error retry, and empty-state create action exercised |
+| Recovery states | Permission back-navigation, safe-error retry, empty-state create action, state-specific icon treatment, and mobile panel spacing exercised |
 | Browser diagnostics | No console warning or error recorded during the exercised paths |
 | Mechanical detector | Regex fallback completed because optional HTML parser modules were unavailable; its Inter warning is an accepted continuation of the approved M0-S4 Curve shell typography rather than a new visual-world decision |
-| Finish review | Prescribed in-thread fallback used because collaboration slots were occupied; the correction pass rechecked the complete create path, 1440 px desktop and 390 px mobile renders, state-badge geometry, gate/footer initials, and Help icon; no additional blocking defect found |
+| Finish review | Prescribed in-thread fallback used because collaboration slots were occupied; the second correction pass rechecked fresh-form state, successful-creation reset, four-row mobile visibility, filter-result accuracy, recovery-state hierarchy, 1440 px desktop, and 390 px mobile rendering; no additional blocking defect found |
 
 The finish-review verdict means that the artifact is ready for accountable manual
 UX review. It does not populate the approval record or authorize Plane code.
@@ -222,6 +222,23 @@ part of the exact-commit gate until Federico retests the corrected prototype.
 This correction record documents prototype behavior and review evidence. It does
 not mark UX-006-M1-01B (clickable Initiative prototype and task review) or
 UX-007-M1-01B (work-package-linked Initiative screen contract) approved.
+
+## Manual review iteration 2
+
+Federico Ocampo reported T6, T7, and T8 as passing on 2026-08-29. T9 passed
+functionally with visual follow-ups. T10 identified that the mobile list exposed
+only the selected Initiative regardless of filters. Federico also reported that
+the New Initiative form retained values from the prior creation attempt.
+
+| Finding | Reported issue | Correction in this iteration | Retest state |
+| --- | --- | --- | --- |
+| MR-06 | Mobile displayed only the selected Initiative | The mobile rule that hid every non-selected row is removed; all search/filter matches remain visible before the stacked detail | Required |
+| MR-07 | New Initiative retained prior values | Every drawer opening resets authored fields, selector defaults, validation classes, `aria-invalid`, and the approver error before focus enters the form | Required |
+| MR-08 | Recovery states passed functionally with visual issues | Empty, permission, and error states now use compact state-specific icon containers, consistent authored strokes, stronger heading rhythm, and reduced mobile panel height | Required |
+
+T9 remains functionally passed with visual retest required. T10 remains failed
+until Federico confirms the corrected mobile list and completes the remaining
+mobile and keyboard checks.
 
 ## Review decision record
 

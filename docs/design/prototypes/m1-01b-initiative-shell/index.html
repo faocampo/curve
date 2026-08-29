@@ -352,9 +352,13 @@
       .fact dd { margin: 0; color: var(--ink); font-size: 12px; line-height: 1.45; }
 
       .state-panel { min-height: 586px; display: grid; place-items: center; padding: 40px; text-align: center; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
-      .state-panel svg { width: 42px; height: 42px; margin: 0 auto 18px; color: var(--indigo); }
-      .state-panel h2 { margin: 0; font-size: 23px; }
-      .state-panel p { max-width: 520px; margin: 10px auto 20px; color: var(--muted); line-height: 1.55; }
+      .state-content { width: min(100%, 600px); }
+      .state-icon { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; margin: 0 auto 20px; color: var(--indigo); background: var(--indigo-soft); border-radius: 16px; }
+      .state-icon svg { width: 28px; height: 28px; }
+      .state-icon.lock { color: #5a6276; background: #eef0f4; }
+      .state-icon.error { color: var(--red); background: var(--red-soft); }
+      .state-panel h2 { width: fit-content; margin: 0 auto; font-size: 23px; line-height: 1.2; letter-spacing: -0.02em; }
+      .state-panel p { max-width: 520px; margin: 11px auto 22px; color: var(--muted); line-height: 1.55; }
       .skeleton { width: min(100%, 680px); display: grid; gap: 12px; }
       .skeleton span { display: block; height: 68px; border-radius: 12px; background: linear-gradient(100deg, #edf0f5 20%, #f7f8fb 38%, #edf0f5 56%); background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; }
       @keyframes shimmer { to { background-position-x: -200%; } }
@@ -446,7 +450,6 @@
         .filter { flex: 1; }
         .workbench { display: block; }
         .initiative-list { border-right: 0; border-bottom: 1px solid var(--line); }
-        .initiative-row:not(.active) { display: none; }
         .detail-head, .detail-main { padding-inline: 20px; }
         .detail-headline { display: block; }
         .drawer { width: 100%; }
@@ -459,6 +462,7 @@
         .toolbar .result-count { display: none; }
         .detail h2 { font-size: 21px; }
         .detail-actions .button { flex: 1; }
+        .state-panel { min-height: 430px; padding: 36px 22px; }
         .form-grid { grid-template-columns: 1fr; }
         .field.full { grid-column: auto; }
         .drawer-head, .form { padding-inline: 20px; }
@@ -562,12 +566,12 @@
         <header class="drawer-head"><div><h2 id="drawer-title">New initiative</h2><p>Create a governed manual-first Initiative under one active Product.</p></div><button class="icon-button" id="close-drawer" type="button" aria-label="Close new initiative form"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
         <form class="form" id="initiative-form" novalidate>
           <div class="form-grid">
-            <div class="field full"><label for="title">Title <span>Required</span></label><input id="title" name="title" autocomplete="off" value="Improve experiment rollout confidence" required aria-describedby="title-error" /><span class="field-error" id="title-error">Enter a title.</span></div>
+            <div class="field full"><label for="title">Title <span>Required</span></label><input id="title" name="title" autocomplete="off" placeholder="e.g. Improve experiment rollout confidence" required aria-describedby="title-error" /><span class="field-error" id="title-error">Enter a title.</span></div>
             <div class="field"><label for="product">Product <span>Active only</span></label><select id="product" name="product"><option>Loomit</option><option>X3M Platform</option><option>Sachiel</option></select></div>
-            <div class="field"><label for="keyword">Keyword <span>Workspace unique</span></label><input id="keyword" name="keyword" autocomplete="off" value="rollout-confidence" pattern="[A-Za-z0-9][A-Za-z0-9-]{0,49}" required aria-describedby="keyword-error" /><span class="field-error" id="keyword-error">Use letters, numbers, and hyphens.</span></div>
+            <div class="field"><label for="keyword">Keyword <span>Workspace unique</span></label><input id="keyword" name="keyword" autocomplete="off" placeholder="e.g. rollout-confidence" pattern="[A-Za-z0-9][A-Za-z0-9-]{0,49}" required aria-describedby="keyword-error" /><span class="field-error" id="keyword-error">Use letters, numbers, and hyphens.</span></div>
             <div class="field"><label for="risk">Risk tier</label><select id="risk" name="risk" aria-describedby="approver-rule"><option>STANDARD</option><option>LOW</option><option>HIGH</option></select></div>
             <div class="field"><label for="mode">Mode</label><select id="mode" name="mode"><option>STANDALONE</option><option disabled>ROADMAP — available in M2</option></select></div>
-            <div class="field full"><label for="description">Problem and intended outcome <span>Required · Markdown</span></label><textarea id="description" name="description" required aria-describedby="description-error">Reduce uncertainty when product teams move validated experiments toward a staged rollout, while keeping every human decision and rollback condition visible.</textarea><span class="field-error" id="description-error">Describe the problem and intended outcome.</span></div>
+            <div class="field full"><label for="description">Problem and intended outcome <span>Required · Markdown</span></label><textarea id="description" name="description" placeholder="Describe the problem, intended outcome, and important constraints." required aria-describedby="description-error"></textarea><span class="field-error" id="description-error">Describe the problem and intended outcome.</span></div>
             <div class="field"><label for="product-approver">Product Approver</label><select id="product-approver" aria-describedby="approver-rule approver-error"><option value="paula-ortega" data-initials="PO" data-name="Paula Ortega">Paula Ortega · PO</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
             <div class="field"><label for="technical-approver">Technical Approver</label><select id="technical-approver" aria-describedby="approver-rule approver-error"><option value="tomas-lopez" data-initials="TL" data-name="Tomás López">Tomás López · TL</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
             <div class="field full"><label for="code-approver">Code Approver</label><select id="code-approver" aria-describedby="approver-rule approver-error"><option value="diego-vega" data-initials="DV" data-name="Diego Vega">Diego Vega · Dev</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
@@ -599,9 +603,9 @@
         const paths = {
           empty: '<path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
           lock: '<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
-          error: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/>'
+          error: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6"/><circle cx="12" cy="17.25" r="0.8" fill="currentColor" stroke="none"/>'
         };
-        return `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor">${paths[name]}</svg>`;
+        return `<span class="state-icon ${name}" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8">${paths[name]}</svg></span>`;
       };
 
       let initiatives = [
@@ -693,7 +697,7 @@
             error: [icon("error"), "Initiatives could not be loaded", "Curve kept the last confirmed workspace state private. Try the authorized request again.", '<button class="button primary" data-retry type="button">Try again</button>']
           };
           const [stateIcon,title,copy,action] = states[name];
-          el["state-panel"].innerHTML = `<div>${stateIcon}<h2 tabindex="-1">${title}</h2><p>${copy}</p>${action}</div>`;
+          el["state-panel"].innerHTML = `<div class="state-content state-${name}">${stateIcon}<h2 tabindex="-1">${title}</h2><p>${copy}</p>${action}</div>`;
           el["state-panel"].querySelector("h2")?.focus();
           el["state-panel"].querySelector("[data-empty-create]")?.addEventListener("click", openDrawer);
           el["state-panel"].querySelector("[data-retry]")?.addEventListener("click", showWorkspace);
@@ -702,8 +706,18 @@
         announce(name === "loading" ? "Loading initiatives" : el["state-panel"].querySelector("h2")?.textContent || "");
       }
 
+      function resetCreateForm() {
+        el["initiative-form"].reset();
+        [el.title, el.keyword, el.description, el["product-approver"], el["technical-approver"], el["code-approver"]].forEach(control => {
+          control.closest(".field").classList.remove("invalid");
+          control.setAttribute("aria-invalid", "false");
+        });
+        el["approver-error"].hidden = true;
+      }
+
       function openDrawer() {
         previousFocus = document.activeElement;
+        resetCreateForm();
         el["drawer-backdrop"].classList.add("visible");
         document.body.style.overflow = "hidden";
         el.title.focus();

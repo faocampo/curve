@@ -53,4 +53,10 @@ test("M1-01B binds the complete task-based prototype review", () => {
   assert.match(prototype, /\.initiative-row > \.badge \{ min-width: 76px/);
   assert.match(prototype, /aria-label="Help"/);
   assert.match(prototype, /cy="17\.25" r="0\.8"/);
+  assert.doesNotMatch(prototype, /\.initiative-row:not\(\.active\)/);
+  assert.match(prototype, /function resetCreateForm/);
+  assert.match(prototype, /el\["initiative-form"\]\.reset\(\)/);
+  assert.match(prototype, /placeholder="e\.g\. Improve experiment rollout confidence"/);
+  assert.match(prototype, /class="state-icon \$\{name\}"/);
+  assert.match(prototype, /class="state-content state-\$\{name\}"/);
 });
