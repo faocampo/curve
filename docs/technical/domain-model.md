@@ -213,6 +213,7 @@ remain readable and the Initiative creation service rejects them until restore.
 | `WorkflowVersion.template_id`, `version_number` | `OpaqueId`, positive integer | NO | Unique immutable version. |
 | `WorkflowVersion.definition` | `ObjectRef` | NO | Versioned stages, gates, policies, roles, and required artifacts. |
 | `WorkflowVersion.digest` | `Digest` | NO | Pinned by Initiative and event envelope. |
+
 | `Artifact.initiative_id` | `OpaqueId` | NO | Logical artifact belongs to one Initiative. |
 | `Artifact.kind` | `ArtifactKind` | NO | Stable type such as Idea Brief, Research Dossier, PRD, Architecture Delta, Repository Impact Map, Execution Plan presentation, Preview Report, or Lovable Package. Extending codes requires schema versioning. |
 | `Artifact.current_version_id` | `OpaqueId` | YES | Convenience pointer; historical versions remain addressable. |
@@ -241,6 +242,14 @@ remain readable and the Initiative creation service rejects them until restore.
 | `ChangeImpact.old_subject`, `new_subject` | `VersionRef` | NO | Immutable compared versions. |
 | `ChangeImpact.affected_slice_ids` | list of `OpaqueId` | NO | May be empty only if impact analysis proves no execution effect. |
 | `ChangeImpactDecision.slice_id`, `decision` | `OpaqueId`, `ChangeImpactDecisionCode` | NO | `CONTINUE_PINNED`, `PAUSE`, `CANCEL`, or `REPLAN`; human authority follows PRD change control. |
+
+M1-01A (Initiative domain and API foundation) uses a bounded, schema-versioned
+inline Markdown document only for synthetic `INTERNAL` local tests. It grants
+no protected-body or non-local activation. Before staging or protected content,
+the R1 persistence profile replaces that local transport with `RichTextRef`
+through M0-04 (protected object-storage foundation) after D-009 (retention,
+backup, hold, and erasure policy) is decided. Initiative identity, lifecycle,
+versioning, event, authorization, and API command semantics remain unchanged.
 
 Gate 3 is complete only when every required current-head binding has an approved decision and the trusted controller has successfully converted each exact draft to ready. A convenience aggregate decision MUST NOT obscure the per-binding subject SHAs (FR-020; AC-25, AC-29-AC-30).
 
