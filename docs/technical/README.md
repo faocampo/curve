@@ -15,14 +15,16 @@ Docker OTLP, Prometheus, Grafana, and path-health binding) is decided for local
 development. M0-S5B (local observability integration proof) is accepted and
 merged, completing M0-08 for `LOCAL_ONLY`. M0-S6A (durable parent/child
 Temporal orchestration) is accepted and merged, completing the defined M0-06
-(Temporal workflow-skeleton work package) for `LOCAL_ONLY`. M0-S9A (provider-neutral registry
-and reconciliation foundation) has an approved synchronous-command and
-explicit local outbox/inbox delivery model, published Option B registration
-authority, and a previously authorized Plane implementation. [Curve PR #36](https://github.com/faocampo/curve/pull/36)
-(six-finding M0-S9A contract correction) passed CI, received exact-head
-approval, and squash-merged. Plane implementation remains paused until an
-immutable external resumption record binds the canonical M0-S9A context,
-revalidated Plane base, and Federico authorization. D-007 (MCP trust-model
+(Temporal workflow-skeleton work package) for `LOCAL_ONLY`. M0-S9A
+(provider-neutral registry and reconciliation foundation) is implemented,
+accepted, and merged for `LOCAL_ONLY` through [Plane PR #12](https://github.com/faocampo/plane/pull/12)
+(M0-S9A local provider-registry implementation) at Plane `preview`
+`af7187d049c6ee6d0c82a5c70b686d4c444e9b63`. Its exact contract, context,
+tests, security checks, inherited dependency disposition, regression
+comparison, and rollback are bound by [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md)
+(post-merge local acceptance record). M0-09 (provider integration foundation)
+remains open for M0-S9B (external provider transport and administration) and
+the future Model Gateway child. D-007 (MCP trust-model
 decision) stays scoped to
 MCP/Orca activation. An
 implementation package
@@ -103,7 +105,8 @@ identifiers are:
 | [M0-S4 foundation probe experience](ux-m0-s4-foundation-probe.md) (clickable local foundation-status flow, state contract, and review script) | Approved UX-004-M0-S4/UX-005-M0-S4 contract for the Operation API, resumable SSE, cancellation, recovery, and minimal workspace UI | `IMPLEMENTED_AND_ACCEPTED`; PR #17 head `a463876...` merged as `42ea329...`; Plane implementation and acceptance are recorded in the M0-S4 evidence document |
 | [OBS-BIND-001 local observability binding](obs-bind-001-local-observability-binding.md) (decided Docker OTLP, Prometheus, Grafana, health, cleanup, and promotion contract) | Exact local platform binding and five-checkpoint M0-S5B implementation handoff | `DECIDED_LOCAL_ONLY`; published at Curve `43480ca...` and consumed by M0-S5B |
 | [M0-S5 observability task packet](m0-s5-observability-task-packet.md) (safe telemetry kernel, local binding proof, tests, evidence, and rollback) | Independently reviewable M0-S5A telemetry-kernel and M0-S5B local-integration changes | `M0-S5A_ACCEPTED_AND_MERGED / M0-S5B_ACCEPTED_AND_MERGED` |
-| [M0-S9A provider-registry task packet](m0-s9a-provider-registry-task-packet.md) (corrected local provider persistence, Option B authorization, synchronous reconciliation, delivery ordering/recovery, replay, event payloads, acceptance, stop conditions, and rollback) | First independently reviewable child of M0-09; excludes public administration, credentials, callbacks/webhooks, schedules, background execution, and real adapters | `CORRECTION_MERGED / IMPLEMENTATION_PAUSED`; [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction) is merged, and the previously authorized Plane implementation remains paused until an immutable external resumption record binds the canonical M0-S9A context, revalidated Plane base, and explicit Federico authorization; D-007 is MCP/Orca-specific |
+| [M0-S9A provider-registry task packet](m0-s9a-provider-registry-task-packet.md) (local provider persistence, Option B authorization, synchronous reconciliation, delivery ordering/recovery, replay, event payloads, acceptance, stop conditions, and rollback) | First independently reviewable child of M0-09; excludes public administration, credentials, callbacks/webhooks, schedules, background execution, and real adapters | `ACCEPTED_AND_MERGED / LOCAL_ONLY`; Plane PR #12 merged accepted tree `d43bdc2...` into `preview` as `af7187d...`; D-007 is MCP/Orca-specific |
+| [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md) (exact contract, Plane head/merge/tree, CI, regression, dependency disposition, security boundary, and rollback) | Post-merge acceptance record for the local fake-provider registry and reconciliation substrate | `ACCEPTED_AND_MERGED / LOCAL_ONLY`; M0-09 remains open for M0-S9B and the future Model Gateway child |
 | [M0-S5 telemetry manifest](../../contracts/observability/m0-s5-telemetry-v1.json) (fail-closed exporter, bounded metrics, spans, logs, dashboard, four alerts, and redaction contract) | Normative v1 instrumentation and operational-asset surface | Export defaults to disabled; exporter-failure diagnostics stay process-local; X3M endpoint/datasource/alert/path-health binding is supplied separately |
 | [M1-M7 coding-agent task packets](m1-m7-task-packets.md) | Milestone package outcomes, material gates, executable evidence, rollback, and deterministic materialization rules | Prepared catalog; Federico Ocampo is default owner/reviewer until reassigned |
 | [P0-06 local Temporal proof packet](p0-06-local-temporal-proof-task-packet.md) | Historical P0-06A/P0-06B standalone-proof design and supersession record | `SUPERSEDED`; retained for audit, with M0-S3 as the executable proof |

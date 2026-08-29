@@ -269,7 +269,7 @@ test("M0-S9A context pins the local provider registry, persistence, fixtures, an
   assert.deepEqual(contextPathsFor("M0-S9A"), M0_S9A_CONTEXT_PATHS);
 });
 
-test("M0-S9A correction is merged while Plane implementation requires external resumption evidence", () => {
+test("M0-S9A implementation evidence binds the accepted local Plane merge", () => {
   const taskPacket = readFileSync(
     new URL("../../docs/technical/m0-s9a-provider-registry-task-packet.md", import.meta.url),
     "utf8",
@@ -282,9 +282,14 @@ test("M0-S9A correction is merged while Plane implementation requires external r
     new URL("../../docs/technical/m0-s9a-registration-authorization-decision.md", import.meta.url),
     "utf8",
   );
+  const implementationEvidence = readFileSync(
+    new URL("../../docs/technical/m0-s9a-implementation-evidence.md", import.meta.url),
+    "utf8",
+  );
   const lifecycleDocuments = [
     ["task packet", taskPacket],
     ["relational contract", relationalContract],
+    ["implementation evidence", implementationEvidence],
     ["contract catalog", readFileSync(new URL("../../contracts/README.md", import.meta.url), "utf8")],
     ["technical catalog", readFileSync(new URL("../../docs/technical/README.md", import.meta.url), "utf8")],
     ["development plan", readFileSync(new URL("../../docs/technical/development-plan.md", import.meta.url), "utf8")],
@@ -293,28 +298,43 @@ test("M0-S9A correction is merged while Plane implementation requires external r
     ["readiness board", readFileSync(new URL("../../docs/technical/m0-readiness-board.md", import.meta.url), "utf8")],
   ];
 
-  assert.match(taskPacket, /\| Status \| `CORRECTION_MERGED \/ IMPLEMENTATION_PAUSED` \|/);
+  assert.match(taskPacket, /\| Status \| `ACCEPTED_AND_MERGED \/ LOCAL_ONLY` \|/);
   assert.match(taskPacket, /\| M0-S9A independent-review correction \| Satisfied \|/);
-  assert.match(taskPacket, /737c52c52f6f8f8b5f59ec4c69450b2edcacea8d/);
-  assert.match(taskPacket, /da44d27c3bde73b11640b165d3ddbca8451cd1f6/);
-  assert.match(taskPacket, /3596a70feecb6fd72f65e3394d7091141b3bbba8/);
-  assert.match(taskPacket, /33181156641/);
-  assert.match(taskPacket, /\| Canonical M0-S9A context \| Required at dispatch \|/);
-  assert.match(taskPacket, /\| Plane base revalidation \| Required at dispatch \|/);
+  assert.match(taskPacket, /\| Canonical M0-S9A context \| Satisfied \|/);
+  assert.match(taskPacket, /\| Plane base revalidation \| Satisfied \|/);
   assert.match(taskPacket, /\| Material decisions \| `PUBLISHED \/ SATISFIED` \|/);
-  assert.match(taskPacket, /\| Renewed exact-revision and context-digest implementation authorization \| Required at dispatch \|/);
-  assert.match(taskPacket, /immutable external resumption record/i);
-  assert.match(taskPacket, /does not require editing\s+or redigesting this packet/i);
-  assert.match(taskPacket, /grants no renewed Plane execution authority/i);
-  assert.match(relationalContract, /\| Status \| `CORRECTION_MERGED \/ IMPLEMENTATION_PAUSED` \|/);
-  assert.match(relationalContract, /human-approved Plane resumption/i);
+  assert.match(taskPacket, /\| Renewed exact-revision and context-digest implementation authorization \| Satisfied \|/);
+  assert.match(taskPacket, /\| Post-merge implementation evidence \| Satisfied \|/);
+  assert.match(relationalContract, /\| Status \| `IMPLEMENTED_AND_ACCEPTED \/ LOCAL_ONLY` \|/);
   assert.match(authorizationDecision, /\| Status \| `PUBLISHED` \|/);
+
+  for (const expected of [
+    "e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb",
+    "sha256:9e07550799a6e4d88a6734f9a98e0de59812402d983bc7291396332a6b214cb0",
+    "ad5772c0565c934e64ea90f892be1374819979be",
+    "d48a7d09f6824f045a1077ce2de256bd3dcde5d4",
+    "af7187d049c6ee6d0c82a5c70b686d4c444e9b63",
+    "d43bdc22413627399f2232f1b17e2092d9e31cb1",
+  ]) {
+    assert.match(implementationEvidence, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+  assert.match(implementationEvidence, /72 passed/);
+  assert.match(implementationEvidence, /326 passed/);
+  assert.match(implementationEvidence, /800 \| 10 \| 42/);
+  assert.match(implementationEvidence, /684 \| 10 \| 42/);
+  assert.match(implementationEvidence, /33208175433/);
+  assert.match(implementationEvidence, /33213223875/);
+  assert.match(implementationEvidence, /33213231056/);
+  assert.match(implementationEvidence, /No broken requirements found/);
+  assert.match(implementationEvidence, /454debf594e2b3e657f223ce3e026fb4a0b4b95a/);
+  assert.match(implementationEvidence, /M0-09 \(provider integration foundation\) remains open/i);
+  assert.match(implementationEvidence, /M0-S9B \(external provider\s+transport and administration\)/i);
 
   for (const [name, document] of lifecycleDocuments) {
     assert.doesNotMatch(
       document,
-      /REVIEW_DRAFT|PENDING_PUBLICATION|AWAITING_EXACT_HEAD_APPROVAL|CONTRACT_CORRECTION_IN_REVIEW|correction remains under review/i,
-      `${name} retains stale pre-merge lifecycle state`,
+      /REVIEW_DRAFT|PENDING_PUBLICATION|AWAITING_EXACT_HEAD_APPROVAL|CONTRACT_CORRECTION_IN_REVIEW|CORRECTION_MERGED \/ IMPLEMENTATION_PAUSED|implementation remains paused|correction remains under review/i,
+      `${name} retains stale pre-acceptance lifecycle state`,
     );
     assert.doesNotMatch(
       document,

@@ -4,15 +4,20 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `CORRECTION_MERGED / IMPLEMENTATION_PAUSED` |
-| Version | 1.7 |
+| Status | `IMPLEMENTED_AND_ACCEPTED / LOCAL_ONLY` |
+| Version | 1.8 |
 | Date | 2026-08-28 |
 | Work package | M0-S9A (provider-neutral registry and reconciliation foundation) |
 | Owner and reviewer | Federico Ocampo (`faocampo`) |
 | Applies to | Curve-owned PostgreSQL tables in the public Plane fork |
 | Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) |
-| Published Curve correction baseline | Curve `main` contains [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction), approved at exact head `737c52c52f6f8f8b5f59ec4c69450b2edcacea8d` and squash-merged as `da44d27c3bde73b11640b165d3ddbca8451cd1f6`; both commits share Git tree `3596a70feecb6fd72f65e3394d7091141b3bbba8` |
-| Dispatch-time requirements | An immutable external resumption record binds the canonical M0-S9A context digest from the exact merged Curve `origin/main` revision selected for resumed dispatch, Plane-base revalidation, and renewed human-approved Plane resumption by Federico Ocampo; recording it requires no contract edit or redigest |
+| Published Curve contract baseline | Curve `main` `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`, the squash merge of [Curve PR #37](https://github.com/faocampo/curve/pull/37) (M0-S9A post-correction lifecycle reconciliation) |
+| Accepted Plane implementation | [Plane PR #12](https://github.com/faocampo/plane/pull/12) (M0-S9A local provider-registry implementation) approved at exact head `d48a7d09f6824f045a1077ce2de256bd3dcde5d4` and squash-merged as `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; accepted Git tree `d43bdc22413627399f2232f1b17e2092d9e31cb1` |
+| Accepted evidence | [M0-S9A implementation evidence](../../docs/technical/m0-s9a-implementation-evidence.md) (exact contract, implementation, tests, security, dependency disposition, and rollback) |
+
+Version 1.8 binds the completed local Plane implementation and accepted
+post-merge evidence. It changes no table, constraint, transaction, replay,
+delivery, event, migration, or rollback semantic.
 
 Version 1.7 reconciles only post-merge lifecycle and evidence metadata after
 Curve PR #36 (six-finding M0-S9A contract correction); it changes no table,
@@ -25,9 +30,9 @@ authorization/drain order, pending reconciliation replay, guarded ORM bulk
 writes, abandoned-claim exhaustion, stale result normalization, and versioned
 aggregate-aware provider event payload contracts.
 
-The six-finding correction is merged. Plane implementation remains paused
-until the immutable external resumption record satisfies the dispatch-time
-requirements recorded above.
+The six-finding correction, exact-context dispatch, Plane implementation,
+commit-bound validation, exact-head approval, squash merge, and post-merge
+acceptance evidence are complete for `LOCAL_ONLY`.
 
 ## Purpose and boundary
 
