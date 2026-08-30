@@ -4,14 +4,17 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PREPARED_NOT_DISPATCHABLE`; Product semantics are approved; contract publication, final context digest, and exact dispatch approval remain pending |
-| Version | 1.1 |
+| Status | Historical dispatch completed; `MERGED / LOCAL_ACCEPTANCE_RECORDED / CONFORMANCE_VARIANCE_OPEN`; Plane PR #13 merged the reviewed implementation as `afdb593...`, while R-027 (Product timestamp/schema-version contract reconciliation) remains undecided |
+| Version | 1.2 |
 | Date | 2026-08-28 |
 | Product | Curve |
 | Work package | M1-00A (minimal Product core) |
 | Owner and human reviewer | Federico Ocampo (`faocampo`) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Candidate target/base | `preview` at `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; dispatch re-verifies the live base and migration chain |
+| Accepted target/base | `preview` from base `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; reviewed head `d4ab9ea...` squash-merged as `afdb593...` |
+| Accepted Curve contract revision | `46880350e0ca1e57dd08b6fb5a6a6546f37c4473` |
+| Accepted context digest | `sha256:951fd873f4a9179aae58359e595e48e80ba081a9703202f6b9d9eed51b4b3b6f` |
+| Accepted Plane result | Reviewed head `d4ab9ea7c6d19222c316a51d7d2992415c8940f0`; squash merge `afdb59388e4ea9b2321d33935000126303fc93b8`; shared tree `1c4904d617207b8301954c1019fe0fc6bf099b6d` |
 | Risk classification | Medium; workspace authorization, ownership, lifecycle, and additive persistence |
 | Data classification | Synthetic `INTERNAL` test data only |
 | Model/tool policy | No model, provider, protected data, or external service |
@@ -182,9 +185,9 @@ git diff --check
 - A partially deployed API/service change is rolled back while the Product table
   remains inert and unexposed.
 
-## Dispatch blockers
+## Historical dispatch prerequisites and closure
 
-This packet becomes `READY` only after:
+The approved dispatch required:
 
 1. the exact Curve revision containing every normative contract is reviewed and
    merged to `main`;
@@ -194,5 +197,16 @@ This packet becomes `READY` only after:
 5. exact repository commands are reconfirmed against that base; and
 6. Federico explicitly dispatches the implementation packet.
 
-No coding agent may infer that Project `In progress` status or this prepared
-document authorizes Plane code mutation.
+All six requirements were satisfied by the accepted dispatch binding recorded
+in [M1-00A implementation evidence](m1-00a-product-core-implementation-evidence.md)
+(exact Curve context, Plane head/merge/tree, tests, security boundary, and
+rollback). Plane PR #13 merged the reviewed head
+`d4ab9ea7c6d19222c316a51d7d2992415c8940f0` as
+`afdb59388e4ea9b2321d33935000126303fc93b8`; both commits share Git tree
+`1c4904d617207b8301954c1019fe0fc6bf099b6d`.
+
+This packet is now an immutable historical dispatch contract. Future Product
+changes require a new work package and exact dispatch; the completed dispatch
+grants no continuing mutation authority. Its local merge/test record does not
+close R-027 (Product timestamp/schema-version contract reconciliation) or grant
+production qualification.

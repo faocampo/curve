@@ -128,13 +128,26 @@ requireDocumentTokens(m1TaskPacketPath, m1TaskPacket, [
 ]);
 requireDocumentTokens(m1ProductPacketPath, m1ProductPacket, [
   "# M1-00A Minimal Product Core Task Packet",
-  "`PREPARED_NOT_DISPATCHABLE`",
+  "`MERGED / LOCAL_ACCEPTANCE_RECORDED / CONFORMANCE_VARIANCE_OPEN`",
+  "R-027 (Product timestamp/schema-version contract reconciliation) remains undecided",
+  "close R-027 (Product timestamp/schema-version contract reconciliation) or grant",
+  "production qualification.",
   "## Approved outcome",
   "## Authorization matrix",
   "## Given/When/Then acceptance cases",
   "| P-18 |",
-  "## Dispatch blockers",
+  "## Historical dispatch prerequisites and closure",
+  "46880350e0ca1e57dd08b6fb5a6a6546f37c4473",
+  "sha256:951fd873f4a9179aae58359e595e48e80ba081a9703202f6b9d9eed51b4b3b6f",
+  "d4ab9ea7c6d19222c316a51d7d2992415c8940f0",
+  "afdb59388e4ea9b2321d33935000126303fc93b8",
+  "1c4904d617207b8301954c1019fe0fc6bf099b6d",
 ]);
+if (m1ProductPacket.includes("`ACCEPTED_AND_MERGED / LOCAL_ONLY`")) {
+  failures.push(
+    "docs/technical/m1-00a-product-core-task-packet.md: exact relational conformance cannot be accepted while R-027 remains undecided",
+  );
+}
 const expectedLaterPacketIds = [
   "M1-00A",
   ...Array.from({ length: 7 }, (_, index) => `M1-${String(index + 1).padStart(2, "0")}`),

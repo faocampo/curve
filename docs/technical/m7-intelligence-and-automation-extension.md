@@ -5,9 +5,9 @@
 | Field | Value |
 | --- | --- |
 | Status | Post-R1 product-extension charter |
-| Version | 0.1 |
-| Last updated | 2026-08-15 |
-| Source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md), M7 integration-expansion scope |
+| Version | 0.2 |
+| Last updated | 2026-08-29 |
+| Source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current requirements and M7 integration-expansion boundary) |
 | Audience | Product, finance, engineering, security, operations, and integration owners |
 | Catalog status | Future scope; outside the active 71-item GitHub Project #2 catalog |
 

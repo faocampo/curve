@@ -7,10 +7,10 @@
 | Status | Derived architecture baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Architecture, engineering, security, platform operations, product, and AI coding agents |
-| Version | 0.1 |
-| Last updated | 2026-08-15 |
-| Normative source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
-| Derived from | [Architecture](architecture.md), [Engineering Patterns and Technologies](engineering-patterns-and-technologies.md), [Integration Contracts](integration-contracts.md), and [Workflows and Sequences](workflows-and-sequences.md) |
+| Version | 0.2 |
+| Last updated | 2026-08-29 |
+| Normative source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current product, lifecycle, security, and acceptance contract) |
+| Derived from | [Architecture](architecture.md) (logical components and deployment boundaries), [Engineering Patterns and Technologies](engineering-patterns-and-technologies.md) (implementation conventions and technology register), [Integration Contracts](integration-contracts.md) (API, event, and provider boundaries), and [Workflows and Sequences](workflows-and-sequences.md) (durable lifecycle and recovery behavior) |
 
 ## Purpose and authority
 

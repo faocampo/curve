@@ -6,8 +6,8 @@
 | --- | --- |
 | Milestone | M1 (alignment, evidence, immutable PRD versions, and Gate 1) |
 | Status | `PREPARED_NOT_DISPATCHABLE`; task decomposition is complete; M0 dependencies and named material decisions remain open |
-| Version | 1.4 |
-| Date | 2026-08-28 |
+| Version | 1.5 |
+| Date | 2026-08-29 |
 | Product | Curve |
 | Product baseline | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, approved Product core, Curve-first shell, lifecycle, identity, evidence, and Gate 1 acceptance) |
 | Architecture baseline | [Architecture](architecture.md) (definition domain, trust boundaries, asynchronous commands, and Temporal ownership) and [Domain model](domain-model.md) (Product, Initiative, Activity, ArtifactVersion, Evidence, AccessEnvelope, and Gate entities) |
@@ -90,7 +90,7 @@ approval and cannot cross a material activation boundary.
 
 | Packet | Scope | Dependencies and material gates | Required evidence |
 | --- | --- | --- | --- |
-| M1-00A (minimal Product core) | Implement the [dedicated Product packet](m1-00a-product-core-task-packet.md) (approved exact semantics, API, persistence, policy, guard, tests, and rollback). Roadmaps, Milestones, Features, Roadmap Items, schedules, and snapshots remain M2. | `DONE_LOCAL`; Plane PR #13 merged as `afdb593...` | P-01-P-18 plus migration forward/reverse, same-workspace key uniqueness, IANA timezone history, exact human authorization, idempotency, optimistic concurrency, lifecycle guard, audit/outbox, and OpenAPI tests |
+| M1-00A (minimal Product core) | Implement the [dedicated Product packet](m1-00a-product-core-task-packet.md) (approved Product semantics, API, historical persistence target, policy, guard, tests, rollback, and open conformance variance). Roadmaps, Milestones, Features, Roadmap Items, schedules, and snapshots remain M2. | `MERGED_LOCAL_IMPLEMENTATION / CONFORMANCE_VARIANCE_OPEN`; Plane PR #13 merged as `afdb593...`; R-027 (Product timestamp/schema-version contract reconciliation) blocks production qualification and successor Product persistence | P-01-P-18 functional/local evidence plus migration forward/reverse, same-workspace key uniqueness, IANA timezone history, exact human authorization, idempotency, optimistic concurrency, lifecycle guard, audit/outbox, and OpenAPI tests; exact relational conformance remains open |
 | M1-01A (Initiative domain/API) | Implement the [dedicated Initiative packet](m1-01a-initiative-core-task-packet.md) (Product binding, three assignments, lifecycle, policy, persistence, API, tests, and rollback). | M1-00A (minimal Product core); accepted M0 core/API/Temporal/audit foundation; merged M1-01A contracts and canonical dispatch | I-01-I-16 plus migration forward/reverse, Product-reference integrity, uniqueness, workspace isolation, actor/role denial, idempotency, state, pause/resume/cancel, and OpenAPI tests |
 | M1-01B (Initiative shell) | Curve-first Initiatives list/create/detail experience with assignment and lifecycle controls | M1-01A (Initiative domain/API); approved screen contract | Browser, keyboard, screen-reader, responsive, error/retry, empty/loading, disabled-state, and role-visibility tests |
 | M1-02A (manual Idea Brief) | `IDEA_BRIEF` Artifact and immutable/manual draft versions with attributed structured edits for problem, users, outcomes, assumptions, contradictions, blockers, and unknowns | M1-01A (Initiative domain/API); no model gate | Schema, attribution, concurrent edit, canonical digest, diff, validation, browser, and accessibility tests |
@@ -116,7 +116,7 @@ records the exact merged Curve revision and generated-client digest.
 | --- | --- |
 | Product JSON Schema | Published [Product resource and request schemas](../../contracts/schemas/product.schema.json) (immutable key, mutable metadata, IANA timezone, one human owner, lifecycle, optimistic version, state-dependent archival fields, and no roadmap entities) |
 | Product decision/policy | Published [M1-00A machine decision](../../contracts/governance/m1-00a-product-core-v1.json) (approved exact semantics) and [Product policy v1](../../contracts/policy/product-policy-v1.json) (Plane Admin mapping, owner authority, human-only actions, and archive guard) |
-| Product relational contract | Published [M1-00A persistence contract](../../contracts/database/m1-00a-product-core-relational-contract.md) (table, constraints, transactions, Initiative guard, migration, and verification) |
+| Product relational contract | Published [M1-00A persistence contract](../../contracts/database/m1-00a-product-core-relational-contract.md) (historical v1 table, constraints, transactions, Initiative guard, migration, verification, and open timestamp/schema-version variance) |
 | Initiative JSON Schema | Common workspace record, mode, Product reference, keyword/title/description, risk, lifecycle, paused-from state, workflow version, creator, current artifact pointers, three assignments, optimistic version, timestamps |
 | Artifact and ArtifactVersion JSON Schemas | Stable kind, immutable numbered version, state, body schema/version/ref/digest, evidence snapshot, parent, provenance, submit/supersede invariants |
 | Idea Brief body schema | Problem, affected users, desired outcomes, non-goals, constraints, assumptions, contradictions, blockers, unknowns, attribution, validation action, owner, and due stage |
@@ -200,7 +200,7 @@ not invented by the coding agent.
 
 | Packet group | Current state | Missing evidence before `READY` |
 | --- | --- | --- |
-| M1-00A (minimal Product core) | `DONE_LOCAL` | Plane PR #13 merged accepted implementation and commit-bound CI to `preview` as `afdb593...` |
+| M1-00A (minimal Product core) | `MERGED_LOCAL_IMPLEMENTATION / CONFORMANCE_VARIANCE_OPEN` | Plane PR #13 merged the locally verified implementation and commit-bound CI to `preview` as `afdb593...`; R-027 (Product timestamp/schema-version contract reconciliation) remains required before production qualification or successor Product persistence |
 | M1-01A (Initiative domain/API) | `DONE_LOCAL` | Plane PR #14 merged reviewed head `7e712e0...` as `99a73b4...`; [implementation evidence](m1-01a-initiative-core-implementation-evidence.md) (exact context, CI, tests, merge tree, data boundary, and rollback) binds acceptance |
 | M1-01B (Initiative shell) | `PREPARED / UX_GATE_REQUIRED` | Approved screen contract; exact UI commands and context digest; browser, accessibility, and Federico Ocampo manual UX acceptance |
 | M1-02A (manual Idea Brief) | `PREPARED` | M1-01A; Idea Brief/ArtifactVersion contracts; UI contract; exact dispatch values |

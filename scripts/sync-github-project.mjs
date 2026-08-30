@@ -23,10 +23,10 @@ const VALID_STATUSES = new Set(["Backlog", "Ready", "In progress", "In review", 
 
 const initialStatus = new Map([
   ["P0-01", "Done"],
-  ["P0-02", "In review"],
+  ["P0-02", "Done"],
   ["P0-03", "In progress"],
   ["P0-04", "Done"],
-  ["P0-05", "Ready"],
+  ["P0-05", "Done"],
   ["P0-06", "Done"],
 ]);
 
@@ -157,12 +157,16 @@ function phaseFor(id) {
 function parseTasks(markdown) {
   const tasks = [];
   for (const line of markdown.split(/\r?\n/)) {
-    if (!/^\| (?:P0|M[0-7]|R1)-\d{2}[A-Z]? \|/.test(line)) continue;
+    const rowMatch = line.match(
+      /^\| ((?:P0|M[0-7]|R1)-\d{2}[A-Z]?)(?: \([^|]+\))? \|/,
+    );
+    if (!rowMatch) continue;
     const cells = line.split("|").slice(1, -1).map((cell) => cell.trim());
     if (cells.length !== 5 && cells.length !== 6) {
       throw new Error(`Unexpected work-package row shape: ${line}`);
     }
-    const [id, size, deliverable, dependencies] = cells;
+    const [, size, deliverable, dependencies] = cells;
+    const id = rowMatch[1];
     const trace = cells.length === 6 ? cells[4] : "";
     const completionEvidence = cells.length === 6 ? cells[5] : cells[4];
     tasks.push({

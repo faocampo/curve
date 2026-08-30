@@ -4,18 +4,18 @@
 
 | Field | Value |
 | --- | --- |
-| Status | Approved Product semantics; implementation contract prepared; publication and context pin pending |
-| Version | 1.0 |
-| Date | 2026-08-23 |
+| Status | `HISTORICAL_V1 / MERGED_LOCAL_IMPLEMENTATION / CONFORMANCE_VARIANCE_OPEN`; R-027 (Product timestamp/schema-version contract reconciliation) remains undecided |
+| Version | 1.1 |
+| Date | 2026-08-29 |
 | Work package | M1-00A (minimal Product core) |
 | Owner and reviewer | Federico Ocampo (`faocampo`) |
 | Applies to | Curve-owned PostgreSQL tables in the public Plane fork |
 
 ## Purpose and scope
 
-This contract fixes the PostgreSQL representation and transaction invariants
-for the minimum workspace-scoped Product required before an Initiative can
-exist. It consumes the approved
+This document preserves the v1 PostgreSQL representation and transaction
+invariants dispatched for the minimum workspace-scoped Product required before
+an Initiative can exist. It consumes the approved
 [M1-00A decision](../governance/m1-00a-product-core-v1.json) (exact Product
 identity, ownership, lifecycle, authorization, retirement, and M2 boundary),
 the [Product schema](../schemas/product.schema.json) (wire representation and
@@ -25,6 +25,28 @@ preconditions).
 
 Roadmaps, Milestones, Features, Roadmap Items, schedules, snapshots, and their
 tables remain M2 scope.
+
+## Known implementation variance
+
+The merged Plane implementation and this historical v1 contract differ in two
+ways recorded by R-027 (Product timestamp/schema-version contract
+reconciliation):
+
+- migration `0006_product.py` persists an application-managed `schema_version` column
+  with application default `1.0`, while the v1 table list below omitted it; and
+- the Django model populates `created_at` and `updated_at` through application
+  UTC using `auto_now_add` and `auto_now`, while the v1 contract specified
+  trusted PostgreSQL time in UTC.
+
+The [M1-00A physical-schema evidence](m1-00a-product-physical-schema-evidence-v1.json)
+(commit-bound Product index attestation) and the
+[implemented ERD](../../docs/technical/implemented-entity-relationship-model.md)
+(observed Plane tables, fields, relationships, and migration boundary) record
+the current physical result. They do not approve either R-027 alternative.
+Exact relational conformance, production qualification, and any successor
+Product persistence change remain fail closed until R-027 is decided and
+closed. The table below intentionally retains the historical v1 target rather
+than silently rewriting the dispatched contract.
 
 ## Table and column contract
 
@@ -65,11 +87,11 @@ truth and creates no foreign key to Plane tables.
 | `curve_product_workspace_state_key_idx` | Index | `(workspace_id, state, key)` |
 | `curve_product_workspace_owner_state_idx` | Index | `(workspace_id, owner_user_id, state)` |
 
-The migration is additive and is planned after provider migration `0005`; its
-expected sequence is `0006_product.py`. Dispatch must revalidate the accepted
-migration chain and update the filename if a merged predecessor consumes that
-number. The logical table, constraint names, and migration behavior remain
-unchanged.
+The released additive migration is `0006_product.py`, after provider migration
+`0005_providerconnection_providercapability.py`. Its two query indexes are
+present as physical `RunSQL` operations. R-027 determines whether a successor
+additive migration is required for timestamp or schema-version conformance; it
+does not require a successor migration for these two indexes.
 
 ## Authorization and membership checks
 
@@ -152,7 +174,7 @@ contracts.
 
 ## Verification obligations
 
-The Plane implementation must prove:
+The historical v1 dispatch required the Plane implementation to prove:
 
 1. Forward, reverse-to-prior, and forward-again migration behavior on a
    disposable PostgreSQL database before shipment.
@@ -167,3 +189,7 @@ The Plane implementation must prove:
 6. Archived historical read and new-Initiative rejection.
 7. Atomic Product/event/outbox/audit/idempotency commit, rollback, and replay.
 8. OpenAPI and JSON Schema conformance plus full Plane regression commands.
+
+The recorded local verification satisfies the functional cases above for the
+merged implementation. It does not establish exact conformance for the two
+R-027 variances or grant production qualification.

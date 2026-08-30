@@ -7,8 +7,8 @@
 | Status | Derived architecture baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Architecture, engineering, security, platform operations, product, and AI coding agents |
-| Version | 0.6 |
-| Last updated | 2026-08-21 |
+| Version | 0.7 |
+| Last updated | 2026-08-29 |
 | Normative source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product contract, approved Product core, Curve-first shell, decision register, and accepted local Temporal proof) |
 | Companion | [Engineering Patterns and Technologies](./engineering-patterns-and-technologies.md) (component, workflow, data, and technology implementation patterns) |
 
@@ -620,7 +620,7 @@ Each ADR must include options, evidence, selection criteria, consequences, threa
 Before implementation, the architecture package must add the following without weakening this baseline:
 
 1. Requirement traceability matrix covering every goal, `FR-001`-`FR-044`, `NFR-001`-`NFR-020`, `AC-01`-`AC-60`, risk, decision, component, command, entity, test, and milestone.
-2. An ERD with workspace-scoped indexes, uniqueness, object layout, deletion, and migration semantics. The C4 context/container/component views are maintained in [C4 Architecture Views](c4-architecture.md) (context, container, and component diagrams).
+2. The [implemented entity-relationship model](implemented-entity-relationship-model.md) (versioned physical M0/M1 ERD, workspace ownership, indexes, uniqueness, immutable history, object-reference boundary, and migration semantics) is maintained against the accepted Plane migration head. The C4 context/container/component views are maintained in [C4 Architecture Views](c4-architecture.md) (context, container, and component diagrams).
 3. Versioned OpenAPI, event, webhook, SSE, provider, and object schemas.
 4. Temporal sequence diagrams for every happy, rework, cancellation, loss, stale-state, supersession, and reconciliation path.
 5. Threat model, data-flow inventory, Access Envelope rules, and security-test fixtures.

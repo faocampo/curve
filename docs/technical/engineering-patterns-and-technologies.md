@@ -7,10 +7,10 @@
 | Status | Engineering baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Engineers, reviewers, security and platform teams, and AI coding agents |
-| Version | 0.5 |
-| Last updated | 2026-08-18 |
-| Normative source | [Curve PRD v0.8](../curve-ai-native-sdlc-prd.md) |
-| Architecture | [Curve Technical Architecture](./architecture.md) |
+| Version | 0.6 |
+| Last updated | 2026-08-29 |
+| Normative source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current product, lifecycle, security, and acceptance contract) |
+| Architecture | [Curve Technical Architecture](./architecture.md) (logical components, deployment profiles, trust zones, and operability) |
 
 ## Purpose
 
@@ -346,7 +346,7 @@ Provider operations return or emit a normalized result containing:
 - Usage/cost where applicable.
 - Normalized error class, retry hint, and provider correlation ID on failure.
 
-Exact provider-specific wire schemas are ADR and adapter-spec outputs, especially D-002, D-006, D-007, and D-008.
+Exact provider-specific wire schemas are ADR and adapter-spec outputs, especially D-002 (Onyx delegated-identity decision), D-006 (Orca developer-operated MCP profile decision), D-007 (MCP trust and delegated-action decision), and D-008 (VCS controller identity and scope decision).
 
 ## Technology register
 
@@ -354,21 +354,21 @@ The table distinguishes a fixed contract from an unresolved production selection
 
 | Capability | Technology or boundary | Status | Decision / implementation constraint |
 | --- | --- | --- | --- |
-| Work-management foundation | Plane community edition | `ADR_DECIDED`; accepted base pinned | D-001 approves candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`, the reuse boundary, and upstream process; fork `preview` foundation is `549db1aea8f3307b337b3686dbb844a87549cd95`; M0-S1, M0-S2, M0-03, M0-S3, and M0-S4 are merged and the current implementation base is `e762fbbd2c1726a2833745add8245a1679c60d88` |
+| Work-management foundation | Plane community edition | `ADR_DECIDED`; accepted base pinned | D-001 (Plane upstream, licensing, fork, and upgrade decision) approves candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`, the reuse boundary, and upstream process; fork `preview` foundation is `549db1aea8f3307b337b3686dbb844a87549cd95`. Historical checkpoints are M0-S4 (Operation API, SSE, and Curve-first UI) at `e762fbb...`, M0-S9A (provider-neutral registry and reconciliation foundation) at `af7187d...`, and M1-00A (minimal Product core) at `afdb593...`; the current accepted Plane `preview` after M1-01A (Initiative domain and API foundation) is `99a73b4eab5ee21fd012d7358bc9259252d47f71`. |
 | Curve relational state | PostgreSQL category used by Plane/Curve | `FIXED_CONTRACT`; connectivity direction selected; activation inputs open | Local development reuses Plane PostgreSQL over shared `dev_env`; private X3M environments use workspace-scoped PostgreSQL access through the approved private-platform direction. Exact persistence placement, HA, backup, recovery, and operations evidence remain environment-package inputs. |
-| Large immutable bodies | Workspace-scoped immutable object storage | `FIXED_CONTRACT`; product open | D-003/D-009 select product, topology, retention, erasure, and backup |
-| Durable orchestration | Temporal | `PRD_SELECTED`; local profile and private-platform connectivity selected; activation inputs open | D-003 pins CLI 1.8.1/server 1.31.2/SDK 1.31.0 and disposable local SQLite, shared `dev_env`, loopback-only host ports, private EKS `ClusterIP`, internal VPN-only UI exposure, and authenticated non-local clients. Non-local persistence/visibility placement, HA, certificates, backup, and recovery evidence remain open; workflow version/replay rules are fixed. |
+| Large immutable bodies | Workspace-scoped immutable object storage | `FIXED_CONTRACT`; product open | D-003 (runtime topology and trust-zone decision) and D-009 (retention, deletion, backup, and legal-hold decision) select product, topology, retention, erasure, and backup |
+| Durable orchestration | Temporal | `PRD_SELECTED`; local profile and private-platform connectivity selected; activation inputs open | D-003 (runtime topology and trust-zone decision) pins CLI 1.8.1/server 1.31.2/SDK 1.31.0 and disposable local SQLite, shared `dev_env`, loopback-only host ports, private EKS `ClusterIP`, internal VPN-only UI exposure, and authenticated non-local clients. Non-local persistence/visibility placement, HA, certificates, backup, and recovery evidence remain open; workflow version/replay rules are fixed. |
 | Bounded background work | Plane Celery infrastructure | `PRD_SELECTED` existing capability | Notifications, exports, and bounded refresh only; no lifecycle state ownership |
-| Internal knowledge | X3M Onyx | `PRD_SELECTED`; identity open | D-002 selects per-operation delegation; no user PAT storage |
-| Tool interoperability | MCP behind `ToolProvider` | `FIXED_CONTRACT`; protocol policy open | D-007 selects protocol/transports, registry, auth, risk, and allowlist |
+| Internal knowledge | X3M Onyx | `PRD_SELECTED`; identity open | D-002 (Onyx delegated-identity decision) selects per-operation delegation; no user PAT storage |
+| Tool interoperability | MCP behind `ToolProvider` | `FIXED_CONTRACT`; protocol policy open | D-007 (MCP trust and delegated-action decision) selects protocol/transports, registry, auth, risk, and allowlist |
 | Model traffic | `ModelGateway` port | `FIXED_CONTRACT` | Direct production calls outside the gateway are prohibited |
-| Model gateway | Thin in-process Curve Model Gateway over X3M's approved OpenRouter access | `PROPOSED` | D-004 pins the upstream contract, allowlists, routing/fallback constraints, usage normalization, failure behavior, owner, and replacement strategy; use a development stub until decided |
-| Models/providers | Task/data-class allowlist | `OPEN_DECISION` | D-005; only approved self-hosted development models under the conservative default |
-| LLM traces/evaluation | Langfuse | `PRD_SELECTED`; placement/policy open | D-003/D-005/D-009 control deployment, exported data, and retention |
+| Model gateway | Thin in-process Curve Model Gateway over X3M's approved OpenRouter access | `PROPOSED` | D-004 (Model Gateway architecture decision) pins the upstream contract, allowlists, routing/fallback constraints, usage normalization, failure behavior, owner, and replacement strategy; use a development stub until decided |
+| Models/providers | Task/data-class allowlist | `OPEN_DECISION` | D-005 (model/provider and data-policy decision); only approved self-hosted development models under the conservative default |
+| LLM traces/evaluation | Langfuse | `PRD_SELECTED`; placement/policy open | D-003 (runtime topology and trust-zone decision), D-005 (model/provider and data-policy decision), and D-009 (retention, deletion, backup, and legal-hold decision) control deployment, exported data, and retention |
 | Automated coding execution | OpenHands | `PRD_SELECTED` | Sole initial `AgentExecutionProvider`; pin supported API/version/image/license in the provider manifest |
-| Human-assisted coding | X3M Orca over MCP | `PRD_SELECTED`; profile approval open | D-006/D-007 block Orca-enabled M4/R1 completeness; use delegated developer identity and the bounded read/write tool profile; do not invent an execution-provider API |
-| VCS providers | GitHub and GitLab | `PRD_SELECTED` | D-008 selects identities, signing, rotation, repository allowlists, and scopes |
-| Sandbox boundary | gVisor-class isolated Linux runner; Firecracker is a future option | `PRD_SELECTED` boundary; topology open | D-003 must approve production isolation; ordinary container isolation alone is insufficient |
+| Human-assisted coding | X3M Orca over MCP | `PRD_SELECTED`; profile approval open | D-006 (Orca developer-operated MCP profile decision) and D-007 (MCP trust and delegated-action decision) block Orca-enabled M4/R1 completeness; use delegated developer identity and the bounded read/write tool profile; do not invent an execution-provider API |
+| VCS providers | GitHub and GitLab | `PRD_SELECTED` | D-008 (VCS controller identity and scope decision) selects identities, signing, rotation, repository allowlists, and scopes |
+| Sandbox boundary | gVisor-class isolated Linux runner; Firecracker is a future option | `PRD_SELECTED` boundary; topology open | D-003 (runtime topology and trust-zone decision) must approve production isolation; ordinary container isolation alone is insufficient |
 | Structural repository analysis | Tree-sitter | `PRD_SELECTED` recommendation | Pin grammars and versions in the dependency manifest; unsupported languages fail explicitly |
 | Exact code search | Zoekt | `PRD_SELECTED` recommendation | Define index lifecycle and workspace/repository authorization in detailed design |
 | Browser/E2E validation | Playwright | `PRD_SELECTED` recommendation | Pin browser images; run only in isolated quality/preview profiles |

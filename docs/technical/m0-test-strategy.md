@@ -6,12 +6,12 @@
 | --- | --- |
 | Product | Curve |
 | Work package | P0-05 (test-harness strategy and R1 acceptance traceability) |
-| Status | `IN_REVIEW` |
-| Version | 1.2 |
+| Status | `ACCEPTED / DONE` |
+| Version | 1.3 |
 | Owner | Federico Ocampo, CTO at X3M |
 | Human reviewer | Federico Ocampo |
-| Last updated | 2026-08-22 |
-| Product source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, lifecycle, decisions, and AC-01 through AC-60) |
+| Last updated | 2026-08-29 |
+| Product source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current product requirements, lifecycle, decisions, and AC-01 through AC-60) |
 | Delivery source | [Development plan](development-plan.md) (milestones, packages, dependencies, and completion evidence) |
 | Machine contract | [AC test matrix v1](../../contracts/testing/ac-test-matrix-v1.json) (suite, environment, command, gate, and evidence ownership for all 60 criteria) |
 | Validation schema | [Test-strategy matrix schema](../../contracts/schemas/test-strategy-matrix.schema.json) (closed JSON Schema for the P0-05 matrix) |
@@ -38,6 +38,20 @@ P0-05 is complete when:
 The strategy governs test planning and evidence. A consuming implementation
 package remains responsible for its executable test code, exact base SHA,
 environment authorization, and package-level acceptance result.
+
+## Acceptance record
+
+Federico Ocampo approved exact Curve head
+`7d2794bad87a6e2e733ee8a53a650d8ea7658d22`. [Curve PR #27](https://github.com/faocampo/curve/pull/27)
+(P0-05 test strategy and audit closure) passed the
+[documentation-contract CI run](https://github.com/faocampo/curve/actions/runs/32619264292)
+(schema, semantic, documentation, and Project-map validation) and squash-merged
+to `main` as `fdae85b33a235cd494dd36565698b2b5033a3389` on 2026-08-23.
+
+The accepted matrix contains AC-01 through AC-60 exactly once, binds the PRD
+criterion digest `sha256:0115c788d369b6063282a4549ff8fc7b011727be13f6f882b004fd9920b33a20`,
+and keeps future coverage separate from existing executable evidence. This
+acceptance closes P0-05; individual packages still own their exact test results.
 
 ## Test principles
 

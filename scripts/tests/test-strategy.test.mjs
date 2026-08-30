@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { validateTestStrategyMatrixSemantics } from "../lib/test-strategy.mjs";
+import {
+  extractDevelopmentPlanPackageTrace,
+  validateTestStrategyMatrixSemantics,
+} from "../lib/test-strategy.mjs";
 
 const MATRIX = JSON.parse(
   readFileSync(
@@ -16,6 +19,14 @@ const PRD_TEXT = readFileSync(
 );
 const DEVELOPMENT_PLAN_TEXT = readFileSync(
   new URL("../../docs/technical/development-plan.md", import.meta.url),
+  "utf8",
+);
+const STRATEGY_TEXT = readFileSync(
+  new URL("../../docs/technical/m0-test-strategy.md", import.meta.url),
+  "utf8",
+);
+const READINESS_TEXT = readFileSync(
+  new URL("../../docs/technical/m0-readiness-board.md", import.meta.url),
   "utf8",
 );
 
@@ -35,6 +46,26 @@ test("canonical test strategy binds all 60 PRD criteria by exact source digest",
   const result = validate();
   assert.equal(result.acceptanceCriteriaCount, 60);
   assert.equal(result.acceptanceCriteriaDigest, MATRIX.source.acceptance_criteria_digest);
+});
+
+test("parenthetical package titles preserve canonical development-plan identifiers", () => {
+  const packageTrace = extractDevelopmentPlanPackageTrace(DEVELOPMENT_PLAN_TEXT);
+  assert.ok(packageTrace.has("M0-09"));
+  assert.ok(packageTrace.has("M1-00A"));
+  assert.ok(packageTrace.has("M1-01"));
+  assert.equal(
+    [...packageTrace.keys()].some((id) => id.includes("(")),
+    false,
+  );
+});
+
+test("P0-05 governance records the same accepted lifecycle and exact merge evidence", () => {
+  assert.match(STRATEGY_TEXT, /\| Status \| `ACCEPTED \/ DONE` \|/);
+  assert.match(STRATEGY_TEXT, /7d2794bad87a6e2e733ee8a53a650d8ea7658d22/);
+  assert.match(STRATEGY_TEXT, /fdae85b33a235cd494dd36565698b2b5033a3389/);
+  assert.match(STRATEGY_TEXT, /32619264292/);
+  assert.match(READINESS_TEXT, /\| P0-05 test strategy \| DONE \|/);
+  assert.doesNotMatch(STRATEGY_TEXT, /\| Status \| `IN_REVIEW` \|/);
 });
 
 test("PRD criterion wording drift invalidates the source digest", () => {
