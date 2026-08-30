@@ -25,7 +25,7 @@
         "source_id": "curve-pr-100",
         "repository": "CURVE",
         "title": "Curve approval record",
-        "path": "contracts/approvals/curve-pr-100.json",
+        "path": "contracts/authority/curve-pr-100.json",
         "revision": "1111111111111111111111111111111111111111",
         "content_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
       },

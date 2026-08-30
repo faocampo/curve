@@ -1940,6 +1940,19 @@ const CURVE_REFERENCE_ROLES = Object.freeze({
   PUBLISHED_EVIDENCE: "PUBLISHED_EVIDENCE",
   SOURCE_CATALOG: "SOURCE_CATALOG",
 });
+const CURVE_PUBLICATION_ROOTS = Object.freeze({
+  AUTHORITY_SOURCE: "contracts/authority/",
+  STATE_EVIDENCE: "contracts/state/",
+  CONTEXT_MANIFEST: "contracts/context/",
+  SOURCE_CATALOG: "contracts/task-packet-sources/",
+});
+
+function assertCurvePublicationRoot(reference, publicationRoot, label) {
+  const path = normalizeRepositoryPath(reference.path, `${label} path`);
+  if (!path.startsWith(publicationRoot)) {
+    throw new Error(`${label} must be published under ${publicationRoot}`);
+  }
+}
 
 function referenceRepository(reference) {
   return reference.repository ?? "CURVE";
@@ -2153,6 +2166,11 @@ function validateSourceCatalogBinding(packet, resolveReference) {
   if (binding.evidence.repository !== "CURVE") {
     throw new Error("source catalog must be stored in CURVE");
   }
+  assertCurvePublicationRoot(
+    binding.evidence,
+    CURVE_PUBLICATION_ROOTS.SOURCE_CATALOG,
+    "source catalog",
+  );
   const contents = resolveAndVerifyReference(
     packet,
     binding.evidence,
@@ -2216,6 +2234,11 @@ function validateContextPackBinding(packet, resolveReference) {
   if (binding.manifest.repository !== "CURVE") {
     throw new Error("context-pack manifest must be stored in CURVE");
   }
+  assertCurvePublicationRoot(
+    binding.manifest,
+    CURVE_PUBLICATION_ROOTS.CONTEXT_MANIFEST,
+    "context-pack manifest",
+  );
   const manifestContents = resolveAndVerifyReference(
     packet,
     binding.manifest,
@@ -2336,6 +2359,11 @@ function validateStateAuthoritySource(packet, attestation, label, resolveReferen
   if (source.repository !== "CURVE") {
     throw new Error(`${label} authority source must be a CURVE evidence blob`);
   }
+  assertCurvePublicationRoot(
+    source,
+    CURVE_PUBLICATION_ROOTS.AUTHORITY_SOURCE,
+    `${label} authority source`,
+  );
   const contents = resolveAndVerifyReference(
     packet,
     source,
@@ -2353,6 +2381,11 @@ function validateStateRecord(packet, item, resolveReference) {
   if (binding.evidence.repository !== "CURVE") {
     throw new Error(`${label} state evidence must be stored in CURVE`);
   }
+  assertCurvePublicationRoot(
+    binding.evidence,
+    CURVE_PUBLICATION_ROOTS.STATE_EVIDENCE,
+    `${label} state evidence`,
+  );
   const contents = resolveAndVerifyReference(
     packet,
     binding.evidence,

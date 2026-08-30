@@ -4,9 +4,9 @@
 
 | Field | Value |
 | ----- | ----- |
-| Status | Decision index; D-001 (Plane upstream foundation decision) is decided; D-003 (runtime topology and trust-zone decision) local private-platform profile is decided and implemented; remaining activation scopes require owner approval and applicable proof |
-| Version | 1.3 |
-| Last updated | 2026-08-29 |
+| Status | Decision index; D-001 (Plane upstream foundation decision) is decided; D-003 (runtime topology and trust-zone decision) local private-platform profile is decided and implemented; remaining activation scopes and cross-cutting coding-agent execution/authority profiles require owner approval and applicable proof |
+| Version | 1.4 |
+| Last updated | 2026-08-30 |
 | Source | [Curve PRD v0.13 decision register](../curve-ai-native-sdlc-prd.md#decision-register) (controlled product and architecture decisions, approved Product core, Curve-first shell, and accepted local Temporal proof) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
@@ -36,6 +36,21 @@ An AI agent may draft an ADR, gather evidence, run non-destructive proofs, and r
 | D-014 | PROPOSED | Conservative R0B workspace/activity budgets and escalation | R0B/M4/M6 | Reservation/concurrency/reconciliation semantics, cost scope, reset/currency, exception expiry, finance approval, denial-of-service analysis. |
 | D-015 | PROPOSED | Loomit SDK Compatibility pilot and comparison | R0A/R0B | Approval of CIA external-contract/staging boundary, authoritative OpenAPI/deployment evidence, reversible Sachiel scope, user approvals, data class, metric definitions, support and rollback commitment. |
 | D-016 | PROPOSED | Pilot targets and post-three-initiative R1 guardrails | Pilot/R1 rollout | Versioned metric events, numerator/denominator, inclusion/exclusion, binary pilot rule, confidence caveats, owner, review cadence. |
+
+## Cross-cutting execution decisions
+
+The task-packet security model exposes two cross-cutting blockers that are not
+new PRD product decisions and therefore do not consume a D-001 through D-016
+identifier:
+
+| Blocker | Status | Decision packet | Blocks | Minimum evidence before decision |
+| --- | --- | --- | --- | --- |
+| B-CODING-TOOLS-01 (local coding-tool execution profile) | PROPOSED | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (trusted-local versus gVisor profiles, Python/Docker command boundary, security evidence, and rollback) | Machine-`READY` Python/Docker task packets, beginning with RUNTIME-M0-01 (graceful Curve worker shutdown classification) | Selected trust tier, helper owner, exact tool/image versions and digests, argv/path/environment/network/output grammar, adversarial tests, cleanup, and residual-risk acceptance. |
+| B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) | PROPOSED | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (bootstrap authority alternatives, production verifier/lease requirements, and fail-closed behavior) | Implementation dispatch after registry publication and read-only readiness preflight; it does not block `S -> E1..En -> C -> P` publication | Authoritative identity/role and approval/revocation receipt sources, nonce/freshness/replay rules, required roles, atomic attempt-lease provider, lifecycle/recovery tests, kill switch, and named approval. |
+
+An AI agent may prepare these records and prove negative fail-closed behavior.
+Only Federico Ocampo, with any reassigned Security/Platform reviewers, may
+select the execution and authority profiles.
 
 ## Required ADR structure
 

@@ -68,6 +68,25 @@ This directory is the normative machine-readable interface source for Curve. Imp
 | Orca MCP tool invocations | [`mcp/orca-tools-v1.schema.json`](mcp/orca-tools-v1.schema.json) | Exact v1.1 read/write allowlist and per-tool arguments; unspecified tools and fields are denied. |
 | Orca MCP tool results | [`mcp/orca-tool-result-v1.schema.json`](mcp/orca-tool-result-v1.schema.json) | Typed v1.1 safe projections and mutation receipts; protected bodies and caller-supplied attribution are absent. |
 
+## Coding-agent publication roots
+
+Canonical coding-agent artifacts use these non-overlapping repository roots.
+The directories are created only when their first reviewed artifact is
+published; an absent directory grants no implied state or authority.
+
+| Publication role | Canonical root | Ordering rule |
+| --- | --- | --- |
+| Human or system authority sources | `contracts/authority/` | Evidence publication; each source descends from normative source `S` and precedes every state record that cites it. |
+| Governance, dependency, decision, contract, policy, and UX state evidence | `contracts/state/` | Evidence publication after its exact authority source. |
+| Context Manifests | `contracts/context/` | Evidence publication whose entries bind exact bytes at `S`. |
+| Source-catalog projections | `contracts/task-packet-sources/` | Catalog revision `C`, after all evidence revisions and before the sealed packet. |
+| Sealed task-packet registry | `contracts/task-packets/` | Registry revision `P`, descending from `C`; discovery and read-only readiness preflight start here. |
+| Separate implementation authorizations | `contracts/task-packet-authorizations/` | Published only after `P`; exact packet/attempt grant that still requires trusted authority verification and a durable lease before dispatch. |
+
+The resulting publication ancestry is `S -> E1..En -> C -> P`: normative
+source; ordered authority/state/context evidence; source catalog; sealed
+registry packet. Implementation authorization is a later, separate grant.
+
 JSON Schema uses draft 2020-12. OpenAPI is 3.1 so schemas share the same dialect. Every example uses synthetic identifiers and contains no X3M data.
 
 Materialized packet JSON lives under
