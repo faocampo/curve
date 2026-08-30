@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/coding-agent-state-evidence.schema.json",
+  "title": "Curve coding-agent machine state evidence",
+  "description": "Digest-bound state record whose attestations bind one canonical approval subject.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "workspace_id", "subject_type", "subject_id", "state", "approval_subject", "approval_subject_digest", "attestations"],
+  "properties": {
+    "schema_version": { "const": "curve.coding-agent-state-evidence/v1" },
+    "workspace_id": { "type": "string", "format": "uuid" },
+    "subject_type": { "enum": ["DECISION", "DEPENDENCY", "POLICY", "UX", "CONTRACT", "GOVERNANCE_DOCUMENT"] },
+    "subject_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "state": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "approval_subject": { "type": "object", "minProperties": 1 },
+    "approval_subject_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "attestations": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/attestation" }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "subject_type": { "const": "DEPENDENCY" } }, "required": ["subject_type"] },
+      "else": { "properties": { "attestations": { "items": { "properties": { "actor_type": { "const": "HUMAN" } } } } } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["APPROVED", "DECIDED"] } }, "required": ["state"] },
+      "then": { "properties": { "attestations": { "contains": { "properties": { "actor_type": { "const": "HUMAN" } }, "required": ["actor_type"] }, "minContains": 1 } } }
+    }
+  ],
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "authoritySource": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_type", "source_id", "repository", "title", "path", "revision", "content_digest"],
+      "properties": {
+        "source_type": { "enum": ["CURVE_APPROVAL_RECORD", "WORKSPACE_ROLE_BINDING", "SYSTEM_DERIVATION_CONTRACT"] },
+        "source_id": { "type": "string", "minLength": 1, "maxLength": 255, "pattern": "\\S" },
+        "repository": { "const": "CURVE" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "\\S" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\s]+$" },
+        "revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "description": "Exact Curve commit publishing the authority-source bytes. It must precede the state-evidence commit and the source-catalog commit."
+        },
+        "content_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "derivation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contract_id", "contract_digest", "input_digest"],
+      "properties": {
+        "contract_id": { "type": "string", "minLength": 1, "maxLength": 255, "pattern": "\\S" },
+        "contract_digest": { "$ref": "#/$defs/digest" },
+        "input_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "attestation": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "actor_type", "actor_id", "actor_role", "authority_source", "workspace_id",
+        "authority_scope", "attested_at", "subject_digest", "derivation"
+      ],
+      "properties": {
+        "actor_type": { "enum": ["HUMAN", "SYSTEM"] },
+        "actor_id": { "type": "string", "minLength": 1, "maxLength": 255, "pattern": "\\S" },
+        "actor_role": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,99}$" },
+        "authority_source": { "$ref": "#/$defs/authoritySource" },
+        "workspace_id": { "type": "string", "format": "uuid" },
+        "authority_scope": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "\\S" }
+        },
+        "attested_at": { "type": "string", "format": "date-time" },
+        "subject_digest": { "$ref": "#/$defs/digest" },
+        "derivation": { "oneOf": [{ "$ref": "#/$defs/derivation" }, { "type": "null" }] }
+      },
+      "allOf": [{
+        "if": { "properties": { "actor_type": { "const": "HUMAN" } }, "required": ["actor_type"] },
+        "then": {
+          "properties": {
+            "authority_source": { "properties": { "source_type": { "enum": ["CURVE_APPROVAL_RECORD", "WORKSPACE_ROLE_BINDING"] } } },
+            "derivation": { "type": "null" }
+          }
+        },
+        "else": {
+          "properties": {
+            "actor_role": { "const": "SYSTEM_DERIVER" },
+            "authority_source": { "properties": { "source_type": { "const": "SYSTEM_DERIVATION_CONTRACT" } } },
+            "derivation": { "$ref": "#/$defs/derivation" }
+          }
+        }
+      }]
+    }
+  }
+}

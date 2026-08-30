@@ -16,6 +16,7 @@ const development = read("docs/technical/development-plan.md");
 const decisions = read("docs/technical/architecture-decisions.md");
 const foundation = read("docs/technical/plane-foundation-inventory.md");
 const readiness = read("docs/technical/m0-readiness-board.md");
+const m0Audit = read("docs/technical/m0-completion-audit.md");
 const strategy = read("docs/technical/m0-test-strategy.md");
 const technicalIndex = read("docs/technical/README.md");
 const contractIndex = read("contracts/README.md");
@@ -53,6 +54,7 @@ test("active current-state documents bind one accepted Plane preview", () => {
     ["decisions", decisions],
     ["foundation", foundation],
     ["readiness", readiness],
+    ["M0 completion audit", m0Audit],
   ]) {
     assert.match(contents, new RegExp(currentPlane), name);
   }
@@ -70,8 +72,10 @@ test("active current-state documents bind one accepted Plane preview", () => {
   );
   assert.match(
     readiness,
-    /\| Published Curve contract baseline \| Curve `main` at `a1a34c142bc37bf331cc58056dba858851db9cbf`/,
+    /\| Published Curve contract baseline \| Curve `main` at `a0d21bee7f98f2477d9cfe69708a8ac043c4fc69`/,
   );
+  assert.match(m0Audit, /a0d21bee7f98f2477d9cfe69708a8ac043c4fc69/);
+  assert.match(m0Audit, /accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`/);
 });
 
 test("exact-preview local runtime evidence binds the durable verified control path", () => {
@@ -104,19 +108,44 @@ test("exact-preview local runtime evidence binds the durable verified control pa
 });
 
 test("substantively reconciled governance documents advance document control", () => {
-  for (const [name, contents, version, dateLabel] of [
-    ["architecture", architecture, "0.7", "Last updated"],
-    ["development", development, "1.15", "Last updated"],
-    ["foundation", foundation, "1.4", "Review date"],
-    ["M0 readiness board", readiness, "1.33", "Date"],
-    ["GitHub Project execution map", projectMap, "1.18", "Date"],
-    ["M1 alignment", m1Alignment, "1.5", "Date"],
-    ["M1-M7 catalog", laterPackets, "1.6", "Date"],
-    ["decision index", decisions, "1.3", "Last updated"],
+  for (const [name, contents, version, dateLabel, date] of [
+    ["architecture", architecture, "0.9", "Last updated", "2026-08-30"],
+    ["development", development, "1.18", "Last updated", "2026-08-30"],
+    ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
+    ["M0 readiness board", readiness, "1.35", "Date", "2026-08-30"],
+    ["M0 completion audit", m0Audit, "1.8", "Date", "2026-08-30"],
+    ["GitHub Project execution map", projectMap, "1.18", "Date", "2026-08-29"],
+    ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],
+    ["M1-M7 catalog", laterPackets, "1.9", "Date", "2026-08-30"],
+    ["decision index", decisions, "1.3", "Last updated", "2026-08-29"],
+    ["implemented ERD", implementedErd, "1.2", "Last updated", "2026-08-30"],
   ]) {
     assert.match(contents, new RegExp(`^\\| Version \\| ${version.replace(".", "\\.")} \\|$`, "m"), name);
-    assert.match(contents, new RegExp(`^\\| ${dateLabel} \\| 2026-08-29 \\|$`, "m"), name);
+    assert.match(contents, new RegExp(`^\\| ${dateLabel} \\| ${date} \\|$`, "m"), name);
   }
+});
+
+test("next work and later-milestone status remain truthfully executable", () => {
+  const nextSequence = m0Audit.match(
+    /## Next executable sequence\n\n([\s\S]*?)\n## Completion-claim rule/,
+  );
+  assert.ok(nextSequence, "M0 next executable sequence is required");
+  assert.match(
+    nextSequence[1],
+    /^1\. Materialize and execute RUNTIME-M0-01 \(graceful Curve worker shutdown\n {3}classification\)/,
+  );
+  assert.match(nextSequence[1], /Curve issue #46/);
+  assert.match(nextSequence[1], /D-009 \(retention, backup, legal-hold, tombstone, and erasure/);
+
+  assert.match(
+    laterPackets,
+    /\| Status \| Deterministic M1-M6 materialization catalog plus deferred M7 charter;/,
+  );
+  assert.match(laterPackets, /M7 has no active implementation packet or exact FR\/NFR\/AC trace/);
+  assert.doesNotMatch(
+    laterPackets,
+    /Deterministic materialization catalog; every package has an exact dependency\/trace record/,
+  );
 });
 
 test("P0-05 accepted lifecycle agrees across strategy, readiness, and Project projection", () => {

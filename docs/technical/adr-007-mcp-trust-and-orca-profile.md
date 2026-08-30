@@ -5,6 +5,7 @@
 - Owner: Security and Platform Administration
 - Reviewers: Identity, Agent Platform, Curve engineering
 - Decision date: Pending named-owner approval
+- Last updated: 2026-08-30
 - Required by: MCP/Orca-enabled M0-S9B/M1/M4
 - Supersedes: Read-only-only MCP proposal in PRD v0.5
 
@@ -39,8 +40,10 @@ Prohibited operations include gate decisions, waivers, finding reclassification,
 
 ### Protocol and transport profile
 
-- Proposed protocol revision is the stable [MCP `2026-07-28` specification](https://modelcontextprotocol.io/specification/2026-07-28/basic) over authenticated Streamable HTTP. The endpoint is workspace-neutral; `workspace_id` is always a validated tool argument, never inferred from host or a caller-controlled header.
-- Version and capability negotiation must prove that the named supported Orca client implements this revision and the exact v1.1 tool schemas. If it does not, the write profile remains disabled; Curve does not silently downgrade or accept a wider schema. A separately tested prior-revision compatibility profile requires an ADR update.
+- Proposed protocol revision is the stable [MCP `2026-07-28` specification](https://modelcontextprotocol.io/specification/2026-07-28/basic) over authenticated Streamable HTTP. The binding is stateless: every request carries `MCP-Protocol-Version: 2026-07-28`, `Mcp-Method`, the applicable `Mcp-Name`, required `_meta` protocol/client/capability data, and `Authorization: Bearer <token>`. Curve derives no authorization, workspace, aggregate version, idempotency, lease, or workflow continuity from a connection or session.
+- The endpoint is workspace-neutral. `workspace_id`, slice/attempt identifiers, `expected_version`, and `idempotency_key` are validated application inputs as applicable; none is inferred from host, connection state, or a caller-controlled routing header. The authenticated subject and client are derived only from the validated bearer token and authorization profile.
+- The selected profile has no `initialize`/`initialized` dependency and no `Mcp-Session-Id`. Optional `server/discover` supplies capability discovery. Every stateful Curve aggregate is addressed by an opaque explicit identifier and reauthorized on every request.
+- Request handling rejects missing or unsupported protocol metadata and any `Mcp-Method`/`Mcp-Name`/body disagreement at the protocol boundary. Capability proof must show that the named Orca client implements the exact request headers, discovery behavior, and v1.1 tool schemas. Curve does not silently downgrade or accept a wider schema; a separately tested prior-revision compatibility profile requires an ADR update.
 - HTTPS is mandatory outside local synthetic testing. The server validates `Origin` and allowed client identity, returns `403` for an invalid origin, prevents DNS rebinding, limits request/body/concurrency rates, and never accepts credentials in URL query parameters.
 - Tool schemas are application payloads inside the negotiated MCP/JSON-RPC envelope. Protocol errors are reserved for malformed MCP/JSON-RPC. Authenticated application validation, stale version, denied transition, and policy outcomes are typed tool execution errors with safe correlation IDs.
 - Server-to-client sampling, roots, elicitation, arbitrary URL fetch, executable resource upload, and MCP task extensions are not advertised. The client cannot add a capability by prompt text or initialization metadata.
@@ -57,7 +60,7 @@ The identity mechanism, ten-minute ceiling, client registration, issuer/audience
 
 ### Tool-schema and state contract
 
-The normative application payloads are `orca-tools-v1.schema.json` and `orca-tool-result-v1.schema.json`, both schema version `1.1`. Every tool uses a closed argument/result object. Reads return only the authorized projection named by the tool. Writes additionally require `idempotency_key`, `expected_version`, and `client_event_time`; the server uses its own receipt time for authorization, lease, and ordering decisions.
+The normative application payloads are `orca-tools-v1.schema.json` and `orca-tool-result-v1.schema.json`, both schema version `1.1`. A versioned MCP catalog binds thirteen deterministic first-class `tools/list` definitions and their closed input/output schemas to those internal envelopes. `tools/call.params.name`, `Mcp-Name`, and the selected schema must agree. Reads return only the projection authorized for that request's effective developer, workspace, and object. Writes additionally require `idempotency_key`, `expected_version`, and `client_event_time`; the server uses its own receipt time for authorization, lease, and ordering decisions.
 
 The idempotency scope is `(workspace_id, effective_subject, tool, idempotency_key)`. A byte-equivalent canonical command returns its original mutation receipt; a different command under the same key is rejected. `expected_version` is the target slice/manual-attempt aggregate version. Stale versions and duplicate client progress sequence numbers have no side effect. Idempotency retention follows D-009 and cannot expire while the related attempt or audit obligation remains live.
 
@@ -65,7 +68,7 @@ The idempotency scope is `(workspace_id, effective_subject, tool, idempotency_ke
 
 ### Trust-registry record
 
-Each enabled connection pins workspace, owner, environment, endpoint/origin, server certificate/identity, MCP revision, client allowlist, tool and result schema digests, read/write scopes, risk per tool, allowed classifications, rate/body/concurrency limits, token issuer/audience/revocation profile, creation/expiry/review dates, and kill switch. Missing, expired, stale, or digest-mismatched fields deny connection use.
+Each enabled trust profile pins workspace, owner, environment, endpoint/origin, server certificate/identity, MCP revision, client allowlist, tool-catalog and result-schema digests, read/write scopes, risk per tool, allowed classifications, rate/body/concurrency limits, token issuer/audience/revocation profile, creation/expiry/review dates, and kill switch. This record configures request validation and grants no session continuity. Missing, expired, stale, or digest-mismatched fields deny every request.
 
 ## Security, privacy, licensing, and operational impact
 
@@ -95,10 +98,10 @@ and license classification.
 
 ## Validation and review date
 
-The transport, tool schema, transition, and proposed identity profile are ready for proof review. This ADR remains `PROPOSED` pending:
+The stateless transport, tool schema, transition, and proposed identity profile are ready for proof review. This ADR remains `PROPOSED` pending:
 
 - named Security and Platform approval of the MCP revision, OAuth issuer/audience/scopes, client registration, token lifetime, and revocation method;
-- D-006 evidence that the named supported Orca client/version can negotiate the profile without extra tools;
-- conformance fixtures for every allowed read/write, unknown tool/field, forged actor, wrong audience/client/workspace, expired/revoked token, origin failure, injection attempt, idempotent replay/conflict, stale version, invalid transition, sequence replay, and VCS-reference rejection;
+- D-006 evidence that the named supported Orca client/version can send the exact stateless headers, use `server/discover` when needed, and expose no extra tools;
+- conformance fixtures for every allowed read/write, required header, header/body mismatch, absence of session continuity, discovery result, unknown tool/field, forged actor, wrong audience/client/workspace, expired/revoked token, origin failure, injection attempt, idempotent replay/conflict, stale version, invalid transition, sequence replay, and VCS-reference rejection;
 - rate/body/concurrency limit values plus audit/redaction evidence; and
 - decision/review dates and named connection/support owners.

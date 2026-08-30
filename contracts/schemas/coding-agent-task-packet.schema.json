@@ -1,0 +1,797 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/coding-agent-task-packet.schema.json",
+  "title": "Curve coding-agent task packet",
+  "description": "Closed readiness evidence for one repository-local coding change. A packet never grants implementation authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "packet_id", "work_package_id", "workspace_id", "packet_version", "packet_digest", "status", "size",
+    "user_facing", "source_catalog_binding", "curve_binding", "repository", "project_tracking", "people", "objective",
+    "scope", "requirements", "dependencies", "decisions", "contract_applicability",
+    "repository_instructions", "commands", "data_policy", "model_policy", "tool_policy",
+    "sandbox_policy", "budget", "external_effects", "rollback", "ux_evidence",
+    "decomposition", "blockers"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.coding-agent-task-packet/v1" },
+    "packet_id": { "$ref": "#/$defs/packetId" },
+    "work_package_id": { "$ref": "#/$defs/workPackageId" },
+    "workspace_id": { "$ref": "#/$defs/workspaceId" },
+    "packet_version": { "type": "integer", "minimum": 1 },
+    "packet_digest": { "$ref": "#/$defs/sha256Digest" },
+    "status": { "enum": ["BLOCKED", "READY"] },
+    "size": { "enum": ["S", "M", "L"] },
+    "user_facing": { "type": "boolean" },
+    "source_catalog_binding": { "$ref": "#/$defs/documentBinding" },
+    "curve_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository", "curve_revision", "context_pack", "governance_documents"],
+      "properties": {
+        "repository": { "const": "https://github.com/faocampo/curve" },
+        "curve_revision": {
+          "allOf": [{ "$ref": "#/$defs/gitSha" }],
+          "description": "Normative Curve source revision containing the approved requirements, governance, contracts, repository instructions, and context entry bytes. Later evidence, catalog, and registry publications use their own evidence-reference revisions."
+        },
+        "context_pack": { "$ref": "#/$defs/contextPackBinding" },
+        "governance_documents": {
+          "type": "array", "minItems": 1,
+          "items": { "$ref": "#/$defs/governanceDocument" }
+        }
+      }
+    },
+    "repository": {
+      "type": "object", "additionalProperties": false,
+      "required": ["url", "target_branch", "base_sha", "feature_branch", "stale_base_policy"],
+      "properties": {
+        "url": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?:https://|ssh://|git@)[^\\s]+$" },
+        "target_branch": { "$ref": "#/$defs/gitRef" },
+        "base_sha": { "$ref": "#/$defs/gitSha" },
+        "feature_branch": { "$ref": "#/$defs/gitRef" },
+        "stale_base_policy": { "enum": ["REQUIRE_EXACT_REMOTE_TIP", "ALLOW_ANCESTOR", "REQUIRED_UNRESOLVED"] }
+      }
+    },
+    "project_tracking": {
+      "type": "object", "additionalProperties": false,
+      "description": "Exactly one visual GitHub Project item. Its status grants no product or implementation authority.",
+      "required": ["project_url", "project_number", "item_node_id", "work_package_id", "tracking_kind", "status", "visual_metadata_only"],
+      "properties": {
+        "project_url": { "const": "https://github.com/users/faocampo/projects/2" },
+        "project_number": { "const": 2 },
+        "item_node_id": { "type": "string", "pattern": "^PVTI_[A-Za-z0-9_-]+$" },
+        "work_package_id": { "$ref": "#/$defs/workPackageId" },
+        "tracking_kind": { "enum": ["WORK_PACKAGE", "DEFINITION_EVIDENCE"] },
+        "status": { "enum": ["BACKLOG", "READY", "IN_PROGRESS", "IN_REVIEW", "BLOCKED", "DONE"] },
+        "visual_metadata_only": { "const": true }
+      }
+    },
+    "people": {
+      "type": "object", "additionalProperties": false,
+      "required": ["owner", "human_reviewer", "implementer"],
+      "properties": {
+        "owner": { "$ref": "#/$defs/humanIdentity" },
+        "human_reviewer": { "$ref": "#/$defs/humanIdentity" },
+        "implementer": {
+          "type": "object", "additionalProperties": false,
+          "required": ["actor_type", "identifier"],
+          "properties": {
+            "actor_type": { "const": "AI_CODING_AGENT" },
+            "identifier": { "$ref": "#/$defs/nonEmptyText" }
+          }
+        }
+      }
+    },
+    "objective": {
+      "type": "object", "additionalProperties": false,
+      "required": ["demonstrable_outcome", "risk_tier"],
+      "properties": {
+        "demonstrable_outcome": { "$ref": "#/$defs/nonEmptyText" },
+        "risk_tier": { "enum": ["LOW", "STANDARD", "HIGH"] }
+      }
+    },
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["in_scope", "out_of_scope"],
+      "properties": {
+        "in_scope": { "$ref": "#/$defs/nonEmptyTextList" },
+        "out_of_scope": { "$ref": "#/$defs/nonEmptyTextList" }
+      }
+    },
+    "requirements": {
+      "type": "object", "additionalProperties": false,
+      "required": ["functional_requirement_ids", "non_functional_requirement_ids", "acceptance_tests"],
+      "properties": {
+        "functional_requirement_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^FR-[0-9]{3}$" }
+        },
+        "non_functional_requirement_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^NFR-[0-9]{3}$" }
+        },
+        "acceptance_tests": {
+          "type": "array", "minItems": 1,
+          "items": { "$ref": "#/$defs/acceptanceTest" }
+        }
+      }
+    },
+    "dependencies": { "type": "array", "items": { "$ref": "#/$defs/dependency" } },
+    "decisions": { "type": "array", "items": { "$ref": "#/$defs/decision" } },
+    "contract_applicability": {
+      "type": "array", "minItems": 7, "maxItems": 7,
+      "items": { "$ref": "#/$defs/contractApplicability" }
+    },
+    "repository_instructions": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/evidenceReference" }
+    },
+    "commands": {
+      "type": "array", "minItems": 5,
+      "items": { "$ref": "#/$defs/command" }
+    },
+    "data_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["policy_id", "status", "classification", "allowed_data", "prohibited_data", "protected_data_allowed", "state_binding"],
+      "properties": {
+        "policy_id": { "const": "DATA-POLICY" },
+        "status": { "$ref": "#/$defs/approvalStatus" },
+        "classification": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+        "allowed_data": { "$ref": "#/$defs/nonEmptyTextList" },
+        "prohibited_data": { "$ref": "#/$defs/nonEmptyTextList" },
+        "protected_data_allowed": { "type": "boolean" },
+        "state_binding": { "$ref": "#/$defs/stateBinding" }
+      }
+    },
+    "model_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["policy_id", "status", "mode", "provider", "model", "model_version", "prompt_digest", "maximum_calls", "state_binding"],
+      "properties": {
+        "policy_id": { "const": "MODEL-POLICY" },
+        "status": { "$ref": "#/$defs/approvalStatus" },
+        "mode": { "enum": ["NONE", "PINNED"] },
+        "provider": { "type": ["string", "null"], "minLength": 1, "maxLength": 128 },
+        "model": { "type": ["string", "null"], "minLength": 1, "maxLength": 256 },
+        "model_version": { "type": ["string", "null"], "minLength": 1, "maxLength": 128 },
+        "prompt_digest": { "oneOf": [{ "$ref": "#/$defs/sha256Digest" }, { "type": "null" }] },
+        "maximum_calls": { "type": "integer", "minimum": 0 },
+        "state_binding": { "$ref": "#/$defs/stateBinding" }
+      },
+      "allOf": [{
+        "if": { "properties": { "mode": { "const": "NONE" } }, "required": ["mode"] },
+        "then": { "properties": {
+          "provider": { "type": "null" }, "model": { "type": "null" },
+          "model_version": { "type": "null" }, "prompt_digest": { "type": "null" },
+          "maximum_calls": { "const": 0 }
+        } },
+        "else": { "properties": {
+          "provider": { "type": "string", "minLength": 1 },
+          "model": { "type": "string", "minLength": 1 },
+          "model_version": { "type": "string", "minLength": 1 },
+          "prompt_digest": { "$ref": "#/$defs/sha256Digest" },
+          "maximum_calls": { "type": "integer", "minimum": 1 }
+        } }
+      }]
+    },
+    "tool_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["policy_id", "status", "mode", "tools", "state_binding"],
+      "properties": {
+        "policy_id": { "const": "TOOL-POLICY" },
+        "status": { "$ref": "#/$defs/approvalStatus" },
+        "mode": { "enum": ["NONE", "PINNED"] },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": [
+              "tool_id", "tool_kind", "name", "executable", "launcher_mode",
+              "canonical_executable_name", "executable_digest", "version",
+              "version_probe", "capabilities"
+            ],
+            "properties": {
+              "tool_id": { "$ref": "#/$defs/nestedId" },
+              "tool_kind": {
+                "enum": [
+                  "PNPM_PACKAGE_MANAGER", "NPM_PACKAGE_MANAGER", "YARN_PACKAGE_MANAGER",
+                  "CODEQL_ANALYZER", "GIT_READ_ONLY", "GH_READ_ONLY",
+                  "DOCKER_LOCAL", "NODE_RUNTIME", "PYTHON_RUNTIME"
+                ]
+              },
+              "name": { "$ref": "#/$defs/nonEmptyText" },
+              "executable": { "type": "string", "pattern": "^[A-Za-z0-9._+-]+$", "maxLength": 128 },
+              "launcher_mode": { "enum": ["REGULAR_FILE_ONLY", "SYMLINK_TO_CANONICAL"] },
+              "canonical_executable_name": { "type": "string", "pattern": "^[A-Za-z0-9._+-]+$", "maxLength": 128 },
+              "executable_digest": { "$ref": "#/$defs/sha256Digest" },
+              "version": { "$ref": "#/$defs/nonEmptyText" },
+              "version_probe": {
+                "type": "object", "additionalProperties": false,
+                "required": ["argv", "expected_output", "timeout_seconds"],
+                "properties": {
+                  "argv": {
+                    "type": "array", "minItems": 2, "maxItems": 8,
+                    "items": { "type": "string", "minLength": 1, "maxLength": 256 }
+                  },
+                  "expected_output": { "type": "string", "minLength": 1, "maxLength": 512 },
+                  "timeout_seconds": { "type": "integer", "minimum": 1, "maximum": 10 }
+                }
+              },
+              "capabilities": {
+                "type": "array", "minItems": 1, "uniqueItems": true,
+                "items": { "$ref": "#/$defs/nonEmptyText" }
+              }
+            }
+          }
+        },
+        "state_binding": { "$ref": "#/$defs/stateBinding" }
+      },
+      "allOf": [{
+        "if": { "properties": { "mode": { "const": "NONE" } }, "required": ["mode"] },
+        "then": { "properties": { "tools": { "maxItems": 0 } } },
+        "else": { "properties": { "tools": { "minItems": 1 } } }
+      }]
+    },
+    "sandbox_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "policy_id", "status", "runtime", "image_digest", "cpu_limit", "memory_mib_limit", "duration_seconds",
+        "max_attempts", "max_active_attempts", "credential_mode", "credential_references", "network_mode",
+        "network_policy_decision_id", "network_destinations", "read_only_paths", "writable_paths",
+        "cancellation", "cleanup", "state_binding"
+      ],
+      "properties": {
+        "policy_id": { "const": "SANDBOX-POLICY" },
+        "status": { "$ref": "#/$defs/approvalStatus" },
+        "runtime": { "enum": ["LOCAL_WORKTREE", "GVISOR_CONTAINER"] },
+        "image_digest": { "oneOf": [{ "$ref": "#/$defs/sha256Digest" }, { "type": "null" }] },
+        "cpu_limit": { "type": "number", "exclusiveMinimum": 0 },
+        "memory_mib_limit": { "type": "integer", "minimum": 1 },
+        "duration_seconds": { "type": "integer", "minimum": 1 },
+        "max_attempts": { "type": "integer", "minimum": 1 },
+        "max_active_attempts": { "const": 1 },
+        "credential_mode": { "enum": ["NONE", "JIT_REFERENCE_ONLY"] },
+        "credential_references": {
+          "type": "array", "uniqueItems": true,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["reference_id", "purpose", "expires_with_attempt"],
+            "properties": {
+              "reference_id": { "$ref": "#/$defs/nestedId" },
+              "purpose": { "$ref": "#/$defs/nonEmptyText" },
+              "expires_with_attempt": { "const": true }
+            }
+          }
+        },
+        "network_mode": { "enum": ["NONE", "ALLOWLIST"] },
+        "network_policy_decision_id": {
+          "oneOf": [{ "type": "string", "pattern": "^(?:D|ADR)-[0-9]{3}$" }, { "type": "null" }]
+        },
+        "network_destinations": {
+          "type": "array", "items": { "$ref": "#/$defs/networkDestination" }
+        },
+        "read_only_paths": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/repositoryPath" }
+        },
+        "writable_paths": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/repositoryPath" }
+        },
+        "cancellation": {
+          "type": "object", "additionalProperties": false,
+          "required": ["grace_seconds", "force_termination_seconds", "terminal_state"],
+          "properties": {
+            "grace_seconds": { "type": "integer", "minimum": 0 },
+            "force_termination_seconds": { "type": "integer", "minimum": 1 },
+            "terminal_state": { "const": "CANCELLED" }
+          }
+        },
+        "cleanup": {
+          "type": "object", "additionalProperties": false,
+          "required": ["on_success", "on_failure", "on_cancel", "verification"],
+          "properties": {
+            "on_success": { "$ref": "#/$defs/nonEmptyText" },
+            "on_failure": { "$ref": "#/$defs/nonEmptyText" },
+            "on_cancel": { "$ref": "#/$defs/nonEmptyText" },
+            "verification": { "$ref": "#/$defs/nonEmptyText" }
+          }
+        },
+        "state_binding": { "$ref": "#/$defs/stateBinding" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "runtime": { "const": "LOCAL_WORKTREE" } }, "required": ["runtime"] },
+          "then": { "properties": { "image_digest": { "type": "null" } } },
+          "else": { "properties": { "image_digest": { "$ref": "#/$defs/sha256Digest" } } }
+        },
+        {
+          "if": { "properties": { "credential_mode": { "const": "NONE" } }, "required": ["credential_mode"] },
+          "then": { "properties": { "credential_references": { "maxItems": 0 } } },
+          "else": { "properties": { "credential_references": { "minItems": 1 } } }
+        },
+        {
+          "if": { "properties": { "network_mode": { "const": "NONE" } }, "required": ["network_mode"] },
+          "then": { "properties": {
+            "network_policy_decision_id": { "type": "null" },
+            "network_destinations": { "maxItems": 0 }
+          } },
+          "else": { "properties": {
+            "network_policy_decision_id": { "type": "string", "pattern": "^(?:D|ADR)-[0-9]{3}$" },
+            "network_destinations": { "minItems": 1 }
+          } }
+        }
+      ]
+    },
+    "budget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["policy_id", "status", "currency", "maximum_external_spend", "maximum_compute_minutes", "on_exhaustion", "state_binding"],
+      "properties": {
+        "policy_id": { "const": "BUDGET-POLICY" },
+        "status": { "$ref": "#/$defs/approvalStatus" },
+        "currency": { "const": "USD" },
+        "maximum_external_spend": { "type": "number", "minimum": 0 },
+        "maximum_compute_minutes": { "type": "integer", "minimum": 1 },
+        "on_exhaustion": { "const": "PAUSE" },
+        "state_binding": { "$ref": "#/$defs/stateBinding" }
+      }
+    },
+    "external_effects": {
+      "type": "object", "additionalProperties": false,
+      "required": ["policy_id", "status", "mode", "effects", "controller_contracts", "state_binding"],
+      "properties": {
+        "policy_id": { "const": "EXTERNAL-EFFECTS-POLICY" },
+        "status": { "$ref": "#/$defs/approvalStatus" },
+        "mode": { "enum": ["NONE", "TRUSTED_CONTROLLER_ONLY"] },
+        "effects": { "type": "array", "items": { "$ref": "#/$defs/externalEffect" } },
+        "controller_contracts": { "type": "array", "items": { "$ref": "#/$defs/contractReference" } },
+        "state_binding": { "$ref": "#/$defs/stateBinding" }
+      },
+      "allOf": [{
+        "if": { "properties": { "mode": { "const": "NONE" } }, "required": ["mode"] },
+        "then": { "properties": { "effects": { "maxItems": 0 }, "controller_contracts": { "maxItems": 0 } } },
+        "else": { "properties": {
+          "effects": { "minItems": 1 },
+          "controller_contracts": {
+            "minItems": 1,
+            "items": { "allOf": [
+              { "$ref": "#/$defs/contractReference" },
+              { "properties": { "status": { "const": "APPROVED" } } }
+            ] }
+          }
+        } }
+      }]
+    },
+    "rollback": {
+      "type": "object", "additionalProperties": false,
+      "required": ["policy_id", "status", "before_merge", "after_merge_disablement", "persistent_data_strategy", "verification_command", "state_binding"],
+      "properties": {
+        "policy_id": { "const": "ROLLBACK-POLICY" },
+        "status": { "$ref": "#/$defs/approvalStatus" },
+        "before_merge": { "$ref": "#/$defs/nonEmptyText" },
+        "after_merge_disablement": { "$ref": "#/$defs/nonEmptyText" },
+        "persistent_data_strategy": { "$ref": "#/$defs/nonEmptyText" },
+        "verification_command": { "$ref": "#/$defs/nonEmptyText" },
+        "state_binding": { "$ref": "#/$defs/stateBinding" }
+      }
+    },
+    "ux_evidence": {
+      "oneOf": [{ "$ref": "#/$defs/stateBinding" }, { "type": "null" }]
+    },
+    "decomposition": { "oneOf": [{ "$ref": "#/$defs/decomposition" }, { "type": "null" }] },
+    "blockers": { "type": "array", "items": { "$ref": "#/$defs/blocker" } }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "READY" } }, "required": ["status"] },
+      "then": { "properties": {
+        "size": { "enum": ["S", "M"] },
+        "source_catalog_binding": { "$ref": "#/$defs/resolvedDocumentBinding" },
+        "curve_binding": { "properties": {
+          "context_pack": { "$ref": "#/$defs/resolvedContextPackBinding" },
+          "governance_documents": { "items": { "properties": {
+            "status": { "const": "APPROVED" },
+            "approval_binding": { "$ref": "#/$defs/resolvedStateBinding" }
+          } } }
+        } },
+        "repository": { "properties": { "stale_base_policy": { "enum": ["REQUIRE_EXACT_REMOTE_TIP", "ALLOW_ANCESTOR"] } } },
+        "project_tracking": { "properties": { "tracking_kind": { "const": "WORK_PACKAGE" } } },
+        "blockers": { "maxItems": 0 },
+        "dependencies": {
+          "items": { "properties": {
+            "satisfaction": { "const": "SATISFIED" },
+            "state_binding": { "$ref": "#/$defs/resolvedStateBinding" }
+          } }
+        },
+        "decisions": {
+          "items": { "properties": {
+            "status": { "const": "DECIDED" },
+            "state_binding": { "$ref": "#/$defs/resolvedStateBinding" }
+          } }
+        },
+        "contract_applicability": { "items": {
+          "properties": { "applicability": { "enum": ["APPLICABLE", "NOT_APPLICABLE"] } },
+          "if": { "properties": { "applicability": { "const": "APPLICABLE" } } },
+          "then": { "properties": { "contract": { "properties": {
+            "status": { "const": "APPROVED" },
+            "approval_binding": { "$ref": "#/$defs/resolvedStateBinding" }
+          } } } }
+        } },
+        "commands": {
+          "items": { "properties": { "availability": { "const": "AVAILABLE" } } }
+        },
+        "data_policy": { "properties": { "status": { "const": "APPROVED" }, "state_binding": { "$ref": "#/$defs/resolvedStateBinding" } } },
+        "model_policy": { "properties": { "status": { "const": "APPROVED" }, "state_binding": { "$ref": "#/$defs/resolvedStateBinding" } } },
+        "tool_policy": { "properties": { "status": { "const": "APPROVED" }, "state_binding": { "$ref": "#/$defs/resolvedStateBinding" } } },
+        "sandbox_policy": { "properties": { "status": { "const": "APPROVED" }, "state_binding": { "$ref": "#/$defs/resolvedStateBinding" } } },
+        "budget": { "properties": { "status": { "const": "APPROVED" }, "state_binding": { "$ref": "#/$defs/resolvedStateBinding" } } },
+        "external_effects": { "properties": { "status": { "const": "APPROVED" }, "state_binding": { "$ref": "#/$defs/resolvedStateBinding" } } },
+        "rollback": { "properties": { "status": { "const": "APPROVED" }, "state_binding": { "$ref": "#/$defs/resolvedStateBinding" } } },
+        "decomposition": { "type": "null" }
+      } },
+      "else": { "properties": { "blockers": { "minItems": 1 } } }
+    },
+    {
+      "if": { "properties": { "user_facing": { "const": true } }, "required": ["user_facing"] },
+      "then": { "properties": { "ux_evidence": { "$ref": "#/$defs/stateBinding" } } },
+      "else": { "properties": { "ux_evidence": { "type": "null" } } }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "READY" }, "user_facing": { "const": true } },
+        "required": ["status", "user_facing"]
+      },
+      "then": { "properties": { "ux_evidence": { "$ref": "#/$defs/resolvedStateBinding" } } }
+    },
+    {
+      "if": { "properties": { "size": { "const": "L" } }, "required": ["size"] },
+      "then": { "properties": {
+        "status": { "const": "BLOCKED" },
+        "decomposition": { "$ref": "#/$defs/decomposition" }
+      } },
+      "else": { "properties": { "decomposition": { "type": "null" } } }
+    }
+  ],
+  "$defs": {
+    "nonEmptyText": { "type": "string", "minLength": 1, "maxLength": 2048, "pattern": "\\S" },
+    "nonEmptyTextList": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "$ref": "#/$defs/nonEmptyText" }
+    },
+    "gitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "sha256Digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "gitRef": {
+      "type": "string", "minLength": 1, "maxLength": 255,
+      "pattern": "^(?!/|.*(?:\\.\\.|//|@\\{|\\\\|[~^:?*\\[]|\\.$|/$))[A-Za-z0-9._/-]+$"
+    },
+    "repositoryPath": {
+      "type": "string", "minLength": 1, "maxLength": 512,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\s]+$"
+    },
+    "packetId": { "type": "string", "pattern": "^CURVE-[A-Z0-9]+(?:-[A-Z0-9]+)*$" },
+    "workPackageId": { "type": "string", "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+$" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "nestedId": { "type": "string", "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$" },
+    "approvalStatus": { "enum": ["PROPOSED", "APPROVED"] },
+    "referenceRepository": { "enum": ["CURVE", "TARGET"] },
+    "evidenceReference": {
+      "type": "object", "additionalProperties": false,
+      "description": "Immutable blob reference. CURVE publication artifacts carry the exact commit that first publishes their bytes; normative source references remain pinned to curve_binding.curve_revision.",
+      "required": ["repository", "title", "path", "revision", "content_digest"],
+      "properties": {
+        "repository": { "$ref": "#/$defs/referenceRepository" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "path": { "$ref": "#/$defs/repositoryPath" },
+        "revision": { "$ref": "#/$defs/gitSha" },
+        "content_digest": { "$ref": "#/$defs/sha256Digest" }
+      }
+    },
+    "jsonPointerAssertion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pointer", "expected"],
+      "properties": {
+        "pointer": { "type": "string", "pattern": "^(?:|(?:/(?:[^~/]|~[01])*)+)$", "maxLength": 512 },
+        "expected": {}
+      }
+    },
+    "documentBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["resolution", "evidence", "record_pointer", "unresolved_blocker_id"],
+      "properties": {
+        "resolution": { "enum": ["RESOLVED", "REQUIRED_UNRESOLVED"] },
+        "evidence": { "oneOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] },
+        "record_pointer": { "type": ["string", "null"], "pattern": "^(?:|(?:/(?:[^~/]|~[01])*)+)$", "maxLength": 512 },
+        "unresolved_blocker_id": { "oneOf": [{ "type": "string", "pattern": "^B-[A-Z0-9]+(?:-[A-Z0-9]+)*$" }, { "type": "null" }] }
+      },
+      "allOf": [{
+        "if": { "properties": { "resolution": { "const": "RESOLVED" } }, "required": ["resolution"] },
+        "then": { "properties": {
+          "evidence": { "$ref": "#/$defs/evidenceReference" },
+          "record_pointer": { "type": "string" },
+          "unresolved_blocker_id": { "type": "null" }
+        } },
+        "else": { "properties": {
+          "evidence": { "type": "null" },
+          "record_pointer": { "type": "null" },
+          "unresolved_blocker_id": { "type": "string", "pattern": "^B-[A-Z0-9]+(?:-[A-Z0-9]+)*$" }
+        } }
+      }]
+    },
+    "resolvedDocumentBinding": {
+      "allOf": [
+        { "$ref": "#/$defs/documentBinding" },
+        { "properties": { "resolution": { "const": "RESOLVED" } } }
+      ]
+    },
+    "contextPackBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["resolution", "manifest", "context_digest", "unresolved_blocker_id"],
+      "properties": {
+        "resolution": { "enum": ["RESOLVED", "REQUIRED_UNRESOLVED"] },
+        "manifest": { "oneOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] },
+        "context_digest": { "oneOf": [{ "$ref": "#/$defs/sha256Digest" }, { "type": "null" }] },
+        "unresolved_blocker_id": { "oneOf": [{ "type": "string", "pattern": "^B-[A-Z0-9]+(?:-[A-Z0-9]+)*$" }, { "type": "null" }] }
+      },
+      "allOf": [{
+        "if": { "properties": { "resolution": { "const": "RESOLVED" } }, "required": ["resolution"] },
+        "then": { "properties": {
+          "manifest": { "$ref": "#/$defs/evidenceReference" },
+          "context_digest": { "$ref": "#/$defs/sha256Digest" },
+          "unresolved_blocker_id": { "type": "null" }
+        } },
+        "else": { "properties": {
+          "manifest": { "type": "null" },
+          "context_digest": { "type": "null" },
+          "unresolved_blocker_id": { "type": "string", "pattern": "^B-[A-Z0-9]+(?:-[A-Z0-9]+)*$" }
+        } }
+      }]
+    },
+    "resolvedContextPackBinding": {
+      "allOf": [
+        { "$ref": "#/$defs/contextPackBinding" },
+        { "properties": { "resolution": { "const": "RESOLVED" } } }
+      ]
+    },
+    "stateBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["resolution", "evidence", "record_pointer", "assertions", "approval_subject_digest", "unresolved_blocker_id"],
+      "properties": {
+        "resolution": { "enum": ["RESOLVED", "REQUIRED_UNRESOLVED"] },
+        "evidence": { "oneOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] },
+        "record_pointer": { "type": ["string", "null"], "pattern": "^(?:|(?:/(?:[^~/]|~[01])*)+)$", "maxLength": 512 },
+        "assertions": { "type": "array", "items": { "$ref": "#/$defs/jsonPointerAssertion" } },
+        "approval_subject_digest": { "oneOf": [{ "$ref": "#/$defs/sha256Digest" }, { "type": "null" }] },
+        "unresolved_blocker_id": { "oneOf": [{ "type": "string", "pattern": "^B-[A-Z0-9]+(?:-[A-Z0-9]+)*$" }, { "type": "null" }] }
+      },
+      "allOf": [{
+        "if": { "properties": { "resolution": { "const": "RESOLVED" } }, "required": ["resolution"] },
+        "then": { "properties": {
+          "evidence": { "$ref": "#/$defs/evidenceReference" },
+          "record_pointer": { "type": "string" },
+          "assertions": { "minItems": 3 },
+          "approval_subject_digest": { "$ref": "#/$defs/sha256Digest" },
+          "unresolved_blocker_id": { "type": "null" }
+        } },
+        "else": { "properties": {
+          "evidence": { "type": "null" },
+          "record_pointer": { "type": "null" },
+          "assertions": { "maxItems": 0 },
+          "approval_subject_digest": { "type": "null" },
+          "unresolved_blocker_id": { "type": "string", "pattern": "^B-[A-Z0-9]+(?:-[A-Z0-9]+)*$" }
+        } }
+      }]
+    },
+    "resolvedStateBinding": {
+      "allOf": [
+        { "$ref": "#/$defs/stateBinding" },
+        { "properties": { "resolution": { "const": "RESOLVED" } } }
+      ]
+    },
+    "governanceDocument": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "repository", "document_id", "role", "title", "path", "revision",
+        "content_digest", "version", "status", "approval_binding"
+      ],
+      "properties": {
+        "repository": { "const": "CURVE" },
+        "document_id": { "type": "string", "pattern": "^DOC-[A-Z0-9]+(?:-[A-Z0-9]+)*$" },
+        "role": { "enum": ["PRD", "ARCHITECTURE", "ADR", "TECHNICAL_PLAN", "SECURITY", "UX_SPEC", "IMPLEMENTATION_EVIDENCE", "OTHER"] },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "path": { "$ref": "#/$defs/repositoryPath" },
+        "revision": { "$ref": "#/$defs/gitSha" },
+        "content_digest": { "$ref": "#/$defs/sha256Digest" },
+        "version": { "$ref": "#/$defs/nonEmptyText" },
+        "status": { "$ref": "#/$defs/approvalStatus" },
+        "approval_binding": { "$ref": "#/$defs/stateBinding" }
+      }
+    },
+    "humanIdentity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["actor_type", "name", "handle"],
+      "properties": {
+        "actor_type": { "const": "HUMAN" },
+        "name": { "$ref": "#/$defs/nonEmptyText" },
+        "handle": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9_.@-]+$" }
+      }
+    },
+    "acceptanceTest": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "title", "requirement_ids", "given", "when", "then", "command_ids", "test_location", "test_selector", "trace_evidence"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^AC-[0-9]{2}(?:-[A-Z0-9]+(?:-[A-Z0-9]+)*)?$" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "requirement_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^(?:FR|NFR)-[0-9]{3}$" }
+        },
+        "given": { "$ref": "#/$defs/nonEmptyText" },
+        "when": { "$ref": "#/$defs/nonEmptyText" },
+        "then": { "$ref": "#/$defs/nonEmptyText" },
+        "command_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^CMD-[A-Z0-9]+(?:-[A-Z0-9]+)*$" }
+        },
+        "test_location": { "$ref": "#/$defs/repositoryPath" },
+        "test_selector": { "$ref": "#/$defs/nonEmptyText" },
+        "trace_evidence": { "$ref": "#/$defs/evidenceReference" }
+      }
+    },
+    "dependency": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "title", "satisfaction", "state_binding"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyText" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "satisfaction": { "enum": ["UNVERIFIED", "BLOCKED", "SATISFIED"] },
+        "state_binding": { "$ref": "#/$defs/stateBinding" }
+      }
+    },
+    "decision": {
+      "type": "object", "additionalProperties": false,
+      "required": ["decision_id", "title", "governs", "status", "state_binding"],
+      "properties": {
+        "decision_id": { "type": "string", "pattern": "^(?:D|ADR)-[0-9]{3}$" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "governs": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "enum": [
+            "GENERAL_ARCHITECTURE", "RETENTION_AND_PROTECTED_STORAGE",
+            "MODEL_GATEWAY", "MODEL_DATA_POLICY", "BUDGET",
+            "NETWORK_ALLOWLIST", "TRUSTED_VCS", "OTHER"
+          ] }
+        },
+        "status": { "enum": ["UNVERIFIED", "PROPOSED", "DECIDED"] },
+        "state_binding": { "$ref": "#/$defs/stateBinding" }
+      }
+    },
+    "contractReference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contract_id", "title", "path", "version", "revision", "content_digest", "status", "approval_binding"],
+      "properties": {
+        "contract_id": { "$ref": "#/$defs/nestedId" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "path": { "$ref": "#/$defs/repositoryPath" },
+        "version": { "$ref": "#/$defs/nonEmptyText" },
+        "revision": { "$ref": "#/$defs/gitSha" },
+        "content_digest": { "$ref": "#/$defs/sha256Digest" },
+        "status": { "enum": ["PROPOSED", "APPROVED"] },
+        "approval_binding": { "$ref": "#/$defs/stateBinding" }
+      }
+    },
+    "contractApplicability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["category", "applicability", "contract", "not_applicable_rationale", "unresolved_blocker_id", "unresolved_rationale"],
+      "properties": {
+        "category": { "enum": ["API", "SCHEMA", "EVENT", "WORKFLOW", "POLICY", "PERSISTENCE", "MIGRATION"] },
+        "applicability": { "enum": ["APPLICABLE", "NOT_APPLICABLE", "REQUIRED_UNRESOLVED"] },
+        "contract": { "oneOf": [{ "$ref": "#/$defs/contractReference" }, { "type": "null" }] },
+        "not_applicable_rationale": { "oneOf": [{ "$ref": "#/$defs/nonEmptyText" }, { "type": "null" }] },
+        "unresolved_blocker_id": { "oneOf": [{ "type": "string", "pattern": "^B-[A-Z0-9]+(?:-[A-Z0-9]+)*$" }, { "type": "null" }] },
+        "unresolved_rationale": { "oneOf": [{ "$ref": "#/$defs/nonEmptyText" }, { "type": "null" }] }
+      },
+      "allOf": [{
+        "if": { "properties": { "applicability": { "const": "APPLICABLE" } }, "required": ["applicability"] },
+        "then": { "properties": {
+          "contract": { "$ref": "#/$defs/contractReference" },
+          "not_applicable_rationale": { "type": "null" },
+          "unresolved_blocker_id": { "type": "null" },
+          "unresolved_rationale": { "type": "null" }
+        } },
+        "else": {
+          "if": { "properties": { "applicability": { "const": "NOT_APPLICABLE" } } },
+          "then": { "properties": {
+            "contract": { "type": "null" },
+            "not_applicable_rationale": { "$ref": "#/$defs/nonEmptyText" },
+            "unresolved_blocker_id": { "type": "null" },
+            "unresolved_rationale": { "type": "null" }
+          } },
+          "else": { "properties": {
+            "contract": { "type": "null" },
+            "not_applicable_rationale": { "type": "null" },
+            "unresolved_blocker_id": { "type": "string", "pattern": "^B-[A-Z0-9]+(?:-[A-Z0-9]+)*$" },
+            "unresolved_rationale": { "$ref": "#/$defs/nonEmptyText" }
+          } }
+        }
+      }]
+    },
+    "command": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "phase", "argv", "working_directory", "timeout_seconds", "availability", "tool_id", "network_destination_ids", "external_effect_ids"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^CMD-[A-Z0-9]+(?:-[A-Z0-9]+)*$" },
+        "phase": { "enum": ["INSTALL", "TYPECHECK", "LINT", "BUILD", "TEST", "MIGRATION", "SECURITY", "LOCAL_RUN", "OTHER"] },
+        "argv": {
+          "type": "array", "minItems": 1, "maxItems": 128,
+          "items": { "type": "string", "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]*$" }
+        },
+        "working_directory": { "$ref": "#/$defs/repositoryPath" },
+        "timeout_seconds": { "type": "integer", "minimum": 1 },
+        "availability": { "enum": ["AVAILABLE", "PLANNED"] },
+        "tool_id": { "$ref": "#/$defs/nestedId" },
+        "network_destination_ids": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nestedId" } },
+        "external_effect_ids": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nestedId" } }
+      }
+    },
+    "networkDestination": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["destination_id", "kind", "scheme", "host", "port", "path_prefix", "allowed_cidrs", "purpose"],
+          "properties": {
+            "destination_id": { "$ref": "#/$defs/nestedId" },
+            "kind": { "const": "HOST" },
+            "scheme": { "enum": ["HTTP", "HTTPS", "SSH", "TCP"] },
+            "host": { "type": "string", "minLength": 1, "maxLength": 253, "pattern": "^(?!.*\\.\\.)[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?$" },
+            "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+            "path_prefix": { "type": ["string", "null"], "maxLength": 512, "pattern": "^/" },
+            "allowed_cidrs": {
+              "type": "array", "minItems": 1, "uniqueItems": true,
+              "items": { "type": "string", "minLength": 3, "maxLength": 64, "pattern": "^[0-9A-Fa-f:.]+/[0-9]{1,3}$" }
+            },
+            "purpose": { "$ref": "#/$defs/nonEmptyText" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["destination_id", "kind", "protocol", "cidr", "port", "purpose"],
+          "properties": {
+            "destination_id": { "$ref": "#/$defs/nestedId" },
+            "kind": { "const": "CIDR" },
+            "protocol": { "enum": ["TCP", "UDP"] },
+            "cidr": { "type": "string", "minLength": 3, "maxLength": 64, "pattern": "^[0-9A-Fa-f:.]+/[0-9]{1,3}$" },
+            "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+            "purpose": { "$ref": "#/$defs/nonEmptyText" }
+          }
+        }
+      ]
+    },
+    "externalEffect": {
+      "type": "object", "additionalProperties": false,
+      "required": ["effect_id", "effect_type", "target", "rationale", "controller_contract_ids"],
+      "properties": {
+        "effect_id": { "$ref": "#/$defs/nestedId" },
+        "effect_type": { "enum": ["PUSH_BRANCH", "CREATE_DRAFT_PR", "LINK_VCS_REFERENCE", "OTHER"] },
+        "target": { "$ref": "#/$defs/nonEmptyText" },
+        "rationale": { "$ref": "#/$defs/nonEmptyText" },
+        "controller_contract_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/nestedId" } }
+      }
+    },
+    "decomposition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["independently_dispatchable_children", "child_packet_ids"],
+      "properties": {
+        "independently_dispatchable_children": { "const": true },
+        "child_packet_ids": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/packetId" } }
+      }
+    },
+    "blocker": {
+      "type": "object", "additionalProperties": false,
+      "required": ["blocker_id", "category", "summary", "required_evidence"],
+      "properties": {
+        "blocker_id": { "type": "string", "pattern": "^B-[A-Z0-9]+(?:-[A-Z0-9]+)*$" },
+        "category": { "enum": ["DECISION", "DEPENDENCY", "CONTRACT", "COMMAND", "UX", "DATA", "MODEL", "TOOL", "SANDBOX", "BUDGET", "EXTERNAL_EFFECT", "REPOSITORY", "OTHER"] },
+        "summary": { "$ref": "#/$defs/nonEmptyText" },
+        "required_evidence": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    }
+  }
+}

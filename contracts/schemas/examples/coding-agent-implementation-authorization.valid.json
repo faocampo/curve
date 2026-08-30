@@ -1,0 +1,147 @@
+{
+  "schema_version": "curve.coding-agent-implementation-authorization/v1",
+  "authorization_id": "CURVE-AUTH-M1-01B-ATTEMPT-1",
+  "authorization_version": 1,
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "replaces_authorization_version": null,
+  "lifecycle_state": "ACTIVE",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "attempt_id": "20000000-0000-4000-8000-000000000001",
+    "packet": {
+      "packet_id": "CURVE-M1-01B",
+      "packet_version": 1,
+      "packet_digest": "sha256:649ef025ce5d623359c5566893b7f6c9606b6bf8fc7bff8f41f919d67ff8b811"
+    },
+    "curve": {
+      "repository": "https://github.com/faocampo/curve",
+      "curve_revision": "a0d21bee7f98f2477d9cfe69708a8ac043c4fc69",
+      "context_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "repository": {
+      "url": "git@github.com:faocampo/plane.git",
+      "target_branch": "preview",
+      "feature_branch": "curve/m1-01b-initiative-shell",
+      "base_sha": "99a73b4eab5ee21fd012d7358bc9259252d47f71"
+    },
+    "people": {
+      "owner": {
+        "actor_type": "HUMAN",
+        "name": "Federico Ocampo",
+        "handle": "faocampo"
+      },
+      "human_reviewer": {
+        "actor_type": "HUMAN",
+        "name": "Federico Ocampo",
+        "handle": "faocampo"
+      },
+      "implementer": {
+        "actor_type": "AI_CODING_AGENT",
+        "identifier": "codex"
+      }
+    },
+    "scope": {
+      "in_scope": [
+        "Implement the exact repository-local Initiative shell slice described by the packet."
+      ],
+      "out_of_scope": [
+        "Provider, deployment, protected-data, merge, and infrastructure changes."
+      ]
+    },
+    "budget": {
+      "currency": "USD",
+      "maximum_external_spend": 0,
+      "maximum_compute_minutes": 120,
+      "on_exhaustion": "PAUSE"
+    },
+    "external_effects": {
+      "policy_id": "EXTERNAL-EFFECTS-POLICY",
+      "status": "APPROVED",
+      "mode": "NONE",
+      "effects": [],
+      "controller_contracts": [],
+      "state_binding": {
+        "resolution": "RESOLVED",
+        "evidence": {
+          "repository": "CURVE",
+          "title": "Approved external-effects policy state",
+          "path": "contracts/schemas/examples/coding-agent-state-evidence.valid.json",
+          "revision": "a0d21bee7f98f2477d9cfe69708a8ac043c4fc69",
+          "content_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "record_pointer": "",
+        "assertions": [
+          { "pointer": "/subject_type", "expected": "POLICY" },
+          { "pointer": "/subject_id", "expected": "EXTERNAL-EFFECTS-POLICY" },
+          { "pointer": "/state", "expected": "APPROVED" }
+        ],
+        "approval_subject_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "unresolved_blocker_id": null
+      }
+    },
+    "rollback": {
+      "policy_id": "ROLLBACK-POLICY",
+      "status": "APPROVED",
+      "before_merge": "Revert or delete the isolated feature branch.",
+      "after_merge_disablement": "Set CURVE_ENABLED=0 and omit the Curve Compose profile.",
+      "persistent_data_strategy": "Preserve authoritative records and use additive correction after merge.",
+      "verification_command": "git diff --check",
+      "state_binding": {
+        "resolution": "RESOLVED",
+        "evidence": {
+          "repository": "CURVE",
+          "title": "Approved rollback policy state",
+          "path": "contracts/schemas/examples/coding-agent-state-evidence.valid.json",
+          "revision": "a0d21bee7f98f2477d9cfe69708a8ac043c4fc69",
+          "content_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        "record_pointer": "",
+        "assertions": [
+          { "pointer": "/subject_type", "expected": "POLICY" },
+          { "pointer": "/subject_id", "expected": "ROLLBACK-POLICY" },
+          { "pointer": "/state", "expected": "APPROVED" }
+        ],
+        "approval_subject_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "unresolved_blocker_id": null
+      }
+    },
+    "permitted_agent_workflow_actions": [
+      "INSPECT_AUTHORIZED_CONTEXT",
+      "EDIT_AUTHORIZED_WORKTREE",
+      "RUN_APPROVED_COMMANDS",
+      "CREATE_CANDIDATE_TREE",
+      "REPORT_RESULTS"
+    ],
+    "valid_from": "2026-08-30T10:00:00Z",
+    "expires_at": "2026-08-30T12:00:00Z"
+  },
+  "approval_subject_digest": "sha256:2466a531563cf63b836f9416a7790993c783f23ea609ce82a05a1f00c4a815e4",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "authority_role": "IMPLEMENTATION_APPROVER",
+      "actor_id": "faocampo",
+      "actor_name": "Federico Ocampo",
+      "subject_digest": "sha256:2466a531563cf63b836f9416a7790993c783f23ea609ce82a05a1f00c4a815e4",
+      "attested_at": "2026-08-30T09:55:00Z",
+      "authority_receipt": {
+        "kind": "EXTERNAL_TRUSTED_HUMAN_AUTHORITY",
+        "reference": "authority-receipt:example/implementation-approval/1",
+        "content_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+        "revalidation_policy": "RECHECK_REVOCATION_EACH_DISPATCH"
+      },
+      "provenance": {
+        "kind": "CURVE_MERGED_GOVERNANCE",
+        "repository": "CURVE",
+        "revision": "a0d21bee7f98f2477d9cfe69708a8ac043c4fc69",
+        "path": "docs/technical/m1-m7-task-packets.md",
+        "content_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+      }
+    }
+  ],
+  "revoked_at": null,
+  "revocation_reason": null,
+  "revocation_subject": null,
+  "revocation_subject_digest": null,
+  "revocation_attestation": null
+}

@@ -18,6 +18,16 @@ import {
   validateInitiativePolicy,
   validateInitiativeRecord,
 } from "./lib/initiative-core.mjs";
+import {
+  discoverCodingAgentTaskPacketFiles,
+  validateCodingAgentTaskPacketSemantics,
+  validateCodingAgentTaskPacketSetSemantics,
+} from "./lib/coding-agent-task-packet.mjs";
+import {
+  discoverCodingAgentImplementationAuthorizationFiles,
+  validateCodingAgentImplementationAuthorizationSemantics,
+  validateCodingAgentImplementationAuthorizationSetSemantics,
+} from "./lib/coding-agent-implementation-authorization.mjs";
 
 const root = process.cwd();
 
@@ -88,6 +98,11 @@ const observabilityBindingSchema = join(root, "contracts/schemas/observability-b
 const observabilityBindingPath = join(root, "contracts/observability/obs-bind-001-local-v1.json");
 const testStrategyMatrixSchema = join(root, "contracts/schemas/test-strategy-matrix.schema.json");
 const testStrategyMatrixPath = join(root, "contracts/testing/ac-test-matrix-v1.json");
+const testStrategyMatrixV2Schema = join(
+  root,
+  "contracts/schemas/test-strategy-matrix-v2.schema.json",
+);
+const testStrategyMatrixV2Path = join(root, "contracts/testing/ac-test-matrix-v2.json");
 const temporalOrchestrationSchema = join(root, "contracts/schemas/temporal-orchestration.schema.json");
 const temporalOrchestrationPath = join(root, "contracts/temporal/m0-orchestration-v1.json");
 const providerConnectionSchema = join(root, "contracts/schemas/provider-connection.schema.json");
@@ -123,6 +138,28 @@ const productEventFixturePath = join(
 );
 const initiativePolicyPath = join(root, "contracts/policy/initiative-policy-v1.json");
 const initiativeFixturePath = join(root, "contracts/schemas/examples/initiative.valid.json");
+const codingAgentTaskPacketFixturePath = join(
+  root,
+  "contracts/schemas/examples/coding-agent-task-packet.valid.json",
+);
+const codingAgentTaskPacketSchema = join(
+  root,
+  "contracts/schemas/coding-agent-task-packet.schema.json",
+);
+const codingAgentImplementationAuthorizationFixturePath = join(
+  root,
+  "contracts/schemas/examples/coding-agent-implementation-authorization.valid.json",
+);
+const codingAgentImplementationAuthorizationSchema = join(
+  root,
+  "contracts/schemas/coding-agent-implementation-authorization.schema.json",
+);
+const materializedCodingAgentTaskPacketFiles =
+  discoverCodingAgentTaskPacketFiles(join(root, "contracts/task-packets"));
+const materializedCodingAgentImplementationAuthorizationFiles =
+  discoverCodingAgentImplementationAuthorizationFiles(
+    join(root, "contracts/task-packet-authorizations"),
+  );
 const fixtureSpecs = [
   ["contracts/mcp/examples/claim-slice.valid.json", invocationSchema, true],
   ["contracts/mcp/examples/link-vcs-reference.valid.json", invocationSchema, true],
@@ -135,6 +172,7 @@ const fixtureSpecs = [
   ["contracts/observability/m0-s5-telemetry-v1.json", telemetryManifestSchema, true],
   ["contracts/observability/obs-bind-001-local-v1.json", observabilityBindingSchema, true],
   ["contracts/testing/ac-test-matrix-v1.json", testStrategyMatrixSchema, true],
+  ["contracts/testing/ac-test-matrix-v2.json", testStrategyMatrixV2Schema, true],
   ["contracts/temporal/m0-orchestration-v1.json", temporalOrchestrationSchema, true],
   ["contracts/governance/d009-retention-policy-v1.json", retentionPolicyDecisionSchema, true],
   ["contracts/governance/d002-onyx-delegation-v1.json", onyxDelegationDecisionSchema, true],
@@ -192,6 +230,16 @@ for (const fixture of filesUnder(join(root, "contracts/schemas/examples"), ".jso
   if (!match) throw new Error(`Unexpected schema fixture name: ${fixtureName}`);
   fixtureSpecs.push([fixtureName, join(root, `contracts/schemas/${match[1]}.schema.json`), match[2] === "valid"]);
 }
+for (const fixture of materializedCodingAgentTaskPacketFiles) {
+  fixtureSpecs.push([relative(root, fixture), codingAgentTaskPacketSchema, true]);
+}
+for (const fixture of materializedCodingAgentImplementationAuthorizationFiles) {
+  fixtureSpecs.push([
+    relative(root, fixture),
+    codingAgentImplementationAuthorizationSchema,
+    true,
+  ]);
+}
 
 const testStrategyMatrix = JSON.parse(readFileSync(testStrategyMatrixPath, "utf8"));
 const prdText = readFileSync(join(root, testStrategyMatrix.source.document), "utf8");
@@ -201,6 +249,36 @@ validateTestStrategyMatrixSemantics({
   prdText,
   developmentPlanText,
 });
+const testStrategyMatrixV2 = JSON.parse(readFileSync(testStrategyMatrixV2Path, "utf8"));
+if (testStrategyMatrixV2.status !== "IN_REVIEW") {
+  throw new Error(
+    "contracts/testing/ac-test-matrix-v2.json must remain IN_REVIEW until exact-head human approval",
+  );
+}
+validateTestStrategyMatrixSemantics({
+  matrix: testStrategyMatrixV2,
+  prdText,
+  developmentPlanText,
+});
+
+const immutableTestStrategyV1Digests = new Map([
+  [
+    testStrategyMatrixSchema,
+    "64fb3ce685c0d05ea5c5821b36843a76552361f0ad482397aa5d3bdadc5e7d16",
+  ],
+  [
+    testStrategyMatrixPath,
+    "bad1a5a710ca16b3de399e1b0ff4b265d0c8ce64c203521f20e0d3f5ab2d3e3a",
+  ],
+]);
+for (const [path, expectedDigest] of immutableTestStrategyV1Digests) {
+  const actualDigest = createHash("sha256").update(readFileSync(path)).digest("hex");
+  if (actualDigest !== expectedDigest) {
+    throw new Error(
+      `${relative(root, path)} changed instead of publishing a reviewed successor`,
+    );
+  }
+}
 
 const retentionPolicyDecision = JSON.parse(readFileSync(retentionPolicyDecisionPath, "utf8"));
 validateRetentionPolicyDecisionSemantics(retentionPolicyDecision);
@@ -216,6 +294,20 @@ validateProductRecordSemantics(JSON.parse(readFileSync(productFixturePath, "utf8
 validateProductEventSemantics(JSON.parse(readFileSync(productEventFixturePath, "utf8")));
 validateInitiativePolicy(JSON.parse(readFileSync(initiativePolicyPath, "utf8")));
 validateInitiativeRecord(JSON.parse(readFileSync(initiativeFixturePath, "utf8")));
+const codingAgentTaskPacket = JSON.parse(
+  readFileSync(codingAgentTaskPacketFixturePath, "utf8"),
+);
+validateCodingAgentTaskPacketSemantics(codingAgentTaskPacket);
+validateCodingAgentTaskPacketSetSemantics([codingAgentTaskPacket]);
+const codingAgentImplementationAuthorization = JSON.parse(
+  readFileSync(codingAgentImplementationAuthorizationFixturePath, "utf8"),
+);
+validateCodingAgentImplementationAuthorizationSemantics(
+  codingAgentImplementationAuthorization,
+);
+validateCodingAgentImplementationAuthorizationSetSemantics([
+  codingAgentImplementationAuthorization,
+]);
 
 const corePolicyManifest = JSON.parse(readFileSync(corePolicyManifestPath, "utf8"));
 const corePolicyManifestV1Digest = createHash("sha256")
@@ -933,6 +1025,25 @@ for (const [fixtureName, schema, shouldBeValid] of fixtureSpecs) {
     throw new Error(`${relative(root, fixture)} was expected to be ${shouldBeValid ? "valid" : "invalid"}`);
   }
 }
+
+const materializedCodingAgentTaskPackets = materializedCodingAgentTaskPacketFiles.map(
+  (path) => JSON.parse(readFileSync(path, "utf8")),
+);
+for (const packet of materializedCodingAgentTaskPackets) {
+  validateCodingAgentTaskPacketSemantics(packet);
+}
+validateCodingAgentTaskPacketSetSemantics(materializedCodingAgentTaskPackets);
+
+const materializedCodingAgentImplementationAuthorizations =
+  materializedCodingAgentImplementationAuthorizationFiles.map((path) =>
+    JSON.parse(readFileSync(path, "utf8")),
+  );
+for (const authorization of materializedCodingAgentImplementationAuthorizations) {
+  validateCodingAgentImplementationAuthorizationSemantics(authorization);
+}
+validateCodingAgentImplementationAuthorizationSetSemantics(
+  materializedCodingAgentImplementationAuthorizations,
+);
 
 const p0_06AttemptFixturePath = join(
   root,

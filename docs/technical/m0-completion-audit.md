@@ -5,20 +5,22 @@
 | Field | Value |
 | --- | --- |
 | Status | `AUDITED / M0 INCOMPLETE / M0-S9A ACCEPTED_LOCAL / M0-S9B-S9C PREPARED_BLOCKED / NOT_IMPLEMENTATION_AUTHORITY` |
-| Version | 1.6 |
-| Date | 2026-08-29 |
+| Version | 1.8 |
+| Date | 2026-08-30 |
 | Product | Curve |
 | Owner and human reviewer | Federico Ocampo |
 | Audit scope | M0 (foundation and control plane), its P0 (foundation-readiness) decisions/proofs, Plane implementation evidence, and the next executable package |
-| Audited Curve contract baseline | `45590d356fa813a7407f624ee47d1c0ab3bc4cf2`, the squash merge of Curve PR #30 (P0-12 retention-policy decision package), including Curve PR #40 (M0-S9B/M0-S9C definition gates) |
-| Merged Plane `preview` baseline | `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, the squash merge of Plane PR #12 (M0-S9A local provider-registry implementation) |
+| Audited Curve contract baseline | `a0d21bee7f98f2477d9cfe69708a8ac043c4fc69`, the squash merge of Curve PR #47 (exact-preview local runtime refresh evidence), containing the historical M0 contract checkpoint `45590d356fa813a7407f624ee47d1c0ab3bc4cf2` |
+| Merged Plane `preview` baseline | `99a73b4eab5ee21fd012d7358bc9259252d47f71`, the squash merge of Plane PR #14 (M1-01A Initiative backend foundation), containing the accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63` |
 | Authority boundary | This audit records evidence and gaps. It authorizes no decision transition, code mutation, provider access, credential use, infrastructure change, deployment, or merge. |
 
 ## Audit outcome
 
 The local M0 (foundation and control plane) vertical skeleton is implemented and
-accepted through Plane `preview` commit
-`af7187d049c6ee6d0c82a5c70b686d4c444e9b63`. M0 (foundation and control plane)
+accepted through the M0-S9A Plane `preview` checkpoint
+`af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, and the same control path was
+reverified on the current accepted descendant
+`99a73b4eab5ee21fd012d7358bc9259252d47f71`. M0 (foundation and control plane)
 as a whole remains incomplete because:
 
 1. M0-04 (protected object storage and erasure) is blocked by D-009 (retention,
@@ -49,7 +51,9 @@ remaining rows below satisfy their own completion boundaries.
 | [Curve PR #37](https://github.com/faocampo/curve/pull/37) (M0-S9A post-correction lifecycle reconciliation) | Approved head `cf1ffb696b30f45e71a6edcaba062f67a3de7b8e` squash-merged as `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`; CI passed. | Canonical implementation contract and context source |
 | [Curve PR #39](https://github.com/faocampo/curve/pull/39) (M0-S9A implementation-evidence reconciliation) | Approved head `05e759f6749861f3332bb124d5dca703f304726a` squash-merged as `03b26cdb576962fad8e2047fedcfafa2636bfc23`; CI passed. | Canonical post-implementation evidence |
 | [Curve PR #40](https://github.com/faocampo/curve/pull/40) (M0-S9B/M0-S9C definition gates) | Approved head `8db2b1cbf29632c64b9498fb05925934d7ddd3ff` squash-merged as `02d383ada3941cdebc1939a1d7990f8ea7ff50d4`; CI passed. | Canonical definition packages and context source |
-| [Curve PR #30](https://github.com/faocampo/curve/pull/30) (P0-12 retention-policy decision package) | Rebased head `b538d06c4e3392a574fafbef7184b24497c7d48b` squash-merged as `45590d356fa813a7407f624ee47d1c0ab3bc4cf2`; CI passed. | Current Curve baseline; canonical fail-closed D-009 proposal and context source, without decision or implementation authority |
+| [Curve PR #30](https://github.com/faocampo/curve/pull/30) (P0-12 retention-policy decision package) | Rebased head `b538d06c4e3392a574fafbef7184b24497c7d48b` squash-merged as `45590d356fa813a7407f624ee47d1c0ab3bc4cf2`; CI passed. | Historical M0 contract checkpoint; canonical fail-closed D-009 proposal and context source, without decision or implementation authority |
+| [Curve PR #45](https://github.com/faocampo/curve/pull/45) (governance-baseline reconciliation and implemented physical ERD) | Squash-merged as `a1a34c142bc37bf331cc58056dba858851db9cbf`; CI passed. | Current governance, physical-schema, and accepted-preview reconciliation ancestor |
+| [Curve PR #47](https://github.com/faocampo/curve/pull/47) (exact-preview local runtime refresh evidence) | Squash-merged as `a0d21bee7f98f2477d9cfe69708a8ac043c4fc69`; commit-bound documentation and contract CI passed. | Current Curve audit baseline and exact-preview local runtime evidence |
 | [Plane PR #10](https://github.com/faocampo/plane/pull/10) (M0-S6A durable orchestration implementation) | Approved head `af8335c42fa3c57e66f76c6ebd80220640630cf8` squash-merged as `ad5772c0565c934e64ea90f892be1374819979be`. Both commits resolve to Git tree `dde7e50afa1710b729ab86f9ed99e4c462c763d0`. | Canonical merged Plane baseline |
 | [Plane API and Curve CI](https://github.com/faocampo/plane/actions/runs/32844162011) (M0-S6A API, Curve, replay, and migration validation) | Passed. | Accepted implementation evidence |
 | [Plane CodeQL](https://github.com/faocampo/plane/actions/runs/32844164027) (M0-S6A security analysis) | Passed. | Accepted security evidence |
@@ -58,6 +62,7 @@ remaining rows below satisfy their own completion boundaries.
 | [Plane API and Curve CI run 33208175433](https://github.com/faocampo/plane/actions/runs/33208175433) (M0-S9A contracts, tests, migration drift, and lint) | Passed at the approved head. | Accepted implementation evidence |
 | [Plane CodeQL run 33213223875](https://github.com/faocampo/plane/actions/runs/33213223875) (merge-bound Python and JavaScript security analysis) | Passed at the squash commit. | Accepted security evidence |
 | [Plane copyright run 33213231056](https://github.com/faocampo/plane/actions/runs/33213231056) (merge-bound source-header compliance) | Passed at the squash commit. | Accepted licensing-hygiene evidence |
+| [Plane PR #14](https://github.com/faocampo/plane/pull/14) (M1-01A Initiative backend foundation) | Squash-merged as `99a73b4eab5ee21fd012d7358bc9259252d47f71`, preserving the accepted M0-S9A checkpoint in its ancestry. | Current accepted Plane `preview` descendant used by the exact-preview local runtime refresh |
 
 ## Requirement-by-package audit
 
@@ -83,19 +88,26 @@ remaining rows below satisfy their own completion boundaries.
 
 ## Next executable sequence
 
-1. Complete D-009 (retention, backup, legal-hold, tombstone, and erasure
+1. Materialize and execute RUNTIME-M0-01 (graceful Curve worker shutdown
+   classification) as the next decision-free, local-only Plane packet. The
+   bounded defect and acceptance boundary are tracked by
+   [Curve issue #46](https://github.com/faocampo/curve/issues/46) (intentional
+   SIGTERM lifecycle classification and traceback correction). It may proceed
+   in parallel with the material-decision sequence below and does not expand
+   the accepted M0 runtime topology.
+2. Complete D-009 (retention, backup, legal-hold, tombstone, and erasure
    decision) using the published P0-12 (retention-policy decision package), then
    materialize the separately reviewable M0-04 (protected object storage and
    erasure) task packet.
-2. Materialize an M0-S9B (external provider transport and administration)
+3. Materialize an M0-S9B (external provider transport and administration)
    child only after its applicable
    identity, security, data, infrastructure, provider, owner, budget, and
    external-side-effect decisions are approved.
-3. Decide D-004 (Curve Model Gateway decision), D-005 (model/provider
+4. Decide D-004 (Curve Model Gateway decision), D-005 (model/provider
    data-policy decision), and D-014
    (budget-policy decision) before materializing an M0-S9C (Model Gateway
    routing and failover) child.
-4. Remediate the inherited High production dependency advisories recorded in
+5. Remediate the inherited High production dependency advisories recorded in
    [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md)
    (dependency audit disposition) before pilot release.
 
@@ -104,7 +116,8 @@ remaining rows below satisfy their own completion boundaries.
 The following narrower statements are currently evidence-backed:
 
 - “Curve has an accepted local M0 (foundation and control plane) vertical
-  skeleton through Plane `preview` `af7187d…`.”
+  skeleton through Plane M0-S9A checkpoint `af7187d…`, reverified on current
+  Plane `preview` descendant `99a73b4…`.”
 - “M0-06 (local Temporal skeleton) is implemented, accepted, and closed for its
   defined local scope.”
 - “M0-S9A (local provider-registry substrate) is implemented, accepted, and
