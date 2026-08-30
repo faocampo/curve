@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | D-001 (Plane upstream, licensing, fork, and upgrade decision) decided; accepted Plane foundation merged and pinned |
-| Version | 1.3 |
+| Version | 1.4 |
 | Review date | 2026-08-29 |
 | Plane fork | `git@github.com:faocampo/plane.git` |
 | Inspected branch and commit | `preview` at `99a73b4eab5ee21fd012d7358bc9259252d47f71` |
@@ -13,6 +13,7 @@
 | Candidate integration branch | `curve/plane-upstream-sync-2026-08-12` |
 | License | GNU AGPL-3.0 in `LICENSE.txt` |
 | Decision | D-001 (Plane upstream, licensing, fork, and upgrade decision) |
+| Current local runtime evidence | [Exact-preview local runtime refresh](local-runtime-refresh-evidence.md) (durable source checkout, Curve migrations `0001`-`0007`, health, dual-mode behavior, replay, restart recovery, and remaining gates) |
 
 ## Conclusion
 
@@ -154,6 +155,25 @@ An unrelated `x3m-hr-local-frappe-1` container already owned host ports `8000` a
 | Safe task delivery | PASS within disabled-result-backend limits | Task `plane.bgtasks.storage_metadata_task.get_asset_object_metadata` with task ID `ffb878bb-446f-4b3c-a79a-92b9fd1f8a9c` and random nonexistent asset ID was received. It was subsequently neither active nor reserved and no error/traceback was logged. Its code returns on `FileAsset.DoesNotExist`; Celery results are disabled, so no terminal result record exists. |
 
 The local stack remains running for developer use. No `down -v`, volume deletion, push, merge, or external deployment was performed.
+
+## Current exact-preview local runtime refresh
+
+The earlier candidate smoke evidence above remains historical D-001 (Plane
+upstream, licensing, fork, and upgrade decision) evidence. On 2026-08-29 the
+local Curve application containers were refreshed from accepted Plane
+`preview` `99a73b4eab5ee21fd012d7358bc9259252d47f71` using a durable detached
+worktree. Curve migrations `0005` through `0007` were applied additively to the
+retained local database; API health, worker health, disabled/enabled behavior,
+Temporal replay, cancellation, Continue-As-New, and worker-restart recovery all
+passed.
+
+The complete evidence, source/image bindings, proof identifiers, safe operating
+command, bounded defect, and remaining gates are recorded in the
+[exact-preview local runtime refresh evidence](local-runtime-refresh-evidence.md)
+(durable worktree, current migrations, health, Temporal durability, and
+rollback). Curve issue #46 (RUNTIME-M0-01 graceful Curve worker shutdown
+classification) tracks the non-blocking intentional-SIGTERM traceback before
+any Plane code change.
 
 ## D-001 closure checklist
 
