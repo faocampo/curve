@@ -1,0 +1,37 @@
+{
+  "schema_version": "curve.coding-agent-implementation-authorization/v1",
+  "authorization_id": "CURVE-AUTH-M1-01B-ATTEMPT-1",
+  "authorization_version": 0,
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "replaces_authorization_version": null,
+  "lifecycle_state": "ACTIVE",
+  "approval_subject": {},
+  "approval_subject_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "attestations": [
+    {
+      "actor_type": "AI_CODING_AGENT",
+      "authority_role": "IMPLEMENTATION_APPROVER",
+      "actor_id": "codex",
+      "actor_name": "Codex",
+      "subject_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "attested_at": "2026-08-30T09:55:00Z",
+      "authority_receipt": {
+        "kind": "EXTERNAL_TRUSTED_HUMAN_AUTHORITY",
+        "reference": "authority-receipt:invalid/self-approval",
+        "content_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "provenance": {
+        "kind": "LOCAL_TEXT",
+        "repository": "CURVE",
+        "revision": "a0d21bee7f98f2477d9cfe69708a8ac043c4fc69",
+        "path": "README.md",
+        "content_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    }
+  ],
+  "revoked_at": "2026-08-30T10:30:00Z",
+  "revocation_reason": "Local agent attempted to self-authorize.",
+  "revocation_subject": null,
+  "revocation_subject_digest": null,
+  "revocation_attestation": null
+}

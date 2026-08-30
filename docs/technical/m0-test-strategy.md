@@ -7,14 +7,15 @@
 | Product | Curve |
 | Work package | P0-05 (test-harness strategy and R1 acceptance traceability) |
 | Status | `ACCEPTED / DONE` |
-| Version | 1.3 |
+| Version | 1.4 |
 | Owner | Federico Ocampo, CTO at X3M |
 | Human reviewer | Federico Ocampo |
-| Last updated | 2026-08-29 |
+| Last updated | 2026-08-30 |
 | Product source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current product requirements, lifecycle, decisions, and AC-01 through AC-60) |
 | Delivery source | [Development plan](development-plan.md) (milestones, packages, dependencies, and completion evidence) |
 | Machine contract | [AC test matrix v1](../../contracts/testing/ac-test-matrix-v1.json) (suite, environment, command, gate, and evidence ownership for all 60 criteria) |
 | Validation schema | [Test-strategy matrix schema](../../contracts/schemas/test-strategy-matrix.schema.json) (closed JSON Schema for the P0-05 matrix) |
+| Candidate successor | [AC test matrix v2](../../contracts/testing/ac-test-matrix-v2.json) (split provider-conformance commands and current decision-gating semantics) with [v2 validation schema](../../contracts/schemas/test-strategy-matrix-v2.schema.json) (closed successor machine contract); `IN_REVIEW` and non-authoritative |
 
 ## Purpose and completion boundary
 
@@ -52,6 +53,16 @@ The accepted matrix contains AC-01 through AC-60 exactly once, binds the PRD
 criterion digest `sha256:0115c788d369b6063282a4549ff8fc7b011727be13f6f882b004fd9920b33a20`,
 and keeps future coverage separate from existing executable evidence. This
 acceptance closes P0-05; individual packages still own their exact test results.
+
+The accepted v1 files remain byte-for-byte identical to the exact reviewed
+revision, including the embedded `IN_REVIEW` lifecycle value that existed
+before the external exact-head approval and merge. Acceptance evidence lives in
+the record above; it is not back-written into immutable contract bytes.
+
+The v2 successor separates provider conformance by trust boundary and aligns
+decision gating with the current plan. It remains `IN_REVIEW`, is validated
+only as a candidate, and grants no package-readiness or implementation
+authority. Accepting v2 requires Federico Ocampo's approval of its exact PR head.
 
 ## Test principles
 
@@ -138,9 +149,11 @@ bounded targets, abort conditions, and cleanup evidence.
 
 ## Command catalog and readiness
 
-The [AC test matrix v1](../../contracts/testing/ac-test-matrix-v1.json)
+The accepted [AC test matrix v1](../../contracts/testing/ac-test-matrix-v1.json)
 (suite, environment, command, gate, and evidence ownership for all 60 criteria)
-is authoritative for command IDs. Available commands are:
+remains authoritative for command IDs. The [AC test matrix v2](../../contracts/testing/ac-test-matrix-v2.json)
+(candidate split provider-conformance commands and current decision-gating
+semantics) is informative while `IN_REVIEW`. Available v1 commands are:
 
 | Command ID | Repository root | Exact command |
 | --- | --- | --- |
@@ -280,6 +293,9 @@ not gate read-only retrieval or source-ACL conformance.
 - V1 remains immutable after approval. A change to suite semantics, environment
   authority, command meaning, AC ownership, or evidence requirements creates a
   reviewed successor matrix/schema version.
+- A successor marked `IN_REVIEW` is validated for internal consistency but
+  cannot replace the accepted matrix or authorize package readiness,
+  implementation, or evidence promotion.
 - A PRD acceptance-criterion change updates the PRD version, creates a successor
   test matrix, reconciles requirement-to-package traceability, and records the
   migration impact.

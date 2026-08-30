@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
@@ -7,11 +8,18 @@ import {
   validateTestStrategyMatrixSemantics,
 } from "../lib/test-strategy.mjs";
 
+const MATRIX_V1_BYTES = readFileSync(
+  new URL("../../contracts/testing/ac-test-matrix-v1.json", import.meta.url),
+);
+const MATRIX_V1 = JSON.parse(MATRIX_V1_BYTES);
 const MATRIX = JSON.parse(
   readFileSync(
-    new URL("../../contracts/testing/ac-test-matrix-v1.json", import.meta.url),
+    new URL("../../contracts/testing/ac-test-matrix-v2.json", import.meta.url),
     "utf8",
   ),
+);
+const SCHEMA_V1_BYTES = readFileSync(
+  new URL("../../contracts/schemas/test-strategy-matrix.schema.json", import.meta.url),
 );
 const PRD_TEXT = readFileSync(
   new URL("../../docs/curve-ai-native-sdlc-prd.md", import.meta.url),
@@ -42,10 +50,32 @@ function criterion(matrix, acId) {
   return matrix.acceptance_criteria.find((entry) => entry.ac_id === acId);
 }
 
-test("canonical test strategy binds all 60 PRD criteria by exact source digest", () => {
-  const result = validate();
-  assert.equal(result.acceptanceCriteriaCount, 60);
-  assert.equal(result.acceptanceCriteriaDigest, MATRIX.source.acceptance_criteria_digest);
+test("both test-strategy versions bind all 60 PRD criteria by exact source digest", () => {
+  for (const matrix of [MATRIX_V1, MATRIX]) {
+    const result = validate(matrix);
+    assert.equal(result.acceptanceCriteriaCount, 60);
+    assert.equal(result.acceptanceCriteriaDigest, matrix.source.acceptance_criteria_digest);
+  }
+});
+
+test("accepted v1 bytes remain immutable", () => {
+  assert.equal(MATRIX_V1.status, "IN_REVIEW");
+  assert.equal(MATRIX_V1.source.prd_version, "0.12");
+  assert.equal(
+    createHash("sha256").update(MATRIX_V1_BYTES).digest("hex"),
+    "bad1a5a710ca16b3de399e1b0ff4b265d0c8ce64c203521f20e0d3f5ab2d3e3a",
+  );
+  assert.equal(
+    createHash("sha256").update(SCHEMA_V1_BYTES).digest("hex"),
+    "64fb3ce685c0d05ea5c5821b36843a76552361f0ad482397aa5d3bdadc5e7d16",
+  );
+});
+
+test("v2 successor uses the current PRD and remains unapproved", () => {
+  assert.equal(MATRIX.schema_version, "curve.test-strategy-matrix/v2");
+  assert.equal(MATRIX.matrix_version, 2);
+  assert.equal(MATRIX.status, "IN_REVIEW");
+  assert.equal(MATRIX.source.prd_version, "0.13");
 });
 
 test("parenthetical package titles preserve canonical development-plan identifiers", () => {
@@ -66,6 +96,8 @@ test("P0-05 governance records the same accepted lifecycle and exact merge evide
   assert.match(STRATEGY_TEXT, /32619264292/);
   assert.match(READINESS_TEXT, /\| P0-05 test strategy \| DONE \|/);
   assert.doesNotMatch(STRATEGY_TEXT, /\| Status \| `IN_REVIEW` \|/);
+  assert.match(STRATEGY_TEXT, /v2 successor[\s\S]*remains `IN_REVIEW`/);
+  assert.match(STRATEGY_TEXT, /grants no package-readiness or implementation\s+authority/);
 });
 
 test("PRD criterion wording drift invalidates the source digest", () => {

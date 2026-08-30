@@ -5,8 +5,8 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 1.15 |
-| Last updated | 2026-08-29 |
+| Version | 1.18 |
+| Last updated | 2026-08-30 |
 | Source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, approved Product core, Curve-first shell invariant, lifecycle, security invariants, acceptance criteria, and accepted D-003 (runtime topology and trust-zone decision) local implementation) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
@@ -71,7 +71,12 @@ M1 and M2 may proceed in parallel after the relevant M0 contracts stabilize. M6 
 
 A work package is `READY` only when it has:
 
-- Approved PRD and technical-document versions.
+- An approved machine-readable source-catalog record whose work-package ID,
+  repository, size, user-facing classification, risk tier, requirements,
+  dependencies, decisions, contract applicability, commands, and Project
+  binding agree with the materialized packet.
+- Approved PRD and technical-document versions at one exact merged Curve
+  revision.
 - Resolved blocking decision/ADR IDs.
 - One repository, target branch, and pinned base SHA.
 - A named owner and human reviewer.
@@ -79,13 +84,39 @@ A work package is `READY` only when it has:
 - Linked FR/NFR/AC IDs and Given/When/Then tests.
 - Approved data/API/event/provider contracts and migration strategy.
 - Dependency edges with explicit satisfaction states.
-- Repository instructions and required build/lint/type/test/security commands.
+- Repository instructions and exact `LINT`, `BUILD`, `TEST`, `SECURITY`, and
+  `LOCAL_RUN` commands, plus applicable `INSTALL`, `TYPECHECK`, and `MIGRATION`
+  commands.
 - Model/tool/sandbox budgets and data classification.
 - Rollback or disablement behavior.
 - A unique item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) whose stable ID matches the package and whose status is maintained as visual progress metadata.
 - For a user-facing flow, an approved [Curve Experience Blueprint](curve-experience-blueprint.md) record linked from the work package. The record includes the target role/job, primary task flow, normal/loading/empty/error/permission-limited states, primary actions, accessibility behavior, and prototype-review outcome.
+- A canonical packet digest and a versioned Context Manifest whose complete
+  entry set reproduces the recorded context-pack digest.
+- Successful structural validation and read-only dispatch preflight proving
+  catalog/state/context consistency, exact referenced bytes, authoritative Git
+  ancestry and repository identity, clean base state, and live Project-item
+  mapping.
 
 If any item is absent, the coding agent stops before mutation and reports the missing prerequisite.
+
+`READY` records readiness evidence only. Implementation begins only after a
+separate record governed by the
+[coding-agent implementation-authorization schema](../../contracts/schemas/coding-agent-implementation-authorization.schema.json)
+(human-attested, time-bounded, exact-packet execution grant) binds the workspace,
+attempt, packet ID/version/digest, Curve revision, context-pack digest,
+repository, target/feature branches, base SHA, owner, reviewer, implementer,
+scope/non-scope, budget, permitted workflow actions, external effects, rollback,
+and validity window. Changing any bound value invalidates that authorization.
+`B-CODING-AUTHORITY-01` (trusted human-state verification and durable attempt
+lease) remains a fail-closed security prerequisite for using that record: the
+controller must independently verify the human's identity, current authority,
+exact approval or revocation receipt, and all subject-specific required roles,
+then atomically acquire one current non-terminal attempt lease. Structural
+strings, merged generic documentation, a caller-supplied attempt UUID, or a
+replayed authorization cannot satisfy this prerequisite. Selecting the concrete
+identity/signature or approval-receipt provider and durable lease store requires
+an explicit security and architecture decision; a coding agent cannot select it.
 
 Preparing a task packet and maintaining its GitHub Project status require no
 separate project-management approval. A packet blocks implementation only for a
@@ -211,11 +242,11 @@ can gate packet materialization.
 | -- | ---- | ----------- | ------------ | --------- | ------------------- |
 | M1-00A (minimal Product core) | S | Minimal Product aggregate and APIs for the approved immutable key, mutable metadata, prospective IANA timezone, one human owner, ACTIVE/ARCHIVED lifecycle, archive guard, concurrency, and audit/outbox events; roadmap behavior remains in M2 (Product roadmap and schedule) | M0-02 (core aggregate persistence), M0-03 (core authorization and policy kernel), M0-07 (Operation API, SSE, and UI) | FR-025 (Product aggregate), AC-35 (Product authorization), AC-52 (Product lifecycle); P-01 through P-18 (Product-core acceptance scenarios) in the M1-00A (minimal Product core) task packet | `MERGED_LOCAL_IMPLEMENTATION / CONFORMANCE_VARIANCE_OPEN`: Plane PR #13 (M1-00A Product implementation) merged locally verified head `d4ab9ea...` as `afdb593...`; workspace isolation, authority, uniqueness, timezone history, lifecycle guard, concurrency, migration, atomic audit/outbox, API, 355-backend-test, `pnpm check`, `pnpm build`, and commit-bound CI evidence passed. R-027 (Product timestamp/schema-version contract reconciliation) remains open before production qualification or successor Product persistence. |
 | M1-01 (Initiative capability) | M | Parent work package split into M1-01A (STANDALONE Initiative domain/API with active Product, case-insensitive keyword, risk, creator, three assignments, DRAFT/ALIGNING/PAUSED/CANCELLED lifecycle, and manual-first workflow pin) and M1-01B (Curve-first Initiative shell) | M1-00A (minimal Product core), M0-02 (core aggregate persistence), M0-03 (core authorization and policy kernel), M0-06 (Temporal workflow skeleton), M0-07 (Operation API, SSE, and UI); M1-01B (Curve-first Initiative shell) also requires M1-01A (Initiative domain and API foundation) and an approved screen contract | FR-001 (Initiative creation), FR-042 through FR-043 (Product ownership and workflow pinning), AC-01 through AC-02 (Initiative creation and refinement), AC-20 (human approval separation); I-01 through I-16 (Initiative-core acceptance scenarios) in the M1-01A (Initiative domain and API foundation) task packet | `IN_PROGRESS`: M1-01A (Initiative domain and API foundation) is `DONE_LOCAL`; Plane PR #14 (M1-01A Initiative backend implementation) merged reviewed head `7e712e0...` as `99a73b4...`, with 364 passing Curve backend tests, migration proof, monorepo checks/build, and green commit-bound CI recorded in [M1-01A implementation evidence](m1-01a-initiative-core-implementation-evidence.md) (exact context, implementation, tests, merge tree, data boundary, and rollback). M1-01B (Curve-first Initiative shell) remains open for browser, accessibility, safe-error, responsive-layout, and manual UX acceptance. |
-| M1-02 | M | Idea Brief schema and conversation-plus-artifact UI with attributed manual updates plus separately activated model refinement | M1-01; D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) before model execution | FR-002, G-01, AC-03 | Browser/accessibility, manual diff, and model-regeneration provenance tests as applicable. |
+| M1-02 | M | Idea Brief schema and conversation-plus-artifact UI with attributed manual updates plus separately activated model refinement | M1-01 (Initiative capability); `B-ARTIFACT-BODY-01` (manual artifact-body persistence contract) before body persistence; M0-S9C (Model Gateway routing/failover), D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) only before model execution | FR-002 (Idea Brief), G-01 (north-star workflow), AC-03 (attributed alignment) | Manual browser/accessibility, attribution, and diff tests; model provenance/evaluation tests only for the separately activated generation child. |
 | M1-03 | M | KnowledgeProvider contract/fake plus separately activated Onyx per-operation delegation with access recheck, revocation, source metadata, and policy-safe retrieval | M0-09; D-002 (Onyx delegated-identity decision) before live retrieval; D-009 (retention and erasure decision)/M0-04 before protected body persistence; D-005 (model/provider data-policy decision) before model destination | FR-003-FR-004, FR-043, AC-04, AC-09, AC-53-AC-54, AC-60 | Provider conformance, two-user ACL, revoked-token, inaccessible-approver, prompt-injection, and credential-leakage fixtures. |
-| M1-04 | M | Evidence Snapshot/Item, AccessEnvelope propagation, citation validation, DLP/redaction, freshness, and artifact evidence view | M0-04, M1-03 | FR-004, FR-021, NFR-010-NFR-012, AC-09, AC-34, AC-53 | Claim-to-evidence trace and destination-leakage tests. |
-| M1-05 | S | Optional research lifecycle with bounded questions, manual skip/partial history, and separately activated provider/model execution | M1-03-M1-04; D-002 (Onyx delegated-identity decision) for live Onyx; D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) for provider/model research | FR-005, AC-05 | Budget, skip, provider-failure, citation, and fact/inference separation tests. |
-| M1-06 | L | Artifact and PRD versioning, manual editing, structural diff, submission, completeness, supersession, approval UI, and separately activated generation | M0-02, M1-02, M1-04; D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) before generation | FR-007, FR-021, AC-08-AC-09 | Immutable-version, source-access, diff, provenance, and concurrent-edit suites. Decompose into schema/API/UI/generation slices. |
+| M1-04 | M | Manually attributable Evidence metadata/snapshots plus separately activated KnowledgeProvider ingestion and protected bodies | M0-02 (core persistence), M0-03 (core policy), M0-07 (API/SSE), M1-01 (Initiative) for manual metadata; M1-03 (KnowledgeProvider/Onyx) only for provider-derived evidence; M0-04 (protected storage) and D-009 (retention/erasure) before protected bodies | FR-004 (evidence), FR-021 (artifact/evidence lineage), NFR-010-NFR-012 (data protection/audit), AC-09 (Gate 1 evidence access), AC-34 (lineage), AC-53 (destination safety) | Manual metadata and snapshot tests remain model/provider independent; provider ACL, protected-body, DLP, retention, and destination-leakage tests run only for activated children. |
+| M1-05 | S | Optional research lifecycle with bounded questions, manual skip/partial history, and separately activated provider/model execution | M1-01 (Initiative), M1-02 (Idea Brief), metadata-only M1-04 (Evidence) for manual skip/state; `B-ARTIFACT-BODY-01` (manual artifact-body persistence contract) before dossier-body persistence; M0-S9B (external provider transport), M0-S9C (Model Gateway), D-002 (Onyx delegation), D-004 (model gateway), D-005 (model/data policy), D-009 (retention), and D-014 (budget policy) only for their consuming provider/model/protected children | FR-005 (optional research), AC-05 (skip and partial disposition) | Manual skip/state evidence is independent; budget, provider-failure, citation, provenance, and fact/inference tests apply to activated provider/model children. |
+| M1-06 | L | Artifact and PRD versioning, manual editing, structural diff, submission, completeness, supersession, approval UI, and separately activated generation | M0-02 (core persistence), M1-02 (Idea Brief), M1-04 (Evidence); `B-ARTIFACT-BODY-01` (manual artifact-body persistence contract) before manual body persistence; M0-S9C (Model Gateway), D-004 (model gateway), D-005 (model/data policy), and D-014 (budget policy) only before generation | FR-007 (PRD lifecycle), FR-021 (lineage), AC-08-AC-09 (exact PRD version and evidence access) | Immutable-version, source-access, diff, and concurrent-edit suites for the manual lane; provenance/model evaluation only for generation. Decompose into schema/API/UI/generation slices. |
 | M1-07 | M | Gate 1 assignment/decision workflow, notifications, changes requested/rejection, risk confirmation, and evidence-access enforcement | M1-06, M0-06 | FR-007, FR-015, AC-08-AC-09 | Exact-version approval and unauthorized/agent decision rejection. |
 
 M1 exit is R0A: an X3M user completes an evidence-backed PRD with their own delegated access, and every material approver can access the evidence used.
@@ -229,7 +260,7 @@ M1 exit is R0A: an X3M user completes an evidence-backed PRD with their own dele
 | M2-03 | M | Plane WorkItemBinding and Execution Completion projection with estimate/count formulas and no feedback loop | M0-09, M2-01 | FR-028, FR-037, AC-38, AC-42 | Formula fixtures for nested, blocked, cancelled, and unestimated work. |
 | M2-04 | L | Portfolio Roadmap and period Gantt queries/UI with filtering, health/confidence, dependency graph, schedule impact, and critical path | M2-01-M2-03, P0-01 | FR-030-FR-031, NFR-015, AC-37-AC-42 | Browser/accessibility and critical-path/not-calculable scenarios. Decompose view and scheduling engine. |
 | M2-05 | M | Immutable Roadmap Snapshot, copied render values, object export, PDF/image renderer, and publication authority | M0-04, M2-01-M2-04 | FR-029, NFR-018, AC-39-AC-40 | Byte/digest reproducibility, immutability, ACL, and export tests. |
-| M2-06 | S | Validated manual/import workflow selected by D-013 with source references and reconciliation report | M2-01, D-013 | Migration assumptions, AC-37 | Import fixture, rollback, and error report. |
+| M2-06 (future import) | S | `DEFERRED_POST_R1`: no import implementation in R1; a future catalog revision may define validated mapping, references, reconciliation ownership, and rollback | D-013 (no-migration and new-initiative policy) confirms import is absent in R1; a separate future product decision must add exact dependencies and authority | OPEN: no R1 FR/NFR/AC authorizes import | No R1 execution evidence. Future materialization must add import fixtures, duplicate/error/dry-run reporting, rollback, audit, and product acceptance. |
 
 M2 can run parallel to M1 after M0, but M2-02 waits for the Initiative/PRD contracts. Published snapshots cannot depend on mutable working-roadmap fields.
 
@@ -240,7 +271,7 @@ M2 can run parallel to M1 after M0, but M2-02 waits for the Initiative/PRD contr
 | M3-01 | M | Read-only GitHub and GitLab repository discovery adapters with base SHA, instructions, CODEOWNERS, CI, build/test commands, and allowlist enforcement | M0-09, D-008 | FR-008-FR-009, FR-043, AC-10, AC-52 | Both providers pass read-only conformance and revoked-scope tests. |
 | M3-02 | L | Deterministic repository analyzer for packages, services, symbols, schemas, migrations, dependencies, Tree-sitter extraction, and Zoekt search | M3-01, D-001 | FR-009-FR-010, AC-10 | Golden-repository corpus and freshness/digest tests. Decompose index, extractor, and report. |
 | M3-03 | M | Context Pack builder and signer with exact versions, bounded inputs, read-only mount contract, and sanitized Context Manifest | M0-04, M1-04, M3-01-M3-02 | FR-012, FR-021, NFR-010-NFR-011, AC-15, AC-53 | No restricted evidence in Git; mount/digest/access/revocation tests. |
-| M3-04 | L | Architecture Delta, Repository Impact Map, typed DAG, plan/slice schemas, acceptance/test/rollback obligations, and plan generation workflow | M1-06-M1-07, M3-02-M3-03, D-005 | FR-010-FR-011, AC-11-AC-14 | Schema completeness, cycle, one-repository, and requirement-trace tests. Decompose generation and deterministic validator. |
+| M3-04 | L | Deterministic Architecture Delta, Repository Impact Map, typed DAG, plan/slice schemas, acceptance/test/rollback obligations, and validator; model-assisted generation is a separate child | M1-06-M1-07 (PRD/Gate 1), M3-02-M3-03 (repository analysis/context), `B-NO-MODEL-BUDGET-01` (explicit no-model and zero-budget representation) before deterministic/manual plan persistence; M0-S9C (Model Gateway), D-004 (model gateway), D-005 (model/data policy), and D-014 (budget policy) only before model-assisted generation | FR-010-FR-011 (planning), AC-11-AC-14 (plan completeness and slicing) | Deterministic schema, cycle, one-repository, vertical-slice, and requirement-trace tests; model provenance/evaluation only for the generation child. Decompose domain/validator and generation. |
 | M3-05 | M | Plan review UI and Gate 2 with exact versions, base-update policy, providers, budgets, contract applicability, and authorized side effects | M3-04, M0-06, D-008, D-014 | FR-010-FR-012, FR-032-FR-040, AC-11-AC-15, AC-44-AC-48 | Exact-plan authorization, scope-expansion denial, and re-plan invalidation tests. |
 | M3-06 | M | PRD/plan supersession impact assessment with continue-pinned, pause, cancel, and re-plan per slice | M1-06, M3-04-M3-05 | FR-007, FR-021, AC-08, AC-25 | Active context never changes silently; decision/audit/replay tests. |
 
@@ -250,10 +281,10 @@ M3 exit is an approved two-repository plan with no cycles, exact base SHAs, type
 
 | ID | Size | Deliverable | Dependencies | PRD trace | Completion evidence |
 | -- | ---- | ----------- | ------------ | --------- | ------------------- |
-| M4-01 | M | AgentExecutionProvider SDK, fake provider, normalized attempt/events, leases, heartbeat, questions, usage, candidate artifacts, and contract suite | M0-09, M3-04 | FR-013-FR-015, NFR-007-NFR-008, NFR-013, AC-16-AC-21 | Shared automated-provider conformance, lease exclusivity, callback/poll, and replay tests. |
+| M4-01 | M | AgentExecutionProvider SDK, fake provider, normalized attempt/events, leases, heartbeat, questions, usage, candidate artifacts, and contract suite | M0-09 (provider registry), M3-04 (Execution plan); synthetic fake-provider work requires no Orca or live-provider decision | FR-013-FR-015 (execution), NFR-007-NFR-008/NFR-013 (reliability/isolation), AC-16-AC-21 (execution conformance) | Shared automated-provider conformance, lease exclusivity, callback/poll, and replay tests. |
 | M4-02 | M | Developer-operated Orca MCP profile for task/context reads and claim, release, heartbeat, progress, question, completion, and VCS-reference writes | M0-09, M3-04, D-006-D-007 | FR-013-FR-015, AC-16-AC-21 | Delegated-auth, workspace/object authorization, transition, attribution, idempotency, stale-version, revocation, and prohibited-action fixtures. Orca receives no Curve-managed VCS credential. |
-| M4-03 | M | OpenHands adapter pinned to approved API/version and sandbox mode | M4-01 | FR-013-FR-015, AC-16 | Complete shared suite plus OpenHands-specific recovery fixtures. |
-| M4-04 | L | Trusted runner controller, JIT identity/secrets, namespace/worktree lifecycle, context mount, resource policy, heartbeat, cancellation, cleanup, and quarantine | M0-03-M0-04, M3-03, M4-01, D-003, D-014 | FR-013-FR-015, FR-042-FR-043, NFR-007-NFR-010, AC-20-AC-22, AC-52-AC-55 | Isolation/SSRF/egress/secret/cross-run/resource/lost-runner tests. Decompose control plane and runtime profile. |
+| M4-03 | M | OpenHands adapter pinned to approved API/version and sandbox mode | M4-01 (automated execution SDK), P0-08 (OpenHands provider/runtime proof), P0-07 (gVisor runner proof), approved target-environment D-003 (runtime topology), and exact OpenHands version/license/security profile | FR-013-FR-015 (execution), AC-16 (OpenHands conformance lane) | Complete shared suite plus OpenHands-specific heartbeat, artifact, question, cancellation, outage, and recovery fixtures. |
+| M4-04 | L | Trusted runner controller, JIT identity/secrets, namespace/worktree lifecycle, context mount, resource policy, heartbeat, cancellation, cleanup, and quarantine | M0-03 (core policy), M3-03 (Context Pack), M4-01 (execution SDK), P0-07 (gVisor runner proof), target-environment D-003 (runtime topology), D-014 (budget policy), and D-009/M0-04 (retention/protected storage) before protected mounts | FR-013-FR-015 (execution), FR-042-FR-043 (authorization/classification), NFR-007-NFR-010 (execution security), AC-20-AC-22 (control), AC-52-AC-55 (isolation) | Isolation/SSRF/egress/secret/cross-run/resource/lost-runner tests. Decompose control plane and runtime profile. |
 | M4-05 | M | Slice dispatch child workflow, dependency satisfaction, attempt retry/replacement, durable question/answer, budget pause, and cancellation | M0-06, M3-05, M4-01-M4-04 | FR-013-FR-015, FR-042, AC-17-AC-21 | Temporal replay and fault-injection suite. |
 | M4-06 | M | Execution Console for state, safe activity, questions, costs, errors, attempts, pause/cancel/retry, and lineage | M4-05, M0-07-M0-08 | FR-014-FR-015, FR-024, NFR-012, NFR-015, AC-17-AC-21 | Live SSE, accessibility, redaction, and authorization tests. |
 
@@ -263,13 +294,13 @@ M4 exit requires OpenHands to pass `AgentExecutionProvider` conformance and Orca
 
 | ID | Size | Deliverable | Dependencies | PRD trace | Completion evidence |
 | -- | ---- | ----------- | ------------ | --------- | ------------------- |
-| M5-01 | M | QualityPolicyVersion merge engine with non-reducible X3M baseline, additive repository policy, tool/rulepack/image pins, applicability, and D-010 thresholds | M0-02, M3-01, D-010 | FR-016-FR-018, NFR-013, AC-23-AC-25 | Policy precedence, unknown-license, and non-waivable fixtures. |
-| M5-02 | L | Isolated preflight executor for repository commands, builds/types/lint/tests, Playwright, Gitleaks, Trivy, Opengrep, protected logs, and result attestation | M4-04-M4-05, M5-01 | FR-016, FR-018, NFR-009-NFR-011, AC-23-AC-25, AC-55 | Seeded pass/fail/flaky/malicious fixtures and exact-SHA attestation. Decompose command runner and scanners. |
-| M5-03 | M | Independent AI code/security review, normalized findings, fingerprinting, severity, dispositions, reclassification, re-review, and evaluation corpus | M4-01, M5-01-M5-02, D-005 | FR-017-FR-018, NFR-011-NFR-012, AC-23-AC-25, AC-48 | Model/prompt pin, precision dataset, no self-approval, and deterministic-check precedence. |
+| M5-01 | M | QualityPolicyVersion merge engine with non-reducible X3M baseline, additive repository policy, tool/rulepack/image pins, applicability, and D-010 thresholds | M0-02 (core persistence), M3-01 (repository discovery), P0-11 (quality/security/license baseline proof), D-010 (quality/security/license policy) | FR-016-FR-018 (quality), NFR-013 (provider isolation), AC-23-AC-25 (quality evidence) | Policy precedence, unknown-license, pinned-tool, severity, and non-waivable fixtures. |
+| M5-02 | L | Isolated preflight executor for repository commands, builds/types/lint/tests, Playwright, Gitleaks, Trivy, Opengrep, protected logs, and result attestation | M4-04-M4-05 (runner/workflow), M5-01 (quality policy), P0-07 (gVisor runner proof), P0-11 (quality/security/license baseline proof) | FR-016/FR-018 (preflight), NFR-009-NFR-011 (isolation/data), AC-23-AC-25 (quality), AC-55 (sandbox) | Seeded pass/fail/flaky/malicious fixtures and exact-SHA attestation. Decompose command runner and scanners. |
+| M5-03 | M | Independent AI code/security review, normalized findings, fingerprinting, severity, dispositions, reclassification, re-review, and evaluation corpus | M4-01 (execution SDK), M5-01-M5-02 (quality/preflight), P0-11 (quality/security/license baseline proof), M0-S9C (Model Gateway), D-004 (model gateway), D-005 (model/data policy), D-010 (quality/security/license policy), D-014 (budget policy) | FR-017-FR-018 (review/quality), NFR-011-NFR-012 (data/audit), AC-23-AC-25 (quality), AC-48 (waiver/reclassification) | Model/prompt/policy/budget pins, precision dataset, no self-approval, and deterministic-check precedence. |
 | M5-04 | M | Waiver and `NOT_APPLICABLE` decision workflows with authority, non-waivable matrix, expiry, follow-up, and non-compliant projection | M0-03, M5-01, M2-02 | FR-039-FR-040, AC-47-AC-48 | Unauthorized/agent/non-waivable denial and clock-expiry tests. |
-| M5-05 | L | Trusted VCS controller and GitHub adapter: validated candidate, commit attribution/signing, branch push, draft create/update, current state, explicit ready conversion, and reconciliation | M3-01, M4-04-M4-05, M5-02, D-008 | FR-018-FR-020, FR-044, AC-22, AC-25-AC-33 | GitHub conformance, ambiguous response, stale head/base, and no-agent-token tests. Decompose controller and provider. |
-| M5-06 | M | GitLab VCS adapter with behavior parity and provider-specific webhook/auth mapping | M5-05, D-008 | FR-008, FR-019-FR-020, FR-044, AC-26-AC-33 | Same VCS contract suite as GitHub. |
-| M5-07 | M | Post-draft validation projection: CI/checks, protection/configuration, CODEOWNERS resolution, mergeability, draft-capable findings, head invalidation, and reconciliation | M5-05-M5-06 | FR-020, FR-041, FR-044, AC-25, AC-27-AC-28, AC-31-AC-33 | New-commit invalidation, delayed/missing webhook, and post-ready approval separation. |
+| M5-05 | L | Trusted VCS controller and GitHub adapter: validated candidate, commit attribution/signing, branch push, draft create/update, current state, explicit ready conversion, and reconciliation | M3-01 (repository discovery), M4-04-M4-05 (runner/workflow), M5-02 (preflight), P0-10 (trusted VCS-controller proof), D-008 (VCS identity/controller decision) | FR-018-FR-020/FR-044 (quality/VCS/reconciliation), AC-22/AC-25-AC-33 (candidate and draft lifecycle) | GitHub conformance, ambiguous response, stale head/base, and no-agent-token tests. Decompose controller and provider. |
+| M5-06 | M | GitLab VCS adapter with behavior parity and provider-specific webhook/auth mapping | M5-05 (trusted controller core), P0-10 (trusted VCS-controller proof), D-008 (VCS identity/controller decision) | FR-008/FR-019-FR-020/FR-044 (GitLab/VCS), AC-26-AC-33 (draft lifecycle) | Same VCS contract suite as GitHub plus provider-specific webhook/auth fixtures. |
+| M5-07 | M | Post-draft validation projection: CI/checks, protection/configuration, CODEOWNERS resolution, mergeability, draft-capable findings, head invalidation, and reconciliation | M5-01-M5-02 (quality/preflight), M5-05-M5-06 (VCS controllers), D-008 (VCS identity/controller decision), D-010 (quality/security/license policy) | FR-020/FR-041/FR-044 (VCS/rework/reconciliation), AC-25/AC-27-AC-28/AC-31-AC-33 (invalidation and projection) | New-commit invalidation, delayed/missing webhook, and post-ready approval separation. |
 | M5-08 | M | Review-comment synchronization and authorized actionable rework on the same branch/PR with rerun orchestration | M5-03, M5-05-M5-07 | FR-041, AC-31 | Human/bot comments, thread authorization, same-binding, and stale-result tests. |
 | M5-09 | M | Gate 3 Code Readiness UI/workflow for exact heads and explicit trusted-controller draft-to-ready; repository approvals remain external | M5-03-M5-08, M0-06 | FR-020, FR-037, AC-25, AC-27-AC-30 | Head-race fail-closed, role separation, no-auto-ready/merge/deploy tests. |
 | M5-10 | L | Feature Delivery, versioned contract, aggregate checks/evidence, Pull Request Set, independent binding state, and release-readiness projection | M2-02, M3-05, M5-04-M5-09 | FR-032-FR-040, AC-32, AC-42, AC-44-AC-51 | Multi-repository partial failure, contract cardinality, applicability, and readiness tests. Decompose aggregate and UI. |
@@ -278,17 +309,20 @@ M4 exit requires OpenHands to pass `AgentExecutionProvider` conformance and Orca
 | M5-13 | M | OpenFeature validation adapter, flag lifecycle schema, applicability, dual-path evidence, and cleanup projection | M5-10, D-011 | FR-035-FR-036, AC-47-AC-49 | Backend contract, disabled/enabled tests, N-A authority, expiry/cleanup. |
 | M5-14 | M | Quality/Contract/PR Set UI and draft-body/check-summary renderer with lineage, waivers, dependencies, and current-head state | M5-03-M5-13 | FR-019-FR-021, FR-036-FR-040, NFR-012, NFR-015, AC-29-AC-34, AC-44-AC-51 | Browser/accessibility, redaction, update, and coordinated-state tests. |
 
-M5 exit proves the entire supported flow through both VCS providers, both agent providers, a coordinated multi-repository set, two-phase quality, human Code Readiness, contract evidence, review rework, and replay-safe recovery.
+M5 exit proves the entire supported flow through both VCS providers, OpenHands as
+the automated execution provider, Orca as the developer-operated MCP client, a
+coordinated multi-repository set, two-phase quality, human Code Readiness,
+contract evidence, review rework, and replay-safe recovery.
 
 ### M6: Prototypes, feedback, KPI, and optimization
 
 | ID | Size | Deliverable | Dependencies | PRD trace | Completion evidence |
 | -- | ---- | ----------- | ------------ | --------- | ------------------- |
-| M6-01 | L | Separate preview controller/runtime with declared build/start/health contract, synthetic data, authentication, unique origin, deny egress, limits, TTL, teardown, and feedback channel | M0-03-M0-09, M1-06, D-003, D-014 | FR-006, NFR-019, AC-06, AC-55 | Supported-repo golden tests, isolation, expired URL, cleanup, and no control-plane route. Decompose controller/runtime/gateway. |
-| M6-02 | S | Lovable prompt-package generator/export with exact artifact/evidence versions and untrusted-return handling | M1-04, M1-06 | FR-006, AC-07 | Golden package, redaction, version, and no-trusted-code tests. |
+| M6-01 | L | Separate preview controller/runtime with declared build/start/health contract, synthetic data, authentication, unique origin, deny egress, limits, TTL, teardown, and feedback channel | M0-03-M0-09 (foundation), M1-06 (PRD versions), P0-07 (gVisor runner proof), approved non-local D-003 (runtime topology), D-014 (budget policy) | FR-006 (prototype), NFR-019 (preview isolation), AC-06 (runnable prototype), AC-55 (sandbox boundary) | Supported-repo golden tests, isolation, expired URL, cleanup, and no control-plane route. Decompose controller/runtime/gateway. |
+| M6-02 | S | Deterministic local Lovable prompt-package serializer plus separately authorized external delivery and untrusted-return handling | M1-04 (Evidence), M1-06 (PRD versions); no provider decision for local serialization; D-005 (model/data policy), approved destination profile, and exact external-effect authorization before Lovable delivery | FR-006 (prototype), AC-07 (redacted export/untrusted return) | Local golden package, redaction, version, and digest tests; destination and no-trusted-code tests only for the activated delivery child. |
 | M6-03 | M | Prototype feedback aggregate/UI and selective promotion into a new PRD version | M6-01-M6-02, M1-06 | FR-006-FR-007, AC-06-AC-08 | Attributed feedback, immutable prototype version, and PRD supersession tests. |
 | M6-04 | M | KPI event definitions and computation for idea-to-draft, idea-to-ready, observed merge, human time, cost, quality, evidence, retry, roadmap, and contract measures | M0-08, M1-01, M5-10, D-016 | FR-024, G-09, AC-36 | Versioned metric fixtures, baseline dashboard, and no historical rewrite. |
-| M6-05 | M | Budget administration, cost dashboards, alerts, and performance/capacity optimization to R1 NFR targets | M0-08, M4-05, M6-04, D-014 | NFR-001-NFR-008, NFR-017, AC-19, AC-36, AC-58 | Load, cost-exhaustion, SLO, and capacity qualification. |
+| M6-05 | M | Budget administration, cost dashboards, alerts, and performance/capacity optimization to R1 NFR targets | M0-08 (audit/observability), M4-05 (slice workflow), M6-04 (KPI computation), D-014 (budget policy), and D-005 (model/data policy) only for provider/model-coupled exhaustion and routing behavior | NFR-001-NFR-008/NFR-017 (SLO, budget, traceability), AC-19 (exhaustion), AC-36 (KPI), AC-58 (recovery) | Load, cost-exhaustion, SLO, and capacity qualification; provider/model substitution cases only for the activated lane. |
 
 ### R1: Qualification and controlled rollout
 
@@ -342,43 +376,74 @@ The following concerns are delivered with the first package that needs them and 
 
 Every test result stores test suite/version, environment, base/head SHA, schema/policy/tool versions, timestamp, logs/artifact digests, and requirement IDs. Flaky tests are treated as failures until their infrastructure status is proven and handled under the waiver policy.
 
-## AI coding-agent task packet
+## AI coding-agent task-packet field map
 
-Before dispatch, the planner creates this immutable packet:
+Before dispatch, the planner creates an immutable JSON record that validates
+against the [coding-agent task-packet schema](../../contracts/schemas/coding-agent-task-packet.schema.json)
+(closed repository, context, evidence, command, policy, and rollback contract).
+The YAML below is an orientation map of the required fields; it is not a
+schema-valid packet instance. Canonical JSON records live in the
+[task-packet registry](../../contracts/task-packets/README.md) (merged packet
+discovery, publication, and preflight rules).
 
 ```yaml
-task_id: CURVE-<work-package>-<slice>
-objective: <one demonstrable repository-local outcome>
-repository: <approved repository>
-base_branch: <approved target>
-base_sha: <exact SHA>
-prd_version: "0.7"
-technical_doc_versions: {}
-requirements: [FR-000, NFR-000, AC-00]
-decisions_and_adrs: []
-in_scope: []
-out_of_scope: []
-dependencies: []
-contracts: []
-data_classification: INTERNAL
-risk_tier: STANDARD
-context_pack_digest: sha256:...
-required_commands: []
-acceptance_tests: []
-migration_and_rollback: <explicit behavior>
-model_policy: <approved model and no-substitution rule>
-tool_policy: <explicit allowlist and prohibited side effects>
-sandbox_policy: <limits, egress, credentials, timeout, and cleanup>
-budgets: <cost, duration, CPU, memory, and attempt limits>
-human_owner: <identity>
-human_reviewer: <identity>
+schema_version: curve.coding-agent-task-packet/v1
+packet_id: CURVE-<work-package>-<slice>
+workspace_id: <Curve workspace UUID>
+work_package_id: <one repository-local implementation package>
+packet_version: 1
+packet_digest: sha256:<canonical-payload-digest>
+status: READY | BLOCKED
+size: S | M | L
+user_facing: true | false
+source_catalog_binding: <digest-bound machine source record or unresolved blocker>
+curve_binding:
+  repository: https://github.com/faocampo/curve
+  curve_revision: <normative merged Curve source SHA>
+  context_pack: <manifest at its evidence-publication SHA plus canonical entry-set digest>
+  governance_documents: <approved PRD, architecture, ADR, and plan records>
+repository: <URL, target branch, base SHA, and feature branch>
+project_tracking: <stable work-package item; visual metadata only>
+people: <owner, human reviewer, and AI implementer>
+objective: <one demonstrable repository-local outcome and risk tier>
+scope: <explicit in-scope and out-of-scope lists>
+requirements: <FR/NFR IDs and executable acceptance traces>
+dependencies: <machine-authenticated satisfaction evidence>
+decisions: <machine-authenticated decision evidence>
+contract_applicability: <API, schema, event, workflow, policy, persistence, migration>
+repository_instructions: <digest-bound files at the base SHA>
+commands: <five mandatory phases plus applicable optional phases>
+data_policy: <approved classification and allowed/prohibited data>
+model_policy: <none or exact approved provider/model/prompt/call limit>
+tool_policy: <approved executable/version allowlist>
+sandbox_policy: <filesystem, credentials, egress, attempts, timeout, cancellation, cleanup>
+budget: <cost and compute limits with fail-closed exhaustion>
+external_effects: <none or exact trusted-controller effects>
+rollback: <before-merge and after-merge behavior plus verification>
+ux_evidence: <approved machine record when user-facing>
+decomposition: <child packet IDs when size L; otherwise null>
+blockers: <named missing evidence when BLOCKED>
 ```
 
-The packet must contain repository-specific instructions discovered at the pinned base SHA. An AI agent may identify a plan defect, but it may not broaden scope, add a repository, change a contract, raise a budget, choose an `OPEN` decision, or reinterpret acceptance criteria.
+The packet must contain repository-specific instructions discovered at the
+pinned base SHA. Curve publication follows a non-circular
+source/evidence/catalog/registry chain: the normative source SHA precedes authority, context, and state
+evidence commit(s); those precede the source-catalog commit; and the catalog
+precedes the registry commit containing the sealed packet. Structural CI
+validates shape and cross-field invariants. The dispatch preflight additionally
+resolves the exact source-catalog, decision,
+dependency, policy, UX, context, repository, and Project evidence. An AI agent
+may identify a plan defect, but it may not broaden scope, add a repository,
+change a contract, raise a budget, choose an `OPEN` decision, or reinterpret
+acceptance criteria.
 
 ## Coding-agent execution protocol
 
-1. Validate the task packet and repository state before editing. Report a blocker if the base, context digest, contracts, dependencies, or required command is unavailable.
+1. Run structural validation and exact-evidence dispatch preflight before
+   editing. Confirm the separate implementation authorization binds this exact
+   packet ID/version/digest and repository/context tuple. Report a blocker when
+   any catalog, state, base, context, contract, Project, policy, or command
+   proof is unavailable or stale.
 2. Inspect only the approved repository/context and restate the intended change, invariants, and test plan in the run record.
 3. Implement the smallest cohesive slice without unrelated refactors or dependency upgrades.
 4. Add or update tests at the same abstraction level as the behavior. Negative authorization/idempotency/failure tests are mandatory when relevant.
@@ -422,10 +487,14 @@ Before dispatching each coding task:
 - [ ] Every P0 dependency explicitly named by the exact task packet is approved or complete.
 - [ ] Every decision scope explicitly named by the exact task packet is `DECIDED`; unrelated just-in-time decisions remain gated at their consuming packages.
 - [ ] The companion technical documents referenced by the packet are versioned and mutually consistent.
+- [ ] A machine source-catalog entry matches every dispatch-critical packet field.
 - [ ] The API, event, provider, persistence, and migration contracts consumed by the packet are approved.
 - [ ] Fake providers and local dependencies required by the packet can run in the agent sandbox.
-- [ ] Repository instructions and exact verification commands are captured.
+- [ ] Repository instructions and exact `LINT`, `BUILD`, `TEST`, `SECURITY`, and `LOCAL_RUN` commands are captured; applicable `INSTALL`, `TYPECHECK`, and `MIGRATION` commands are included.
 - [ ] Trusted-controller paths exist before a packet is permitted to cause an external mutation.
 - [ ] The packet uses only data and environments allowed by decided policy; D-009-dependent protected storage and non-local activation remain excluded while D-009 is open.
 - [ ] Security, licensing, model-destination, and unresolved retention behavior fail closed.
-- [ ] The dispatched slice has an immutable task packet, named human owner, named reviewer, pinned repository base, and pinned Curve context; its GitHub Project item exists for visual tracking and its current status is informational.
+- [ ] Structural validation and read-only dispatch preflight pass for the complete materialized-packet registry.
+- [ ] The dispatched slice has an immutable workspace, packet ID/version/digest, named human owner, named reviewer, pinned repository base, and canonical pinned Curve context; its live GitHub Project work-package item exists for visual tracking and its current status is informational.
+- [ ] A separate human-attested implementation authorization binds the exact workspace, attempt, packet and context tuple, repository/base/branches, people, scope/non-scope, budget, permitted workflow actions, external effects, rollback, and validity window.
+- [ ] `B-CODING-AUTHORITY-01` (trusted human-state verification and durable attempt lease) is resolved by an approved verifier/lease profile, and the dispatch obtains one independently verified authority receipt plus one atomic current-attempt lease.

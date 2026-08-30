@@ -5,10 +5,10 @@
 | Field | Value |
 | --- | --- |
 | Status | `IMPLEMENTED_PHYSICAL_SNAPSHOT / LOCAL_ONLY / PRODUCT_CONFORMANCE_VARIANCE_OPEN`; R-027 (Product timestamp/schema-version contract reconciliation) remains undecided |
-| Version | 1.0 |
-| Last updated | 2026-08-29 |
-| Source Curve `main` before this reconciliation | `7ef2de326411ae34b11e11b28d8f9ec7c0d5f16e` |
-| Published Curve revision | Assigned after this reconciliation is merged; this source document MUST be updated with that exact commit in the next governed revision |
+| Version | 1.2 |
+| Last updated | 2026-08-30 |
+| Contract derivation baseline | Curve `main` `a0d21bee7f98f2477d9cfe69708a8ac043c4fc69`; the exact accepted Plane snapshot below is unchanged |
+| Publication identity | The regular Git blob and merged commit containing these exact bytes are the publication receipt; consumers resolve them from Git history rather than a self-referential future-revision field |
 | Plane implementation | `preview` at `99a73b4eab5ee21fd012d7358bc9259252d47f71` |
 | Migration boundary | `curve.0001_initial` through `curve.0007_initiative_gateassignment` |
 | Audience | Backend, data, security, migration reviewers, and AI coding agents |
@@ -453,3 +453,10 @@ An ERD revision is acceptable only when:
    cannot be interpreted as R-027 approval; and
 8. Markdown, local links, heading hierarchy, and every Mermaid block pass the
    repository documentation validators.
+
+The [implemented-ERD consistency test](../../scripts/tests/implemented-erd-consistency.test.mjs)
+(exact Plane/migration binding, entity inventory, relationship, index,
+uniqueness, and protected-storage-boundary assertions) enforces this committed
+snapshot. A Plane schema change still requires commit-bound migration evidence;
+the documentation test does not substitute for inspecting the pinned Plane
+models and migrations.

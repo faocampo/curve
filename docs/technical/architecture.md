@@ -7,8 +7,8 @@
 | Status | Derived architecture baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Architecture, engineering, security, platform operations, product, and AI coding agents |
-| Version | 0.7 |
-| Last updated | 2026-08-29 |
+| Version | 0.9 |
+| Last updated | 2026-08-30 |
 | Normative source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product contract, approved Product core, Curve-first shell, decision register, and accepted local Temporal proof) |
 | Companion | [Engineering Patterns and Technologies](./engineering-patterns-and-technologies.md) (component, workflow, data, and technology implementation patterns) |
 
@@ -45,7 +45,7 @@ This architecture observes provider merges, deployments, and post-release eviden
 | --- | --- | --- |
 | R0A | Curve domain, policy, object/audit storage, Onyx evidence, artifact versions, SSE, Temporal definition workflow, and Gate 1 | No coding-agent or VCS-mutation promise |
 | R0B | The named GitLab/OpenHands validation path through repository-local slices or an approved external contract/deployment prerequisite, trusted controller, preflight, automatic draft MR, VCS validation, and Gate 3 | Pilot configuration only; not provider-, roadmap-, or prototype-complete R1 |
-| R1 | All M0-M6 components, both initiative modes, both VCS adapters, both agent adapters, coordinated slices, roadmaps, contracts, and both prototype paths | No autonomous merge, deployment, or M7 connector automation |
+| R1 | All M0-M6 components, both initiative modes, both VCS adapters, OpenHands automated execution, developer-operated Orca MCP assistance, coordinated slices, roadmaps, contracts, and both prototype paths | No autonomous merge, deployment, or M7 connector automation |
 | R1.x | M7 adapters attached through existing provider and policy boundaries | No change to the three-gate lifecycle |
 
 See the PRD release baseline, `FR-001` through `FR-044`, and milestone exit criteria M0-M7.
@@ -417,9 +417,9 @@ capacity, cost, and ownership remain environment-package inputs.
 | --- | --- | --- | --- |
 | Local development | Plane/Curve app, relational store, object-store substitute, Temporal development service, outbox relay, stub adapters, fake webhook receiver on shared Plane `dev_env` | Synthetic/unrestricted fixtures only; direct loopback Temporal ports; no production delegation or mutation identity | Developer convenience; no R1 SLA claim |
 | Internal staging | Full control plane, durable Temporal, object storage, policy engine, provider test connections, isolated runner/preview fleet, reconciliation, sanitized telemetry in private X3M EKS using `ClusterIP` and authenticated Temporal clients | Operational activation requires D-009 plus reviewed persistence, certificate, HA, backup/recovery, ownership, and environment evidence. | Required recovery and security-test environment after its activation gates pass |
-| R0A | Production-like definition/control-plane subset through Gate 1 | Approved Onyx path only after D-002/D-005; no VCS mutation | Must meet M0/M1 exit tests for enabled components |
+| R0A | Production-like definition/control-plane subset through Gate 1 | Manual-first definition remains available; live Onyx requires D-002 (Onyx delegated identity), protected bodies require D-009/M0-04 (retention and protected storage), and D-005 (model/data policy) applies only before a model destination; no VCS mutation | Must meet M0/M1 exit tests for enabled components |
 | R0B pilot | Selected GitLab/OpenHands path with repository-local slices or an approved external prerequisite | Named pilot only after its blocking decisions and Gate 2 authorization | Pilot SLO measured, not advertised as R1 |
-| R1 production | Full M0-M6 logical topology, both VCS and agent adapters, HA/persistence/backups, isolated execution, audited secrets and telemetry | Data and providers allowed by decided classification, residency, retention, and model policies | `NFR-001` through `NFR-020` and AC-01 through AC-60 |
+| R1 production | Full M0-M6 logical topology, both VCS adapters, OpenHands automated execution, Orca developer-operated MCP assistance, HA/persistence/backups, isolated execution, audited secrets and telemetry | Data and providers allowed by decided classification, residency, retention, and model policies | `NFR-001` through `NFR-020` and AC-01 through AC-60 |
 
 ### Production logical placement
 
@@ -491,7 +491,10 @@ Curve is the user-facing product surface and an additive bounded domain implemen
 - Preserve visible Plane attribution, notices, and an exact-version AGPL source link through the Curve About, Open source, or equivalent product surface.
 - Use Plane notifications and comments through a narrow integration service. Notification delivery never becomes lifecycle truth.
 - Keep Celery jobs bounded and idempotent. Temporal exclusively owns durable lifecycle waits and orchestration.
-- Seed workflow/policy v1 explicitly. Existing Plane data is referenced, not copied; roadmap import behavior remains D-013.
+- Seed workflow/policy v1 explicitly. Existing Plane data is referenced, not
+  copied. D-013 (no-migration and new-initiative policy) keeps roadmap import
+  absent in R1; any future import requires a new approved product decision,
+  mapping, reconciliation owner, rollback design, and product acceptance trace.
 - Rollback disables new entry points and dispatch while retaining Curve tables and external bindings for reconciliation. No destructive down-migration touches Plane data.
 - Pin the supported Plane commit, API/UI reuse inventory, extension points, and upstream rebase process through D-001 before M0 architecture sign-off.
 
@@ -581,14 +584,29 @@ capacity, cost, and named-ownership evidence required by D-003 and D-009.
 | Milestone | Architecture increment | Required decision/ADR state before implementation |
 | --- | --- | --- |
 | M0 | Additive domain shell, core policy enforcement, versioning, audit, API conventions, Temporal/outbox/inbox, SSE, and reconciliation; protected-object storage follows D-009 | D-001 plus applicable D-003/D-007 local profiles; D-009 before protected storage or non-local activation |
-| M1 | Definition workflows, effective-principal Onyx/MCP retrieval, evidence/access envelopes, artifact diff/versioning, Gate 1 | D-002, D-005 plus M0 decisions |
-| M2 | Roadmap domain, Plane bindings, schedule projections, snapshots, deterministic export | D-013 plus M0 foundation |
-| M3 | Repository inventory, typed DAG, Context Packs/Manifests, Gate 2 bounded authorizations, VCS read adapter | D-008 plus M0 foundation |
-| M4 | Provider-neutral attempt model, OpenHands adapter, developer-operated Orca MCP profile, leases, trusted runner controller, questions, retries/cancellation | D-006, D-007, D-014 plus M0/M3 |
-| M5 | Versioned quality, trusted VCS controller, GitHub/GitLab adapters, two-phase validation, review rework, contract/PR-set projections | D-010, D-011, D-012 plus M3/M4 |
-| M6 | Isolated authenticated previews, Lovable packages, KPI/cost dashboards and qualification | D-015, D-016 plus prior milestones |
+| M1 | Manual-first definition workflows, separately activated effective-principal Onyx/MCP retrieval and model assistance, evidence/access envelopes, artifact diff/versioning, Gate 1 | M0 foundation for every child; D-002 (Onyx delegation) only for Onyx, D-004/D-005/D-014 (model gateway/data/budget) only for model use, D-009/M0-04 (retention/protected storage) only for protected bodies, and `B-ARTIFACT-BODY-01` (manual artifact-body persistence contract) before manual body persistence |
+| M2 | New Curve roadmap domain, Plane bindings, schedule projections, snapshots, deterministic export; no R1 import | D-013 (no-migration and new-initiative policy) plus M0 foundation; a future import requires a separate product decision |
+| M3 | Repository inventory, deterministic typed-DAG/plan validation with separately activated model generation, Context Packs/Manifests, Gate 2 bounded authorizations, VCS read adapter | D-008 (trusted VCS decision) for repository access; `B-NO-MODEL-BUDGET-01` (explicit no-model and zero-budget representation) for deterministic plan persistence; M0-S9C plus D-004/D-005/D-014 only for model generation |
+| M4 | Provider-neutral attempt model, OpenHands adapter, developer-operated Orca MCP profile, leases, trusted runner controller, questions, retries/cancellation | P0-07 (gVisor runner proof) and P0-08 (OpenHands provider/runtime proof) before runner/OpenHands activation; target-environment D-003 (runtime topology) and D-014 (budget policy); D-006/D-007 only for Orca/MCP |
+| M5 | Versioned quality, trusted VCS controller, GitHub/GitLab adapters, two-phase validation, review rework, contract/PR-set projections | P0-10 (trusted VCS proof), P0-11 (quality/security/license proof), D-008 (trusted VCS), and D-010 (quality/security/license); D-004/D-005/D-014 plus M0-S9C only for AI review; D-011/D-012 only for applicable flag/documentation delivery |
+| M6 | Isolated authenticated previews, Lovable packages, KPI/cost dashboards and qualification | P0-07 (gVisor runner proof) and approved non-local D-003 activation for preview runtime; D-014 (budget policy), D-015 (pilot profile), D-016 (KPI/rollout), and D-005 only for provider/model-coupled destinations or exhaustion |
 
 No implementation backlog may move an unresolved decision past its blocking milestone by substituting a developer preference. Conservative defaults permit only the limited behavior stated in the PRD decision register.
+
+Two cross-milestone architecture contradictions remain named and unresolved:
+
+- `B-ARTIFACT-BODY-01` (manual artifact-body persistence contract) must reconcile
+  manual Idea Brief/PRD durability with the current non-null ObjectRef boundary
+  while D-009 (retention and erasure decision) and M0-04 (protected-object
+  storage) remain unavailable. Until a versioned contract is approved, metadata
+  and UI contracts may proceed but no manual artifact body may be persisted.
+- `B-NO-MODEL-BUDGET-01` (explicit no-model and zero-budget representation) must
+  define exact versioned values for non-null ExecutionPlan model, tool, and budget
+  references in deterministic/manual planning. It cannot imply an approved model
+  route or paid budget. Deterministic plan persistence and Gate 2 wait for this
+  contract; model-assisted planning additionally waits for M0-S9C (Model Gateway),
+  D-004 (model-gateway decision), D-005 (model/provider data-policy decision),
+  and D-014 (budget-policy decision).
 
 ## ADR prerequisites and unresolved decisions
 
@@ -597,10 +615,10 @@ The PRD records agreed planning directions as `PROPOSED` and leaves genuinely un
 | Decision | Required ADR output | Blocks |
 | --- | --- | --- |
 | D-001 | Pinned Plane commit, reuse/build inventory, extension seams, supported upgrade/rebase baseline | M0 architecture sign-off |
-| D-002 | Onyx per-operation delegation protocol, token lifecycle, revocation, audit, failure proof | M1 |
+| D-002 | Onyx per-operation delegation protocol, token lifecycle, revocation, audit, failure proof | Live Onyx retrieval in M1; manual definition remains independent |
 | D-003 | Dev/staging/prod topology, region/residency, trust zones, data services, HA, backups, secrets, Langfuse, ownership | Shared local `dev_env` plus private X3M EKS/VPC/VPN, `ClusterIP`, dedicated namespace by default, internal UI ingress, workload identity/Secrets Manager, and authenticated non-local Temporal clients are effective through the merged 2026-08-20 amendment. M0-S3 accepts the local implementation at Plane merge `d99342f...`; environment activation still requires its persistence, certificate, HA, backup/recovery, capacity, cost, and ownership evidence. |
 | D-004 | In-process Curve Model Gateway and OpenRouter contract, allowlists, routing/fallback constraints, operations, security, license, and replacement evaluation | Model-enabled M1/M3/M5 |
-| D-005 | Task/data-class model allowlist, residency/training/retention terms, fallback equivalence, evaluation baseline | M1 |
+| D-005 | Task/data-class model allowlist, residency/training/retention terms, fallback equivalence, evaluation baseline | Model-enabled M1/M3/M5 and provider/model destinations; manual/deterministic children remain independent |
 | D-006 | Orca supported MCP client/version, delegated auth, bounded capability profile, ownership, support and license | Orca-enabled M4 / R1 human-assistance completeness |
 | D-007 | MCP version/transports, trust registry, delegated auth, read/write risk, idempotency, transitions, and pre-authorized action allowlist | MCP-enabled M0/M1/M4 |
 | D-008 | GitHub/GitLab controller identities, scopes, signing, rotation, repository allowlist, reconciliation permissions | M3 |
@@ -608,7 +626,7 @@ The PRD records agreed planning directions as `PROPOSED` and leaves genuinely un
 | D-010 | Pinned quality/security/license toolchain, images, rulepacks, thresholds, suppressions, non-waivable classes | M5 |
 | D-011 | OpenFeature backend and flag naming, ownership, rollout, audit, expiry and cleanup conventions | M5 |
 | D-012 | Docusaurus repository, branch, ownership, build/link/navigation/preview and release relationship | M5 |
-| D-013 | Manual roadmap recreation or validated import mapping and ongoing reconciliation ownership | M2 |
+| D-013 | No-migration/new-initiative adoption rule and reconciliation ownership; any future import requires a separate approved decision and mapping | M2 roadmap activation; M2-06 (future import) remains deferred post-R1 |
 | D-014 | Workspace/initiative/research/model/tool/sandbox budgets and escalation authority | R0B/M4 |
 | D-015 | Pilot Product, repository, initiative, users and baseline comparison method | R0A/R0B |
 | D-016 | Numeric KPI targets based on pilot measurements | Broad R1 rollout |
