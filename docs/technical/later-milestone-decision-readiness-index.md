@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Status | `DECISION-READINESS PACKETS PREPARED / OWNER DECISIONS OPEN / IMPLEMENTATION PACKETS UNMATERIALIZED` |
-| Version | 1.3 |
+| Version | 1.4 |
 | Prepared | 2026-08-31 |
 | Product | Curve |
 | Scope | D-002 (Onyx delegation) through D-016 (KPI and rollout guardrails), excluding already decided D-003 (runtime topology for local scope) |
@@ -80,7 +80,8 @@ ambiguous, stale, or inconsistent with the approved decision.
 | --- | --- | --- | --- |
 | `B-ARTIFACT-BODY-01` (manual artifact-body persistence contract) | Architecture/data-policy approval of an exact body reference/persistence, classification, lifecycle, migration, and rollback contract for local synthetic manual artifacts before protected storage activation | M1-02A (manual Idea Brief), M1-05A (manual dossier body), M1-06A/B (manual PRD), and M1-07 (Gate 1) when binding those bodies | Metadata-only contracts may proceed; manual body persistence is blocked |
 | `B-NO-MODEL-BUDGET-01` (explicit no-model and zero-budget representation) | Architecture approval of exact versioned values satisfying non-null ExecutionPlan model/tool/budget references without granting a model route or paid budget | M3-04 (deterministic plan domain/validator) and M3-05 (Gate 2) | Deterministic plan persistence and approval are blocked; no model/data/budget decision is inferred |
-| `B-CODING-AUTHORITY-01` (trusted human-state verification and durable attempt lease) | Security/architecture approval of the authoritative human role and approval/revocation receipt verifier, subject-specific multi-role policy, trusted Git/controller boundary, and atomic current-attempt lease/consumption store | Implementation execution for every materialized coding-agent packet | Schema/catalog publication and read-only preflight may proceed; implementation authority remains false and no packet command may execute |
+| `B-CODING-TOOLS-01` (machine coding-tool execution profile) | Security/platform approval of the OpenHands/gVisor command, image, network, mount, output, cancellation, cleanup, and evidence boundary | M4-04 (trusted runner controller) and every automated repository-execution consumer | A human-operated bootstrap may defer this decision to M4; Curve machine commands remain unavailable until it is decided and implemented |
+| `B-CODING-AUTHORITY-01` (trusted human authority and durable attempt lease) | Security/architecture approval of the authoritative human role and approval/revocation receipt verifier, subject-specific multi-role policy, trusted Git/controller boundary, and atomic current-attempt lease/consumption store | Curve-dispatched implementation execution for every materialized coding-agent packet; M4-04 owns the production implementation | Schema/catalog publication and read-only preflight may proceed. An approved Option 3 manual bootstrap remains outside Curve dispatch and makes no authority claim; automated implementation authority remains false until this decision is implemented |
 
 ## Validation state
 

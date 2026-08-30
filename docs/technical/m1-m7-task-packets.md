@@ -5,8 +5,8 @@
 | Field | Value |
 | --- | --- |
 | Status | Deterministic M1-M6 materialization catalog plus deferred M7 charter; each M1-M6 package has an exact dependency/trace record and becomes `READY` only after its listed material gates, contracts, base SHA, commands, and context digest are satisfied; M7 has no active implementation packet or exact FR/NFR/AC trace |
-| Version | 1.9 |
-| Date | 2026-08-30 |
+| Version | 1.11 |
+| Date | 2026-08-31 |
 | Product baseline | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, approved Product core, Curve-first shell, lifecycle, security invariants, and acceptance criteria) |
 | Delivery baseline | [Development plan](development-plan.md) (milestones, package dependencies, product trace, and completion evidence) and [M1 task packet](m1-alignment-evidence-prd-task-packet.md) (manual-first/provider-enhanced lanes, implementation slices, contracts, tests, and readiness gates) |
 | Decision readiness | [Later-milestone decision-readiness index](later-milestone-decision-readiness-index.md) (D-002 (Onyx delegation) through D-016 (KPI and rollout guardrails) owner inputs, machine contracts, acceptance evidence, and fail-closed milestone effects) |
@@ -113,9 +113,15 @@ children that consume them:
   route or paid authorization.
 - `B-CODING-AUTHORITY-01` (trusted human-state verification and durable attempt
   lease): select an independently verifiable human authority/approval-receipt
-  profile plus an atomic current-attempt lease store. It blocks execution
-  authority for every packet while allowing schema publication, catalog
-  preparation, structural validation, and read-only preflight to proceed.
+  profile plus an atomic current-attempt lease store. It blocks Curve-dispatched
+  execution authority for every packet while allowing schema publication,
+  catalog preparation, structural validation, and read-only preflight to
+  proceed. A separately approved human-operated bootstrap path remains outside
+  this machine contract and cannot satisfy it.
+- `B-CODING-TOOLS-01` (machine coding-tool execution profile): define the
+  OpenHands/gVisor command, image, network, mount, output, cancellation, and
+  cleanup boundary before automated M4 repository execution. A local manual
+  bootstrap deferral changes no M4 acceptance criterion.
 
 ## M1 (alignment, evidence, and PRD)
 
@@ -165,8 +171,8 @@ and readiness gates) is the normative decomposition for materialization.
 | M4-01 (Execution SDK) | Provider-neutral automated execution contract, fake provider, events, questions, usage, and reconciliation | Synthetic `INTERNAL`, credential-free, no-network fake-provider boundary; each real adapter remains separately gated by its provider-specific security, data, runtime, and activation decisions | Provider conformance, lease exclusivity, duplicate/out-of-order callback, polling, replay, and cancellation tests | Disable provider connections; retain fake provider |
 | M4-02 (Orca MCP) | Developer-delegated read and narrow workflow write-back tools | D-006 (Orca support and license decision) and D-007 (MCP trust and delegated write-back decision) | Authn/authz, attribution, idempotency, stale version, revocation, transition, and prohibited-action tests | Revoke MCP tokens/connection; preserve manual UI workflow |
 | M4-03 (OpenHands) | Pinned OpenHands execution adapter | P0-08 (OpenHands provider/runtime proof), including P0-07 (gVisor runner proof); approved target-environment D-003 (runtime topology), OpenHands version/license/security profile, and exact provider activation | Shared conformance plus heartbeat, artifact, question, cancellation, outage, and recovery tests | Disable adapter/version and reconcile active attempts |
-| M4-04 (Runner controller) | gVisor runner lifecycle, JIT identity, mounts, quotas, egress, cleanup, and quarantine | P0-07 (gVisor runner-pool proof), D-003 (runtime topology and trust-zone decision) for the target environment, D-014 (budget-policy decision), and D-009 (retention and erasure decision) plus M0-04 (protected storage) before protected context mounts | Escape, SSRF, egress, secret, cross-run/workspace, lost-runner, limit, cleanup, and quarantine tests | Revoke credentials, cancel pods, quarantine residue, disable RuntimeClass pool |
-| M4-05 (Slice workflow) | Temporal child workflow for dependency dispatch, retries, questions, budgets, and cancellation | Decided local/non-local Temporal topology for target environment | Replay corpus, retry, lost callback, budget pause, cancellation, worker restart, and continue-as-new tests | Stop new dispatch; cancel/reconcile active workflows |
+| M4-04 (Runner controller) | gVisor runner lifecycle, JIT identity, mounts, quotas, egress, cleanup, and quarantine | P0-07 (gVisor runner-pool proof), D-003 (runtime topology and trust-zone decision) for the target environment, B-CODING-TOOLS-01 (machine coding-tool execution profile), B-CODING-AUTHORITY-01 (production human authority and durable attempt lease), D-014 (budget-policy decision), and D-009 (retention and erasure decision) plus M0-04 (protected storage) before protected context mounts | Escape, SSRF, egress, secret, cross-run/workspace, lost-runner, limit, authority/lease, cleanup, and quarantine tests | Revoke credentials, cancel pods, quarantine residue, disable RuntimeClass pool |
+| M4-05 (Slice workflow) | Temporal child workflow for dependency dispatch, retries, questions, budgets, and cancellation | Decided local/non-local Temporal topology for target environment; accepted M4-04 machine execution and authority/lease controls | Replay corpus, retry, lost callback, budget pause, cancellation, worker restart, authority revocation, lease loss, and continue-as-new tests | Stop new dispatch; cancel/reconcile active workflows |
 | M4-06 (Execution Console) | Authorized, redacted live execution UI | Material UX decisions through experience blueprint | SSE reconnect, authorization, accessibility, redaction, stale state, and recovery tests | Feature flag off; APIs remain available to operators |
 
 ## M5 (quality, VCS, Code Readiness, and delivery contracts)
@@ -246,8 +252,8 @@ a value that the dispatcher may invent.
 | M4-01 (Execution SDK) | M0-09 (provider registry), M3-04 (Execution plan); synthetic fake-provider work requires no Orca or live-provider decision | FR-013-FR-015; NFR-007-NFR-008, NFR-013; AC-16-AC-21 (provider-neutral automated execution, attempts, events, questions, usage, and reconciliation) |
 | M4-02 (Orca MCP) | M0-09 (provider registry), M3-04 (Execution plan), D-006 (Orca support and license decision), D-007 (MCP trust and delegated write-back decision) | FR-013-FR-015; AC-16-AC-21 (developer-delegated reads and narrow attributed workflow updates) |
 | M4-03 (OpenHands) | M4-01 (Execution SDK), P0-08 (OpenHands provider/runtime proof), P0-07 (gVisor runner proof), approved target-environment D-003 (runtime topology and trust-zone decision), and approved OpenHands version/license/security profile | FR-013-FR-015; AC-16 (first automated coding-provider adapter, independent of Orca D-006 (Orca support and license decision) and D-007 (MCP trust and delegated write-back decision)) |
-| M4-04 (Runner controller) | M0-03 (core policy), M3-03 (Context Pack), M4-01 (Execution SDK), P0-07 (gVisor runner proof), target-environment D-003 (runtime topology and trust-zone decision), D-014 (budget-policy decision), and D-009 (retention and erasure decision) plus M0-04 (protected storage) before protected mounts | FR-013-FR-015, FR-042-FR-043; NFR-007-NFR-010; AC-20-AC-22, AC-52-AC-55 (gVisor runner lifecycle, JIT authority, quotas, egress, cleanup, and quarantine) |
-| M4-05 (Slice workflow) | M0-06 (Temporal skeleton), M3-05 (Gate 2), M4-01 (Execution SDK) through M4-04 (Runner controller) | FR-013-FR-015, FR-042; AC-17-AC-21 (durable dependency dispatch, retries, questions, budgets, and cancellation) |
+| M4-04 (Runner controller) | M0-03 (core policy), M3-03 (Context Pack), M4-01 (Execution SDK), P0-07 (gVisor runner proof), target-environment D-003 (runtime topology and trust-zone decision), B-CODING-TOOLS-01 (machine coding-tool execution profile), B-CODING-AUTHORITY-01 (production human authority and durable attempt lease), D-014 (budget-policy decision), and D-009 (retention and erasure decision) plus M0-04 (protected storage) before protected mounts | FR-013-FR-015, FR-042-FR-043; NFR-007-NFR-010; AC-20-AC-22, AC-52-AC-55 (gVisor runner lifecycle, JIT authority, quotas, egress, cleanup, quarantine, and durable lease control) |
+| M4-05 (Slice workflow) | M0-06 (Temporal skeleton), M3-05 (Gate 2), M4-01 (Execution SDK) through accepted M4-04 (Runner controller and authority/lease controls) | FR-013-FR-015, FR-042; AC-17-AC-21 (durable dependency dispatch, retries, questions, budgets, cancellation, authority revocation, and lease loss) |
 | M4-06 (Execution Console) | M4-05 (Slice workflow), M0-07 (API/SSE), M0-08 (audit and observability), approved Curve Experience Blueprint (screen-flow and usability gate) | FR-014-FR-015, FR-024; NFR-012, NFR-015; AC-17-AC-21 (authorized redacted live execution UI) |
 | M5-01 (Quality policy) | M0-02 (core persistence), M3-01 (Repository discovery), P0-11 (quality/security/license baseline proof), D-010 (quality, security, license, waiver, and severity decision) | FR-016-FR-018; NFR-013; AC-23-AC-25 (policy precedence, pins, applicability, and non-waivable rules) |
 | M5-02 (Isolated preflight) | M4-04 (Runner controller), M4-05 (Slice workflow), M5-01 (Quality policy), P0-07 (gVisor runner proof), P0-11 (quality/security/license baseline proof) | FR-016, FR-018; NFR-009-NFR-011; AC-23-AC-25, AC-55 (isolated repository-equivalent and security checks bound to exact SHA) |
@@ -290,4 +296,4 @@ a value that the dispatcher may invent.
 - [ ] Rollback/disablement preserves authoritative state and auditability.
 - [ ] Structural validation and the read-only exact-evidence dispatch preflight pass for the complete packet registry.
 - [ ] A separate human-attested implementation authorization binds the exact workspace, attempt, packet/context tuple, repository/base/branches, people, scope/non-scope, budget, permitted workflow actions, external effects, rollback, and validity window.
-- [ ] `B-CODING-AUTHORITY-01` (trusted human-state verification and durable attempt lease) is resolved, every required human role is independently verified, and one atomic current-attempt lease is acquired before any mutation.
+- [ ] For Curve-dispatched execution, `B-CODING-AUTHORITY-01` (trusted human-state verification and durable attempt lease) is resolved, every required human role is independently verified, and one atomic current-attempt lease is acquired before any mutation. Human-operated work outside Curve dispatch uses a separate exact grant and cannot satisfy this item.

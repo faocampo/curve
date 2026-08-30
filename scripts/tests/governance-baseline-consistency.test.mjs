@@ -14,6 +14,8 @@ const remediation = read("docs/technical/review-analysis-and-remediation.md");
 const architecture = read("docs/technical/architecture.md");
 const development = read("docs/technical/development-plan.md");
 const decisions = read("docs/technical/architecture-decisions.md");
+const codingDecision = read("docs/technical/coding-agent-local-execution-decision.md");
+const runtimePacket = read("docs/technical/runtime-m0-01-graceful-shutdown-task-packet.md");
 const foundation = read("docs/technical/plane-foundation-inventory.md");
 const readiness = read("docs/technical/m0-readiness-board.md");
 const m0Audit = read("docs/technical/m0-completion-audit.md");
@@ -25,6 +27,7 @@ const productEvidence = read("docs/technical/m1-00a-product-core-implementation-
 const productRelational = read("contracts/database/m1-00a-product-core-relational-contract.md");
 const m1Alignment = read("docs/technical/m1-alignment-evidence-prd-task-packet.md");
 const laterPackets = read("docs/technical/m1-m7-task-packets.md");
+const laterIndex = read("docs/technical/later-milestone-decision-readiness-index.md");
 const implementedErd = read("docs/technical/implemented-entity-relationship-model.md");
 const projectMap = read("docs/technical/github-project-execution-map.md");
 const runtimeRefresh = read("docs/technical/local-runtime-refresh-evidence.md");
@@ -72,9 +75,10 @@ test("active current-state documents bind one accepted Plane preview", () => {
   );
   assert.match(
     readiness,
-    /\| Observed Curve contract base \| Curve `main` at `cbbb9a7397fd65f100344ceb766ad57e8039aaa1`/,
+    /\| Observed Curve contract base \| Curve `main` at `7069acba643942c9670521b8b1ebc1774b5ea7fb`/,
   );
   assert.match(readiness, /grants no decision, implementation, provider-call, or dispatch authority/);
+  assert.match(m0Audit, /c55686c8061f092f4f82ab73681e06f97d80893f/);
   assert.match(m0Audit, /68a05e9f2920454752e9039d596271dbb39d6e6e/);
   assert.match(m0Audit, /accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`/);
 });
@@ -111,14 +115,18 @@ test("exact-preview local runtime evidence binds the durable verified control pa
 test("substantively reconciled governance documents advance document control", () => {
   for (const [name, contents, version, dateLabel, date] of [
     ["architecture", architecture, "0.9", "Last updated", "2026-08-30"],
-    ["development", development, "1.20", "Last updated", "2026-08-31"],
+    ["coding-agent decision", codingDecision, "1.1", "Prepared", "2026-08-30"],
+    ["RUNTIME-M0-01 packet", runtimePacket, "1.1", "Prepared", "2026-08-30"],
+    ["development", development, "1.21", "Last updated", "2026-08-31"],
     ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
-    ["M0 readiness board", readiness, "1.38", "Date", "2026-08-31"],
-    ["M0 completion audit", m0Audit, "1.10", "Date", "2026-08-31"],
+    ["M0 readiness board", readiness, "1.39", "Date", "2026-08-31"],
+    ["M0 completion audit", m0Audit, "1.11", "Date", "2026-08-31"],
+    ["M0 test strategy", strategy, "1.8", "Last updated", "2026-08-31"],
     ["GitHub Project execution map", projectMap, "1.18", "Date", "2026-08-29"],
     ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],
-    ["M1-M7 catalog", laterPackets, "1.9", "Date", "2026-08-30"],
-    ["decision index", decisions, "1.5", "Last updated", "2026-08-31"],
+    ["M1-M7 catalog", laterPackets, "1.11", "Date", "2026-08-31"],
+    ["architecture decision index", decisions, "1.6", "Last updated", "2026-08-31"],
+    ["later-milestone index", laterIndex, "1.4", "Prepared", "2026-08-31"],
     ["implemented ERD", implementedErd, "1.2", "Last updated", "2026-08-30"],
   ]) {
     assert.match(contents, new RegExp(`^\\| Version \\| ${version.replace(".", "\\.")} \\|$`, "m"), name);
@@ -133,15 +141,31 @@ test("next work and later-milestone status remain truthfully executable", () => 
   assert.ok(nextSequence, "M0 next executable sequence is required");
   assert.match(
     nextSequence[1],
-    /^1\. Decide \[B-CODING-TOOLS-01\]/,
+    /^1\. Decide the paired simplified outcome in the/m,
+  );
+  assert.match(nextSequence[1], /Authority Option 3/);
+  assert.match(nextSequence[1], /B-CODING-TOOLS-01\/B-CODING-AUTHORITY-01 pair/);
+  assert.match(
+    nextSequence[1],
+    /^2\. Merge that exact decision revision and obtain one exact human Plane execution\s+grant for RUNTIME-M0-01/m,
   );
   assert.match(
     nextSequence[1],
-    /2\. Publish the RUNTIME-M0-01 \(graceful Curve worker shutdown classification\)/,
+    /^3\. Revalidate the live Plane base and local image\/tool\/workspace evidence,\s+implement the three-file correction in one human-operated worktree,[\s\S]*publish Curve implementation evidence/m,
   );
-  assert.match(nextSequence[1], /3\. Decide \[B-CODING-AUTHORITY-01\]/);
   assert.match(nextSequence[1], /Curve issue #46/);
+  assert.match(nextSequence[1], /Machine dispatch remains fail closed/);
+  assert.doesNotMatch(nextSequence[1], /Publish the RUNTIME-M0-01 machine packet/);
   assert.match(nextSequence[1], /D-009 \(retention, backup, legal-hold, tombstone, and erasure/);
+
+  assert.match(
+    development,
+    /M4-04[^\n]*consumes any B-CODING-TOOLS-01\/B-CODING-AUTHORITY-01 controls deferred during human-operated bootstrap/,
+  );
+  assert.match(
+    laterPackets,
+    /M4-04 \(Runner controller\)[^\n]*B-CODING-TOOLS-01 \(machine coding-tool execution profile\)[^\n]*B-CODING-AUTHORITY-01 \(production human authority and durable attempt lease\)/,
+  );
 
   assert.match(
     laterPackets,

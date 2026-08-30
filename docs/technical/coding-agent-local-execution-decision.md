@@ -4,8 +4,8 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `ANALYZED / OWNER DECISIONS REQUIRED / NOT IMPLEMENTATION AUTHORITY` |
-| Version | 1.0 |
+| Status | `ANALYZED / SIMPLIFIED BOOTSTRAP PROPOSED / OWNER DECISION REQUIRED / NOT IMPLEMENTATION AUTHORITY` |
+| Version | 1.1 |
 | Prepared | 2026-08-30 |
 | Product | Curve |
 | Decisions | B-CODING-TOOLS-01 (local coding-tool execution profile) and B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) |
@@ -29,9 +29,11 @@ independent boundary also prevents production dispatch until Curve can verify
 the approving human's current authority and atomically acquire one durable
 attempt lease.
 
-Federico must select one execution profile and one authority profile. An AI
-coding agent may prepare and validate the alternatives but cannot select either
-security architecture.
+Federico must either select one execution profile plus Authority Option 1 or 2,
+or select Authority Option 3 and explicitly defer the machine execution profile
+to M4 (OpenHands automation and gVisor runner integration). An AI coding agent
+may prepare and validate the alternatives but cannot select the security
+architecture.
 
 ### Current v1 representation boundary
 
@@ -60,21 +62,26 @@ Therefore:
   boundary. Node/Pnpm remain unavailable until a later packet that needs them
   separately pins their executable, lifecycle-script, registry/cache, network,
   and output contract.
+- Authority Option 3 creates no Curve machine-execution command. The human
+  operator uses ordinary repository authorization and repository-native tools;
+  Curve records commit-bound evidence afterward. B-CODING-TOOLS-01 may
+  therefore remain `DEFERRED_TO_M4` while this path is active.
 
 ## Fixed invariants
 
 | Area | Invariant |
 | --- | --- |
-| Repository scope | One packet, one repository, one pinned base, one feature branch, one active attempt. |
+| Repository scope | Curve machine dispatch uses one packet, one repository, one pinned base, one feature branch, and one active attempt. The manual path binds the same repository/base/branch tuple in its human grant and makes no Curve lease claim. |
 | Data | Local bootstrap tasks use synthetic `INTERNAL` data and no protected body. |
 | Credentials | Repository-code sandboxes receive no Curve-managed VCS, provider, deployment, production, or cloud credential. |
-| Commands | Exact argv arrays only; no shell wrapper, interpolation, dynamic module, package download, lifecycle hook, alias, or caller-supplied executable path. |
-| Tools | Executable path, regular-file/symlink policy, byte digest, version, and isolated version probe are pinned. |
-| Network | Default deny; each allowed destination requires a named policy decision and command binding. |
-| VCS mutation | Agents return candidate changes; the trusted controller owns commit, push, and draft PR/MR effects. |
+| Commands | Curve machine dispatch uses exact argv arrays with no shell wrapper, interpolation, dynamic module, package download, lifecycle hook, alias, or caller-supplied executable path. The manual path records the exact human-run repository-native commands and outputs. |
+| Tools | Curve machine dispatch pins executable path, regular-file/symlink policy, byte digest, version, and isolated version probe. The manual path records observed image/tool versions and digests without claiming Curve enforcement. |
+| Network | Curve machine dispatch defaults to deny and binds every destination to a named policy decision and command. The manual path uses the existing developer-owned local stack and intentionally accesses no provider, protected-data, production, or deployment destination. |
+| VCS mutation | Curve-dispatched agents return candidate changes and the trusted controller owns VCS effects. Under Authority Option 3, the human operator uses ordinary developer repository authority and records the resulting branch, commit, and PR evidence. |
 | Human authority | An agent cannot attest or infer a human approval, role, receipt, or revocation state. |
 | Production dispatch | Remains fail closed until an independently verified authority receipt and atomic current-attempt lease exist. |
 | gVisor | Remains mandatory for OpenHands, quality jobs, and every untrusted/non-local automated workload. |
+| Manual bootstrap | Human-operated coding uses ordinary developer authority outside Curve dispatch, produces no Curve machine-execution claim, and records implementation evidence after repository CI and review. |
 
 Official implementation references:
 
@@ -86,7 +93,7 @@ Official implementation references:
 
 ## B-CODING-TOOLS-01 (Local Coding-Tool Execution Profile)
 
-### Option A — Trust-tiered local bootstrap profile (recommended)
+### Option A — Trust-tiered local bootstrap profile
 
 Allow a narrowly defined `LOCAL_TRUSTED_WORKTREE_V1` profile for local-only,
 human-supervised bootstrap changes. Keep gVisor mandatory for untrusted,
@@ -150,7 +157,8 @@ helper and service/file allowlists.
 
 ### Tool decision record
 
-The approval must select exactly one option and bind:
+An approval that selects Authority Option 1 or 2 must select exactly one tool
+option and bind:
 
 - profile ID/version and allowed environment;
 - trusted executor/helper implementation owner;
@@ -162,9 +170,13 @@ The approval must select exactly one option and bind:
   stricter approved replacement;
 - residual risks, review date, and revocation/disable behavior.
 
+An approval that selects Authority Option 3 may instead bind
+`B-CODING-TOOLS-01: DEFERRED_TO_M4`. That deferral authorizes no Curve machine
+command and preserves the current fail-closed classifier and dispatcher.
+
 ## B-CODING-AUTHORITY-01 (Human Authority and Attempt Lease)
 
-### Option 1 — Bootstrap-local human grant plus production fail-closed (recommended)
+### Option 1 — Bootstrap-local human grant plus production fail-closed
 
 Permit an interim `BOOTSTRAP_LOCAL_MANUAL_V1` grant for explicitly approved,
 synthetic, local-only repository tasks while the production verifier and lease
@@ -217,9 +229,16 @@ Benefits: no bootstrap authority adapter. Limitation: this path does not prove
 Curve's machine dispatch contract and cannot be called Curve-authorized
 automated execution.
 
+If selected for the bootstrap phase, this option also records
+B-CODING-TOOLS-01 as `DEFERRED_TO_M4`. There is no local machine command packet,
+trusted Docker gateway, human-receipt adapter, or local lease to implement for
+the manual path. M4 must decide and implement the production-relevant
+OpenHands/gVisor command, authority, lease, and evidence boundary before Curve
+dispatches an automated coding attempt.
+
 ### Authority decision record
 
-The approval must select exactly one option and bind:
+An approval selecting Option 1 or 2 must bind:
 
 - environment and expiry/review date;
 - authoritative identity/role source;
@@ -232,6 +251,12 @@ The approval must select exactly one option and bind:
 - permitted actions and explicit prohibitions;
 - kill switch, rollback, and incident owner.
 
+An approval selecting Option 3 instead binds the human operator, repository,
+base, feature branch, files, commands, synthetic-data boundary, permitted local
+Docker and VCS effects, tests, budget, validity window, review, rollback, and
+production fail-closed state. It has no Curve authority receipt, nonce, lease,
+renewal, or recovery semantics because the work occurs outside Curve dispatch.
+
 Selecting Option 1 or Option 3 changes only the local bootstrap process.
 Production dispatch remains blocked until Option 2's equivalent controls are
 approved, implemented, and independently verified.
@@ -241,38 +266,64 @@ field is one of `LOCAL_BOOTSTRAP_PROFILE_SELECTED`,
 `LOCAL_BOOTSTRAP_OUTSIDE_CURVE`, or `LOCAL_BOOTSTRAP_UNRESOLVED`. The production
 field remains `PRODUCTION_AUTHORITY_UNRESOLVED` until the independently
 verified identity/receipt source and PostgreSQL-backed durable lease are
-implemented and accepted. Selecting Option 1 may change only the first field;
-it cannot imply production readiness.
+implemented and accepted. Selecting Option 1 sets the local field to
+`LOCAL_BOOTSTRAP_PROFILE_SELECTED`; selecting Option 3 sets it to
+`LOCAL_BOOTSTRAP_OUTSIDE_CURVE`. Neither implies production readiness.
 
-## Recommendation
+## Verified bootstrap feasibility evidence
 
-Select B-CODING-TOOLS-01 Option A (trust-tiered local bootstrap profile) and
-B-CODING-AUTHORITY-01 Option 1 (bootstrap-local exact human grant with
-production fail-closed). This matches the existing local Plane Docker workflow,
-preserves gVisor for untrusted execution, permits RUNTIME-M0-01 to proceed with
-synthetic data and zero external spend, and keeps production security claims
-closed until the real verifier and lease provider exist.
+The 2026-08-30 local audit used Curve `main`
+`c55686c8061f092f4f82ab73681e06f97d80893f` and Plane `preview`
+`99a73b4eab5ee21fd012d7358bc9259252d47f71`.
+
+| Evidence | Verified result | Consequence |
+| --- | --- | --- |
+| Host Python/Ruff | Python 3.14.7; no host Ruff executable | Option A needs a separately pinned disposable Python/Ruff environment rather than the current host tools. |
+| Existing Curve worker image | Image digest `sha256:afaf09281c96e984df0f5510657e5609e9bb88200b12f040bc0cb672d9706617`; Python 3.12.5; Ruff 0.9.7 | The local image is usable human-operated evidence, while a machine profile requires provenance, full runtime-tree pinning, and controller receipts. |
+| Existing dependency-complete test image | Image digest `sha256:5dcd00dec45aebe57fd0965e0b04e1765cad6dcce32af474fbc29073bbe834d7`; Python 3.12.5; Ruff 0.9.7; pytest 9.0.3 | A human operator can reuse the exact local image through an isolated disposable project. Machine use additionally requires a reviewed immutable image and non-installing Compose model. |
+| Cached test dependencies | PostgreSQL `sha256:468d34f...`, Valkey `sha256:10328d0...`, RabbitMQ `sha256:611107e...`, and MinIO `sha256:14cea49...` are present locally | The exact human grant binds and revalidates the full image IDs and uses `--pull never`; any missing or changed dependency stops the proof. |
+| Existing source-image project resources | Four healthy dependency containers and the `test_env` network remain active under Compose project `plane-m1-01a-initiative-core-20260829` | RUNTIME-M0-01 must not reuse or clean that project. The manual proof uses a dedicated project plus a disposable alias of the exact source image ID, and stops if its own alias or project resources pre-exist. |
+| Exact-preview environment file | `apps/api/.env` is absent; `docker-compose-test.yml` requires it for four services | The manual proof creates an ignored mode-`0600` byte copy of the public `.env.example`, appends no secret, rejects any pre-existing `.env`, and removes only the attempt-created copy in `finally`. |
+| Plane API test definition | The `api-tests` entrypoint installs `requirements/test.txt`; the stack includes shell entrypoints, mutable dependency tags, environment-file reads, and an egress-capable bridge | Option A or C requires a new image supply-chain decision, sanitized Compose model, trusted helper, receipt schema, and adversarial validation before machine use. |
+| Synthetic local workspace | Workspace `c6d757e7-7c0d-4721-990b-4cfbf4063e8e`; zero non-terminal Operations; zero undelivered `CURVE_TEMPORAL_OPERATION_V1` events; 95 pending `CURVE_LOCAL` application events | Worker shutdown quiescence must examine worker-owned Temporal work. Application-local events are inventoried separately and do not block the signal proof. |
+
+## Simplified bootstrap proposal
+
+Select B-CODING-AUTHORITY-01 Option 3 (human-operated coding outside Curve
+dispatch) for local bootstrap development and record B-CODING-TOOLS-01 as
+`DEFERRED_TO_M4`. RUNTIME-M0-01 (graceful Curve worker shutdown classification)
+then proceeds as an ordinary human-supervised Plane change with repository-
+native tests, local signal verification, commit-bound CI, CodeQL, review, and
+post-merge Curve evidence. Curve machine dispatch remains fail closed until M4
+implements the production-relevant OpenHands/gVisor execution and authority
+boundary.
+
+This proposal requires Federico's exact-revision approval. The document does
+not decide it.
 
 ## Acceptance before implementation
 
-1. Federico approves one exact option from each decision section.
+1. Federico approves either one exact tool option plus Authority Option 1 or 2,
+   or the paired simplified outcome: Authority Option 3 plus
+   `B-CODING-TOOLS-01: DEFERRED_TO_M4`.
 2. The selected decision text is committed and merged at an exact Curve
    revision.
-3. The command classifier, schema, fixtures, and adversarial tests implement
-   the selected tool boundary without caller-selectable helpers.
-4. The RUNTIME-M0-01 machine packet is published in
-   `S -> E1..En -> C -> P` order (normative source; ordered authority,
-   state, and context evidence; source catalog; sealed registry) and passes
-   structural plus read-only preflight.
-5. The selected authority profile produces a separate exact-digest
-   authorization before Plane mutation.
-6. GitHub Project items reflect visual progress without being used as evidence
+3. For Authority Option 1 or 2, the command classifier, schema, fixtures,
+   adversarial tests, ordered machine packet, trusted authority receipt, and
+   current-attempt lease must exist before Plane mutation.
+4. For Authority Option 3, Federico supplies one exact human execution grant
+   binding the Plane base, branch, scope, data boundary, commands, external
+   effects, tests, rollback, and review. The implementation is recorded as
+   human-operated rather than Curve-dispatched.
+5. GitHub Project items reflect visual progress without being used as evidence
    of approval or authority.
 
 ## Rollback
 
 Before decision approval, close or revert this documentation package. After a
-decision is implemented, disable the selected local profile, revoke any active
-bootstrap authorization, terminate its attempt, remove its local worktree, and
-return dispatch to fail closed. No application data or migration is involved in
-the decision packet itself.
+machine profile is implemented, disable the selected local profile, revoke any
+active bootstrap authorization, terminate its attempt, remove its local
+worktree, and return dispatch to fail closed. Under Authority Option 3, abandon
+or revert the human-operated feature branch and keep machine dispatch fail
+closed. No application data or migration is involved in the decision packet
+itself.
