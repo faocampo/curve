@@ -26,6 +26,7 @@ const m1Alignment = read("docs/technical/m1-alignment-evidence-prd-task-packet.m
 const laterPackets = read("docs/technical/m1-m7-task-packets.md");
 const implementedErd = read("docs/technical/implemented-entity-relationship-model.md");
 const projectMap = read("docs/technical/github-project-execution-map.md");
+const runtimeRefresh = read("docs/technical/local-runtime-refresh-evidence.md");
 const projectSync = read("scripts/sync-github-project.mjs");
 
 const versionMatch = prd.match(/^\| Version\s+\|\s+([0-9.]+)\s+\|$/m);
@@ -69,15 +70,46 @@ test("active current-state documents bind one accepted Plane preview", () => {
   );
   assert.match(
     readiness,
-    /\| Published Curve contract baseline \| Curve `main` at `7ef2de326411ae34b11e11b28d8f9ec7c0d5f16e`/,
+    /\| Published Curve contract baseline \| Curve `main` at `a1a34c142bc37bf331cc58056dba858851db9cbf`/,
   );
+});
+
+test("exact-preview local runtime evidence binds the durable verified control path", () => {
+  for (const value of [
+    "99a73b4eab5ee21fd012d7358bc9259252d47f71",
+    "/Users/federico.ocampo/Development/tools/project_management/plane-runtime-preview",
+    "/Users/federico.ocampo/Development/tools/project_management/plane-runtime-preview/docker-compose-local.yml",
+    "/Users/federico.ocampo/Development/tools/project_management/plane-runtime-preview/docker-compose-curve.yml",
+    "--project-directory /Users/federico.ocampo/Development/tools/project_management/plane",
+    "7129cc4e-a914-4331-acba-8cf2754c15bf",
+    "7897ba9c-90cc-40f5-b970-c099234f7d19",
+    "bf4b5743-2ef4-4a03-9f6e-c8044e18f100",
+    "d8082c6c-4954-4c45-adb8-7aff29e7768b",
+    "29e27d7b-9e89-4b6b-a2be-472c13110a8d",
+  ]) {
+    assert.match(runtimeRefresh, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+  assert.match(runtimeRefresh, /Curve issue #46/);
+  assert.match(runtimeRefresh, /RUNTIME-M0-01 graceful Curve worker shutdown classification/);
+  assert.match(runtimeRefresh, /Broad M0 completion remains open/);
+  assert.match(runtimeRefresh, /verified symptom, suspected\s+race/);
+  assert.doesNotMatch(
+    runtimeRefresh,
+    /project_management\/plane\/docker-compose-local\.yml/,
+  );
+  assert.match(runtimeRefresh, /D-009 \(retention, backup, legal-hold, tombstone, and erasure decision\)/);
+  assert.match(readiness, /\[Exact-preview local runtime refresh evidence\]\(local-runtime-refresh-evidence\.md\)/);
+  assert.match(foundation, /\[exact-preview local runtime refresh evidence\]\(local-runtime-refresh-evidence\.md\)/);
+  assert.match(technicalIndex, /\[Exact-preview local runtime refresh evidence\]\(local-runtime-refresh-evidence\.md\)/);
 });
 
 test("substantively reconciled governance documents advance document control", () => {
   for (const [name, contents, version, dateLabel] of [
     ["architecture", architecture, "0.7", "Last updated"],
     ["development", development, "1.15", "Last updated"],
-    ["foundation", foundation, "1.3", "Review date"],
+    ["foundation", foundation, "1.4", "Review date"],
+    ["M0 readiness board", readiness, "1.33", "Date"],
+    ["GitHub Project execution map", projectMap, "1.18", "Date"],
     ["M1 alignment", m1Alignment, "1.5", "Date"],
     ["M1-M7 catalog", laterPackets, "1.6", "Date"],
     ["decision index", decisions, "1.3", "Last updated"],
@@ -145,14 +177,14 @@ test("M1-00A merged local lifecycle and open conformance variance agree across a
   }
 });
 
-test("GitHub Project snapshot accounts for all 95 current items", () => {
+test("GitHub Project snapshot accounts for all 97 current items", () => {
   const liveCounts = projectMap.match(
     /Project #2 had (\d+) items: (\d+) draft issues, (\d+) issues, and (\d+) pull requests/,
   );
   assert.ok(liveCounts, "live Project count summary is required");
   const [, liveTotal, draftIssues, issues, pullRequests] = liveCounts.map(Number);
   assert.equal(draftIssues + issues + pullRequests, liveTotal);
-  assert.deepEqual([liveTotal, draftIssues, issues, pullRequests], [95, 81, 4, 10]);
+  assert.deepEqual([liveTotal, draftIssues, issues, pullRequests], [97, 81, 5, 11]);
 
   const countFor = (labelPattern) => {
     const match = projectMap.match(
@@ -178,13 +210,14 @@ test("GitHub Project snapshot accounts for all 95 current items", () => {
   const standaloneIssues =
     countFor("SEC-M0-01 \\(inherited High dependency advisories\\) issue") +
     countFor("R-027 \\(Product timestamp/schema-version contract reconciliation\\) issue") +
+    countFor("RUNTIME-M0-01 \\(graceful Curve worker shutdown classification\\) issue") +
     countFor("M7 intelligence extension issues");
   const trackedPullRequests = countFor("Tracked pull-request evidence items");
   const documentedTotal = countFor("\\*\\*Current visual total\\*\\*");
 
   assert.deepEqual(
     { canonical, checkpoints, standaloneIssues, trackedPullRequests, documentedTotal },
-    { canonical: 71, checkpoints: 10, standaloneIssues: 4, trackedPullRequests: 10, documentedTotal: 95 },
+    { canonical: 71, checkpoints: 10, standaloneIssues: 5, trackedPullRequests: 11, documentedTotal: 97 },
   );
   assert.equal(canonical + checkpoints + standaloneIssues + trackedPullRequests, documentedTotal);
   assert.match(projectMap, /P0-02 \(runtime and repository topology\).*`Done`/);
@@ -193,6 +226,7 @@ test("GitHub Project snapshot accounts for all 95 current items", () => {
     "P0-03A",
     "SEC-M0-01",
     "R-027",
+    "RUNTIME-M0-01",
     "M0-S9B-D1",
     "M0-S9C-D1",
   ]) {
