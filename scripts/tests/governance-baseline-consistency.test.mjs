@@ -1,0 +1,202 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+
+const read = (path) =>
+  readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
+
+const prd = read("docs/curve-ai-native-sdlc-prd.md");
+const workflows = read("docs/technical/workflows-and-sequences.md");
+const engineering = read("docs/technical/engineering-patterns-and-technologies.md");
+const c4 = read("docs/technical/c4-architecture.md");
+const m7 = read("docs/technical/m7-intelligence-and-automation-extension.md");
+const remediation = read("docs/technical/review-analysis-and-remediation.md");
+const architecture = read("docs/technical/architecture.md");
+const development = read("docs/technical/development-plan.md");
+const decisions = read("docs/technical/architecture-decisions.md");
+const foundation = read("docs/technical/plane-foundation-inventory.md");
+const readiness = read("docs/technical/m0-readiness-board.md");
+const strategy = read("docs/technical/m0-test-strategy.md");
+const technicalIndex = read("docs/technical/README.md");
+const contractIndex = read("contracts/README.md");
+const productPacket = read("docs/technical/m1-00a-product-core-task-packet.md");
+const productEvidence = read("docs/technical/m1-00a-product-core-implementation-evidence.md");
+const productRelational = read("contracts/database/m1-00a-product-core-relational-contract.md");
+const m1Alignment = read("docs/technical/m1-alignment-evidence-prd-task-packet.md");
+const laterPackets = read("docs/technical/m1-m7-task-packets.md");
+const implementedErd = read("docs/technical/implemented-entity-relationship-model.md");
+const projectMap = read("docs/technical/github-project-execution-map.md");
+const projectSync = read("scripts/sync-github-project.mjs");
+
+const versionMatch = prd.match(/^\| Version\s+\|\s+([0-9.]+)\s+\|$/m);
+assert.ok(versionMatch, "PRD document-control version is required");
+const prdVersion = versionMatch[1];
+
+test("active architecture specifications bind the current PRD version", () => {
+  for (const [name, contents] of [
+    ["workflows", workflows],
+    ["engineering", engineering],
+    ["C4", c4],
+    ["M7 extension", m7],
+  ]) {
+    assert.match(contents, new RegExp(`Curve PRD v${prdVersion.replace(".", "\\.")}`), name);
+  }
+});
+
+test("active current-state documents bind one accepted Plane preview", () => {
+  const currentPlane = "99a73b4eab5ee21fd012d7358bc9259252d47f71";
+  for (const [name, contents] of [
+    ["engineering", engineering],
+    ["remediation", remediation],
+    ["development", development],
+    ["decisions", decisions],
+    ["foundation", foundation],
+    ["readiness", readiness],
+  ]) {
+    assert.match(contents, new RegExp(currentPlane), name);
+  }
+
+  assert.doesNotMatch(remediation, /current accepted Plane `preview` is `e762fbb/);
+  assert.doesNotMatch(development, /current implementation base[^\n]*`af7187d/);
+  assert.doesNotMatch(foundation, /current `origin\/preview` `e762fbb/);
+  assert.match(
+    readiness,
+    /\| Accepted Plane baseline \| Fork `preview` at `99a73b4eab5ee21fd012d7358bc9259252d47f71`/,
+  );
+  assert.match(
+    readiness,
+    /\| Published Plane implementation \| Plane `preview` at `99a73b4eab5ee21fd012d7358bc9259252d47f71`/,
+  );
+  assert.match(
+    readiness,
+    /\| Published Curve contract baseline \| Curve `main` at `7ef2de326411ae34b11e11b28d8f9ec7c0d5f16e`/,
+  );
+});
+
+test("substantively reconciled governance documents advance document control", () => {
+  for (const [name, contents, version, dateLabel] of [
+    ["architecture", architecture, "0.7", "Last updated"],
+    ["development", development, "1.15", "Last updated"],
+    ["foundation", foundation, "1.3", "Review date"],
+    ["M1 alignment", m1Alignment, "1.5", "Date"],
+    ["M1-M7 catalog", laterPackets, "1.6", "Date"],
+    ["decision index", decisions, "1.3", "Last updated"],
+  ]) {
+    assert.match(contents, new RegExp(`^\\| Version \\| ${version.replace(".", "\\.")} \\|$`, "m"), name);
+    assert.match(contents, new RegExp(`^\\| ${dateLabel} \\| 2026-08-29 \\|$`, "m"), name);
+  }
+});
+
+test("P0-05 accepted lifecycle agrees across strategy, readiness, and Project projection", () => {
+  assert.match(strategy, /\| Status \| `ACCEPTED \/ DONE` \|/);
+  assert.match(strategy, /7d2794bad87a6e2e733ee8a53a650d8ea7658d22/);
+  assert.match(strategy, /fdae85b33a235cd494dd36565698b2b5033a3389/);
+  assert.match(readiness, /\| P0-05 test strategy \| DONE \|/);
+  assert.match(projectMap, /P0-05 \(test strategy and audit closure\).*`Done`/);
+  assert.match(projectSync, /\["P0-05", "Done"\]/);
+});
+
+test("M1-00A merged local lifecycle and open conformance variance agree across active indexes", () => {
+  for (const [name, contents] of [
+    ["task packet", productPacket],
+    ["technical index", technicalIndex],
+    ["contract index", contractIndex],
+  ]) {
+    assert.match(contents, /CONFORMANCE_VARIANCE_OPEN/, name);
+    assert.match(
+      contents,
+      /R-027 \(Product timestamp\/schema-version contract reconciliation\)/,
+      name,
+    );
+  }
+
+  assert.match(development, /\| M1-00A \(minimal Product core\) \|[^\n]*`MERGED_LOCAL_IMPLEMENTATION \/ CONFORMANCE_VARIANCE_OPEN`/);
+  assert.match(m1Alignment, /\| M1-00A \(minimal Product core\) \|[^\n]*`MERGED_LOCAL_IMPLEMENTATION \/ CONFORMANCE_VARIANCE_OPEN`/);
+  assert.match(projectMap, /M1-00A \(minimal Product core\).*`Done`/);
+  assert.doesNotMatch(productPacket, /`PREPARED_NOT_DISPATCHABLE`/);
+  assert.doesNotMatch(technicalIndex, /M1-00A[^\n]*`PREPARED_NOT_DISPATCHABLE`/);
+  assert.doesNotMatch(
+    contractIndex,
+    /M1-00A relational contract[^\n]*`IMPLEMENTED_AND_ACCEPTED/,
+  );
+  assert.match(productEvidence, /Exact\s+relational conformance, production qualification,[\s\S]*remain fail-closed/);
+  assert.match(productRelational, /`HISTORICAL_V1 \/ MERGED_LOCAL_IMPLEMENTATION \/ CONFORMANCE_VARIANCE_OPEN`/);
+  assert.match(productRelational, /schema_version/);
+  assert.match(productRelational, /application\s+UTC using `auto_now_add` and `auto_now`/);
+  assert.match(productRelational, /trusted PostgreSQL time in UTC/);
+  assert.doesNotMatch(productRelational, /\| Status \|[^\n]*(ACCEPTED_AND_MERGED|IMPLEMENTED_AND_ACCEPTED)/);
+  assert.match(implementedErd, /observational physical evidence/);
+  assert.match(implementedErd, /exact relational[\s\S]*remain[\s\S]*fail closed/i);
+  assert.match(laterPackets, /M2-01 \(roadmap planning domain\)[^\n]*R-027 \(Product timestamp\/schema-version contract reconciliation\)/);
+  assert.match(projectMap, /GitHub Project[^\n]*visual|visual metadata/i);
+  assert.match(
+    foundation,
+    /M1-00A \(minimal Product core\)[^\n]*R-027 \(Product timestamp\/schema-version contract reconciliation\)/,
+  );
+
+  for (const value of [
+    "46880350e0ca1e57dd08b6fb5a6a6546f37c4473",
+    "sha256:951fd873f4a9179aae58359e595e48e80ba081a9703202f6b9d9eed51b4b3b6f",
+    "d4ab9ea7c6d19222c316a51d7d2992415c8940f0",
+    "afdb59388e4ea9b2321d33935000126303fc93b8",
+    "1c4904d617207b8301954c1019fe0fc6bf099b6d",
+  ]) {
+    assert.match(productEvidence, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+});
+
+test("GitHub Project snapshot accounts for all 95 current items", () => {
+  const liveCounts = projectMap.match(
+    /Project #2 had (\d+) items: (\d+) draft issues, (\d+) issues, and (\d+) pull requests/,
+  );
+  assert.ok(liveCounts, "live Project count summary is required");
+  const [, liveTotal, draftIssues, issues, pullRequests] = liveCounts.map(Number);
+  assert.equal(draftIssues + issues + pullRequests, liveTotal);
+  assert.deepEqual([liveTotal, draftIssues, issues, pullRequests], [95, 81, 4, 10]);
+
+  const countFor = (labelPattern) => {
+    const match = projectMap.match(
+      new RegExp(`^\\| ${labelPattern} \\|[^\\n]*\\| \\*{0,2}(\\d+)\\*{0,2} \\|`, "m"),
+    );
+    assert.ok(match, `missing inventory count for ${labelPattern}`);
+    return Number(match[1]);
+  };
+
+  const canonical = countFor("Canonical catalog total");
+  const checkpoints = [
+    "M0-S3 \\(local Temporal round-trip implementation packet\\) checkpoint",
+    "M0-S4 \\(API, SSE, and Curve-first UI implementation packet\\) checkpoint",
+    "M0-S4-UX \\(Foundation Definition/UX gate\\) checkpoint",
+    "M0-03A \\(policy timestamp-ordering regression\\) checkpoint",
+    "M0-S6A \\(durable parent/child Temporal orchestration\\) checkpoint",
+    "M0-S9A \\(provider-neutral registry and local reconciliation\\) checkpoint",
+    "M0-S6A-E1 \\(durable-orchestration evidence reconciliation\\) checkpoint",
+    "P0-03A \\(later-milestone decision-readiness packets\\) checkpoint",
+    "M0-S9B-D1 \\(external-provider transport definition gate\\) checkpoint",
+    "M0-S9C-D1 \\(Model Gateway definition gate\\) checkpoint",
+  ].reduce((total, label) => total + countFor(label), 0);
+  const standaloneIssues =
+    countFor("SEC-M0-01 \\(inherited High dependency advisories\\) issue") +
+    countFor("R-027 \\(Product timestamp/schema-version contract reconciliation\\) issue") +
+    countFor("M7 intelligence extension issues");
+  const trackedPullRequests = countFor("Tracked pull-request evidence items");
+  const documentedTotal = countFor("\\*\\*Current visual total\\*\\*");
+
+  assert.deepEqual(
+    { canonical, checkpoints, standaloneIssues, trackedPullRequests, documentedTotal },
+    { canonical: 71, checkpoints: 10, standaloneIssues: 4, trackedPullRequests: 10, documentedTotal: 95 },
+  );
+  assert.equal(canonical + checkpoints + standaloneIssues + trackedPullRequests, documentedTotal);
+  assert.match(projectMap, /P0-02 \(runtime and repository topology\).*`Done`/);
+  for (const id of [
+    "M0-S6A-E1",
+    "P0-03A",
+    "SEC-M0-01",
+    "R-027",
+    "M0-S9B-D1",
+    "M0-S9C-D1",
+  ]) {
+    assert.equal((projectMap.match(new RegExp(`\\| ${id} `, "g")) ?? []).length, 1, id);
+  }
+  assert.match(projectSync, /\["P0-02", "Done"\]/);
+});

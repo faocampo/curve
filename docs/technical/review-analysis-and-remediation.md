@@ -5,9 +5,9 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Remediation in progress; implementation authority is package-specific |
-| Version | 0.8 |
-| Review date | 2026-08-20 |
-| Reviewed baseline | Curve PRD v0.4; remediation target advanced through [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (current product requirements, decision register, and accepted local Temporal proof) and the governed technical suite |
+| Version | 1.0 |
+| Review date | 2026-08-29 |
+| Reviewed baseline | Curve PRD v0.4; remediation target advanced through [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current Product/Initiative requirements, decision register, and accepted local foundation proofs) and the governed technical suite |
 | Audience | Product, engineering, architecture, security, platform operations, legal, and AI coding agents |
 | Authority | Records gaps and closure evidence; it does not override the PRD or approve an ADR |
 
@@ -20,7 +20,10 @@ is `DECIDED`; D-003 (runtime topology and trust-zone decision) is decided and
 implemented for `LOCAL_ONLY`. M0-S1 (module shell), M0-S2 (operation and
 delivery kernel), M0-03 (core authorization and policy kernel), and M0-S3
 (local Temporal round-trip implementation packet) are implemented and merged.
-The current accepted Plane `preview` is `e762fbb...`. Other packages retain their recorded decision
+Accepted local descendants now include M0-S9A (provider-neutral registry and
+reconciliation foundation), M1-00A (minimal Product core), and M1-01A
+(Initiative domain and API foundation). The current accepted Plane `preview` is
+`99a73b4eab5ee21fd012d7358bc9259252d47f71`. Other packages retain their recorded decision
 and proof blockers, preserving named-owner authority over infrastructure,
 security, provider, retention, quality, and pilot-contract behavior.
 
@@ -39,7 +42,7 @@ The review covered:
 
 - The complete [Curve PRD](../curve-ai-native-sdlc-prd.md), including scope, lifecycle, requirements, NFRs, acceptance criteria, risks, decisions, and architecture handoff.
 - The complete technical suite indexed by the [technical README](README.md).
-- The historical Plane review baseline at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47` and the current accepted M0-S4 implementation descendant `e762fbbd2c1726a2833745add8245a1679c60d88` on branch `preview`.
+- The historical Plane review baseline at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47`, the accepted M0-S4 checkpoint `e762fbbd2c1726a2833745add8245a1679c60d88`, and current accepted Plane `preview` `99a73b4eab5ee21fd012d7358bc9259252d47f71`.
 - The inspected Sachiel baseline at commit `07f0a7aeedc2930e99e42524ce75c2150a700c4a` on branch `main`.
 - The inspected General Config baseline at commit `d95dec9b913a54b956f96e96de186003f292d082` on branch `master`.
 - Official upstream documentation for Temporal, gVisor, OpenHands, Onyx, CodeQL, EKS, OpenFeature, and AGPL obligations.
@@ -66,7 +69,7 @@ Repository SHAs above are review evidence, not approved Gate 2 base SHAs. Gate 2
 | R-002 | P0 | The planned pilot was GitLab + OpenHands, while the early normative R0B text named GitHub + Orca. | Release baseline; D-006-D-008; D-015 | R0B now identifies GitLab/OpenHands as the validation configuration. R1 separately requires both VCS providers, OpenHands automation, and the developer-operated Orca MCP profile. | Product owner and engineering lead | CLOSED |
 | R-003 | P0 | The plan treated Orca as an automated provider without an authoritative API while developers actually operate it manually. | D-006-D-007; M0-09; M4; AC-16 | OpenHands is the sole automated provider and Orca is a developer-operated MCP client. The D-006/D-007 dependency order, trust/error contracts, named-owner decisions, and conformance proof remain open and must be resolved by Security, Platform Administration, and Agent Platform before MCP implementation. | Agent platform owner; security and platform administration | IN PROGRESS |
 | R-004 | P0 | D-004 selected Portkey or Envoy, while planning selected a thin Curve gateway over OpenRouter and only three new infrastructure services. | D-004; model-enabled M1/M3/M5 | The PRD and technology baseline now consistently specify the in-process Curve Model Gateway and no longer block the model-free M0 skeleton; closure still requires the approved ADR, OpenRouter contract proof, failure behavior, policy, telemetry, ownership, and exit strategy before model use. | AI platform and operations | IN PROGRESS |
-| R-005 | P0 | The Plane fork lacked an authoritative `upstream` remote/ref, and rebasing shared `preview` could have rewritten published history. | D-001; M0 | D-001 is decided: the fetch-only upstream, exact pins, ancestry report, isolated candidate, checks, local smoke, community/commercial boundary, licensing obligations, ownership, and exact-head dispositions are approved. Candidate `d380678...` is merged without rewriting history and foundation `549db1a...` is preserved. M0-01, M0-S2, M0-03, M0-S3, and M0-S4 completed their accepted implementation proofs; current `preview` is `e762fbb...`. | Federico Ocampo, CTO at X3M | CLOSED |
+| R-005 | P0 | The Plane fork lacked an authoritative `upstream` remote/ref, and rebasing shared `preview` could have rewritten published history. | D-001; M0 | D-001 is decided: the fetch-only upstream, exact pins, ancestry report, isolated candidate, checks, local smoke, community/commercial boundary, licensing obligations, ownership, and exact-head dispositions are approved. Candidate `d380678...` is merged without rewriting history and foundation `549db1a...` is preserved. Accepted additive descendants now include the local M0 foundation through M0-S9A, M1-00A, and M1-01A; current `preview` is `99a73b4...`. | Federico Ocampo, CTO at X3M | CLOSED |
 | R-006 | P0 | The supplied General Config repository does not implement the target `/mm/organizations/{orgId}/apps/{appId}` route. | D-015; pilot Gate 2 | R0B now models CIA as an external versioned-contract/staging prerequisite; closure requires the authoritative OpenAPI artifact, deployed version, staging probe, and owner approval. | CIA TL and Product owner | IN PROGRESS |
 | R-007 | P0 | The proposed SDK compatibility wire shape used camel case, while inspected Sachiel wire representations use snake case. | Pilot contract; M3; M5 | The reference contract now specifies snake-case wire fields and a camel-case mapper; closure requires CIA/Sachiel approval, authoritative OpenAPI, and consumer contract tests. | CIA TL and Sachiel TL | IN PROGRESS |
 | R-008 | P0 | The four-state UI requirement did not distinguish missing compatibility data from failure of the App endpoint itself. | Pilot acceptance; Gate 2; Gate 3 | The reference contract now separates omitted compatibility on a successful App response from full App failure and defines unknown/invalid behavior; closure requires owner approval and fixtures. | Product approver and both TLs | IN PROGRESS |
@@ -88,6 +91,7 @@ Repository SHAs above are review evidence, not approved Gate 2 base SHAs. Gate 2
 | R-024 | P2 | Package credentials and dependency egress were not fully defined for credential-free agents. | D-003; D-008; M4 | The PRD now requires lease-bound read-only approved-mirror access, no publish/arbitrary-registry access, redaction/revocation, and leak/egress tests; closure requires provider details and staging proof. | Platform operations and security | IN PROGRESS |
 | R-025 | P2 | The compressed execution plan was less precise than the existing M0-M6 component backlog and did not separate decision proofs from implementation. | Development plan | The development plan now defines bounded P0 proof packages plus repository-local task-packet entry criteria and M0-M6 delivery; no single monolithic implementation branch is authorized. | Delivery lead | CLOSED |
 | R-026 | P0 | Curve repository ruleset 20824868 targeted all branches, prevented feature-branch creation/update, and required CodeQL, code-quality, and 90% coverage checks that the documentation repository did not produce. | Governed baseline; P0-04; B-REVIEW | Federico approved the interim default-branch scope with creation/deletion/non-fast-forward protection, linear history, PR enforcement, zero bootstrap approvals, and strict `validate`; inapplicable scan/coverage rules were removed. Final head validation run 31884924454 passed, Curve PR #1 squash-merged at `1529b8b...`, and post-merge run 31887095811 passed. Restore one required approval when a separate PR author identity exists. | Federico Ocampo, repository owner | CLOSED |
+| [R-027](https://github.com/faocampo/curve/issues/44) (Product timestamp/schema-version contract reconciliation) | P1 | The M1-00A relational contract (Product persistence and transaction contract) omits the implemented `schema_version` column and assigns `created_at`/`updated_at` to database time, while Plane migration `0006_product.py` persists `schema_version` without a database equality check and Django supplies both timestamps from trusted application UTC time. | M1-00A (minimal Product core); M0-02 (core persistence conventions); later mutable aggregates | Approve one system-wide timestamp-authority rule, then publish a successor Product relational contract that records `schema_version` and the selected authority. If database time remains authoritative, use a new additive Plane migration and regression evidence; if application UTC is selected, align the contract and tests without rewriting released migration `0006`. Decide separately whether schema-version equality is an API/service invariant or a database check constraint. | Curve engineering and architecture owner | OPEN / DECISION REQUIRED; tracked in Project #2 as `Backlog`, `P1`, `S` |
 
 ## Normative corrections required before pilot coding
 

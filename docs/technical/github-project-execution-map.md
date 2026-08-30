@@ -5,14 +5,14 @@
 | Field | Value |
 | --- | --- |
 | Status | Active visual-tracking contract |
-| Version | 1.15 |
-| Date | 2026-08-28 |
+| Version | 1.17 |
+| Date | 2026-08-29 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (71-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
-| Last verified live reconciliation | 2026-08-23: Project #2 had 79 unique items; M0-08 (audit and observability foundation), M0-03A (policy timestamp-ordering fix), and P0-05 (test strategy and audit closure) were `Done`; M1-00A (minimal Product core) was `In progress`; M0-S6A (durable Temporal orchestration readiness), M0-S9A (provider registry readiness), and P0-12 (retention-policy decision package) were `In review`; no duplicate item was created. |
-| Required publication-time reconciliation | Verify the existing items without duplication; set M0-S6A (durable Temporal orchestration readiness) and M0-S9A (provider registry readiness) to `Done` from accepted Plane implementation evidence; retain M1-00A (minimal Product core) as `In progress` until its Curve contracts publish and as ready only after exact dispatch materialization; preserve P0-12 (retention-policy decision package) according to its live PR state. |
+| Last verified live reconciliation | 2026-08-29: Project #2 had 95 items: 81 draft issues, 4 issues, and 10 pull requests. P0-02 (runtime and repository topology), P0-05 (test strategy and audit closure), M0-S6A (durable orchestration), M0-S9A (local provider registry), and M1-00A (minimal Product core) were `Done`; M1-01 (Initiative capability) was `In progress`; Curve PR #43 (Initiative-shell UX definition) was `In review`; R-027 (Product timestamp/schema-version contract reconciliation) was `Backlog`. |
+| Required publication-time reconciliation | Preserve P0-02 (runtime and repository topology) and the other accepted packages as `Done`; retain M1-01 (Initiative capability) as `In progress`; retain Curve PR #43 (Initiative-shell UX definition) in review until its approval record is published; refresh synchronizer-owned bodies from the next canonical Curve revision without duplicating items. |
 
 ## Purpose and authority boundary
 
@@ -53,14 +53,21 @@ grant. Execution systems evaluate their own authoritative inputs independently.
 | M6 prototypes/KPIs | M6-01 through M6-05 | 5 | Backlog |
 | R1 qualification/rollout | R1-01 through R1-05 | 5 | Backlog |
 | Canonical catalog total |  | **71** |  |
-| M0-S3 packet checkpoint | Decomposed executable slice of M0-06 | 1 | Completed proof projection; Plane merge `d99342f...` |
-| M0-S4 packet checkpoint | Decomposed executable slice completing local M0-07 | 1 | `Done`; Plane merge `e762fbb...` and accepted post-merge evidence |
-| M0-S4-UX checkpoint | Definition/UX child of M0-S4 | 1 | `Done`; Curve-first shell and Foundation experience approved |
-| M0-03A checkpoint | Core-policy timestamp-ordering regression child of M0-03 | 1 | `Done`; Plane PR #9 merged at `cb177342...` |
-| M0-S6A checkpoint | Durable parent/child Temporal orchestration readiness child of M0-06 | 1 | Engineering lifecycle `Done`; accepted Plane PR #10 and M0-S6A implementation evidence; live Project status must be reconciled after publication |
-| M0-S9A checkpoint | Provider-neutral registry and reconciliation readiness child of M0-09 | 1 | Engineering lifecycle `Done`; accepted Plane PR #12 and M0-S9A implementation evidence; live Project status must be reconciled after publication |
-| M7 intelligence extension issues | M7-01 and M7-02 outside the active 71-row catalog | 2 | Backlog; governed by the separate M7 extension charter |
-| **Current visual total** |  | **79** |  |
+| M0-S3 (local Temporal round-trip implementation packet) checkpoint | Decomposed executable slice of M0-06 (Temporal workflow skeleton) | 1 | Completed proof projection; Plane merge `d99342f...` |
+| M0-S4 (API, SSE, and Curve-first UI implementation packet) checkpoint | Decomposed executable slice completing local M0-07 (API, error, and SSE conventions) | 1 | `Done`; Plane merge `e762fbb...` and accepted post-merge evidence |
+| M0-S4-UX (Foundation Definition/UX gate) checkpoint | Definition/UX child of M0-S4 (API, SSE, and Curve-first UI implementation packet) | 1 | `Done`; Curve-first shell and Foundation experience approved |
+| M0-03A (policy timestamp-ordering regression) checkpoint | Regression child of M0-03 (core authorization and policy kernel) | 1 | `Done`; Plane PR #9 merged at `cb177342...` |
+| M0-S6A (durable parent/child Temporal orchestration) checkpoint | Readiness child of M0-06 (Temporal workflow skeleton) | 1 | `Done`; accepted Plane PR #10 and M0-S6A implementation evidence (durable-orchestration acceptance record) |
+| M0-S9A (provider-neutral registry and local reconciliation) checkpoint | Readiness child of M0-09 (provider integration foundation) | 1 | `Done`; accepted Plane PR #12 and M0-S9A implementation evidence (provider-registry acceptance record) |
+| M0-S6A-E1 (durable-orchestration evidence reconciliation) checkpoint | Acceptance-evidence reconciliation for M0-S6A (durable parent/child Temporal orchestration) | 1 | `Done` |
+| P0-03A (later-milestone decision-readiness packets) checkpoint | Decision-ready owner-input packets for later milestones | 1 | `Done` |
+| SEC-M0-01 (inherited High dependency advisories) issue | Production dependency-remediation tracking | 1 | `Backlog`; tracked by Curve issue #38 |
+| R-027 (Product timestamp/schema-version contract reconciliation) issue | Material decision tracking for Product timestamp authority and schema-version enforcement | 1 | `Backlog`, `P1`, `S`; tracked by [Curve issue #44](https://github.com/faocampo/curve/issues/44) (timestamp/schema-version architecture decision) |
+| M0-S9B-D1 (external-provider transport definition gate) checkpoint | External-provider transport definition gate | 1 | `Done`; definition complete, implementation remains decision-gated |
+| M0-S9C-D1 (Model Gateway definition gate) checkpoint | Model Gateway definition gate | 1 | `Done`; definition complete, implementation remains decision-gated |
+| M7 intelligence extension issues | M7-01 (expense intelligence) and M7-02 (budget optimization) outside the active 71-row catalog | 2 | Backlog; governed by the separate M7 extension charter (future intelligence and automation scope) |
+| Tracked pull-request evidence items | Curve and Plane implementation/governance pull requests | 10 | Eight `Done`; two `In review` at the 2026-08-29 snapshot |
+| **Current visual total** |  | **95** |  |
 
 ## Field mapping
 

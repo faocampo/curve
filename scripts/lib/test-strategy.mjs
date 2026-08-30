@@ -52,12 +52,15 @@ function expandAcceptanceCriteria(text) {
 export function extractDevelopmentPlanPackageTrace(developmentPlanText) {
   const packages = new Map();
   for (const line of developmentPlanText.split("\n")) {
-    if (!/^\| (?:P0|M[0-7]|R1)-\d{2} \|/.test(line)) continue;
+    const rowMatch = line.match(
+      /^\| ((?:P0|M[0-7]|R1)-\d{2}[A-Z]?)(?: \([^|]+\))? \|/,
+    );
+    if (!rowMatch) continue;
     const cells = line
       .slice(1, -1)
       .split("|")
       .map((cell) => cell.trim());
-    const packageId = cells[0];
+    const packageId = rowMatch[1];
     if (packages.has(packageId)) {
       throw new Error(`Development plan contains duplicate package row ${packageId}`);
     }

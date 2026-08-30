@@ -1,0 +1,49 @@
+{
+  "schema_version": "curve.physical-schema-evidence/v1",
+  "evidence_key": "M1_00A_PRODUCT_PHYSICAL_SCHEMA",
+  "evidence_scope": "INDEX_EXISTENCE",
+  "plane_revision": "99a73b4eab5ee21fd012d7358bc9259252d47f71",
+  "plane_tree": "fd1c18aa4754620bd3b0d28f3cb82af565c4e5a4",
+  "captured_at": "2026-08-29",
+  "migration_boundary": "curve.0006_product",
+  "sources": [
+    {
+      "path": "apps/api/plane/curve/migrations/0006_product.py",
+      "git_blob": "d9905634e63e0e1c5e4da37439547079772f36eb",
+      "sha256": "sha256:219caf004407992065fa854b667408e8b435c7e91ed7bd78d6dd3b4a26d1d0b9"
+    }
+  ],
+  "tables": [
+    {
+      "table": "curve_product",
+      "introduced_by": "0006_product",
+      "new_index_migration_required": false,
+      "indexes": [
+        {
+          "name": "curve_product_workspace_key_uniq",
+          "columns": ["workspace_id", "key"],
+          "unique": true,
+          "implementation": "DJANGO_UNIQUE_CONSTRAINT",
+          "forward_sql": null,
+          "reverse_sql": null
+        },
+        {
+          "name": "curve_product_workspace_state_key_idx",
+          "columns": ["workspace_id", "state", "key"],
+          "unique": false,
+          "implementation": "DJANGO_RUNSQL",
+          "forward_sql": "CREATE INDEX curve_product_workspace_state_key_idx ON curve_product (workspace_id, state, key)",
+          "reverse_sql": "DROP INDEX IF EXISTS curve_product_workspace_state_key_idx"
+        },
+        {
+          "name": "curve_product_workspace_owner_state_idx",
+          "columns": ["workspace_id", "owner_user_id", "state"],
+          "unique": false,
+          "implementation": "DJANGO_RUNSQL",
+          "forward_sql": "CREATE INDEX curve_product_workspace_owner_state_idx ON curve_product (workspace_id, owner_user_id, state)",
+          "reverse_sql": "DROP INDEX IF EXISTS curve_product_workspace_owner_state_idx"
+        }
+      ]
+    }
+  ]
+}

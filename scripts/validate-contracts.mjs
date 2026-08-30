@@ -111,6 +111,10 @@ const productCoreDecisionPath = join(
   root,
   "contracts/governance/m1-00a-product-core-v1.json",
 );
+const physicalSchemaEvidenceSchema = join(
+  root,
+  "contracts/schemas/physical-schema-evidence.schema.json",
+);
 const productPolicyPath = join(root, "contracts/policy/product-policy-v1.json");
 const productFixturePath = join(root, "contracts/schemas/examples/product.valid.json");
 const productEventFixturePath = join(
@@ -134,6 +138,11 @@ const fixtureSpecs = [
   ["contracts/temporal/m0-orchestration-v1.json", temporalOrchestrationSchema, true],
   ["contracts/governance/d009-retention-policy-v1.json", retentionPolicyDecisionSchema, true],
   ["contracts/governance/d002-onyx-delegation-v1.json", onyxDelegationDecisionSchema, true],
+  [
+    "contracts/database/m1-00a-product-physical-schema-evidence-v1.json",
+    physicalSchemaEvidenceSchema,
+    true,
+  ],
   ["contracts/schemas/semantic-fixtures/observability-binding-external-delivery.invalid.json", observabilityBindingSchema, false],
   ["contracts/schemas/semantic-fixtures/provider-connection-active.valid.json", providerConnectionSchema, true],
   ["contracts/schemas/semantic-fixtures/provider-connection-active-null.invalid.json", providerConnectionSchema, false],
