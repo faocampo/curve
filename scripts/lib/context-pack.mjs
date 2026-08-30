@@ -199,6 +199,42 @@ export const M0_S6A_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const RUNTIME_M0_01_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/README.md",
+    "contracts/schemas/coding-agent-context-pack-manifest.schema.json",
+    "contracts/schemas/coding-agent-implementation-authorization.schema.json",
+    "contracts/schemas/coding-agent-source-catalog.schema.json",
+    "contracts/schemas/coding-agent-state-evidence.schema.json",
+    "contracts/schemas/coding-agent-task-packet.schema.json",
+    "contracts/task-packet-authorizations/README.md",
+    "contracts/task-packets/README.md",
+    "contracts/testing/ac-test-matrix-v1.json",
+    "contracts/temporal/m0-workflow-contract.md",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/adr-001-plane-upstream-foundation.md",
+    "docs/technical/adr-003-runtime-topology.md",
+    "docs/technical/architecture.md",
+    "docs/technical/architecture-decisions.md",
+    "docs/technical/coding-agent-local-execution-decision.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/local-runtime-refresh-evidence.md",
+    "docs/technical/m0-completion-audit.md",
+    "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-s6a-durable-orchestration-task-packet.md",
+    "docs/technical/m0-s6a-implementation-evidence.md",
+    "docs/technical/m0-test-strategy.md",
+    "docs/technical/m0-traceability.md",
+    "docs/technical/runtime-m0-01-graceful-shutdown-task-packet.md",
+    "docs/technical/security-and-operations.md",
+    "scripts/lib/coding-agent-task-packet.mjs",
+    "scripts/lib/context-pack.mjs",
+    "scripts/tests/coding-agent-task-packet.test.mjs",
+    "scripts/tests/runtime-m0-01-task-packet.test.mjs",
+    "scripts/validate-contracts.mjs",
+  ].sort(),
+);
+
 export const M0_S9A_CONTEXT_PATHS = Object.freeze(
   [
     "contracts/database/m0-03-policy-contract.md",
@@ -472,6 +508,7 @@ const CONTEXT_PATHS = new Map([
   ["M0-08", M0_08_CONTEXT_PATHS],
   ["M0-S5B", M0_08_CONTEXT_PATHS],
   ["M0-S6A", M0_S6A_CONTEXT_PATHS],
+  ["RUNTIME-M0-01", RUNTIME_M0_01_CONTEXT_PATHS],
   ["M0-S9A", M0_S9A_CONTEXT_PATHS],
   ["M0-S9B", M0_S9B_CONTEXT_PATHS],
   ["M0-S9C", M0_S9C_CONTEXT_PATHS],

@@ -1124,6 +1124,77 @@ test("state authority is tenant-bound, role-scoped, resolvable, and human for ma
   }
 });
 
+test("authority sources cannot be substituted outside the authority publication root", () => {
+  const harness = makeReadyHarnessV1();
+  const [entry] = collectCodingAgentTaskPacketStateBindings(harness.packet);
+  readyUpdateStateRecord(harness, entry, (record) => {
+    const reference = record.attestations[0].authority_source;
+    const contents = harness.evidence.get(readyEvidenceKey(reference));
+    assert.ok(contents, "authority fixture bytes must exist before path substitution");
+    reference.path = "contracts/context/substituted-authority.json";
+    harness.evidence.set(readyEvidenceKey(reference), contents);
+  });
+
+  assert.throws(
+    () => validateCodingAgentTaskPacketEvidence(harness.packet, {
+      resolveReference: readyResolver(harness),
+    }),
+    /authority source.*published under contracts\/authority\//i,
+  );
+});
+
+test("state evidence cannot be substituted outside the state publication root", () => {
+  const harness = makeReadyHarnessV1();
+  const [entry] = collectCodingAgentTaskPacketStateBindings(harness.packet);
+  const reference = entry.binding.evidence;
+  const contents = harness.evidence.get(readyEvidenceKey(reference));
+  assert.ok(contents, "state fixture bytes must exist before path substitution");
+  reference.path = "contracts/authority/substituted-state.json";
+  harness.evidence.set(readyEvidenceKey(reference), contents);
+  readyRefreshCatalog(harness);
+
+  assert.throws(
+    () => validateCodingAgentTaskPacketEvidence(harness.packet, {
+      resolveReference: readyResolver(harness),
+    }),
+    /state evidence.*published under contracts\/state\//i,
+  );
+});
+
+test("context manifests cannot be substituted outside the context publication root", () => {
+  const harness = makeReadyHarnessV1();
+  const reference = harness.packet.curve_binding.context_pack.manifest;
+  const contents = harness.evidence.get(readyEvidenceKey(reference));
+  assert.ok(contents, "context fixture bytes must exist before path substitution");
+  reference.path = "contracts/state/substituted-context.json";
+  harness.evidence.set(readyEvidenceKey(reference), contents);
+  readyRefreshCatalog(harness);
+
+  assert.throws(
+    () => validateCodingAgentTaskPacketEvidence(harness.packet, {
+      resolveReference: readyResolver(harness),
+    }),
+    /context-pack manifest.*published under contracts\/context\//i,
+  );
+});
+
+test("source catalogs cannot be substituted outside their publication root", () => {
+  const harness = makeReadyHarnessV1();
+  const reference = harness.packet.source_catalog_binding.evidence;
+  const contents = harness.evidence.get(readyEvidenceKey(reference));
+  assert.ok(contents, "catalog fixture bytes must exist before path substitution");
+  reference.path = "contracts/context/substituted-source-catalog.json";
+  harness.evidence.set(readyEvidenceKey(reference), contents);
+  readySeal(harness);
+
+  assert.throws(
+    () => validateCodingAgentTaskPacketEvidence(harness.packet, {
+      resolveReference: readyResolver(harness),
+    }),
+    /source catalog.*published under contracts\/task-packet-sources\//i,
+  );
+});
+
 test("context manifests reject changed entry bytes and a stale aggregate digest", () => {
   const entryMismatch = makeReadyHarnessV1();
   const [firstEntry] = entryMismatch.contextManifest.entries;

@@ -72,9 +72,9 @@ test("active current-state documents bind one accepted Plane preview", () => {
   );
   assert.match(
     readiness,
-    /\| Published Curve contract baseline \| Curve `main` at `a0d21bee7f98f2477d9cfe69708a8ac043c4fc69`/,
+    /\| Published Curve contract baseline \| Curve `main` at `68a05e9f2920454752e9039d596271dbb39d6e6e`/,
   );
-  assert.match(m0Audit, /a0d21bee7f98f2477d9cfe69708a8ac043c4fc69/);
+  assert.match(m0Audit, /68a05e9f2920454752e9039d596271dbb39d6e6e/);
   assert.match(m0Audit, /accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`/);
 });
 
@@ -110,14 +110,14 @@ test("exact-preview local runtime evidence binds the durable verified control pa
 test("substantively reconciled governance documents advance document control", () => {
   for (const [name, contents, version, dateLabel, date] of [
     ["architecture", architecture, "0.9", "Last updated", "2026-08-30"],
-    ["development", development, "1.18", "Last updated", "2026-08-30"],
+    ["development", development, "1.19", "Last updated", "2026-08-30"],
     ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
-    ["M0 readiness board", readiness, "1.35", "Date", "2026-08-30"],
-    ["M0 completion audit", m0Audit, "1.8", "Date", "2026-08-30"],
+    ["M0 readiness board", readiness, "1.36", "Date", "2026-08-30"],
+    ["M0 completion audit", m0Audit, "1.9", "Date", "2026-08-30"],
     ["GitHub Project execution map", projectMap, "1.18", "Date", "2026-08-29"],
     ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],
     ["M1-M7 catalog", laterPackets, "1.9", "Date", "2026-08-30"],
-    ["decision index", decisions, "1.3", "Last updated", "2026-08-29"],
+    ["decision index", decisions, "1.4", "Last updated", "2026-08-30"],
     ["implemented ERD", implementedErd, "1.2", "Last updated", "2026-08-30"],
   ]) {
     assert.match(contents, new RegExp(`^\\| Version \\| ${version.replace(".", "\\.")} \\|$`, "m"), name);
@@ -132,8 +132,13 @@ test("next work and later-milestone status remain truthfully executable", () => 
   assert.ok(nextSequence, "M0 next executable sequence is required");
   assert.match(
     nextSequence[1],
-    /^1\. Materialize and execute RUNTIME-M0-01 \(graceful Curve worker shutdown\n {3}classification\)/,
+    /^1\. Decide \[B-CODING-TOOLS-01\]/,
   );
+  assert.match(
+    nextSequence[1],
+    /2\. Publish the RUNTIME-M0-01 \(graceful Curve worker shutdown classification\)/,
+  );
+  assert.match(nextSequence[1], /3\. Decide \[B-CODING-AUTHORITY-01\]/);
   assert.match(nextSequence[1], /Curve issue #46/);
   assert.match(nextSequence[1], /D-009 \(retention, backup, legal-hold, tombstone, and erasure/);
 

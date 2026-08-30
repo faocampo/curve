@@ -7,7 +7,7 @@
 | Product | Curve |
 | Work package | P0-05 (test-harness strategy and R1 acceptance traceability) |
 | Status | `ACCEPTED / DONE` |
-| Version | 1.4 |
+| Version | 1.5 |
 | Owner | Federico Ocampo, CTO at X3M |
 | Human reviewer | Federico Ocampo |
 | Last updated | 2026-08-30 |
@@ -166,6 +166,12 @@ semantics) is informative while `IN_REVIEW`. Available v1 commands are:
 | `CMD-PLANE-CHECK` | Plane | `pnpm check` |
 | `CMD-PLANE-BUILD` | Plane | `pnpm build` |
 | `CMD-TEMPORAL-LOCAL` | Plane | `docker compose -f docker-compose-local.yml -f docker-compose-curve.yml --profile curve exec api pytest plane/curve/tests -k "workflow or temporal or replay or cancellation"` |
+
+### Local Temporal shutdown checkpoint
+
+| Checkpoint | Requirement boundary | Owning suites and evidence | Completion boundary |
+| --- | --- | --- | --- |
+| [RUNTIME-M0-01](runtime-m0-01-graceful-shutdown-task-packet.md) (graceful Curve worker shutdown classification) | FR-015, FR-022, NFR-004-NFR-005, and the local enabling portion of AC-58 | Focused async lifecycle tests, the complete Curve backend and migration-drift regression, repository-native CI/CodeQL, and separate live `SIGINT` plus `SIGTERM` Compose proofs | Intentional signal exit is graceful within the existing ten-second container deadline; independent worker/relay failures remain fail closed; no task survives cleanup. R1-03 (full disaster-recovery exercise) retains complete AC-58 ownership across database, Temporal, gateway, Onyx, runner, and VCS disruption with measured RPO/RTO. |
 
 Each planned command has `working_directory: null` and `command: null` until
 its consuming packet pins an executable tool/version, exact command, fixture or

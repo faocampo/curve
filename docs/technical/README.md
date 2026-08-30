@@ -63,6 +63,9 @@ identifiers are:
 - M0-S9A (provider-neutral registry and reconciliation foundation).
 - M0-S9B (external provider transport and administration).
 - M0-S9C (Model Gateway policy, OpenRouter transport, and failover).
+- RUNTIME-M0-01 (graceful Curve worker shutdown classification).
+- B-CODING-TOOLS-01 (local coding-tool execution profile).
+- B-CODING-AUTHORITY-01 (trusted human authority and attempt lease).
 - M0-03 (core authorization and policy kernel work package).
 - M0-08 (audit and observability foundation work package).
 - M1 (alignment, evidence, immutable PRD versions, and Gate 1 milestone).
@@ -79,6 +82,8 @@ identifiers are:
 | [Implemented entity-relationship model](implemented-entity-relationship-model.md) (physical M0/M1 tables, workspace ownership, cardinalities, indexes, history, object-reference boundary, and migrations) | Versioned Mermaid ERD bound to Plane `preview` `99a73b4...` and Curve migrations `0001`-`0007`, with committed snapshot-consistency tests | Physical schema review, migration planning, and implementation-drift checks |
 | [Exact-preview local runtime refresh evidence](local-runtime-refresh-evidence.md) (durable source checkout, migrations, health, dual-mode behavior, Temporal proofs, restart recovery, and remaining gates) | Commit-bound verification of the existing Plane Docker stack at `preview` `99a73b4...` | `VERIFIED / LOCAL_ONLY / SYNTHETIC_INTERNAL`; broad M0 completion and non-local activation remain separately gated |
 | [M0 completion audit](m0-completion-audit.md) (accepted local foundation evidence, current baseline lineage, blocked protected storage, and remaining provider/model packages) | Requirement-by-package proof for the local vertical skeleton and the exact remaining M0 boundaries | `M0 INCOMPLETE`; D-009 (retention and erasure decision), M0-04 (protected object storage), M0-S9B (external provider transport), and M0-S9C (Model Gateway) remain open or blocked |
+| [RUNTIME-M0-01 task packet](runtime-m0-01-graceful-shutdown-task-packet.md) (graceful Curve worker shutdown classification, deterministic tests, live signal evidence, stop conditions, and rollback) | Bounded Plane correction at exact `preview` base `99a73b4...` | `DEFINITION_PREPARED / MACHINE_READY_TOOL_BLOCKED / DISPATCH_AUTHORITY_REQUIRED / NOT_IMPLEMENTATION_AUTHORITY`; Plane mutation remains blocked |
+| [Coding-agent local execution and authority decision packet](coding-agent-local-execution-decision.md) (local trust-tier/tool alternatives, exact human grant, attempt lease, production fail-closed behavior, and rollback) | Decision-ready alternatives for B-CODING-TOOLS-01 and B-CODING-AUTHORITY-01 | `ANALYZED / OWNER DECISIONS REQUIRED`; no option is selected by this document |
 | [Workflows and sequences](workflows-and-sequences.md) | Initiative, slice, agent, quality, VCS, contract, recovery, and Temporal execution flows | State-transition and orchestration behavior |
 | [Integration contracts](integration-contracts.md) | Public API, commands, events, SSE, webhooks, adapters, idempotency, and reconciliation | Wire and provider boundaries |
 | [Security and operations](security-and-operations.md) | Identity, authorization, data/evidence policy, isolation, threats, incident response, and service objectives | Security and production controls |
