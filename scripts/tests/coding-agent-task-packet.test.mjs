@@ -33,10 +33,12 @@ import {
   validateCodingAgentCurveRepositoryPreflight,
   validateCodingAgentRepositoryPreflight,
   validateCodingAgentImplementationAuthorizationBinding,
+  validateCodingAgentProjectTracking,
   validateCodingAgentRegistryFilesPreflight,
   validateCodingAgentTaskPacketEvidence,
   validateCodingAgentTaskPacketForDispatch,
   validateCodingAgentTaskPacketForDispatchWithTestControllers,
+  validateCodingAgentTaskPacketForReadinessPreflight,
   validateCodingAgentTaskPacketForReadinessPreflightWithTestControllers,
   validateCodingAgentTaskPacketSemantics,
   validateCodingAgentTaskPacketSetSemantics,
@@ -502,16 +504,21 @@ function makeReadyHarnessV1({
     availability: "AVAILABLE",
   }));
   packet.commands.find((command) => command.id === "CMD-SECURITY").argv = [
-    "codeql",
-    "database",
-    "analyze",
-    "curve-db",
-    "curve-suite.qls",
+    "pnpm",
+    "check",
   ];
+  packet.commands.find((command) => command.id === "CMD-SECURITY").tool_id =
+    "PNPM";
   packet.commands.push({
     id: "CMD-INSTALL",
     phase: "INSTALL",
-    argv: ["pnpm", "install", "--frozen-lockfile", "--offline"],
+    argv: [
+      "pnpm",
+      "install",
+      "--frozen-lockfile",
+      "--offline",
+      "--ignore-scripts",
+    ],
     working_directory: ".",
     timeout_seconds: 1200,
     availability: "AVAILABLE",
@@ -552,6 +559,8 @@ function makeReadyHarnessV1({
   });
   packet.sandbox_policy.max_attempts = 1;
   packet.sandbox_policy.max_active_attempts = 1;
+  packet.sandbox_policy.runtime = "GVISOR_CONTAINER";
+  packet.sandbox_policy.image_digest = `sha256:${"c".repeat(64)}`;
   packet.sandbox_policy.read_only_paths = [".git", "AGENTS.md"];
   packet.sandbox_policy.writable_paths = [
     "apps/web",
@@ -769,6 +778,99 @@ test("migrated examples expose BLOCKED honestly and dispatch fails closed", () =
     }),
     /READY|dispatch/i,
   );
+});
+
+test("direct task-packet entry points enforce the closed JSON Schema", () => {
+  const blocked = cloneBlocked();
+  blocked.unexpected_privilege = { mode: "BYPASS" };
+  sealCodingAgentTaskPacket(blocked);
+  assert.equal(isSchemaValid(blocked), false);
+  assert.throws(
+    () => validateCodingAgentTaskPacketSemantics(blocked),
+    /closed JSON Schema|additional properties|unexpected_privilege/i,
+  );
+  assert.throws(
+    () => validateCodingAgentTaskPacketForDispatch(blocked),
+    /closed JSON Schema|additional properties|unexpected_privilege/i,
+  );
+  assert.throws(
+    () => validateCodingAgentTaskPacketForReadinessPreflight(blocked),
+    /closed JSON Schema|additional properties|unexpected_privilege/i,
+  );
+
+  const inheritedRequiredField = cloneBlocked();
+  const inheritedStatus = inheritedRequiredField.status;
+  delete inheritedRequiredField.status;
+  Object.setPrototypeOf(inheritedRequiredField, { status: inheritedStatus });
+  sealCodingAgentTaskPacket(inheritedRequiredField);
+  assert.throws(
+    () => validateCodingAgentTaskPacketSemantics(inheritedRequiredField),
+    /closed JSON Schema|required property 'status'|must have required property 'status'/i,
+  );
+
+  const nested = cloneBlocked();
+  nested.repository.unexpected_privilege = { mode: "BYPASS" };
+  sealCodingAgentTaskPacket(nested);
+  let toolResolverCalls = 0;
+  let projectResolverCalls = 0;
+  const schemaFailure = /closed JSON Schema|additional properties|unexpected_privilege/i;
+  assert.throws(
+    () => validateCodingAgentRepositoryPreflight(
+      nested,
+      "/definitely/missing/target-repository",
+    ),
+    schemaFailure,
+  );
+  assert.throws(
+    () => validateCodingAgentCurveRepositoryPreflight(
+      nested,
+      "/definitely/missing/curve-repository",
+    ),
+    schemaFailure,
+  );
+  assert.throws(
+    () => validateCodingAgentRegistryFilesPreflight(
+      [sealCodingAgentTaskPacket(cloneBlocked()), nested],
+      [
+        "/definitely/missing/valid-task-packet.json",
+        "/definitely/missing/invalid-task-packet.json",
+      ],
+      "/definitely/missing/curve-repository",
+    ),
+    schemaFailure,
+  );
+  assert.throws(
+    () => validateCodingAgentToolsPreflight(nested, () => {
+      toolResolverCalls += 1;
+      return null;
+    }),
+    schemaFailure,
+  );
+  assert.throws(
+    () => validateCodingAgentProjectTracking(nested, () => {
+      projectResolverCalls += 1;
+      return null;
+    }),
+    schemaFailure,
+  );
+  assert.equal(toolResolverCalls, 0);
+  assert.equal(projectResolverCalls, 0);
+
+  const ready = readyDispatchHarness();
+  try {
+    ready.packet.unexpected_privilege = { mode: "BYPASS" };
+    readySeal(ready);
+    assert.throws(
+      () => readyValidateReadiness(ready),
+      /closed JSON Schema|additional properties|unexpected_privilege/i,
+    );
+    assert.throws(
+      () => readyValidateDispatch(ready),
+      /closed JSON Schema|additional properties|unexpected_privilege/i,
+    );
+  } finally {
+    rmSync(ready.temporary, { recursive: true, force: true });
+  }
 });
 
 test("a genuinely READY packet closes catalog, context, state, Project, and Git", () => {
@@ -1167,7 +1269,7 @@ test("structured command classification blocks direct VCS, network, deployment, 
   readySeal(onlineInstall);
   assert.throws(
     () => validateCodingAgentTaskPacketSemantics(onlineInstall.packet),
-    /network-capable|network destination/i,
+    /network-capable|network destination|only exact/i,
   );
 });
 
@@ -1175,20 +1277,51 @@ test("recognized command grammars reject aliases, dynamic execution, release scr
   const cases = [
     ["GIT_READ_ONLY", "git", ["git", "-c", "alias.audit=!sh", "audit"]],
     ["GIT_READ_ONLY", "git", ["git", "--exec-path=/tmp/forged", "status"]],
-    ["GIT_READ_ONLY", "git", ["git", "forged-alias"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "forged-alias"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "LoG", "HEAD"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "STATUS"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "grep", "--open-files-in-pager=sh", "pattern"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "grep", "--open-files-in-pager", "sh", "pattern"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "diff", "--ext-diff", "HEAD"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "show", "--textconv", "HEAD:file"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "diff", "--no-index", "left", "right"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "show", "--output=/tmp/forged", "HEAD"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "show", "--output", "/tmp/forged", "HEAD"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "grep", "-f", "/tmp/patterns"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "log", "--show-signature", "HEAD"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "cat-file", "--filters", "HEAD:file"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "ls-files", "--exclude-from=/tmp/patterns"]],
+    ["GIT_READ_ONLY", "git", ["git", "--no-pager", "status", "--pathspec-from-file=/tmp/paths"]],
     ["GH_READ_ONLY", "gh", ["gh", "project", "item-edit"]],
+    ["GH_READ_ONLY", "gh", ["gh", "repo", "view", "--web"]],
+    ["GH_READ_ONLY", "gh", ["gh", "pr", "view", "123", "--repo", "other/private"]],
+    ["GH_READ_ONLY", "gh", ["gh", "PR", "view", "123"]],
     ["PNPM_PACKAGE_MANAGER", "pnpm", ["pnpm", "exec", "node", "tool.js"]],
     ["NPM_PACKAGE_MANAGER", "npm", ["npm", "exec", "node", "tool.js"]],
     ["YARN_PACKAGE_MANAGER", "yarn", ["yarn", "exec", "node", "tool.js"]],
+    ["PNPM_PACKAGE_MANAGER", "pnpm", ["pnpm", "run", "TeSt"]],
+    ["NPM_PACKAGE_MANAGER", "npm", ["npm", "TEST"]],
+    ["NPM_PACKAGE_MANAGER", "npm", ["npm", "test", "--help"]],
+    ["PNPM_PACKAGE_MANAGER", "pnpm", ["pnpm", "test", "--help"]],
+    ["NPM_PACKAGE_MANAGER", "npm", ["npm", "test", "--script-shell=/tmp/helper"]],
+    ["NPM_PACKAGE_MANAGER", "npm", ["npm", "run", "test", "--if-present"]],
+    ["PNPM_PACKAGE_MANAGER", "pnpm", ["pnpm", "install", "--frozen-lockfile", "--offline"]],
+    ["PNPM_PACKAGE_MANAGER", "pnpm", ["pnpm", "--filter=web", "install", "--frozen-lockfile", "--offline", "--ignore-scripts"]],
     ["PNPM_PACKAGE_MANAGER", "pnpm", ["pnpm", "run", "deploy"]],
     ["NPM_PACKAGE_MANAGER", "npm", ["npm", "run", "publish"]],
     ["YARN_PACKAGE_MANAGER", "yarn", ["yarn", "release"]],
     ["NODE_RUNTIME", "node", ["node", "-e", "process.exit(0)"]],
+    ["NODE_RUNTIME", "node", ["node", "--check", "--import=data:text/javascript,console.log%28%22EXEC%22%29"]],
+    ["NODE_RUNTIME", "node", ["node", "--check", "--require=./payload.js"]],
     ["PYTHON_RUNTIME", "python", ["python", "-c", "print('forged')"]],
+    ["PYTHON_RUNTIME", "python", ["python", "-m", "compileall", "-q", "."]],
+    ["CODEQL_ANALYZER", "codeql", ["codeql", "database", "analyze", "curve-db", "curve-suite.qls"]],
     ["DOCKER_LOCAL", "docker", ["docker", "run", "--privileged", "image"]],
     ["DOCKER_LOCAL", "docker", ["docker", "run", "--network=host", "image"]],
     ["DOCKER_LOCAL", "docker", ["docker", "run", "-v", "/var/run/docker.sock:/sock", "image"]],
     ["DOCKER_LOCAL", "docker", ["docker", "run", "--device=/dev/kvm", "image"]],
+    ["DOCKER_LOCAL", "docker", ["docker", "compose", "config", "--resolve-image-digests"]],
+    ["DOCKER_LOCAL", "docker", ["docker", "compose", "config", "--output", "/tmp/compose.yaml"]],
   ];
   for (const [toolKind, executable, argv] of cases) {
     const harness = makeReadyHarnessV1();
@@ -1214,7 +1347,7 @@ test("recognized command grammars reject aliases, dynamic execution, release scr
     );
     assert.throws(
       () => validateCodingAgentTaskPacketSemantics(harness.packet),
-      /recognized|prohibited|outside|host|privilege|tool kind|dispatch.safe/i,
+      /recognized|prohibited|outside|host|privilege|tool kind|dispatch.safe|requires|only exact|selectors/i,
     );
   }
 
@@ -1225,8 +1358,86 @@ test("recognized command grammars reject aliases, dynamic execution, release scr
   readySeal(preferOffline);
   assert.throws(
     () => validateCodingAgentTaskPacketSemantics(preferOffline.packet),
-    /network.capable|exact --offline|unrecognized install/i,
+    /network.capable|exact --offline|unrecognized install|only exact/i,
   );
+});
+
+test("package-manager execution uses exact argv and a sealed no-credential gVisor boundary", () => {
+  const tool = { tool_kind: "PNPM_PACKAGE_MANAGER", executable: "pnpm" };
+  const safeCommands = [
+    ["pnpm", "check"],
+    ["pnpm", "--filter=web", "test", "--", "initiative-shell"],
+    [
+      "pnpm",
+      "install",
+      "--frozen-lockfile",
+      "--offline",
+      "--ignore-scripts",
+    ],
+  ];
+  for (const argv of safeCommands) {
+    const classification = classifyCodingAgentCommand({ id: "SAFE-PNPM", argv }, tool);
+    assert.equal(classification.prohibited_reason, null, argv.join(" "));
+    assert.equal(classification.sandboxed_repository_code, true, argv.join(" "));
+  }
+
+  const localWorktree = makeReadyHarnessV1();
+  localWorktree.packet.sandbox_policy.runtime = "LOCAL_WORKTREE";
+  localWorktree.packet.sandbox_policy.image_digest = null;
+  readySeal(localWorktree);
+  assert.throws(
+    () => validateCodingAgentTaskPacketSemantics(localWorktree.packet),
+    /repository code.*gVisor|gVisor.*repository code/i,
+  );
+});
+
+test("GIT_READ_ONLY uses a closed argv grammar for every retained inspection subcommand", () => {
+  const tool = { tool_kind: "GIT_READ_ONLY", executable: "git" };
+  const safeCommands = [
+    ["git", "--no-pager", "cat-file", "-p", "HEAD"],
+    ["git", "--no-pager", "diff", "--no-ext-diff", "--no-textconv", "--ignore-submodules=all", "--stat", "HEAD^", "HEAD"],
+    ["git", "--no-pager", "diff-tree", "--no-ext-diff", "--no-textconv", "--ignore-submodules=all", "-r", "--no-commit-id", "HEAD"],
+    ["git", "--no-pager", "for-each-ref", "--count=5", "--format=%(refname)", "refs/heads"],
+    ["git", "--no-pager", "grep", "-n", "TODO", "--", "src"],
+    ["git", "--no-pager", "log", "--no-ext-diff", "--no-textconv", "--no-show-signature", "--no-use-mailmap", "--ignore-submodules=all", "-n5", "--oneline", "HEAD"],
+    ["git", "--no-pager", "ls-files", "--cached", "--", "src"],
+    ["git", "--no-pager", "ls-tree", "-r", "--name-only", "HEAD"],
+    ["git", "--no-pager", "merge-base", "--is-ancestor", "HEAD^", "HEAD"],
+    ["git", "--no-pager", "rev-list", "--count", "HEAD"],
+    ["git", "--no-pager", "rev-parse", "--verify", "HEAD^{commit}"],
+    ["git", "--no-pager", "show", "--no-ext-diff", "--no-textconv", "--no-show-signature", "--no-use-mailmap", "--ignore-submodules=all", "--stat", "--no-color", "HEAD"],
+    ["git", "--no-pager", "show-ref", "--verify", "refs/heads/main"],
+    ["git", "--no-pager", "status", "--ignore-submodules=all", "--porcelain=v1", "--untracked-files=all"],
+  ];
+  for (const argv of safeCommands) {
+    assert.equal(
+      classifyCodingAgentCommand({ id: `SAFE-${argv[2]}`, argv }, tool)
+        .prohibited_reason,
+      null,
+      `${argv.join(" ")} should remain inside the closed read-only grammar`,
+    );
+  }
+
+  for (const argv of [
+    ["git", "--no-pager", "grep", "--open-files-in-pager=sh", "pattern"],
+    ["git", "--no-pager", "diff", "--ext-diff", "HEAD"],
+    ["git", "--no-pager", "show", "--textconv", "HEAD:file"],
+    ["git", "--no-pager", "diff", "--no-index", "left", "right"],
+    ["git", "--no-pager", "show", "--output=/tmp/forged", "HEAD"],
+    ["git", "log", "HEAD"],
+    ["git", "--no-pager", "log", "--no-ext-diff", "HEAD"],
+    ["git", "--no-pager", "log", "--no-ext-diff", "--no-textconv", "HEAD"],
+    ["git", "--no-pager", "show", "--no-ext-diff", "--no-textconv", "--no-show-signature", "HEAD"],
+    ["git", "--no-pager", "diff", "--no-ext-diff", "--no-textconv", "HEAD"],
+    ["git", "--no-pager", "diff", "--no-ext-diff", "--no-textconv", "--ignore-submodules=all", "--submodule=diff", "HEAD"],
+    ["git", "--no-pager", "for-each-ref", "--format=%(signature:grade)"],
+  ]) {
+    assert.match(
+      classifyCodingAgentCommand({ id: `REJECT-${argv[2] ?? argv[1]}`, argv }, tool)
+        .prohibited_reason,
+      /closed read-only grammar|unsafe|repository-local read boundary|no-pager|requires exact/i,
+    );
+  }
 });
 
 test("trusted tool proof rejects missing, shadowed, substituted, and version-mismatched executables", () => {
@@ -1235,7 +1446,7 @@ test("trusted tool proof rejects missing, shadowed, substituted, and version-mis
     assert.equal(validateCodingAgentToolsPreflight(
       harness.packet,
       harness.resolveTool,
-    ).length, 2);
+    ).length, 1);
 
     assert.throws(
       () => validateCodingAgentToolsPreflight(harness.packet, (tool) => ({
@@ -1622,6 +1833,16 @@ test("Git trust rejects local command, include, credential, and transport overri
     ["include.path", "/tmp/curve-untrusted-git-config"],
     ["credential.helper", "!false"],
     ["core.sshCommand", "false"],
+    ["core.attributesFile", "/tmp/curve-untrusted-attributes"],
+    ["core.excludesFile", "/tmp/curve-untrusted-excludes"],
+    ["core.pager", "false"],
+    ["diff.external", "false"],
+    ["gpg.program", "/definitely/missing/curve-untrusted-gpg"],
+    ["interactive.diffFilter", "false"],
+    ["log.showSignature", "true"],
+    ["log.mailmap", "true"],
+    ["mailmap.file", "/tmp/curve-untrusted-mailmap"],
+    ["pager.log", "false"],
     ["http.proxy", "http://127.0.0.1:9"],
     ["remote.origin.uploadpack", "false"],
   ];
@@ -1639,8 +1860,109 @@ test("Git trust rejects local command, include, credential, and transport overri
       readyRunGit(harness.repository, ["config", "--local", "--unset-all", name]);
       readyRepositoryPreflight(harness);
     }
+
+    readyRunGit(harness.repository, [
+      "config",
+      "--local",
+      "extensions.worktreeConfig",
+      "true",
+    ]);
+    readyRunGit(harness.repository, [
+      "config",
+      "--worktree",
+      "gpg.program",
+      "/definitely/missing/curve-worktree-gpg",
+    ]);
+    assert.throws(
+      () => readyRepositoryPreflight(harness),
+      /unsafe local Git config extensions\.worktreeconfig/i,
+    );
+    assert.throws(
+      () => createGitEvidenceResolver({ TARGET: harness.repository }),
+      /unsafe local Git config extensions\.worktreeconfig/i,
+    );
   } finally {
     rmSync(harness.temporary, { recursive: true, force: true });
+  }
+});
+
+test("GIT_READ_ONLY submodule isolation prevents child diff-helper execution", () => {
+  const temporary = mkdtempSync(join(tmpdir(), "curve-packet-submodule-trust-"));
+  const childSource = join(temporary, "child-source");
+  const parent = join(temporary, "parent");
+  const childCheckout = join(parent, "dependency");
+  const missingHelper = "/definitely/missing/curve-submodule-diff-helper";
+  mkdirSync(childSource);
+  mkdirSync(parent);
+  try {
+    readyRunGit(childSource, ["init", "-b", "main"]);
+    writeFileSync(join(childSource, "child.txt"), "child v1\n");
+    readyRunGit(childSource, ["add", "child.txt"]);
+    readyRunGit(childSource, ["commit", "-m", "child baseline"]);
+
+    readyRunGit(parent, ["init", "-b", "main"]);
+    writeFileSync(join(parent, "README.md"), "parent\n");
+    readyRunGit(parent, ["add", "README.md"]);
+    readyRunGit(parent, ["commit", "-m", "parent baseline"]);
+    readyRunGit(parent, [
+      "-c",
+      "protocol.file.allow=always",
+      "submodule",
+      "add",
+      childSource,
+      "dependency",
+    ]);
+    readyRunGit(parent, ["commit", "-am", "add dependency"]);
+    readyRunGit(parent, ["config", "--local", "diff.submodule", "diff"]);
+    readyRunGit(parent, [
+      "config",
+      "--local",
+      "--remove-section",
+      "submodule.dependency",
+    ]);
+    readyRunGit(childCheckout, ["config", "--local", "diff.external", missingHelper]);
+    writeFileSync(join(childCheckout, "child.txt"), "child v2\n");
+    readyRunGit(childCheckout, ["add", "child.txt"]);
+    readyRunGit(childCheckout, ["commit", "-m", "child update"]);
+
+    assert.doesNotThrow(() => createGitEvidenceResolver({ TARGET: parent }));
+    const unsafe = spawnSync(
+      "git",
+      ["--no-pager", "diff", "--no-ext-diff", "--no-textconv", "HEAD"],
+      { cwd: parent, encoding: "utf8" },
+    );
+    assert.match(`${unsafe.stderr}${unsafe.stdout}`, /curve-submodule-diff-helper/i);
+
+    const isolated = spawnSync(
+      "git",
+      [
+        "--no-pager",
+        "diff",
+        "--no-ext-diff",
+        "--no-textconv",
+        "--ignore-submodules=all",
+        "HEAD",
+      ],
+      { cwd: parent, encoding: "utf8" },
+    );
+    assert.equal(isolated.status, 0, isolated.stderr || isolated.stdout);
+
+    const tool = { tool_kind: "GIT_READ_ONLY", executable: "git" };
+    assert.match(
+      classifyCodingAgentCommand({ id: "UNSAFE-SUBMODULE", argv: [
+        "git", "--no-pager", "diff", "--no-ext-diff", "--no-textconv", "HEAD",
+      ] }, tool).prohibited_reason,
+      /ignore-submodules=all/i,
+    );
+    assert.equal(
+      classifyCodingAgentCommand({ id: "SAFE-SUBMODULE", argv: [
+        "git", "--no-pager", "diff", "--no-ext-diff", "--no-textconv",
+        "--ignore-submodules=all", "HEAD",
+      ] }, tool).prohibited_reason,
+      null,
+    );
+  } finally {
+    rmSync(temporary, { recursive: true, force: true });
   }
 });
 

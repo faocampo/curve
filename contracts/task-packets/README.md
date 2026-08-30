@@ -39,14 +39,23 @@ separate production `DISPATCH` entry point remains fail closed until the
 verifiers in the gate below are approved and implemented.
 
 Every `AVAILABLE` command is checked against the recognized grammar for its
-approved `tool_kind`. The current contract recognizes bounded local pnpm/npm/yarn
-scripts and exact-offline installs, local CodeQL database analysis, explicitly
-read-only Git/GitHub forms, Docker Compose configuration, Node syntax checking,
-and Python `compileall`. Package-manager dynamic execution, deploy/publish/release
-scripts, Git configuration/aliases/exec-paths or mutation, GitHub Project or
-other mutation, inline interpreter evaluation, host-privileged Docker forms,
-and unknown task-runner forms fail closed. `--prefer-offline` remains
-network-capable; only exact `--offline` satisfies the offline install grammar.
+approved `tool_kind`. The current `READY` boundary recognizes exact lowercase
+pnpm/npm/yarn repository scripts, repository-local test selectors after an
+exact `--`, one exact pnpm offline-install form with lifecycle scripts disabled,
+and the closed Git inspection grammars. These commands intentionally execute or
+may resolve repository/image code. A `READY` packet can use them only inside a
+digest-pinned `GVISOR_CONTAINER` sandbox with credential mode `NONE`, network
+mode `NONE`, and `.git` mounted read-only.
+
+`GH_READ_ONLY`, `DOCKER_LOCAL`, `CODEQL_ANALYZER`, `NODE_RUNTIME`, and
+`PYTHON_RUNTIME` remain representable for planning, but only a `BLOCKED` packet
+may carry them as `PLANNED` with argv `UNRESOLVED`. An `AVAILABLE` command in any
+of those families fails closed until a dedicated repository/path argv grammar,
+helper identity, and execution-environment contract is reviewed. Package-manager
+dynamic execution, mixed-case or case-distinct scripts, help/skip/config/shell
+flags, deploy/publish/release scripts, install lifecycle hooks, Git
+configuration/aliases/exec-paths or mutation, and unknown task-runner forms also
+fail closed.
 
 Tool preflight binds the command's tool kind to one PATH launcher, its declared
 regular-file or symlink mode, the canonical realpath basename, exact executable

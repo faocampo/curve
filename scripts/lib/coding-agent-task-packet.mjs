@@ -20,7 +20,29 @@ import {
 } from "node:path";
 import { posix } from "node:path";
 
+import Ajv2020 from "ajv/dist/2020.js";
+import addFormats from "ajv-formats";
+
 import { digestContextEntries } from "./context-pack.mjs";
+
+const CODING_AGENT_TASK_PACKET_SCHEMA = JSON.parse(
+  readFileSync(
+    new URL(
+      "../../contracts/schemas/coding-agent-task-packet.schema.json",
+      import.meta.url,
+    ),
+    "utf8",
+  ),
+);
+const TASK_PACKET_SCHEMA_VALIDATOR = new Ajv2020({
+  allErrors: true,
+  ownProperties: true,
+  strict: false,
+});
+addFormats(TASK_PACKET_SCHEMA_VALIDATOR);
+const validateTaskPacketSchema = TASK_PACKET_SCHEMA_VALIDATOR.compile(
+  CODING_AGENT_TASK_PACKET_SCHEMA,
+);
 
 const MANDATORY_COMMAND_PHASES = Object.freeze([
   "LINT",
@@ -92,7 +114,199 @@ const SAFE_GIT_READ_SUBCOMMANDS = new Set([
   "ls-files", "ls-tree", "merge-base", "rev-list", "rev-parse", "show",
   "show-ref", "status",
 ]);
-const SAFE_GH_READ_GROUPS = new Set(["issue", "pr", "repo", "run", "workflow"]);
+const GIT_DIFF_READ_OPTIONS = Object.freeze([
+  "--cached", "--staged", "--merge-base", "--stat", "--numstat",
+  "--shortstat", "--summary", "--patch", "-p", "-u", "--raw",
+  "--patch-with-raw", "--name-only", "--name-status", "--check",
+  "--full-index", "--binary", "--abbrev", "--no-abbrev", "--no-color",
+  "--color", "--no-prefix", "--default-prefix", "--relative", "--minimal",
+  "--patience", "--histogram", "--word-diff", "--exit-code", "--quiet",
+  "--ignore-submodules=all", "--ignore-space-at-eol",
+  "--ignore-space-change", "-b", "--ignore-all-space", "-w",
+  "--ignore-blank-lines", "--indent-heuristic", "--no-indent-heuristic",
+  "--no-ext-diff", "--no-textconv",
+]);
+const GIT_DIFF_READ_OPTION_PATTERNS = Object.freeze([
+  /^-U[0-9]+$/u,
+  /^--unified=[0-9]+$/u,
+  /^--abbrev=[0-9]+$/u,
+  /^--color=(?:always|auto|never)$/u,
+  /^--diff-filter=[ACDMRTUXB*]+$/u,
+  /^--find-renames(?:=[0-9]+%?)?$/u,
+  /^--find-copies(?:=[0-9]+%?)?$/u,
+  /^--word-diff=(?:color|plain|porcelain|none)$/u,
+]);
+const GIT_HISTORY_READ_OPTIONS = Object.freeze([
+  "--all", "--branches", "--tags", "--remotes", "--decorate",
+  "--no-decorate", "--oneline", "--graph", "--first-parent", "--merges",
+  "--no-merges", "--reverse", "--topo-order", "--date-order",
+  "--author-date-order", "--parents", "--children", "--boundary",
+  "--left-right", "--cherry-mark", "--cherry-pick", "--full-history",
+  "--simplify-merges", "--simplify-by-decoration", "--dense", "--sparse",
+  "--remove-empty", "--name-only", "--name-status", "--stat", "--shortstat",
+  "--no-patch", "-s", "--patch", "-p", "--no-color",
+  "--no-show-signature", "--no-use-mailmap",
+]);
+const GIT_HISTORY_READ_OPTION_PATTERNS = Object.freeze([
+  /^-n[1-9][0-9]*$/u,
+  /^--max-count=[1-9][0-9]*$/u,
+  /^--skip=[0-9]+$/u,
+  /^--(?:branches|tags|remotes)=[A-Za-z0-9._/*?\[\]-]+$/u,
+  /^--(?:since|after|until|before|author|committer|grep)=[A-Za-z0-9._@:+/ ,=-]+$/u,
+  /^--date=(?:relative|local|iso|iso-strict|rfc|short|raw|human|unix)$/u,
+  /^--pretty=(?:oneline|short|medium|full|fuller|reference|email|raw)$/u,
+  /^--abbrev-commit$/u,
+]);
+
+function gitReadGrammar({ exact = [], patterns = [], minOperands = 0, maxOperands = 64 }) {
+  return Object.freeze({
+    exact: new Set(exact),
+    patterns: Object.freeze(patterns),
+    minOperands,
+    maxOperands,
+  });
+}
+
+const GIT_READ_ONLY_GRAMMARS = Object.freeze({
+  "cat-file": gitReadGrammar({
+    exact: ["-e", "-p", "-t", "-s", "--allow-unknown-type"],
+    minOperands: 1,
+    maxOperands: 1,
+  }),
+  diff: gitReadGrammar({
+    exact: GIT_DIFF_READ_OPTIONS,
+    patterns: GIT_DIFF_READ_OPTION_PATTERNS,
+  }),
+  "diff-tree": gitReadGrammar({
+    exact: [
+      ...GIT_DIFF_READ_OPTIONS,
+      "-r", "-t", "--root", "--no-commit-id", "--commit-id", "--cc",
+      "-c", "-m", "--first-parent",
+    ],
+    patterns: GIT_DIFF_READ_OPTION_PATTERNS,
+    minOperands: 1,
+  }),
+  "for-each-ref": gitReadGrammar({
+    exact: ["--ignore-case", "--omit-empty", "--include-root-refs"],
+    patterns: [
+      /^--count=[1-9][0-9]*$/u,
+      /^--sort=-?(?:refname|objectname|authordate|committerdate|creatordate|taggerdate|version:refname)$/u,
+      /^--format=%\((?:refname(?::short)?|objectname|objecttype|upstream:short|HEAD)\)$/u,
+      /^--color=(?:always|auto|never)$/u,
+      /^--(?:points-at|merged|no-merged|contains|no-contains)=[A-Za-z0-9._/@{}^~:+\-]+$/u,
+    ],
+  }),
+  grep: gitReadGrammar({
+    exact: [
+      "-n", "--line-number", "-l", "--files-with-matches", "-L",
+      "--files-without-match", "-i", "--ignore-case", "-w", "--word-regexp",
+      "-v", "--invert-match", "-F", "--fixed-strings", "-E",
+      "--extended-regexp", "-G", "--basic-regexp", "-P", "--perl-regexp",
+      "--all-match", "--break", "--heading", "--full-name", "--cached",
+      "--untracked", "--exclude-standard", "--no-exclude-standard", "--text",
+      "-a", "-I", "--ignore-binary",
+    ],
+    patterns: [
+      /^-[ABC][0-9]+$/u,
+      /^--(?:after-context|before-context|context|threads)=[0-9]+$/u,
+      /^--max-depth=-?[0-9]+$/u,
+    ],
+    minOperands: 1,
+  }),
+  log: gitReadGrammar({
+    exact: [...GIT_HISTORY_READ_OPTIONS, ...GIT_DIFF_READ_OPTIONS],
+    patterns: [...GIT_HISTORY_READ_OPTION_PATTERNS, ...GIT_DIFF_READ_OPTION_PATTERNS],
+  }),
+  "ls-files": gitReadGrammar({
+    exact: [
+      "-c", "--cached", "-d", "--deleted", "-m", "--modified", "-o",
+      "--others", "-i", "--ignored", "-s", "--stage", "-u", "--unmerged",
+      "-k", "--killed", "--directory", "--no-empty-directory", "--eol",
+      "--deduplicate", "--error-unmatch", "-t", "-v", "-f", "-z",
+      "--full-name", "--sparse", "--resolve-undo", "--exclude-standard",
+    ],
+    patterns: [],
+  }),
+  "ls-tree": gitReadGrammar({
+    exact: [
+      "-r", "-d", "-t", "-l", "--name-only", "--name-status",
+      "--object-only", "--full-name", "--full-tree", "-z", "--abbrev",
+    ],
+    patterns: [
+      /^--abbrev=[0-9]+$/u,
+    ],
+    minOperands: 1,
+  }),
+  "merge-base": gitReadGrammar({
+    exact: ["--all", "--octopus", "--independent", "--is-ancestor", "--fork-point"],
+    minOperands: 1,
+  }),
+  "rev-list": gitReadGrammar({
+    exact: [
+      ...GIT_HISTORY_READ_OPTIONS,
+      "--objects", "--objects-edge", "--objects-edge-aggressive", "--disk-usage",
+      "--count", "--timestamp", "--header",
+    ],
+    patterns: GIT_HISTORY_READ_OPTION_PATTERNS,
+  }),
+  "rev-parse": gitReadGrammar({
+    exact: [
+      "--verify", "-q", "--quiet", "--short", "--symbolic",
+      "--symbolic-full-name", "--abbrev-ref", "--show-toplevel", "--show-prefix",
+      "--show-cdup", "--show-superproject-working-tree", "--git-dir",
+      "--git-common-dir", "--is-inside-git-dir", "--is-inside-work-tree",
+      "--is-bare-repository", "--is-shallow-repository", "--show-object-format",
+      "--show-ref-format", "--end-of-options", "--revs-only", "--no-revs",
+      "--flags", "--no-flags",
+    ],
+    patterns: [
+      /^--short=[0-9]+$/u,
+      /^--abbrev-ref=(?:strict|loose)$/u,
+      /^--path-format=(?:absolute|relative)$/u,
+      /^--show-object-format=(?:storage|input|output)$/u,
+    ],
+  }),
+  show: gitReadGrammar({
+    exact: [...GIT_HISTORY_READ_OPTIONS, ...GIT_DIFF_READ_OPTIONS],
+    patterns: [...GIT_HISTORY_READ_OPTION_PATTERNS, ...GIT_DIFF_READ_OPTION_PATTERNS],
+  }),
+  "show-ref": gitReadGrammar({
+    exact: [
+      "--head", "--branches", "--tags", "--dereference", "-d", "--hash",
+      "-s", "--verify", "--exists", "--exclude-existing", "--quiet", "-q",
+    ],
+    patterns: [/^--abbrev=[0-9]+$/u, /^--hash=[0-9]+$/u],
+  }),
+  status: gitReadGrammar({
+    exact: [
+      "--short", "-s", "--porcelain", "--branch", "-b", "--show-stash",
+      "--ahead-behind", "--no-ahead-behind", "--untracked-files", "-uno",
+      "-unormal", "-uall", "--ignored", "--renames", "--no-renames", "-z",
+      "--column", "--no-column", "--ignore-submodules=all",
+    ],
+    patterns: [
+      /^--porcelain=(?:v1|v2)$/u,
+      /^--untracked-files=(?:no|normal|all)$/u,
+      /^--ignored=(?:traditional|matching|no)$/u,
+      /^--find-renames(?:=[0-9]+%?)?$/u,
+      /^--column=(?:always|never|auto|column|row|plain|dense|nodense)(?:,[a-z]+)*$/u,
+    ],
+  }),
+});
+const GIT_DIFF_HELPER_SENSITIVE_SUBCOMMANDS = new Set([
+  "diff",
+  "diff-tree",
+  "log",
+  "show",
+]);
+const GIT_IDENTITY_HELPER_SENSITIVE_SUBCOMMANDS = new Set(["log", "show"]);
+const GIT_SUBMODULE_SENSITIVE_SUBCOMMANDS = new Set([
+  "diff",
+  "diff-tree",
+  "log",
+  "show",
+  "status",
+]);
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 const TRUSTED_GIT_EXECUTABLE = "/usr/bin/git";
 const GIT_ENVIRONMENT = Object.freeze({
@@ -108,7 +322,7 @@ const GIT_ENVIRONMENT = Object.freeze({
   GIT_OPTIONAL_LOCKS: "0",
   GIT_TERMINAL_PROMPT: "0",
 });
-const UNSAFE_LOCAL_GIT_CONFIG = /^(?:alias\.|include(?:if)?\.|url\.|credential\.|http\.|filter\.|submodule\.|protocol\.|remote\..*\.(?:uploadpack|receivepack|proxy|promisor|partialclonefilter)$|core\.(?:hookspath|sshcommand|fsmonitor|askpass)$|diff\..*\.(?:command|textconv)$)/u;
+const UNSAFE_LOCAL_GIT_CONFIG = /^(?:alias\.|include(?:if)?\.|url\.|credential\.|http\.|filter\.|submodule\.|protocol\.|gpg\.|mailmap\.|pager\.|remote\..*\.(?:uploadpack|receivepack|proxy|promisor|partialclonefilter)$|extensions\.worktreeconfig$|log\.(?:showsignature|mailmap)$|interactive\.difffilter$|core\.(?:hookspath|sshcommand|fsmonitor|askpass|attributesfile|excludesfile|editor|pager)$|diff\.(?:external$|.*\.(?:command|textconv)$))/iu;
 
 function sha256(contents) {
   return `sha256:${createHash("sha256").update(contents).digest("hex")}`;
@@ -188,6 +402,15 @@ function assertEnumValue(value, allowed, label) {
   if (!allowed.includes(value)) {
     throw new Error(`${label} must be one of ${allowed.join(", ")}`);
   }
+}
+
+function assertCodingAgentTaskPacketSchema(packet) {
+  if (validateTaskPacketSchema(packet)) return;
+  const details = TASK_PACKET_SCHEMA_VALIDATOR.errorsText(
+    validateTaskPacketSchema.errors,
+    { separator: "; " },
+  );
+  throw new Error(`task packet violates the closed JSON Schema: ${details}`);
 }
 
 export function computeCodingAgentTaskPacketDigest(packet) {
@@ -908,6 +1131,7 @@ function prohibitedClassification(executable, category, reason, extras = {}) {
     network_capable: false,
     external_mutation: false,
     direct_vcs_mutation: false,
+    sandboxed_repository_code: false,
     prohibited_reason: reason,
     ...extras,
   };
@@ -942,11 +1166,14 @@ function classifyPackageManager(command, tool, executable) {
   const argv = command.argv;
   let index = 1;
   if (executable === "pnpm") {
-    while (index < argv.length && /^--filter=[A-Za-z0-9._@/*-]+$/u.test(argv[index])) {
+    while (
+      index < argv.length &&
+      /^--filter=[A-Za-z0-9@][A-Za-z0-9@._-]{0,127}$/u.test(argv[index])
+    ) {
       index += 1;
     }
   }
-  const subcommand = argv[index]?.toLowerCase();
+  const subcommand = argv[index];
   if (!subcommand) {
     return prohibitedClassification(executable, "PACKAGE_MANAGER", "package-manager subcommand is missing");
   }
@@ -960,32 +1187,32 @@ function classifyPackageManager(command, tool, executable) {
   }
   if (["install", "i", "ci", "fetch"].includes(subcommand)) {
     const flags = argv.slice(index + 1);
-    const hasOffline = flags.includes("--offline");
-    const hasPreferOffline = flags.includes("--prefer-offline");
-    const allowedFlags = new Set(["--offline", "--frozen-lockfile", "--ignore-scripts"]);
-    if (flags.some((value) => !allowedFlags.has(value))) {
+    const supportedOfflineInstall =
+      executable === "pnpm" &&
+      index === 1 &&
+      subcommand === "install" &&
+      canonicalJsonString(flags) === canonicalJsonString([
+        "--frozen-lockfile",
+        "--offline",
+        "--ignore-scripts",
+      ]);
+    if (!supportedOfflineInstall) {
       return prohibitedClassification(
         executable,
         "PACKAGE_MANAGER",
-        `package-manager ${subcommand} contains an unrecognized install option`,
-        { network_capable: !hasOffline || hasPreferOffline },
+        "only exact pnpm install --frozen-lockfile --offline --ignore-scripts is dispatch-safe",
+        { network_capable: !flags.includes("--offline") },
       );
     }
-    if (!hasOffline || hasPreferOffline) {
-      return prohibitedClassification(
-        executable,
-        "PACKAGE_MANAGER",
-        "package installation is network-capable unless exact --offline is present",
-        { network_capable: true },
-      );
-    }
-    return prohibitedClassification(executable, "PACKAGE_MANAGER", null);
+    return prohibitedClassification(executable, "PACKAGE_MANAGER", null, {
+      sandboxed_repository_code: true,
+    });
   }
 
   let script = subcommand;
   let scriptArguments = argv.slice(index + 1);
   if (subcommand === "run") {
-    script = argv[index + 1]?.toLowerCase();
+    script = argv[index + 1];
     scriptArguments = argv.slice(index + 2);
   }
   if (
@@ -999,12 +1226,31 @@ function classifyPackageManager(command, tool, executable) {
       `package script ${script ?? "<missing>"} is outside the recognized dispatch grammar`,
     );
   }
-  try {
-    assertSafeOpaqueArguments(scriptArguments, `package script ${script}`);
-  } catch (error) {
-    return prohibitedClassification(executable, "PACKAGE_MANAGER", error.message);
+  if (scriptArguments.length > 0) {
+    const selectors = scriptArguments.slice(1);
+    if (
+      script !== "test" ||
+      scriptArguments[0] !== "--" ||
+      selectors.length === 0 ||
+      selectors.some((selector) =>
+        !/^[A-Za-z0-9@][A-Za-z0-9@._/-]{0,255}$/u.test(selector)
+      )
+    ) {
+      return prohibitedClassification(
+        executable,
+        "PACKAGE_MANAGER",
+        "package scripts accept only repository-local test selectors after exact --",
+      );
+    }
+    try {
+      assertSafeOpaqueArguments(selectors, `package script ${script}`);
+    } catch (error) {
+      return prohibitedClassification(executable, "PACKAGE_MANAGER", error.message);
+    }
   }
-  return prohibitedClassification(executable, "PACKAGE_MANAGER", null);
+  return prohibitedClassification(executable, "PACKAGE_MANAGER", null, {
+    sandboxed_repository_code: true,
+  });
 }
 
 function classifyGitReadOnly(command, tool, executable) {
@@ -1032,8 +1278,19 @@ function classifyGitReadOnly(command, tool, executable) {
       { direct_vcs_mutation: true },
     );
   }
-  const subcommand = command.argv[1]?.toLowerCase();
-  if (!subcommand || !SAFE_GIT_READ_SUBCOMMANDS.has(subcommand)) {
+  if (command.argv[1] !== "--no-pager") {
+    return prohibitedClassification(
+      executable,
+      "GIT",
+      "git inspection requires the exact global --no-pager control",
+    );
+  }
+  // Git dispatches subcommands case-sensitively and may resolve an unknown
+  // spelling through an external git-<subcommand> helper. Keep the approved
+  // grammar bound to the exact canonical lowercase command token.
+  const subcommand = command.argv[2];
+  const grammar = GIT_READ_ONLY_GRAMMARS[subcommand];
+  if (!subcommand || !SAFE_GIT_READ_SUBCOMMANDS.has(subcommand) || !grammar) {
     return prohibitedClassification(
       executable,
       "GIT",
@@ -1041,35 +1298,124 @@ function classifyGitReadOnly(command, tool, executable) {
       { direct_vcs_mutation: true, external_mutation: true },
     );
   }
-  return prohibitedClassification(executable, "GIT", null);
+  const argumentsAfterSubcommand = command.argv.slice(3);
+  try {
+    assertSafeOpaqueArguments(argumentsAfterSubcommand, `git ${subcommand}`);
+  } catch (error) {
+    return prohibitedClassification(executable, "GIT", error.message);
+  }
+  if (argumentsAfterSubcommand.length > 128) {
+    return prohibitedClassification(
+      executable,
+      "GIT",
+      `git ${subcommand} exceeds the bounded read-only argument count`,
+    );
+  }
+  let optionsTerminated = false;
+  let operandCount = 0;
+  for (const argument of argumentsAfterSubcommand) {
+    if (argument.length > 1024 || argument.includes("\0")) {
+      return prohibitedClassification(
+        executable,
+        "GIT",
+        `git ${subcommand} contains an unbounded or invalid argument`,
+      );
+    }
+    if (!optionsTerminated && argument === "--") {
+      optionsTerminated = true;
+      continue;
+    }
+    if (!optionsTerminated && argument.startsWith("-")) {
+      const recognized =
+        grammar.exact.has(argument) ||
+        grammar.patterns.some((pattern) => pattern.test(argument));
+      if (!recognized) {
+        return prohibitedClassification(
+          executable,
+          "GIT",
+          `git ${subcommand} option ${argument} is outside its closed read-only grammar`,
+        );
+      }
+      continue;
+    }
+    if (
+      argument.startsWith("/") ||
+      argument.startsWith("~") ||
+      /^[A-Za-z]:[\\/]/u.test(argument) ||
+      /(?:^|[\\/])\.\.(?:[\\/]|$)/u.test(argument) ||
+      /(?:^[A-Za-z][A-Za-z0-9+.-]*:\/\/|^[^/\s]+@[^/\s]+:)/u.test(argument)
+    ) {
+      return prohibitedClassification(
+        executable,
+        "GIT",
+        `git ${subcommand} operand ${argument} escapes the repository-local read boundary`,
+      );
+    }
+    operandCount += 1;
+  }
+  if (operandCount < grammar.minOperands || operandCount > grammar.maxOperands) {
+    return prohibitedClassification(
+      executable,
+      "GIT",
+      `git ${subcommand} requires ${grammar.minOperands}-${grammar.maxOperands} repository-local operands`,
+    );
+  }
+  if (
+    GIT_DIFF_HELPER_SENSITIVE_SUBCOMMANDS.has(subcommand) &&
+    (!grammar.exact.has("--no-ext-diff") ||
+      !argumentsAfterSubcommand.includes("--no-ext-diff") ||
+      !grammar.exact.has("--no-textconv") ||
+      !argumentsAfterSubcommand.includes("--no-textconv"))
+  ) {
+    return prohibitedClassification(
+      executable,
+      "GIT",
+      `git ${subcommand} requires exact --no-ext-diff and --no-textconv controls`,
+    );
+  }
+  if (
+    GIT_IDENTITY_HELPER_SENSITIVE_SUBCOMMANDS.has(subcommand) &&
+    (!argumentsAfterSubcommand.includes("--no-show-signature") ||
+      !argumentsAfterSubcommand.includes("--no-use-mailmap"))
+  ) {
+    return prohibitedClassification(
+      executable,
+      "GIT",
+      `git ${subcommand} requires exact --no-show-signature and --no-use-mailmap controls`,
+    );
+  }
+  if (
+    GIT_SUBMODULE_SENSITIVE_SUBCOMMANDS.has(subcommand) &&
+    !argumentsAfterSubcommand.includes("--ignore-submodules=all")
+  ) {
+    return prohibitedClassification(
+      executable,
+      "GIT",
+      `git ${subcommand} requires exact --ignore-submodules=all isolation`,
+    );
+  }
+  return prohibitedClassification(executable, "GIT", null, {
+    sandboxed_repository_code: true,
+  });
 }
 
 function classifyGitHubReadOnly(command, tool, executable) {
   if (tool.tool_kind !== "GH_READ_ONLY") {
     return prohibitedClassification(executable, "GITHUB_CLI", `tool kind ${tool.tool_kind} cannot invoke gh`);
   }
-  const group = command.argv[1]?.toLowerCase();
-  const action = command.argv[2]?.toLowerCase();
-  if (
-    group === "project" ||
-    !SAFE_GH_READ_GROUPS.has(group) ||
-    !["list", "view", "status"].includes(action)
-  ) {
-    return prohibitedClassification(
-      executable,
-      "GITHUB_CLI",
-      `gh ${group ?? "<missing>"} ${action ?? "<missing>"} is outside the recognized read-only grammar`,
-      { network_capable: true, external_mutation: true },
-    );
-  }
-  return prohibitedClassification(executable, "GITHUB_CLI", null, { network_capable: true });
+  return prohibitedClassification(
+    executable,
+    "GITHUB_CLI",
+    "GH_READ_ONLY requires a reviewed repository-bound argv, helper, and environment contract",
+    { network_capable: true },
+  );
 }
 
 export function classifyCodingAgentCommand(command, tool = null) {
   if (!Array.isArray(command?.argv) || command.argv.length === 0) {
     throw new Error(`command ${String(command?.id)} has no structured argv`);
   }
-  const executable = basename(command.argv[0]).toLowerCase();
+  const executable = basename(command.argv[0]);
   if (!tool || typeof tool.tool_kind !== "string") {
     return prohibitedClassification(
       executable,
@@ -1094,55 +1440,31 @@ export function classifyCodingAgentCommand(command, tool = null) {
   if (executable === "git") return classifyGitReadOnly(command, tool, executable);
   if (executable === "gh") return classifyGitHubReadOnly(command, tool, executable);
   if (executable === "codeql") {
-    const safe =
-      tool.tool_kind === "CODEQL_ANALYZER" &&
-      command.argv[1] === "database" &&
-      command.argv[2] === "analyze" &&
-      command.argv.length >= 5 &&
-      !command.argv.some((argument) => /(?:download|upload|publish|github|https?:)/iu.test(argument));
     return prohibitedClassification(
       executable,
       "CODEQL_ANALYZER",
-      safe ? null : "CodeQL command is outside the recognized local database-analyze grammar",
+      "CODEQL_ANALYZER requires a reviewed no-download path, output, helper, and environment contract",
     );
   }
   if (executable === "docker") {
-    const dangerous = command.argv.some((argument) =>
-      argument === "--privileged" ||
-      argument === "--pid=host" ||
-      argument === "--network=host" ||
-      argument === "--ipc=host" ||
-      argument === "--uts=host" ||
-      argument.startsWith("--device") ||
-      /(?:^|:)\/(?:var\/run\/docker\.sock|proc|sys|dev)(?::|$)/u.test(argument)
-    );
-    const safe =
-      tool.tool_kind === "DOCKER_LOCAL" &&
-      command.argv[1] === "compose" &&
-      command.argv[2] === "config" &&
-      !dangerous;
     return prohibitedClassification(
       executable,
       "LOCAL_CONTAINER_TOOL",
-      safe ? null : "Docker command is outside the recognized local compose-config grammar or requests host privileges",
-      { external_mutation: dangerous },
+      "DOCKER_LOCAL requires a pinned Compose helper and reviewed argv and environment contract",
     );
   }
   if (executable === "node") {
-    const inline = command.argv.some((argument) => ["-e", "--eval", "-p", "--print"].includes(argument));
-    const safe = tool.tool_kind === "NODE_RUNTIME" && command.argv[1] === "--check" && command.argv.length === 3 && !inline;
     return prohibitedClassification(
       executable,
       "NODE_RUNTIME",
-      safe ? null : "Node invocation is outside the recognized file-only syntax-check grammar",
+      "NODE_RUNTIME requires a repository-contained operand and reviewed preload-free environment contract",
     );
   }
   if (executable === "python") {
-    const safe = tool.tool_kind === "PYTHON_RUNTIME" && command.argv[1] === "-m" && command.argv[2] === "compileall" && command.argv.length >= 4;
     return prohibitedClassification(
       executable,
       "PYTHON_RUNTIME",
-      safe && !command.argv.includes("-c") ? null : "Python invocation is outside the recognized compileall grammar",
+      "PYTHON_RUNTIME requires an isolated stdlib binding and reviewed path and environment contract",
     );
   }
   return prohibitedClassification(
@@ -1220,6 +1542,20 @@ function validateCommands(packet, destinationIds, effectIds) {
       : classifyCodingAgentCommand(command, tool);
     if (classification.prohibited_reason) {
       throw new Error(`command ${command.id} ${classification.prohibited_reason}`);
+    }
+    if (
+      packet.status === "READY" &&
+      classification.sandboxed_repository_code &&
+      (
+        packet.sandbox_policy.runtime !== "GVISOR_CONTAINER" ||
+        packet.sandbox_policy.image_digest === null ||
+        packet.sandbox_policy.credential_mode !== "NONE" ||
+        packet.sandbox_policy.network_mode !== "NONE"
+      )
+    ) {
+      throw new Error(
+        `command ${command.id} executes repository code and requires a digest-pinned gVisor sandbox with no credentials or network destinations`,
+      );
     }
     if (
       classification.network_capable &&
@@ -1450,6 +1786,7 @@ function validateBlockers(packet) {
 }
 
 export function validateCodingAgentTaskPacketSemantics(packet) {
+  assertCodingAgentTaskPacketSchema(packet);
   const expectedDigest = computeCodingAgentTaskPacketDigest(packet);
   if (packet.packet_digest !== expectedDigest) {
     throw new Error(`packet_digest is not canonical: expected ${expectedDigest}`);
@@ -2684,6 +3021,7 @@ export function validateCodingAgentTargetRepositoryPreflight(
   targetRepository,
   { testOnlyRemoteTipController } = {},
 ) {
+  assertCodingAgentTaskPacketSchema(packet);
   const repository = realpathSync(targetRepository);
   assertGitObjectTrust(repository, "target repository");
   const topLevel = realpathSync(runGit(repository, ["rev-parse", "--show-toplevel"]).trim());
@@ -2972,6 +3310,7 @@ export function validateCodingAgentCurveRepositoryPreflight(
   curveRepository,
   options = {},
 ) {
+  assertCodingAgentTaskPacketSchema(packet);
   if (options === null || typeof options !== "object" || Array.isArray(options)) {
     throw new Error("Curve repository preflight options must be an object");
   }
@@ -3005,6 +3344,7 @@ export function validateCodingAgentRegistryFilesPreflight(
   if (packets.length !== packetPaths.length) {
     throw new Error("task-packet registry paths do not match parsed packet records");
   }
+  for (const packet of packets) assertCodingAgentTaskPacketSchema(packet);
   const repository = realpathSync(curveRepository);
   const head = runGit(repository, ["rev-parse", "HEAD"]).trim();
   const baseline = validateCodingAgentCurveRepositoryPreflight(
@@ -3297,6 +3637,7 @@ function validateToolObservation(tool, observation) {
 }
 
 export function validateCodingAgentToolsPreflight(packet, resolveTool) {
+  assertCodingAgentTaskPacketSchema(packet);
   if (typeof resolveTool !== "function") {
     throw new Error("dispatch requires a trusted tool resolver");
   }
@@ -3368,6 +3709,7 @@ export function createGitHubProjectItemResolver(options = {}) {
 }
 
 export function validateCodingAgentProjectTracking(packet, resolveProjectItem) {
+  assertCodingAgentTaskPacketSchema(packet);
   if (typeof resolveProjectItem !== "function") {
     throw new Error("live GitHub Project resolution is required for dispatch");
   }
