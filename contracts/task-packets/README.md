@@ -98,6 +98,15 @@ predict the commit that will contain itself:
    repositories, exact target base SHA, normative source revision, and the
    registry-published packet bytes.
 
+When repository policy disallows merge commits, publish `S`, `E1`, `E2`, `C`,
+and `P` as sequential, single-stage squash PRs. After each stage merges,
+regenerate the next downstream stage using the exact new `origin/main` SHA as
+its parent and revision binding. Never squash or rebase a multi-stage PR whose
+descendant artifacts bind predecessor commit SHAs: rewriting any predecessor
+invalidates every downstream binding. This rule preserves the ordered
+publication proof while keeping each stage compatible with a squash-only
+repository.
+
 The source catalog itself lives outside this packet-only discovery directory.
 All referenced revisions remain immutable raw-byte/digest bindings. Readiness
 preflight verifies `S -> E1..En -> C -> P` ancestry and rejects sibling,
