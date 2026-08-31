@@ -1,0 +1,45 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "POLICY",
+  "subject_id": "BUDGET-POLICY",
+  "state": "PROPOSED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "POLICY",
+    "subject_id": "BUDGET-POLICY",
+    "state": "PROPOSED",
+    "claim": {
+      "policy_id": "BUDGET-POLICY",
+      "status": "PROPOSED",
+      "currency": "USD",
+      "maximum_external_spend": 0,
+      "maximum_compute_minutes": 120,
+      "on_exhaustion": "PAUSE"
+    }
+  },
+  "approval_subject_digest": "sha256:3a21aa8c94efd8e8cbf30f833460f510c366175c1bbb9ea14d92dbf833de74e6",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "CURVE_ENGINEERING_APPROVER",
+      "authority_source": {
+        "source_type": "WORKSPACE_ROLE_BINDING",
+        "source_id": "CURVE-M1-01B-POLICY-BUDGET-POLICY",
+        "repository": "CURVE",
+        "title": "policy BUDGET-POLICY publication authority source",
+        "path": "contracts/authority/m1-01b/v1/policy-budget-policy.json",
+        "revision": "b32c2388492450792d7b98766b9e2ffd181fdc5d",
+        "content_digest": "sha256:7f313ef7d964c476e57da43574eb4d3ef16e7871e406864632544b4a4bf7a6e1"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:POLICY:BUDGET-POLICY:PROPOSED"
+      ],
+      "attested_at": "2026-08-31T13:41:00-03:00",
+      "subject_digest": "sha256:3a21aa8c94efd8e8cbf30f833460f510c366175c1bbb9ea14d92dbf833de74e6",
+      "derivation": null
+    }
+  ]
+}

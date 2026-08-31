@@ -1,0 +1,44 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "POLICY",
+  "subject_id": "EXTERNAL-EFFECTS-POLICY",
+  "state": "PROPOSED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "POLICY",
+    "subject_id": "EXTERNAL-EFFECTS-POLICY",
+    "state": "PROPOSED",
+    "claim": {
+      "policy_id": "EXTERNAL-EFFECTS-POLICY",
+      "status": "PROPOSED",
+      "mode": "NONE",
+      "effects": [],
+      "controller_contracts": []
+    }
+  },
+  "approval_subject_digest": "sha256:76dd2b6a821b454f6ca1f3c474635ec75340342f573988357c6cf5a45dc7f636",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "CURVE_ENGINEERING_APPROVER",
+      "authority_source": {
+        "source_type": "WORKSPACE_ROLE_BINDING",
+        "source_id": "CURVE-M1-01B-POLICY-EXTERNAL-EFFECTS-POLICY",
+        "repository": "CURVE",
+        "title": "policy EXTERNAL-EFFECTS-POLICY publication authority source",
+        "path": "contracts/authority/m1-01b/v1/policy-external-effects-policy.json",
+        "revision": "b32c2388492450792d7b98766b9e2ffd181fdc5d",
+        "content_digest": "sha256:3d863495bb8b249d8790d64e2ebe752efd895e1477e2bddf34090fce9bb5729a"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:POLICY:EXTERNAL-EFFECTS-POLICY:PROPOSED"
+      ],
+      "attested_at": "2026-08-31T13:41:00-03:00",
+      "subject_digest": "sha256:76dd2b6a821b454f6ca1f3c474635ec75340342f573988357c6cf5a45dc7f636",
+      "derivation": null
+    }
+  ]
+}

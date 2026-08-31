@@ -1,0 +1,78 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "POLICY",
+  "subject_id": "SANDBOX-POLICY",
+  "state": "PROPOSED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "POLICY",
+    "subject_id": "SANDBOX-POLICY",
+    "state": "PROPOSED",
+    "claim": {
+      "policy_id": "SANDBOX-POLICY",
+      "status": "PROPOSED",
+      "runtime": "LOCAL_WORKTREE",
+      "image_digest": null,
+      "cpu_limit": 2,
+      "memory_mib_limit": 8192,
+      "duration_seconds": 7200,
+      "max_attempts": 1,
+      "max_active_attempts": 1,
+      "credential_mode": "NONE",
+      "credential_references": [],
+      "network_mode": "NONE",
+      "network_policy_decision_id": null,
+      "network_destinations": [],
+      "read_only_paths": [
+        ".git",
+        "AGENTS.md"
+      ],
+      "writable_paths": [
+        "apps/web/app/(all)/[workspaceSlug]/(projects)/curve/initiatives",
+        "apps/web/app/routes/core.ts",
+        "apps/web/core/components/curve",
+        "apps/web/core/hooks/use-curve-initiatives.ts",
+        "apps/web/core/services/curve.service.ts",
+        "apps/web/tests/curve",
+        "packages/services/src/curve/curve.service.ts",
+        "packages/types/src/curve.ts"
+      ],
+      "cancellation": {
+        "grace_seconds": 30,
+        "force_termination_seconds": 60,
+        "terminal_state": "CANCELLED"
+      },
+      "cleanup": {
+        "on_success": "Stop task-local processes and remove generated temporary artifacts.",
+        "on_failure": "Stop task-local processes, preserve redacted diagnostics, and remove temporary credentials and artifacts.",
+        "on_cancel": "Terminate child processes, revoke task-local resources, and restore the clean branch boundary.",
+        "verification": "Verify no task-local process, credential reference, or temporary artifact remains."
+      }
+    }
+  },
+  "approval_subject_digest": "sha256:a167252915ff6efcbddd02178bb38e1d68bf5dea603481e363a7fd4922c4afcf",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "CURVE_ENGINEERING_APPROVER",
+      "authority_source": {
+        "source_type": "WORKSPACE_ROLE_BINDING",
+        "source_id": "CURVE-M1-01B-POLICY-SANDBOX-POLICY",
+        "repository": "CURVE",
+        "title": "policy SANDBOX-POLICY publication authority source",
+        "path": "contracts/authority/m1-01b/v1/policy-sandbox-policy.json",
+        "revision": "b32c2388492450792d7b98766b9e2ffd181fdc5d",
+        "content_digest": "sha256:165eb2ded5895f7d7eb7bfe763c5d987df4551d339be89a2500219810819668c"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:POLICY:SANDBOX-POLICY:PROPOSED"
+      ],
+      "attested_at": "2026-08-31T13:41:00-03:00",
+      "subject_digest": "sha256:a167252915ff6efcbddd02178bb38e1d68bf5dea603481e363a7fd4922c4afcf",
+      "derivation": null
+    }
+  ]
+}
