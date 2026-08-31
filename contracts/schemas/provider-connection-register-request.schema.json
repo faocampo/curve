@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/provider-connection-register-request.schema.json",
+  "title": "Curve provider-connection registration request",
+  "description": "Candidate-only M0-S9B1 registration request. It is not normative until B-ADMIN-M0-S9B1 is approved and the successor OpenAPI contract is materialized.",
+  "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
+  "x-curve-promotion-decision": "B-ADMIN-M0-S9B1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider_type",
+    "adapter_key",
+    "adapter_version",
+    "environment",
+    "display_name",
+    "allowed_classifications"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.provider-connection-register-request/v1" },
+    "provider_type": {
+      "type": "string",
+      "enum": [
+        "FAKE_LOCAL",
+        "ONYX",
+        "MCP",
+        "ORCA_HUMAN_ASSISTANCE",
+        "MODEL_GATEWAY",
+        "OPENHANDS",
+        "GITHUB",
+        "GITLAB",
+        "QUALITY",
+        "FEATURE_FLAG",
+        "DOCUMENTATION",
+        "MONITORING",
+        "PROTOTYPE"
+      ]
+    },
+    "adapter_key": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9.-]{0,99}$"
+    },
+    "adapter_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?=.*\\S)[^\\r\\n]+$",
+      "maxLength": 100
+    },
+    "environment": {
+      "type": "string",
+      "enum": ["LOCAL", "STAGING", "PRODUCTION"]
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^(?=.*\\S)[^\\r\\n]+$"
+    },
+    "allowed_classifications": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+      }
+    }
+  }
+}

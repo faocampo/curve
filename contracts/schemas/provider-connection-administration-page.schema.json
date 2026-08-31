@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/provider-connection-administration-page.schema.json",
+  "title": "Curve provider-connection administration page",
+  "description": "Candidate-only M0-S9B1 safe page envelope. It is not normative until B-ADMIN-M0-S9B1 is approved and the successor OpenAPI contract is materialized.",
+  "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
+  "x-curve-promotion-decision": "B-ADMIN-M0-S9B1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "results", "next_cursor"],
+  "properties": {
+    "schema_version": { "const": "curve.provider-connection-administration-page/v1" },
+    "results": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "$ref": "provider-connection-administration.schema.json" }
+    },
+    "next_cursor": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 4096 },
+        { "type": "null" }
+      ]
+    }
+  }
+}

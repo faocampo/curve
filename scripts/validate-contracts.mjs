@@ -7,6 +7,10 @@ import { join, relative } from "node:path";
 import { validateTestStrategyMatrixSemantics } from "./lib/test-strategy.mjs";
 import { validateTemporalOrchestrationSemantics } from "./lib/temporal-orchestration.mjs";
 import { validateRetentionPolicyDecisionSemantics } from "./lib/retention-policy.mjs";
+import {
+  validateProviderAdministrationBoundContractBytes,
+  validateProviderAdministrationDecisionSemantics,
+} from "./lib/provider-administration-decision.mjs";
 import { validateOnyxDelegationDecision } from "./lib/onyx-delegation.mjs";
 import {
   validateProductCoreDecision,
@@ -114,6 +118,34 @@ const providerRegistryManifestSchema = join(root, "contracts/schemas/provider-re
 const providerRegistryManifestPath = join(root, "contracts/providers/m0-s9a-provider-registry-v1.json");
 const retentionPolicyDecisionSchema = join(root, "contracts/schemas/retention-policy-decision.schema.json");
 const retentionPolicyDecisionPath = join(root, "contracts/governance/d009-retention-policy-v1.json");
+const providerAdministrationDecisionSchema = join(
+  root,
+  "contracts/schemas/provider-administration-decision.schema.json",
+);
+const providerAdministrationDecisionPath = join(
+  root,
+  "contracts/governance/m0-s9b1-provider-administration-v1.json",
+);
+const providerConnectionRegisterRequestSchema = join(
+  root,
+  "contracts/schemas/provider-connection-register-request.schema.json",
+);
+const providerConnectionAdministrationSchema = join(
+  root,
+  "contracts/schemas/provider-connection-administration.schema.json",
+);
+const providerConnectionAdministrationPageSchema = join(
+  root,
+  "contracts/schemas/provider-connection-administration-page.schema.json",
+);
+const providerAdministrationApprovedFixturePath = join(
+  root,
+  "contracts/schemas/semantic-fixtures/provider-administration-decision-approved.valid.json",
+);
+const providerAdministrationDeferredFixturePath = join(
+  root,
+  "contracts/schemas/semantic-fixtures/provider-administration-decision-deferred.valid.json",
+);
 const onyxDelegationDecisionSchema = join(
   root,
   "contracts/schemas/onyx-delegation-decision.schema.json",
@@ -175,6 +207,56 @@ const fixtureSpecs = [
   ["contracts/testing/ac-test-matrix-v2.json", testStrategyMatrixV2Schema, true],
   ["contracts/temporal/m0-orchestration-v1.json", temporalOrchestrationSchema, true],
   ["contracts/governance/d009-retention-policy-v1.json", retentionPolicyDecisionSchema, true],
+  [
+    "contracts/governance/m0-s9b1-provider-administration-v1.json",
+    providerAdministrationDecisionSchema,
+    true,
+  ],
+  [
+    "contracts/schemas/semantic-fixtures/provider-administration-decision-approved.valid.json",
+    providerAdministrationDecisionSchema,
+    true,
+  ],
+  [
+    "contracts/schemas/semantic-fixtures/provider-administration-decision-deferred.valid.json",
+    providerAdministrationDecisionSchema,
+    true,
+  ],
+  [
+    "contracts/schemas/semantic-fixtures/provider-administration-decision-lifecycle.invalid.json",
+    providerAdministrationDecisionSchema,
+    false,
+  ],
+  [
+    "contracts/schemas/examples/provider-connection-register-request.valid.json",
+    providerConnectionRegisterRequestSchema,
+    true,
+  ],
+  [
+    "contracts/schemas/examples/provider-connection-register-request.invalid.json",
+    providerConnectionRegisterRequestSchema,
+    false,
+  ],
+  [
+    "contracts/schemas/examples/provider-connection-administration.valid.json",
+    providerConnectionAdministrationSchema,
+    true,
+  ],
+  [
+    "contracts/schemas/examples/provider-connection-administration.invalid.json",
+    providerConnectionAdministrationSchema,
+    false,
+  ],
+  [
+    "contracts/schemas/examples/provider-connection-administration-page.valid.json",
+    providerConnectionAdministrationPageSchema,
+    true,
+  ],
+  [
+    "contracts/schemas/examples/provider-connection-administration-page.invalid.json",
+    providerConnectionAdministrationPageSchema,
+    false,
+  ],
   ["contracts/governance/d002-onyx-delegation-v1.json", onyxDelegationDecisionSchema, true],
   [
     "contracts/database/m1-00a-product-physical-schema-evidence-v1.json",
@@ -282,6 +364,29 @@ for (const [path, expectedDigest] of immutableTestStrategyV1Digests) {
 
 const retentionPolicyDecision = JSON.parse(readFileSync(retentionPolicyDecisionPath, "utf8"));
 validateRetentionPolicyDecisionSemantics(retentionPolicyDecision);
+const providerAdministrationDecision = JSON.parse(
+  readFileSync(providerAdministrationDecisionPath, "utf8"),
+);
+validateProviderAdministrationDecisionSemantics(providerAdministrationDecision);
+const providerAdministrationBoundPaths = new Set([
+  providerAdministrationDecision.api_contract.register_request.schema_path,
+  ...Object.values(providerAdministrationDecision.api_contract.response_contracts).map(
+    (contract) => contract.schema_path,
+  ),
+  providerAdministrationDecision.api_contract.accepted_adapter_snapshot.source_path,
+]);
+validateProviderAdministrationBoundContractBytes(
+  providerAdministrationDecision,
+  Object.fromEntries(
+    [...providerAdministrationBoundPaths].map((path) => [path, readFileSync(join(root, path))]),
+  ),
+);
+validateProviderAdministrationDecisionSemantics(
+  JSON.parse(readFileSync(providerAdministrationApprovedFixturePath, "utf8")),
+);
+validateProviderAdministrationDecisionSemantics(
+  JSON.parse(readFileSync(providerAdministrationDeferredFixturePath, "utf8")),
+);
 const onyxDelegationDecision = JSON.parse(readFileSync(onyxDelegationDecisionPath, "utf8"));
 const onyxValidation = validateOnyxDelegationDecision(onyxDelegationDecision);
 if (onyxValidation.dispatchable !== false || onyxValidation.unresolved.length === 0) {

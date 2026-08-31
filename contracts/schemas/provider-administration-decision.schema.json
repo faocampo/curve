@@ -1,0 +1,1197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/provider-administration-decision.schema.json",
+  "title": "Curve M0-S9B1 provider-administration decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "decision_version",
+    "work_package",
+    "status",
+    "decision_outcome",
+    "last_updated",
+    "baseline",
+    "fixed_invariants",
+    "api_contract",
+    "safe_projection",
+    "material_options",
+    "dependency_evidence",
+    "proof_cases",
+    "owners",
+    "approvals",
+    "decided_at",
+    "next_review_at",
+    "decision_payload_digest",
+    "activation",
+    "unresolved_requirements",
+    "implementation_dispatch_allowed"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.provider-administration-decision/v1" },
+    "decision_id": { "const": "B-ADMIN-M0-S9B1" },
+    "decision_version": { "const": 1 },
+    "work_package": { "const": "M0-S9B1" },
+    "status": { "type": "string", "enum": ["PROPOSED", "DECIDED"] },
+    "decision_outcome": {
+      "type": "string",
+      "enum": ["UNSELECTED", "APPROVED", "DEFERRED"]
+    },
+    "last_updated": { "$ref": "common.schema.json#/$defs/Instant" },
+    "baseline": { "$ref": "#/$defs/baseline" },
+    "fixed_invariants": { "$ref": "#/$defs/fixedInvariants" },
+    "api_contract": { "$ref": "#/$defs/apiContract" },
+    "safe_projection": { "$ref": "#/$defs/safeProjection" },
+    "material_options": { "$ref": "#/$defs/materialOptions" },
+    "dependency_evidence": { "$ref": "#/$defs/dependencyEvidence" },
+    "proof_cases": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": { "$ref": "#/$defs/proofCase" }
+    },
+    "owners": { "$ref": "#/$defs/owners" },
+    "approvals": {
+      "type": "array",
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/approval" }
+    },
+    "decided_at": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Instant" },
+        { "type": "null" }
+      ]
+    },
+    "next_review_at": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Instant" },
+        { "type": "null" }
+      ]
+    },
+    "decision_payload_digest": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Digest" },
+        { "type": "null" }
+      ]
+    },
+    "activation": { "$ref": "#/$defs/activation" },
+    "unresolved_requirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/unresolvedRequirement" }
+    },
+    "implementation_dispatch_allowed": { "const": false }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "PROPOSED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "decision_outcome": { "const": "UNSELECTED" },
+          "material_options": { "$ref": "#/$defs/materialOptionsUnselected" },
+          "approvals": { "maxItems": 0 },
+          "decided_at": { "type": "null" },
+          "next_review_at": { "type": "null" },
+          "decision_payload_digest": { "type": "null" },
+          "activation": { "$ref": "#/$defs/activationProposed" },
+          "unresolved_requirements": { "minItems": 1 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "DECIDED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "decision_outcome": {
+            "type": "string",
+            "enum": ["APPROVED", "DEFERRED"]
+          },
+          "owners": {
+            "properties": {
+              "security_identity_owner": { "$ref": "#/$defs/human" },
+              "platform_administration_owner": { "$ref": "#/$defs/human" }
+            }
+          },
+          "approvals": {
+            "minItems": 3,
+            "maxItems": 3,
+            "allOf": [
+              {
+                "contains": {
+                  "properties": { "approval_role": { "const": "CURVE_PRODUCT" } },
+                  "required": ["approval_role"]
+                },
+                "minContains": 1,
+                "maxContains": 1
+              },
+              {
+                "contains": {
+                  "properties": { "approval_role": { "const": "SECURITY_IDENTITY" } },
+                  "required": ["approval_role"]
+                },
+                "minContains": 1,
+                "maxContains": 1
+              },
+              {
+                "contains": {
+                  "properties": {
+                    "approval_role": { "const": "PLATFORM_ADMINISTRATION" }
+                  },
+                  "required": ["approval_role"]
+                },
+                "minContains": 1,
+                "maxContains": 1
+              }
+            ]
+          },
+          "decided_at": { "$ref": "common.schema.json#/$defs/Instant" },
+          "next_review_at": { "$ref": "common.schema.json#/$defs/Instant" },
+          "decision_payload_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+          "activation": {
+            "properties": { "decision_selected": { "const": true } }
+          },
+          "unresolved_requirements": { "maxItems": 0 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "decision_outcome": { "const": "APPROVED" } },
+        "required": ["decision_outcome"]
+      },
+      "then": {
+        "properties": {
+          "status": { "const": "DECIDED" },
+          "material_options": { "$ref": "#/$defs/materialOptionsApproved" },
+          "proof_cases": {
+            "items": {
+              "properties": {
+                "status": { "const": "PASS" },
+                "evidence_refs": {
+                  "minItems": 1,
+                  "items": { "$ref": "#/$defs/proofEvidenceRef" }
+                }
+              }
+            }
+          },
+          "activation": { "$ref": "#/$defs/activationApproved" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "decision_outcome": { "const": "DEFERRED" } },
+        "required": ["decision_outcome"]
+      },
+      "then": {
+        "properties": {
+          "status": { "const": "DECIDED" },
+          "material_options": { "$ref": "#/$defs/materialOptionsDeferred" },
+          "dependency_evidence": { "$ref": "#/$defs/dependencyEvidenceEmpty" },
+          "activation": { "$ref": "#/$defs/activationDeferred" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "surveyed_curve_revision",
+        "observed_plane_preview_revision",
+        "observed_plane_migration_head",
+        "plane_migration_reserved",
+        "parent_packet_version",
+        "openapi_version",
+        "core_policy_version",
+        "core_policy_manifest_digest",
+        "provider_connection_schema_version"
+      ],
+      "properties": {
+        "surveyed_curve_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "observed_plane_preview_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "observed_plane_migration_head": {
+          "type": "string",
+          "pattern": "^[0-9]{4}_[a-z0-9_]+\\.py$"
+        },
+        "plane_migration_reserved": { "const": false },
+        "parent_packet_version": { "const": "0.2" },
+        "openapi_version": { "const": "1.1.0" },
+        "core_policy_version": { "const": 2 },
+        "core_policy_manifest_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "provider_connection_schema_version": { "const": "2.0" }
+      }
+    },
+    "fixedInvariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_scope",
+        "authorization_order",
+        "cross_workspace_identifier_behavior",
+        "caller_supplied_workspace",
+        "caller_supplied_role",
+        "agent_authority",
+        "service_authority",
+        "system_authority",
+        "credential_resolution",
+        "provider_network_access",
+        "callback_processing",
+        "outgoing_webhooks",
+        "scheduled_reconciliation",
+        "real_adapter_activation",
+        "external_side_effect",
+        "protected_body_persistence",
+        "evidence_verification_boundary"
+      ],
+      "properties": {
+        "workspace_scope": { "const": "EXACT_TARGET_WORKSPACE" },
+        "authorization_order": {
+          "const": "WORKSPACE_PREAUTH_BEFORE_SCOPED_SAFE_LOOKUP_THEN_RESOURCE_AUTH"
+        },
+        "cross_workspace_identifier_behavior": { "const": "SAME_AS_ABSENT" },
+        "caller_supplied_workspace": { "const": "REJECT" },
+        "caller_supplied_role": { "const": "REJECT" },
+        "agent_authority": { "const": false },
+        "service_authority": { "const": false },
+        "system_authority": { "const": false },
+        "credential_resolution": { "const": false },
+        "provider_network_access": { "const": false },
+        "callback_processing": { "const": false },
+        "outgoing_webhooks": { "const": false },
+        "scheduled_reconciliation": { "const": false },
+        "real_adapter_activation": { "const": false },
+        "external_side_effect": { "const": false },
+        "protected_body_persistence": { "const": false },
+        "evidence_verification_boundary": {
+          "const": "DIGEST_BOUND_HUMAN_ATTESTATION"
+        }
+      }
+    },
+    "apiContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_state",
+        "api_prefix",
+        "pagination",
+        "idempotency_precondition_profile",
+        "accepted_adapter_snapshot",
+        "register_request",
+        "response_contracts",
+        "operations"
+      ],
+      "properties": {
+        "contract_state": { "const": "PROPOSED_NOT_NORMATIVE" },
+        "api_prefix": { "const": "/api/v1/workspaces/{workspace_slug}/curve" },
+        "pagination": {
+          "const": {
+            "cursor_parameter": "cursor",
+            "page_size_parameter": "page_size",
+            "minimum_page_size": 1,
+            "maximum_page_size": 100,
+            "default_page_size": 25,
+            "maximum_cursor_length": 4096,
+            "response_cursor_field": "next_cursor"
+          }
+        },
+        "idempotency_precondition_profile": {
+          "const": {
+            "request_digest": "SHA256_CANONICAL_REQUEST_BYTES",
+            "record_payload": "STATUS_DIGEST_RESOURCE_REF_NO_RESPONSE_BODY",
+            "matching_terminal_command": "RESOLVE_CURRENT_AUTHORIZED_SAFE_PROJECTION_FROM_STORED_RESOURCE_REF",
+            "matching_pending_operation": "RETURN_SAME_OPERATION_AND_RESUME_DURABLE_PHASE",
+            "replay_response_status": "ORIGINAL_STORED_STATUS",
+            "replay_location": "STORED_RESOURCE_REF",
+            "replay_response_etag": "CURRENT_RESOURCE_AGGREGATE_VERSION",
+            "historical_response_body": "NOT_STORED",
+            "unavailable_stored_resource_version": "IDEMPOTENCY_RECONCILIATION_REQUIRED_NO_EFFECT",
+            "changed_request_digest": "HTTP_409_NO_EFFECT",
+            "evaluation_order": [
+              "AUTHORIZE_CURRENT_REQUEST_WITH_OPERATION_LOOKUP_SEQUENCE",
+              "LOOKUP_IDEMPOTENCY_RECORD_BY_WORKSPACE_PRINCIPAL_COMMAND_AND_KEY_DIGEST",
+              "REPLAY_OR_RESUME_MATCHING_REQUEST_DIGEST",
+              "REJECT_CHANGED_REQUEST_DIGEST",
+              "EVALUATE_IF_MATCH_FOR_NEW_COMMAND",
+              "COMMIT_DOMAIN_EVENT_OUTBOX_AUDIT_AND_IDEMPOTENCY_ATOMICALLY"
+            ],
+            "missing_if_match": "HTTP_428_NO_EFFECT",
+            "stale_if_match": "HTTP_412_NO_DOMAIN_OR_DELIVERY_EFFECT"
+          }
+        },
+        "accepted_adapter_snapshot": {
+          "const": {
+            "contract_state": "ACCEPTED_M0_S9A_BASE",
+            "source_schema_version": "curve.provider-registry/v1",
+            "source_path": "contracts/providers/m0-s9a-provider-registry-v1.json",
+            "source_content_digest": "sha256:393c33fa5343beb1fe05a445a015333334a27bf491d7850c64dcf0a7f265071a",
+            "accepted_coordinates": [
+              {
+                "provider_type": "FAKE_LOCAL",
+                "adapter_key": "curve.fake-local",
+                "adapter_version": "1.0.0",
+                "environment": "LOCAL",
+                "allowed_classifications": ["INTERNAL"]
+              }
+            ]
+          }
+        },
+        "register_request": {
+          "const": {
+            "contract_state": "PROPOSED_NOT_NORMATIVE",
+            "schema_version": "curve.provider-connection-register-request/v1",
+            "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-connection-register-request.schema.json",
+            "schema_path": "contracts/schemas/provider-connection-register-request.schema.json",
+            "schema_content_digest": "sha256:03ab2cbbefd45793631874483a8781173069ff827b0b1c850b1d6f0cef17a76a",
+            "additional_properties": false,
+            "required_fields": [
+              "schema_version",
+              "provider_type",
+              "adapter_key",
+              "adapter_version",
+              "environment",
+              "display_name",
+              "allowed_classifications"
+            ],
+            "allowed_fields": [
+              "schema_version",
+              "provider_type",
+              "adapter_key",
+              "adapter_version",
+              "environment",
+              "display_name",
+              "allowed_classifications"
+            ],
+            "blocked_fields": [
+              "id",
+              "workspace_id",
+              "aggregate_version",
+              "external_tenant_ref",
+              "configuration_ref",
+              "configuration_digest",
+              "configuration_body",
+              "secret_reference",
+              "status",
+              "created_by",
+              "updated_by",
+              "actor_roles"
+            ],
+            "provider_type_values": [
+              "FAKE_LOCAL",
+              "ONYX",
+              "MCP",
+              "ORCA_HUMAN_ASSISTANCE",
+              "MODEL_GATEWAY",
+              "OPENHANDS",
+              "GITHUB",
+              "GITLAB",
+              "QUALITY",
+              "FEATURE_FLAG",
+              "DOCUMENTATION",
+              "MONITORING",
+              "PROTOTYPE"
+            ],
+            "environment_values": ["LOCAL", "STAGING", "PRODUCTION"],
+            "classification_values": ["INTERNAL", "CONFIDENTIAL", "RESTRICTED"],
+            "adapter_allowlist_source": "SERVER_SIDE_PROVIDER_REGISTRY",
+            "caller_selected_workspace": false,
+            "configuration_body_allowed": false
+          }
+        },
+        "response_contracts": {
+          "const": {
+            "PROVIDER_CONNECTION_ADMINISTRATION_V1": {
+              "contract_state": "PROPOSED_NOT_NORMATIVE",
+              "schema_version": "curve.provider-connection-administration/v1",
+              "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-connection-administration.schema.json",
+              "schema_path": "contracts/schemas/provider-connection-administration.schema.json",
+              "schema_content_digest": "sha256:65b3898dff3b0dda08805f2eced3dc4a8e31f10e1abd621dd97c3e31687b86bd"
+            },
+            "PROVIDER_CONNECTION_ADMINISTRATION_PAGE_V1": {
+              "contract_state": "PROPOSED_NOT_NORMATIVE",
+              "schema_version": "curve.provider-connection-administration-page/v1",
+              "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-connection-administration-page.schema.json",
+              "schema_path": "contracts/schemas/provider-connection-administration-page.schema.json",
+              "schema_content_digest": "sha256:7230268285ccd98bad70032d2af1f200e904df550a9fcb9cd433c46966a0d825"
+            },
+            "OPERATION_SUMMARY_V1": {
+              "contract_state": "ACCEPTED_BASE_REQUIRES_SELECTED_OPERATION_TYPE_MATERIALIZATION",
+              "schema_version": "1.0",
+              "schema_id": "https://curve.x3m.internal/contracts/schemas/operation-summary.schema.json",
+              "schema_path": "contracts/schemas/operation-summary.schema.json",
+              "schema_content_digest": "sha256:3a237b4f66a90b92545446989da0678b0e82f0f19aa2a9a4bf159740dfa80bb1",
+              "safe_fields": [
+                "schema_version",
+                "id",
+                "workspace_id",
+                "operation_type",
+                "status",
+                "version",
+                "progress_percent"
+              ],
+              "accepted_operation_types": [
+                "FOUNDATION_PROBE",
+                "WORKFLOW_COMMAND",
+                "PROVIDER_RECONCILIATION"
+              ],
+              "candidate_operation_types": [
+                "PROVIDER_ADMINISTRATION",
+                "PROVIDER_VALIDATION",
+                "PROVIDER_RECONCILIATION"
+              ],
+              "selected_operation_type_materialization_required": true
+            }
+          }
+        },
+        "operations": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/apiOperation" }
+        }
+      }
+    },
+    "apiOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "kind",
+        "method",
+        "path",
+        "coarse_action",
+        "granular_action",
+        "authorization_resource_type",
+        "lookup_sequence",
+        "required_headers",
+        "success_status",
+        "response_kind",
+        "response_contract",
+        "request_body_contract",
+        "operation_type_options",
+        "precondition_resource",
+        "response_etag_resource",
+        "location"
+      ],
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "enum": ["LIST", "REGISTER", "READ", "VALIDATE", "RECONCILE", "DISABLE", "ENABLE", "REVOKE"]
+        },
+        "kind": { "type": "string", "enum": ["QUERY", "COMMAND"] },
+        "method": { "type": "string", "enum": ["GET", "POST"] },
+        "path": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "coarse_action": {
+          "type": "string",
+          "pattern": "^CURVE\\.PROVIDER_CONNECTION\\.[A-Z_]+$"
+        },
+        "granular_action": {
+          "type": "string",
+          "pattern": "^CURVE\\.PROVIDER_CONNECTION\\.[A-Z_]+$"
+        },
+        "authorization_resource_type": {
+          "type": "string",
+          "enum": ["WORKSPACE", "PROVIDER_CONNECTION"]
+        },
+        "lookup_sequence": {
+          "type": "string",
+          "enum": [
+            "WORKSPACE_AUTHORIZATION_ONLY",
+            "WORKSPACE_PREAUTHORIZE_SCOPED_SAFE_LOOKUP_RESOURCE_AUTHORIZE"
+          ]
+        },
+        "required_headers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["Idempotency-Key", "If-Match"] }
+        },
+        "success_status": { "type": "integer", "enum": [200, 201, 202] },
+        "response_kind": {
+          "type": "string",
+          "enum": ["CONNECTION_PAGE", "CONNECTION", "OPERATION"]
+        },
+        "response_contract": {
+          "type": "string",
+          "enum": [
+            "PROVIDER_CONNECTION_ADMINISTRATION_PAGE_V1",
+            "PROVIDER_CONNECTION_ADMINISTRATION_V1",
+            "OPERATION_SUMMARY_V1"
+          ]
+        },
+        "request_body_contract": {
+          "type": "string",
+          "enum": ["NONE", "PROVIDER_CONNECTION_REGISTER_REQUEST_V1"]
+        },
+        "operation_type_options": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "SHARED_PROVIDER_ADMINISTRATION_OPERATION_V1": {
+              "const": "PROVIDER_ADMINISTRATION"
+            },
+            "DISTINCT_VALIDATE_RECONCILE_OPERATION_TYPES_V1": {
+              "type": "string",
+              "enum": ["PROVIDER_VALIDATION", "PROVIDER_RECONCILIATION"]
+            }
+          }
+        },
+        "precondition_resource": {
+          "type": "string",
+          "enum": ["NONE", "PROVIDER_CONNECTION"]
+        },
+        "response_etag_resource": {
+          "type": "string",
+          "enum": ["NONE", "PROVIDER_CONNECTION", "OPERATION"]
+        },
+        "location": { "type": "boolean" }
+      }
+    },
+    "safeProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "additional_properties",
+        "allowed_fields",
+        "blocked_fields",
+        "nested_shapes",
+        "capability_digest_derivation"
+      ],
+      "properties": {
+        "schema_version": { "const": "curve.provider-connection-administration/v1" },
+        "additional_properties": { "const": false },
+        "allowed_fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,99}$" }
+        },
+        "blocked_fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,99}$" }
+        },
+        "nested_shapes": {
+          "const": {
+            "current_capability": {
+              "nullable": true,
+              "additional_properties": false,
+              "required_fields": ["capability_version", "capability_digest"],
+              "field_types": {
+                "capability_version": "AGGREGATE_VERSION",
+                "capability_digest": "SHA256_DIGEST"
+              }
+            },
+            "last_error": {
+              "nullable": true,
+              "additional_properties": false,
+              "required_fields": ["code", "retryable"],
+              "field_types": {
+                "code": "SAFE_ERROR_CODE",
+                "retryable": "BOOLEAN"
+              }
+            }
+          }
+        },
+        "capability_digest_derivation": {
+          "const": {
+            "algorithm": "SHA-256",
+            "encoding": "UTF-8",
+            "digest_prefix": "sha256:",
+            "canonical_json": "RECURSIVE_LEXICOGRAPHIC_OBJECT_KEYS_COMPACT_SEPARATORS_ARRAY_ORDER_PRESERVED",
+            "source_fields": [
+              "adapter_key",
+              "adapter_version",
+              "allowed_classifications",
+              "capabilities",
+              "connection_id",
+              "protocol_versions",
+              "provider_type",
+              "workspace_id"
+            ],
+            "capability_fields": ["enabled", "name", "risk", "schema_uri"],
+            "optional_field_rule": "OMIT_CAPABILITY_SCHEMA_URI_WHEN_NULL",
+            "excluded_fields": [
+              "capability_version",
+              "connection_version",
+              "expires_at",
+              "observed_at",
+              "validated_at"
+            ]
+          }
+        }
+      }
+    },
+    "materialOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_source",
+        "action_profile",
+        "read_visibility",
+        "membership_rule",
+        "separation_rule",
+        "deny_response_profile",
+        "api_exposure_profile",
+        "environment_classification_scope",
+        "owner_reviewer_rule",
+        "approval_separation_rule",
+        "coding_budget_profile",
+        "governance_identity_authority",
+        "async_operation_profile"
+      ],
+      "properties": {
+        "authority_source": { "$ref": "#/$defs/materialOption" },
+        "action_profile": { "$ref": "#/$defs/materialOption" },
+        "read_visibility": { "$ref": "#/$defs/materialOption" },
+        "membership_rule": { "$ref": "#/$defs/materialOption" },
+        "separation_rule": { "$ref": "#/$defs/materialOption" },
+        "deny_response_profile": { "$ref": "#/$defs/materialOption" },
+        "api_exposure_profile": { "$ref": "#/$defs/materialOption" },
+        "environment_classification_scope": { "$ref": "#/$defs/materialOption" },
+        "owner_reviewer_rule": { "$ref": "#/$defs/materialOption" },
+        "approval_separation_rule": { "$ref": "#/$defs/materialOption" },
+        "coding_budget_profile": { "$ref": "#/$defs/materialOption" },
+        "governance_identity_authority": { "$ref": "#/$defs/materialOption" },
+        "async_operation_profile": { "$ref": "#/$defs/materialOption" }
+      }
+    },
+    "materialOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "selected"],
+      "properties": {
+        "allowed": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,99}$" }
+        },
+        "selected": {
+          "type": ["string", "null"],
+          "pattern": "^[A-Z][A-Z0-9_]{0,99}$"
+        }
+      }
+    },
+    "materialOptionsUnselected": {
+      "type": "object",
+      "properties": {
+        "authority_source": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "action_profile": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "read_visibility": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "membership_rule": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "separation_rule": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "deny_response_profile": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "api_exposure_profile": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "environment_classification_scope": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "owner_reviewer_rule": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "approval_separation_rule": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "coding_budget_profile": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "governance_identity_authority": { "$ref": "#/$defs/unselectedMaterialOption" },
+        "async_operation_profile": { "$ref": "#/$defs/unselectedMaterialOption" }
+      }
+    },
+    "materialOptionsApproved": {
+      "type": "object",
+      "properties": {
+        "authority_source": { "$ref": "#/$defs/approvedMaterialOption" },
+        "action_profile": { "$ref": "#/$defs/approvedMaterialOption" },
+        "read_visibility": { "$ref": "#/$defs/approvedMaterialOption" },
+        "membership_rule": { "$ref": "#/$defs/approvedMaterialOption" },
+        "separation_rule": { "$ref": "#/$defs/approvedMaterialOption" },
+        "deny_response_profile": { "$ref": "#/$defs/approvedMaterialOption" },
+        "api_exposure_profile": { "$ref": "#/$defs/approvedMaterialOption" },
+        "environment_classification_scope": { "$ref": "#/$defs/approvedMaterialOption" },
+        "owner_reviewer_rule": { "$ref": "#/$defs/approvedMaterialOption" },
+        "approval_separation_rule": { "$ref": "#/$defs/approvedMaterialOption" },
+        "coding_budget_profile": { "$ref": "#/$defs/approvedMaterialOption" },
+        "governance_identity_authority": { "$ref": "#/$defs/approvedMaterialOption" },
+        "async_operation_profile": { "$ref": "#/$defs/approvedMaterialOption" }
+      }
+    },
+    "materialOptionsDeferred": {
+      "type": "object",
+      "properties": {
+        "authority_source": { "$ref": "#/$defs/deferredMaterialOption" },
+        "action_profile": { "$ref": "#/$defs/deferredMaterialOption" },
+        "read_visibility": { "$ref": "#/$defs/deferredMaterialOption" },
+        "membership_rule": { "$ref": "#/$defs/deferredMaterialOption" },
+        "separation_rule": { "$ref": "#/$defs/deferredMaterialOption" },
+        "deny_response_profile": { "$ref": "#/$defs/deferredMaterialOption" },
+        "api_exposure_profile": { "$ref": "#/$defs/deferredMaterialOption" },
+        "environment_classification_scope": { "$ref": "#/$defs/deferredMaterialOption" },
+        "owner_reviewer_rule": { "$ref": "#/$defs/deferredMaterialOption" },
+        "approval_separation_rule": { "$ref": "#/$defs/deferredMaterialOption" },
+        "coding_budget_profile": { "$ref": "#/$defs/deferredMaterialOption" },
+        "governance_identity_authority": { "$ref": "#/$defs/approvedMaterialOption" },
+        "async_operation_profile": { "$ref": "#/$defs/deferredMaterialOption" }
+      }
+    },
+    "unselectedMaterialOption": {
+      "type": "object",
+      "properties": { "selected": { "type": "null" } }
+    },
+    "approvedMaterialOption": {
+      "type": "object",
+      "properties": {
+        "selected": {
+          "type": "string",
+          "not": { "const": "DEFER" }
+        }
+      }
+    },
+    "deferredMaterialOption": {
+      "type": "object",
+      "properties": { "selected": { "const": "DEFER" } }
+    },
+    "dependencyEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtime_activation_refs",
+        "retention_decision_refs",
+        "ux_contract_refs",
+        "approved_data_classifications",
+        "data_classification_approval_refs",
+        "dedicated_revoke_approver_policy_ref",
+        "owner_reviewer_exception_ref",
+        "approval_role_overlap_exception_ref",
+        "custom_coding_attempt_usd"
+      ],
+      "properties": {
+        "runtime_activation_refs": { "$ref": "#/$defs/evidenceRefs" },
+        "retention_decision_refs": { "$ref": "#/$defs/evidenceRefs" },
+        "ux_contract_refs": { "$ref": "#/$defs/evidenceRefs" },
+        "approved_data_classifications": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "common.schema.json#/$defs/DataClassification" }
+        },
+        "data_classification_approval_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/classificationApprovalEvidenceRef" }
+        },
+        "dedicated_revoke_approver_policy_ref": {
+          "oneOf": [{ "$ref": "#/$defs/evidenceRef" }, { "type": "null" }]
+        },
+        "owner_reviewer_exception_ref": {
+          "oneOf": [{ "$ref": "#/$defs/timeBoundEvidenceRef" }, { "type": "null" }]
+        },
+        "approval_role_overlap_exception_ref": {
+          "oneOf": [
+            { "$ref": "#/$defs/approvalOverlapExceptionRef" },
+            { "type": "null" }
+          ]
+        },
+        "custom_coding_attempt_usd": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "exclusiveMaximum": 25
+        }
+      }
+    },
+    "dependencyEvidenceEmpty": {
+      "const": {
+        "runtime_activation_refs": [],
+        "retention_decision_refs": [],
+        "ux_contract_refs": [],
+        "approved_data_classifications": [],
+        "data_classification_approval_refs": [],
+        "dedicated_revoke_approver_policy_ref": null,
+        "owner_reviewer_exception_ref": null,
+        "approval_role_overlap_exception_ref": null,
+        "custom_coding_attempt_usd": null
+      }
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/evidenceRef" }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_type",
+        "reference",
+        "content_digest",
+        "source_revision",
+        "target_environment",
+        "decision_id",
+        "work_package",
+        "repository"
+      ],
+      "properties": {
+        "evidence_type": {
+          "type": "string",
+          "enum": [
+            "RUNTIME_ACTIVATION",
+            "RETENTION_DECISION",
+            "UX_CONTRACT",
+            "SEPARATION_POLICY"
+          ]
+        },
+        "reference": {
+          "type": "string",
+          "format": "uri-reference",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "decision_id": { "const": "B-ADMIN-M0-S9B1" },
+        "work_package": { "const": "M0-S9B1" },
+        "repository": { "const": "github.com/faocampo/curve" },
+        "target_environment": {
+          "type": "string",
+          "enum": ["LOCAL", "STAGING", "PRODUCTION", "NOT_APPLICABLE"]
+        }
+      }
+    },
+    "proofEvidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_type",
+        "proof_case_id",
+        "reference",
+        "content_digest",
+        "source_revision",
+        "target_environment",
+        "decision_id",
+        "work_package",
+        "repository"
+      ],
+      "properties": {
+        "evidence_type": { "const": "PROOF_RESULT" },
+        "proof_case_id": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{0,99}$"
+        },
+        "reference": {
+          "type": "string",
+          "format": "uri-reference",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "decision_id": { "const": "B-ADMIN-M0-S9B1" },
+        "work_package": { "const": "M0-S9B1" },
+        "repository": { "const": "github.com/faocampo/curve" },
+        "target_environment": { "const": "NOT_APPLICABLE" }
+      }
+    },
+    "classificationApprovalEvidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_type",
+        "reference",
+        "content_digest",
+        "source_revision",
+        "target_environment",
+        "approved_classifications",
+        "decision_id",
+        "work_package",
+        "repository"
+      ],
+      "properties": {
+        "evidence_type": { "const": "CLASSIFICATION_APPROVAL" },
+        "reference": {
+          "type": "string",
+          "format": "uri-reference",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "decision_id": { "const": "B-ADMIN-M0-S9B1" },
+        "work_package": { "const": "M0-S9B1" },
+        "repository": { "const": "github.com/faocampo/curve" },
+        "target_environment": { "const": "NOT_APPLICABLE" },
+        "approved_classifications": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "common.schema.json#/$defs/DataClassification" }
+        }
+      }
+    },
+    "identityProofRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_type",
+        "reference",
+        "content_digest",
+        "source_revision",
+        "target_environment",
+        "identity_authority",
+        "subject_id",
+        "decision_id",
+        "work_package",
+        "repository"
+      ],
+      "properties": {
+        "evidence_type": { "const": "IDENTITY_SUBJECT_PROOF" },
+        "reference": {
+          "type": "string",
+          "format": "uri-reference",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "decision_id": { "const": "B-ADMIN-M0-S9B1" },
+        "work_package": { "const": "M0-S9B1" },
+        "repository": { "const": "github.com/faocampo/curve" },
+        "target_environment": { "const": "NOT_APPLICABLE" },
+        "identity_authority": {
+          "type": "string",
+          "enum": ["X3M_IDP_SUBJECT", "PLANE_USER_ID", "GITHUB_USER_ID"]
+        },
+        "subject_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,254}$"
+        }
+      }
+    },
+    "timeBoundEvidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_type",
+        "reference",
+        "content_digest",
+        "source_revision",
+        "target_environment",
+        "valid_from",
+        "valid_until",
+        "dispatch_revalidation_required",
+        "decision_id",
+        "work_package",
+        "repository"
+      ],
+      "properties": {
+        "evidence_type": { "const": "OWNER_REVIEWER_EXCEPTION" },
+        "reference": {
+          "type": "string",
+          "format": "uri-reference",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "decision_id": { "const": "B-ADMIN-M0-S9B1" },
+        "work_package": { "const": "M0-S9B1" },
+        "repository": { "const": "github.com/faocampo/curve" },
+        "target_environment": { "const": "NOT_APPLICABLE" },
+        "valid_from": { "$ref": "common.schema.json#/$defs/Instant" },
+        "valid_until": { "$ref": "common.schema.json#/$defs/Instant" },
+        "dispatch_revalidation_required": { "const": true }
+      }
+    },
+    "approvalOverlapExceptionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_type",
+        "reference",
+        "content_digest",
+        "source_revision",
+        "target_environment",
+        "valid_from",
+        "valid_until",
+        "decision_id",
+        "work_package",
+        "repository"
+      ],
+      "properties": {
+        "evidence_type": { "const": "APPROVAL_ROLE_OVERLAP_EXCEPTION" },
+        "reference": {
+          "type": "string",
+          "format": "uri-reference",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "decision_id": { "const": "B-ADMIN-M0-S9B1" },
+        "work_package": { "const": "M0-S9B1" },
+        "repository": { "const": "github.com/faocampo/curve" },
+        "target_environment": { "const": "NOT_APPLICABLE" },
+        "valid_from": { "$ref": "common.schema.json#/$defs/Instant" },
+        "valid_until": { "$ref": "common.schema.json#/$defs/Instant" }
+      }
+    },
+    "proofCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "status", "evidence_refs"],
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{0,99}$"
+        },
+        "status": { "type": "string", "enum": ["NOT_RUN", "PASS", "FAIL"] },
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/proofEvidenceRef" }
+        }
+      }
+    },
+    "owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_owner",
+        "delivery_owner",
+        "human_reviewer",
+        "security_identity_owner",
+        "platform_administration_owner"
+      ],
+      "properties": {
+        "decision_owner": { "$ref": "#/$defs/human" },
+        "delivery_owner": { "$ref": "#/$defs/human" },
+        "human_reviewer": { "$ref": "#/$defs/human" },
+        "security_identity_owner": {
+          "oneOf": [{ "$ref": "#/$defs/human" }, { "type": "null" }]
+        },
+        "platform_administration_owner": {
+          "oneOf": [{ "$ref": "#/$defs/human" }, { "type": "null" }]
+        }
+      }
+    },
+    "human": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor_type",
+        "identity_ref",
+        "identity_authority",
+        "subject_id",
+        "identity_proof_ref",
+        "name",
+        "role"
+      ],
+      "properties": {
+        "actor_type": { "const": "HUMAN" },
+        "identity_ref": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "identity_authority": {
+          "type": ["string", "null"],
+          "enum": ["X3M_IDP_SUBJECT", "PLANE_USER_ID", "GITHUB_USER_ID", null]
+        },
+        "subject_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,254}$"
+            },
+            { "type": "null" }
+          ]
+        },
+        "identity_proof_ref": {
+          "oneOf": [{ "$ref": "#/$defs/identityProofRef" }, { "type": "null" }]
+        },
+        "name": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "role": { "type": "string", "minLength": 1, "maxLength": 255 }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approval_role", "approver", "approved_decision_digest", "approved_at"],
+      "properties": {
+        "approval_role": {
+          "type": "string",
+          "enum": ["CURVE_PRODUCT", "SECURITY_IDENTITY", "PLATFORM_ADMINISTRATION"]
+        },
+        "approver": { "$ref": "#/$defs/human" },
+        "approved_decision_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "approved_at": { "$ref": "common.schema.json#/$defs/Instant" }
+      }
+    },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_selected",
+        "successor_policy_materialization_ready",
+        "successor_openapi_materialization_ready",
+        "child_task_packet_materialization_ready",
+        "plane_implementation_authorized"
+      ],
+      "properties": {
+        "decision_selected": { "type": "boolean" },
+        "successor_policy_materialization_ready": { "type": "boolean" },
+        "successor_openapi_materialization_ready": { "type": "boolean" },
+        "child_task_packet_materialization_ready": { "type": "boolean" },
+        "plane_implementation_authorized": { "const": false }
+      }
+    },
+    "activationProposed": {
+      "type": "object",
+      "properties": {
+        "decision_selected": { "const": false },
+        "successor_policy_materialization_ready": { "const": false },
+        "successor_openapi_materialization_ready": { "const": false },
+        "child_task_packet_materialization_ready": { "const": false },
+        "plane_implementation_authorized": { "const": false }
+      }
+    },
+    "activationApproved": {
+      "type": "object",
+      "properties": {
+        "decision_selected": { "const": true },
+        "successor_policy_materialization_ready": { "const": true },
+        "successor_openapi_materialization_ready": { "const": true },
+        "child_task_packet_materialization_ready": { "const": true },
+        "plane_implementation_authorized": { "const": false }
+      }
+    },
+    "activationDeferred": {
+      "type": "object",
+      "properties": {
+        "decision_selected": { "const": true },
+        "successor_policy_materialization_ready": { "const": false },
+        "successor_openapi_materialization_ready": { "const": false },
+        "child_task_packet_materialization_ready": { "const": false },
+        "plane_implementation_authorized": { "const": false }
+      }
+    },
+    "unresolvedRequirement": {
+      "type": "string",
+      "enum": [
+        "AUTHORITY_SOURCE",
+        "ACTION_PROFILE",
+        "READ_VISIBILITY",
+        "MEMBERSHIP_RULE",
+        "SEPARATION_RULE",
+        "DENY_RESPONSE_PROFILE",
+        "API_EXPOSURE_PROFILE",
+        "ENVIRONMENT_CLASSIFICATION_SCOPE",
+        "OWNER_REVIEWER_RULE",
+        "APPROVAL_SEPARATION_RULE",
+        "CODING_BUDGET_PROFILE",
+        "GOVERNANCE_IDENTITY_AUTHORITY",
+        "ASYNC_OPERATION_PROFILE",
+        "SECURITY_IDENTITY_OWNER",
+        "PLATFORM_ADMINISTRATION_OWNER",
+        "FOURTEEN_PROOF_CASES",
+        "THREE_DIGEST_BOUND_APPROVALS"
+      ]
+    }
+  }
+}
