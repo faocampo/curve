@@ -5,6 +5,7 @@ import test from "node:test";
 import {
   M0_S9B_CONTEXT_PATHS,
   M0_S9B1_CONTEXT_PATHS,
+  M0_S9B2_CONTEXT_PATHS,
   M0_S9C_CONTEXT_PATHS,
   M0_S9C1A_CONTEXT_PATHS,
   contextPathsFor,
@@ -24,6 +25,7 @@ test("M0-S9B context pins the external transport and administration readiness bo
   assertContext("M0-S9B", M0_S9B_CONTEXT_PATHS, [
     "contracts/database/m0-s2-relational-contract.md",
     "contracts/governance/m0-s9b1-provider-administration-v1.json",
+    "contracts/governance/m0-s9b2-provider-profile-v1.json",
     "contracts/openapi/curve-v1.openapi.yaml",
     "contracts/schemas/examples/provider-administration-decision.invalid.json",
     "contracts/schemas/examples/provider-connection-administration-page.invalid.json",
@@ -34,6 +36,7 @@ test("M0-S9B context pins the external transport and administration readiness bo
     "contracts/schemas/examples/provider-connection-register-request.valid.json",
     "contracts/schemas/operation-summary.schema.json",
     "contracts/schemas/provider-administration-decision.schema.json",
+    "contracts/schemas/provider-profile-decision.schema.json",
     "contracts/schemas/provider-connection-administration-page.schema.json",
     "contracts/schemas/provider-connection-administration.schema.json",
     "contracts/schemas/provider-connection-register-request.schema.json",
@@ -45,6 +48,7 @@ test("M0-S9B context pins the external transport and administration readiness bo
     "docs/technical/m0-s9a-implementation-evidence.md",
     "docs/technical/m0-s9b-provider-transport-task-packet.md",
     "docs/technical/m0-s9b1-provider-administration-decision.md",
+    "docs/technical/m0-s9b2-provider-profile-decision.md",
     "docs/technical/security-and-operations.md",
     "scripts/lib/context-pack.mjs",
     "scripts/tests/m0-s9-remainder-readiness.test.mjs",
@@ -112,6 +116,52 @@ test("M0-S9C1A context pins the unselected Model Gateway and data-policy candida
     assert.equal(decision.activation.runtime_model_calls_allowed, false);
     assert.ok(Object.values(decision.material_options).every(({ selected }) => selected === null));
   }
+});
+
+test("M0-S9B2 context pins the fail-closed credential and endpoint profile proposal", () => {
+  assertContext("M0-S9B2", M0_S9B2_CONTEXT_PATHS, [
+    "contracts/database/m0-s9a-provider-registry-contract.md",
+    "contracts/governance/m0-s9b1-provider-administration-v1.json",
+    "contracts/governance/m0-s9b2-provider-profile-v1.json",
+    "contracts/providers/m0-s9a-provider-registry-v1.json",
+    "contracts/schemas/examples/provider-credential-reference.invalid.json",
+    "contracts/schemas/examples/provider-credential-reference.valid.json",
+    "contracts/schemas/examples/provider-endpoint-profile.invalid.json",
+    "contracts/schemas/examples/provider-endpoint-profile.valid.json",
+    "contracts/schemas/examples/provider-profile-binding.invalid.json",
+    "contracts/schemas/examples/provider-profile-binding.valid.json",
+    "contracts/schemas/examples/provider-profile-decision.invalid.json",
+    "contracts/schemas/examples/provider-profile-decision.valid.json",
+    "contracts/schemas/provider-credential-reference.schema.json",
+    "contracts/schemas/provider-endpoint-profile.schema.json",
+    "contracts/schemas/provider-profile-binding.schema.json",
+    "contracts/schemas/provider-profile-decision.schema.json",
+    "contracts/testing/ac-test-matrix-v2.json",
+    "docs/technical/m0-readiness-board.md",
+    "docs/technical/m0-s9b2-provider-profile-decision.md",
+    "docs/technical/m0-test-strategy.md",
+    "docs/technical/m0-traceability.md",
+    "scripts/lib/provider-profile-decision.mjs",
+    "scripts/tests/provider-profile-decision.test.mjs",
+    "scripts/validate-contracts.mjs",
+  ]);
+
+  const decision = JSON.parse(
+    read("contracts/governance/m0-s9b2-provider-profile-v1.json"),
+  );
+  assert.equal(decision.status, "PROPOSED");
+  assert.equal(decision.readiness, "OWNER_SELECTION_REQUIRED");
+  assert.equal(decision.dispatch_state, "NO_DISPATCH");
+  assert.equal(decision.implementation_authority, false);
+  assert.ok(Object.values(decision.material_options).every((option) => option.selected === null));
+  assert.ok(Object.values(decision.activation).every((value) => value === false));
+  assert.equal(decision.evidence.length, 0);
+  assert.equal(decision.approvals.length, 0);
+  assert.equal(decision.material_options.credential_reference_protocol.reference_syntax, null);
+  assert.deepEqual(decision.material_options.endpoint_transport_policy.endpoint_values, []);
+  assert.equal(decision.broker_port.scope, "PROCESS_LOCAL");
+  assert.equal(decision.broker_port.serializable, false);
+  assert.equal(decision.broker_port.implementation_authorized, false);
 });
 
 test("M0-S9B1 context pins the fail-closed provider-administration decision gate", () => {

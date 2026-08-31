@@ -1,0 +1,26 @@
+{
+  "schema_version": "curve.provider-profile-decision/v1",
+  "decision_id": "B-PROFILE-M0-S9B2",
+  "work_package": "M0-S9B2",
+  "status": "PROPOSED",
+  "readiness": "OWNER_SELECTION_REQUIRED",
+  "dispatch_state": "DISPATCH_ALLOWED",
+  "contract_state": "PROPOSED_NOT_NORMATIVE",
+  "baseline": {
+    "curve_revision": "1c38a5398b9e6c7cf83c8ee7e8a4615f8f2450d1",
+    "data_boundary": "SYNTHETIC_INTERNAL_METADATA_ONLY",
+    "external_effects": "NONE"
+  },
+  "predecessor_bindings": [],
+  "schema_bindings": [],
+  "material_options": {},
+  "broker_port": {},
+  "normalized_errors": [],
+  "candidate_records": {},
+  "unresolved_requirements": [],
+  "owners": {},
+  "evidence": [],
+  "approvals": [],
+  "activation": {},
+  "implementation_authority": true
+}

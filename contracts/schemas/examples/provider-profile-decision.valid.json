@@ -1,0 +1,56 @@
+{
+  "schema_version": "curve.provider-profile-decision/v1",
+  "decision_id": "B-PROFILE-M0-S9B2",
+  "work_package": "M0-S9B2",
+  "status": "PROPOSED",
+  "readiness": "OWNER_SELECTION_REQUIRED",
+  "dispatch_state": "NO_DISPATCH",
+  "contract_state": "PROPOSED_NOT_NORMATIVE",
+  "baseline": {
+    "curve_revision": "32b716ff77a35f2a3267118b5fd7e639dcc46154",
+    "data_boundary": "SYNTHETIC_INTERNAL_METADATA_ONLY",
+    "external_effects": "NONE"
+  },
+  "predecessor_bindings": [
+    { "path": "contracts/governance/m0-s9b1-provider-administration-v1.json", "sha256": "sha256:7930bc55f8ee05abee88b23ecfbaf940368da24bc5f14c78cd16c92006cf9427" },
+    { "path": "contracts/providers/m0-s9a-provider-registry-v1.json", "sha256": "sha256:393c33fa5343beb1fe05a445a015333334a27bf491d7850c64dcf0a7f265071a" }
+  ],
+  "schema_bindings": [
+    { "path": "contracts/schemas/provider-credential-reference.schema.json", "sha256": "sha256:3a9a1dd86d5ac845362ac6780117b47f16d19040e457222e69f94c4e5f663ece", "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-credential-reference.schema.json", "contract_state": "PROPOSED_NOT_NORMATIVE", "promotion_decision": "B-PROFILE-M0-S9B2" },
+    { "path": "contracts/schemas/provider-endpoint-profile.schema.json", "sha256": "sha256:9d49886177b47140d87a5926f21c0e743b0e1ba5d5ce378e7a07409b4cca91b4", "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-endpoint-profile.schema.json", "contract_state": "PROPOSED_NOT_NORMATIVE", "promotion_decision": "B-PROFILE-M0-S9B2" },
+    { "path": "contracts/schemas/provider-profile-binding.schema.json", "sha256": "sha256:e458de6d3898e4c7b356dba223c005334664920037a7aa0ee3fdab2a9a41318e", "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-profile-binding.schema.json", "contract_state": "PROPOSED_NOT_NORMATIVE", "promotion_decision": "B-PROFILE-M0-S9B2" },
+    { "path": "contracts/schemas/provider-profile-decision.schema.json", "sha256": "sha256:19dee9c422140e8853eee8076844b478b03d2519957d943193bcea25a5b267d1", "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-profile-decision.schema.json", "contract_state": "PROPOSED_NOT_NORMATIVE", "promotion_decision": "B-PROFILE-M0-S9B2" }
+  ],
+  "material_options": {
+    "credential_persistence_placement": { "allowed": ["DEDICATED_PROFILE_RECORD", "PROVIDER_CONNECTION_EXTENSION", "DEFER"], "selected": null },
+    "endpoint_persistence_placement": { "allowed": ["DEDICATED_PROFILE_RECORD", "PROVIDER_CONNECTION_EXTENSION", "DEFER"], "selected": null },
+    "credential_broker_profile": { "allowed": ["X3M_SECRETS_MANAGER_BROKER", "ABSTRACT_CREDENTIAL_BROKER", "DEFER"], "selected": null },
+    "credential_reference_protocol": { "allowed": ["OPAQUE_VERSIONED_REFERENCE", "DEFER"], "selected": null, "reference_syntax": null },
+    "endpoint_transport_policy": { "allowed": ["HTTPS_ALLOWLISTED_ORIGINS", "LOCAL_PROCESS_ONLY", "DEFER"], "selected": null, "endpoint_values": [] },
+    "rotation_and_revocation_policy": { "allowed": ["BROKER_VERSIONED_ROTATION_AND_TERMINAL_REVOCATION", "PROVIDER_MANAGED_ROTATION_AND_TERMINAL_REVOCATION", "DEFER"], "selected": null },
+    "environment_activation": { "allowed": ["LOCAL_ONLY", "LOCAL_AND_STAGING", "ALL_ENVIRONMENTS", "DEFER"], "selected": null }
+  },
+  "broker_port": {
+    "port_id": "CURVE_PROVIDER_CREDENTIAL_BROKER_PORT_V1_CANDIDATE",
+    "scope": "PROCESS_LOCAL",
+    "serializable": false,
+    "network_transport": false,
+    "persistent_secret_material": false,
+    "inputs": ["workspace_context", "provider_connection_context", "requested_capability"],
+    "success_projection": "NON_SERIALIZABLE_CREDENTIAL_USE_CAPABILITY",
+    "error_projection": "NORMALIZED_ERROR_CODE_ONLY",
+    "implementation_authorized": false
+  },
+  "normalized_errors": ["BROKER_UNAVAILABLE", "CREDENTIAL_REFERENCE_MISSING", "CREDENTIAL_REFERENCE_REVOKED", "CREDENTIAL_REFERENCE_VERSION_MISMATCH", "ENDPOINT_PROFILE_DISABLED", "ENDPOINT_PROFILE_MISSING", "OPTIMISTIC_CONCURRENCY", "POLICY_DENIED"],
+  "candidate_records": {
+    "credential_reference": { "schema_version": "curve.provider-credential-reference/v1-candidate", "workspace_id": "11111111-1111-4111-8111-111111111111", "provider_connection_id": "22222222-2222-4222-8222-222222222222", "profile_version": 1, "reference_kind": null, "reference_format_version": null, "status": "UNCONFIGURED", "rotation_due_at": null, "revoked_at": null, "credential_material_present": false },
+    "endpoint_profile": { "schema_version": "curve.provider-endpoint-profile/v1-candidate", "workspace_id": "11111111-1111-4111-8111-111111111111", "provider_connection_id": "22222222-2222-4222-8222-222222222222", "profile_version": 1, "environment": "LOCAL", "endpoint_profile_kind": null, "transport_protocol": null, "tls_policy": null, "source_policy": null, "status": "UNCONFIGURED", "endpoint_value_present": false },
+    "profile_binding": { "schema_version": "curve.provider-profile-binding/v1-candidate", "workspace_id": "11111111-1111-4111-8111-111111111111", "provider_connection_id": "22222222-2222-4222-8222-222222222222", "binding_version": 1, "credential_profile_version": null, "endpoint_profile_version": null, "state": "UNBOUND", "capability_revalidation_required": true, "dispatch_allowed": false }
+  },
+  "unresolved_requirements": ["B-IDENTITY", "B-ENDPOINT", "B-DATA", "CREDENTIAL_PERSISTENCE_PLACEMENT", "BROKER_REFERENCE_SYNTAX", "ENDPOINT_VALUES", "OWNER_APPROVALS"],
+  "owners": { "decision_owner": null, "security_owner": null, "platform_owner": null, "data_owner": null },
+  "evidence": [],
+  "approvals": [],
+  "activation": { "contract_promotion_allowed": false, "plane_implementation_authorized": false, "credential_resolution_enabled": false, "endpoint_use_enabled": false, "provider_network_enabled": false, "staging_enabled": false, "production_enabled": false },
+  "implementation_authority": false
+}

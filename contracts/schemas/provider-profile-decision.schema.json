@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/provider-profile-decision.schema.json",
+  "title": "Curve M0-S9B2 provider profile decision",
+  "description": "Candidate-only M0-S9B2 decision worksheet. It grants no provider, credential, endpoint, network, implementation, or dispatch authority.",
+  "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
+  "x-curve-promotion-decision": "B-PROFILE-M0-S9B2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "work_package",
+    "status",
+    "readiness",
+    "dispatch_state",
+    "contract_state",
+    "baseline",
+    "predecessor_bindings",
+    "schema_bindings",
+    "material_options",
+    "broker_port",
+    "normalized_errors",
+    "candidate_records",
+    "unresolved_requirements",
+    "owners",
+    "evidence",
+    "approvals",
+    "activation",
+    "implementation_authority"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.provider-profile-decision/v1" },
+    "decision_id": { "const": "B-PROFILE-M0-S9B2" },
+    "work_package": { "const": "M0-S9B2" },
+    "status": { "const": "PROPOSED" },
+    "readiness": { "const": "OWNER_SELECTION_REQUIRED" },
+    "dispatch_state": { "const": "NO_DISPATCH" },
+    "contract_state": { "const": "PROPOSED_NOT_NORMATIVE" },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["curve_revision", "data_boundary", "external_effects"],
+      "properties": {
+        "curve_revision": { "const": "32b716ff77a35f2a3267118b5fd7e639dcc46154" },
+        "data_boundary": { "const": "SYNTHETIC_INTERNAL_METADATA_ONLY" },
+        "external_effects": { "const": "NONE" }
+      }
+    },
+    "predecessor_bindings": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/RawByteBinding" }
+    },
+    "schema_bindings": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/SchemaBinding" }
+    },
+    "material_options": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "credential_persistence_placement",
+        "endpoint_persistence_placement",
+        "credential_broker_profile",
+        "credential_reference_protocol",
+        "endpoint_transport_policy",
+        "rotation_and_revocation_policy",
+        "environment_activation"
+      ],
+      "properties": {
+        "credential_persistence_placement": { "$ref": "#/$defs/PlacementOption" },
+        "endpoint_persistence_placement": { "$ref": "#/$defs/PlacementOption" },
+        "credential_broker_profile": { "$ref": "#/$defs/BrokerOption" },
+        "credential_reference_protocol": { "$ref": "#/$defs/ReferenceProtocolOption" },
+        "endpoint_transport_policy": { "$ref": "#/$defs/EndpointPolicyOption" },
+        "rotation_and_revocation_policy": { "$ref": "#/$defs/RotationOption" },
+        "environment_activation": { "$ref": "#/$defs/EnvironmentOption" }
+      }
+    },
+    "broker_port": { "$ref": "#/$defs/BrokerPort" },
+    "normalized_errors": {
+      "type": "array",
+      "const": [
+        "BROKER_UNAVAILABLE",
+        "CREDENTIAL_REFERENCE_MISSING",
+        "CREDENTIAL_REFERENCE_REVOKED",
+        "CREDENTIAL_REFERENCE_VERSION_MISMATCH",
+        "ENDPOINT_PROFILE_DISABLED",
+        "ENDPOINT_PROFILE_MISSING",
+        "OPTIMISTIC_CONCURRENCY",
+        "POLICY_DENIED"
+      ]
+    },
+    "candidate_records": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["credential_reference", "endpoint_profile", "profile_binding"],
+      "properties": {
+        "credential_reference": { "$ref": "provider-credential-reference.schema.json" },
+        "endpoint_profile": { "$ref": "provider-endpoint-profile.schema.json" },
+        "profile_binding": { "$ref": "provider-profile-binding.schema.json" }
+      }
+    },
+    "unresolved_requirements": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "B-IDENTITY",
+          "B-ENDPOINT",
+          "B-DATA",
+          "CREDENTIAL_PERSISTENCE_PLACEMENT",
+          "BROKER_REFERENCE_SYNTAX",
+          "ENDPOINT_VALUES",
+          "OWNER_APPROVALS"
+        ]
+      }
+    },
+    "owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_owner", "security_owner", "platform_owner", "data_owner"],
+      "properties": {
+        "decision_owner": { "type": "null" },
+        "security_owner": { "type": "null" },
+        "platform_owner": { "type": "null" },
+        "data_owner": { "type": "null" }
+      }
+    },
+    "evidence": { "type": "array", "maxItems": 0 },
+    "approvals": { "type": "array", "maxItems": 0 },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_promotion_allowed",
+        "plane_implementation_authorized",
+        "credential_resolution_enabled",
+        "endpoint_use_enabled",
+        "provider_network_enabled",
+        "staging_enabled",
+        "production_enabled"
+      ],
+      "properties": {
+        "contract_promotion_allowed": { "const": false },
+        "plane_implementation_authorized": { "const": false },
+        "credential_resolution_enabled": { "const": false },
+        "endpoint_use_enabled": { "const": false },
+        "provider_network_enabled": { "const": false },
+        "staging_enabled": { "const": false },
+        "production_enabled": { "const": false }
+      }
+    },
+    "implementation_authority": { "const": false }
+  },
+  "$defs": {
+    "RawByteBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "sha256": { "$ref": "common.schema.json#/$defs/Digest" }
+      }
+    },
+    "SchemaBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "schema_id",
+        "contract_state",
+        "promotion_decision"
+      ],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "sha256": { "$ref": "common.schema.json#/$defs/Digest" },
+        "schema_id": { "type": "string", "format": "uri" },
+        "contract_state": { "const": "PROPOSED_NOT_NORMATIVE" },
+        "promotion_decision": { "const": "B-PROFILE-M0-S9B2" }
+      }
+    },
+    "PlacementOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "selected"],
+      "properties": {
+        "allowed": { "const": ["DEDICATED_PROFILE_RECORD", "PROVIDER_CONNECTION_EXTENSION", "DEFER"] },
+        "selected": { "type": "null" }
+      }
+    },
+    "BrokerOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "selected"],
+      "properties": {
+        "allowed": { "const": ["X3M_SECRETS_MANAGER_BROKER", "ABSTRACT_CREDENTIAL_BROKER", "DEFER"] },
+        "selected": { "type": "null" }
+      }
+    },
+    "ReferenceProtocolOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "selected", "reference_syntax"],
+      "properties": {
+        "allowed": { "const": ["OPAQUE_VERSIONED_REFERENCE", "DEFER"] },
+        "selected": { "type": "null" },
+        "reference_syntax": { "type": "null" }
+      }
+    },
+    "EndpointPolicyOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "selected", "endpoint_values"],
+      "properties": {
+        "allowed": { "const": ["HTTPS_ALLOWLISTED_ORIGINS", "LOCAL_PROCESS_ONLY", "DEFER"] },
+        "selected": { "type": "null" },
+        "endpoint_values": { "type": "array", "maxItems": 0 }
+      }
+    },
+    "RotationOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "selected"],
+      "properties": {
+        "allowed": { "const": ["BROKER_VERSIONED_ROTATION_AND_TERMINAL_REVOCATION", "PROVIDER_MANAGED_ROTATION_AND_TERMINAL_REVOCATION", "DEFER"] },
+        "selected": { "type": "null" }
+      }
+    },
+    "EnvironmentOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "selected"],
+      "properties": {
+        "allowed": { "const": ["LOCAL_ONLY", "LOCAL_AND_STAGING", "ALL_ENVIRONMENTS", "DEFER"] },
+        "selected": { "type": "null" }
+      }
+    },
+    "BrokerPort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "port_id",
+        "scope",
+        "serializable",
+        "network_transport",
+        "persistent_secret_material",
+        "inputs",
+        "success_projection",
+        "error_projection",
+        "implementation_authorized"
+      ],
+      "properties": {
+        "port_id": { "const": "CURVE_PROVIDER_CREDENTIAL_BROKER_PORT_V1_CANDIDATE" },
+        "scope": { "const": "PROCESS_LOCAL" },
+        "serializable": { "const": false },
+        "network_transport": { "const": false },
+        "persistent_secret_material": { "const": false },
+        "inputs": { "const": ["workspace_context", "provider_connection_context", "requested_capability"] },
+        "success_projection": { "const": "NON_SERIALIZABLE_CREDENTIAL_USE_CAPABILITY" },
+        "error_projection": { "const": "NORMALIZED_ERROR_CODE_ONLY" },
+        "implementation_authorized": { "const": false }
+      }
+    }
+  }
+}

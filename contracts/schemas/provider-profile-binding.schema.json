@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/provider-profile-binding.schema.json",
+  "title": "Curve candidate provider profile binding",
+  "description": "Candidate-only M0-S9B2 binding between one workspace provider connection and unconfigured credential/endpoint metadata projections. It grants no resolution, network, or dispatch authority.",
+  "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
+  "x-curve-promotion-decision": "B-PROFILE-M0-S9B2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "workspace_id",
+    "provider_connection_id",
+    "binding_version",
+    "credential_profile_version",
+    "endpoint_profile_version",
+    "state",
+    "capability_revalidation_required",
+    "dispatch_allowed"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.provider-profile-binding/v1-candidate" },
+    "workspace_id": { "$ref": "common.schema.json#/$defs/WorkspaceId" },
+    "provider_connection_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+    "binding_version": { "$ref": "common.schema.json#/$defs/AggregateVersion" },
+    "credential_profile_version": { "type": "null" },
+    "endpoint_profile_version": { "type": "null" },
+    "state": { "const": "UNBOUND" },
+    "capability_revalidation_required": { "const": true },
+    "dispatch_allowed": { "const": false }
+  }
+}
