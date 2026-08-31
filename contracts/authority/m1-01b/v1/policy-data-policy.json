@@ -1,0 +1,53 @@
+{
+  "schema_version": "curve.coding-agent-state-authority-source/v1",
+  "source_id": "CURVE-M1-01B-POLICY-DATA-POLICY",
+  "source_type": "WORKSPACE_ROLE_BINDING",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "work_package_id": "M1-01B",
+  "actor": {
+    "actor_type": "HUMAN",
+    "actor_id": "faocampo",
+    "actor_role": "CURVE_ENGINEERING_APPROVER"
+  },
+  "authority_scope": [
+    "STATE:POLICY:DATA-POLICY:PROPOSED"
+  ],
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "POLICY",
+    "subject_id": "DATA-POLICY",
+    "state": "PROPOSED",
+    "claim": {
+      "policy_id": "DATA-POLICY",
+      "status": "PROPOSED",
+      "classification": "INTERNAL",
+      "allowed_data": [
+        "Existing authorized workspace Product, Initiative, and active-human metadata plus fixed synthetic INTERNAL UI fixtures."
+      ],
+      "prohibited_data": [
+        "Credentials, protected bodies, customer content, provider/model payloads, and production data."
+      ],
+      "protected_data_allowed": false
+    }
+  },
+  "approval_subject_digest": "sha256:b5d056ec7e851019204af6b815fde450afa47e19652800cb71b1ed6d7a73db4e",
+  "attested_at": "2026-08-31T13:01:10-03:00",
+  "normative_source": {
+    "repository": "CURVE",
+    "title": "M1-01B DATA-POLICY proposal source",
+    "path": "contracts/schemas/examples/coding-agent-task-packet.valid.json",
+    "revision": "96a43a4c044bcd78cc47bb7f637c1e4e0d1a3b42",
+    "content_digest": "sha256:e0b7d8625fe6c9f5aee1000efa49ec3aaf3436c65378d3d45977dd96882f379d"
+  },
+  "execution_selections": {
+    "node_execution_profile": null,
+    "security_profile": null,
+    "authority_profile": null
+  },
+  "implementation_authority": {
+    "status": "UNRESOLVED",
+    "blocker_id": "B-CODING-AUTHORITY-01",
+    "implementation_authority_granted": false,
+    "dispatch_status": "NO_DISPATCH"
+  }
+}

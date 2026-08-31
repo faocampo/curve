@@ -1,0 +1,46 @@
+{
+  "schema_version": "curve.coding-agent-state-authority-source/v1",
+  "source_id": "CURVE-M1-01B-UX-M1-01B",
+  "source_type": "CURVE_APPROVAL_RECORD",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "work_package_id": "M1-01B",
+  "actor": {
+    "actor_type": "HUMAN",
+    "actor_id": "faocampo",
+    "actor_role": "PRODUCT_APPROVER"
+  },
+  "authority_scope": [
+    "STATE:UX:M1-01B:APPROVED"
+  ],
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "UX",
+    "subject_id": "M1-01B",
+    "state": "APPROVED",
+    "claim": {
+      "packet_id": "CURVE-M1-01B",
+      "work_package_id": "M1-01B",
+      "user_facing": true
+    }
+  },
+  "approval_subject_digest": "sha256:3fa2efb952ac413851f269f14411e76e33e76a5057965589081e854c17db3a2a",
+  "attested_at": "2026-08-29T20:03:56-03:00",
+  "normative_source": {
+    "repository": "CURVE",
+    "title": "UX evidence for M1-01B approval record",
+    "path": "docs/technical/ux-m1-01b-initiative-shell.md",
+    "revision": "96a43a4c044bcd78cc47bb7f637c1e4e0d1a3b42",
+    "content_digest": "sha256:9843ec48b45cca0bf5e19016b009c60584bdfbbc1e3b767d154a7e14941c32bf"
+  },
+  "execution_selections": {
+    "node_execution_profile": null,
+    "security_profile": null,
+    "authority_profile": null
+  },
+  "implementation_authority": {
+    "status": "UNRESOLVED",
+    "blocker_id": "B-CODING-AUTHORITY-01",
+    "implementation_authority_granted": false,
+    "dispatch_status": "NO_DISPATCH"
+  }
+}

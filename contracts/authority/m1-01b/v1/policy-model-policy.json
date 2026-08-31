@@ -1,0 +1,51 @@
+{
+  "schema_version": "curve.coding-agent-state-authority-source/v1",
+  "source_id": "CURVE-M1-01B-POLICY-MODEL-POLICY",
+  "source_type": "WORKSPACE_ROLE_BINDING",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "work_package_id": "M1-01B",
+  "actor": {
+    "actor_type": "HUMAN",
+    "actor_id": "faocampo",
+    "actor_role": "CURVE_ENGINEERING_APPROVER"
+  },
+  "authority_scope": [
+    "STATE:POLICY:MODEL-POLICY:PROPOSED"
+  ],
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "POLICY",
+    "subject_id": "MODEL-POLICY",
+    "state": "PROPOSED",
+    "claim": {
+      "policy_id": "MODEL-POLICY",
+      "status": "PROPOSED",
+      "mode": "NONE",
+      "provider": null,
+      "model": null,
+      "model_version": null,
+      "prompt_digest": null,
+      "maximum_calls": 0
+    }
+  },
+  "approval_subject_digest": "sha256:dc8110cdfb146159a956f3526dba65b980391767cf05a0b39974551a72de0da9",
+  "attested_at": "2026-08-31T13:01:10-03:00",
+  "normative_source": {
+    "repository": "CURVE",
+    "title": "M1-01B MODEL-POLICY proposal source",
+    "path": "contracts/schemas/examples/coding-agent-task-packet.valid.json",
+    "revision": "96a43a4c044bcd78cc47bb7f637c1e4e0d1a3b42",
+    "content_digest": "sha256:e0b7d8625fe6c9f5aee1000efa49ec3aaf3436c65378d3d45977dd96882f379d"
+  },
+  "execution_selections": {
+    "node_execution_profile": null,
+    "security_profile": null,
+    "authority_profile": null
+  },
+  "implementation_authority": {
+    "status": "UNRESOLVED",
+    "blocker_id": "B-CODING-AUTHORITY-01",
+    "implementation_authority_granted": false,
+    "dispatch_status": "NO_DISPATCH"
+  }
+}
