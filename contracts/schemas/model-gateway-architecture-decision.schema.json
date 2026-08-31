@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/model-gateway-architecture-decision.schema.json",
+  "title": "D-004 candidate Model Gateway architecture decision",
+  "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "work_package",
+    "contract_state",
+    "status",
+    "decision_outcome",
+    "last_updated",
+    "baseline",
+    "fixed_invariants",
+    "material_options",
+    "interface_contract",
+    "evidence_requirements",
+    "dependencies",
+    "owners",
+    "approvals",
+    "decided_at",
+    "next_review_at",
+    "decision_payload_digest",
+    "activation",
+    "unresolved_requirements"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.model-gateway-architecture-decision/v1" },
+    "decision_id": { "const": "D-004" },
+    "work_package": { "const": "M0-S9C1A" },
+    "contract_state": { "enum": ["PROPOSED_NOT_NORMATIVE", "DECIDED_NORMATIVE"] },
+    "status": { "enum": ["PROPOSED", "DECIDED"] },
+    "decision_outcome": { "enum": ["UNSELECTED", "APPROVED", "DEFERRED"] },
+    "last_updated": { "$ref": "common.schema.json#/$defs/Instant" },
+    "baseline": { "$ref": "#/$defs/baseline" },
+    "fixed_invariants": { "$ref": "#/$defs/fixedInvariants" },
+    "material_options": { "$ref": "#/$defs/materialOptions" },
+    "interface_contract": { "$ref": "#/$defs/interfaceContract" },
+    "evidence_requirements": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/evidenceRequirement" }
+    },
+    "dependencies": { "$ref": "#/$defs/dependencies" },
+    "owners": { "$ref": "#/$defs/owners" },
+    "approvals": {
+      "type": "array",
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/approval" }
+    },
+    "decided_at": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Instant" },
+        { "type": "null" }
+      ]
+    },
+    "next_review_at": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Instant" },
+        { "type": "null" }
+      ]
+    },
+    "decision_payload_digest": { "$ref": "#/$defs/nullableDigest" },
+    "activation": { "$ref": "#/$defs/activation" },
+    "unresolved_requirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_.-]{2,99}$" }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "PROPOSED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "contract_state": { "const": "PROPOSED_NOT_NORMATIVE" },
+          "decision_outcome": { "const": "UNSELECTED" },
+          "approvals": { "maxItems": 0 },
+          "decided_at": { "type": "null" },
+          "next_review_at": { "type": "null" },
+          "decision_payload_digest": { "type": "null" },
+          "activation": { "$ref": "#/$defs/proposedActivation" },
+          "unresolved_requirements": { "minItems": 1 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "DECIDED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "contract_state": { "const": "DECIDED_NORMATIVE" },
+          "decision_outcome": { "enum": ["APPROVED", "DEFERRED"] },
+          "approvals": { "minItems": 4, "maxItems": 4 },
+          "decided_at": { "$ref": "common.schema.json#/$defs/Instant" },
+          "next_review_at": { "$ref": "common.schema.json#/$defs/Instant" },
+          "decision_payload_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+          "unresolved_requirements": { "maxItems": 0 }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nullableDigest": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Digest" },
+        { "type": "null" }
+      ]
+    },
+    "nullableText": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "surveyed_curve_revision",
+        "parent_packet_id",
+        "parent_packet_version",
+        "provider_transport"
+      ],
+      "properties": {
+        "surveyed_curve_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "parent_packet_id": { "const": "CURVE-M0-S9C-MODEL-GATEWAY" },
+        "parent_packet_version": { "const": "0.2" },
+        "provider_transport": { "const": "OPENROUTER_PROPOSED_UNAPPROVED" }
+      }
+    },
+    "fixedInvariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "curve_policy_precedes_transport",
+        "caller_selects_route",
+        "provider_defaults_allowed",
+        "silent_model_or_provider_substitution",
+        "actual_route_evidence_required",
+        "ambiguous_charge_retried_automatically",
+        "raw_body_in_ordinary_telemetry",
+        "credential_in_agent_or_temporal_history",
+        "unknown_error_retryable",
+        "workspace_scope_required"
+      ],
+      "properties": {
+        "curve_policy_precedes_transport": { "const": true },
+        "caller_selects_route": { "const": false },
+        "provider_defaults_allowed": { "const": false },
+        "silent_model_or_provider_substitution": { "const": false },
+        "actual_route_evidence_required": { "const": true },
+        "ambiguous_charge_retried_automatically": { "const": false },
+        "raw_body_in_ordinary_telemetry": { "const": false },
+        "credential_in_agent_or_temporal_history": { "const": false },
+        "unknown_error_retryable": { "const": false },
+        "workspace_scope_required": { "const": true }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["options", "selected"],
+      "properties": {
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,99}$" }
+        },
+        "selected": {
+          "type": ["string", "null"],
+          "pattern": "^[A-Z][A-Z0-9_]{2,99}$"
+        }
+      }
+    },
+    "materialOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component_boundary",
+        "transport_profile",
+        "attempt_routing_profile",
+        "streaming_profile",
+        "reconciliation_profile",
+        "deployment_profile",
+        "telemetry_profile",
+        "replacement_profile"
+      ],
+      "properties": {
+        "component_boundary": { "$ref": "#/$defs/selection" },
+        "transport_profile": { "$ref": "#/$defs/selection" },
+        "attempt_routing_profile": { "$ref": "#/$defs/selection" },
+        "streaming_profile": { "$ref": "#/$defs/selection" },
+        "reconciliation_profile": { "$ref": "#/$defs/selection" },
+        "deployment_profile": { "$ref": "#/$defs/selection" },
+        "telemetry_profile": { "$ref": "#/$defs/selection" },
+        "replacement_profile": { "$ref": "#/$defs/selection" }
+      }
+    },
+    "interfaceContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "port_name",
+        "operations",
+        "required_request_bindings",
+        "safe_result_bindings",
+        "normalized_errors"
+      ],
+      "properties": {
+        "port_name": { "const": "ModelGateway" },
+        "operations": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": { "enum": ["GENERATE", "STREAM", "COUNT_TOKENS", "CANCEL", "REPORT_USAGE"] }
+        },
+        "required_request_bindings": {
+          "type": "array",
+          "minItems": 14,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,99}$" }
+        },
+        "safe_result_bindings": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,99}$" }
+        },
+        "normalized_errors": {
+          "type": "array",
+          "minItems": 12,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,99}$" }
+        }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "path", "source_revision", "content_digest", "environment", "checked_at"],
+      "properties": {
+        "repository": { "const": "github.com/faocampo/curve" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "environment": { "enum": ["LOCAL", "STAGING", "PRODUCTION"] },
+        "checked_at": { "$ref": "common.schema.json#/$defs/Instant" }
+      }
+    },
+    "evidenceRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement_id", "status", "evidence_refs"],
+      "properties": {
+        "requirement_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,99}$" },
+        "status": { "enum": ["NOT_PROVIDED", "PASS", "FAIL"] },
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidenceRef" }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["d005", "d014", "d009"],
+      "properties": {
+        "d005": { "$ref": "#/$defs/decisionDependency" },
+        "d014": { "$ref": "#/$defs/decisionDependency" },
+        "d009": { "$ref": "#/$defs/decisionDependency" }
+      }
+    },
+    "decisionDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_id", "required_before", "status", "evidence_digest"],
+      "properties": {
+        "decision_id": { "enum": ["D-005", "D-009", "D-014"] },
+        "required_before": { "enum": ["CONTRACT_PROMOTION", "PROTECTED_BODY_PERSISTENCE", "CHARGEABLE_INVOCATION"] },
+        "status": { "enum": ["PROPOSED", "DECIDED"] },
+        "evidence_digest": { "$ref": "#/$defs/nullableDigest" }
+      }
+    },
+    "owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ai_platform", "platform_operations", "security", "finops"],
+      "properties": {
+        "ai_platform": { "$ref": "#/$defs/nullableText" },
+        "platform_operations": { "$ref": "#/$defs/nullableText" },
+        "security": { "$ref": "#/$defs/nullableText" },
+        "finops": { "$ref": "#/$defs/nullableText" }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "approved_by", "approved_at", "decision_payload_digest"],
+      "properties": {
+        "role": { "enum": ["AI_PLATFORM", "PLATFORM_OPERATIONS", "SECURITY", "FINOPS"] },
+        "approved_by": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "approved_at": { "$ref": "common.schema.json#/$defs/Instant" },
+        "decision_payload_digest": { "$ref": "common.schema.json#/$defs/Digest" }
+      }
+    },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_selected",
+        "successor_contract_preparation_authorized",
+        "implementation_dispatch_allowed",
+        "runtime_model_calls_allowed",
+        "provider_network_allowed",
+        "protected_data_allowed"
+      ],
+      "properties": {
+        "decision_selected": { "type": "boolean" },
+        "successor_contract_preparation_authorized": { "type": "boolean" },
+        "implementation_dispatch_allowed": { "const": false },
+        "runtime_model_calls_allowed": { "const": false },
+        "provider_network_allowed": { "const": false },
+        "protected_data_allowed": { "const": false }
+      }
+    },
+    "proposedActivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decision_selected": { "const": false },
+        "successor_contract_preparation_authorized": { "const": false },
+        "implementation_dispatch_allowed": { "const": false },
+        "runtime_model_calls_allowed": { "const": false },
+        "provider_network_allowed": { "const": false },
+        "protected_data_allowed": { "const": false }
+      }
+    }
+  }
+}

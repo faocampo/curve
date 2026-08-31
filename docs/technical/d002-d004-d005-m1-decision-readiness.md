@@ -5,8 +5,8 @@
 | Field | Value |
 | --- | --- |
 | Status | `ANALYZED / OWNER AND DEPLOYMENT EVIDENCE REQUIRED / NOT IMPLEMENTATION AUTHORITY` |
-| Version | 1.0 |
-| Prepared | 2026-08-27 |
+| Version | 1.1 |
+| Prepared | 2026-08-31 |
 | Product | Curve |
 | Scope | D-002 (Onyx delegated-identity decision), D-004 (Curve Model Gateway decision), and D-005 (model/provider data-policy decision) |
 | Intended owners | Security and Identity; Onyx Operations; AI Platform; Platform Operations; AI Governance; Privacy and Legal; FinOps; Curve Product and Engineering |
@@ -104,29 +104,22 @@ The pending M1 branch already provides:
   deployment.
 - A service/admin API key cannot prove initiating-human source permissions.
 
-## D-004 (Curve Model Gateway decision) missing contract set
+## D-004 (Curve Model Gateway decision) required machine contracts and remaining evidence
 
-D-004 (Curve Model Gateway decision) currently exists as a proposed
-architectural direction. Before decision,
-publish:
+M0-S9C1A (candidate Model Gateway architecture and data-policy contracts)
+prepares the [D-004 ADR](adr-004-model-gateway-architecture.md) (unselected
+gateway architecture alternatives and proof requirements), [machine proposal](../../contracts/governance/d004-model-gateway-architecture-v1.json)
+(closed option catalog, exact gateway-port surface, dependencies, and
+fail-closed activation), [closed schema](../../contracts/schemas/model-gateway-architecture-decision.schema.json)
+(decision structure and lifecycle rules), and positive/negative fixtures.
 
-1. `adr-004-model-gateway.md` containing ownership, scope, options, selected
-   in-process boundary, failure behavior, replacement path, and approval.
-2. `d004-model-gateway-v1.json` containing the exact OpenRouter API/profile,
-   endpoint class, authentication reference type, timeout/retry/cancellation,
-   streaming/tool/structured-output capabilities, usage normalization,
-   telemetry/redaction, health, kill switch, and version-review triggers.
-3. A closed JSON Schema and positive/negative fixtures for that record.
-4. A gateway port contract with idempotency, deadline, cancellation, model and
-   provider identity, classification, policy/budget version, prompt-package
-   digest, safe response/usage projection, and normalized errors.
-5. A routing-evidence contract that records requested and actual model/provider
-   plus routing reason without storing protected prompt/response bodies.
-6. A failure matrix for timeout, rate limit, moderation refusal, context limit,
-   provider outage, malformed response, usage disagreement, cancellation,
-   ambiguous result, and policy mismatch.
-7. An exit/conformance test proving that another gateway implementation can
-   replace OpenRouter behind the same Curve port.
+Before D-004 can become `DECIDED`, named owners must provide the exact deployed
+account/transport/operations evidence, select every material option, resolve
+every computed requirement, and bind approvals to one decision digest. Before
+runtime implementation, the separately gated M0-S9C1B (runtime Model Gateway
+contracts) must still publish invocation/usage/stream payloads, the complete
+failure matrix, and replacement conformance fixtures under the selected D-004
+architecture.
 
 ### D-004 (Curve Model Gateway decision) owner inputs
 
@@ -141,27 +134,27 @@ publish:
 - Operational SLOs, incident owner, kill switch, and review cadence.
 - License, terms, supply-chain, and replacement-path evidence.
 
-## D-005 (model/provider data-policy decision) missing contract set
+## D-005 (model/provider data-policy decision) required machine contracts and remaining evidence
 
-Before decision, publish:
+M0-S9C1A prepares the [D-005 ADR](adr-005-model-provider-data-policy.md)
+(unselected task, classification, fallback, data, evaluation, and exception
+alternatives), [machine proposal](../../contracts/governance/d005-model-data-policy-v1.json)
+(closed option catalog and raw-byte candidate bindings), [model catalog](../../contracts/models/m0-s9c1a-model-catalog-v1.json)
+(empty exact-route allowlist), [task-model policy matrix](../../contracts/models/m0-s9c1a-task-model-policy-v1.json)
+(empty task/classification route policy), [fallback-equivalence contract](../../contracts/models/m0-s9c1a-fallback-equivalence-v1.json)
+(unselected empty proof groups), and [RESTRICTED-route evidence contract](../../contracts/models/m0-s9c1a-restricted-route-evidence-v1.json)
+(empty approved-route set and exact evidence vocabulary). Closed schemas,
+positive/negative fixtures, raw-byte drift checks, and semantic validators keep
+these candidates fail closed.
 
-1. `adr-005-model-provider-data-policy.md` containing task, classification,
-   residency, retention/training, evaluation, fallback, and exception policy.
-2. `d005-model-policy-v1.json` plus a closed schema and fixtures.
-3. A model catalog snapshot containing exact stable model IDs, provider
-   endpoints, capability metadata, context/output limits, price/source date,
-   region, retention/training/ZDR terms, and support lifecycle.
-4. A task-policy matrix mapping every model-enabled Curve operation to allowed
-   model/provider endpoints, classifications, prompt policy, required
-   capabilities, evaluation suite/version, threshold, and fallback set.
-5. A fallback-equivalence matrix proving allowed alternatives meet task quality,
-   capability, data, residency, security, context, latency, and cost bounds.
-6. A red-team/evaluation corpus with reproducible inputs, expected judgments,
-   score definitions, thresholds, approvers, and regression policy.
-7. A restricted-data profile tying ZDR, DLP, residency, retention, telemetry,
-   and legal approval to exact endpoints. An empty approved set keeps
-   `RESTRICTED` calls denied.
-8. Exception, expiry, re-evaluation, catalog-drift, and kill-switch contracts.
+Before D-005 can become `DECIDED`, owners must populate exact stable routes,
+endpoint-specific terms and regions, task policies, versioned evaluations and
+red-team evidence, any fallback equivalence, and any RESTRICTED route evidence;
+bind the selected policy to decided D-004 (Model Gateway architecture decision),
+D-009 (retention, legal-hold, backup, and erasure decision), and D-014
+(budget-policy decision) where required; resolve every computed requirement;
+and provide digest-bound approvals. The empty candidate set authorizes no
+model route.
 
 ### D-005 (model/provider data-policy decision) owner inputs
 
@@ -237,12 +230,16 @@ In either shape:
 
 ### D-004 (Curve Model Gateway decision)
 
-- Dedicated ADR, machine record/schema/fixtures, gateway port, routing evidence,
-  error/failure matrix, replacement test, and named owners
+- Candidate ADR, machine record/schema/fixtures, and gateway-port surface are
+  prepared; exact selections, runtime invocation/usage/stream contracts,
+  routing evidence, error/failure matrix, replacement test, and named owners
+  remain open
 - Exact X3M OpenRouter account/API/auth/configuration/operations evidence
 
 ### D-005 (model/provider data-policy decision)
 
-- Dedicated ADR, machine record/schema/fixtures, catalog, task matrix,
-  endpoint-specific data terms, evaluations, red-team corpus, fallback
-  equivalence, restricted-data profile, and named AI Governance/Security owners
+- Candidate ADR, machine record/schema/fixtures, empty catalog, empty task
+  matrix, unselected fallback contract, and empty RESTRICTED profile are
+  prepared; endpoint-specific data terms, populated routes, evaluations,
+  red-team corpus, any equivalence proof, and named AI Governance/Security
+  owners remain open

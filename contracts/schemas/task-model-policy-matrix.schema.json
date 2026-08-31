@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/task-model-policy-matrix.schema.json",
+  "title": "Curve candidate task-to-model policy matrix",
+  "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_state",
+    "matrix_id",
+    "matrix_version",
+    "status",
+    "catalog_id",
+    "catalog_version",
+    "catalog_digest",
+    "policies",
+    "policy_activation_allowed",
+    "d004_decision_digest",
+    "d005_decision_digest",
+    "d014_budget_decision_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.task-model-policy-matrix/v1" },
+    "contract_state": { "enum": ["PROPOSED_NOT_NORMATIVE", "APPROVED_NORMATIVE"] },
+    "matrix_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]{2,99}$" },
+    "matrix_version": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["DRAFT", "APPROVED", "EXPIRED", "REVOKED"] },
+    "catalog_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]{2,99}$" },
+    "catalog_version": { "type": "integer", "minimum": 1 },
+    "catalog_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+    "policies": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/taskPolicy" }
+    },
+    "policy_activation_allowed": { "type": "boolean" },
+    "d004_decision_digest": { "$ref": "#/$defs/nullableDigest" },
+    "d005_decision_digest": { "$ref": "#/$defs/nullableDigest" },
+    "d014_budget_decision_digest": { "$ref": "#/$defs/nullableDigest" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "DRAFT" } }, "required": ["status"] },
+      "then": { "properties": { "contract_state": { "const": "PROPOSED_NOT_NORMATIVE" } } }
+    },
+    {
+      "if": { "properties": { "status": { "enum": ["APPROVED", "EXPIRED", "REVOKED"] } }, "required": ["status"] },
+      "then": { "properties": { "contract_state": { "const": "APPROVED_NORMATIVE" } } }
+    }
+  ],
+  "$defs": {
+    "nullableDigest": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Digest" },
+        { "type": "null" }
+      ]
+    },
+    "taskClass": {
+      "enum": [
+        "ALIGNMENT_REFINEMENT",
+        "RESEARCH_SYNTHESIS",
+        "PRD_GENERATION",
+        "ARCHITECTURE_PLANNING",
+        "CODING_ASSISTANCE",
+        "QUALITY_REVIEW"
+      ]
+    },
+    "taskPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "task_class",
+        "classification",
+        "allowed_route_ids",
+        "required_capabilities",
+        "prompt_policy_id",
+        "prompt_policy_digest",
+        "evaluation_suite_id",
+        "evaluation_suite_digest",
+        "minimum_quality_score_basis_points",
+        "maximum_input_tokens",
+        "maximum_output_tokens",
+        "maximum_cost_micro_usd",
+        "fallback_equivalence_group_ids",
+        "restricted_evidence_contract_id",
+        "exception_policy"
+      ],
+      "properties": {
+        "policy_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]{2,127}$" },
+        "task_class": { "$ref": "#/$defs/taskClass" },
+        "classification": { "$ref": "common.schema.json#/$defs/DataClassification" },
+        "allowed_route_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9_-]{2,127}$" }
+        },
+        "required_capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["TEXT", "STRUCTURED_OUTPUT", "TOOL_CALLING", "STREAMING", "REASONING", "VISION"] }
+        },
+        "prompt_policy_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_.:-]{2,127}$" },
+        "prompt_policy_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "evaluation_suite_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_.:-]{2,127}$" },
+        "evaluation_suite_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "minimum_quality_score_basis_points": { "type": "integer", "minimum": 0, "maximum": 10000 },
+        "maximum_input_tokens": { "type": "integer", "minimum": 1 },
+        "maximum_output_tokens": { "type": "integer", "minimum": 1 },
+        "maximum_cost_micro_usd": { "type": "integer", "minimum": 0 },
+        "fallback_equivalence_group_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]{2,127}$" }
+        },
+        "restricted_evidence_contract_id": {
+          "type": ["string", "null"],
+          "pattern": "^[A-Z][A-Z0-9_-]{2,127}$"
+        },
+        "exception_policy": { "enum": ["NONE", "TIME_BOUND_HUMAN_APPROVAL"] }
+      }
+    }
+  }
+}

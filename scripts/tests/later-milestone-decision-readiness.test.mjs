@@ -87,12 +87,12 @@ for (const name of [...packetNames, indexName]) {
 
 assert.match(
   documents.get(indexName),
-  /^\| Version \| 1\.2 \|$/m,
+  /^\| Version \| 1\.3 \|$/m,
   `${indexName}: reconciled version`,
 );
 assert.match(
   documents.get(indexName),
-  /^\| Prepared \| 2026-08-30 \|$/m,
+  /^\| Prepared \| 2026-08-31 \|$/m,
   `${indexName}: reconciled preparation date`,
 );
 

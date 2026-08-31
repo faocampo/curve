@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/model-data-policy-decision.schema.json",
+  "title": "D-005 candidate model and provider data-policy decision",
+  "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "work_package",
+    "contract_state",
+    "status",
+    "decision_outcome",
+    "last_updated",
+    "baseline",
+    "fixed_invariants",
+    "material_options",
+    "candidate_contracts",
+    "evidence_requirements",
+    "dependencies",
+    "owners",
+    "approvals",
+    "decided_at",
+    "next_review_at",
+    "decision_payload_digest",
+    "activation",
+    "unresolved_requirements"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.model-data-policy-decision/v1" },
+    "decision_id": { "const": "D-005" },
+    "work_package": { "const": "M0-S9C1A" },
+    "contract_state": { "enum": ["PROPOSED_NOT_NORMATIVE", "DECIDED_NORMATIVE"] },
+    "status": { "enum": ["PROPOSED", "DECIDED"] },
+    "decision_outcome": { "enum": ["UNSELECTED", "APPROVED", "DEFERRED"] },
+    "last_updated": { "$ref": "common.schema.json#/$defs/Instant" },
+    "baseline": { "$ref": "#/$defs/baseline" },
+    "fixed_invariants": { "$ref": "#/$defs/fixedInvariants" },
+    "material_options": { "$ref": "#/$defs/materialOptions" },
+    "candidate_contracts": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/candidateContract" }
+    },
+    "evidence_requirements": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "items": { "$ref": "#/$defs/evidenceRequirement" }
+    },
+    "dependencies": { "$ref": "#/$defs/dependencies" },
+    "owners": { "$ref": "#/$defs/owners" },
+    "approvals": {
+      "type": "array",
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/approval" }
+    },
+    "decided_at": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Instant" },
+        { "type": "null" }
+      ]
+    },
+    "next_review_at": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Instant" },
+        { "type": "null" }
+      ]
+    },
+    "decision_payload_digest": { "$ref": "#/$defs/nullableDigest" },
+    "activation": { "$ref": "#/$defs/activation" },
+    "unresolved_requirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_.-]{2,99}$" }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "PROPOSED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "contract_state": { "const": "PROPOSED_NOT_NORMATIVE" },
+          "decision_outcome": { "const": "UNSELECTED" },
+          "approvals": { "maxItems": 0 },
+          "decided_at": { "type": "null" },
+          "next_review_at": { "type": "null" },
+          "decision_payload_digest": { "type": "null" },
+          "activation": { "$ref": "#/$defs/proposedActivation" },
+          "unresolved_requirements": { "minItems": 1 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "DECIDED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "contract_state": { "const": "DECIDED_NORMATIVE" },
+          "decision_outcome": { "enum": ["APPROVED", "DEFERRED"] },
+          "approvals": { "minItems": 4, "maxItems": 4 },
+          "decided_at": { "$ref": "common.schema.json#/$defs/Instant" },
+          "next_review_at": { "$ref": "common.schema.json#/$defs/Instant" },
+          "decision_payload_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+          "unresolved_requirements": { "maxItems": 0 }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nullableDigest": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Digest" },
+        { "type": "null" }
+      ]
+    },
+    "nullableText": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surveyed_curve_revision", "d004_status", "catalog_policy"],
+      "properties": {
+        "surveyed_curve_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "d004_status": { "enum": ["PROPOSED", "DECIDED"] },
+        "catalog_policy": { "const": "EMPTY_ALLOWLIST_FAILS_CLOSED" }
+      }
+    },
+    "fixedInvariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unknown_classification_normalizes_to_restricted",
+        "empty_allowlist_denies",
+        "floating_model_alias_allowed",
+        "provider_default_routing_allowed",
+        "silent_fallback_allowed",
+        "actual_route_evidence_required",
+        "restricted_requires_route_evidence",
+        "route_policy_immutable_per_attempt",
+        "changed_route_creates_new_attempt",
+        "budget_failure_changes_route",
+        "protected_body_persistence_allowed"
+      ],
+      "properties": {
+        "unknown_classification_normalizes_to_restricted": { "const": true },
+        "empty_allowlist_denies": { "const": true },
+        "floating_model_alias_allowed": { "const": false },
+        "provider_default_routing_allowed": { "const": false },
+        "silent_fallback_allowed": { "const": false },
+        "actual_route_evidence_required": { "const": true },
+        "restricted_requires_route_evidence": { "const": true },
+        "route_policy_immutable_per_attempt": { "const": true },
+        "changed_route_creates_new_attempt": { "const": true },
+        "budget_failure_changes_route": { "const": false },
+        "protected_body_persistence_allowed": { "const": false }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["options", "selected"],
+      "properties": {
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,99}$" }
+        },
+        "selected": {
+          "type": ["string", "null"],
+          "pattern": "^[A-Z][A-Z0-9_]{2,99}$"
+        }
+      }
+    },
+    "materialOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification_profile",
+        "restricted_profile",
+        "fallback_profile",
+        "evaluation_profile",
+        "data_terms_profile",
+        "exception_profile",
+        "telemetry_profile",
+        "catalog_drift_profile"
+      ],
+      "properties": {
+        "classification_profile": { "$ref": "#/$defs/selection" },
+        "restricted_profile": { "$ref": "#/$defs/selection" },
+        "fallback_profile": { "$ref": "#/$defs/selection" },
+        "evaluation_profile": { "$ref": "#/$defs/selection" },
+        "data_terms_profile": { "$ref": "#/$defs/selection" },
+        "exception_profile": { "$ref": "#/$defs/selection" },
+        "telemetry_profile": { "$ref": "#/$defs/selection" },
+        "catalog_drift_profile": { "$ref": "#/$defs/selection" }
+      }
+    },
+    "candidateContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_id", "path", "schema_id", "content_digest", "promotion_state"],
+      "properties": {
+        "contract_id": { "enum": ["MODEL_CATALOG", "TASK_MODEL_POLICY_MATRIX", "FALLBACK_EQUIVALENCE", "RESTRICTED_ROUTE_EVIDENCE"] },
+        "path": { "type": "string", "pattern": "^contracts/models/[a-z0-9./-]+\\.json$" },
+        "schema_id": { "type": "string", "format": "uri" },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "promotion_state": { "const": "PROPOSED_NOT_NORMATIVE" }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "path", "source_revision", "content_digest", "environment", "checked_at"],
+      "properties": {
+        "repository": { "const": "github.com/faocampo/curve" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "environment": { "enum": ["LOCAL", "STAGING", "PRODUCTION"] },
+        "checked_at": { "$ref": "common.schema.json#/$defs/Instant" }
+      }
+    },
+    "evidenceRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement_id", "status", "evidence_refs"],
+      "properties": {
+        "requirement_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,99}$" },
+        "status": { "enum": ["NOT_PROVIDED", "PASS", "FAIL"] },
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidenceRef" }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["d004", "d009", "d014"],
+      "properties": {
+        "d004": { "$ref": "#/$defs/decisionDependency" },
+        "d009": { "$ref": "#/$defs/decisionDependency" },
+        "d014": { "$ref": "#/$defs/decisionDependency" }
+      }
+    },
+    "decisionDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_id", "required_before", "status", "evidence_digest"],
+      "properties": {
+        "decision_id": { "enum": ["D-004", "D-009", "D-014"] },
+        "required_before": { "enum": ["CONTRACT_PROMOTION", "PROTECTED_BODY_PERSISTENCE", "CHARGEABLE_INVOCATION"] },
+        "status": { "enum": ["PROPOSED", "DECIDED"] },
+        "evidence_digest": { "$ref": "#/$defs/nullableDigest" }
+      }
+    },
+    "owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ai_governance", "security", "privacy_legal", "curve_product"],
+      "properties": {
+        "ai_governance": { "$ref": "#/$defs/nullableText" },
+        "security": { "$ref": "#/$defs/nullableText" },
+        "privacy_legal": { "$ref": "#/$defs/nullableText" },
+        "curve_product": { "$ref": "#/$defs/nullableText" }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "approved_by", "approved_at", "decision_payload_digest"],
+      "properties": {
+        "role": { "enum": ["AI_GOVERNANCE", "SECURITY", "PRIVACY_LEGAL", "CURVE_PRODUCT"] },
+        "approved_by": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "approved_at": { "$ref": "common.schema.json#/$defs/Instant" },
+        "decision_payload_digest": { "$ref": "common.schema.json#/$defs/Digest" }
+      }
+    },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_selected",
+        "successor_contract_preparation_authorized",
+        "implementation_dispatch_allowed",
+        "runtime_model_calls_allowed",
+        "restricted_model_calls_allowed",
+        "protected_body_persistence_allowed"
+      ],
+      "properties": {
+        "decision_selected": { "type": "boolean" },
+        "successor_contract_preparation_authorized": { "type": "boolean" },
+        "implementation_dispatch_allowed": { "const": false },
+        "runtime_model_calls_allowed": { "const": false },
+        "restricted_model_calls_allowed": { "const": false },
+        "protected_body_persistence_allowed": { "const": false }
+      }
+    },
+    "proposedActivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decision_selected": { "const": false },
+        "successor_contract_preparation_authorized": { "const": false },
+        "implementation_dispatch_allowed": { "const": false },
+        "runtime_model_calls_allowed": { "const": false },
+        "restricted_model_calls_allowed": { "const": false },
+        "protected_body_persistence_allowed": { "const": false }
+      }
+    }
+  }
+}

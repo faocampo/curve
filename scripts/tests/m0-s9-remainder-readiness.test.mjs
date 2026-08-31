@@ -6,6 +6,7 @@ import {
   M0_S9B_CONTEXT_PATHS,
   M0_S9B1_CONTEXT_PATHS,
   M0_S9C_CONTEXT_PATHS,
+  M0_S9C1A_CONTEXT_PATHS,
   contextPathsFor,
 } from "../lib/context-pack.mjs";
 
@@ -65,6 +66,52 @@ test("M0-S9B context pins the external transport and administration readiness bo
     /one provider\/profile\/environment per packet/i,
     /`B-OWNER`[\s\S]*same-human bootstrap exception/i,
   ]) assert.match(packet, boundary);
+});
+
+test("M0-S9C1A context pins the unselected Model Gateway and data-policy candidates", () => {
+  assertContext("M0-S9C1A", M0_S9C1A_CONTEXT_PATHS, [
+    "contracts/governance/d004-model-gateway-architecture-v1.json",
+    "contracts/governance/d005-model-data-policy-v1.json",
+    "contracts/models/m0-s9c1a-model-catalog-v1.json",
+    "contracts/models/m0-s9c1a-task-model-policy-v1.json",
+    "contracts/models/m0-s9c1a-fallback-equivalence-v1.json",
+    "contracts/models/m0-s9c1a-restricted-route-evidence-v1.json",
+    "contracts/schemas/model-gateway-architecture-decision.schema.json",
+    "contracts/schemas/model-data-policy-decision.schema.json",
+    "contracts/schemas/model-catalog.schema.json",
+    "contracts/schemas/task-model-policy-matrix.schema.json",
+    "contracts/schemas/fallback-equivalence.schema.json",
+    "contracts/schemas/restricted-route-evidence.schema.json",
+    "contracts/schemas/examples/model-gateway-architecture-decision.valid.json",
+    "contracts/schemas/examples/model-gateway-architecture-decision.invalid.json",
+    "contracts/schemas/examples/model-data-policy-decision.valid.json",
+    "contracts/schemas/examples/model-data-policy-decision.invalid.json",
+    "contracts/schemas/examples/model-catalog.valid.json",
+    "contracts/schemas/examples/model-catalog.invalid.json",
+    "contracts/schemas/examples/task-model-policy-matrix.valid.json",
+    "contracts/schemas/examples/task-model-policy-matrix.invalid.json",
+    "contracts/schemas/examples/fallback-equivalence.valid.json",
+    "contracts/schemas/examples/fallback-equivalence.invalid.json",
+    "contracts/schemas/examples/restricted-route-evidence.valid.json",
+    "contracts/schemas/examples/restricted-route-evidence.invalid.json",
+    "docs/technical/adr-004-model-gateway-architecture.md",
+    "docs/technical/adr-005-model-provider-data-policy.md",
+    "docs/technical/d012-d016-rollout-decision-readiness.md",
+    "docs/technical/m0-s9c-model-gateway-task-packet.md",
+    "scripts/lib/model-governance.mjs",
+    "scripts/tests/model-governance.test.mjs",
+    "scripts/validate-contracts.mjs",
+  ]);
+
+  const architecture = JSON.parse(read("contracts/governance/d004-model-gateway-architecture-v1.json"));
+  const dataPolicy = JSON.parse(read("contracts/governance/d005-model-data-policy-v1.json"));
+  for (const decision of [architecture, dataPolicy]) {
+    assert.equal(decision.status, "PROPOSED");
+    assert.equal(decision.decision_outcome, "UNSELECTED");
+    assert.equal(decision.activation.implementation_dispatch_allowed, false);
+    assert.equal(decision.activation.runtime_model_calls_allowed, false);
+    assert.ok(Object.values(decision.material_options).every(({ selected }) => selected === null));
+  }
 });
 
 test("M0-S9B1 context pins the fail-closed provider-administration decision gate", () => {
@@ -192,7 +239,7 @@ test("M0-S9C context pins the Model Gateway readiness and no-silent-routing boun
 
   const packet = read("docs/technical/m0-s9c-model-gateway-task-packet.md");
   assert.match(packet, /`PREPARED \/ BLOCKED \/ NO_DISPATCH`/);
-  for (const child of ["M0-S9C1", "M0-S9C2", "M0-S9C3", "M0-S9C4"]) {
+  for (const child of ["M0-S9C1A", "M0-S9C1B", "M0-S9C2", "M0-S9C3", "M0-S9C4"]) {
     assert.match(packet, new RegExp(`${child.replace("-", "\\-")} \\(`));
   }
   for (const decision of ["D-004", "D-005", "D-009", "D-014"]) assert.ok(packet.includes(decision), decision);
@@ -204,7 +251,7 @@ test("M0-S9C context pins the Model Gateway readiness and no-silent-routing boun
     /actual-route failover\s+matrix passes/,
   ]) assert.match(packet, boundary);
 
-  assert.match(packet, /Observed Curve contract base[\s\S]*`cbbb9a7397fd65f100344ceb766ad57e8039aaa1`/);
+  assert.match(packet, /Observed Curve contract base[\s\S]*`1c38a5398b9e6c7cf83c8ee7e8a4615f8f2450d1`/);
   assert.match(packet, /Observed Plane implementation base[\s\S]*`9f9bb14f46b80e1d05b4c900d25c1af7a229b55c`/);
   assert.match(packet, /grants no[\s\S]*implementation[\s\S]*dispatch authority/i);
 
@@ -229,7 +276,7 @@ test("M0-S9C definition completion remains distinct from implementation readines
   assert.match(packet, /`PREPARED \/ BLOCKED \/ NO_DISPATCH`/);
   assert.match(readiness, /M0-S9C Model Gateway routing\/failover \| PREPARED \/ BLOCKED/);
   assert.match(project, /M0-S9C-D1 \(Model Gateway definition gate\)[\s\S]*`Done`; definition complete, implementation remains decision-gated/);
-  assert.match(strategy, /decomposed into M0-S9C1 \(Model Gateway contracts\), M0-S9C2 \(policy and budget[\s\S]*M0-S9C4 \(failover and[\s\S]*reconciliation\)/);
+  assert.match(strategy, /decomposed into M0-S9C1A \(candidate Model Gateway architecture and data-policy\s+contracts\), M0-S9C1B \(runtime Model Gateway contracts\), M0-S9C2 \(policy and budget[\s\S]*M0-S9C4 \(failover and[\s\S]*reconciliation\)/);
   assert.match(strategy, /active M0-S9C \(Model Gateway routing and failover\) source for AC-57/);
   assert.match(strategy, /informative for every other package[\s\S]*global-successor status remains[\s\S]*`IN_REVIEW`/);
   assert.match(strategy, /D-004 \(Model Gateway\s+architecture decision\), D-005 \(model\/provider data-policy decision\), and D-014\s+\(budget-policy decision\)/);

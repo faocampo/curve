@@ -1,0 +1,164 @@
+{
+  "schema_version": "curve.model-data-policy-decision/v1",
+  "decision_id": "D-005",
+  "work_package": "M0-S9C1A",
+  "contract_state": "PROPOSED_NOT_NORMATIVE",
+  "status": "PROPOSED",
+  "decision_outcome": "UNSELECTED",
+  "last_updated": "2026-08-31T16:00:00Z",
+  "baseline": {
+    "surveyed_curve_revision": "1c38a5398b9e6c7cf83c8ee7e8a4615f8f2450d1",
+    "d004_status": "PROPOSED",
+    "catalog_policy": "EMPTY_ALLOWLIST_FAILS_CLOSED"
+  },
+  "fixed_invariants": {
+    "unknown_classification_normalizes_to_restricted": true,
+    "empty_allowlist_denies": true,
+    "floating_model_alias_allowed": false,
+    "provider_default_routing_allowed": false,
+    "silent_fallback_allowed": false,
+    "actual_route_evidence_required": true,
+    "restricted_requires_route_evidence": true,
+    "route_policy_immutable_per_attempt": true,
+    "changed_route_creates_new_attempt": true,
+    "budget_failure_changes_route": false,
+    "protected_body_persistence_allowed": false
+  },
+  "material_options": {
+    "classification_profile": {
+      "options": ["EXACT_TASK_CLASSIFICATION_ROUTE_MATRIX", "DEFER"],
+      "selected": null
+    },
+    "restricted_profile": {
+      "options": ["DENY_ALL_RESTRICTED", "ZDR_DLP_RESIDENCY_EVIDENCE", "DEFER"],
+      "selected": null
+    },
+    "fallback_profile": {
+      "options": ["SINGLE_ROUTE_NEW_AUDITED_ATTEMPT", "EQUIVALENT_ROUTE_ENVELOPE", "NO_FALLBACK", "DEFER"],
+      "selected": null
+    },
+    "evaluation_profile": {
+      "options": ["TASK_SPECIFIC_VERSIONED_THRESHOLDS", "DEFER"],
+      "selected": null
+    },
+    "data_terms_profile": {
+      "options": ["ENDPOINT_SPECIFIC_EVIDENCE_SNAPSHOT", "DEFER"],
+      "selected": null
+    },
+    "exception_profile": {
+      "options": ["NO_EXCEPTIONS", "TIME_BOUND_HUMAN_APPROVED", "DEFER"],
+      "selected": null
+    },
+    "telemetry_profile": {
+      "options": ["METADATA_ONLY", "PROTECTED_TRACE_DESTINATION", "DEFER"],
+      "selected": null
+    },
+    "catalog_drift_profile": {
+      "options": ["FAIL_CLOSED_ON_DIGEST_CHANGE", "DEFER"],
+      "selected": null
+    }
+  },
+  "candidate_contracts": [
+    {
+      "contract_id": "MODEL_CATALOG",
+      "path": "contracts/models/m0-s9c1a-model-catalog-v1.json",
+      "schema_id": "https://curve.x3m.internal/contracts/schemas/model-catalog.schema.json",
+      "content_digest": "sha256:aa6dadabe1a0d6f14eb01d09b1ca9aad47667c0be7dc22dbe7dc3fe5e81e4d98",
+      "promotion_state": "PROPOSED_NOT_NORMATIVE"
+    },
+    {
+      "contract_id": "TASK_MODEL_POLICY_MATRIX",
+      "path": "contracts/models/m0-s9c1a-task-model-policy-v1.json",
+      "schema_id": "https://curve.x3m.internal/contracts/schemas/task-model-policy-matrix.schema.json",
+      "content_digest": "sha256:c18088d7aff04300bfc09388dcf58b7fdac41f2efce26b94bbc4db7c54f03995",
+      "promotion_state": "PROPOSED_NOT_NORMATIVE"
+    },
+    {
+      "contract_id": "FALLBACK_EQUIVALENCE",
+      "path": "contracts/models/m0-s9c1a-fallback-equivalence-v1.json",
+      "schema_id": "https://curve.x3m.internal/contracts/schemas/fallback-equivalence.schema.json",
+      "content_digest": "sha256:35cfc4fdd0f549f43f3bb3626b52484e4f863f5a67ba9419244725ab991f2040",
+      "promotion_state": "PROPOSED_NOT_NORMATIVE"
+    },
+    {
+      "contract_id": "RESTRICTED_ROUTE_EVIDENCE",
+      "path": "contracts/models/m0-s9c1a-restricted-route-evidence-v1.json",
+      "schema_id": "https://curve.x3m.internal/contracts/schemas/restricted-route-evidence.schema.json",
+      "content_digest": "sha256:e354a42f1655f135e257f44d5000c80d70dbcd65b23cde13eaba598d09b45aad",
+      "promotion_state": "PROPOSED_NOT_NORMATIVE"
+    }
+  ],
+  "evidence_requirements": [
+    { "requirement_id": "MODEL_CATALOG_SNAPSHOT", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "PROVIDER_TERMS", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "REGION_RESIDENCY", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "ZERO_DATA_RETENTION", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "PRE_AND_POST_CALL_DLP", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "RETENTION_AND_TRAINING", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "TASK_EVALUATION", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "RED_TEAM", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "FALLBACK_EQUIVALENCE", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "ACTUAL_ROUTE_ATTESTATION", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "TELEMETRY_DESTINATION", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "D014_BUDGET_BINDING", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "D009_RETENTION_BINDING", "status": "NOT_PROVIDED", "evidence_refs": [] }
+  ],
+  "dependencies": {
+    "d004": {
+      "decision_id": "D-004",
+      "required_before": "CONTRACT_PROMOTION",
+      "status": "PROPOSED",
+      "evidence_digest": null
+    },
+    "d009": {
+      "decision_id": "D-009",
+      "required_before": "PROTECTED_BODY_PERSISTENCE",
+      "status": "PROPOSED",
+      "evidence_digest": null
+    },
+    "d014": {
+      "decision_id": "D-014",
+      "required_before": "CHARGEABLE_INVOCATION",
+      "status": "PROPOSED",
+      "evidence_digest": null
+    }
+  },
+  "owners": {
+    "ai_governance": null,
+    "security": null,
+    "privacy_legal": null,
+    "curve_product": null
+  },
+  "approvals": [],
+  "decided_at": null,
+  "next_review_at": null,
+  "decision_payload_digest": null,
+  "activation": {
+    "decision_selected": false,
+    "successor_contract_preparation_authorized": false,
+    "implementation_dispatch_allowed": false,
+    "runtime_model_calls_allowed": false,
+    "restricted_model_calls_allowed": false,
+    "protected_body_persistence_allowed": false
+  },
+  "unresolved_requirements": [
+    "AI_GOVERNANCE_OWNER",
+    "APPROVALS",
+    "CATALOG_DRIFT_PROFILE",
+    "CLASSIFICATION_PROFILE",
+    "CURVE_PRODUCT_OWNER",
+    "DATA_TERMS_PROFILE",
+    "EVALUATION_PROFILE",
+    "EVIDENCE_REQUIREMENTS",
+    "EXCEPTION_PROFILE",
+    "FALLBACK_EQUIVALENCE_GROUPS",
+    "FALLBACK_PROFILE",
+    "MODEL_CATALOG_ENTRIES",
+    "PRIVACY_LEGAL_OWNER",
+    "RESTRICTED_PROFILE",
+    "RESTRICTED_ROUTE_EVIDENCE",
+    "SECURITY_OWNER",
+    "TASK_MODEL_POLICIES",
+    "TELEMETRY_PROFILE"
+  ]
+}
