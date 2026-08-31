@@ -1,0 +1,42 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "DEPENDENCY",
+  "subject_id": "M1-01A",
+  "state": "SATISFIED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "DEPENDENCY",
+    "subject_id": "M1-01A",
+    "state": "SATISFIED",
+    "claim": {
+      "id": "M1-01A",
+      "title": "Initiative domain and API foundation",
+      "satisfaction": "SATISFIED"
+    }
+  },
+  "approval_subject_digest": "sha256:467684548097b16186de8fbf32a3e52bf4b220e436b00edbd452961617b3d3bb",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "CURVE_ENGINEERING_APPROVER",
+      "authority_source": {
+        "source_type": "CURVE_APPROVAL_RECORD",
+        "source_id": "CURVE-M1-01B-DEPENDENCY-M1-01A",
+        "repository": "CURVE",
+        "title": "dependency M1-01A publication authority source",
+        "path": "contracts/authority/m1-01b/v1/dependency-m1-01a.json",
+        "revision": "2970542cd9bcb2a1e84cb2ba45db172adbda6c1c",
+        "content_digest": "sha256:215ad982a7b8147ad0aabb3ba91089a2907d898fec6025f85701dcc4772533bd"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:DEPENDENCY:M1-01A:SATISFIED"
+      ],
+      "attested_at": "2026-08-31T10:11:57-03:00",
+      "subject_digest": "sha256:467684548097b16186de8fbf32a3e52bf4b220e436b00edbd452961617b3d3bb",
+      "derivation": null
+    }
+  ]
+}

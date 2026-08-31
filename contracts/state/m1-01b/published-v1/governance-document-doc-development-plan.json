@@ -1,0 +1,48 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "GOVERNANCE_DOCUMENT",
+  "subject_id": "DOC-DEVELOPMENT-PLAN",
+  "state": "APPROVED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "GOVERNANCE_DOCUMENT",
+    "subject_id": "DOC-DEVELOPMENT-PLAN",
+    "state": "APPROVED",
+    "claim": {
+      "repository": "CURVE",
+      "document_id": "DOC-DEVELOPMENT-PLAN",
+      "role": "TECHNICAL_PLAN",
+      "title": "Curve technical development sequencing and readiness plan",
+      "path": "docs/technical/development-plan.md",
+      "revision": "96a43a4c044bcd78cc47bb7f637c1e4e0d1a3b42",
+      "content_digest": "sha256:115b213947bdca5bdef8c294b067fc3a76840025c218c3ad0fa57d6f3cabcbab",
+      "version": "1.15",
+      "status": "APPROVED"
+    }
+  },
+  "approval_subject_digest": "sha256:c2aecfdb597469a7adb84111b0a325fdae7ee254d085f13f158249731af6dc6f",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "CURVE_ENGINEERING_APPROVER",
+      "authority_source": {
+        "source_type": "CURVE_APPROVAL_RECORD",
+        "source_id": "CURVE-M1-01B-GOVERNANCE_DOCUMENT-DOC-DEVELOPMENT-PLAN",
+        "repository": "CURVE",
+        "title": "governance document DOC-DEVELOPMENT-PLAN publication authority source",
+        "path": "contracts/authority/m1-01b/v1/governance-document-doc-development-plan.json",
+        "revision": "2970542cd9bcb2a1e84cb2ba45db172adbda6c1c",
+        "content_digest": "sha256:9f3c2e5619bfe5a16074540ae4f888e595fa07cc8fe2fcf27fdbe9a250c59f28"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:GOVERNANCE_DOCUMENT:DOC-DEVELOPMENT-PLAN:APPROVED"
+      ],
+      "attested_at": "2026-08-31T10:11:57-03:00",
+      "subject_digest": "sha256:c2aecfdb597469a7adb84111b0a325fdae7ee254d085f13f158249731af6dc6f",
+      "derivation": null
+    }
+  ]
+}

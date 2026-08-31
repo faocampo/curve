@@ -1,0 +1,48 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "GOVERNANCE_DOCUMENT",
+  "subject_id": "DOC-ADR-001",
+  "state": "APPROVED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "GOVERNANCE_DOCUMENT",
+    "subject_id": "DOC-ADR-001",
+    "state": "APPROVED",
+    "claim": {
+      "repository": "CURVE",
+      "document_id": "DOC-ADR-001",
+      "role": "ADR",
+      "title": "Plane upstream foundation and reuse boundary",
+      "path": "docs/technical/adr-001-plane-upstream-foundation.md",
+      "revision": "96a43a4c044bcd78cc47bb7f637c1e4e0d1a3b42",
+      "content_digest": "sha256:4f2aa5b734d8f3ba9b2e08d0503fe1b4d0e7556aff1452dae859b8e97e12948d",
+      "version": "1",
+      "status": "APPROVED"
+    }
+  },
+  "approval_subject_digest": "sha256:d6a380c7f82320193d1ce9859663a2c4fe8309a30082d9d62240c64d2855c073",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "CURVE_ENGINEERING_APPROVER",
+      "authority_source": {
+        "source_type": "CURVE_APPROVAL_RECORD",
+        "source_id": "CURVE-M1-01B-GOVERNANCE_DOCUMENT-DOC-ADR-001",
+        "repository": "CURVE",
+        "title": "governance document DOC-ADR-001 publication authority source",
+        "path": "contracts/authority/m1-01b/v1/governance-document-doc-adr-001.json",
+        "revision": "2970542cd9bcb2a1e84cb2ba45db172adbda6c1c",
+        "content_digest": "sha256:2b29f77234aa366d5860ec3be56d6ce0066d04e8f59dddeefddad19891851dbb"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:GOVERNANCE_DOCUMENT:DOC-ADR-001:APPROVED"
+      ],
+      "attested_at": "2026-08-18T18:53:57-03:00",
+      "subject_digest": "sha256:d6a380c7f82320193d1ce9859663a2c4fe8309a30082d9d62240c64d2855c073",
+      "derivation": null
+    }
+  ]
+}

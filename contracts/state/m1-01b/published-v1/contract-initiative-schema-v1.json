@@ -1,0 +1,46 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "CONTRACT",
+  "subject_id": "INITIATIVE-SCHEMA-V1",
+  "state": "APPROVED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "CONTRACT",
+    "subject_id": "INITIATIVE-SCHEMA-V1",
+    "state": "APPROVED",
+    "claim": {
+      "contract_id": "INITIATIVE-SCHEMA-V1",
+      "title": "Workspace Initiative resource schema",
+      "path": "contracts/schemas/initiative.schema.json",
+      "version": "1",
+      "revision": "96a43a4c044bcd78cc47bb7f637c1e4e0d1a3b42",
+      "content_digest": "sha256:8e00c9904e348e43f44339bb6283da931225f339ed0edc379200689486eb52a7",
+      "status": "APPROVED"
+    }
+  },
+  "approval_subject_digest": "sha256:761cdde38239db41238f91fc43d80bec1e0794a1387d16afa5514bb4f4e67921",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "CURVE_ENGINEERING_APPROVER",
+      "authority_source": {
+        "source_type": "CURVE_APPROVAL_RECORD",
+        "source_id": "CURVE-M1-01B-CONTRACT-INITIATIVE-SCHEMA-V1",
+        "repository": "CURVE",
+        "title": "contract INITIATIVE-SCHEMA-V1 publication authority source",
+        "path": "contracts/authority/m1-01b/v1/contract-initiative-schema-v1.json",
+        "revision": "2970542cd9bcb2a1e84cb2ba45db172adbda6c1c",
+        "content_digest": "sha256:4709181d7d575a29ebd75380de95cde78506dc9f6dd5dbf754327e6302255a39"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:CONTRACT:INITIATIVE-SCHEMA-V1:APPROVED"
+      ],
+      "attested_at": "2026-08-31T10:11:57-03:00",
+      "subject_digest": "sha256:761cdde38239db41238f91fc43d80bec1e0794a1387d16afa5514bb4f4e67921",
+      "derivation": null
+    }
+  ]
+}

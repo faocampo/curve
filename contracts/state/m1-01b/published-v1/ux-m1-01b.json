@@ -1,0 +1,42 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "UX",
+  "subject_id": "M1-01B",
+  "state": "APPROVED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "UX",
+    "subject_id": "M1-01B",
+    "state": "APPROVED",
+    "claim": {
+      "packet_id": "CURVE-M1-01B",
+      "work_package_id": "M1-01B",
+      "user_facing": true
+    }
+  },
+  "approval_subject_digest": "sha256:3fa2efb952ac413851f269f14411e76e33e76a5057965589081e854c17db3a2a",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "PRODUCT_APPROVER",
+      "authority_source": {
+        "source_type": "CURVE_APPROVAL_RECORD",
+        "source_id": "CURVE-M1-01B-UX-M1-01B",
+        "repository": "CURVE",
+        "title": "UX evidence for M1-01B publication authority source",
+        "path": "contracts/authority/m1-01b/v1/ux-m1-01b.json",
+        "revision": "2970542cd9bcb2a1e84cb2ba45db172adbda6c1c",
+        "content_digest": "sha256:8ece1408aacc12f7dd04b951f226e0186583e358e7cb3efb7228dd607f991447"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:UX:M1-01B:APPROVED"
+      ],
+      "attested_at": "2026-08-29T20:03:56-03:00",
+      "subject_digest": "sha256:3fa2efb952ac413851f269f14411e76e33e76a5057965589081e854c17db3a2a",
+      "derivation": null
+    }
+  ]
+}

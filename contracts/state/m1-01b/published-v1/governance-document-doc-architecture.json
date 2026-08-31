@@ -1,0 +1,48 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "GOVERNANCE_DOCUMENT",
+  "subject_id": "DOC-ARCHITECTURE",
+  "state": "APPROVED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "GOVERNANCE_DOCUMENT",
+    "subject_id": "DOC-ARCHITECTURE",
+    "state": "APPROVED",
+    "claim": {
+      "repository": "CURVE",
+      "document_id": "DOC-ARCHITECTURE",
+      "role": "ARCHITECTURE",
+      "title": "Curve technical architecture baseline",
+      "path": "docs/technical/architecture.md",
+      "revision": "96a43a4c044bcd78cc47bb7f637c1e4e0d1a3b42",
+      "content_digest": "sha256:d3a88160fccffbd17ebc3dbb5b6fb8f27484856f184d5ab96bf4f5448c2adad3",
+      "version": "0.7",
+      "status": "APPROVED"
+    }
+  },
+  "approval_subject_digest": "sha256:840f827c3f0793dc45cb50cad6e6c685ae9e9e7fc620c3aabad59beff0096477",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "CURVE_ENGINEERING_APPROVER",
+      "authority_source": {
+        "source_type": "CURVE_APPROVAL_RECORD",
+        "source_id": "CURVE-M1-01B-GOVERNANCE_DOCUMENT-DOC-ARCHITECTURE",
+        "repository": "CURVE",
+        "title": "governance document DOC-ARCHITECTURE publication authority source",
+        "path": "contracts/authority/m1-01b/v1/governance-document-doc-architecture.json",
+        "revision": "2970542cd9bcb2a1e84cb2ba45db172adbda6c1c",
+        "content_digest": "sha256:e26426ceaf3baf306975f4c279d183139425e730e946a7f1246bd6805dd54c52"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:GOVERNANCE_DOCUMENT:DOC-ARCHITECTURE:APPROVED"
+      ],
+      "attested_at": "2026-08-30T04:33:15-03:00",
+      "subject_digest": "sha256:840f827c3f0793dc45cb50cad6e6c685ae9e9e7fc620c3aabad59beff0096477",
+      "derivation": null
+    }
+  ]
+}
