@@ -39,6 +39,27 @@ function commitFor(path) {
   return git(["log", "-1", "--format=%H", "--", path]);
 }
 
+function commitParents(revision) {
+  return git(["rev-list", "--parents", "-n", "1", revision])
+    .split(/\s+/u)
+    .slice(1);
+}
+
+function assertPacketPublicationCheckout({
+  head,
+  headParents,
+  expectedBaseRevision,
+  packetRevision,
+}) {
+  if (head === packetRevision) return "DIRECT_PACKET_HEAD";
+  assert.deepEqual(
+    headParents,
+    [expectedBaseRevision, packetRevision],
+    "publication checkout must be the packet head or GitHub's exact two-parent PR merge",
+  );
+  return "GITHUB_PR_SYNTHETIC_MERGE";
+}
+
 function assertAncestor(ancestor, descendant) {
   execFileSync("git", ["merge-base", "--is-ancestor", ancestor, descendant], {
     cwd: M1_01B_REPOSITORY_ROOT,
@@ -75,6 +96,72 @@ function directCurveReferenceRevisions(value, revisions = []) {
   }
   return revisions;
 }
+
+test("packet publication checkout accepts only direct or exact PR merge heads", () => {
+  const expectedBaseRevision = "1".repeat(40);
+  const packetRevision = "2".repeat(40);
+  const syntheticMergeRevision = "3".repeat(40);
+  const accepted = [
+    {
+      name: "direct packet head",
+      input: {
+        head: packetRevision,
+        headParents: [expectedBaseRevision],
+        expectedBaseRevision,
+        packetRevision,
+      },
+      result: "DIRECT_PACKET_HEAD",
+    },
+    {
+      name: "exact GitHub PR synthetic merge",
+      input: {
+        head: syntheticMergeRevision,
+        headParents: [expectedBaseRevision, packetRevision],
+        expectedBaseRevision,
+        packetRevision,
+      },
+      result: "GITHUB_PR_SYNTHETIC_MERGE",
+    },
+  ];
+  for (const { name, input, result } of accepted) {
+    assert.equal(assertPacketPublicationCheckout(input), result, name);
+  }
+
+  const rejected = [
+    {
+      name: "wrong base",
+      headParents: ["4".repeat(40), packetRevision],
+    },
+    {
+      name: "wrong PR head",
+      headParents: [expectedBaseRevision, "4".repeat(40)],
+    },
+    {
+      name: "swapped parents",
+      headParents: [packetRevision, expectedBaseRevision],
+    },
+    {
+      name: "extra parent",
+      headParents: [expectedBaseRevision, packetRevision, "4".repeat(40)],
+    },
+    {
+      name: "missing parent",
+      headParents: [expectedBaseRevision],
+    },
+  ];
+  for (const { name, headParents } of rejected) {
+    assert.throws(
+      () => assertPacketPublicationCheckout({
+        head: syntheticMergeRevision,
+        headParents,
+        expectedBaseRevision,
+        packetRevision,
+      }),
+      /exact two-parent PR merge/u,
+      name,
+    );
+  }
+});
 
 test("M1-01B ordered publication remains monotonic and fail closed", () => {
   const stage = m1_01bPublicationStage();
@@ -150,7 +237,15 @@ test("M1-01B ordered publication remains monotonic and fail closed", () => {
   if (stage === "C") return;
 
   const packetRevision = commitFor(M1_01B_PACKET_PATH);
-  assert.equal(packetRevision, git(["rev-parse", "HEAD"]));
+  const packetParents = commitParents(packetRevision);
+  assert.equal(packetParents.length, 1, "packet publication commit must have one parent");
+  const head = git(["rev-parse", "HEAD"]);
+  assertPacketPublicationCheckout({
+    head,
+    headParents: commitParents(head),
+    expectedBaseRevision: packetParents[0],
+    packetRevision,
+  });
   assertAncestor(catalogRevision, packetRevision);
   const packet = readJson(M1_01B_PACKET_PATH);
   assert.deepEqual(
