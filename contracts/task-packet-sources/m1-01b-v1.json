@@ -1,0 +1,158 @@
+{
+  "schema_version": "curve.coding-agent-source-catalog/v1",
+  "catalog_id": "curve-m1-01b-v1",
+  "catalog_version": 1,
+  "work_packages": [
+    {
+      "work_package_id": "M1-01B",
+      "packet_id": "CURVE-M1-01B",
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "packet_projection_digest": "sha256:8e3c6954149ff05eef2b252c2e3bd064280931c48d7a5d370a3935c5f5580383",
+      "size": "M",
+      "user_facing": true,
+      "risk_tier": "STANDARD",
+      "repository": {
+        "url": "git@github.com:faocampo/plane.git",
+        "target_branch": "preview"
+      },
+      "requirements": {
+        "functional_requirement_ids": [
+          "FR-001",
+          "FR-042",
+          "FR-043"
+        ],
+        "non_functional_requirement_ids": [
+          "NFR-005",
+          "NFR-009",
+          "NFR-015",
+          "NFR-016"
+        ]
+      },
+      "dependencies": [
+        "M1-01A"
+      ],
+      "decisions": [
+        "D-001"
+      ],
+      "project_tracking": {
+        "project_number": 2,
+        "item_node_id": "PVTI_lAHOBNjuQc4BgZzOzg4vNto",
+        "tracking_kind": "WORK_PACKAGE"
+      },
+      "commands": [
+        {
+          "id": "CMD-LINT",
+          "phase": "LINT",
+          "argv": [
+            "pnpm",
+            "check"
+          ],
+          "working_directory": ".",
+          "timeout_seconds": 1200,
+          "availability": "PLANNED",
+          "tool_id": "PNPM",
+          "network_destination_ids": [],
+          "external_effect_ids": []
+        },
+        {
+          "id": "CMD-BUILD",
+          "phase": "BUILD",
+          "argv": [
+            "pnpm",
+            "build"
+          ],
+          "working_directory": ".",
+          "timeout_seconds": 1800,
+          "availability": "PLANNED",
+          "tool_id": "PNPM",
+          "network_destination_ids": [],
+          "external_effect_ids": []
+        },
+        {
+          "id": "CMD-TEST",
+          "phase": "TEST",
+          "argv": [
+            "pnpm",
+            "--filter=web",
+            "test",
+            "--",
+            "tests/curve/curve-initiative-service.test.ts",
+            "tests/curve/curve-initiative-shell.test.tsx"
+          ],
+          "working_directory": ".",
+          "timeout_seconds": 1200,
+          "availability": "PLANNED",
+          "tool_id": "PNPM",
+          "network_destination_ids": [],
+          "external_effect_ids": []
+        },
+        {
+          "id": "CMD-SECURITY",
+          "phase": "SECURITY",
+          "argv": [
+            "codeql",
+            "UNRESOLVED"
+          ],
+          "working_directory": ".",
+          "timeout_seconds": 1800,
+          "availability": "PLANNED",
+          "tool_id": "CODEQL",
+          "network_destination_ids": [],
+          "external_effect_ids": []
+        },
+        {
+          "id": "CMD-LOCAL-RUN",
+          "phase": "LOCAL_RUN",
+          "argv": [
+            "pnpm",
+            "--filter=web",
+            "dev"
+          ],
+          "working_directory": ".",
+          "timeout_seconds": 7200,
+          "availability": "PLANNED",
+          "tool_id": "PNPM",
+          "network_destination_ids": [],
+          "external_effect_ids": []
+        }
+      ],
+      "contract_applicability": [
+        {
+          "category": "API",
+          "applicability": "APPLICABLE",
+          "contract_id": "CURVE-OPENAPI-V1"
+        },
+        {
+          "category": "SCHEMA",
+          "applicability": "APPLICABLE",
+          "contract_id": "INITIATIVE-SCHEMA-V1"
+        },
+        {
+          "category": "EVENT",
+          "applicability": "NOT_APPLICABLE",
+          "contract_id": null
+        },
+        {
+          "category": "WORKFLOW",
+          "applicability": "NOT_APPLICABLE",
+          "contract_id": null
+        },
+        {
+          "category": "POLICY",
+          "applicability": "APPLICABLE",
+          "contract_id": "INITIATIVE-POLICY-V1"
+        },
+        {
+          "category": "PERSISTENCE",
+          "applicability": "NOT_APPLICABLE",
+          "contract_id": null
+        },
+        {
+          "category": "MIGRATION",
+          "applicability": "NOT_APPLICABLE",
+          "contract_id": null
+        }
+      ]
+    }
+  ]
+}
