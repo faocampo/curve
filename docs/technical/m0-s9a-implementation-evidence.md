@@ -145,7 +145,7 @@ remediation is outside this provider-registry package.
 | M0-S9A package scenarios | Passed across contract integrity, 72 focused tests, 326 complete Curve tests, migration proof, and commit-bound CI |
 | AC-33 (provider delivery and reconciliation) | Partial enabling evidence: local fake-provider registration, capability history, reconciliation, replay, bounded delivery, recovery, dead-lettering, and workspace isolation are accepted |
 | AC-33 remaining ownership | M0-S9B retains authenticated administration, credentials, real transports/adapters, callbacks/webhooks, and scheduled reconciliation |
-| AC-57 (model failover and actual-route evidence) | No claim; the separately defined Model Gateway child remains decision-bound by D-004 (model catalog and data-policy decision) and D-005 (model task-routing decision) |
+| AC-57 (model failover and actual-route evidence) | No claim; the separately defined M0-S9C (Model Gateway routing and failover) child remains decision-bound by D-004 (Model Gateway architecture decision) and D-005 (model/provider data-policy decision) |
 
 ## Security and authority acceptance
 

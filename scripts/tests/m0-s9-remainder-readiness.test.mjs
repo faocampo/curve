@@ -181,13 +181,14 @@ test("M0-S9B1 context pins the fail-closed provider-administration decision gate
 test("M0-S9C context pins the Model Gateway readiness and no-silent-routing boundary", () => {
   assertContext("M0-S9C", M0_S9C_CONTEXT_PATHS, [
     "contracts/schemas/provider-connection.schema.json",
-    "contracts/testing/ac-test-matrix-v1.json",
+    "contracts/testing/ac-test-matrix-v2.json",
     "docs/technical/integration-contracts.md",
     "docs/technical/m0-s9a-implementation-evidence.md",
     "docs/technical/m0-s9c-model-gateway-task-packet.md",
     "docs/technical/security-and-operations.md",
     "scripts/lib/context-pack.mjs",
   ]);
+  assert.equal(M0_S9C_CONTEXT_PATHS.includes("contracts/testing/ac-test-matrix-v1.json"), false);
 
   const packet = read("docs/technical/m0-s9c-model-gateway-task-packet.md");
   assert.match(packet, /`PREPARED \/ BLOCKED \/ NO_DISPATCH`/);
@@ -202,6 +203,40 @@ test("M0-S9C context pins the Model Gateway readiness and no-silent-routing boun
     /No `latest`, automatic, floating, free, preview, or provider-agnostic alias/,
     /actual-route failover\s+matrix passes/,
   ]) assert.match(packet, boundary);
+
+  assert.match(packet, /Observed Curve contract base[\s\S]*`cbbb9a7397fd65f100344ceb766ad57e8039aaa1`/);
+  assert.match(packet, /Observed Plane implementation base[\s\S]*`9f9bb14f46b80e1d05b4c900d25c1af7a229b55c`/);
+  assert.match(packet, /grants no[\s\S]*implementation[\s\S]*dispatch authority/i);
+
+  const matrix = JSON.parse(read("contracts/testing/ac-test-matrix-v2.json"));
+  const command = matrix.commands.find(({ id }) => id === "CMD-MODEL-GATEWAY-CONFORMANCE");
+  assert.ok(command);
+  assert.equal(command.state, "PLANNED");
+  const acceptance = matrix.acceptance_criteria.find(({ ac_id }) => ac_id === "AC-57");
+  assert.ok(acceptance);
+  assert.deepEqual(acceptance.command_ids, ["CMD-MODEL-GATEWAY-CONFORMANCE"]);
+  assert.deepEqual(acceptance.blocking_decisions, ["D-004", "D-005"]);
+  assert.equal(acceptance.coverage_state, "DECISION_BLOCKED");
+});
+
+test("M0-S9C definition completion remains distinct from implementation readiness", () => {
+  const packet = read("docs/technical/m0-s9c-model-gateway-task-packet.md");
+  const readiness = read("docs/technical/m0-readiness-board.md");
+  const project = read("docs/technical/github-project-execution-map.md");
+  const strategy = read("docs/technical/m0-test-strategy.md");
+  const providerEvidence = read("docs/technical/m0-s9a-implementation-evidence.md");
+
+  assert.match(packet, /`PREPARED \/ BLOCKED \/ NO_DISPATCH`/);
+  assert.match(readiness, /M0-S9C Model Gateway routing\/failover \| PREPARED \/ BLOCKED/);
+  assert.match(project, /M0-S9C-D1 \(Model Gateway definition gate\)[\s\S]*`Done`; definition complete, implementation remains decision-gated/);
+  assert.match(strategy, /decomposed into M0-S9C1 \(Model Gateway contracts\), M0-S9C2 \(policy and budget[\s\S]*M0-S9C4 \(failover and[\s\S]*reconciliation\)/);
+  assert.match(strategy, /active M0-S9C \(Model Gateway routing and failover\) source for AC-57/);
+  assert.match(strategy, /informative for every other package[\s\S]*global-successor status remains[\s\S]*`IN_REVIEW`/);
+  assert.match(strategy, /D-004 \(Model Gateway\s+architecture decision\), D-005 \(model\/provider data-policy decision\), and D-014\s+\(budget-policy decision\)/);
+  assert.match(providerEvidence, /D-004 \(Model Gateway architecture decision\) and D-005 \(model\/provider data-policy decision\)/);
+  assert.doesNotMatch(strategy, /until the Model Gateway consuming package is decomposed/);
+  assert.doesNotMatch(strategy, /D-004 \(model catalog and\s+data-policy decision\)/);
+  assert.doesNotMatch(providerEvidence, /D-005 \(model task-routing decision\)/);
 });
 
 test("M0-09 indexes identify both decision-gated remainder packets", () => {

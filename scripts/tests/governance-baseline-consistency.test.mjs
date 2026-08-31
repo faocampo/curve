@@ -64,16 +64,17 @@ test("active current-state documents bind one accepted Plane preview", () => {
   assert.doesNotMatch(foundation, /current `origin\/preview` `e762fbb/);
   assert.match(
     readiness,
-    /\| Accepted Plane baseline \| Fork `preview` at `99a73b4eab5ee21fd012d7358bc9259252d47f71`/,
+    /\| Accepted Plane capability baseline \| Fork `preview` checkpoint `99a73b4eab5ee21fd012d7358bc9259252d47f71`/,
   );
   assert.match(
     readiness,
-    /\| Published Plane implementation \| Plane `preview` at `99a73b4eab5ee21fd012d7358bc9259252d47f71`/,
+    /\| Observed Plane implementation base \| Plane `preview` at `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c`/,
   );
   assert.match(
     readiness,
-    /\| Published Curve contract baseline \| Curve `main` at `68a05e9f2920454752e9039d596271dbb39d6e6e`/,
+    /\| Observed Curve contract base \| Curve `main` at `cbbb9a7397fd65f100344ceb766ad57e8039aaa1`/,
   );
+  assert.match(readiness, /grants no decision, implementation, provider-call, or dispatch authority/);
   assert.match(m0Audit, /68a05e9f2920454752e9039d596271dbb39d6e6e/);
   assert.match(m0Audit, /accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`/);
 });
@@ -112,7 +113,7 @@ test("substantively reconciled governance documents advance document control", (
     ["architecture", architecture, "0.9", "Last updated", "2026-08-30"],
     ["development", development, "1.19", "Last updated", "2026-08-30"],
     ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
-    ["M0 readiness board", readiness, "1.36", "Date", "2026-08-30"],
+    ["M0 readiness board", readiness, "1.37", "Date", "2026-08-31"],
     ["M0 completion audit", m0Audit, "1.9", "Date", "2026-08-30"],
     ["GitHub Project execution map", projectMap, "1.18", "Date", "2026-08-29"],
     ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],

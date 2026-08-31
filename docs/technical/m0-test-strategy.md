@@ -7,15 +7,15 @@
 | Product | Curve |
 | Work package | P0-05 (test-harness strategy and R1 acceptance traceability) |
 | Status | `ACCEPTED / DONE` |
-| Version | 1.5 |
+| Version | 1.6 |
 | Owner | Federico Ocampo, CTO at X3M |
 | Human reviewer | Federico Ocampo |
-| Last updated | 2026-08-30 |
+| Last updated | 2026-08-31 |
 | Product source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current product requirements, lifecycle, decisions, and AC-01 through AC-60) |
 | Delivery source | [Development plan](development-plan.md) (milestones, packages, dependencies, and completion evidence) |
 | Machine contract | [AC test matrix v1](../../contracts/testing/ac-test-matrix-v1.json) (suite, environment, command, gate, and evidence ownership for all 60 criteria) |
 | Validation schema | [Test-strategy matrix schema](../../contracts/schemas/test-strategy-matrix.schema.json) (closed JSON Schema for the P0-05 matrix) |
-| Candidate successor | [AC test matrix v2](../../contracts/testing/ac-test-matrix-v2.json) (split provider-conformance commands and current decision-gating semantics) with [v2 validation schema](../../contracts/schemas/test-strategy-matrix-v2.schema.json) (closed successor machine contract); `IN_REVIEW` and non-authoritative |
+| Package-scoped successor | [AC test matrix v2](../../contracts/testing/ac-test-matrix-v2.json) (split provider-conformance commands and current decision-gating semantics) with [v2 validation schema](../../contracts/schemas/test-strategy-matrix-v2.schema.json) (closed successor machine contract); active for the M0-S9C (Model Gateway routing and failover) AC-57 source binding while remaining `IN_REVIEW` as the global v1 successor |
 
 ## Purpose and completion boundary
 
@@ -151,9 +151,11 @@ bounded targets, abort conditions, and cleanup evidence.
 
 The accepted [AC test matrix v1](../../contracts/testing/ac-test-matrix-v1.json)
 (suite, environment, command, gate, and evidence ownership for all 60 criteria)
-remains authoritative for command IDs. The [AC test matrix v2](../../contracts/testing/ac-test-matrix-v2.json)
-(candidate split provider-conformance commands and current decision-gating
-semantics) is informative while `IN_REVIEW`. Available v1 commands are:
+remains authoritative for global command IDs. The [AC test matrix v2](../../contracts/testing/ac-test-matrix-v2.json)
+(split provider-conformance commands and current decision-gating semantics) is
+the active M0-S9C (Model Gateway routing and failover) source for AC-57 and is
+informative for every other package while its global-successor status remains
+`IN_REVIEW`. Available v1 commands are:
 
 | Command ID | Repository root | Exact command |
 | --- | --- | --- |
@@ -281,12 +283,17 @@ duplicated, reordered, renamed, or text-modified AC fails validation until this
 strategy is intentionally versioned.
 
 AC-57 (model-failover policy and actual-routing evidence) remains assigned to
-the M0-09 (provider registry, callback, capability, and reconciliation
-foundation) aggregate until the Model Gateway consuming package is decomposed.
-M0-S9A (provider registry and deterministic fake-provider foundation) performs
-no model call and therefore cannot complete AC-57. D-004 (model catalog and
-data-policy decision) and D-005 (model task-routing decision) remain its exact
-material blockers.
+the M0-09 (provider integration foundation) aggregate. Its consuming work is
+decomposed into M0-S9C1 (Model Gateway contracts), M0-S9C2 (policy and budget
+kernel), M0-S9C3 (OpenRouter transport), and M0-S9C4 (failover and
+reconciliation) by the [M0-S9C task packet](m0-s9c-model-gateway-task-packet.md)
+(decision-gated contracts, policy, transport, failover, tests, and rollback).
+M0-S9A (provider-neutral registry and local reconciliation foundation) performs
+no model call and therefore cannot complete AC-57. D-004 (Model Gateway
+architecture decision), D-005 (model/provider data-policy decision), and D-014
+(budget-policy decision) remain exact material blockers. D-009 (retention,
+backup, legal-hold, tombstone, and erasure decision) additionally applies before
+protected prompt, response, tool, or provider-body persistence.
 
 AC-04 (initiating-user Onyx and MCP retrieval isolation) is gated by D-002
 (Onyx delegated-identity decision) and D-007 (MCP trust and delegated
