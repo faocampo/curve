@@ -7,7 +7,7 @@
   "dispatch_state": "NO_DISPATCH",
   "contract_state": "PROPOSED_NOT_NORMATIVE",
   "baseline": {
-    "curve_revision": "32b716ff77a35f2a3267118b5fd7e639dcc46154",
+    "curve_revision": "56e4ac12e9017555a0a23cb1025ac762358c3110",
     "data_boundary": "SYNTHETIC_INTERNAL_METADATA_ONLY",
     "external_effects": "NONE"
   },
@@ -45,7 +45,7 @@
     },
     {
       "path": "contracts/schemas/provider-profile-decision.schema.json",
-      "sha256": "sha256:db16fc915c1aa9fda2556e347ff5948580dc72c59104bb984e241c550f77eb0f",
+      "sha256": "sha256:a25ba567486b3bbf40c42e3bf395f1865b959f609fbba4f9dc721fbec5744c1d",
       "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-profile-decision.schema.json",
       "contract_state": "PROPOSED_NOT_NORMATIVE",
       "promotion_decision": "B-PROFILE-M0-S9B2"

@@ -10,7 +10,7 @@
 | Contract state | `PROPOSED_NOT_NORMATIVE` |
 | Version | 0.2 |
 | Date | 2026-08-31 |
-| Candidate Curve base | `32b716ff77a35f2a3267118b5fd7e639dcc46154` |
+| Candidate Curve base | `56e4ac12e9017555a0a23cb1025ac762358c3110` |
 | Data boundary | Synthetic `INTERNAL` metadata only |
 | External effects | None |
 

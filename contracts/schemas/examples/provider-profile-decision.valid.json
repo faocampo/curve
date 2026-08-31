@@ -7,7 +7,7 @@
   "dispatch_state": "NO_DISPATCH",
   "contract_state": "PROPOSED_NOT_NORMATIVE",
   "baseline": {
-    "curve_revision": "32b716ff77a35f2a3267118b5fd7e639dcc46154",
+    "curve_revision": "56e4ac12e9017555a0a23cb1025ac762358c3110",
     "data_boundary": "SYNTHETIC_INTERNAL_METADATA_ONLY",
     "external_effects": "NONE"
   },
@@ -19,7 +19,7 @@
     { "path": "contracts/schemas/provider-credential-reference.schema.json", "sha256": "sha256:3a9a1dd86d5ac845362ac6780117b47f16d19040e457222e69f94c4e5f663ece", "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-credential-reference.schema.json", "contract_state": "PROPOSED_NOT_NORMATIVE", "promotion_decision": "B-PROFILE-M0-S9B2" },
     { "path": "contracts/schemas/provider-endpoint-profile.schema.json", "sha256": "sha256:9d49886177b47140d87a5926f21c0e743b0e1ba5d5ce378e7a07409b4cca91b4", "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-endpoint-profile.schema.json", "contract_state": "PROPOSED_NOT_NORMATIVE", "promotion_decision": "B-PROFILE-M0-S9B2" },
     { "path": "contracts/schemas/provider-profile-binding.schema.json", "sha256": "sha256:e458de6d3898e4c7b356dba223c005334664920037a7aa0ee3fdab2a9a41318e", "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-profile-binding.schema.json", "contract_state": "PROPOSED_NOT_NORMATIVE", "promotion_decision": "B-PROFILE-M0-S9B2" },
-    { "path": "contracts/schemas/provider-profile-decision.schema.json", "sha256": "sha256:db16fc915c1aa9fda2556e347ff5948580dc72c59104bb984e241c550f77eb0f", "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-profile-decision.schema.json", "contract_state": "PROPOSED_NOT_NORMATIVE", "promotion_decision": "B-PROFILE-M0-S9B2" }
+    { "path": "contracts/schemas/provider-profile-decision.schema.json", "sha256": "sha256:a25ba567486b3bbf40c42e3bf395f1865b959f609fbba4f9dc721fbec5744c1d", "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-profile-decision.schema.json", "contract_state": "PROPOSED_NOT_NORMATIVE", "promotion_decision": "B-PROFILE-M0-S9B2" }
   ],
   "material_options": {
     "credential_persistence_placement": { "allowed": ["DEDICATED_PROFILE_RECORD", "PROVIDER_CONNECTION_EXTENSION", "DEFER"], "selected": null },

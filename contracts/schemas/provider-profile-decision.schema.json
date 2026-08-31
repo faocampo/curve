@@ -44,7 +44,7 @@
       "additionalProperties": false,
       "required": ["curve_revision", "data_boundary", "external_effects"],
       "properties": {
-        "curve_revision": { "const": "32b716ff77a35f2a3267118b5fd7e639dcc46154" },
+        "curve_revision": { "const": "56e4ac12e9017555a0a23cb1025ac762358c3110" },
         "data_boundary": { "const": "SYNTHETIC_INTERNAL_METADATA_ONLY" },
         "external_effects": { "const": "NONE" }
       }
