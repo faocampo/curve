@@ -582,6 +582,47 @@ export const M1_01A_CONTEXT_PATHS = Object.freeze(
   ].sort(),
 );
 
+export const M1_01B_CONTEXT_PATHS = Object.freeze(
+  [
+    "contracts/openapi/curve-v1.openapi.yaml",
+    "contracts/policy/initiative-policy-v1.json",
+    "contracts/schemas/coding-agent-context-pack-manifest.schema.json",
+    "contracts/schemas/coding-agent-implementation-authorization.schema.json",
+    "contracts/schemas/coding-agent-source-catalog.schema.json",
+    "contracts/schemas/coding-agent-state-evidence.schema.json",
+    "contracts/schemas/coding-agent-task-packet.schema.json",
+    "contracts/schemas/common.schema.json",
+    "contracts/schemas/gate-assignment.schema.json",
+    "contracts/schemas/initiative-create-request.schema.json",
+    "contracts/schemas/initiative-transition-request.schema.json",
+    "contracts/schemas/initiative-update-request.schema.json",
+    "contracts/schemas/initiative.schema.json",
+    "contracts/schemas/product.schema.json",
+    "contracts/task-packets/README.md",
+    "docs/curve-ai-native-sdlc-prd.md",
+    "docs/technical/adr-001-plane-upstream-foundation.md",
+    "docs/technical/architecture.md",
+    "docs/technical/coding-agent-local-execution-decision.md",
+    "docs/technical/development-plan.md",
+    "docs/technical/m0-readiness-board.md",
+    "docs/technical/m1-01a-initiative-core-implementation-evidence.md",
+    "docs/technical/m1-01a-initiative-core-task-packet.md",
+    "docs/technical/m1-01b-execution-grant-decision.md",
+    "docs/technical/m1-01b-initiative-shell-implementation-task-packet.md",
+    "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+    "docs/technical/ux-m1-01b-initiative-shell.md",
+    "scripts/lib/coding-agent-implementation-authorization.mjs",
+    "scripts/lib/coding-agent-task-packet.mjs",
+    "scripts/lib/context-pack.mjs",
+    "scripts/tests/coding-agent-implementation-authorization.test.mjs",
+    "scripts/tests/coding-agent-task-packet.test.mjs",
+    "scripts/tests/m1-01b-implementation-readiness.test.mjs",
+    "scripts/tests/m1-01b-ux-definition.test.mjs",
+    "scripts/validate-contracts.mjs",
+    "scripts/validate-docs.mjs",
+  ].sort(),
+);
+
 const CONTEXT_PATHS = new Map([
   ["M0-03", M0_03_CONTEXT_PATHS],
   ["M0-S3", M0_S3_CONTEXT_PATHS],
@@ -600,6 +641,7 @@ const CONTEXT_PATHS = new Map([
   ["M1-03B", P0_09_CONTEXT_PATHS],
   ["M1-00A", M1_00A_CONTEXT_PATHS],
   ["M1-01A", M1_01A_CONTEXT_PATHS],
+  ["M1-01B", M1_01B_CONTEXT_PATHS],
 ]);
 
 export function contextPathsFor(taskId) {

@@ -1,0 +1,208 @@
+{
+  "schema_version": "curve.coding-agent-context-pack-manifest/v1",
+  "context_pack_id": "M1-01B-PREPARED-F7C211C",
+  "version": 1,
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "work_package_id": "M1-01B",
+  "curve_revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+  "entries": [
+    {
+      "repository": "CURVE",
+      "path": "contracts/openapi/curve-v1.openapi.yaml",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:928993ea6fc8847e7547474418b12b523ff60f5180310c3bc07743d4873cb321"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/policy/initiative-policy-v1.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:df9aa96d5de46232074abcc51fbb268beda0b73b45906c986f106b2d317adf8b"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/coding-agent-context-pack-manifest.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:e68dd2c773c3fbaee2c5e93f10c0547390f26f28d542d1a20231347266d95a60"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/coding-agent-implementation-authorization.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:71736322a64b32673cb1d2b27e53fa99ec3eccc1fb09324ed55bcdfdc9c77641"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/coding-agent-source-catalog.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:d2adc413f016022bc6bf8f28e4eb67e172ee0bea8cb04a05a04d21a9e1f0d553"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/coding-agent-state-evidence.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:0fa38a8bb2484cc5f1486eacef356479ba570f43b6e2d3991e2514ba013668ee"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/coding-agent-task-packet.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:c35722f82378023e48ac1daa374565bce7a49a960c2d33554df137c408586034"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/common.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:b00c8c420f7e78f20adea2b3a097d74a4e97e73c0f2cc71ad9ac5c4933e31583"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/gate-assignment.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:f972dada1c24769deb4cd0cfa2f79518b7c75f8e9806c497d98d3c66fa1c15de"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/initiative-create-request.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:b5334b2c2841d3e9beaf801c78ee93d5e8946ffc6de960c59873ff447d86e050"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/initiative-transition-request.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:dbeb6b639283c90cd1fde539224636a9064d17fea597ca885abe271dfa605229"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/initiative-update-request.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:9fee283bb3c6ba359b491b25a9b02b984c94b4ead055e78680660cbe576babf3"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/initiative.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:8e00c9904e348e43f44339bb6283da931225f339ed0edc379200689486eb52a7"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/schemas/product.schema.json",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:4d65d50a57e51d011bb9d48bf108e7538ed4a9ed421670ac87902a6f16a35e7a"
+    },
+    {
+      "repository": "CURVE",
+      "path": "contracts/task-packets/README.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:c8f051d9b2f1f366860bc7c8fa4958443ad17efa282e05d9cfb82c3168a85484"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/curve-ai-native-sdlc-prd.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:302b4a0470524e6d3a2c14a5d0753b1d0c604db1709813cf4755724aa77456bf"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/technical/adr-001-plane-upstream-foundation.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:4f2aa5b734d8f3ba9b2e08d0503fe1b4d0e7556aff1452dae859b8e97e12948d"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/technical/architecture.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:d3a88160fccffbd17ebc3dbb5b6fb8f27484856f184d5ab96bf4f5448c2adad3"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/technical/coding-agent-local-execution-decision.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:5c423c756d24a0c71ed75b3db9b266134fb66938d4c90cb2ea9c34b22bfd6ee1"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/technical/development-plan.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:cd260d326f0b496c56b1c4418832f457ae7f52b7f61e122beebd3a6263562c6d"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/technical/m0-readiness-board.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:ca2128a9e53c28244fd30c500e9fd0cf6edcaa449fbf9d400aa769cdb505543c"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/technical/m1-01a-initiative-core-implementation-evidence.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:e040cca0e8cd693f9206abb433787b737b3b3b01da1438c0126176bc96328201"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/technical/m1-01a-initiative-core-task-packet.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:221ed87cb8bbfca05271cff0277dadd73742a0768c6cb1e3d8a1ee589f24c396"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:2e41859e0d36f8fadbcb03c1b05d8c17bdc5263c47346a2903e882102ec83440"
+    },
+    {
+      "repository": "CURVE",
+      "path": "docs/technical/ux-m1-01b-initiative-shell.md",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:9843ec48b45cca0bf5e19016b009c60584bdfbbc1e3b767d154a7e14941c32bf"
+    },
+    {
+      "repository": "CURVE",
+      "path": "scripts/lib/coding-agent-implementation-authorization.mjs",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:4473c7ea62d504ac7de63f5eb284e950fc45657a3cdd03d44372b53cfedac79f"
+    },
+    {
+      "repository": "CURVE",
+      "path": "scripts/lib/coding-agent-task-packet.mjs",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:4d30f5e17ad3d10cb59c83dde5f15ab81f9d2724765dacd7e07d1c5aa15873cb"
+    },
+    {
+      "repository": "CURVE",
+      "path": "scripts/lib/context-pack.mjs",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:2e09b26882dc3a592124981021930a2111a95e3fb446ecec7501904124faa212"
+    },
+    {
+      "repository": "CURVE",
+      "path": "scripts/tests/coding-agent-implementation-authorization.test.mjs",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:2c9a79e532e5487dc3e0457f56de583ec9d1df82aff32ea9744d9cf33d6ef326"
+    },
+    {
+      "repository": "CURVE",
+      "path": "scripts/tests/coding-agent-task-packet.test.mjs",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:c916baeac5ed8c4111d57b6446cb7a5e2f6593483bc03163b73150240bcb89ac"
+    },
+    {
+      "repository": "CURVE",
+      "path": "scripts/tests/m1-01b-ux-definition.test.mjs",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:8c163558b47a835aeaa8e8f7c480616bd023dac8e97695b9b97136d7c779db7e"
+    },
+    {
+      "repository": "CURVE",
+      "path": "scripts/validate-contracts.mjs",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:b63f7ef910e74f0738f35b3fceb0d3ab102d11cf31ad3ecdfdbef97f973e79cb"
+    },
+    {
+      "repository": "CURVE",
+      "path": "scripts/validate-docs.mjs",
+      "revision": "f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe",
+      "content_digest": "sha256:ebf954826d8638f1b3cf899f58c6f6ea3c2a5ddc382151b456d53f4ea44a7f4f"
+    }
+  ]
+}

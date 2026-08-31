@@ -211,14 +211,14 @@ function readyDirectReferences(packet) {
 }
 
 function readyBindDirectEvidence(harness) {
-  readyDirectReferences(harness.packet).forEach((reference, index) => {
+  readyDirectReferences(harness.packet).forEach((reference) => {
     const revision = reference.repository === "TARGET"
       ? harness.targetRevision
       : harness.packet.curve_binding.curve_revision;
     readyRegisterReference(
       harness,
       reference,
-      `direct-evidence:${reference.repository}:${reference.path}:${index}\n`,
+      `direct-evidence:${reference.repository}:${reference.path}\n`,
       revision,
     );
   });
@@ -542,6 +542,8 @@ function makeReadyHarnessV1({
   packet.tool_policy.tools.find((tool) => tool.tool_id === "CODEQL").version =
     "2.23.0";
   Object.assign(packet.tool_policy.tools.find((tool) => tool.tool_id === "PNPM"), {
+    launcher_mode: "REGULAR_FILE_ONLY",
+    canonical_executable_name: "pnpm",
     executable_digest: digest(READY_PNPM_BYTES),
     version_probe: {
       argv: ["pnpm", "--version"],
