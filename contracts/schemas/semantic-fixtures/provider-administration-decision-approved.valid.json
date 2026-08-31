@@ -1,0 +1,1059 @@
+{
+  "schema_version": "curve.provider-administration-decision/v1",
+  "decision_id": "B-ADMIN-M0-S9B1",
+  "decision_version": 1,
+  "work_package": "M0-S9B1",
+  "status": "DECIDED",
+  "decision_outcome": "APPROVED",
+  "last_updated": "2026-08-30T13:00:00Z",
+  "baseline": {
+    "surveyed_curve_revision": "e7aa7e6ff23491cfae02379d74508822a8ded238",
+    "observed_plane_preview_revision": "99a73b4eab5ee21fd012d7358bc9259252d47f71",
+    "observed_plane_migration_head": "0007_initiative_gateassignment.py",
+    "plane_migration_reserved": false,
+    "parent_packet_version": "0.2",
+    "openapi_version": "1.1.0",
+    "core_policy_version": 2,
+    "core_policy_manifest_digest": "sha256:2895b63392236afa07e6f0572d6ddb1c91aa7f40d37282f250019d2829ed5787",
+    "provider_connection_schema_version": "2.0"
+  },
+  "fixed_invariants": {
+    "workspace_scope": "EXACT_TARGET_WORKSPACE",
+    "authorization_order": "WORKSPACE_PREAUTH_BEFORE_SCOPED_SAFE_LOOKUP_THEN_RESOURCE_AUTH",
+    "cross_workspace_identifier_behavior": "SAME_AS_ABSENT",
+    "caller_supplied_workspace": "REJECT",
+    "caller_supplied_role": "REJECT",
+    "agent_authority": false,
+    "service_authority": false,
+    "system_authority": false,
+    "credential_resolution": false,
+    "provider_network_access": false,
+    "callback_processing": false,
+    "outgoing_webhooks": false,
+    "scheduled_reconciliation": false,
+    "real_adapter_activation": false,
+    "external_side_effect": false,
+    "protected_body_persistence": false,
+    "evidence_verification_boundary": "DIGEST_BOUND_HUMAN_ATTESTATION"
+  },
+  "api_contract": {
+    "contract_state": "PROPOSED_NOT_NORMATIVE",
+    "api_prefix": "/api/v1/workspaces/{workspace_slug}/curve",
+    "pagination": {
+      "cursor_parameter": "cursor",
+      "page_size_parameter": "page_size",
+      "minimum_page_size": 1,
+      "maximum_page_size": 100,
+      "default_page_size": 25,
+      "maximum_cursor_length": 4096,
+      "response_cursor_field": "next_cursor"
+    },
+    "register_request": {
+      "contract_state": "PROPOSED_NOT_NORMATIVE",
+      "schema_version": "curve.provider-connection-register-request/v1",
+      "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-connection-register-request.schema.json",
+      "schema_path": "contracts/schemas/provider-connection-register-request.schema.json",
+      "schema_content_digest": "sha256:03ab2cbbefd45793631874483a8781173069ff827b0b1c850b1d6f0cef17a76a",
+      "additional_properties": false,
+      "required_fields": [
+        "schema_version",
+        "provider_type",
+        "adapter_key",
+        "adapter_version",
+        "environment",
+        "display_name",
+        "allowed_classifications"
+      ],
+      "allowed_fields": [
+        "schema_version",
+        "provider_type",
+        "adapter_key",
+        "adapter_version",
+        "environment",
+        "display_name",
+        "allowed_classifications"
+      ],
+      "blocked_fields": [
+        "id",
+        "workspace_id",
+        "aggregate_version",
+        "external_tenant_ref",
+        "configuration_ref",
+        "configuration_digest",
+        "configuration_body",
+        "secret_reference",
+        "status",
+        "created_by",
+        "updated_by",
+        "actor_roles"
+      ],
+      "provider_type_values": [
+        "FAKE_LOCAL",
+        "ONYX",
+        "MCP",
+        "ORCA_HUMAN_ASSISTANCE",
+        "MODEL_GATEWAY",
+        "OPENHANDS",
+        "GITHUB",
+        "GITLAB",
+        "QUALITY",
+        "FEATURE_FLAG",
+        "DOCUMENTATION",
+        "MONITORING",
+        "PROTOTYPE"
+      ],
+      "environment_values": [
+        "LOCAL",
+        "STAGING",
+        "PRODUCTION"
+      ],
+      "classification_values": [
+        "INTERNAL",
+        "CONFIDENTIAL",
+        "RESTRICTED"
+      ],
+      "adapter_allowlist_source": "SERVER_SIDE_PROVIDER_REGISTRY",
+      "caller_selected_workspace": false,
+      "configuration_body_allowed": false
+    },
+    "operations": [
+      {
+        "operation_id": "LIST",
+        "kind": "QUERY",
+        "method": "GET",
+        "path": "/api/v1/workspaces/{workspace_slug}/curve/providers/connections",
+        "coarse_action": "CURVE.PROVIDER_CONNECTION.LIST",
+        "granular_action": "CURVE.PROVIDER_CONNECTION.LIST",
+        "required_headers": [],
+        "success_status": 200,
+        "response_kind": "CONNECTION_PAGE",
+        "response_contract": "PROVIDER_CONNECTION_ADMINISTRATION_PAGE_V1",
+        "request_body_contract": "NONE",
+        "operation_type_options": {},
+        "precondition_resource": "NONE",
+        "response_etag_resource": "NONE",
+        "location": false,
+        "authorization_resource_type": "WORKSPACE",
+        "lookup_sequence": "WORKSPACE_AUTHORIZATION_ONLY"
+      },
+      {
+        "operation_id": "REGISTER",
+        "kind": "COMMAND",
+        "method": "POST",
+        "path": "/api/v1/workspaces/{workspace_slug}/curve/providers/connections",
+        "coarse_action": "CURVE.PROVIDER_CONNECTION.REGISTER",
+        "granular_action": "CURVE.PROVIDER_CONNECTION.REGISTER",
+        "required_headers": [
+          "Idempotency-Key"
+        ],
+        "success_status": 201,
+        "response_kind": "CONNECTION",
+        "response_contract": "PROVIDER_CONNECTION_ADMINISTRATION_V1",
+        "request_body_contract": "PROVIDER_CONNECTION_REGISTER_REQUEST_V1",
+        "operation_type_options": {},
+        "precondition_resource": "NONE",
+        "response_etag_resource": "PROVIDER_CONNECTION",
+        "location": true,
+        "authorization_resource_type": "WORKSPACE",
+        "lookup_sequence": "WORKSPACE_AUTHORIZATION_ONLY"
+      },
+      {
+        "operation_id": "READ",
+        "kind": "QUERY",
+        "method": "GET",
+        "path": "/api/v1/workspaces/{workspace_slug}/curve/providers/connections/{connection_id}",
+        "coarse_action": "CURVE.PROVIDER_CONNECTION.READ",
+        "granular_action": "CURVE.PROVIDER_CONNECTION.READ",
+        "required_headers": [],
+        "success_status": 200,
+        "response_kind": "CONNECTION",
+        "response_contract": "PROVIDER_CONNECTION_ADMINISTRATION_V1",
+        "request_body_contract": "NONE",
+        "operation_type_options": {},
+        "precondition_resource": "NONE",
+        "response_etag_resource": "PROVIDER_CONNECTION",
+        "location": false,
+        "authorization_resource_type": "PROVIDER_CONNECTION",
+        "lookup_sequence": "WORKSPACE_PREAUTHORIZE_SCOPED_SAFE_LOOKUP_RESOURCE_AUTHORIZE"
+      },
+      {
+        "operation_id": "VALIDATE",
+        "kind": "COMMAND",
+        "method": "POST",
+        "path": "/api/v1/workspaces/{workspace_slug}/curve/providers/connections/{connection_id}:validate",
+        "coarse_action": "CURVE.PROVIDER_CONNECTION.ADMINISTER",
+        "granular_action": "CURVE.PROVIDER_CONNECTION.VALIDATE",
+        "required_headers": [
+          "Idempotency-Key",
+          "If-Match"
+        ],
+        "success_status": 202,
+        "response_kind": "OPERATION",
+        "response_contract": "OPERATION_SUMMARY_V1",
+        "request_body_contract": "NONE",
+        "operation_type_options": {
+          "SHARED_PROVIDER_ADMINISTRATION_OPERATION_V1": "PROVIDER_ADMINISTRATION",
+          "DISTINCT_VALIDATE_RECONCILE_OPERATION_TYPES_V1": "PROVIDER_VALIDATION"
+        },
+        "precondition_resource": "PROVIDER_CONNECTION",
+        "response_etag_resource": "OPERATION",
+        "location": true,
+        "authorization_resource_type": "PROVIDER_CONNECTION",
+        "lookup_sequence": "WORKSPACE_PREAUTHORIZE_SCOPED_SAFE_LOOKUP_RESOURCE_AUTHORIZE"
+      },
+      {
+        "operation_id": "RECONCILE",
+        "kind": "COMMAND",
+        "method": "POST",
+        "path": "/api/v1/workspaces/{workspace_slug}/curve/providers/connections/{connection_id}:reconcile",
+        "coarse_action": "CURVE.PROVIDER_CONNECTION.ADMINISTER",
+        "granular_action": "CURVE.PROVIDER_CONNECTION.RECONCILE",
+        "required_headers": [
+          "Idempotency-Key",
+          "If-Match"
+        ],
+        "success_status": 202,
+        "response_kind": "OPERATION",
+        "response_contract": "OPERATION_SUMMARY_V1",
+        "request_body_contract": "NONE",
+        "operation_type_options": {
+          "SHARED_PROVIDER_ADMINISTRATION_OPERATION_V1": "PROVIDER_ADMINISTRATION",
+          "DISTINCT_VALIDATE_RECONCILE_OPERATION_TYPES_V1": "PROVIDER_RECONCILIATION"
+        },
+        "precondition_resource": "PROVIDER_CONNECTION",
+        "response_etag_resource": "OPERATION",
+        "location": true,
+        "authorization_resource_type": "PROVIDER_CONNECTION",
+        "lookup_sequence": "WORKSPACE_PREAUTHORIZE_SCOPED_SAFE_LOOKUP_RESOURCE_AUTHORIZE"
+      },
+      {
+        "operation_id": "DISABLE",
+        "kind": "COMMAND",
+        "method": "POST",
+        "path": "/api/v1/workspaces/{workspace_slug}/curve/providers/connections/{connection_id}:disable",
+        "coarse_action": "CURVE.PROVIDER_CONNECTION.ADMINISTER",
+        "granular_action": "CURVE.PROVIDER_CONNECTION.DISABLE",
+        "required_headers": [
+          "Idempotency-Key",
+          "If-Match"
+        ],
+        "success_status": 200,
+        "response_kind": "CONNECTION",
+        "response_contract": "PROVIDER_CONNECTION_ADMINISTRATION_V1",
+        "request_body_contract": "NONE",
+        "operation_type_options": {},
+        "precondition_resource": "PROVIDER_CONNECTION",
+        "response_etag_resource": "PROVIDER_CONNECTION",
+        "location": false,
+        "authorization_resource_type": "PROVIDER_CONNECTION",
+        "lookup_sequence": "WORKSPACE_PREAUTHORIZE_SCOPED_SAFE_LOOKUP_RESOURCE_AUTHORIZE"
+      },
+      {
+        "operation_id": "ENABLE",
+        "kind": "COMMAND",
+        "method": "POST",
+        "path": "/api/v1/workspaces/{workspace_slug}/curve/providers/connections/{connection_id}:enable",
+        "coarse_action": "CURVE.PROVIDER_CONNECTION.ADMINISTER",
+        "granular_action": "CURVE.PROVIDER_CONNECTION.ENABLE",
+        "required_headers": [
+          "Idempotency-Key",
+          "If-Match"
+        ],
+        "success_status": 200,
+        "response_kind": "CONNECTION",
+        "response_contract": "PROVIDER_CONNECTION_ADMINISTRATION_V1",
+        "request_body_contract": "NONE",
+        "operation_type_options": {},
+        "precondition_resource": "PROVIDER_CONNECTION",
+        "response_etag_resource": "PROVIDER_CONNECTION",
+        "location": false,
+        "authorization_resource_type": "PROVIDER_CONNECTION",
+        "lookup_sequence": "WORKSPACE_PREAUTHORIZE_SCOPED_SAFE_LOOKUP_RESOURCE_AUTHORIZE"
+      },
+      {
+        "operation_id": "REVOKE",
+        "kind": "COMMAND",
+        "method": "POST",
+        "path": "/api/v1/workspaces/{workspace_slug}/curve/providers/connections/{connection_id}:revoke",
+        "coarse_action": "CURVE.PROVIDER_CONNECTION.ADMINISTER",
+        "granular_action": "CURVE.PROVIDER_CONNECTION.REVOKE",
+        "required_headers": [
+          "Idempotency-Key",
+          "If-Match"
+        ],
+        "success_status": 200,
+        "response_kind": "CONNECTION",
+        "response_contract": "PROVIDER_CONNECTION_ADMINISTRATION_V1",
+        "request_body_contract": "NONE",
+        "operation_type_options": {},
+        "precondition_resource": "PROVIDER_CONNECTION",
+        "response_etag_resource": "PROVIDER_CONNECTION",
+        "location": false,
+        "authorization_resource_type": "PROVIDER_CONNECTION",
+        "lookup_sequence": "WORKSPACE_PREAUTHORIZE_SCOPED_SAFE_LOOKUP_RESOURCE_AUTHORIZE"
+      }
+    ],
+    "idempotency_precondition_profile": {
+      "request_digest": "SHA256_CANONICAL_REQUEST_BYTES",
+      "record_payload": "STATUS_DIGEST_RESOURCE_REF_NO_RESPONSE_BODY",
+      "matching_terminal_command": "RESOLVE_CURRENT_AUTHORIZED_SAFE_PROJECTION_FROM_STORED_RESOURCE_REF",
+      "matching_pending_operation": "RETURN_SAME_OPERATION_AND_RESUME_DURABLE_PHASE",
+      "replay_response_status": "ORIGINAL_STORED_STATUS",
+      "replay_location": "STORED_RESOURCE_REF",
+      "replay_response_etag": "CURRENT_RESOURCE_AGGREGATE_VERSION",
+      "historical_response_body": "NOT_STORED",
+      "unavailable_stored_resource_version": "IDEMPOTENCY_RECONCILIATION_REQUIRED_NO_EFFECT",
+      "changed_request_digest": "HTTP_409_NO_EFFECT",
+      "evaluation_order": [
+        "AUTHORIZE_CURRENT_REQUEST_WITH_OPERATION_LOOKUP_SEQUENCE",
+        "LOOKUP_IDEMPOTENCY_RECORD_BY_WORKSPACE_PRINCIPAL_COMMAND_AND_KEY_DIGEST",
+        "REPLAY_OR_RESUME_MATCHING_REQUEST_DIGEST",
+        "REJECT_CHANGED_REQUEST_DIGEST",
+        "EVALUATE_IF_MATCH_FOR_NEW_COMMAND",
+        "COMMIT_DOMAIN_EVENT_OUTBOX_AUDIT_AND_IDEMPOTENCY_ATOMICALLY"
+      ],
+      "missing_if_match": "HTTP_428_NO_EFFECT",
+      "stale_if_match": "HTTP_412_NO_DOMAIN_OR_DELIVERY_EFFECT"
+    },
+    "accepted_adapter_snapshot": {
+      "contract_state": "ACCEPTED_M0_S9A_BASE",
+      "source_schema_version": "curve.provider-registry/v1",
+      "source_path": "contracts/providers/m0-s9a-provider-registry-v1.json",
+      "source_content_digest": "sha256:393c33fa5343beb1fe05a445a015333334a27bf491d7850c64dcf0a7f265071a",
+      "accepted_coordinates": [
+        {
+          "provider_type": "FAKE_LOCAL",
+          "adapter_key": "curve.fake-local",
+          "adapter_version": "1.0.0",
+          "environment": "LOCAL",
+          "allowed_classifications": [
+            "INTERNAL"
+          ]
+        }
+      ]
+    },
+    "response_contracts": {
+      "PROVIDER_CONNECTION_ADMINISTRATION_V1": {
+        "contract_state": "PROPOSED_NOT_NORMATIVE",
+        "schema_version": "curve.provider-connection-administration/v1",
+        "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-connection-administration.schema.json",
+        "schema_path": "contracts/schemas/provider-connection-administration.schema.json",
+        "schema_content_digest": "sha256:65b3898dff3b0dda08805f2eced3dc4a8e31f10e1abd621dd97c3e31687b86bd"
+      },
+      "PROVIDER_CONNECTION_ADMINISTRATION_PAGE_V1": {
+        "contract_state": "PROPOSED_NOT_NORMATIVE",
+        "schema_version": "curve.provider-connection-administration-page/v1",
+        "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-connection-administration-page.schema.json",
+        "schema_path": "contracts/schemas/provider-connection-administration-page.schema.json",
+        "schema_content_digest": "sha256:7230268285ccd98bad70032d2af1f200e904df550a9fcb9cd433c46966a0d825"
+      },
+      "OPERATION_SUMMARY_V1": {
+        "contract_state": "ACCEPTED_BASE_REQUIRES_SELECTED_OPERATION_TYPE_MATERIALIZATION",
+        "schema_version": "1.0",
+        "schema_id": "https://curve.x3m.internal/contracts/schemas/operation-summary.schema.json",
+        "schema_path": "contracts/schemas/operation-summary.schema.json",
+        "schema_content_digest": "sha256:3a237b4f66a90b92545446989da0678b0e82f0f19aa2a9a4bf159740dfa80bb1",
+        "safe_fields": [
+          "schema_version",
+          "id",
+          "workspace_id",
+          "operation_type",
+          "status",
+          "version",
+          "progress_percent"
+        ],
+        "accepted_operation_types": [
+          "FOUNDATION_PROBE",
+          "WORKFLOW_COMMAND",
+          "PROVIDER_RECONCILIATION"
+        ],
+        "candidate_operation_types": [
+          "PROVIDER_ADMINISTRATION",
+          "PROVIDER_VALIDATION",
+          "PROVIDER_RECONCILIATION"
+        ],
+        "selected_operation_type_materialization_required": true
+      }
+    }
+  },
+  "safe_projection": {
+    "schema_version": "curve.provider-connection-administration/v1",
+    "additional_properties": false,
+    "allowed_fields": [
+      "schema_version",
+      "id",
+      "workspace_id",
+      "aggregate_version",
+      "provider_type",
+      "adapter_key",
+      "adapter_version",
+      "environment",
+      "display_name",
+      "allowed_classifications",
+      "status",
+      "current_capability",
+      "validated_at",
+      "last_reconciled_at",
+      "next_reconcile_at",
+      "last_error",
+      "created_at",
+      "updated_at"
+    ],
+    "blocked_fields": [
+      "external_tenant_ref",
+      "configuration_ref",
+      "configuration_digest",
+      "secret_reference",
+      "capability_document_ref",
+      "validation_result_ref",
+      "callback_endpoint_key",
+      "callback_secret",
+      "signing_material",
+      "provider_token",
+      "authorization_header",
+      "endpoint_url",
+      "raw_callback_body",
+      "raw_delivery_body",
+      "raw_provider_body",
+      "provider_exception",
+      "protected_object_ref",
+      "created_by",
+      "updated_by",
+      "actor_roles"
+    ],
+    "nested_shapes": {
+      "current_capability": {
+        "nullable": true,
+        "additional_properties": false,
+        "required_fields": [
+          "capability_version",
+          "capability_digest"
+        ],
+        "field_types": {
+          "capability_version": "AGGREGATE_VERSION",
+          "capability_digest": "SHA256_DIGEST"
+        }
+      },
+      "last_error": {
+        "nullable": true,
+        "additional_properties": false,
+        "required_fields": [
+          "code",
+          "retryable"
+        ],
+        "field_types": {
+          "code": "SAFE_ERROR_CODE",
+          "retryable": "BOOLEAN"
+        }
+      }
+    },
+    "capability_digest_derivation": {
+      "algorithm": "SHA-256",
+      "encoding": "UTF-8",
+      "digest_prefix": "sha256:",
+      "canonical_json": "RECURSIVE_LEXICOGRAPHIC_OBJECT_KEYS_COMPACT_SEPARATORS_ARRAY_ORDER_PRESERVED",
+      "source_fields": [
+        "adapter_key",
+        "adapter_version",
+        "allowed_classifications",
+        "capabilities",
+        "connection_id",
+        "protocol_versions",
+        "provider_type",
+        "workspace_id"
+      ],
+      "capability_fields": [
+        "enabled",
+        "name",
+        "risk",
+        "schema_uri"
+      ],
+      "optional_field_rule": "OMIT_CAPABILITY_SCHEMA_URI_WHEN_NULL",
+      "excluded_fields": [
+        "capability_version",
+        "connection_version",
+        "expires_at",
+        "observed_at",
+        "validated_at"
+      ]
+    }
+  },
+  "material_options": {
+    "authority_source": {
+      "allowed": [
+        "PLANE_WORKSPACE_ROLE_20",
+        "PLANE_INSTANCE_ADMIN_AND_WORKSPACE_MEMBER",
+        "CURVE_PLATFORM_ADMIN_ASSIGNMENT",
+        "DEFER"
+      ],
+      "selected": "PLANE_WORKSPACE_ROLE_20"
+    },
+    "action_profile": {
+      "allowed": [
+        "COARSE_V3",
+        "GRANULAR_V3",
+        "DEFER"
+      ],
+      "selected": "COARSE_V3"
+    },
+    "read_visibility": {
+      "allowed": [
+        "PLATFORM_ADMINISTRATOR_ONLY",
+        "ACTIVE_WORKSPACE_MEMBERS_SAFE_PROJECTION",
+        "DEFER"
+      ],
+      "selected": "PLATFORM_ADMINISTRATOR_ONLY"
+    },
+    "membership_rule": {
+      "allowed": [
+        "ACTIVE_TARGET_WORKSPACE_REQUIRED",
+        "ACTIVE_TARGET_WORKSPACE_AND_INSTANCE_ADMIN_REQUIRED",
+        "ACTIVE_TARGET_WORKSPACE_AND_CURVE_ASSIGNMENT_REQUIRED",
+        "DEFER"
+      ],
+      "selected": "ACTIVE_TARGET_WORKSPACE_REQUIRED"
+    },
+    "separation_rule": {
+      "allowed": [
+        "NONE",
+        "DISTINCT_REVOKER",
+        "DISTINCT_REGISTRAR_AND_REVOKER",
+        "DEDICATED_REVOKE_APPROVER",
+        "DEFER"
+      ],
+      "selected": "NONE"
+    },
+    "deny_response_profile": {
+      "allowed": [
+        "ROLE_DENIAL_403_SCOPE_OR_ABSENCE_404",
+        "OPAQUE_404_FOR_ALL_AUTHENTICATED_DENIALS",
+        "DEFER"
+      ],
+      "selected": "ROLE_DENIAL_403_SCOPE_OR_ABSENCE_404"
+    },
+    "api_exposure_profile": {
+      "allowed": [
+        "INTERNAL_API_ONLY",
+        "API_AND_CURVE_ADMIN_UI",
+        "DEFER"
+      ],
+      "selected": "INTERNAL_API_ONLY"
+    },
+    "environment_classification_scope": {
+      "allowed": [
+        "LOCAL_INTERNAL_ONLY",
+        "LOCAL_AND_STAGING_INTERNAL",
+        "ALL_ENVIRONMENTS_APPROVED_CLASSES",
+        "DEFER"
+      ],
+      "selected": "LOCAL_INTERNAL_ONLY"
+    },
+    "owner_reviewer_rule": {
+      "allowed": [
+        "DISTINCT_HUMANS",
+        "SAME_PERSON_BOOTSTRAP_EXCEPTION",
+        "DEFER"
+      ],
+      "selected": "SAME_PERSON_BOOTSTRAP_EXCEPTION"
+    },
+    "approval_separation_rule": {
+      "allowed": [
+        "THREE_DISTINCT_HUMANS",
+        "MULTI_ROLE_TIME_BOUND_EXCEPTION",
+        "DEFER"
+      ],
+      "selected": "THREE_DISTINCT_HUMANS"
+    },
+    "coding_budget_profile": {
+      "allowed": [
+        "USD_25_ZERO_PROVIDER_SPEND",
+        "OWNER_SPECIFIED_LOWER_CEILING",
+        "DEFER"
+      ],
+      "selected": "USD_25_ZERO_PROVIDER_SPEND"
+    },
+    "governance_identity_authority": {
+      "allowed": [
+        "X3M_IDP_SUBJECT",
+        "PLANE_USER_ID",
+        "GITHUB_USER_ID"
+      ],
+      "selected": "GITHUB_USER_ID"
+    },
+    "async_operation_profile": {
+      "allowed": [
+        "SHARED_PROVIDER_ADMINISTRATION_OPERATION_V1",
+        "DISTINCT_VALIDATE_RECONCILE_OPERATION_TYPES_V1",
+        "DEFER"
+      ],
+      "selected": "DISTINCT_VALIDATE_RECONCILE_OPERATION_TYPES_V1"
+    }
+  },
+  "dependency_evidence": {
+    "runtime_activation_refs": [
+      {
+        "evidence_type": "RUNTIME_ACTIVATION",
+        "reference": "evidence://local-runtime",
+        "content_digest": "sha256:bd11cfe3a7f0882268e2f5e50c8bbc0a8c77ecd26b83157858597bb3a9ff34fa",
+        "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "target_environment": "LOCAL",
+        "decision_id": "B-ADMIN-M0-S9B1",
+        "work_package": "M0-S9B1",
+        "repository": "github.com/faocampo/curve"
+      }
+    ],
+    "retention_decision_refs": [],
+    "ux_contract_refs": [],
+    "approved_data_classifications": [
+      "INTERNAL"
+    ],
+    "data_classification_approval_refs": [],
+    "dedicated_revoke_approver_policy_ref": null,
+    "owner_reviewer_exception_ref": {
+      "evidence_type": "OWNER_REVIEWER_EXCEPTION",
+      "reference": "evidence://owner-reviewer-exception",
+      "content_digest": "sha256:2e06c0686400fa4bdf77e83a516fb655d3423d50215159ccf1414a869d1fb022",
+      "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "target_environment": "NOT_APPLICABLE",
+      "decision_id": "B-ADMIN-M0-S9B1",
+      "work_package": "M0-S9B1",
+      "repository": "github.com/faocampo/curve",
+      "valid_from": "2026-08-30T10:00:00Z",
+      "valid_until": "2027-03-01T12:00:00Z",
+      "dispatch_revalidation_required": true
+    },
+    "approval_role_overlap_exception_ref": null,
+    "custom_coding_attempt_usd": null
+  },
+  "proof_cases": [
+    {
+      "case_id": "ROLE_SOURCE_DERIVATION",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/role_source_derivation",
+          "content_digest": "sha256:4d62f5a734ce3dfd274efb5390ddcf5d2d71eecfce09b319fc2e3454cb3e15b9",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "ROLE_SOURCE_DERIVATION"
+        }
+      ]
+    },
+    {
+      "case_id": "MEMBERSHIP_ACTIVE_EXACT_WORKSPACE",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/membership_active_exact_workspace",
+          "content_digest": "sha256:3936d3f47ca523b9e0c7fb1e973c644967681b163c0715e884c0dca31d72e554",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "MEMBERSHIP_ACTIVE_EXACT_WORKSPACE"
+        }
+      ]
+    },
+    {
+      "case_id": "CALLER_SUPPLIED_ROLE_REJECTED",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/caller_supplied_role_rejected",
+          "content_digest": "sha256:c4b4a0a0fdf0c0d510e7e99b68da23244c97b5ae7c706c6db51a0d7909f87205",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "CALLER_SUPPLIED_ROLE_REJECTED"
+        }
+      ]
+    },
+    {
+      "case_id": "AGENT_SERVICE_SYSTEM_REJECTED",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/agent_service_system_rejected",
+          "content_digest": "sha256:9316664896baf04340673f0a8fe997eb4b4a8bc0c086207297b5df998209a9a0",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "AGENT_SERVICE_SYSTEM_REJECTED"
+        }
+      ]
+    },
+    {
+      "case_id": "ACTION_SCOPE_EXACT",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/action_scope_exact",
+          "content_digest": "sha256:fbfecb4ed0c890dec8660052826d40d4d3cbcbbbc8651562193e693cefe0a9fc",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "ACTION_SCOPE_EXACT"
+        }
+      ]
+    },
+    {
+      "case_id": "SEPARATION_RULE_ENFORCED",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/separation_rule_enforced",
+          "content_digest": "sha256:15006105fb8151bed73aa766b695582837c23faebbea23026c6415c8c0fb3b28",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "SEPARATION_RULE_ENFORCED"
+        }
+      ]
+    },
+    {
+      "case_id": "DENY_RESPONSE_INDISTINGUISHABILITY",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/deny_response_indistinguishability",
+          "content_digest": "sha256:7b013d3a77abecf8bbed0cbc770213f12916374db38deb02b26916c488dc5d03",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "DENY_RESPONSE_INDISTINGUISHABILITY"
+        }
+      ]
+    },
+    {
+      "case_id": "READ_PROJECTION_REDACTION",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/read_projection_redaction",
+          "content_digest": "sha256:8cfda84d2931d177b7abbdf82f38580f91d5129182b13ac62bfd3659427e5eb5",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "READ_PROJECTION_REDACTION"
+        }
+      ]
+    },
+    {
+      "case_id": "IDEMPOTENCY_REPLAY_AND_CONFLICT",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/idempotency_replay_and_conflict",
+          "content_digest": "sha256:579937607ece5f0f435a0438345aad00d6e89c1a5f03d2c2187f7d328637b452",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "IDEMPOTENCY_REPLAY_AND_CONFLICT"
+        }
+      ]
+    },
+    {
+      "case_id": "ETAG_PRECONDITION",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/etag_precondition",
+          "content_digest": "sha256:67ce3e3a2bb6fcd2a60e28a39d80f93313b20be23eb12c6af14bb7c491a22af4",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "ETAG_PRECONDITION"
+        }
+      ]
+    },
+    {
+      "case_id": "AUTHORIZATION_BEFORE_LOOKUP",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/authorization_before_lookup",
+          "content_digest": "sha256:a42a6bdb4b149fb13105162582cf9120e8a50a2a5f2a3070eeb374fc1a28e7a8",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "AUTHORIZATION_BEFORE_LOOKUP"
+        }
+      ]
+    },
+    {
+      "case_id": "ZERO_SECRET_NETWORK_DELIVERY_EFFECT",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/zero_secret_network_delivery_effect",
+          "content_digest": "sha256:cebef60cafaa8c720a96b9f71b352e12d2e8bb1beb12711c1f92cc56daa97499",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "ZERO_SECRET_NETWORK_DELIVERY_EFFECT"
+        }
+      ]
+    },
+    {
+      "case_id": "APPROVAL_ROLE_SEPARATION_ENFORCED",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/approval_role_separation_enforced",
+          "content_digest": "sha256:b65a6fa86ee65e318c5c4eb82551068dba63e7b7d48ab7f9764a914c5c5a6f6a",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "APPROVAL_ROLE_SEPARATION_ENFORCED"
+        }
+      ]
+    },
+    {
+      "case_id": "REGISTRATION_ALLOWLIST_AND_SCOPE_CEILING",
+      "status": "PASS",
+      "evidence_refs": [
+        {
+          "evidence_type": "PROOF_RESULT",
+          "reference": "evidence://proof/registration_allowlist_and_scope_ceiling",
+          "content_digest": "sha256:e744601f3bb64f4294acb4a212ca94adf39eb98a5b78bc0ee2dbc7612655df04",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "proof_case_id": "REGISTRATION_ALLOWLIST_AND_SCOPE_CEILING"
+        }
+      ]
+    }
+  ],
+  "owners": {
+    "decision_owner": {
+      "actor_type": "HUMAN",
+      "identity_ref": "github:faocampo",
+      "identity_authority": "GITHUB_USER_ID",
+      "subject_id": "1001",
+      "identity_proof_ref": {
+        "evidence_type": "IDENTITY_SUBJECT_PROOF",
+        "reference": "evidence://identity/decision-owner",
+        "content_digest": "sha256:045d0d79d70906771e225217f4b198811c1fb597e7ffc56e14f4a29d4d1af15d",
+        "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "target_environment": "NOT_APPLICABLE",
+        "decision_id": "B-ADMIN-M0-S9B1",
+        "work_package": "M0-S9B1",
+        "repository": "github.com/faocampo/curve",
+        "identity_authority": "GITHUB_USER_ID",
+        "subject_id": "1001"
+      },
+      "name": "Synthetic Curve product owner",
+      "role": "X3M CTO"
+    },
+    "delivery_owner": {
+      "actor_type": "HUMAN",
+      "identity_ref": "github:federico.ocampo",
+      "identity_authority": "GITHUB_USER_ID",
+      "subject_id": "1001",
+      "identity_proof_ref": {
+        "evidence_type": "IDENTITY_SUBJECT_PROOF",
+        "reference": "evidence://identity/delivery-owner-alias",
+        "content_digest": "sha256:65f06e56252d84f2fcef7739ae1512659185ab5b1d9ae8cfd0c02c112dca201b",
+        "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "target_environment": "NOT_APPLICABLE",
+        "decision_id": "B-ADMIN-M0-S9B1",
+        "work_package": "M0-S9B1",
+        "repository": "github.com/faocampo/curve",
+        "identity_authority": "GITHUB_USER_ID",
+        "subject_id": "1001"
+      },
+      "name": "Synthetic Curve product owner",
+      "role": "Curve engineering owner"
+    },
+    "human_reviewer": {
+      "actor_type": "HUMAN",
+      "identity_ref": "github:faocampo-reviewer-alias",
+      "identity_authority": "GITHUB_USER_ID",
+      "subject_id": "1001",
+      "identity_proof_ref": {
+        "evidence_type": "IDENTITY_SUBJECT_PROOF",
+        "reference": "evidence://identity/reviewer-alias",
+        "content_digest": "sha256:e6164c28c48019d60b960018256129e9f84ad7d39e25e3dcbc2bb7cb12ef80fa",
+        "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "target_environment": "NOT_APPLICABLE",
+        "decision_id": "B-ADMIN-M0-S9B1",
+        "work_package": "M0-S9B1",
+        "repository": "github.com/faocampo/curve",
+        "identity_authority": "GITHUB_USER_ID",
+        "subject_id": "1001"
+      },
+      "name": "Synthetic Curve product owner",
+      "role": "Current default human reviewer"
+    },
+    "security_identity_owner": {
+      "actor_type": "HUMAN",
+      "identity_ref": "github:synthetic-security",
+      "identity_authority": "GITHUB_USER_ID",
+      "subject_id": "1002",
+      "identity_proof_ref": {
+        "evidence_type": "IDENTITY_SUBJECT_PROOF",
+        "reference": "evidence://identity/security-owner",
+        "content_digest": "sha256:1afb48f5ba33ce0db56d6874338979f35a0a7e59b545318f81456d1ce5004fc4",
+        "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "target_environment": "NOT_APPLICABLE",
+        "decision_id": "B-ADMIN-M0-S9B1",
+        "work_package": "M0-S9B1",
+        "repository": "github.com/faocampo/curve",
+        "identity_authority": "GITHUB_USER_ID",
+        "subject_id": "1002"
+      },
+      "name": "Synthetic security owner",
+      "role": "Security identity owner"
+    },
+    "platform_administration_owner": {
+      "actor_type": "HUMAN",
+      "identity_ref": "github:synthetic-platform",
+      "identity_authority": "GITHUB_USER_ID",
+      "subject_id": "1003",
+      "identity_proof_ref": {
+        "evidence_type": "IDENTITY_SUBJECT_PROOF",
+        "reference": "evidence://identity/platform-owner",
+        "content_digest": "sha256:af95924c19f56ab353c5b825d60ddf034b940a79fdc740b2f5b11b485f38fe61",
+        "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "target_environment": "NOT_APPLICABLE",
+        "decision_id": "B-ADMIN-M0-S9B1",
+        "work_package": "M0-S9B1",
+        "repository": "github.com/faocampo/curve",
+        "identity_authority": "GITHUB_USER_ID",
+        "subject_id": "1003"
+      },
+      "name": "Synthetic platform owner",
+      "role": "Platform administration owner"
+    }
+  },
+  "approvals": [
+    {
+      "approval_role": "CURVE_PRODUCT",
+      "approver": {
+        "actor_type": "HUMAN",
+        "identity_ref": "github:faocampo",
+        "identity_authority": "GITHUB_USER_ID",
+        "subject_id": "1001",
+        "identity_proof_ref": {
+          "evidence_type": "IDENTITY_SUBJECT_PROOF",
+          "reference": "evidence://identity/decision-owner",
+          "content_digest": "sha256:045d0d79d70906771e225217f4b198811c1fb597e7ffc56e14f4a29d4d1af15d",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "identity_authority": "GITHUB_USER_ID",
+          "subject_id": "1001"
+        },
+        "name": "Synthetic Curve product owner",
+        "role": "X3M CTO"
+      },
+      "approved_decision_digest": "sha256:3706738ee07495584d63f72322e12839010b5640f3b07d1dddb81ffdd64e0c59",
+      "approved_at": "2026-08-30T11:00:00Z"
+    },
+    {
+      "approval_role": "SECURITY_IDENTITY",
+      "approver": {
+        "actor_type": "HUMAN",
+        "identity_ref": "github:synthetic-security",
+        "identity_authority": "GITHUB_USER_ID",
+        "subject_id": "1002",
+        "identity_proof_ref": {
+          "evidence_type": "IDENTITY_SUBJECT_PROOF",
+          "reference": "evidence://identity/security-owner",
+          "content_digest": "sha256:1afb48f5ba33ce0db56d6874338979f35a0a7e59b545318f81456d1ce5004fc4",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "identity_authority": "GITHUB_USER_ID",
+          "subject_id": "1002"
+        },
+        "name": "Synthetic security owner",
+        "role": "Security identity owner"
+      },
+      "approved_decision_digest": "sha256:3706738ee07495584d63f72322e12839010b5640f3b07d1dddb81ffdd64e0c59",
+      "approved_at": "2026-08-30T11:00:00Z"
+    },
+    {
+      "approval_role": "PLATFORM_ADMINISTRATION",
+      "approver": {
+        "actor_type": "HUMAN",
+        "identity_ref": "github:synthetic-platform",
+        "identity_authority": "GITHUB_USER_ID",
+        "subject_id": "1003",
+        "identity_proof_ref": {
+          "evidence_type": "IDENTITY_SUBJECT_PROOF",
+          "reference": "evidence://identity/platform-owner",
+          "content_digest": "sha256:af95924c19f56ab353c5b825d60ddf034b940a79fdc740b2f5b11b485f38fe61",
+          "source_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "target_environment": "NOT_APPLICABLE",
+          "decision_id": "B-ADMIN-M0-S9B1",
+          "work_package": "M0-S9B1",
+          "repository": "github.com/faocampo/curve",
+          "identity_authority": "GITHUB_USER_ID",
+          "subject_id": "1003"
+        },
+        "name": "Synthetic platform owner",
+        "role": "Platform administration owner"
+      },
+      "approved_decision_digest": "sha256:3706738ee07495584d63f72322e12839010b5640f3b07d1dddb81ffdd64e0c59",
+      "approved_at": "2026-08-30T11:00:00Z"
+    }
+  ],
+  "decided_at": "2026-08-30T12:00:00Z",
+  "next_review_at": "2027-02-28T12:00:00Z",
+  "decision_payload_digest": "sha256:3706738ee07495584d63f72322e12839010b5640f3b07d1dddb81ffdd64e0c59",
+  "activation": {
+    "decision_selected": true,
+    "successor_policy_materialization_ready": true,
+    "successor_openapi_materialization_ready": true,
+    "child_task_packet_materialization_ready": true,
+    "plane_implementation_authorized": false
+  },
+  "unresolved_requirements": [],
+  "implementation_dispatch_allowed": false
+}

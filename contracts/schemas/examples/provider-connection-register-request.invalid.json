@@ -1,0 +1,10 @@
+{
+  "schema_version": "curve.provider-connection-register-request/v1",
+  "provider_type": "FAKE_LOCAL",
+  "adapter_key": "curve.fake-local",
+  "adapter_version": "1.0.0",
+  "environment": "LOCAL",
+  "display_name": "Synthetic local provider",
+  "allowed_classifications": ["INTERNAL"],
+  "secret_reference": "forbidden://caller-secret"
+}

@@ -1,19 +1,19 @@
-# M0-S9B External Provider Transport and Administration Task Packet
+# M0-S9B (External Provider Transport and Administration Task Packet)
 
 ## Document control
 
 | Field | Value |
 | --- | --- |
 | Package | M0-S9B (external provider transport and administration foundation), a decision-gated child of M0-09 (provider integration foundation) |
-| Task ID | `CURVE-M0-S9B-PROVIDER-TRANSPORT` |
+| Task ID | `CURVE-M0-S9B-PROVIDER-TRANSPORT` (external provider transport and administration parent planning packet) |
 | Status | `PREPARED / BLOCKED / NO_DISPATCH` |
-| Version | 0.1 |
-| Date | 2026-08-28 |
+| Version | 0.3 |
+| Date | 2026-08-31 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Candidate Curve base | Curve `main` at `03b26cdb576962fad8e2047fedcfafa2636bfc23`, the squash merge of Curve PR #39 (M0-S9A implementation-evidence reconciliation); dispatch additionally requires this packet's accepted merge |
-| Candidate Plane base | `preview` at `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, containing accepted M0-S9A (provider-neutral registry and reconciliation foundation) |
+| Candidate Curve base | Curve `main` at `e7aa7e6ff23491cfae02379d74508822a8ded238`; dispatch additionally requires the accepted merge containing the exact child decision and contracts |
+| Observed Plane base | `preview` at `99a73b4eab5ee21fd012d7358bc9259252d47f71`; `0007_initiative_gateassignment.py` (Initiative and gate-assignment migration) is current and migration slot `0008` is observational only, not reserved; every implementation dispatch revalidates both values |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | Unassigned until an exact child packet is authorized; Codex may implement only under a later bounded authorization |
 | Risk | `MATERIAL`; public administration, secret references, network endpoints, provider callbacks, outgoing notifications, schedules, and external state |
@@ -41,7 +41,8 @@ data classification, environment, commands, and rollback before mutation.
 | --- | --- |
 | `B-CURVE` (contract baseline) | Merged Curve revision containing this packet, the generated OpenAPI/schema/event contracts, negative fixtures, threat-model disposition, and deterministic context digest |
 | `B-PLANE` (implementation baseline) | Exact reviewed Plane `preview` SHA and the next free additive Curve migration number |
-| `B-ADMIN` (human administration authority) | Trusted Plane role source, membership/activity rules, exact provider actions, separation rules, and deny response; the local M0-S9A role-20 mapping is not generalized silently |
+| `B-ADMIN` (human administration authority and action profile) | Approved [M0-S9B1 decision record](../../contracts/governance/m0-s9b1-provider-administration-v1.json) (authority, membership, actions, separation, deny response, environment, review, budget, proofs, and approvals) at one accepted digest; the local M0-S9A (provider-neutral registry and reconciliation foundation) role-20 mapping is not generalized silently |
+| `B-EXPOSURE` (provider-administration product surface) | Approved internal API-only, API-plus-Curve-UI, or defer decision; the UI alternative additionally requires its own UX contract and manual human test |
 | `B-IDENTITY` (provider identity and secret policy) | Provider-specific service or delegated identity, credential broker/reference type, scopes, rotation, revocation, validation owner, and audit rules |
 | `B-ENDPOINT` (network and callback policy) | Approved provider origins, DNS/IP/source allowlists, TLS/certificate requirements, signature algorithm/key source, timestamp window, payload/acknowledgement limits, and egress policy |
 | `B-WEBHOOK` (outgoing notification policy) | Approved destination ownership, event allowlist, data-class ceiling, exact retry schedule within the 24-hour limit, secret rotation overlap, dead-letter owner, and external-write authorization |
@@ -49,7 +50,7 @@ data classification, environment, commands, and rollback before mutation.
 | `B-DATA` (body retention) | D-009 (retention, legal-hold, backup, and erasure decision) before any raw callback, normalized protected body, or protected delivery body is retained |
 | `B-MCP` (MCP/Orca only) | D-006 (Orca support and license decision) and D-007 (MCP trust and delegated write-back decision); neither gates non-MCP provider transports |
 | `B-VCS` (VCS only) | D-008 (VCS identity, credential, signing, allowlist, and controller-scope decision) before a GitHub or GitLab adapter is activated |
-| `B-OWNER` (human accountability) | Named owner and distinct human reviewer for the exact child and provider profile |
+| `B-OWNER` (human accountability) | Named owner and distinct human reviewer for the exact child and provider profile, or the exact digest-bound, source-revision-bound, time-limited same-human bootstrap exception selected and approved by M0-S9B1 (provider administration API), extending beyond the next review and revalidated at dispatch |
 | `B-BUDGET` (execution limits) | Exact coding-attempt budget plus provider/runtime cost ceiling where the child can incur external cost |
 
 An AI coding agent stops without mutation when any consuming gate is absent.
@@ -61,23 +62,48 @@ schedule, infrastructure owner, or production/staging activation.
 
 | Child | Repository-local outcome | Additional gates | Completion boundary |
 | --- | --- | --- | --- |
-| M0-S9B1 (provider administration API) | Versioned OpenAPI, generated TypeScript client, workspace-scoped list/read/register/validate/reconcile/disable/enable/revoke commands, safe projections, optimistic concurrency, and audit | `B-ADMIN`; approved API/UX exposure | No credential resolution, network call, callback, schedule, or real adapter |
+| M0-S9B1 (provider administration API) | Versioned OpenAPI, generated TypeScript client, workspace-scoped list/read/register/validate/reconcile/disable/enable/revoke commands, safe projections, optimistic concurrency, and audit | `B-ADMIN`, `B-EXPOSURE`, `B-OWNER`, and `B-BUDGET`; [M0-S9B1 decision gate](m0-s9b1-provider-administration-decision.md) (material alternatives, fixed API/security invariants, machine lifecycle, tests, and handoff) | No credential resolution, network call, callback, schedule, or real adapter |
 | M0-S9B2 (credential and endpoint profiles) | Opaque secret-reference and endpoint-profile records, broker port, rotation/revocation state, capability revalidation, and no-secret projections | `B-IDENTITY`, `B-ENDPOINT`, `B-DATA` when protected configuration is retained | No callback listener, outgoing delivery, scheduler, or provider mutation |
 | M0-S9B3 (verified callback ingress) | Opaque callback endpoint binding, pre-body limits, signature/timestamp/source verification, durable inbox receipt, normalized observation, and reconciliation trigger | `B-IDENTITY`, `B-ENDPOINT`, `B-RUNTIME`, `B-DATA` when a body is retained | A callback can append an observation or request reconciliation; it cannot issue a Curve command or directly mutate external state |
 | M0-S9B4 (outgoing Curve webhooks) | Subscription policy, SSRF-safe destination validation, versioned signed projection, outbox delivery, bounded retries, rotation, and visible dead letter | `B-WEBHOOK`, `B-ENDPOINT`, `B-RUNTIME`, `B-DATA` | Notifications only; a receiver response cannot change Curve business state |
 | M0-S9B5 (scheduled reconciliation) | Durable due-work selector, 15-minute maximum active-binding interval, immediate gap/ambiguity trigger, lease, recovery, cancellation, and authoritative-read projection | `B-RUNTIME`, provider read identity, target-environment observability/capacity | Polling repairs projections and records conflict; it never overwrites ambiguous human provider edits |
 | M0-S9B6 (provider activation packet) | One named adapter and provider profile passing shared and provider-specific conformance | Every applicable identity, data, security, infrastructure, licensing, cost, and external-effect decision | One provider/profile/environment per packet; later milestone adapters retain their own product ownership |
 
-Only one active Plane PR is permitted for a child. M0-S9B6 is repeated for
+Only one active Plane PR is permitted for a child. M0-S9B6 (provider activation packet) is repeated for
 each provider; it cannot be used as a generic approval for Onyx, MCP, Orca,
 OpenHands, GitHub, GitLab, quality, flags, documentation, prototype, monitoring,
 or another provider.
+
+## Explicit child dependency graph
+
+The provider children are not a parallel blanket authorization. Their minimum
+predecessors are:
+
+```text
+M0-S9A (provider-neutral registry and reconciliation foundation) accepted provider substrate
+  -> M0-S9B-D1 (external provider transport definition gate) accepted parent definition
+    -> M0-S9B1-D1 (provider administration decision/readiness gate)
+      -> accepted M0-S9B1 (provider administration API) implementation
+        -> M0-S9B2 (credential and endpoint profiles)
+          -> M0-S9B3 (verified callback ingress)
+          -> M0-S9B4 (outgoing Curve webhooks)
+          -> M0-S9B5 (scheduled reconciliation)
+            -> M0-S9B6 (one named provider activation)
+```
+
+M0-S9B3 (verified callback ingress) through M0-S9B5 (scheduled reconciliation) may be prepared after M0-S9B1 (provider administration API) contracts are accepted,
+but implementation also requires their exact M0-S9B2 (credential and endpoint profiles), runtime, and data predecessors.
+M0-S9B6 (one named provider activation) consumes every applicable accepted child and one named provider profile.
+No child infers an absent predecessor from this diagram.
 
 ## Required contracts before each child dispatch
 
 ### Administration API
 
-M0-S9B1 must extend the Curve OpenAPI under
+The [M0-S9B1 decision gate](m0-s9b1-provider-administration-decision.md)
+(owner-fillable authority and product choices plus fixed candidate contracts)
+and its machine record remain `PROPOSED / NO_DISPATCH`. After all material
+choices are approved, M0-S9B1 (provider administration API) must extend the Curve OpenAPI under
 `/api/v1/workspaces/{workspace_slug}/curve/` with these resources before code:
 
 - `GET/POST providers/connections`.
@@ -88,12 +114,21 @@ M0-S9B1 must extend the Curve OpenAPI under
 - `POST providers/connections/{connection_id}:enable`.
 - `POST providers/connections/{connection_id}:revoke`.
 
-Every command requires `Idempotency-Key`; every state-changing command also
-requires `If-Match`. List operations use the existing opaque-cursor and bounded
-page conventions. Cross-workspace and absent identifiers share the same safe
+Every command requires `Idempotency-Key`; every command that mutates an existing
+aggregate also requires `If-Match`. Registration creates an aggregate and
+therefore has no prior ETag to match. List operations use the existing
+opaque-cursor and bounded page conventions. Cross-workspace and absent identifiers share the same safe
 response. Secret references, configuration bodies, callback endpoint secrets,
 signing material, provider tokens, and protected provider payloads never appear
 in responses, SSE, Problem Details, logs, traces, or metrics.
+
+The candidate M0-S9B1 (provider administration API) request, connection
+response, and page schemas remain explicitly `PROPOSED_NOT_NORMATIVE`, closed,
+and raw-byte digest-bound until approval. They consume M0-S2 (operation,
+idempotency, event, delivery, and audit persistence contract) `ResourceRef`
+replay semantics and the exact accepted M0-S9A (provider-neutral registry and
+reconciliation foundation) adapter coordinate. The page limit is 100 and the
+opaque cursor limit is 4,096 characters.
 
 ### Persistence and event contracts
 
@@ -104,7 +139,8 @@ record, unique constraint, cache key, event, inbox/outbox row, secret reference,
 and authorization input carries `workspace_id`.
 
 Provider observations use a new schema version when they add fields to the
-accepted M0-S9A event payloads. Incompatible changes use dual-read/dual-publish
+accepted M0-S9A (provider-neutral registry and reconciliation foundation) event
+payloads. Incompatible changes use dual-read/dual-publish
 and a replay fixture. Callback and delivery events contain metadata and
 digests; protected bodies remain object references governed by D-009
 (retention, legal-hold, backup, and erasure decision).
@@ -159,8 +195,11 @@ approve, merge, deploy, or repeat an ambiguous mutation.
 
 ## Mandatory security and failure rules
 
-- Authorization executes before object lookup, secret resolution, provider
-  event draining, network access, or scheduling mutation.
+- Workspace preauthorization executes before any provider-connection lookup.
+  Read and existing-aggregate commands then perform an exact
+  `(workspace_id, connection_id)` safe-metadata lookup and evaluate the exact
+  `PROVIDER_CONNECTION` resource authorization before secret resolution,
+  provider-event draining, network access, or scheduling mutation.
 - Secret values remain in X3M Secrets Manager or another explicitly approved
   broker. Curve persists only opaque versioned references and safe status.
 - Connection disablement stops new calls, callbacks after verification become
@@ -185,8 +224,9 @@ Each child owns Given/When/Then tests for its outcome and the shared matrix:
 1. Curve-disabled behavior leaves Plane unchanged and starts no transport work.
 2. Cross-workspace reads/writes/callbacks/schedules are indistinguishable from
    absent targets and create no cross-tenant evidence.
-3. Duplicate and changed-digest administration commands replay or conflict
-   without a second effect.
+3. Duplicate and changed-digest administration commands authorize before
+   idempotency lookup, then resolve the stored `ResourceRef` to the current safe
+   projection or conflict without a second effect.
 4. Denied administration performs no secret, network, callback, outbox-claim,
    schedule, or provider mutation.
 5. Secret rotation, revocation, wrong version, and unavailable broker fail
@@ -250,7 +290,9 @@ external side effect absent from the exact child authorization.
 
 ## Completion boundary
 
-This packet closes the M0-S9B planning gap only. M0-S9B becomes complete after
+This packet closes the M0-S9B (external provider transport and administration
+foundation) planning gap only. M0-S9B (external provider transport and
+administration foundation) becomes complete after
 every required foundation child and each R1-required provider activation packet
 has accepted, merge-bound evidence. M0-S9C (Model Gateway routing and failover)
 separately owns AC-57 (model-failover policy and actual-route evidence).
