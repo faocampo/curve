@@ -1,0 +1,47 @@
+{
+  "schema_version": "curve.coding-agent-state-evidence/v1",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "subject_type": "POLICY",
+  "subject_id": "MODEL-POLICY",
+  "state": "PROPOSED",
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "POLICY",
+    "subject_id": "MODEL-POLICY",
+    "state": "PROPOSED",
+    "claim": {
+      "policy_id": "MODEL-POLICY",
+      "status": "PROPOSED",
+      "mode": "NONE",
+      "provider": null,
+      "model": null,
+      "model_version": null,
+      "prompt_digest": null,
+      "maximum_calls": 0
+    }
+  },
+  "approval_subject_digest": "sha256:dc8110cdfb146159a956f3526dba65b980391767cf05a0b39974551a72de0da9",
+  "attestations": [
+    {
+      "actor_type": "HUMAN",
+      "actor_id": "faocampo",
+      "actor_role": "CURVE_ENGINEERING_APPROVER",
+      "authority_source": {
+        "source_type": "WORKSPACE_ROLE_BINDING",
+        "source_id": "CURVE-M1-01B-POLICY-MODEL-POLICY",
+        "repository": "CURVE",
+        "title": "policy MODEL-POLICY publication authority source",
+        "path": "contracts/authority/m1-01b/v1/policy-model-policy.json",
+        "revision": "b32c2388492450792d7b98766b9e2ffd181fdc5d",
+        "content_digest": "sha256:85bac80536830d6a0a02193147d4719c880a31a4676b6f03195abd8799566caf"
+      },
+      "workspace_id": "10000000-0000-4000-8000-000000000001",
+      "authority_scope": [
+        "STATE:POLICY:MODEL-POLICY:PROPOSED"
+      ],
+      "attested_at": "2026-08-31T13:41:00-03:00",
+      "subject_digest": "sha256:dc8110cdfb146159a956f3526dba65b980391767cf05a0b39974551a72de0da9",
+      "derivation": null
+    }
+  ]
+}
