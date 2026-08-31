@@ -7,7 +7,7 @@
 | Product | Curve |
 | Work package | P0-05 (test-harness strategy and R1 acceptance traceability) |
 | Status | `ACCEPTED / DONE` |
-| Version | 1.6 |
+| Version | 1.7 |
 | Owner | Federico Ocampo, CTO at X3M |
 | Human reviewer | Federico Ocampo |
 | Last updated | 2026-08-31 |
@@ -284,7 +284,8 @@ strategy is intentionally versioned.
 
 AC-57 (model-failover policy and actual-routing evidence) remains assigned to
 the M0-09 (provider integration foundation) aggregate. Its consuming work is
-decomposed into M0-S9C1 (Model Gateway contracts), M0-S9C2 (policy and budget
+decomposed into M0-S9C1A (candidate Model Gateway architecture and data-policy
+contracts), M0-S9C1B (runtime Model Gateway contracts), M0-S9C2 (policy and budget
 kernel), M0-S9C3 (OpenRouter transport), and M0-S9C4 (failover and
 reconciliation) by the [M0-S9C task packet](m0-s9c-model-gateway-task-packet.md)
 (decision-gated contracts, policy, transport, failover, tests, and rollback).

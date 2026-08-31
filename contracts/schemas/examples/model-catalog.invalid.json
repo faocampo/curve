@@ -1,0 +1,16 @@
+{
+  "schema_version": "curve.model-catalog/v1",
+  "contract_state": "PROPOSED_NOT_NORMATIVE",
+  "catalog_id": "M0_S9C1A_MODEL_CATALOG",
+  "catalog_version": 1,
+  "status": "DRAFT",
+  "source_revision": "1c38a5398b9e6c7cf83c8ee7e8a4615f8f2450d1",
+  "effective_at": null,
+  "expires_at": null,
+  "entries": [],
+  "allowlist_active": false,
+  "d004_decision_digest": null,
+  "d005_decision_digest": null,
+  "d014_budget_decision_digest": null,
+  "unapproved_route": true
+}

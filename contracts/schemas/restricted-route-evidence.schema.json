@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/restricted-route-evidence.schema.json",
+  "title": "Curve candidate restricted model-route evidence contract",
+  "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_state",
+    "contract_id",
+    "contract_version",
+    "status",
+    "required_evidence_types",
+    "route_evidence",
+    "approved_route_ids",
+    "restricted_route_activation_allowed",
+    "d005_decision_digest",
+    "d009_retention_decision_digest",
+    "d014_budget_decision_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.restricted-route-evidence/v1" },
+    "contract_state": { "enum": ["PROPOSED_NOT_NORMATIVE", "APPROVED_NORMATIVE"] },
+    "contract_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]{2,99}$" },
+    "contract_version": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["DRAFT", "APPROVED", "EXPIRED", "REVOKED"] },
+    "required_evidence_types": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ZERO_DATA_RETENTION",
+          "PRE_CALL_DLP",
+          "POST_CALL_LEAK_SCAN",
+          "PROCESSING_RESIDENCY",
+          "RETENTION_AND_TRAINING_TERMS",
+          "TELEMETRY_DESTINATION",
+          "PRIVACY_LEGAL_APPROVAL",
+          "ACTUAL_ROUTE_ATTESTATION"
+        ]
+      }
+    },
+    "route_evidence": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/routeEvidence" }
+    },
+    "approved_route_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9_-]{2,127}$" }
+    },
+    "restricted_route_activation_allowed": { "type": "boolean" },
+    "d005_decision_digest": { "$ref": "#/$defs/nullableDigest" },
+    "d009_retention_decision_digest": { "$ref": "#/$defs/nullableDigest" },
+    "d014_budget_decision_digest": { "$ref": "#/$defs/nullableDigest" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "DRAFT" } }, "required": ["status"] },
+      "then": { "properties": { "contract_state": { "const": "PROPOSED_NOT_NORMATIVE" } } }
+    },
+    {
+      "if": { "properties": { "status": { "enum": ["APPROVED", "EXPIRED", "REVOKED"] } }, "required": ["status"] },
+      "then": { "properties": { "contract_state": { "const": "APPROVED_NORMATIVE" } } }
+    }
+  ],
+  "$defs": {
+    "nullableDigest": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Digest" },
+        { "type": "null" }
+      ]
+    },
+    "evidenceArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_type",
+        "repository",
+        "reference",
+        "source_revision",
+        "content_digest",
+        "subject_route_id",
+        "checked_at",
+        "valid_until",
+        "status"
+      ],
+      "properties": {
+        "evidence_type": {
+          "enum": [
+            "ZERO_DATA_RETENTION",
+            "PRE_CALL_DLP",
+            "POST_CALL_LEAK_SCAN",
+            "PROCESSING_RESIDENCY",
+            "RETENTION_AND_TRAINING_TERMS",
+            "TELEMETRY_DESTINATION",
+            "PRIVACY_LEGAL_APPROVAL",
+            "ACTUAL_ROUTE_ATTESTATION"
+          ]
+        },
+        "repository": { "const": "github.com/faocampo/curve" },
+        "reference": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "subject_route_id": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9_-]{2,127}$" },
+        "checked_at": { "$ref": "common.schema.json#/$defs/Instant" },
+        "valid_until": { "$ref": "common.schema.json#/$defs/Instant" },
+        "status": { "enum": ["PASS", "FAIL"] }
+      }
+    },
+    "routeEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["route_id", "classification", "evidence", "complete", "approved_by", "approved_at"],
+      "properties": {
+        "route_id": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9_-]{2,127}$" },
+        "classification": { "const": "RESTRICTED" },
+        "evidence": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/evidenceArtifact" }
+        },
+        "complete": { "type": "boolean" },
+        "approved_by": { "type": ["string", "null"], "minLength": 1, "maxLength": 255 },
+        "approved_at": {
+          "oneOf": [
+            { "$ref": "common.schema.json#/$defs/Instant" },
+            { "type": "null" }
+          ]
+        }
+      }
+    }
+  }
+}
