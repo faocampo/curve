@@ -6,6 +6,8 @@ import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
 import {
+  PROVIDER_PROFILE_FAILURE_RULES,
+  PROVIDER_PROFILE_FIXED_INVARIANTS,
   PROVIDER_PROFILE_PREDECESSOR_PATHS,
   PROVIDER_PROFILE_SCHEMA_PATHS,
   validateProviderProfileBoundBytes,
@@ -74,12 +76,25 @@ function clone() {
   return structuredClone(canonical);
 }
 
+const materialOptionSelections = [
+  ["credential persistence placement", "credential_persistence_placement", "DEDICATED_PROFILE_RECORD"],
+  ["endpoint persistence placement", "endpoint_persistence_placement", "PROVIDER_CONNECTION_EXTENSION"],
+  ["credential broker profile", "credential_broker_profile", "ABSTRACT_CREDENTIAL_BROKER"],
+  ["credential reference protocol", "credential_reference_protocol", "OPAQUE_VERSIONED_REFERENCE"],
+  ["endpoint transport policy", "endpoint_transport_policy", "LOCAL_PROCESS_ONLY"],
+  ["rotation and revocation policy", "rotation_and_revocation_policy", "BROKER_VERSIONED_ROTATION_AND_TERMINAL_REVOCATION"],
+  ["environment activation", "environment_activation", "LOCAL_ONLY"],
+];
+
+for (const [label, option, selection] of materialOptionSelections) {
+  test(`semantic validator rejects machine-selected ${label}`, () => {
+    const candidate = clone();
+    candidate.material_options[option].selected = selection;
+    assert.throws(() => validateProviderProfileDecisionSemantics(candidate), /remains a human selection/);
+  });
+}
+
 for (const [label, mutate, expected] of [
-  [
-    "machine-selected persistence placement",
-    (candidate) => { candidate.material_options.credential_persistence_placement.selected = "DEDICATED_PROFILE_RECORD"; },
-    /remains a human selection/,
-  ],
   [
     "concrete credential-reference syntax",
     (candidate) => { candidate.material_options.credential_reference_protocol.reference_syntax = "secret:\/\/example"; },
@@ -96,8 +111,18 @@ for (const [label, mutate, expected] of [
     /candidate broker port changed/,
   ],
   [
-    "owner claim without decision",
+    "owner claim",
     (candidate) => { candidate.owners.decision_owner = "synthetic-human"; },
+    /owner, evidence, or approval claims/,
+  ],
+  [
+    "evidence claim",
+    (candidate) => { candidate.evidence.push({ kind: "synthetic" }); },
+    /owner, evidence, or approval claims/,
+  ],
+  [
+    "approval claim",
+    (candidate) => { candidate.approvals.push({ actor: "synthetic-human" }); },
     /owner, evidence, or approval claims/,
   ],
   [
@@ -120,11 +145,48 @@ for (const [label, mutate, expected] of [
     (candidate) => { candidate.candidate_records.profile_binding.workspace_id = "33333333-3333-4333-8333-333333333333"; },
     /share one workspace-scoped provider connection/,
   ],
+  [
+    "cross-connection endpoint profile",
+    (candidate) => { candidate.candidate_records.endpoint_profile.provider_connection_id = "33333333-3333-4333-8333-333333333333"; },
+    /share one workspace-scoped provider connection/,
+  ],
 ]) {
   test(`semantic validator rejects ${label}`, () => {
     const candidate = clone();
     mutate(candidate);
     assert.throws(() => validateProviderProfileDecisionSemantics(candidate), expected);
+  });
+}
+
+for (const invariant of Object.keys(PROVIDER_PROFILE_FIXED_INVARIANTS)) {
+  test(`semantic validator rejects disabled ${invariant} invariant`, () => {
+    const candidate = clone();
+    candidate.fixed_invariants[invariant] = false;
+    assert.throws(() => validateProviderProfileDecisionSemantics(candidate), /fixed invariants changed/);
+  });
+}
+
+for (const requiredInput of ["credential_profile_version", "endpoint_profile_version", "binding_version"]) {
+  test(`semantic validator rejects broker port without exact ${requiredInput} coordinate`, () => {
+    const candidate = clone();
+    candidate.broker_port.inputs = candidate.broker_port.inputs.filter((input) => input !== requiredInput);
+    assert.throws(() => validateProviderProfileDecisionSemantics(candidate), /candidate broker port changed/);
+  });
+}
+
+for (const expectedRule of PROVIDER_PROFILE_FAILURE_RULES) {
+  test(`semantic validator binds ${expectedRule.condition} to ${expectedRule.normalized_error}`, () => {
+    const candidate = clone();
+    const rule = candidate.failure_semantics.rules.find(({ condition }) => condition === expectedRule.condition);
+    rule.normalized_error = "POLICY_DENIED";
+    assert.throws(() => validateProviderProfileDecisionSemantics(candidate), /failure semantics changed/);
+  });
+
+  test(`semantic validator preserves zero downstream effects for ${expectedRule.condition}`, () => {
+    const candidate = clone();
+    const rule = candidate.failure_semantics.rules.find(({ condition }) => condition === expectedRule.condition);
+    rule.zero_downstream_effects.pop();
+    assert.throws(() => validateProviderProfileDecisionSemantics(candidate), /failure semantics changed/);
   });
 }
 

@@ -300,8 +300,10 @@ AC-33 (invalid-callback rejection and duplicate-free reconciliation) remains
 owned by M0-09 (provider integration foundation). The
 [`CMD-PROVIDER-PROFILE-CONTRACT`](../../contracts/testing/ac-test-matrix-v2.json)
 (M0-S9B2 fail-closed credential/endpoint candidate-contract command) now proves
-only the metadata, raw-byte binding, null-selection, no-secret, no-endpoint,
-no-activation, and no-dispatch boundary. The planned provider-core command and
+the metadata, raw-byte binding, null-selection, no-secret, no-endpoint,
+no-activation, no-dispatch, exact-version, terminal-revocation,
+stale-result-denial, capability-revalidation, and closed zero-effect failure
+boundary. The planned provider-core command and
 Plane integration suite still own callback forgery/replay, duplicate delivery,
 reconciliation, and external-effect evidence.
 

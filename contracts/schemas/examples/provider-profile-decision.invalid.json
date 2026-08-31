@@ -16,6 +16,8 @@
   "material_options": {},
   "broker_port": {},
   "normalized_errors": [],
+  "fixed_invariants": {},
+  "failure_semantics": {},
   "candidate_records": {},
   "unresolved_requirements": [],
   "owners": {},

@@ -14,13 +14,61 @@ export const PROVIDER_PROFILE_PREDECESSOR_PATHS = Object.freeze([
 
 export const PROVIDER_PROFILE_NORMALIZED_ERRORS = Object.freeze([
   "BROKER_UNAVAILABLE",
+  "CAPABILITY_REVALIDATION_REQUIRED",
   "CREDENTIAL_REFERENCE_MISSING",
   "CREDENTIAL_REFERENCE_REVOKED",
   "CREDENTIAL_REFERENCE_VERSION_MISMATCH",
   "ENDPOINT_PROFILE_DISABLED",
+  "ENDPOINT_PROFILE_INVALID",
   "ENDPOINT_PROFILE_MISSING",
   "OPTIMISTIC_CONCURRENCY",
   "POLICY_DENIED",
+]);
+
+export const PROVIDER_PROFILE_FIXED_INVARIANTS = Object.freeze({
+  exact_version_binding_required: true,
+  terminal_revocation_per_version: true,
+  stale_or_replayed_results_denied: true,
+  capability_revalidation_before_dispatch: true,
+  broker_failure_has_zero_downstream_effect: true,
+});
+
+export const PROVIDER_PROFILE_FAILURE_RULES = Object.freeze([
+  {
+    condition: "CREDENTIAL_REFERENCE_MISSING",
+    normalized_error: "CREDENTIAL_REFERENCE_MISSING",
+    zero_downstream_effects: ["credential_broker_call", "endpoint_lookup", "capability_issuance", "provider_call", "network_action", "inbox_outbox_mutation"],
+  },
+  {
+    condition: "CREDENTIAL_REFERENCE_REVOKED",
+    normalized_error: "CREDENTIAL_REFERENCE_REVOKED",
+    zero_downstream_effects: ["credential_broker_call", "endpoint_lookup", "capability_issuance", "provider_call", "network_action", "inbox_outbox_mutation"],
+  },
+  {
+    condition: "CREDENTIAL_REFERENCE_VERSION_MISMATCH",
+    normalized_error: "CREDENTIAL_REFERENCE_VERSION_MISMATCH",
+    zero_downstream_effects: ["credential_broker_call", "endpoint_lookup", "capability_issuance", "provider_call", "network_action", "inbox_outbox_mutation"],
+  },
+  {
+    condition: "STALE_OR_REPLAYED_RESULT",
+    normalized_error: "OPTIMISTIC_CONCURRENCY",
+    zero_downstream_effects: ["credential_broker_call", "endpoint_lookup", "capability_issuance", "provider_call", "network_action", "inbox_outbox_mutation"],
+  },
+  {
+    condition: "BROKER_UNAVAILABLE",
+    normalized_error: "BROKER_UNAVAILABLE",
+    zero_downstream_effects: ["endpoint_lookup", "capability_issuance", "provider_call", "network_action", "inbox_outbox_mutation"],
+  },
+  {
+    condition: "ENDPOINT_PROFILE_INVALID",
+    normalized_error: "ENDPOINT_PROFILE_INVALID",
+    zero_downstream_effects: ["capability_issuance", "provider_call", "network_action", "inbox_outbox_mutation"],
+  },
+  {
+    condition: "CAPABILITY_STALE",
+    normalized_error: "CAPABILITY_REVALIDATION_REQUIRED",
+    zero_downstream_effects: ["credential_broker_call", "endpoint_lookup", "capability_issuance", "provider_call", "network_action", "inbox_outbox_mutation"],
+  },
 ]);
 
 export const PROVIDER_PROFILE_UNRESOLVED = Object.freeze([
@@ -130,6 +178,8 @@ export function validateProviderProfileDecisionSemantics(record) {
     "M0-S9B2 schema inventory",
   );
   assertExact(record.normalized_errors, PROVIDER_PROFILE_NORMALIZED_ERRORS, "M0-S9B2 normalized errors");
+  assertExact(record.fixed_invariants, PROVIDER_PROFILE_FIXED_INVARIANTS, "M0-S9B2 fixed invariants");
+  assertExact(record.failure_semantics, { rules: PROVIDER_PROFILE_FAILURE_RULES }, "M0-S9B2 failure semantics");
   assertExact(record.unresolved_requirements, PROVIDER_PROFILE_UNRESOLVED, "M0-S9B2 unresolved requirements");
 
   for (const [name, allowed] of Object.entries(OPTION_CATALOG)) {
@@ -151,7 +201,14 @@ export function validateProviderProfileDecisionSemantics(record) {
     serializable: false,
     network_transport: false,
     persistent_secret_material: false,
-    inputs: ["workspace_context", "provider_connection_context", "requested_capability"],
+    inputs: [
+      "workspace_context",
+      "provider_connection_context",
+      "requested_capability",
+      "credential_profile_version",
+      "endpoint_profile_version",
+      "binding_version",
+    ],
     success_projection: "NON_SERIALIZABLE_CREDENTIAL_USE_CAPABILITY",
     error_projection: "NORMALIZED_ERROR_CODE_ONLY",
     implementation_authorized: false,

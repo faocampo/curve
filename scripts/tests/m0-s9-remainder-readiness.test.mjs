@@ -161,6 +161,24 @@ test("M0-S9B2 context pins the fail-closed credential and endpoint profile propo
   assert.deepEqual(decision.material_options.endpoint_transport_policy.endpoint_values, []);
   assert.equal(decision.broker_port.scope, "PROCESS_LOCAL");
   assert.equal(decision.broker_port.serializable, false);
+  assert.deepEqual(decision.broker_port.inputs.slice(-3), [
+    "credential_profile_version",
+    "endpoint_profile_version",
+    "binding_version",
+  ]);
+  assert.ok(Object.values(decision.fixed_invariants).every((value) => value === true));
+  assert.deepEqual(
+    decision.failure_semantics.rules.map(({ condition }) => condition),
+    [
+      "CREDENTIAL_REFERENCE_MISSING",
+      "CREDENTIAL_REFERENCE_REVOKED",
+      "CREDENTIAL_REFERENCE_VERSION_MISMATCH",
+      "STALE_OR_REPLAYED_RESULT",
+      "BROKER_UNAVAILABLE",
+      "ENDPOINT_PROFILE_INVALID",
+      "CAPABILITY_STALE",
+    ],
+  );
   assert.equal(decision.broker_port.implementation_authorized, false);
 });
 

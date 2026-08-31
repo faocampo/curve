@@ -8,7 +8,7 @@
 | Decision | `B-PROFILE-M0-S9B2` (credential, endpoint, persistence, lifecycle, and activation selection) |
 | Status | `PROPOSED / OWNER_SELECTION_REQUIRED / NO_DISPATCH` |
 | Contract state | `PROPOSED_NOT_NORMATIVE` |
-| Version | 0.1 |
+| Version | 0.2 |
 | Date | 2026-08-31 |
 | Candidate Curve base | `32b716ff77a35f2a3267118b5fd7e639dcc46154` |
 | Data boundary | Synthetic `INTERNAL` metadata only |
@@ -21,7 +21,10 @@ publishes the smallest machine-checkable definition needed for a named human to
 choose how Curve represents provider credential references, endpoint profiles,
 rotation, revocation, and environment activation. The package also describes a
 process-local, non-serializable credential-broker port and a closed normalized
-error vocabulary.
+error vocabulary. It machine-binds exact profile-version coordinates, terminal
+revocation, stale-result denial, capability revalidation, and zero-effect
+failure semantics without selecting a provider profile or authorizing runtime
+work.
 
 The [M0-S9B2 governance record](../../contracts/governance/m0-s9b2-provider-profile-v1.json)
 (fail-closed owner-selection worksheet and raw-byte contract bindings) keeps all
@@ -84,19 +87,24 @@ application service
     -> non-serializable credential-use capability OR normalized error code
 ```
 
-The port accepts trusted workspace context, provider-connection context, and a
-requested capability. It returns a process-local non-serializable capability
-or one normalized error code. The port is non-networked, persists no credential
-material, has no concrete broker adapter, and is not authorized for
-implementation by this package.
+The port accepts trusted workspace context, provider-connection context, a
+requested capability, and the exact `credential_profile_version`,
+`endpoint_profile_version`, and `binding_version` coordinates. Any future
+authorized invocation must bind all six inputs before resolution begins. It
+returns a process-local non-serializable capability or one normalized error
+code. The port is non-networked, persists no credential material, has no
+concrete broker adapter, and is not authorized for implementation by this
+package.
 
 Normalized errors are closed to:
 
 - `BROKER_UNAVAILABLE`;
+- `CAPABILITY_REVALIDATION_REQUIRED`;
 - `CREDENTIAL_REFERENCE_MISSING`;
 - `CREDENTIAL_REFERENCE_REVOKED`;
 - `CREDENTIAL_REFERENCE_VERSION_MISMATCH`;
 - `ENDPOINT_PROFILE_DISABLED`;
+- `ENDPOINT_PROFILE_INVALID`;
 - `ENDPOINT_PROFILE_MISSING`;
 - `OPTIMISTIC_CONCURRENCY`;
 - `POLICY_DENIED`.
@@ -133,6 +141,18 @@ and a correlation identifier.
    ([OWASP SSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)
    — destination allowlisting, IP/domain validation, and redirect controls).
 
+The [provider-profile decision schema](../../contracts/schemas/provider-profile-decision.schema.json)
+(closed owner-selection, invariant, and failure-semantics contract) fixes the
+following invariants as `true`; the candidate proposal cannot weaken them:
+
+| Fixed invariant | Machine-bound meaning |
+| --- | --- |
+| `exact_version_binding_required` | A future broker invocation carries exact credential-profile, endpoint-profile, and binding versions. |
+| `terminal_revocation_per_version` | Revocation permanently denies the revoked version, including stale success and replay. |
+| `stale_or_replayed_results_denied` | A stale or replayed result is rejected as `OPTIMISTIC_CONCURRENCY`. |
+| `capability_revalidation_before_dispatch` | A stale capability cannot dispatch until it is revalidated against the exact binding versions. |
+| `broker_failure_has_zero_downstream_effect` | Broker failure issues no capability and causes no endpoint, provider, network, or delivery mutation. |
+
 ## Failure and lifecycle rules
 
 | Condition | Candidate result |
@@ -144,6 +164,19 @@ and a correlation identifier.
 | Credential or endpoint profile version change | Existing binding remains non-dispatchable until capability revalidation succeeds under the approved successor. |
 | Cross-workspace identifier | Safe not-found/denial behavior; no cross-workspace lookup or evidence. |
 | Broker or endpoint data appears in a candidate fixture | Schema or semantic validation fails. |
+
+The failure map is also closed and ordered. Each condition binds one normalized
+error and an exact zero-downstream-effect set:
+
+| Condition | Normalized error | Required zero downstream effects |
+| --- | --- | --- |
+| Missing credential reference | `CREDENTIAL_REFERENCE_MISSING` | Broker call, endpoint lookup, capability issuance, provider call, network action, inbox/outbox mutation. |
+| Revoked credential reference | `CREDENTIAL_REFERENCE_REVOKED` | Broker call, endpoint lookup, capability issuance, provider call, network action, inbox/outbox mutation. |
+| Wrong credential-profile version | `CREDENTIAL_REFERENCE_VERSION_MISMATCH` | Broker call, endpoint lookup, capability issuance, provider call, network action, inbox/outbox mutation. |
+| Stale or replayed result | `OPTIMISTIC_CONCURRENCY` | Broker call, endpoint lookup, capability issuance, provider call, network action, inbox/outbox mutation. |
+| Broker unavailable | `BROKER_UNAVAILABLE` | Endpoint lookup, capability issuance, provider call, network action, inbox/outbox mutation. |
+| Invalid endpoint profile | `ENDPOINT_PROFILE_INVALID` | Capability issuance, provider call, network action, inbox/outbox mutation. |
+| Stale capability | `CAPABILITY_REVALIDATION_REQUIRED` | Broker call, endpoint lookup, capability issuance, provider call, network action, inbox/outbox mutation. |
 
 ## Acceptance cases
 
@@ -157,6 +190,8 @@ and a correlation identifier.
 | S9B2-06 | Given owner, evidence, approval, activation, or dispatch claims in the proposal, when semantic validation runs, then it fails. |
 | S9B2-07 | Given candidate records for different workspaces or connections, when semantic validation runs, then it fails. |
 | S9B2-08 | Given valid unconfigured synthetic metadata, when schemas validate it, then the projections contain no secret/reference/endpoint values and authorize no runtime effect. |
+| S9B2-09 | Given any missing exact version coordinate or weakened fixed invariant, when semantic validation runs, then it rejects the candidate. |
+| S9B2-10 | Given missing, revoked, wrong-version, stale/replayed, broker-unavailable, endpoint-invalid, or capability-stale conditions, when the failure contract is validated, then each condition has its fixed normalized error and zero-effect set. |
 
 The [provider-profile semantic test](../../scripts/tests/provider-profile-decision.test.mjs)
 (schema classification, fail-closed semantics, raw-byte bindings, and
