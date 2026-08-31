@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>Curve — Initiatives prototype</title>
+    <style>
+      :root {
+        --ink: #101828;
+        --muted: #596174;
+        --quiet: #7a8397;
+        --line: #dfe3ec;
+        --line-strong: #c9d0dd;
+        --paper: #ffffff;
+        --canvas: #f4f6fa;
+        --sidebar: #f8f9fc;
+        --indigo: #4f5bff;
+        --indigo-strong: #3e49e6;
+        --indigo-soft: #eef0ff;
+        --violet: #6d4cff;
+        --green: #16845b;
+        --green-soft: #eaf8f2;
+        --amber: #9a5b08;
+        --amber-soft: #fff6df;
+        --red: #b42318;
+        --red-soft: #fff0ee;
+        --blue: #1769aa;
+        --blue-soft: #eaf5ff;
+        --shadow: 0 16px 45px rgba(16, 24, 40, 0.09);
+        --focus: 0 0 0 3px rgba(79, 91, 255, 0.25);
+        --sidebar-width: 272px;
+      }
+
+      * { box-sizing: border-box; }
+      html { background: var(--canvas); }
+      body {
+        margin: 0;
+        min-width: 320px;
+        color: var(--ink);
+        background: var(--canvas);
+        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      ::selection { color: #fff; background: var(--indigo); }
+      button, input, textarea, select { font: inherit; }
+      button, a, input, textarea, select { outline: none; }
+      button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+        box-shadow: var(--focus);
+      }
+      button { cursor: pointer; }
+      button:disabled { cursor: not-allowed; opacity: 0.55; }
+      svg { display: block; }
+      [hidden] { display: none !important; }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .app { min-height: 100vh; display: grid; grid-template-columns: var(--sidebar-width) minmax(0, 1fr); }
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 24px 18px 18px;
+        background: var(--sidebar);
+        border-right: 1px solid var(--line);
+        z-index: 20;
+      }
+      .brand { display: flex; align-items: center; min-height: 38px; margin: 0 10px 24px; }
+      .brand img { width: 132px; height: auto; display: block; }
+      .workspace {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        width: 100%;
+        padding: 10px 12px;
+        color: var(--ink);
+        background: var(--paper);
+        border: 1px solid var(--line-strong);
+        border-radius: 12px;
+        text-align: left;
+      }
+      .workspace-mark {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        color: #fff;
+        background: #34346c;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .workspace-copy { min-width: 0; flex: 1; }
+      .workspace-copy strong, .workspace-copy span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .workspace-copy strong { font-size: 14px; }
+      .workspace-copy span { margin-top: 2px; color: var(--quiet); font-size: 11px; }
+      .workspace > svg { width: 18px; height: 18px; flex: 0 0 18px; stroke-width: 1.8; }
+
+      nav { margin-top: 22px; overflow: auto; }
+      .nav-group { margin-bottom: 20px; }
+      .nav-label { margin: 0 12px 7px; color: var(--quiet); font-size: 11px; font-weight: 750; letter-spacing: 0.075em; text-transform: uppercase; }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        width: 100%;
+        min-height: 40px;
+        padding: 8px 12px;
+        color: #475066;
+        background: transparent;
+        border: 0;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 560;
+      }
+      .nav-item:hover { color: var(--ink); background: #eef1f7; }
+      .nav-item.active { color: #3843d7; background: #e7eaff; font-weight: 700; }
+      .nav-item svg { width: 17px; height: 17px; stroke-width: 1.8; }
+      .nav-badge {
+        margin-left: auto;
+        min-width: 22px;
+        padding: 2px 7px;
+        color: #5f6780;
+        background: #e9ecf2;
+        border-radius: 999px;
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+        text-align: center;
+      }
+      .sidebar-footer { margin-top: auto; padding: 15px 10px 0; border-top: 1px solid var(--line); }
+      .identity { display: flex; align-items: center; gap: 10px; }
+      .avatar { display: inline-flex; flex: 0 0 34px; align-items: center; justify-content: center; width: 34px; height: 34px; margin: 0; color: #353db1; background: #e2e6ff; border-radius: 50%; font-size: 12px; font-weight: 800; line-height: 1; text-align: center; }
+      .identity-copy, .identity-copy strong, .identity-copy span { display: block; }
+      .identity-copy { min-width: 0; }
+      .identity-copy strong { overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+      .identity-copy span { margin-top: 2px; color: var(--quiet); font-size: 11px; }
+      .source-link { display: inline-flex; margin-top: 12px; color: #697189; font-size: 10px; text-underline-offset: 2px; }
+
+      .main { min-width: 0; }
+      .topbar {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 32px;
+        background: rgba(255, 255, 255, 0.95);
+        border-bottom: 1px solid var(--line);
+        position: sticky;
+        top: 0;
+        z-index: 15;
+        backdrop-filter: blur(12px);
+      }
+      .crumbs { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+      .crumbs strong { color: var(--ink); }
+      .top-actions { display: flex; align-items: center; gap: 8px; }
+      .icon-button {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        color: #596174;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 10px;
+      }
+      .icon-button:hover { background: #f2f4f8; border-color: var(--line); }
+      .icon-button svg { width: 18px; height: 18px; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+
+      .page { max-width: 1580px; margin: 0 auto; padding: 34px 34px 56px; }
+      .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 26px; }
+      .page-heading h1 { margin: 0; font-size: clamp(30px, 3vw, 43px); line-height: 1.05; letter-spacing: -0.035em; }
+      .page-heading p { max-width: 670px; margin: 10px 0 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
+      .button {
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 9px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--line-strong);
+        background: var(--paper);
+        color: var(--ink);
+        font-weight: 700;
+        font-size: 13px;
+      }
+      .button:hover { background: #f7f8fb; }
+      .button.primary { color: #fff; background: var(--indigo); border-color: var(--indigo); box-shadow: 0 7px 18px rgba(79, 91, 255, 0.23); }
+      .button.primary:hover { background: var(--indigo-strong); }
+      .button.danger { color: var(--red); border-color: #ebc3bf; }
+      .button.danger:hover { background: var(--red-soft); }
+      .button svg { width: 16px; height: 16px; }
+
+      .portfolio-strip {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(125px, 0.5fr));
+        gap: 1px;
+        margin-bottom: 18px;
+        overflow: hidden;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+      .portfolio-cell { min-height: 82px; padding: 17px 18px; background: var(--paper); }
+      .portfolio-cell span, .portfolio-cell strong { display: block; }
+      .portfolio-cell span { color: var(--quiet); font-size: 11px; font-weight: 700; letter-spacing: 0.045em; text-transform: uppercase; }
+      .portfolio-cell strong { margin-top: 8px; font-size: 16px; }
+      .portfolio-cell:first-child strong { margin-top: 0; }
+      .portfolio-cell:not(:first-child) strong { font-size: 23px; font-variant-numeric: tabular-nums; }
+      .portfolio-cell small { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 56px;
+        padding: 8px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        margin-bottom: 14px;
+      }
+      .search { position: relative; flex: 1; min-width: 180px; }
+      .search svg { position: absolute; left: 11px; top: 50%; width: 17px; height: 17px; color: var(--quiet); transform: translateY(-50%); pointer-events: none; }
+      .search input, .filter {
+        width: 100%;
+        min-height: 38px;
+        color: var(--ink);
+        background: #f7f8fb;
+        border: 1px solid transparent;
+        border-radius: 9px;
+      }
+      .search input { padding: 8px 12px 8px 36px; }
+      .filter { width: auto; min-width: 126px; padding: 8px 30px 8px 11px; }
+      .search input:hover, .search input:focus, .filter:hover, .filter:focus { background: var(--paper); border-color: var(--line-strong); }
+      .result-count { padding: 0 8px; color: var(--quiet); font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+      .workbench {
+        min-height: 586px;
+        display: grid;
+        grid-template-columns: minmax(350px, 0.78fr) minmax(500px, 1.22fr);
+        overflow: hidden;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+      .initiative-list { min-width: 0; border-right: 1px solid var(--line); background: #fbfcfe; }
+      .list-header { display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 18px; border-bottom: 1px solid var(--line); }
+      .list-header strong { font-size: 13px; }
+      .list-header span { color: var(--quiet); font-size: 11px; }
+      .initiative-row {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 9px 14px;
+        padding: 17px 18px;
+        text-align: left;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid #e9ecf2;
+        color: var(--ink);
+      }
+      .initiative-row:hover { background: #f3f5fa; }
+      .initiative-row.active { background: var(--indigo-soft); box-shadow: inset 0 0 0 1px #d9dcff; }
+      .initiative-row strong { overflow: hidden; font-size: 14px; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+      .initiative-row .keyword { color: var(--quiet); font-size: 11px; font-variant-numeric: tabular-nums; }
+      .initiative-row .product-name { color: var(--muted); font-size: 12px; }
+      .row-footer { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 3px; }
+      .avatars { display: flex; }
+      .mini-avatar { display: grid; place-items: center; width: 24px; height: 24px; margin-left: -5px; color: #34346c; background: #e8eaff; border: 2px solid #fbfcfe; border-radius: 50%; font-size: 8px; font-weight: 800; }
+      .mini-avatar:first-child { margin-left: 0; }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 24px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 750;
+        letter-spacing: 0.025em;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      .initiative-row > .badge { min-width: 76px; justify-self: end; align-self: start; }
+      .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+      .badge.draft { color: #596174; background: #eceff4; }
+      .badge.aligning { color: var(--blue); background: var(--blue-soft); }
+      .badge.paused { color: var(--amber); background: var(--amber-soft); }
+      .badge.cancelled { color: var(--red); background: var(--red-soft); }
+      .risk { color: var(--muted); font-size: 10px; font-weight: 750; text-transform: uppercase; letter-spacing: 0.05em; }
+      .risk.high { color: var(--red); }
+
+      .detail { min-width: 0; background: var(--paper); }
+      .detail-head { padding: 25px 28px 21px; border-bottom: 1px solid var(--line); }
+      .detail-headline { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+      .detail h2 { max-width: 720px; margin: 8px 0 8px; font-size: 25px; line-height: 1.2; letter-spacing: -0.025em; }
+      .detail-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 9px 12px; color: var(--muted); font-size: 12px; }
+      .detail-sub code { padding: 3px 6px; color: #394057; background: #f0f2f6; border-radius: 5px; font-size: 11px; }
+      .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+      .detail-body { display: grid; grid-template-columns: minmax(0, 1fr) 255px; }
+      .detail-main { padding: 24px 28px 34px; }
+      .detail-aside { padding: 24px 20px; background: #fafbfe; border-left: 1px solid var(--line); }
+      .section { margin-top: 31px; }
+      .section:first-child { margin-top: 0; }
+      .section h3 { margin: 0 0 10px; font-size: 13px; }
+      .description { margin: 0; max-width: 72ch; color: #41495c; font-size: 14px; line-height: 1.65; }
+      .gate-list { display: grid; gap: 8px; }
+      .gate {
+        display: grid;
+        grid-template-columns: 33px 1fr auto;
+        align-items: center;
+        gap: 11px;
+        padding: 11px 12px;
+        background: #f7f8fb;
+        border-radius: 11px;
+      }
+      .gate-avatar { display: inline-flex; flex: 0 0 33px; align-items: center; justify-content: center; width: 33px; height: 33px; margin: 0; color: #353db1; background: #e2e6ff; border-radius: 50%; font-size: 10px; font-weight: 800; line-height: 1; text-align: center; }
+      .gate-copy, .gate-copy strong, .gate-copy span { display: block; }
+      .gate-copy { min-width: 0; }
+      .gate-copy strong { font-size: 12px; }
+      .gate-copy span { margin-top: 2px; color: var(--quiet); font-size: 10px; }
+      .gate .active-human { color: var(--green); font-size: 10px; font-weight: 700; }
+      .timeline { margin: 0; padding: 0; list-style: none; }
+      .timeline li { position: relative; padding: 0 0 19px 25px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+      .timeline li:last-child { padding-bottom: 0; }
+      .timeline li::before { content: ""; position: absolute; left: 3px; top: 5px; width: 8px; height: 8px; background: #a8afbf; border-radius: 50%; }
+      .timeline li::after { content: ""; position: absolute; left: 6.5px; top: 16px; bottom: 3px; width: 1px; background: var(--line-strong); }
+      .timeline li:last-child::after { display: none; }
+      .timeline li:first-child::before { background: var(--indigo); box-shadow: 0 0 0 4px var(--indigo-soft); }
+      .timeline strong { display: block; color: var(--ink); font-size: 11px; }
+      .timeline time { color: var(--quiet); font-size: 10px; }
+      .fact { padding: 0 0 15px; margin-bottom: 15px; border-bottom: 1px solid var(--line); }
+      .fact:last-child { border: 0; margin: 0; padding: 0; }
+      .fact dt { margin-bottom: 5px; color: var(--quiet); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .fact dd { margin: 0; color: var(--ink); font-size: 12px; line-height: 1.45; }
+
+      .state-panel { min-height: 586px; display: grid; place-items: center; padding: 40px; text-align: center; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+      .state-content { width: min(100%, 600px); }
+      .state-icon { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; margin: 0 auto 20px; color: var(--indigo); background: var(--indigo-soft); border-radius: 16px; }
+      .state-icon svg { width: 28px; height: 28px; }
+      .state-icon.lock { color: #5a6276; background: #eef0f4; }
+      .state-icon.error { color: var(--red); background: var(--red-soft); }
+      .state-panel h2 { width: fit-content; margin: 0 auto; font-size: 23px; line-height: 1.2; letter-spacing: -0.02em; }
+      .state-panel p { max-width: 520px; margin: 11px auto 22px; color: var(--muted); line-height: 1.55; }
+      .skeleton { width: min(100%, 680px); display: grid; gap: 12px; }
+      .skeleton span { display: block; height: 68px; border-radius: 12px; background: linear-gradient(100deg, #edf0f5 20%, #f7f8fb 38%, #edf0f5 56%); background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; }
+      @keyframes shimmer { to { background-position-x: -200%; } }
+
+      .drawer-backdrop { position: fixed; inset: 0; display: none; justify-content: flex-end; background: rgba(11, 16, 32, 0.32); z-index: 50; }
+      .drawer-backdrop.visible { display: flex; }
+      .drawer { width: min(620px, 100%); height: 100%; overflow: auto; background: var(--paper); box-shadow: -20px 0 55px rgba(16, 24, 40, 0.2); animation: slide-in 220ms cubic-bezier(.2,.8,.2,1); }
+      @keyframes slide-in { from { transform: translateX(40px); opacity: 0.65; } }
+      .drawer-head { position: sticky; top: 0; z-index: 2; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 24px 28px 19px; background: rgba(255,255,255,.97); border-bottom: 1px solid var(--line); backdrop-filter: blur(10px); }
+      .drawer-head h2 { margin: 0; font-size: 23px; letter-spacing: -0.02em; }
+      .drawer-head p { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
+      .form { padding: 24px 28px 32px; }
+      .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; }
+      .field { min-width: 0; }
+      .field.full { grid-column: 1 / -1; }
+      .field label { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 7px; font-size: 12px; font-weight: 700; }
+      .field label span { color: var(--quiet); font-size: 10px; font-weight: 500; }
+      .field input, .field textarea, .field select {
+        width: 100%;
+        color: var(--ink);
+        background: var(--paper);
+        border: 1px solid var(--line-strong);
+        border-radius: 9px;
+      }
+      .field input, .field select { min-height: 42px; padding: 9px 11px; }
+      .field textarea { min-height: 118px; resize: vertical; padding: 10px 11px; line-height: 1.5; }
+      .field input:hover, .field textarea:hover, .field select:hover { border-color: #aab2c2; }
+      .form-note { margin: 18px 0 0; padding: 13px 14px; color: #4d5569; background: #f2f4ff; border-radius: 10px; font-size: 11px; line-height: 1.5; }
+      .form-error { margin: 10px 0 0; padding: 11px 13px; color: var(--red); background: var(--red-soft); border: 1px solid #f4c7c2; border-radius: 10px; font-size: 11px; font-weight: 650; line-height: 1.45; }
+      .form-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+      .field-error { display: none; margin-top: 5px; color: var(--red); font-size: 10px; }
+      .field.invalid .field-error { display: block; }
+      .field.invalid input, .field.invalid textarea, .field.invalid select { border-color: var(--red); }
+
+      .dialog-backdrop { position: fixed; inset: 0; display: none; place-items: center; padding: 20px; background: rgba(11, 16, 32, 0.42); z-index: 60; }
+      .dialog-backdrop.visible { display: grid; }
+      .dialog { width: min(440px, 100%); padding: 24px; background: var(--paper); border-radius: 14px; box-shadow: 0 24px 65px rgba(16,24,40,.28); }
+      .dialog h2 { margin: 0; font-size: 20px; }
+      .dialog p { margin: 10px 0 22px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+      .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; }
+
+      .prototype-controls {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 40;
+        width: min(360px, calc(100vw - 36px));
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid #bfc6ff;
+        border-radius: 12px;
+        box-shadow: 0 14px 38px rgba(16,24,40,.16);
+      }
+      .prototype-controls header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+      .prototype-controls strong { font-size: 11px; }
+      .prototype-controls span { color: var(--quiet); font-size: 9px; }
+      .prototype-row { display: flex; gap: 8px; }
+      .prototype-row select { flex: 1; min-width: 0; padding: 7px 9px; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 8px; font-size: 11px; }
+      .prototype-row button { padding: 7px 11px; color: var(--ink); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 8px; font-size: 11px; font-weight: 700; }
+
+      @media (max-width: 1100px) {
+        :root { --sidebar-width: 226px; }
+        .page { padding-inline: 24px; }
+        .workbench { grid-template-columns: 320px minmax(0, 1fr); }
+        .detail-body { grid-template-columns: 1fr; }
+        .detail-aside { border-left: 0; border-top: 1px solid var(--line); }
+        .portfolio-strip { grid-template-columns: 1fr 1fr 1fr; }
+        .portfolio-cell:first-child { grid-column: 1 / -1; }
+      }
+      @media (max-width: 820px) {
+        .app { display: block; }
+        .sidebar { position: static; width: 100%; height: auto; display: block; padding: 15px 16px 12px; border-right: 0; border-bottom: 1px solid var(--line); }
+        .brand { display: inline-flex; margin: 0 12px 12px 0; vertical-align: middle; }
+        .brand img { width: 112px; }
+        .workspace { width: auto; min-width: 0; max-width: 190px; display: inline-flex; padding: 8px 10px; vertical-align: middle; }
+        .workspace-copy span { display: none; }
+        nav { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; }
+        .nav-group { display: contents; }
+        .nav-label, .sidebar-footer, .nav-item:not(.active) { display: none; }
+        .nav-item.active { width: auto; white-space: nowrap; }
+        .topbar { position: static; height: 54px; padding: 0 18px; }
+        .page { padding: 25px 18px 92px; }
+        .page-heading { align-items: flex-start; }
+        .portfolio-strip { grid-template-columns: 1fr 1fr; }
+        .portfolio-cell:first-child { grid-column: 1 / -1; }
+        .portfolio-cell:last-child { grid-column: 1 / -1; }
+        .toolbar { flex-wrap: wrap; }
+        .search { flex-basis: 100%; }
+        .filter { flex: 1; }
+        .workbench { display: block; }
+        .initiative-list { border-right: 0; border-bottom: 1px solid var(--line); }
+        .detail-head, .detail-main { padding-inline: 20px; }
+        .detail-headline { display: block; }
+        .drawer { width: 100%; }
+      }
+      @media (max-width: 560px) {
+        .page-heading { display: block; }
+        .page-heading .button { width: 100%; margin-top: 18px; }
+        .portfolio-strip { grid-template-columns: 1fr; }
+        .portfolio-cell:first-child, .portfolio-cell:last-child { grid-column: auto; }
+        .toolbar .result-count { display: none; }
+        .detail h2 { font-size: 21px; }
+        .detail-actions .button { flex: 1; }
+        .state-panel { min-height: 430px; padding: 36px 22px; }
+        .form-grid { grid-template-columns: 1fr; }
+        .field.full { grid-column: auto; }
+        .drawer-head, .form { padding-inline: 20px; }
+        .prototype-controls { bottom: 10px; right: 10px; width: calc(100vw - 20px); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+    THESIS: Initiatives are a governed portfolio of product intent, not a ticket table; list context and decision readiness remain visible together.
+    OWN-WORLD: The approved Curve-first light shell uses Ink, neutral operational surfaces, Indigo actions, compact status color, and precise 10–16px geometry.
+    STORY: Find an Initiative, understand its Product/state/risk/approvers, create one safely, then move or stop its lifecycle with visible consequences.
+    FIRST VIEWPORT: Curve shell at left; portfolio context and filters above a split Initiative list/detail workbench; New initiative remains the single primary action.
+    FORM: Local extension of the approved M0-S4 Curve-first shell; no visual-world seed roll is required.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, exact-commit verdict, durable surface brief, and every shipping raster carrying its provenance
+    -->
+    <div class="app">
+      <aside class="sidebar" aria-label="Curve navigation">
+        <a class="brand" href="#" aria-label="Curve home">
+          <img src="../m0-s4-foundation-probe/curve-logo-light-ui-v1.webp" alt="Curve" />
+        </a>
+        <button class="workspace" type="button" aria-label="Switch workspace, current X3M">
+          <span class="workspace-mark" aria-hidden="true">X3</span>
+          <span class="workspace-copy"><strong>X3M</strong><span>Internal workspace</span></span>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m8 10 4 4 4-4"/></svg>
+        </button>
+        <nav aria-label="Workspace">
+          <div class="nav-group">
+            <p class="nav-label">Product</p>
+            <a class="nav-item" href="#"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>Products</a>
+            <a class="nav-item active" href="#" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 3v18M6 6h9l3 3-3 3H6"/><path d="M10 16h8"/></svg>Initiatives<span class="nav-badge">4</span></a>
+            <a class="nav-item" href="#"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Artifacts</a>
+          </div>
+          <div class="nav-group">
+            <p class="nav-label">Delivery</p>
+            <a class="nav-item" href="#"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m4 17 6-6 4 4 6-8"/><path d="M15 7h5v5"/></svg>Execution</a>
+            <a class="nav-item" href="#"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>Reviews</a>
+          </div>
+          <div class="nav-group">
+            <p class="nav-label">Work management</p>
+            <a class="nav-item" href="#"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>Projects</a>
+          </div>
+          <div class="nav-group">
+            <p class="nav-label">Platform</p>
+            <a class="nav-item" href="#"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 18V6M9 18V9M14 18V4M19 18v-6"/></svg>Foundation status</a>
+          </div>
+        </nav>
+        <footer class="sidebar-footer">
+          <div class="identity"><span class="avatar" aria-hidden="true">FO</span><span class="identity-copy"><strong>Federico Ocampo</strong><span>Workspace administrator</span></span></div>
+          <a class="source-link" href="https://github.com/faocampo/plane">AGPL source · exact release</a>
+        </footer>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="crumbs"><strong>Product</strong><span aria-hidden="true">/</span><span>Initiatives</span></div>
+          <div class="top-actions">
+            <button class="icon-button" type="button" aria-label="Help"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.2a2.6 2.6 0 1 1 4.35 1.92C12.86 12 12 12.55 12 14"/><circle cx="12" cy="17.25" r="0.8" fill="currentColor" stroke="none"/></svg></button>
+            <button class="icon-button" type="button" aria-label="Notifications"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></button>
+          </div>
+        </header>
+
+        <div class="page">
+          <div class="page-heading">
+            <div><h1>Initiatives</h1><p>Shape product intent, assign the three human gates, and keep readiness visible before planning or execution begins.</p></div>
+            <button class="button primary" id="new-initiative" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>New initiative</button>
+          </div>
+
+          <section class="portfolio-strip" aria-label="Initiative portfolio summary">
+            <div class="portfolio-cell"><strong>Manual-first alignment</strong><small>Initiative backend ready · UI definition under review</small></div>
+            <div class="portfolio-cell"><span>Active</span><strong id="active-count">3</strong><small>Draft or aligning</small></div>
+            <div class="portfolio-cell"><span>Paused</span><strong id="paused-count">1</strong><small>Explicitly recoverable</small></div>
+            <div class="portfolio-cell"><span>Needs attention</span><strong>1</strong><small>Approver access check</small></div>
+          </section>
+
+          <section class="toolbar" aria-label="Filter initiatives">
+            <label class="search"><span class="visually-hidden">Search initiatives</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="search" type="search" placeholder="Search title or keyword" /></label>
+            <label><span class="visually-hidden">Filter by state</span><select class="filter" id="state-filter"><option value="all">All states</option><option value="DRAFT">Draft</option><option value="ALIGNING">Aligning</option><option value="PAUSED">Paused</option><option value="CANCELLED">Cancelled</option></select></label>
+            <label><span class="visually-hidden">Filter by risk</span><select class="filter" id="risk-filter"><option value="all">All risk tiers</option><option value="LOW">Low risk</option><option value="STANDARD">Standard risk</option><option value="HIGH">High risk</option></select></label>
+            <span class="result-count" id="result-count">4 initiatives</span>
+          </section>
+
+          <section class="workbench" id="workbench">
+            <div class="initiative-list">
+              <div class="list-header"><strong>Workspace initiatives</strong><span>Updated just now</span></div>
+              <div id="initiative-rows"></div>
+            </div>
+            <article class="detail" id="detail" aria-live="polite"></article>
+          </section>
+
+          <section class="state-panel" id="state-panel" hidden></section>
+        </div>
+      </main>
+    </div>
+
+    <div class="drawer-backdrop" id="drawer-backdrop">
+      <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+        <header class="drawer-head"><div><h2 id="drawer-title">New initiative</h2><p>Create a governed manual-first Initiative under one active Product.</p></div><button class="icon-button" id="close-drawer" type="button" aria-label="Close new initiative form"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
+        <form class="form" id="initiative-form" novalidate>
+          <div class="form-grid">
+            <div class="field full"><label for="title">Title <span>Required</span></label><input id="title" name="title" autocomplete="off" placeholder="e.g. Improve experiment rollout confidence" required aria-describedby="title-error" /><span class="field-error" id="title-error">Enter a title.</span></div>
+            <div class="field"><label for="product">Product <span>Active only</span></label><select id="product" name="product"><option>Loomit</option><option>X3M Platform</option><option>Sachiel</option></select></div>
+            <div class="field"><label for="keyword">Keyword <span>Workspace unique</span></label><input id="keyword" name="keyword" autocomplete="off" placeholder="e.g. rollout-confidence" pattern="[A-Za-z0-9][A-Za-z0-9-]{0,49}" required aria-describedby="keyword-error" /><span class="field-error" id="keyword-error">Use letters, numbers, and hyphens.</span></div>
+            <div class="field"><label for="risk">Risk tier</label><select id="risk" name="risk" aria-describedby="approver-rule"><option>STANDARD</option><option>LOW</option><option>HIGH</option></select></div>
+            <div class="field"><label for="mode">Mode</label><select id="mode" name="mode"><option>STANDALONE</option><option disabled>ROADMAP — available in M2</option></select></div>
+            <div class="field full"><label for="description">Problem and intended outcome <span>Required · Markdown</span></label><textarea id="description" name="description" placeholder="Describe the problem, intended outcome, and important constraints." required aria-describedby="description-error"></textarea><span class="field-error" id="description-error">Describe the problem and intended outcome.</span></div>
+            <div class="field"><label for="product-approver">Product Approver</label><select id="product-approver" aria-describedby="approver-rule approver-error"><option value="paula-ortega" data-initials="PO" data-name="Paula Ortega">Paula Ortega · PO</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
+            <div class="field"><label for="technical-approver">Technical Approver</label><select id="technical-approver" aria-describedby="approver-rule approver-error"><option value="tomas-lopez" data-initials="TL" data-name="Tomás López">Tomás López · TL</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
+            <div class="field full"><label for="code-approver">Code Approver</label><select id="code-approver" aria-describedby="approver-rule approver-error"><option value="diego-vega" data-initials="DV" data-name="Diego Vega">Diego Vega · Dev</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
+          </div>
+          <p class="form-note" id="approver-rule">Only active humans are listed. STANDARD and HIGH risk require a different person for each gate. Creating the Initiative records the initial DRAFT state and all three assignments atomically.</p>
+          <p class="form-error" id="approver-error" role="alert" hidden>Choose three different people for Product, Technical, and Code approval at STANDARD or HIGH risk.</p>
+          <div class="form-actions"><button class="button" id="cancel-create" type="button">Cancel</button><button class="button primary" type="submit">Create initiative</button></div>
+        </form>
+      </section>
+    </div>
+
+    <div class="dialog-backdrop" id="cancel-dialog">
+      <section class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="cancel-title" aria-describedby="cancel-copy">
+        <h2 id="cancel-title">Cancel this Initiative?</h2>
+        <p id="cancel-copy">Cancellation is terminal for this Initiative. Existing history remains readable and no planning or execution can begin from it.</p>
+        <div class="dialog-actions"><button class="button" id="keep-initiative" type="button">Keep initiative</button><button class="button danger" id="confirm-cancel" type="button">Cancel initiative</button></div>
+      </section>
+    </div>
+
+    <aside class="prototype-controls" aria-label="Prototype controls">
+      <header><strong>Prototype controls</strong><span>Review aid · synthetic data</span></header>
+      <div class="prototype-row"><select id="scenario" aria-label="Prototype scenario"><option value="default">Initiative workspace</option><option value="loading">Loading</option><option value="empty">No initiatives</option><option value="permission">Permission limited</option><option value="error">Safe API error</option></select><button id="show-scenario" type="button">Show</button></div>
+    </aside>
+
+    <div class="visually-hidden" id="live-region" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+      const icon = (name) => {
+        const paths = {
+          empty: '<path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
+          lock: '<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+          error: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6"/><circle cx="12" cy="17.25" r="0.8" fill="currentColor" stroke="none"/>'
+        };
+        return `<span class="state-icon ${name}" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8">${paths[name]}</svg></span>`;
+      };
+
+      let initiatives = [
+        { id: "init-1", title: "Loomit SDK compatibility panel", keyword: "sdk-compatibility-panel", product: "Loomit", state: "ALIGNING", risk: "STANDARD", description: "Give product and support teams one reliable view of the installed Loomit SDK version, the recommended version, and whether an upgrade is required before configuration work proceeds.", approvers: [["PO", "Paula Ortega", "Product Approver"], ["TL", "Tomás López", "Technical Approver"], ["DV", "Diego Vega", "Code Approver"]], updated: "Refinement accepted", time: "12 minutes ago" },
+        { id: "init-2", title: "Experiment rollout confidence", keyword: "rollout-confidence", product: "Loomit", state: "DRAFT", risk: "HIGH", description: "Reduce uncertainty when validated experiments move toward staged rollout by making assumptions, protected metrics, stop conditions, and ownership visible before planning.", approvers: [["PO", "Paula Ortega", "Product Approver"], ["FO", "Federico Ocampo", "Technical Approver"], ["DV", "Diego Vega", "Code Approver"]], updated: "Draft updated", time: "38 minutes ago" },
+        { id: "init-3", title: "Internal release evidence ledger", keyword: "release-evidence-ledger", product: "X3M Platform", state: "PAUSED", pausedFrom: "DRAFT", risk: "STANDARD", description: "Create an attributable record of repository checks, security findings, review decisions, and deployment references for each releasable vertical slice.", approvers: [["MC", "María Costa", "Product Approver"], ["FO", "Federico Ocampo", "Technical Approver"], ["LV", "Lucía Vidal", "Code Approver"]], updated: "Paused by creator", time: "Yesterday" },
+        { id: "init-4", title: "Legacy campaign rules cleanup", keyword: "campaign-rules-cleanup", product: "Sachiel", state: "CANCELLED", risk: "LOW", description: "Retire duplicated campaign rules after confirming ownership and historical references.", approvers: [["PO", "Paula Ortega", "Product Approver"], ["TL", "Tomás López", "Technical Approver"], ["DV", "Diego Vega", "Code Approver"]], updated: "Initiative cancelled", time: "3 days ago" }
+      ];
+
+      let selectedId = "init-1";
+      let previousFocus = null;
+      const el = Object.fromEntries(["initiative-rows","detail","workbench","state-panel","search","state-filter","risk-filter","result-count","active-count","paused-count","new-initiative","drawer-backdrop","close-drawer","cancel-create","initiative-form","title","keyword","description","product","risk","product-approver","technical-approver","code-approver","approver-error","cancel-dialog","keep-initiative","confirm-cancel","scenario","show-scenario","live-region"].map(id => [id, document.getElementById(id)]));
+
+      const label = (state) => state.charAt(0) + state.slice(1).toLowerCase();
+      const announce = (message) => { el["live-region"].textContent = ""; window.setTimeout(() => el["live-region"].textContent = message, 20); };
+
+      function visibleInitiatives() {
+        const query = el.search.value.trim().toLowerCase();
+        return initiatives.filter((item) => {
+          const matchesText = !query || [item.title, item.keyword, item.product, item.description].some(value => value.toLowerCase().includes(query));
+          const matchesState = el["state-filter"].value === "all" || item.state === el["state-filter"].value;
+          const matchesRisk = el["risk-filter"].value === "all" || item.risk === el["risk-filter"].value;
+          return matchesText && matchesState && matchesRisk;
+        });
+      }
+
+      function rowTemplate(item) {
+        const active = item.id === selectedId;
+        return `<button class="initiative-row ${active ? "active" : ""}" type="button" data-id="${item.id}" aria-pressed="${active}">
+          <strong>${item.title}</strong><span class="badge ${item.state.toLowerCase()}">${label(item.state)}</span>
+          <span class="product-name">${item.product}</span><span class="risk ${item.risk === "HIGH" ? "high" : ""}">${item.risk} risk</span>
+          <span class="row-footer"><span class="keyword">#${item.keyword}</span><span class="avatars" aria-label="Three active human approvers">${item.approvers.map(([initials, name]) => `<span class="mini-avatar" title="${name}">${initials}</span>`).join("")}</span></span>
+        </button>`;
+      }
+
+      function detailTemplate(item) {
+        const primary = item.state === "DRAFT" ? '<button class="button primary" data-action="accept" type="button">Accept refinement</button>' : item.state === "PAUSED" ? '<button class="button primary" data-action="resume" type="button">Resume initiative</button>' : "";
+        const pause = item.state === "ALIGNING" ? '<button class="button" data-action="pause" type="button">Pause</button>' : "";
+        const cancel = ["DRAFT", "ALIGNING", "PAUSED"].includes(item.state) ? '<button class="button danger" data-action="cancel" type="button">Cancel</button>' : "";
+        return `<header class="detail-head"><div class="detail-headline"><div><span class="badge ${item.state.toLowerCase()}">${label(item.state)}</span><h2>${item.title}</h2><div class="detail-sub"><span>${item.product}</span><code>#${item.keyword}</code><span class="risk ${item.risk === "HIGH" ? "high" : ""}">${item.risk} risk</span></div></div></div><div class="detail-actions">${primary}${pause}${cancel}</div></header>
+          <div class="detail-body"><div class="detail-main">
+            <section class="section"><h3>Problem and intended outcome</h3><p class="description">${item.description}</p></section>
+            <section class="section"><h3>Mandatory human gates</h3><div class="gate-list">${item.approvers.map(([initials,name,role]) => `<div class="gate"><span class="gate-avatar" aria-hidden="true">${initials}</span><span class="gate-copy"><strong>${role}</strong><span>${name}</span></span><span class="active-human">Active human</span></div>`).join("")}</div></section>
+            <section class="section"><h3>Recent history</h3><ol class="timeline"><li><strong>${item.updated}</strong><span>Federico Ocampo · ${item.time}</span></li><li><strong>Gate assignments verified</strong><span>Curve policy · ${item.time}</span></li><li><strong>Initiative created</strong><span>Federico Ocampo · 29 Aug 2026</span></li></ol></section>
+          </div><aside class="detail-aside"><dl><div class="fact"><dt>Mode</dt><dd>Standalone</dd></div><div class="fact"><dt>Workflow</dt><dd>${item.state === "DRAFT" ? "Pins after refinement" : "Manual-first v1"}</dd></div><div class="fact"><dt>Creator</dt><dd>Federico Ocampo</dd></div><div class="fact"><dt>Optimistic version</dt><dd>v${item.state === "DRAFT" ? 2 : 4} · current</dd></div><div class="fact"><dt>External resources</dt><dd>None linked</dd></div><div class="fact"><dt>Data classification</dt><dd>Internal · synthetic prototype</dd></div></dl></aside></div>`;
+      }
+
+      function render() {
+        const filtered = visibleInitiatives();
+        if (!filtered.some(item => item.id === selectedId) && filtered.length) selectedId = filtered[0].id;
+        el["initiative-rows"].innerHTML = filtered.map(rowTemplate).join("");
+        el["result-count"].textContent = `${filtered.length} initiative${filtered.length === 1 ? "" : "s"}`;
+        const selected = initiatives.find(item => item.id === selectedId);
+        el.detail.innerHTML = selected ? detailTemplate(selected) : "";
+        el["active-count"].textContent = initiatives.filter(item => ["DRAFT","ALIGNING"].includes(item.state)).length;
+        el["paused-count"].textContent = initiatives.filter(item => item.state === "PAUSED").length;
+        el["initiative-rows"].querySelectorAll("[data-id]").forEach(button => button.addEventListener("click", () => { selectedId = button.dataset.id; render(); document.querySelector(".detail h2")?.focus?.(); }));
+        el.detail.querySelector("[data-action='accept']")?.addEventListener("click", () => changeState("ALIGNING", "Refinement accepted"));
+        el.detail.querySelector("[data-action='pause']")?.addEventListener("click", () => changeState("PAUSED", "Paused by creator"));
+        el.detail.querySelector("[data-action='resume']")?.addEventListener("click", () => {
+          const item = initiatives.find(candidate => candidate.id === selectedId);
+          const resumedState = item.pausedFrom || "ALIGNING";
+          item.pausedFrom = null;
+          changeState(resumedState, "Resumed after reauthorization");
+        });
+        el.detail.querySelector("[data-action='cancel']")?.addEventListener("click", openCancelDialog);
+      }
+
+      function changeState(state, updated) {
+        const item = initiatives.find(candidate => candidate.id === selectedId);
+        if (state === "PAUSED") item.pausedFrom = item.state;
+        item.state = state; item.updated = updated; item.time = "Just now";
+        render(); announce(`${item.title} is now ${label(state)}`);
+      }
+
+      function showWorkspace() {
+        el.workbench.hidden = false; el["state-panel"].hidden = true; render();
+      }
+
+      function showState(name) {
+        if (name === "default") return showWorkspace();
+        el.workbench.hidden = true; el["state-panel"].hidden = false;
+        if (name === "loading") {
+          el["state-panel"].innerHTML = '<div class="skeleton" aria-label="Loading initiatives"><span></span><span></span><span></span><span></span></div>';
+        } else {
+          const states = {
+            empty: [icon("empty"), "No initiatives yet", "Create the first governed Initiative for this workspace.", '<button class="button primary" data-empty-create type="button">Create initiative</button>'],
+            permission: [icon("lock"), "Initiatives are not available to this account", "Ask a workspace administrator to confirm your active membership and Curve permissions.", '<button class="button" data-back-workspace type="button">Back to workspace</button>'],
+            error: [icon("error"), "Initiatives could not be loaded", "Curve kept the last confirmed workspace state private. Try the authorized request again.", '<button class="button primary" data-retry type="button">Try again</button>']
+          };
+          const [stateIcon,title,copy,action] = states[name];
+          el["state-panel"].innerHTML = `<div class="state-content state-${name}">${stateIcon}<h2 tabindex="-1">${title}</h2><p>${copy}</p>${action}</div>`;
+          el["state-panel"].querySelector("h2")?.focus();
+          el["state-panel"].querySelector("[data-empty-create]")?.addEventListener("click", openDrawer);
+          el["state-panel"].querySelector("[data-retry]")?.addEventListener("click", showWorkspace);
+          el["state-panel"].querySelector("[data-back-workspace]")?.addEventListener("click", showWorkspace);
+        }
+        announce(name === "loading" ? "Loading initiatives" : el["state-panel"].querySelector("h2")?.textContent || "");
+      }
+
+      function resetCreateForm() {
+        el["initiative-form"].reset();
+        [el.title, el.keyword, el.description, el["product-approver"], el["technical-approver"], el["code-approver"]].forEach(control => {
+          control.closest(".field").classList.remove("invalid");
+          control.setAttribute("aria-invalid", "false");
+        });
+        el["approver-error"].hidden = true;
+      }
+
+      function openDrawer() {
+        previousFocus = document.activeElement;
+        resetCreateForm();
+        el["drawer-backdrop"].classList.add("visible");
+        document.body.style.overflow = "hidden";
+        el.title.focus();
+      }
+      function closeDrawer() {
+        el["drawer-backdrop"].classList.remove("visible");
+        document.body.style.overflow = "";
+        previousFocus?.focus();
+      }
+      function openCancelDialog() {
+        previousFocus = document.activeElement;
+        el["cancel-dialog"].classList.add("visible");
+        el["keep-initiative"].focus();
+      }
+      function closeCancelDialog() {
+        el["cancel-dialog"].classList.remove("visible");
+        previousFocus?.focus();
+      }
+
+      function trapFocus(event, container) {
+        if (event.key !== "Tab") return;
+        const controls = [...container.querySelectorAll('button:not(:disabled), input:not(:disabled), textarea:not(:disabled), select:not(:disabled), [href]')];
+        if (!controls.length) return;
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+
+      function validateApprovers({ announceError = false } = {}) {
+        const selects = [el["product-approver"], el["technical-approver"], el["code-approver"]];
+        const personIds = selects.map(select => select.value);
+        const elevatedRisk = ["STANDARD", "HIGH"].includes(el.risk.value);
+        const hasDuplicates = elevatedRisk && new Set(personIds).size !== personIds.length;
+
+        selects.forEach((select, index) => {
+          const duplicated = hasDuplicates && personIds.indexOf(personIds[index]) !== personIds.lastIndexOf(personIds[index]);
+          select.closest(".field").classList.toggle("invalid", duplicated);
+          select.setAttribute("aria-invalid", String(duplicated));
+        });
+        el["approver-error"].hidden = !hasDuplicates;
+        if (hasDuplicates && announceError) announce("Choose three different active humans for Standard or High risk");
+        return !hasDuplicates;
+      }
+
+      function selectedApprover(select, role) {
+        const option = select.selectedOptions[0];
+        return [option.dataset.initials, option.dataset.name, role];
+      }
+
+      el["new-initiative"].addEventListener("click", openDrawer);
+      el["close-drawer"].addEventListener("click", closeDrawer);
+      el["cancel-create"].addEventListener("click", closeDrawer);
+      el["drawer-backdrop"].addEventListener("click", event => { if (event.target === el["drawer-backdrop"]) closeDrawer(); });
+      el["keep-initiative"].addEventListener("click", closeCancelDialog);
+      el["confirm-cancel"].addEventListener("click", () => { closeCancelDialog(); changeState("CANCELLED", "Initiative cancelled"); });
+      el["cancel-dialog"].addEventListener("click", event => { if (event.target === el["cancel-dialog"]) closeCancelDialog(); });
+      [el.search, el["state-filter"], el["risk-filter"]].forEach(control => control.addEventListener("input", render));
+      [el.risk, el["product-approver"], el["technical-approver"], el["code-approver"]].forEach(control => control.addEventListener("change", () => validateApprovers()));
+      el["show-scenario"].addEventListener("click", () => showState(el.scenario.value));
+      el["initiative-form"].addEventListener("submit", event => {
+        event.preventDefault();
+        const fields = [el.title, el.keyword, el.description];
+        let valid = true;
+        fields.forEach(field => {
+          const invalid = !field.value.trim() || (field === el.keyword && !/^[A-Za-z0-9][A-Za-z0-9-]{0,49}$/.test(field.value));
+          field.closest(".field").classList.toggle("invalid", invalid);
+          field.setAttribute("aria-invalid", String(invalid));
+          if (invalid) valid = false;
+        });
+        if (!valid) { fields.find(field => field.closest(".field").classList.contains("invalid"))?.focus(); announce("Review the highlighted fields"); return; }
+        if (!validateApprovers({ announceError: true })) {
+          [el["product-approver"], el["technical-approver"], el["code-approver"]].find(select => select.getAttribute("aria-invalid") === "true")?.focus();
+          return;
+        }
+        const newItem = { id: `init-${Date.now()}`, title: el.title.value.trim(), keyword: el.keyword.value.trim(), product: el.product.value, state: "DRAFT", risk: el.risk.value, description: el.description.value.trim(), approvers: [selectedApprover(el["product-approver"], "Product Approver"), selectedApprover(el["technical-approver"], "Technical Approver"), selectedApprover(el["code-approver"], "Code Approver")], updated: "Initiative created", time: "Just now" };
+        initiatives.unshift(newItem); selectedId = newItem.id; closeDrawer(); showWorkspace(); announce(`${newItem.title} created in Draft`);
+      });
+
+      document.addEventListener("keydown", event => {
+        if (el["drawer-backdrop"].classList.contains("visible")) trapFocus(event, el["drawer-backdrop"]);
+        if (el["cancel-dialog"].classList.contains("visible")) trapFocus(event, el["cancel-dialog"]);
+        if (event.key === "Escape" && el["drawer-backdrop"].classList.contains("visible")) closeDrawer();
+        if (event.key === "Escape" && el["cancel-dialog"].classList.contains("visible")) closeCancelDialog();
+      });
+
+      render();
+    </script>
+  </body>
+</html>

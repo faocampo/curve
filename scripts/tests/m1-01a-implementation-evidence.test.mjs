@@ -16,7 +16,9 @@ test("M1-01A evidence binds the exact reviewed Plane implementation and CI", () 
   assert.match(evidence, /364 passed/);
 });
 
-test("M1-01A evidence leaves the parent and manual UX child open", () => {
+test("M1-01A evidence leaves the parent and UX-approved implementation child open", () => {
   assert.match(evidence, /M1-01 remains open/);
-  assert.match(evidence, /M1-01B .*manual UX acceptance/s);
+  assert.match(evidence, /M1-01B .*Plane implementation/s);
+  assert.match(evidence, /approved[\s\S]*screen contract and test evidence/);
+  assert.match(evidence, /packet[\s\S]*separate dispatch authority remain pending/);
 });

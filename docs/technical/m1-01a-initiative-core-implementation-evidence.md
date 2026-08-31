@@ -111,4 +111,6 @@ revert.
 M1-01A is complete for its approved `LOCAL_ONLY`, synthetic-data backend
 scope. M1-01 remains open. M1-01B (Curve-first Initiative shell) still owns the
 list/create/detail experience, assignment and lifecycle controls, accessibility,
-responsive behavior, browser tests, and manual UX acceptance.
+responsive behavior, browser tests, and Plane implementation. Federico approved
+its screen contract and test evidence at exact Curve commit `656a196...`; packet
+finalization and separate dispatch authority remain pending.

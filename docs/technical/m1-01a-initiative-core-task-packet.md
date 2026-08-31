@@ -155,5 +155,7 @@ commit-bound CI at reviewed head `7e712e0...`, and squash-merged to
 
 [M1-01A implementation evidence](m1-01a-initiative-core-implementation-evidence.md)
 (exact dispatch, implementation, verification, merge, security boundary, and
-rollback) is the acceptance record. M1-01B (Curve-first Initiative shell)
-remains open and requires an approved screen contract plus manual UX acceptance.
+rollback) is the acceptance record. Federico approved the M1-01B (Curve-first
+Initiative shell) screen contract and test evidence at exact Curve commit
+`656a196...`; the child remains open for implementation-packet finalization and
+separate dispatch authorization.
