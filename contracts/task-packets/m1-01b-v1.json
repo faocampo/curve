@@ -1,0 +1,1267 @@
+{
+  "schema_version": "curve.coding-agent-task-packet/v1",
+  "packet_id": "CURVE-M1-01B",
+  "work_package_id": "M1-01B",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "packet_version": 3,
+  "packet_digest": "sha256:61a225084486994f06fb6c0c2660aa03d6dcfb98397b2a2f5a947ba0f7ec680a",
+  "status": "BLOCKED",
+  "size": "M",
+  "user_facing": true,
+  "source_catalog_binding": {
+    "resolution": "RESOLVED",
+    "evidence": {
+      "repository": "CURVE",
+      "title": "M1-01B canonical source-catalog record",
+      "path": "contracts/task-packet-sources/m1-01b-v1.json",
+      "revision": "3c4efd1fbc96f49880190e59effae15d77d0f2d5",
+      "content_digest": "sha256:511ae633c6eb0be5a08d8f0da0372bb073fd6b287538a5df6ca230b717c255a4"
+    },
+    "record_pointer": "/work_packages/0",
+    "unresolved_blocker_id": null
+  },
+  "curve_binding": {
+    "repository": "https://github.com/faocampo/curve",
+    "curve_revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+    "context_pack": {
+      "resolution": "RESOLVED",
+      "manifest": {
+        "repository": "CURVE",
+        "title": "M1-01B canonical context-pack manifest",
+        "path": "contracts/context/m1-01b-v1.json",
+        "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+        "content_digest": "sha256:cf577207a3638a270e77559c11c8655a4cc0c08cf9a4f140b56cd729819b2abd"
+      },
+      "context_digest": "sha256:f73da68a96dc75206967ec60b82c2e252c3ea0651fc5af33b0c1005ccfb19377",
+      "unresolved_blocker_id": null
+    },
+    "governance_documents": [
+      {
+        "repository": "CURVE",
+        "document_id": "DOC-PRD",
+        "role": "PRD",
+        "title": "Curve AI-native SDLC product requirements",
+        "path": "docs/curve-ai-native-sdlc-prd.md",
+        "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+        "content_digest": "sha256:302b4a0470524e6d3a2c14a5d0753b1d0c604db1709813cf4755724aa77456bf",
+        "version": "0.13",
+        "status": "APPROVED",
+        "approval_binding": {
+          "resolution": "RESOLVED",
+          "evidence": {
+            "repository": "CURVE",
+            "title": "governance document DOC-PRD machine state evidence",
+            "path": "contracts/state/m1-01b/published-v1/governance-document-doc-prd.json",
+            "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+            "content_digest": "sha256:fe782bb23646560cc8fbd24bebae76bfc6bd406f1557c908cbda1763c5d3236e"
+          },
+          "record_pointer": "",
+          "assertions": [
+            {
+              "pointer": "/subject_type",
+              "expected": "GOVERNANCE_DOCUMENT"
+            },
+            {
+              "pointer": "/subject_id",
+              "expected": "DOC-PRD"
+            },
+            {
+              "pointer": "/state",
+              "expected": "APPROVED"
+            }
+          ],
+          "approval_subject_digest": "sha256:b4c8dc1de93d09aa6d0d61b2587c35ceeed7802f1438bfd08d2d14521ee3b7e0",
+          "unresolved_blocker_id": null
+        }
+      },
+      {
+        "repository": "CURVE",
+        "document_id": "DOC-ARCHITECTURE",
+        "role": "ARCHITECTURE",
+        "title": "Curve technical architecture baseline",
+        "path": "docs/technical/architecture.md",
+        "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+        "content_digest": "sha256:d3a88160fccffbd17ebc3dbb5b6fb8f27484856f184d5ab96bf4f5448c2adad3",
+        "version": "0.7",
+        "status": "APPROVED",
+        "approval_binding": {
+          "resolution": "RESOLVED",
+          "evidence": {
+            "repository": "CURVE",
+            "title": "governance document DOC-ARCHITECTURE machine state evidence",
+            "path": "contracts/state/m1-01b/published-v1/governance-document-doc-architecture.json",
+            "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+            "content_digest": "sha256:c7a6744432b9b135585c36f2525ca68d4fe705721e16c238db0605abbc4e82ad"
+          },
+          "record_pointer": "",
+          "assertions": [
+            {
+              "pointer": "/subject_type",
+              "expected": "GOVERNANCE_DOCUMENT"
+            },
+            {
+              "pointer": "/subject_id",
+              "expected": "DOC-ARCHITECTURE"
+            },
+            {
+              "pointer": "/state",
+              "expected": "APPROVED"
+            }
+          ],
+          "approval_subject_digest": "sha256:bb4bb40a6402cd8f6f3dd5de3626b5cfafc869840c015a3dc4ab345897086232",
+          "unresolved_blocker_id": null
+        }
+      },
+      {
+        "repository": "CURVE",
+        "document_id": "DOC-ADR-001",
+        "role": "ADR",
+        "title": "Plane upstream foundation and reuse boundary",
+        "path": "docs/technical/adr-001-plane-upstream-foundation.md",
+        "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+        "content_digest": "sha256:4f2aa5b734d8f3ba9b2e08d0503fe1b4d0e7556aff1452dae859b8e97e12948d",
+        "version": "1",
+        "status": "APPROVED",
+        "approval_binding": {
+          "resolution": "RESOLVED",
+          "evidence": {
+            "repository": "CURVE",
+            "title": "governance document DOC-ADR-001 machine state evidence",
+            "path": "contracts/state/m1-01b/published-v1/governance-document-doc-adr-001.json",
+            "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+            "content_digest": "sha256:95d19ee0435684fefa97ae17655d6e1e5affd68e874209f0c8f9f6ace8cf85cd"
+          },
+          "record_pointer": "",
+          "assertions": [
+            {
+              "pointer": "/subject_type",
+              "expected": "GOVERNANCE_DOCUMENT"
+            },
+            {
+              "pointer": "/subject_id",
+              "expected": "DOC-ADR-001"
+            },
+            {
+              "pointer": "/state",
+              "expected": "APPROVED"
+            }
+          ],
+          "approval_subject_digest": "sha256:2d2b7d88190287d9eb342c18fdd5b36609754feb576fcf69c80f1bd5e992326d",
+          "unresolved_blocker_id": null
+        }
+      },
+      {
+        "repository": "CURVE",
+        "document_id": "DOC-DEVELOPMENT-PLAN",
+        "role": "TECHNICAL_PLAN",
+        "title": "Curve technical development sequencing and readiness plan",
+        "path": "docs/technical/development-plan.md",
+        "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+        "content_digest": "sha256:54706e852a1aa8033ddf17bc0f72fb09a5cf96941b2c56d0fa583140a37ddadf",
+        "version": "1.15",
+        "status": "APPROVED",
+        "approval_binding": {
+          "resolution": "RESOLVED",
+          "evidence": {
+            "repository": "CURVE",
+            "title": "governance document DOC-DEVELOPMENT-PLAN machine state evidence",
+            "path": "contracts/state/m1-01b/published-v1/governance-document-doc-development-plan.json",
+            "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+            "content_digest": "sha256:340ec75f22ff04fc2d298c851e76c566486c12b07707780c5213c64998b569d1"
+          },
+          "record_pointer": "",
+          "assertions": [
+            {
+              "pointer": "/subject_type",
+              "expected": "GOVERNANCE_DOCUMENT"
+            },
+            {
+              "pointer": "/subject_id",
+              "expected": "DOC-DEVELOPMENT-PLAN"
+            },
+            {
+              "pointer": "/state",
+              "expected": "APPROVED"
+            }
+          ],
+          "approval_subject_digest": "sha256:df098ddb9e2f0920cea9336b2b9f1ea7fbadebfbf3dfa031ff8e9d006d84f828",
+          "unresolved_blocker_id": null
+        }
+      }
+    ]
+  },
+  "repository": {
+    "url": "git@github.com:faocampo/plane.git",
+    "target_branch": "preview",
+    "base_sha": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+    "feature_branch": "curve/m1-01b-initiative-shell",
+    "stale_base_policy": "REQUIRE_EXACT_REMOTE_TIP"
+  },
+  "project_tracking": {
+    "project_url": "https://github.com/users/faocampo/projects/2",
+    "project_number": 2,
+    "item_node_id": "PVTI_lAHOBNjuQc4BgZzOzg4vNto",
+    "work_package_id": "M1-01B",
+    "tracking_kind": "WORK_PACKAGE",
+    "status": "BACKLOG",
+    "visual_metadata_only": true
+  },
+  "people": {
+    "owner": {
+      "actor_type": "HUMAN",
+      "name": "Federico Ocampo",
+      "handle": "faocampo"
+    },
+    "human_reviewer": {
+      "actor_type": "HUMAN",
+      "name": "Federico Ocampo",
+      "handle": "faocampo"
+    },
+    "implementer": {
+      "actor_type": "AI_CODING_AGENT",
+      "identifier": "codex"
+    }
+  },
+  "objective": {
+    "demonstrable_outcome": "Implement the Curve-first Initiative navigation, paginated list, detail, create, lifecycle, concurrency, recovery, responsive, and accessible keyboard experience against the accepted M1-01A API.",
+    "risk_tier": "STANDARD"
+  },
+  "scope": {
+    "in_scope": [
+      "Add typed Product, Initiative, GateAssignment, request, page, mutation, and safe-error contracts to the shared Curve TypeScript surface.",
+      "Add typed Product and Initiative read/mutation methods with CSRF, idempotency, ETag, cursor, and safe rejected-response behavior.",
+      "Add the first-class Curve Initiatives route and navigation link plus list, detail, create, lifecycle, recovery, responsive, and accessibility components.",
+      "Add focused Vitest and React Testing Library service, state, interaction, mobile-list, form-reset, recovery, and keyboard tests."
+    ],
+    "out_of_scope": [
+      "Backend, persistence, migration, OpenAPI, schema, policy, event, outbox, audit, idempotency-kernel, and Temporal changes.",
+      "Provider, model, Onyx, MCP, VCS-controller, credential, protected-data, deployment, staging, production, and infrastructure changes.",
+      "Idea Brief, evidence, research, PRD, roadmap, planning, coding-agent, quality, review, or draft-PR product behavior."
+    ]
+  },
+  "requirements": {
+    "functional_requirement_ids": [
+      "FR-001",
+      "FR-042",
+      "FR-043"
+    ],
+    "non_functional_requirement_ids": [
+      "NFR-005",
+      "NFR-009",
+      "NFR-015",
+      "NFR-016"
+    ],
+    "acceptance_tests": [
+      {
+        "id": "AC-01-UI-LIST",
+        "title": "Load, accumulate, filter, and inspect authorized Initiatives",
+        "requirement_ids": [
+          "FR-001",
+          "FR-043",
+          "NFR-016"
+        ],
+        "given": "An authorized member, active Products, and more than one page of workspace Initiatives",
+        "when": "the member opens the Curve Initiatives route, loads another page, searches, filters, and selects a row",
+        "then": "the accumulated authorized matches remain visible and one selected detail exposes only safe workspace-scoped data",
+        "command_ids": [
+          "CMD-TEST",
+          "CMD-LOCAL-RUN"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-shell.test.tsx",
+        "test_selector": "M1-01B accumulated list and detail acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      },
+      {
+        "id": "AC-01-UI-CREATE",
+        "title": "Create one idempotent standalone Draft",
+        "requirement_ids": [
+          "FR-001",
+          "FR-043",
+          "NFR-005"
+        ],
+        "given": "An authorized member, one active Product, and three active human members",
+        "when": "the member submits a valid standalone Initiative",
+        "then": "one Draft is created, selected, announced, and shown with its exact Product, risk, assignments, and ETag",
+        "command_ids": [
+          "CMD-TEST",
+          "CMD-LOCAL-RUN"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-shell.test.tsx",
+        "test_selector": "M1-01B Initiative create acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      },
+      {
+        "id": "AC-01-UI-HUMANS",
+        "title": "Enforce three distinct active human assignments for elevated risk",
+        "requirement_ids": [
+          "FR-001",
+          "FR-043",
+          "NFR-009"
+        ],
+        "given": "A Standard or High risk create form",
+        "when": "one active human is assigned to more than one gate",
+        "then": "submission is blocked, every duplicate selector is identified, the first receives focus, and no request is sent",
+        "command_ids": [
+          "CMD-TEST",
+          "CMD-LOCAL-RUN"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-shell.test.tsx",
+        "test_selector": "M1-01B three-distinct-human acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      },
+      {
+        "id": "AC-01-UI-RESET",
+        "title": "Reset the create form across close and success",
+        "requirement_ids": [
+          "FR-001",
+          "NFR-015"
+        ],
+        "given": "A member has entered or submitted create-form data",
+        "when": "the drawer closes and opens again",
+        "then": "authored fields, selector defaults, validation, status, and pending idempotency intent are fresh",
+        "command_ids": [
+          "CMD-TEST",
+          "CMD-LOCAL-RUN"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-shell.test.tsx",
+        "test_selector": "M1-01B fresh-form acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      },
+      {
+        "id": "AC-01-UI-LIFECYCLE",
+        "title": "Apply the accepted Initiative lifecycle with ETag and idempotency",
+        "requirement_ids": [
+          "FR-042",
+          "FR-043",
+          "NFR-005"
+        ],
+        "given": "Draft, Aligning, Paused, and Cancelled Initiative projections",
+        "when": "the member invokes each permitted lifecycle action",
+        "then": "the request headers, reason, last-confirmed resource, ETag, state, actions, and announcement remain consistent with M1-01A",
+        "command_ids": [
+          "CMD-TEST",
+          "CMD-LOCAL-RUN"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-service.test.ts",
+        "test_selector": "M1-01B lifecycle client acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      },
+      {
+        "id": "AC-01-UI-CONFLICT",
+        "title": "Recover safely from stale optimistic concurrency",
+        "requirement_ids": [
+          "FR-043",
+          "NFR-005",
+          "NFR-009"
+        ],
+        "given": "A lifecycle mutation uses a stale or missing ETag",
+        "when": "the API returns 409, 412, or 428",
+        "then": "the last-confirmed resource remains, refetch is deliberate, and no mutation is replayed automatically against a new version",
+        "command_ids": [
+          "CMD-TEST",
+          "CMD-LOCAL-RUN"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-shell.test.tsx",
+        "test_selector": "M1-01B optimistic-concurrency recovery acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      },
+      {
+        "id": "AC-01-UI-RECOVERY",
+        "title": "Render safe and actionable Initiative recovery states",
+        "requirement_ids": [
+          "FR-043",
+          "NFR-009",
+          "NFR-015"
+        ],
+        "given": "Loading, empty, filter-empty, permission, validation, and server-error states",
+        "when": "each state is rendered",
+        "then": "copy is non-enumerating, semantic focus and status are useful, and every valid recovery action is keyboard reachable",
+        "command_ids": [
+          "CMD-TEST",
+          "CMD-LOCAL-RUN"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-shell.test.tsx",
+        "test_selector": "M1-01B recovery-state acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      },
+      {
+        "id": "AC-01-UI-MOBILE",
+        "title": "Keep every matching Initiative visible on mobile",
+        "requirement_ids": [
+          "FR-001",
+          "NFR-015"
+        ],
+        "given": "At least four accumulated matching Initiatives at 390 CSS pixels",
+        "when": "search, state, risk, and row selection change",
+        "then": "every match remains listed before stacked detail with aligned badges and avatars and no horizontal overflow",
+        "command_ids": [
+          "CMD-TEST",
+          "CMD-LOCAL-RUN"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-shell.test.tsx",
+        "test_selector": "M1-01B mobile multi-row acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      },
+      {
+        "id": "AC-01-UI-KEYBOARD",
+        "title": "Complete Initiative tasks with keyboard and accessible focus",
+        "requirement_ids": [
+          "FR-001",
+          "NFR-015"
+        ],
+        "given": "Keyboard-only operation, reduced motion, and a 400 percent zoom viewport",
+        "when": "the member uses list, drawer, validation, confirmation, and recovery controls",
+        "then": "all tasks complete with visible focus, semantic names, announcements, Escape behavior, focus restoration, and usable reflow",
+        "command_ids": [
+          "CMD-TEST",
+          "CMD-LOCAL-RUN"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-shell.test.tsx",
+        "test_selector": "M1-01B keyboard and reflow acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      },
+      {
+        "id": "AC-01-UI-DISABLED",
+        "title": "Preserve disabled Curve behavior",
+        "requirement_ids": [
+          "NFR-016"
+        ],
+        "given": "Curve is disabled",
+        "when": "the existing Plane web checks and build run",
+        "then": "the new route and navigation are unavailable and existing Plane behavior remains unchanged",
+        "command_ids": [
+          "CMD-LINT",
+          "CMD-BUILD",
+          "CMD-TEST"
+        ],
+        "test_location": "apps/web/tests/curve/curve-initiative-shell.test.tsx",
+        "test_selector": "M1-01B disabled-state acceptance",
+        "trace_evidence": {
+          "repository": "CURVE",
+          "title": "M1 alignment acceptance and work-package trace",
+          "path": "docs/technical/m1-alignment-evidence-prd-task-packet.md",
+          "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+          "content_digest": "sha256:c1b8eaa611f6f942097b1e157f4019ef0ba8a7497b40d58578475dace9285424"
+        }
+      }
+    ]
+  },
+  "dependencies": [
+    {
+      "id": "M1-01A",
+      "title": "Initiative domain and API foundation",
+      "satisfaction": "SATISFIED",
+      "state_binding": {
+        "resolution": "RESOLVED",
+        "evidence": {
+          "repository": "CURVE",
+          "title": "dependency M1-01A machine state evidence",
+          "path": "contracts/state/m1-01b/published-v1/dependency-m1-01a.json",
+          "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+          "content_digest": "sha256:b75f5bf77bd2027c2e7b20b6193068f035fb6fc1bedf8c1ac6a596f292772dc0"
+        },
+        "record_pointer": "",
+        "assertions": [
+          {
+            "pointer": "/subject_type",
+            "expected": "DEPENDENCY"
+          },
+          {
+            "pointer": "/subject_id",
+            "expected": "M1-01A"
+          },
+          {
+            "pointer": "/state",
+            "expected": "SATISFIED"
+          }
+        ],
+        "approval_subject_digest": "sha256:467684548097b16186de8fbf32a3e52bf4b220e436b00edbd452961617b3d3bb",
+        "unresolved_blocker_id": null
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "D-001",
+      "title": "Plane upstream foundation and reuse boundary",
+      "governs": [
+        "GENERAL_ARCHITECTURE"
+      ],
+      "status": "DECIDED",
+      "state_binding": {
+        "resolution": "RESOLVED",
+        "evidence": {
+          "repository": "CURVE",
+          "title": "decision D-001 machine state evidence",
+          "path": "contracts/state/m1-01b/published-v1/decision-d-001.json",
+          "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+          "content_digest": "sha256:03683bea49f79e97e097cad4647cac1838cf7b43664b8e84d45cd3861bdeb585"
+        },
+        "record_pointer": "",
+        "assertions": [
+          {
+            "pointer": "/subject_type",
+            "expected": "DECISION"
+          },
+          {
+            "pointer": "/subject_id",
+            "expected": "D-001"
+          },
+          {
+            "pointer": "/state",
+            "expected": "DECIDED"
+          }
+        ],
+        "approval_subject_digest": "sha256:c3fbfb04a8d940ecff0dc161d9a02bae3a9f563bf2ca7c41ffd668cff0463351",
+        "unresolved_blocker_id": null
+      }
+    }
+  ],
+  "contract_applicability": [
+    {
+      "category": "API",
+      "applicability": "APPLICABLE",
+      "contract": {
+        "contract_id": "CURVE-OPENAPI-V1",
+        "title": "Curve workspace API including Initiative resources",
+        "path": "contracts/openapi/curve-v1.openapi.yaml",
+        "version": "1.1",
+        "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+        "content_digest": "sha256:928993ea6fc8847e7547474418b12b523ff60f5180310c3bc07743d4873cb321",
+        "status": "APPROVED",
+        "approval_binding": {
+          "resolution": "RESOLVED",
+          "evidence": {
+            "repository": "CURVE",
+            "title": "contract CURVE-OPENAPI-V1 machine state evidence",
+            "path": "contracts/state/m1-01b/published-v1/contract-curve-openapi-v1.json",
+            "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+            "content_digest": "sha256:bab29f2ff71c2381d3a997f3a439e27ff52cc4eb84c4c46f261aaf585e82491a"
+          },
+          "record_pointer": "",
+          "assertions": [
+            {
+              "pointer": "/subject_type",
+              "expected": "CONTRACT"
+            },
+            {
+              "pointer": "/subject_id",
+              "expected": "CURVE-OPENAPI-V1"
+            },
+            {
+              "pointer": "/state",
+              "expected": "APPROVED"
+            }
+          ],
+          "approval_subject_digest": "sha256:dee95eb0c43a30ff62520a2b9d40f77dcdcfadf97431cdd127e667c98bd40ff6",
+          "unresolved_blocker_id": null
+        }
+      },
+      "not_applicable_rationale": null,
+      "unresolved_blocker_id": null,
+      "unresolved_rationale": null
+    },
+    {
+      "category": "SCHEMA",
+      "applicability": "APPLICABLE",
+      "contract": {
+        "contract_id": "INITIATIVE-SCHEMA-V1",
+        "title": "Workspace Initiative resource schema",
+        "path": "contracts/schemas/initiative.schema.json",
+        "version": "1",
+        "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+        "content_digest": "sha256:8e00c9904e348e43f44339bb6283da931225f339ed0edc379200689486eb52a7",
+        "status": "APPROVED",
+        "approval_binding": {
+          "resolution": "RESOLVED",
+          "evidence": {
+            "repository": "CURVE",
+            "title": "contract INITIATIVE-SCHEMA-V1 machine state evidence",
+            "path": "contracts/state/m1-01b/published-v1/contract-initiative-schema-v1.json",
+            "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+            "content_digest": "sha256:9554f2b1720595a5ead23ca2ee57688829257d4486b6119c384bc0bedec8d7dc"
+          },
+          "record_pointer": "",
+          "assertions": [
+            {
+              "pointer": "/subject_type",
+              "expected": "CONTRACT"
+            },
+            {
+              "pointer": "/subject_id",
+              "expected": "INITIATIVE-SCHEMA-V1"
+            },
+            {
+              "pointer": "/state",
+              "expected": "APPROVED"
+            }
+          ],
+          "approval_subject_digest": "sha256:14a8f840f7f5184ecbf01ee196f034e90a88bb2b1a9624b18e00d75c782b4892",
+          "unresolved_blocker_id": null
+        }
+      },
+      "not_applicable_rationale": null,
+      "unresolved_blocker_id": null,
+      "unresolved_rationale": null
+    },
+    {
+      "category": "EVENT",
+      "applicability": "NOT_APPLICABLE",
+      "contract": null,
+      "not_applicable_rationale": "The UI consumes the accepted Initiative API and introduces no new domain-event payload.",
+      "unresolved_blocker_id": null,
+      "unresolved_rationale": null
+    },
+    {
+      "category": "WORKFLOW",
+      "applicability": "NOT_APPLICABLE",
+      "contract": null,
+      "not_applicable_rationale": "The UI shell adds no Temporal workflow or activity behavior.",
+      "unresolved_blocker_id": null,
+      "unresolved_rationale": null
+    },
+    {
+      "category": "POLICY",
+      "applicability": "APPLICABLE",
+      "contract": {
+        "contract_id": "INITIATIVE-POLICY-V1",
+        "title": "Manual-first Initiative authorization policy",
+        "path": "contracts/policy/initiative-policy-v1.json",
+        "version": "1",
+        "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+        "content_digest": "sha256:df9aa96d5de46232074abcc51fbb268beda0b73b45906c986f106b2d317adf8b",
+        "status": "APPROVED",
+        "approval_binding": {
+          "resolution": "RESOLVED",
+          "evidence": {
+            "repository": "CURVE",
+            "title": "contract INITIATIVE-POLICY-V1 machine state evidence",
+            "path": "contracts/state/m1-01b/published-v1/contract-initiative-policy-v1.json",
+            "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+            "content_digest": "sha256:e1be032abbe051d85dc48bb317d0b0ca09e898478f8d74f5896e5e422de79ca3"
+          },
+          "record_pointer": "",
+          "assertions": [
+            {
+              "pointer": "/subject_type",
+              "expected": "CONTRACT"
+            },
+            {
+              "pointer": "/subject_id",
+              "expected": "INITIATIVE-POLICY-V1"
+            },
+            {
+              "pointer": "/state",
+              "expected": "APPROVED"
+            }
+          ],
+          "approval_subject_digest": "sha256:573792c9a81a7f14cb3a49736358bb21fde251a29f267c2e44cc0719d1f9eb91",
+          "unresolved_blocker_id": null
+        }
+      },
+      "not_applicable_rationale": null,
+      "unresolved_blocker_id": null,
+      "unresolved_rationale": null
+    },
+    {
+      "category": "PERSISTENCE",
+      "applicability": "NOT_APPLICABLE",
+      "contract": null,
+      "not_applicable_rationale": "M1-01B adds no persistent entity; M1-01A owns the accepted backend persistence.",
+      "unresolved_blocker_id": null,
+      "unresolved_rationale": null
+    },
+    {
+      "category": "MIGRATION",
+      "applicability": "NOT_APPLICABLE",
+      "contract": null,
+      "not_applicable_rationale": "The repository-local frontend change adds no database migration.",
+      "unresolved_blocker_id": null,
+      "unresolved_rationale": null
+    }
+  ],
+  "repository_instructions": [
+    {
+      "repository": "TARGET",
+      "title": "Plane agent development commands and repository conventions",
+      "path": "AGENTS.md",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:24069fbf2385fa71ab9ff66feaeb23f5e564a322c16a936b9f29dd7402990ef9"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Plane package-manager and monorepo command manifest",
+      "path": "package.json",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:23c17cbbe039211c8667b8098946771b121be2c80007672b24aaa4ac9b50fbf7"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Plane web package scripts and dependencies",
+      "path": "apps/web/package.json",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:ff76ede6e8d8f4e85bc6b42867bb56e6fed7bc6bb266b59dad1268436e5418bd"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Plane web Vitest and jsdom configuration",
+      "path": "apps/web/vitest.config.ts",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:df46b46cd14007ec9933c1dc825457d7073dbe2abc835e5d82bb2c0a62fcbefe"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Shared Curve typed HTTP service",
+      "path": "packages/services/src/curve/curve.service.ts",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:16707fc2d0c88ba41eabcdeed32fad840cf42ee9c627bddf72fb7a81abf5cdde"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Shared Curve TypeScript contracts",
+      "path": "packages/types/src/curve.ts",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:df05178a8708aac95f3a290e36a27f6b664a793a1e51823703da63c66041c425"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Plane web Curve service singleton",
+      "path": "apps/web/core/services/curve.service.ts",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:a9d394bbc48a5e43b3a8ea9d7f3a765805914e2cff9ba9aa711da7cb788f57f0"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Curve-primary workspace navigation",
+      "path": "apps/web/core/components/curve/curve-workspace-sidebar.tsx",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:38938f187b32a242499d1fc0f38dae42b58798017ddaefffef184a6ae7fe559c"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Plane web workspace route registry",
+      "path": "apps/web/app/routes/core.ts",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:1dc742e68a421009ac71f14f9eda81cc9598f0176292bcdc7e45be7ab0b34be2"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Existing Curve Foundation route entry",
+      "path": "apps/web/app/(all)/[workspaceSlug]/(projects)/curve/page.tsx",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:2b1b283e2bc3a45cdf52b3131270d38882808ce5f3f1727eedec9bcb6d1d87a7"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Plane web member-store hook",
+      "path": "apps/web/core/hooks/store/use-member.ts",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:f1db3db1956486ed597b6ee270a4b226d5d4113b13bd54cb3b6fddd4e2787ca3"
+    },
+    {
+      "repository": "TARGET",
+      "title": "Plane workspace-member projection and active-member data",
+      "path": "apps/web/core/store/member/workspace/workspace-member.store.ts",
+      "revision": "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+      "content_digest": "sha256:1f6add30649942f9ed132864621be1c51e6daf76e4c2e0227c16419639fd21e0"
+    }
+  ],
+  "commands": [
+    {
+      "id": "CMD-LINT",
+      "phase": "LINT",
+      "argv": [
+        "pnpm",
+        "check"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 1200,
+      "availability": "PLANNED",
+      "tool_id": "PNPM",
+      "network_destination_ids": [],
+      "external_effect_ids": []
+    },
+    {
+      "id": "CMD-BUILD",
+      "phase": "BUILD",
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 1800,
+      "availability": "PLANNED",
+      "tool_id": "PNPM",
+      "network_destination_ids": [],
+      "external_effect_ids": []
+    },
+    {
+      "id": "CMD-TEST",
+      "phase": "TEST",
+      "argv": [
+        "pnpm",
+        "--filter=web",
+        "test",
+        "--",
+        "tests/curve/curve-initiative-service.test.ts",
+        "tests/curve/curve-initiative-shell.test.tsx"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 1200,
+      "availability": "PLANNED",
+      "tool_id": "PNPM",
+      "network_destination_ids": [],
+      "external_effect_ids": []
+    },
+    {
+      "id": "CMD-SECURITY",
+      "phase": "SECURITY",
+      "argv": [
+        "codeql",
+        "UNRESOLVED"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 1800,
+      "availability": "PLANNED",
+      "tool_id": "CODEQL",
+      "network_destination_ids": [],
+      "external_effect_ids": []
+    },
+    {
+      "id": "CMD-LOCAL-RUN",
+      "phase": "LOCAL_RUN",
+      "argv": [
+        "pnpm",
+        "--filter=web",
+        "dev"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 7200,
+      "availability": "PLANNED",
+      "tool_id": "PNPM",
+      "network_destination_ids": [],
+      "external_effect_ids": []
+    }
+  ],
+  "data_policy": {
+    "policy_id": "DATA-POLICY",
+    "status": "PROPOSED",
+    "classification": "INTERNAL",
+    "allowed_data": [
+      "Existing authorized workspace Product, Initiative, and active-human metadata plus fixed synthetic INTERNAL UI fixtures."
+    ],
+    "prohibited_data": [
+      "Credentials, protected bodies, customer content, provider/model payloads, and production data."
+    ],
+    "protected_data_allowed": false,
+    "state_binding": {
+      "resolution": "RESOLVED",
+      "evidence": {
+        "repository": "CURVE",
+        "title": "policy DATA-POLICY machine state evidence",
+        "path": "contracts/state/m1-01b/published-v1/policy-data-policy.json",
+        "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+        "content_digest": "sha256:8c6dced82649ff5f99c93450e7981329156d2724bc842099b6dbc7383009f990"
+      },
+      "record_pointer": "",
+      "assertions": [
+        {
+          "pointer": "/subject_type",
+          "expected": "POLICY"
+        },
+        {
+          "pointer": "/subject_id",
+          "expected": "DATA-POLICY"
+        },
+        {
+          "pointer": "/state",
+          "expected": "PROPOSED"
+        }
+      ],
+      "approval_subject_digest": "sha256:b5d056ec7e851019204af6b815fde450afa47e19652800cb71b1ed6d7a73db4e",
+      "unresolved_blocker_id": null
+    }
+  },
+  "model_policy": {
+    "policy_id": "MODEL-POLICY",
+    "status": "PROPOSED",
+    "mode": "NONE",
+    "provider": null,
+    "model": null,
+    "model_version": null,
+    "prompt_digest": null,
+    "maximum_calls": 0,
+    "state_binding": {
+      "resolution": "RESOLVED",
+      "evidence": {
+        "repository": "CURVE",
+        "title": "policy MODEL-POLICY machine state evidence",
+        "path": "contracts/state/m1-01b/published-v1/policy-model-policy.json",
+        "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+        "content_digest": "sha256:0748691ed1f340c25fd57cce90de9c1702e638ccc8bfa358aad785fa15f34d85"
+      },
+      "record_pointer": "",
+      "assertions": [
+        {
+          "pointer": "/subject_type",
+          "expected": "POLICY"
+        },
+        {
+          "pointer": "/subject_id",
+          "expected": "MODEL-POLICY"
+        },
+        {
+          "pointer": "/state",
+          "expected": "PROPOSED"
+        }
+      ],
+      "approval_subject_digest": "sha256:dc8110cdfb146159a956f3526dba65b980391767cf05a0b39974551a72de0da9",
+      "unresolved_blocker_id": null
+    }
+  },
+  "tool_policy": {
+    "policy_id": "TOOL-POLICY",
+    "status": "PROPOSED",
+    "mode": "PINNED",
+    "tools": [
+      {
+        "tool_id": "PNPM",
+        "tool_kind": "PNPM_PACKAGE_MANAGER",
+        "name": "pnpm",
+        "executable": "pnpm",
+        "launcher_mode": "SYMLINK_TO_CANONICAL",
+        "canonical_executable_name": "pnpm.mjs",
+        "executable_digest": "sha256:ff3224d46b47fbb24a7e9fe15fededef7e00892d07d4e376b6762d4899906bfd",
+        "version": "11.3.0",
+        "version_probe": {
+          "argv": [
+            "pnpm",
+            "--version"
+          ],
+          "expected_output": "11.3.0",
+          "timeout_seconds": 5
+        },
+        "capabilities": [
+          "Observed local launcher only; approval, environment contract, and dispatch use remain unresolved"
+        ]
+      },
+      {
+        "tool_id": "CODEQL",
+        "tool_kind": "CODEQL_ANALYZER",
+        "name": "CodeQL",
+        "executable": "codeql",
+        "launcher_mode": "REGULAR_FILE_ONLY",
+        "canonical_executable_name": "codeql",
+        "executable_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "version": "UNRESOLVED",
+        "version_probe": {
+          "argv": [
+            "codeql",
+            "version",
+            "--format=terse"
+          ],
+          "expected_output": "UNRESOLVED",
+          "timeout_seconds": 5
+        },
+        "capabilities": [
+          "Unresolved local security analyzer; same-head repository CodeQL evidence remains required"
+        ]
+      }
+    ],
+    "state_binding": {
+      "resolution": "RESOLVED",
+      "evidence": {
+        "repository": "CURVE",
+        "title": "policy TOOL-POLICY machine state evidence",
+        "path": "contracts/state/m1-01b/published-v1/policy-tool-policy.json",
+        "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+        "content_digest": "sha256:01e6103417ce9b30bd981235c0ab54a40a0d99e5fc52e26a9f72965232f9cb42"
+      },
+      "record_pointer": "",
+      "assertions": [
+        {
+          "pointer": "/subject_type",
+          "expected": "POLICY"
+        },
+        {
+          "pointer": "/subject_id",
+          "expected": "TOOL-POLICY"
+        },
+        {
+          "pointer": "/state",
+          "expected": "PROPOSED"
+        }
+      ],
+      "approval_subject_digest": "sha256:027bf08fdc01aae646df25985a1b857dd8300b5d52f2f1e9282a859a4898e170",
+      "unresolved_blocker_id": null
+    }
+  },
+  "sandbox_policy": {
+    "policy_id": "SANDBOX-POLICY",
+    "status": "PROPOSED",
+    "runtime": "LOCAL_WORKTREE",
+    "image_digest": null,
+    "cpu_limit": 2,
+    "memory_mib_limit": 8192,
+    "duration_seconds": 7200,
+    "max_attempts": 1,
+    "max_active_attempts": 1,
+    "credential_mode": "NONE",
+    "credential_references": [],
+    "network_mode": "NONE",
+    "network_policy_decision_id": null,
+    "network_destinations": [],
+    "read_only_paths": [
+      ".git",
+      "AGENTS.md"
+    ],
+    "writable_paths": [
+      "apps/web/app/(all)/[workspaceSlug]/(projects)/curve/initiatives",
+      "apps/web/app/routes/core.ts",
+      "apps/web/core/components/curve",
+      "apps/web/core/hooks/use-curve-initiatives.ts",
+      "apps/web/core/services/curve.service.ts",
+      "apps/web/tests/curve",
+      "packages/services/src/curve/curve.service.ts",
+      "packages/types/src/curve.ts"
+    ],
+    "cancellation": {
+      "grace_seconds": 30,
+      "force_termination_seconds": 60,
+      "terminal_state": "CANCELLED"
+    },
+    "cleanup": {
+      "on_success": "Stop task-local processes and remove generated temporary artifacts.",
+      "on_failure": "Stop task-local processes, preserve redacted diagnostics, and remove temporary credentials and artifacts.",
+      "on_cancel": "Terminate child processes, revoke task-local resources, and restore the clean branch boundary.",
+      "verification": "Verify no task-local process, credential reference, or temporary artifact remains."
+    },
+    "state_binding": {
+      "resolution": "RESOLVED",
+      "evidence": {
+        "repository": "CURVE",
+        "title": "policy SANDBOX-POLICY machine state evidence",
+        "path": "contracts/state/m1-01b/published-v1/policy-sandbox-policy.json",
+        "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+        "content_digest": "sha256:9e9761c62d1e19e03e95ba064547feaee20ef09901bbf9ca4ed5e8e4ef8dedda"
+      },
+      "record_pointer": "",
+      "assertions": [
+        {
+          "pointer": "/subject_type",
+          "expected": "POLICY"
+        },
+        {
+          "pointer": "/subject_id",
+          "expected": "SANDBOX-POLICY"
+        },
+        {
+          "pointer": "/state",
+          "expected": "PROPOSED"
+        }
+      ],
+      "approval_subject_digest": "sha256:a167252915ff6efcbddd02178bb38e1d68bf5dea603481e363a7fd4922c4afcf",
+      "unresolved_blocker_id": null
+    }
+  },
+  "budget": {
+    "policy_id": "BUDGET-POLICY",
+    "status": "PROPOSED",
+    "currency": "USD",
+    "maximum_external_spend": 0,
+    "maximum_compute_minutes": 120,
+    "on_exhaustion": "PAUSE",
+    "state_binding": {
+      "resolution": "RESOLVED",
+      "evidence": {
+        "repository": "CURVE",
+        "title": "policy BUDGET-POLICY machine state evidence",
+        "path": "contracts/state/m1-01b/published-v1/policy-budget-policy.json",
+        "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+        "content_digest": "sha256:50636766f2ef413fd8c52473e1f3675eb6b3114a9bc58430eecc32a7d9adc5bf"
+      },
+      "record_pointer": "",
+      "assertions": [
+        {
+          "pointer": "/subject_type",
+          "expected": "POLICY"
+        },
+        {
+          "pointer": "/subject_id",
+          "expected": "BUDGET-POLICY"
+        },
+        {
+          "pointer": "/state",
+          "expected": "PROPOSED"
+        }
+      ],
+      "approval_subject_digest": "sha256:3a21aa8c94efd8e8cbf30f833460f510c366175c1bbb9ea14d92dbf833de74e6",
+      "unresolved_blocker_id": null
+    }
+  },
+  "external_effects": {
+    "policy_id": "EXTERNAL-EFFECTS-POLICY",
+    "status": "PROPOSED",
+    "mode": "NONE",
+    "effects": [],
+    "controller_contracts": [],
+    "state_binding": {
+      "resolution": "RESOLVED",
+      "evidence": {
+        "repository": "CURVE",
+        "title": "policy EXTERNAL-EFFECTS-POLICY machine state evidence",
+        "path": "contracts/state/m1-01b/published-v1/policy-external-effects-policy.json",
+        "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+        "content_digest": "sha256:cdbc61a7b869e1af8745139e20229f6df9f32ef7280b1edd36bb3df504b24c52"
+      },
+      "record_pointer": "",
+      "assertions": [
+        {
+          "pointer": "/subject_type",
+          "expected": "POLICY"
+        },
+        {
+          "pointer": "/subject_id",
+          "expected": "EXTERNAL-EFFECTS-POLICY"
+        },
+        {
+          "pointer": "/state",
+          "expected": "PROPOSED"
+        }
+      ],
+      "approval_subject_digest": "sha256:76dd2b6a821b454f6ca1f3c474635ec75340342f573988357c6cf5a45dc7f636",
+      "unresolved_blocker_id": null
+    }
+  },
+  "rollback": {
+    "policy_id": "ROLLBACK-POLICY",
+    "status": "PROPOSED",
+    "before_merge": "Revert or delete the feature branch without changing preview.",
+    "after_merge_disablement": "Set CURVE_ENABLED=0 and omit the Curve Compose profile.",
+    "persistent_data_strategy": "No new persistence or migration is permitted by this UI-only packet.",
+    "verification_command": "git diff --check",
+    "state_binding": {
+      "resolution": "RESOLVED",
+      "evidence": {
+        "repository": "CURVE",
+        "title": "policy ROLLBACK-POLICY machine state evidence",
+        "path": "contracts/state/m1-01b/published-v1/policy-rollback-policy.json",
+        "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+        "content_digest": "sha256:2c886da01229757e2d113bcc0f8d2f72f90eb8d170200e3f25c17a147dda3ad8"
+      },
+      "record_pointer": "",
+      "assertions": [
+        {
+          "pointer": "/subject_type",
+          "expected": "POLICY"
+        },
+        {
+          "pointer": "/subject_id",
+          "expected": "ROLLBACK-POLICY"
+        },
+        {
+          "pointer": "/state",
+          "expected": "PROPOSED"
+        }
+      ],
+      "approval_subject_digest": "sha256:e91f6a27c5e434ac52592f85c92b975cb54f4dc92b2f18256bec85577b6b06b6",
+      "unresolved_blocker_id": null
+    }
+  },
+  "ux_evidence": {
+    "resolution": "RESOLVED",
+    "evidence": {
+      "repository": "CURVE",
+      "title": "UX evidence for M1-01B machine state evidence",
+      "path": "contracts/state/m1-01b/published-v1/ux-m1-01b.json",
+      "revision": "ca41ccd9ac74678b347c1146ec250c6bf2c6b435",
+      "content_digest": "sha256:aa9aafae54d7af76febe899c53776fc74e4ead6476e6972b15d6d19e9da739b9"
+    },
+    "record_pointer": "",
+    "assertions": [
+      {
+        "pointer": "/subject_type",
+        "expected": "UX"
+      },
+      {
+        "pointer": "/subject_id",
+        "expected": "M1-01B"
+      },
+      {
+        "pointer": "/state",
+        "expected": "APPROVED"
+      }
+    ],
+    "approval_subject_digest": "sha256:3fa2efb952ac413851f269f14411e76e33e76a5057965589081e854c17db3a2a",
+    "unresolved_blocker_id": null
+  },
+  "decomposition": null,
+  "blockers": [
+    {
+      "blocker_id": "B-CODING-TOOLS-01",
+      "category": "TOOL",
+      "summary": "The observed pnpm launcher is not an approved execution profile, and the exact no-download local security command and CodeQL tool identity remain unresolved.",
+      "required_evidence": "An owner-approved Node/pnpm and security profile with implemented command grammar, tool or image digests, sandbox controls, adversarial tests, and cleanup evidence."
+    },
+    {
+      "blocker_id": "B-CODING-AUTHORITY-01",
+      "category": "OTHER",
+      "summary": "NO_DISPATCH: trusted human implementation authority remains unresolved and implementation_authority_granted:false.",
+      "required_evidence": "A separately approved, exact-packet-digest implementation grant must change implementation_authority_granted:false before any dispatch."
+    }
+  ]
+}
