@@ -1,0 +1,50 @@
+{
+  "schema_version": "curve.coding-agent-state-authority-source/v1",
+  "source_id": "CURVE-M1-01B-CONTRACT-INITIATIVE-POLICY-V1",
+  "source_type": "CURVE_APPROVAL_RECORD",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "work_package_id": "M1-01B",
+  "actor": {
+    "actor_type": "HUMAN",
+    "actor_id": "faocampo",
+    "actor_role": "CURVE_ENGINEERING_APPROVER"
+  },
+  "authority_scope": [
+    "STATE:CONTRACT:INITIATIVE-POLICY-V1:APPROVED"
+  ],
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "CONTRACT",
+    "subject_id": "INITIATIVE-POLICY-V1",
+    "state": "APPROVED",
+    "claim": {
+      "contract_id": "INITIATIVE-POLICY-V1",
+      "title": "Manual-first Initiative authorization policy",
+      "path": "contracts/policy/initiative-policy-v1.json",
+      "version": "1",
+      "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+      "content_digest": "sha256:df9aa96d5de46232074abcc51fbb268beda0b73b45906c986f106b2d317adf8b",
+      "status": "APPROVED"
+    }
+  },
+  "approval_subject_digest": "sha256:573792c9a81a7f14cb3a49736358bb21fde251a29f267c2e44cc0719d1f9eb91",
+  "attested_at": "2026-08-31T10:11:57-03:00",
+  "normative_source": {
+    "repository": "CURVE",
+    "title": "contract INITIATIVE-POLICY-V1 approval record",
+    "path": "docs/technical/m1-01a-initiative-core-implementation-evidence.md",
+    "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+    "content_digest": "sha256:e040cca0e8cd693f9206abb433787b737b3b3b01da1438c0126176bc96328201"
+  },
+  "execution_selections": {
+    "node_execution_profile": null,
+    "security_profile": null,
+    "authority_profile": null
+  },
+  "implementation_authority": {
+    "status": "UNRESOLVED",
+    "blocker_id": "B-CODING-AUTHORITY-01",
+    "implementation_authority_granted": false,
+    "dispatch_status": "NO_DISPATCH"
+  }
+}

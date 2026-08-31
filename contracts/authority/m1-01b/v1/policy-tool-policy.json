@@ -1,0 +1,91 @@
+{
+  "schema_version": "curve.coding-agent-state-authority-source/v1",
+  "source_id": "CURVE-M1-01B-POLICY-TOOL-POLICY",
+  "source_type": "WORKSPACE_ROLE_BINDING",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "work_package_id": "M1-01B",
+  "actor": {
+    "actor_type": "HUMAN",
+    "actor_id": "faocampo",
+    "actor_role": "CURVE_ENGINEERING_APPROVER"
+  },
+  "authority_scope": [
+    "STATE:POLICY:TOOL-POLICY:PROPOSED"
+  ],
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "POLICY",
+    "subject_id": "TOOL-POLICY",
+    "state": "PROPOSED",
+    "claim": {
+      "policy_id": "TOOL-POLICY",
+      "status": "PROPOSED",
+      "mode": "PINNED",
+      "tools": [
+        {
+          "tool_id": "PNPM",
+          "tool_kind": "PNPM_PACKAGE_MANAGER",
+          "name": "pnpm",
+          "executable": "pnpm",
+          "launcher_mode": "SYMLINK_TO_CANONICAL",
+          "canonical_executable_name": "pnpm.mjs",
+          "executable_digest": "sha256:ff3224d46b47fbb24a7e9fe15fededef7e00892d07d4e376b6762d4899906bfd",
+          "version": "11.3.0",
+          "version_probe": {
+            "argv": [
+              "pnpm",
+              "--version"
+            ],
+            "expected_output": "11.3.0",
+            "timeout_seconds": 5
+          },
+          "capabilities": [
+            "Observed local launcher only; approval, environment contract, and dispatch use remain unresolved"
+          ]
+        },
+        {
+          "tool_id": "CODEQL",
+          "tool_kind": "CODEQL_ANALYZER",
+          "name": "CodeQL",
+          "executable": "codeql",
+          "launcher_mode": "REGULAR_FILE_ONLY",
+          "canonical_executable_name": "codeql",
+          "executable_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "version": "UNRESOLVED",
+          "version_probe": {
+            "argv": [
+              "codeql",
+              "version",
+              "--format=terse"
+            ],
+            "expected_output": "UNRESOLVED",
+            "timeout_seconds": 5
+          },
+          "capabilities": [
+            "Unresolved local security analyzer; same-head repository CodeQL evidence remains required"
+          ]
+        }
+      ]
+    }
+  },
+  "approval_subject_digest": "sha256:027bf08fdc01aae646df25985a1b857dd8300b5d52f2f1e9282a859a4898e170",
+  "attested_at": "2026-08-31T13:41:00-03:00",
+  "normative_source": {
+    "repository": "CURVE",
+    "title": "M1-01B TOOL-POLICY proposal source",
+    "path": "contracts/schemas/examples/coding-agent-task-packet.valid.json",
+    "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+    "content_digest": "sha256:e0b7d8625fe6c9f5aee1000efa49ec3aaf3436c65378d3d45977dd96882f379d"
+  },
+  "execution_selections": {
+    "node_execution_profile": null,
+    "security_profile": null,
+    "authority_profile": null
+  },
+  "implementation_authority": {
+    "status": "UNRESOLVED",
+    "blocker_id": "B-CODING-AUTHORITY-01",
+    "implementation_authority_granted": false,
+    "dispatch_status": "NO_DISPATCH"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "curve.coding-agent-state-authority-source/v1",
+  "source_id": "CURVE-M1-01B-CONTRACT-CURVE-OPENAPI-V1",
+  "source_type": "CURVE_APPROVAL_RECORD",
+  "workspace_id": "10000000-0000-4000-8000-000000000001",
+  "work_package_id": "M1-01B",
+  "actor": {
+    "actor_type": "HUMAN",
+    "actor_id": "faocampo",
+    "actor_role": "CURVE_ENGINEERING_APPROVER"
+  },
+  "authority_scope": [
+    "STATE:CONTRACT:CURVE-OPENAPI-V1:APPROVED"
+  ],
+  "approval_subject": {
+    "workspace_id": "10000000-0000-4000-8000-000000000001",
+    "subject_type": "CONTRACT",
+    "subject_id": "CURVE-OPENAPI-V1",
+    "state": "APPROVED",
+    "claim": {
+      "contract_id": "CURVE-OPENAPI-V1",
+      "title": "Curve workspace API including Initiative resources",
+      "path": "contracts/openapi/curve-v1.openapi.yaml",
+      "version": "1.1",
+      "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+      "content_digest": "sha256:928993ea6fc8847e7547474418b12b523ff60f5180310c3bc07743d4873cb321",
+      "status": "APPROVED"
+    }
+  },
+  "approval_subject_digest": "sha256:dee95eb0c43a30ff62520a2b9d40f77dcdcfadf97431cdd127e667c98bd40ff6",
+  "attested_at": "2026-08-31T10:11:57-03:00",
+  "normative_source": {
+    "repository": "CURVE",
+    "title": "contract CURVE-OPENAPI-V1 approval record",
+    "path": "docs/technical/m1-01a-initiative-core-implementation-evidence.md",
+    "revision": "6da6483aa440630954cd8fc8c4c735464e9001fd",
+    "content_digest": "sha256:e040cca0e8cd693f9206abb433787b737b3b3b01da1438c0126176bc96328201"
+  },
+  "execution_selections": {
+    "node_execution_profile": null,
+    "security_profile": null,
+    "authority_profile": null
+  },
+  "implementation_authority": {
+    "status": "UNRESOLVED",
+    "blocker_id": "B-CODING-AUTHORITY-01",
+    "implementation_authority_granted": false,
+    "dispatch_status": "NO_DISPATCH"
+  }
+}
