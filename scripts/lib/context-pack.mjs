@@ -428,7 +428,7 @@ export const M0_S9C_CONTEXT_PATHS = Object.freeze(
     "contracts/schemas/operation.schema.json",
     "contracts/schemas/provider-capability.schema.json",
     "contracts/schemas/provider-connection.schema.json",
-    "contracts/testing/ac-test-matrix-v1.json",
+    "contracts/testing/ac-test-matrix-v2.json",
     "docs/curve-ai-native-sdlc-prd.md",
     "docs/technical/architecture-decisions.md",
     "docs/technical/architecture.md",

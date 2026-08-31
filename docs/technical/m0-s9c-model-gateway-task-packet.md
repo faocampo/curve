@@ -7,13 +7,13 @@
 | Package | M0-S9C (Curve Model Gateway routing, policy, usage, and failover), a decision-gated child of M0-09 (provider integration foundation) |
 | Task ID | `CURVE-M0-S9C-MODEL-GATEWAY` |
 | Status | `PREPARED / BLOCKED / NO_DISPATCH` |
-| Version | 0.1 |
-| Date | 2026-08-28 |
+| Version | 0.2 |
+| Date | 2026-08-31 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Candidate Curve base | Curve `main` at `03b26cdb576962fad8e2047fedcfafa2636bfc23`, the squash merge of Curve PR #39 (M0-S9A implementation-evidence reconciliation); dispatch additionally requires accepted Curve `main` revisions for this packet, D-004 (Model Gateway architecture decision), and D-005 (model, provider, and data-policy decision) |
-| Candidate Plane base | `preview` at `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, containing accepted M0-S9A (provider-neutral registry and reconciliation foundation) |
+| Observed Curve contract base | Curve `main` at `cbbb9a7397fd65f100344ceb766ad57e8039aaa1`, containing the accepted M0-S9B1 (provider-administration contract and governance definition); this observation grants no D-004 (Model Gateway architecture decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), implementation, provider-call, or dispatch authority |
+| Observed Plane implementation base | `preview` at `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c`, which descends from accepted M0-S9A (provider-neutral registry and reconciliation foundation) and M1-01A (Initiative domain and API foundation); the consuming child must revalidate and receive exact-base authorization before mutation |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | Unassigned until exact child authorization |
 | Risk | `MATERIAL`; model/provider routing, prompt destinations, usage/cost, streaming, cancellation, and data-policy enforcement |
