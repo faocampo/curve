@@ -11,6 +11,12 @@ import {
   validateProviderAdministrationBoundContractBytes,
   validateProviderAdministrationDecisionSemantics,
 } from "./lib/provider-administration-decision.mjs";
+import {
+  PROVIDER_PROFILE_PREDECESSOR_PATHS,
+  PROVIDER_PROFILE_SCHEMA_PATHS,
+  validateProviderProfileBoundBytes,
+  validateProviderProfileDecisionSemantics,
+} from "./lib/provider-profile-decision.mjs";
 import { validateOnyxDelegationDecision } from "./lib/onyx-delegation.mjs";
 import {
   validateModelDataPolicyDecision,
@@ -151,6 +157,14 @@ const providerAdministrationDeferredFixturePath = join(
   root,
   "contracts/schemas/semantic-fixtures/provider-administration-decision-deferred.valid.json",
 );
+const providerProfileDecisionSchema = join(
+  root,
+  "contracts/schemas/provider-profile-decision.schema.json",
+);
+const providerProfileDecisionPath = join(
+  root,
+  "contracts/governance/m0-s9b2-provider-profile-v1.json",
+);
 const onyxDelegationDecisionSchema = join(
   root,
   "contracts/schemas/onyx-delegation-decision.schema.json",
@@ -254,6 +268,51 @@ const fixtureSpecs = [
   [
     "contracts/schemas/semantic-fixtures/provider-administration-decision-lifecycle.invalid.json",
     providerAdministrationDecisionSchema,
+    false,
+  ],
+  [
+    "contracts/governance/m0-s9b2-provider-profile-v1.json",
+    providerProfileDecisionSchema,
+    true,
+  ],
+  [
+    "contracts/schemas/examples/provider-profile-decision.valid.json",
+    providerProfileDecisionSchema,
+    true,
+  ],
+  [
+    "contracts/schemas/examples/provider-profile-decision.invalid.json",
+    providerProfileDecisionSchema,
+    false,
+  ],
+  [
+    "contracts/schemas/examples/provider-credential-reference.valid.json",
+    join(root, "contracts/schemas/provider-credential-reference.schema.json"),
+    true,
+  ],
+  [
+    "contracts/schemas/examples/provider-credential-reference.invalid.json",
+    join(root, "contracts/schemas/provider-credential-reference.schema.json"),
+    false,
+  ],
+  [
+    "contracts/schemas/examples/provider-endpoint-profile.valid.json",
+    join(root, "contracts/schemas/provider-endpoint-profile.schema.json"),
+    true,
+  ],
+  [
+    "contracts/schemas/examples/provider-endpoint-profile.invalid.json",
+    join(root, "contracts/schemas/provider-endpoint-profile.schema.json"),
+    false,
+  ],
+  [
+    "contracts/schemas/examples/provider-profile-binding.valid.json",
+    join(root, "contracts/schemas/provider-profile-binding.schema.json"),
+    true,
+  ],
+  [
+    "contracts/schemas/examples/provider-profile-binding.invalid.json",
+    join(root, "contracts/schemas/provider-profile-binding.schema.json"),
     false,
   ],
   [
@@ -415,6 +474,17 @@ validateProviderAdministrationDecisionSemantics(
 );
 validateProviderAdministrationDecisionSemantics(
   JSON.parse(readFileSync(providerAdministrationDeferredFixturePath, "utf8")),
+);
+const providerProfileDecision = JSON.parse(readFileSync(providerProfileDecisionPath, "utf8"));
+validateProviderProfileDecisionSemantics(providerProfileDecision);
+validateProviderProfileBoundBytes(
+  providerProfileDecision,
+  Object.fromEntries(
+    [...PROVIDER_PROFILE_PREDECESSOR_PATHS, ...PROVIDER_PROFILE_SCHEMA_PATHS].map((path) => [
+      path,
+      readFileSync(join(root, path)),
+    ]),
+  ),
 );
 const onyxDelegationDecision = JSON.parse(readFileSync(onyxDelegationDecisionPath, "utf8"));
 const onyxValidation = validateOnyxDelegationDecision(onyxDelegationDecision);
