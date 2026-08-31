@@ -13,6 +13,11 @@ import {
 } from "./lib/provider-administration-decision.mjs";
 import { validateOnyxDelegationDecision } from "./lib/onyx-delegation.mjs";
 import {
+  validateModelDataPolicyDecision,
+  validateModelGatewayArchitectureDecision,
+  validateModelPolicyBoundContractBytes,
+} from "./lib/model-governance.mjs";
+import {
   validateProductCoreDecision,
   validateProductEventSemantics,
   validateProductPolicy,
@@ -153,6 +158,30 @@ const onyxDelegationDecisionSchema = join(
 const onyxDelegationDecisionPath = join(
   root,
   "contracts/governance/d002-onyx-delegation-v1.json",
+);
+const modelGatewayArchitectureDecisionPath = join(
+  root,
+  "contracts/governance/d004-model-gateway-architecture-v1.json",
+);
+const modelDataPolicyDecisionPath = join(
+  root,
+  "contracts/governance/d005-model-data-policy-v1.json",
+);
+const modelCatalogPath = join(
+  root,
+  "contracts/models/m0-s9c1a-model-catalog-v1.json",
+);
+const taskModelPolicyPath = join(
+  root,
+  "contracts/models/m0-s9c1a-task-model-policy-v1.json",
+);
+const fallbackEquivalencePath = join(
+  root,
+  "contracts/models/m0-s9c1a-fallback-equivalence-v1.json",
+);
+const restrictedRouteEvidencePath = join(
+  root,
+  "contracts/models/m0-s9c1a-restricted-route-evidence-v1.json",
 );
 const productCoreDecisionPath = join(
   root,
@@ -391,6 +420,41 @@ const onyxDelegationDecision = JSON.parse(readFileSync(onyxDelegationDecisionPat
 const onyxValidation = validateOnyxDelegationDecision(onyxDelegationDecision);
 if (onyxValidation.dispatchable !== false || onyxValidation.unresolved.length === 0) {
   throw new Error("the canonical D-002 proposal must remain fail-closed until owner proof and approval");
+}
+
+const modelGatewayArchitectureDecision = JSON.parse(
+  readFileSync(modelGatewayArchitectureDecisionPath, "utf8"),
+);
+const modelDataPolicyDecision = JSON.parse(
+  readFileSync(modelDataPolicyDecisionPath, "utf8"),
+);
+const modelPolicyContracts = {
+  modelCatalog: JSON.parse(readFileSync(modelCatalogPath, "utf8")),
+  taskPolicy: JSON.parse(readFileSync(taskModelPolicyPath, "utf8")),
+  fallbackEquivalence: JSON.parse(readFileSync(fallbackEquivalencePath, "utf8")),
+  restrictedEvidence: JSON.parse(readFileSync(restrictedRouteEvidencePath, "utf8")),
+};
+const d004Validation = validateModelGatewayArchitectureDecision(
+  modelGatewayArchitectureDecision,
+);
+if (d004Validation.decisionReady || d004Validation.unresolved.length === 0) {
+  throw new Error("the canonical D-004 proposal must remain unselected and fail closed");
+}
+validateModelPolicyBoundContractBytes(
+  modelDataPolicyDecision,
+  Object.fromEntries(
+    modelDataPolicyDecision.candidate_contracts.map(({ path }) => [
+      path,
+      readFileSync(join(root, path)),
+    ]),
+  ),
+);
+const d005Validation = validateModelDataPolicyDecision(
+  modelDataPolicyDecision,
+  modelPolicyContracts,
+);
+if (d005Validation.decisionReady || d005Validation.unresolved.length === 0) {
+  throw new Error("the canonical D-005 proposal must retain an empty model allowlist and fail closed");
 }
 
 validateProductCoreDecision(JSON.parse(readFileSync(productCoreDecisionPath, "utf8")));

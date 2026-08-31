@@ -1,0 +1,14 @@
+{
+  "schema_version": "curve.fallback-equivalence/v1",
+  "contract_state": "PROPOSED_NOT_NORMATIVE",
+  "contract_id": "M0_S9C1A_FALLBACK_EQUIVALENCE",
+  "contract_version": 1,
+  "status": "DRAFT",
+  "routing_profile": "UNSELECTED",
+  "groups": [],
+  "fallback_activation_allowed": false,
+  "d004_decision_digest": null,
+  "d005_decision_digest": null,
+  "d014_budget_decision_digest": null,
+  "silent_fallback": true
+}

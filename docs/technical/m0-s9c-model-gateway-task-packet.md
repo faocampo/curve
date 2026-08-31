@@ -7,12 +7,12 @@
 | Package | M0-S9C (Curve Model Gateway routing, policy, usage, and failover), a decision-gated child of M0-09 (provider integration foundation) |
 | Task ID | `CURVE-M0-S9C-MODEL-GATEWAY` |
 | Status | `PREPARED / BLOCKED / NO_DISPATCH` |
-| Version | 0.2 |
+| Version | 0.3 |
 | Date | 2026-08-31 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Observed Curve contract base | Curve `main` at `cbbb9a7397fd65f100344ceb766ad57e8039aaa1`, containing the accepted M0-S9B1 (provider-administration contract and governance definition); this observation grants no D-004 (Model Gateway architecture decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), implementation, provider-call, or dispatch authority |
+| Observed Curve contract base | Curve `main` at `1c38a5398b9e6c7cf83c8ee7e8a4615f8f2450d1`, containing the current governed baseline; this observation grants no D-004 (Model Gateway architecture decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), implementation, provider-call, or dispatch authority |
 | Observed Plane implementation base | `preview` at `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c`, which descends from accepted M0-S9A (provider-neutral registry and reconciliation foundation) and M1-01A (Initiative domain and API foundation); the consuming child must revalidate and receive exact-base authorization before mutation |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | Unassigned until exact child authorization |
@@ -55,7 +55,8 @@ before repository mutation or model access.
 
 | Child | Repository-local outcome | External access | Completion boundary |
 | --- | --- | --- | --- |
-| M0-S9C1 (Model Gateway contracts) | Closed schemas for `ModelPolicyVersion`, `ModelRouteEnvelope`, `ModelInvocation`, `ModelUsage`, normalized stream events/errors, capability rules, and fake conformance fixtures | None | Approved contracts and negative fixtures; no runtime call |
+| M0-S9C1A (candidate architecture and data-policy contracts) | Decision-ready D-004 (Model Gateway architecture decision) and D-005 (model/provider data-policy decision) ADRs, closed decision schemas, empty fail-closed model catalog/task policy/fallback/RESTRICTED-evidence candidates, fixtures, and semantic validation | None | `PROPOSED_NOT_NORMATIVE`; every material alternative remains unselected and no runtime/model/dispatch authority exists |
+| M0-S9C1B (runtime invocation contracts) | Closed schemas for `ModelPolicyVersion`, `ModelRouteEnvelope`, `ModelInvocation`, `ModelUsage`, normalized stream events/errors, capability rules, and fake conformance fixtures | None | Starts only after D-004/D-005 selection authorizes successor-contract preparation; no runtime call |
 | M0-S9C2 (policy and budget kernel) | Workspace-scoped immutable policy versions, eligibility evaluator, budget reservation port, route decision, idempotency, audit, and deterministic fake gateway | None | Fake-only tests prove policy precedence, no-route, budget, route binding, and replay |
 | M0-S9C3 (OpenRouter transport) | Authenticated request/stream/cancel/usage adapter behind `ModelGateway`, exact route-envelope translation, normalized errors, and actual-route evidence | Requires exact OpenRouter proof authorization | No fallback outside the Curve envelope; no public UI or policy administration |
 | M0-S9C4 (failover and reconciliation) | Ordered eligible-route retry/failover, ambiguous/lost response reconciliation, usage settlement, cancellation, and actual-route audit | Requires D-004 (Model Gateway architecture), D-005 (model/provider/data policy), and D-014 (budget policy) values plus provider proof authorization | Completes AC-57 with deterministic plus bounded live evidence |
@@ -63,6 +64,41 @@ before repository mutation or model access.
 Only one child PR is active at a time. A live OpenRouter test is confined to
 M0-S9C3 or M0-S9C4 and requires a separate exact account/key/data/cost/egress
 authorization.
+
+## M0-S9C1A candidate publication
+
+M0-S9C1A (candidate Model Gateway architecture and data-policy contracts) has
+prepared the [D-004 ADR](adr-004-model-gateway-architecture.md) (unselected
+gateway-boundary, transport, routing, streaming, reconciliation, deployment,
+telemetry, and replacement alternatives) and [D-005 ADR](adr-005-model-provider-data-policy.md)
+(unselected classification, RESTRICTED, fallback, evaluation, terms, exception,
+telemetry, and drift alternatives). Their machine counterparts are the
+[D-004 proposal](../../contracts/governance/d004-model-gateway-architecture-v1.json)
+(closed architecture decision record and exact gateway-port surface) and
+[D-005 proposal](../../contracts/governance/d005-model-data-policy-v1.json)
+(closed data-policy decision record and raw-byte-bound candidate contracts).
+
+The D-005 proposal binds these empty fail-closed candidates by raw SHA-256:
+
+- [model catalog](../../contracts/models/m0-s9c1a-model-catalog-v1.json)
+  (inactive exact-route allowlist with endpoint-specific lifecycle, data, and
+  price evidence fields);
+- [task/model policy matrix](../../contracts/models/m0-s9c1a-task-model-policy-v1.json)
+  (inactive task/classification-to-route, prompt, evaluation, token, and cost
+  policy surface);
+- [fallback-equivalence contract](../../contracts/models/m0-s9c1a-fallback-equivalence-v1.json)
+  (unselected, empty quality/capability/data/residency/security/context/latency/
+  cost proof surface); and
+- [RESTRICTED-route evidence contract](../../contracts/models/m0-s9c1a-restricted-route-evidence-v1.json)
+  (empty route allowlist and exact ZDR, DLP, residency, retention, telemetry,
+  and legal-evidence requirements).
+
+The candidate recommendation—one exact model and provider endpoint per
+chargeable attempt, with fallback represented as a new audited attempt—is one
+listed alternative. Its `selected` value remains `null`. D-014 (budget-policy
+decision) must be digest-bound before any chargeable invocation, and D-009
+(retention, legal-hold, backup, and erasure decision) remains required before
+protected body persistence.
 
 ## Required interface contracts
 

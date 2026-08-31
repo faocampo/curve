@@ -111,14 +111,14 @@ test("exact-preview local runtime evidence binds the durable verified control pa
 test("substantively reconciled governance documents advance document control", () => {
   for (const [name, contents, version, dateLabel, date] of [
     ["architecture", architecture, "0.9", "Last updated", "2026-08-30"],
-    ["development", development, "1.19", "Last updated", "2026-08-30"],
+    ["development", development, "1.20", "Last updated", "2026-08-31"],
     ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
-    ["M0 readiness board", readiness, "1.37", "Date", "2026-08-31"],
-    ["M0 completion audit", m0Audit, "1.9", "Date", "2026-08-30"],
+    ["M0 readiness board", readiness, "1.38", "Date", "2026-08-31"],
+    ["M0 completion audit", m0Audit, "1.10", "Date", "2026-08-31"],
     ["GitHub Project execution map", projectMap, "1.18", "Date", "2026-08-29"],
     ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],
     ["M1-M7 catalog", laterPackets, "1.9", "Date", "2026-08-30"],
-    ["decision index", decisions, "1.4", "Last updated", "2026-08-30"],
+    ["decision index", decisions, "1.5", "Last updated", "2026-08-31"],
     ["implemented ERD", implementedErd, "1.2", "Last updated", "2026-08-30"],
   ]) {
     assert.match(contents, new RegExp(`^\\| Version \\| ${version.replace(".", "\\.")} \\|$`, "m"), name);

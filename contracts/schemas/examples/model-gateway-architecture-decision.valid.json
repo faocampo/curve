@@ -1,0 +1,177 @@
+{
+  "schema_version": "curve.model-gateway-architecture-decision/v1",
+  "decision_id": "D-004",
+  "work_package": "M0-S9C1A",
+  "contract_state": "PROPOSED_NOT_NORMATIVE",
+  "status": "PROPOSED",
+  "decision_outcome": "UNSELECTED",
+  "last_updated": "2026-08-31T16:00:00Z",
+  "baseline": {
+    "surveyed_curve_revision": "1c38a5398b9e6c7cf83c8ee7e8a4615f8f2450d1",
+    "parent_packet_id": "CURVE-M0-S9C-MODEL-GATEWAY",
+    "parent_packet_version": "0.2",
+    "provider_transport": "OPENROUTER_PROPOSED_UNAPPROVED"
+  },
+  "fixed_invariants": {
+    "curve_policy_precedes_transport": true,
+    "caller_selects_route": false,
+    "provider_defaults_allowed": false,
+    "silent_model_or_provider_substitution": false,
+    "actual_route_evidence_required": true,
+    "ambiguous_charge_retried_automatically": false,
+    "raw_body_in_ordinary_telemetry": false,
+    "credential_in_agent_or_temporal_history": false,
+    "unknown_error_retryable": false,
+    "workspace_scope_required": true
+  },
+  "material_options": {
+    "component_boundary": {
+      "options": ["IN_PROCESS_CURVE_GATEWAY", "DEDICATED_CURVE_GATEWAY_SERVICE", "DEFER"],
+      "selected": null
+    },
+    "transport_profile": {
+      "options": ["OPENROUTER_HTTP_V1", "OPENROUTER_OFFICIAL_SDK_V1", "PROVIDER_NEUTRAL_OTHER", "DEFER"],
+      "selected": null
+    },
+    "attempt_routing_profile": {
+      "options": ["SINGLE_EXACT_ROUTE_NEW_AUDITED_FALLBACK_ATTEMPT", "IMMUTABLE_EQUIVALENT_ROUTE_ENVELOPE", "DEFER"],
+      "selected": null
+    },
+    "streaming_profile": {
+      "options": ["BUFFERED_ONLY", "NORMALIZED_STREAM_EVENTS", "DEFER"],
+      "selected": null
+    },
+    "reconciliation_profile": {
+      "options": ["PROVIDER_REQUEST_ID_AND_USAGE", "FAIL_AMBIGUOUS_NO_RETRY", "DEFER"],
+      "selected": null
+    },
+    "deployment_profile": {
+      "options": ["API_PROCESS", "DEDICATED_WORKER_PROCESS", "DEDICATED_SERVICE", "DEFER"],
+      "selected": null
+    },
+    "telemetry_profile": {
+      "options": ["METADATA_ONLY_OTEL", "PROTECTED_TRACE_STORE", "DEFER"],
+      "selected": null
+    },
+    "replacement_profile": {
+      "options": ["MODEL_GATEWAY_PORT_CONFORMANCE", "DEFER"],
+      "selected": null
+    }
+  },
+  "interface_contract": {
+    "port_name": "ModelGateway",
+    "operations": ["GENERATE", "STREAM", "COUNT_TOKENS", "CANCEL", "REPORT_USAGE"],
+    "required_request_bindings": [
+      "WORKSPACE_ID",
+      "OPERATION_ID",
+      "TASK_CLASS",
+      "CLASSIFICATION",
+      "PROMPT_PACKAGE_DIGEST",
+      "CONTEXT_DIGEST",
+      "POLICY_VERSION",
+      "POLICY_DIGEST",
+      "MODEL_CATALOG_VERSION",
+      "MODEL_CATALOG_DIGEST",
+      "BUDGET_POLICY_VERSION",
+      "MAXIMUM_INPUT_TOKENS",
+      "MAXIMUM_OUTPUT_TOKENS",
+      "DEADLINE",
+      "IDEMPOTENCY_DIGEST"
+    ],
+    "safe_result_bindings": [
+      "INVOCATION_ID",
+      "STATUS",
+      "REQUESTED_ROUTE_ID",
+      "ACTUAL_MODEL_ID",
+      "ACTUAL_PROVIDER_ID",
+      "ACTUAL_ENDPOINT_ID",
+      "TOKEN_USAGE",
+      "COST_MICRO_USD",
+      "RESPONSE_DIGEST",
+      "ERROR_CODE"
+    ],
+    "normalized_errors": [
+      "VALIDATION",
+      "AUTHENTICATION",
+      "AUTHORIZATION",
+      "POLICY",
+      "DATA_CLASSIFICATION",
+      "NO_ELIGIBLE_ROUTE",
+      "CAPABILITY_UNSUPPORTED",
+      "BUDGET_EXHAUSTED",
+      "RATE_LIMIT",
+      "TRANSIENT",
+      "AMBIGUOUS_RESULT",
+      "USAGE_UNSETTLED",
+      "CANCELLED",
+      "TIMEOUT",
+      "TERMINAL"
+    ]
+  },
+  "evidence_requirements": [
+    { "requirement_id": "OPENROUTER_API_PROFILE", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "AUTH_KEY_LIFECYCLE", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "REQUEST_STREAM_CANCEL", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "RATE_LIMIT_RETRY_TIMEOUT", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "ACTUAL_ROUTE_USAGE", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "TELEMETRY_REDACTION", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "HA_KILL_SWITCH", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "LICENSE_SUPPLY_CHAIN", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "REPLACEMENT_CONFORMANCE", "status": "NOT_PROVIDED", "evidence_refs": [] },
+    { "requirement_id": "BUDGET_PORT_D014_BINDING", "status": "NOT_PROVIDED", "evidence_refs": [] }
+  ],
+  "dependencies": {
+    "d005": {
+      "decision_id": "D-005",
+      "required_before": "CHARGEABLE_INVOCATION",
+      "status": "PROPOSED",
+      "evidence_digest": null
+    },
+    "d014": {
+      "decision_id": "D-014",
+      "required_before": "CHARGEABLE_INVOCATION",
+      "status": "PROPOSED",
+      "evidence_digest": null
+    },
+    "d009": {
+      "decision_id": "D-009",
+      "required_before": "PROTECTED_BODY_PERSISTENCE",
+      "status": "PROPOSED",
+      "evidence_digest": null
+    }
+  },
+  "owners": {
+    "ai_platform": null,
+    "platform_operations": null,
+    "security": null,
+    "finops": null
+  },
+  "approvals": [],
+  "decided_at": null,
+  "next_review_at": null,
+  "decision_payload_digest": null,
+  "activation": {
+    "decision_selected": false,
+    "successor_contract_preparation_authorized": false,
+    "implementation_dispatch_allowed": false,
+    "runtime_model_calls_allowed": false,
+    "provider_network_allowed": false,
+    "protected_data_allowed": false
+  },
+  "unresolved_requirements": [
+    "AI_PLATFORM_OWNER",
+    "APPROVALS",
+    "ATTEMPT_ROUTING_PROFILE",
+    "COMPONENT_BOUNDARY",
+    "DEPLOYMENT_PROFILE",
+    "EVIDENCE_REQUIREMENTS",
+    "FINOPS_OWNER",
+    "PLATFORM_OPERATIONS_OWNER",
+    "RECONCILIATION_PROFILE",
+    "REPLACEMENT_PROFILE",
+    "SECURITY_OWNER",
+    "STREAMING_PROFILE",
+    "TELEMETRY_PROFILE",
+    "TRANSPORT_PROFILE"
+  ]
+}

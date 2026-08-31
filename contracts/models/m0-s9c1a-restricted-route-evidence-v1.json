@@ -1,0 +1,23 @@
+{
+  "schema_version": "curve.restricted-route-evidence/v1",
+  "contract_state": "PROPOSED_NOT_NORMATIVE",
+  "contract_id": "M0_S9C1A_RESTRICTED_ROUTE_EVIDENCE",
+  "contract_version": 1,
+  "status": "DRAFT",
+  "required_evidence_types": [
+    "ZERO_DATA_RETENTION",
+    "PRE_CALL_DLP",
+    "POST_CALL_LEAK_SCAN",
+    "PROCESSING_RESIDENCY",
+    "RETENTION_AND_TRAINING_TERMS",
+    "TELEMETRY_DESTINATION",
+    "PRIVACY_LEGAL_APPROVAL",
+    "ACTUAL_ROUTE_ATTESTATION"
+  ],
+  "route_evidence": [],
+  "approved_route_ids": [],
+  "restricted_route_activation_allowed": false,
+  "d005_decision_digest": null,
+  "d009_retention_decision_digest": null,
+  "d014_budget_decision_digest": null
+}

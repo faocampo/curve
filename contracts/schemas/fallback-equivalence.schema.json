@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.x3m.internal/contracts/schemas/fallback-equivalence.schema.json",
+  "title": "Curve candidate model-route fallback equivalence contract",
+  "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_state",
+    "contract_id",
+    "contract_version",
+    "status",
+    "routing_profile",
+    "groups",
+    "fallback_activation_allowed",
+    "d004_decision_digest",
+    "d005_decision_digest",
+    "d014_budget_decision_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "curve.fallback-equivalence/v1" },
+    "contract_state": { "enum": ["PROPOSED_NOT_NORMATIVE", "APPROVED_NORMATIVE"] },
+    "contract_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]{2,99}$" },
+    "contract_version": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["DRAFT", "APPROVED", "EXPIRED", "REVOKED"] },
+    "routing_profile": {
+      "enum": [
+        "UNSELECTED",
+        "SINGLE_EXACT_ROUTE_NEW_AUDITED_FALLBACK_ATTEMPT",
+        "IMMUTABLE_EQUIVALENT_ROUTE_ENVELOPE"
+      ]
+    },
+    "groups": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/equivalenceGroup" }
+    },
+    "fallback_activation_allowed": { "type": "boolean" },
+    "d004_decision_digest": { "$ref": "#/$defs/nullableDigest" },
+    "d005_decision_digest": { "$ref": "#/$defs/nullableDigest" },
+    "d014_budget_decision_digest": { "$ref": "#/$defs/nullableDigest" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "DRAFT" } }, "required": ["status"] },
+      "then": { "properties": { "contract_state": { "const": "PROPOSED_NOT_NORMATIVE" } } }
+    },
+    {
+      "if": { "properties": { "status": { "enum": ["APPROVED", "EXPIRED", "REVOKED"] } }, "required": ["status"] },
+      "then": { "properties": { "contract_state": { "const": "APPROVED_NORMATIVE" } } }
+    }
+  ],
+  "$defs": {
+    "nullableDigest": {
+      "oneOf": [
+        { "$ref": "common.schema.json#/$defs/Digest" },
+        { "type": "null" }
+      ]
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "source_revision", "content_digest", "checked_at"],
+      "properties": {
+        "reference": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "checked_at": { "$ref": "common.schema.json#/$defs/Instant" }
+      }
+    },
+    "dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidence_refs"],
+      "properties": {
+        "status": { "enum": ["PASS", "FAIL", "NOT_RUN"] },
+        "evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidenceRef" }
+        }
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quality", "capability", "data_handling", "residency", "security", "context", "latency", "cost"],
+      "properties": {
+        "quality": { "$ref": "#/$defs/dimension" },
+        "capability": { "$ref": "#/$defs/dimension" },
+        "data_handling": { "$ref": "#/$defs/dimension" },
+        "residency": { "$ref": "#/$defs/dimension" },
+        "security": { "$ref": "#/$defs/dimension" },
+        "context": { "$ref": "#/$defs/dimension" },
+        "latency": { "$ref": "#/$defs/dimension" },
+        "cost": { "$ref": "#/$defs/dimension" }
+      }
+    },
+    "equivalenceGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "group_id",
+        "task_class",
+        "classification",
+        "primary_route_id",
+        "fallback_route_ids",
+        "allowed_trigger_codes",
+        "new_attempt_required",
+        "actual_route_evidence_required",
+        "dimensions",
+        "valid_until"
+      ],
+      "properties": {
+        "group_id": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]{2,127}$" },
+        "task_class": { "enum": ["ALIGNMENT_REFINEMENT", "RESEARCH_SYNTHESIS", "PRD_GENERATION", "ARCHITECTURE_PLANNING", "CODING_ASSISTANCE", "QUALITY_REVIEW"] },
+        "classification": { "$ref": "common.schema.json#/$defs/DataClassification" },
+        "primary_route_id": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9_-]{2,127}$" },
+        "fallback_route_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9_-]{2,127}$" }
+        },
+        "allowed_trigger_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["RATE_LIMIT", "TRANSIENT", "TIMEOUT", "PROVIDER_OUTAGE"] }
+        },
+        "new_attempt_required": { "type": "boolean" },
+        "actual_route_evidence_required": { "const": true },
+        "dimensions": { "$ref": "#/$defs/dimensions" },
+        "valid_until": { "$ref": "common.schema.json#/$defs/Instant" }
+      }
+    }
+  }
+}
