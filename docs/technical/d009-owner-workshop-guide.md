@@ -5,8 +5,8 @@
 | Field | Value |
 | --- | --- |
 | Status | `OWNER WORKSHOP READY / INPUTS REQUIRED / NOT IMPLEMENTATION AUTHORITY` |
-| Version | 1.0 |
-| Prepared | 2026-08-27 |
+| Version | 1.1 |
+| Prepared | 2026-08-31 |
 | Product | Curve |
 | Scope | D-009 (retention, backup, legal-hold, tombstone, and erasure decision) |
 | Required accountable functions | Security; Privacy; Legal; Platform Operations; Database Operations; Curve Engineering |
@@ -50,8 +50,18 @@ behavior, restore behavior, destruction method, and verification evidence:
 - Log and SIEM projections
 - Forensic quarantine stores
 
-Add every other X3M service that stores, caches, indexes, replicates, scans, or
-projects protected Curve data. An unknown destination remains unresolved.
+Choose exactly one evidenced state for each required kind:
+
+- `PRESENT`: identify product, account, regions, lifecycle, destruction proof,
+  and `RESTORABLE` or `NON_RESTORABLE` behavior;
+- `ABSENT`: evidence that the applicable topology was checked and contains no
+  such copy; or
+- `NOT_DEPLOYED`: evidence that the product/capability does not exist in the
+  governed topology.
+
+If another X3M service stores, caches, indexes, replicates, scans, or projects
+protected Curve data, leave D-009 unresolved and add the copy kind through a
+reviewed contract version.
 
 ## Session 2: asset and classification policy cells
 
@@ -74,8 +84,10 @@ Complete each asset class independently for `INTERNAL`, `CONFIDENTIAL`, and
 
 For every cell, answer:
 
-- Is persistence duration-based, event-based, default-denied, or not
-  applicable?
+- Is persistence duration-based, default-denied, or not applicable? For a
+  duration, which governed event starts its clock? If an owner requires an
+  event-only rule with no duration, record that as an unresolved contract
+  extension rather than entering a value the v1 schema cannot represent.
 - What is the exact ISO 8601 active duration when duration-based?
 - What is the exact backup duration when duration-based?
 - Which trusted event starts each period?
@@ -118,8 +130,12 @@ is the approved result.
 
 ### External-copy deletion
 
-- Define the policy per provider/connection.
-- Choose accepted proof among receipt, contract evidence, or truthful
+- Bind an exhaustive approved-connection inventory revision and digest.
+- Record `NO_EXTERNAL_CONNECTIONS` with evidence or `ENUMERATED` with one
+  explicit inventory ID and exactly one mapping per connection. The inventory
+  ID set and mapping ID set must be equal.
+- Bind each connection's policy revision/digest, proof mode, and proof
+  revision/digest. Proof mode is receipt, contract evidence, or truthful
   outside-Curve-control reporting.
 - Name the owner and procedure.
 
@@ -149,19 +165,38 @@ Validate selected values against:
 - Restore RTO/RPO and the selected re-erasure maximum
 - Estimated storage, scan, restore-test, and operational costs
 
-Capture a source or controlled internal policy reference for every value.
+Capture every source or controlled internal policy as an artifact reference,
+exact revision, and SHA-256 content digest. Bind the exact Curve base revision
+and the ADR/schema content digests used by the decision. The semantic validator
+must resolve that base as an ancestor of the candidate `HEAD` and match the
+candidate ADR/schema bytes.
 
 ## Session 5: approval
 
-After all 39 cells, 8 copy entries, and 6 control blocks plus cost are complete:
+After all 39 cells, 8 copy entries, and all 6 control blocks including cost are
+complete:
 
-1. Run the semantic validator and compute the stable policy-content digest.
-2. Have each of the six named people approve that exact digest independently.
-3. Record approval timestamps before the decision timestamp.
-4. Set a future review date.
-5. Change D-009 (retention, backup, legal-hold, tombstone, and erasure
-   decision) to `DECIDED` only in the reviewed revision containing all evidence
-   and approvals.
+1. Select the canonical human-identity authority.
+2. Decide whether the six functions require `SIX_DISTINCT_PEOPLE` or allow
+   `DUAL_HAT_ALLOWED`. If dual-hat is selected, list every permitted two-role
+   pair; any unlisted pair and any person assigned more than two functions fail.
+   Bind the authority and separation-policy evidence.
+3. Keep the checked-in worksheet fail closed. Create a non-persisted final
+   candidate subject in memory with every requirement, final `DECIDED` state,
+   final scope and implementation-dispatch value, and a future review date.
+4. Compute the stable decision-content digest from that final candidate
+   subject. Set-like authority, region, and per-connection mappings are
+   canonically ordered. The candidate is preparation input rather than an
+   intermediate decision record.
+5. Record one canonical authority/subject identity approval for each of the six
+   functions against that exact digest, with subject proof bound to the same
+   authority and subject.
+6. Assemble the final state, digest, approvals, and a decision timestamp after
+   every approval and before the bound review date. Write and semantically
+   validate that complete record atomically in one reviewed change.
+7. The resulting D-009 (retention, backup, legal-hold, tombstone, and erasure
+   decision) may be `DECIDED` only in that reviewed revision containing all
+   evidence and approvals.
 
 The decided record may permit preparation of M0-04 (protected-storage
 foundation). Storage activation and staging/production activation retain their
@@ -171,8 +206,9 @@ own later approvals and evidence.
 
 - Completed D-009 (retention, backup, legal-hold, tombstone, and erasure
   decision) machine decision worksheet
-- Supporting internal source/reference register
+- Revision/digest-bound source and controlled-policy evidence register
 - Feasibility and cost assessment
-- Named approval record bound to one stable digest
+- Canonical identity/separation policy and six functional approval records
+  bound to one stable digest
 - Decision date and next review date
 - Open exceptions and their explicit capability blocks

@@ -5,6 +5,13 @@
   "approval_subject_digest": null,
   "effective_scope": "NONE_FAIL_CLOSED",
   "source_adr": "docs/technical/adr-009-retention-and-erasure.md",
+  "contract_evidence": {
+    "status": "UNRESOLVED",
+    "repository_ref": "git@github.com:faocampo/curve.git",
+    "base_revision": null,
+    "source_adr_digest": null,
+    "decision_schema_digest": null
+  },
   "catalog": {
     "asset_classes": [
       "EVIDENCE_RESEARCH_BODY",
@@ -122,6 +129,10 @@
     "connection_policy_required": true,
     "truthful_scope_reporting": true,
     "accepted_proof_modes": ["RECEIPT", "CONTRACT_EVIDENCE", "OUTSIDE_CURVE_CONTROL"],
+    "connection_inventory_state": null,
+    "connection_inventory_evidence_ref": null,
+    "connection_inventory_refs": [],
+    "connection_policies": [],
     "owner_ref": null,
     "procedure_ref": null
   },
@@ -141,12 +152,20 @@
     "approver_ref": null
   },
   "approvals": {
-    "security": { "approver_ref": null, "approved_decision_digest": null, "approved_at": null },
-    "privacy": { "approver_ref": null, "approved_decision_digest": null, "approved_at": null },
-    "legal": { "approver_ref": null, "approved_decision_digest": null, "approved_at": null },
-    "platform_operations": { "approver_ref": null, "approved_decision_digest": null, "approved_at": null },
-    "database_operations": { "approver_ref": null, "approved_decision_digest": null, "approved_at": null },
-    "curve_engineering": { "approver_ref": null, "approved_decision_digest": null, "approved_at": null },
+    "identity_policy": {
+      "status": "UNRESOLVED",
+      "canonical_authority_ref": null,
+      "authority_evidence_ref": null,
+      "separation_mode": null,
+      "allowed_dual_hat_role_pairs": [],
+      "separation_policy_evidence_ref": null
+    },
+    "security": { "approver_identity": null, "approved_decision_digest": null, "approved_at": null },
+    "privacy": { "approver_identity": null, "approved_decision_digest": null, "approved_at": null },
+    "legal": { "approver_identity": null, "approved_decision_digest": null, "approved_at": null },
+    "platform_operations": { "approver_identity": null, "approved_decision_digest": null, "approved_at": null },
+    "database_operations": { "approver_identity": null, "approved_decision_digest": null, "approved_at": null },
+    "curve_engineering": { "approver_identity": null, "approved_decision_digest": null, "approved_at": null },
     "decision_date": null,
     "next_review_at": null
   },
@@ -159,6 +178,7 @@
   "unresolved_requirements": [
     "ASSET_POLICY_CELLS",
     "STORAGE_INVENTORY",
+    "CONTRACT_EVIDENCE",
     "KEY_ERASURE",
     "LEGAL_HOLD",
     "RESTORE_RE_ERASURE",

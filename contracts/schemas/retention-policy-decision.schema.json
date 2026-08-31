@@ -11,6 +11,7 @@
     "approval_subject_digest",
     "effective_scope",
     "source_adr",
+    "contract_evidence",
     "catalog",
     "policy_cells",
     "unresolved_cell_keys",
@@ -32,12 +33,13 @@
     "decision_state": { "enum": ["PROPOSED", "DECIDED"] },
     "approval_subject_digest": {
       "anyOf": [
-        { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        { "$ref": "#/$defs/sha256Digest" },
         { "type": "null" }
       ]
     },
     "effective_scope": { "enum": ["NONE_FAIL_CLOSED", "CURVE_CONTROLLED_COPIES"] },
     "source_adr": { "const": "docs/technical/adr-009-retention-and-erasure.md" },
+    "contract_evidence": { "$ref": "#/$defs/contractEvidence" },
     "catalog": {
       "type": "object",
       "additionalProperties": false,
@@ -109,12 +111,13 @@
     },
     "unresolved_requirements": {
       "type": "array",
-      "maxItems": 9,
+      "maxItems": 10,
       "uniqueItems": true,
       "items": {
         "enum": [
           "ASSET_POLICY_CELLS",
           "STORAGE_INVENTORY",
+          "CONTRACT_EVIDENCE",
           "KEY_ERASURE",
           "LEGAL_HOLD",
           "RESTORE_RE_ERASURE",
@@ -126,6 +129,72 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": { "properties": { "decision_state": { "const": "PROPOSED" } } },
+      "then": {
+        "properties": {
+          "approval_subject_digest": { "type": "null" },
+          "effective_scope": { "const": "NONE_FAIL_CLOSED" },
+          "approvals": {
+            "properties": {
+              "security": { "$ref": "#/$defs/emptyApprovalRecord" },
+              "privacy": { "$ref": "#/$defs/emptyApprovalRecord" },
+              "legal": { "$ref": "#/$defs/emptyApprovalRecord" },
+              "platform_operations": { "$ref": "#/$defs/emptyApprovalRecord" },
+              "database_operations": { "$ref": "#/$defs/emptyApprovalRecord" },
+              "curve_engineering": { "$ref": "#/$defs/emptyApprovalRecord" },
+              "decision_date": { "type": "null" },
+              "next_review_at": { "type": "null" }
+            }
+          },
+          "activation_guard": {
+            "properties": { "implementation_dispatch_allowed": { "const": false } }
+          },
+          "unresolved_requirements": { "minItems": 1 }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "decision_state": { "const": "DECIDED" } } },
+      "then": {
+        "properties": {
+          "approval_subject_digest": { "$ref": "#/$defs/sha256Digest" },
+          "effective_scope": { "const": "CURVE_CONTROLLED_COPIES" },
+          "contract_evidence": {
+            "properties": { "status": { "const": "BOUND" } }
+          },
+          "policy_cells": { "minItems": 39 },
+          "unresolved_cell_keys": { "maxItems": 0 },
+          "storage_inventory": { "minItems": 8 },
+          "unresolved_storage_keys": { "maxItems": 0 },
+          "key_erasure": { "properties": { "status": { "const": "DECIDED" } } },
+          "legal_hold": { "properties": { "status": { "const": "DECIDED" } } },
+          "restore_re_erasure": { "properties": { "status": { "const": "DECIDED" } } },
+          "external_copy_deletion": { "properties": { "status": { "const": "DECIDED" } } },
+          "failure_escalation": { "properties": { "status": { "const": "DECIDED" } } },
+          "cost_capacity": { "properties": { "status": { "const": "DECIDED" } } },
+          "approvals": {
+            "properties": {
+              "identity_policy": { "properties": { "status": { "const": "DECIDED" } } },
+              "security": { "$ref": "#/$defs/completedApprovalRecord" },
+              "privacy": { "$ref": "#/$defs/completedApprovalRecord" },
+              "legal": { "$ref": "#/$defs/completedApprovalRecord" },
+              "platform_operations": { "$ref": "#/$defs/completedApprovalRecord" },
+              "database_operations": { "$ref": "#/$defs/completedApprovalRecord" },
+              "curve_engineering": { "$ref": "#/$defs/completedApprovalRecord" },
+              "decision_date": { "type": "string", "format": "date-time" },
+              "next_review_at": { "type": "string", "format": "date-time" }
+            }
+          },
+          "activation_guard": {
+            "properties": { "implementation_dispatch_allowed": { "const": true } }
+          },
+          "unresolved_requirements": { "maxItems": 0 }
+        }
+      }
+    }
+  ],
   "$defs": {
     "assetClass": {
       "enum": [
@@ -167,6 +236,16 @@
       "type": "string",
       "pattern": "^P(?=\\d|T\\d)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$"
     },
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:(?!0{64}$)[0-9a-f]{64}$"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@+-]*$"
+    },
     "reference": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9._:/-]{2,255}$"
@@ -178,6 +257,62 @@
     "personReference": {
       "type": "string",
       "pattern": "^person:[a-z0-9][a-z0-9._-]{1,126}$"
+    },
+    "evidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_ref", "revision", "content_digest"],
+      "properties": {
+        "artifact_ref": { "$ref": "#/$defs/reference" },
+        "revision": { "$ref": "#/$defs/revision" },
+        "content_digest": { "$ref": "#/$defs/sha256Digest" }
+      }
+    },
+    "contractEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "repository_ref",
+        "base_revision",
+        "source_adr_digest",
+        "decision_schema_digest"
+      ],
+      "properties": {
+        "status": { "enum": ["UNRESOLVED", "BOUND"] },
+        "repository_ref": { "const": "git@github.com:faocampo/curve.git" },
+        "base_revision": {
+          "anyOf": [
+            { "type": "string", "pattern": "^(?!0{40}$)[0-9a-f]{40}$" },
+            { "type": "null" }
+          ]
+        },
+        "source_adr_digest": {
+          "anyOf": [{ "$ref": "#/$defs/sha256Digest" }, { "type": "null" }]
+        },
+        "decision_schema_digest": {
+          "anyOf": [{ "$ref": "#/$defs/sha256Digest" }, { "type": "null" }]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "BOUND" } } },
+          "then": {
+            "properties": {
+              "base_revision": { "type": "string", "pattern": "^(?!0{40}$)[0-9a-f]{40}$" },
+              "source_adr_digest": { "$ref": "#/$defs/sha256Digest" },
+              "decision_schema_digest": { "$ref": "#/$defs/sha256Digest" }
+            }
+          },
+          "else": {
+            "anyOf": [
+              { "properties": { "base_revision": { "type": "null" } } },
+              { "properties": { "source_adr_digest": { "type": "null" } } },
+              { "properties": { "decision_schema_digest": { "type": "null" } } }
+            ]
+          }
+        }
+      ]
     },
     "retentionRule": {
       "type": "object",
@@ -261,11 +396,11 @@
             "NOT_APPLICABLE"
           ]
         },
-        "minimum_metadata_profile_ref": { "$ref": "#/$defs/reference" },
+        "minimum_metadata_profile_ref": { "$ref": "#/$defs/evidenceReference" },
         "legal_hold_behavior": { "const": "HOLD_BLOCKS_ERASURE_AND_MAY_FENCE_READS" },
         "backup_destruction_verification_required": { "type": "boolean" },
         "accountable_owner_ref": { "$ref": "#/$defs/principalReference" },
-        "authority_reference": { "$ref": "#/$defs/reference" },
+        "authority_reference": { "$ref": "#/$defs/evidenceReference" },
         "review_cadence": { "$ref": "#/$defs/isoDuration" }
       }
     },
@@ -274,27 +409,82 @@
       "additionalProperties": false,
       "required": [
         "storage_copy_kind",
+        "state",
+        "state_evidence_ref",
         "product_ref",
         "account_ref",
         "regions",
         "catalog_owner_ref",
         "lifecycle_policy_ref",
-        "destruction_proof_ref"
+        "destruction_proof_ref",
+        "restore_behavior",
+        "restore_behavior_ref"
       ],
       "properties": {
         "storage_copy_kind": { "$ref": "#/$defs/storageCopyKind" },
-        "product_ref": { "$ref": "#/$defs/reference" },
-        "account_ref": { "$ref": "#/$defs/reference" },
+        "state": { "enum": ["PRESENT", "ABSENT", "NOT_DEPLOYED"] },
+        "state_evidence_ref": { "$ref": "#/$defs/evidenceReference" },
+        "product_ref": {
+          "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }]
+        },
+        "account_ref": {
+          "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }]
+        },
         "regions": {
           "type": "array",
-          "minItems": 1,
           "uniqueItems": true,
           "items": { "type": "string", "pattern": "^[a-z]{2}(?:-gov)?-[a-z]+-\\d$" }
         },
         "catalog_owner_ref": { "$ref": "#/$defs/principalReference" },
-        "lifecycle_policy_ref": { "$ref": "#/$defs/reference" },
-        "destruction_proof_ref": { "$ref": "#/$defs/reference" }
-      }
+        "lifecycle_policy_ref": {
+          "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }]
+        },
+        "destruction_proof_ref": {
+          "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }]
+        },
+        "restore_behavior": {
+          "enum": ["RESTORABLE", "NON_RESTORABLE", "NOT_APPLICABLE"]
+        },
+        "restore_behavior_ref": {
+          "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "PRESENT" } } },
+          "then": {
+            "properties": {
+              "product_ref": { "$ref": "#/$defs/reference" },
+              "account_ref": { "$ref": "#/$defs/reference" },
+              "regions": { "minItems": 1 },
+              "lifecycle_policy_ref": { "$ref": "#/$defs/evidenceReference" },
+              "destruction_proof_ref": { "$ref": "#/$defs/evidenceReference" },
+              "restore_behavior": { "enum": ["RESTORABLE", "NON_RESTORABLE"] },
+              "restore_behavior_ref": { "$ref": "#/$defs/evidenceReference" }
+            }
+          },
+          "else": {
+            "properties": {
+              "product_ref": { "type": "null" },
+              "account_ref": { "type": "null" },
+              "regions": { "maxItems": 0 },
+              "lifecycle_policy_ref": { "type": "null" },
+              "destruction_proof_ref": { "type": "null" },
+              "restore_behavior": { "const": "NOT_APPLICABLE" },
+              "restore_behavior_ref": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "storage_copy_kind": { "const": "S3_INCOMPLETE_MULTIPART_UPLOAD" },
+              "state": { "const": "PRESENT" }
+            }
+          },
+          "then": { "properties": { "restore_behavior": { "const": "NON_RESTORABLE" } } }
+        }
+      ]
     },
     "keyErasure": {
       "type": "object",
@@ -330,12 +520,29 @@
             { "type": "null" }
           ]
         },
-        "multi_region_replica_handling_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
-        "custom_key_store_backup_handling_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
+        "multi_region_replica_handling_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] },
+        "custom_key_store_backup_handling_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] },
         "destruction_authority_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] },
-        "proof_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
-        "unrelated_data_impact_test_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
-      }
+        "proof_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] },
+        "unrelated_data_impact_test_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "DECIDED" } } },
+          "then": {
+            "properties": {
+              "key_boundary": { "enum": ["WORKSPACE", "WORKSPACE_CLASS", "OBJECT"] },
+              "kms_key_type": { "enum": ["CUSTOMER_MANAGED_SINGLE_REGION", "CUSTOMER_MANAGED_MULTI_REGION"] },
+              "deletion_wait_days": { "type": "integer", "minimum": 7, "maximum": 30 },
+              "multi_region_replica_handling_ref": { "$ref": "#/$defs/evidenceReference" },
+              "custom_key_store_backup_handling_ref": { "$ref": "#/$defs/evidenceReference" },
+              "destruction_authority_ref": { "$ref": "#/$defs/principalReference" },
+              "proof_ref": { "$ref": "#/$defs/evidenceReference" },
+              "unrelated_data_impact_test_ref": { "$ref": "#/$defs/evidenceReference" }
+            }
+          }
+        }
+      ]
     },
     "legalHold": {
       "type": "object",
@@ -362,8 +569,22 @@
         "covers_backups": { "const": true },
         "read_fencing_supported": { "const": true },
         "periodic_review": { "anyOf": [{ "$ref": "#/$defs/isoDuration" }, { "type": "null" }] },
-        "procedure_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
-      }
+        "procedure_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "DECIDED" } } },
+          "then": {
+            "properties": {
+              "authority_refs": { "minItems": 1 },
+              "release_authority_refs": { "minItems": 1 },
+              "conflict_authority_ref": { "$ref": "#/$defs/principalReference" },
+              "periodic_review": { "$ref": "#/$defs/isoDuration" },
+              "procedure_ref": { "$ref": "#/$defs/evidenceReference" }
+            }
+          }
+        }
+      ]
     },
     "restore": {
       "type": "object",
@@ -375,21 +596,126 @@
         "ledger_replay_required": { "const": true },
         "re_erasure_max_duration": { "anyOf": [{ "$ref": "#/$defs/isoDuration" }, { "type": "null" }] },
         "verification_owner_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] },
-        "runbook_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
+        "runbook_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "DECIDED" } } },
+          "then": {
+            "properties": {
+              "re_erasure_max_duration": { "$ref": "#/$defs/isoDuration" },
+              "verification_owner_ref": { "$ref": "#/$defs/principalReference" },
+              "runbook_ref": { "$ref": "#/$defs/evidenceReference" }
+            }
+          }
+        }
+      ]
+    },
+    "externalConnectionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["connection_ref", "policy_ref", "proof_mode", "proof_ref"],
+      "properties": {
+        "connection_ref": { "$ref": "#/$defs/reference" },
+        "policy_ref": { "$ref": "#/$defs/evidenceReference" },
+        "proof_mode": {
+          "enum": ["RECEIPT", "CONTRACT_EVIDENCE", "OUTSIDE_CURVE_CONTROL"]
+        },
+        "proof_ref": { "$ref": "#/$defs/evidenceReference" }
       }
     },
     "externalCopy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "connection_policy_required", "truthful_scope_reporting", "accepted_proof_modes", "owner_ref", "procedure_ref"],
+      "required": [
+        "status",
+        "connection_policy_required",
+        "truthful_scope_reporting",
+        "accepted_proof_modes",
+        "connection_inventory_state",
+        "connection_inventory_evidence_ref",
+        "connection_inventory_refs",
+        "connection_policies",
+        "owner_ref",
+        "procedure_ref"
+      ],
       "properties": {
         "status": { "enum": ["UNRESOLVED", "DECIDED"] },
         "connection_policy_required": { "const": true },
         "truthful_scope_reporting": { "const": true },
         "accepted_proof_modes": { "const": ["RECEIPT", "CONTRACT_EVIDENCE", "OUTSIDE_CURVE_CONTROL"] },
+        "connection_inventory_state": {
+          "anyOf": [
+            { "enum": ["NO_EXTERNAL_CONNECTIONS", "ENUMERATED"] },
+            { "type": "null" }
+          ]
+        },
+        "connection_inventory_evidence_ref": {
+          "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }]
+        },
+        "connection_inventory_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/reference" }
+        },
+        "connection_policies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/externalConnectionPolicy" }
+        },
         "owner_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] },
-        "procedure_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
-      }
+        "procedure_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "connection_inventory_state": { "type": "null" } } },
+          "then": {
+            "properties": {
+              "connection_inventory_evidence_ref": { "type": "null" },
+              "connection_inventory_refs": { "maxItems": 0 },
+              "connection_policies": { "maxItems": 0 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "connection_inventory_state": { "const": "NO_EXTERNAL_CONNECTIONS" }
+            }
+          },
+          "then": {
+            "properties": {
+              "connection_inventory_evidence_ref": { "$ref": "#/$defs/evidenceReference" },
+              "connection_inventory_refs": { "maxItems": 0 },
+              "connection_policies": { "maxItems": 0 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "connection_inventory_state": { "const": "ENUMERATED" } }
+          },
+          "then": {
+            "properties": {
+              "connection_inventory_evidence_ref": { "$ref": "#/$defs/evidenceReference" },
+              "connection_inventory_refs": { "minItems": 1 },
+              "connection_policies": { "minItems": 1 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "DECIDED" } } },
+          "then": {
+            "properties": {
+              "connection_inventory_state": {
+                "enum": ["NO_EXTERNAL_CONNECTIONS", "ENUMERATED"]
+              },
+              "connection_inventory_evidence_ref": { "$ref": "#/$defs/evidenceReference" },
+              "owner_ref": { "$ref": "#/$defs/principalReference" },
+              "procedure_ref": { "$ref": "#/$defs/evidenceReference" }
+            }
+          }
+        }
+      ]
     },
     "failureEscalation": {
       "type": "object",
@@ -400,9 +726,23 @@
         "retry_schedule": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/isoDuration" } },
         "incident_severity": { "anyOf": [{ "enum": ["CRITICAL", "HIGH", "MEDIUM"] }, { "type": "null" }] },
         "owner_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] },
-        "notice_policy_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
-        "manual_recovery_runbook_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] }
-      }
+        "notice_policy_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] },
+        "manual_recovery_runbook_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "DECIDED" } } },
+          "then": {
+            "properties": {
+              "retry_schedule": { "minItems": 1 },
+              "incident_severity": { "enum": ["CRITICAL", "HIGH", "MEDIUM"] },
+              "owner_ref": { "$ref": "#/$defs/principalReference" },
+              "notice_policy_ref": { "$ref": "#/$defs/evidenceReference" },
+              "manual_recovery_runbook_ref": { "$ref": "#/$defs/evidenceReference" }
+            }
+          }
+        }
+      ]
     },
     "costCapacity": {
       "type": "object",
@@ -412,25 +752,212 @@
         "status": { "enum": ["UNRESOLVED", "DECIDED"] },
         "currency": { "const": "USD" },
         "monthly_estimate": { "anyOf": [{ "type": "number", "minimum": 0 }, { "type": "null" }] },
-        "assumptions_ref": { "anyOf": [{ "$ref": "#/$defs/reference" }, { "type": "null" }] },
+        "assumptions_ref": { "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }] },
         "approver_ref": { "anyOf": [{ "$ref": "#/$defs/principalReference" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "DECIDED" } } },
+          "then": {
+            "properties": {
+              "monthly_estimate": { "type": "number", "minimum": 0 },
+              "assumptions_ref": { "$ref": "#/$defs/evidenceReference" },
+              "approver_ref": { "$ref": "#/$defs/principalReference" }
+            }
+          }
+        }
+      ]
+    },
+    "canonicalPersonIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_ref", "subject_id", "identity_proof_ref"],
+      "properties": {
+        "authority_ref": {
+          "type": "string",
+          "pattern": "^identity:[a-z0-9][a-z0-9._/-]{1,126}$"
+        },
+        "subject_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,254}$"
+        },
+        "identity_proof_ref": { "$ref": "#/$defs/identityProofReference" }
       }
+    },
+    "identityProofReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_ref",
+        "revision",
+        "content_digest",
+        "authority_ref",
+        "subject_id"
+      ],
+      "properties": {
+        "artifact_ref": { "$ref": "#/$defs/reference" },
+        "revision": { "$ref": "#/$defs/revision" },
+        "content_digest": { "$ref": "#/$defs/sha256Digest" },
+        "authority_ref": {
+          "type": "string",
+          "pattern": "^identity:[a-z0-9][a-z0-9._/-]{1,126}$"
+        },
+        "subject_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,254}$"
+        }
+      }
+    },
+    "approvalRole": {
+      "enum": [
+        "security",
+        "privacy",
+        "legal",
+        "platform_operations",
+        "database_operations",
+        "curve_engineering"
+      ]
+    },
+    "approvalIdentityPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "canonical_authority_ref",
+        "authority_evidence_ref",
+        "separation_mode",
+        "allowed_dual_hat_role_pairs",
+        "separation_policy_evidence_ref"
+      ],
+      "properties": {
+        "status": { "enum": ["UNRESOLVED", "DECIDED"] },
+        "canonical_authority_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^identity:[a-z0-9][a-z0-9._/-]{1,126}$"
+            },
+            { "type": "null" }
+          ]
+        },
+        "authority_evidence_ref": {
+          "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }]
+        },
+        "separation_mode": {
+          "anyOf": [
+            { "enum": ["SIX_DISTINCT_PEOPLE", "DUAL_HAT_ALLOWED"] },
+            { "type": "null" }
+          ]
+        },
+        "allowed_dual_hat_role_pairs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/approvalRole" }
+          }
+        },
+        "separation_policy_evidence_ref": {
+          "anyOf": [{ "$ref": "#/$defs/evidenceReference" }, { "type": "null" }]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "DECIDED" } } },
+          "then": {
+            "properties": {
+              "canonical_authority_ref": {
+                "type": "string",
+                "pattern": "^identity:[a-z0-9][a-z0-9._/-]{1,126}$"
+              },
+              "authority_evidence_ref": { "$ref": "#/$defs/evidenceReference" },
+              "separation_mode": {
+                "enum": ["SIX_DISTINCT_PEOPLE", "DUAL_HAT_ALLOWED"]
+              },
+              "separation_policy_evidence_ref": { "$ref": "#/$defs/evidenceReference" }
+            }
+          },
+          "else": {
+            "anyOf": [
+              { "properties": { "canonical_authority_ref": { "type": "null" } } },
+              { "properties": { "authority_evidence_ref": { "type": "null" } } },
+              { "properties": { "separation_mode": { "type": "null" } } },
+              { "properties": { "separation_policy_evidence_ref": { "type": "null" } } },
+              {
+                "properties": {
+                  "separation_mode": { "const": "DUAL_HAT_ALLOWED" },
+                  "allowed_dual_hat_role_pairs": { "maxItems": 0 }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": { "properties": { "separation_mode": { "const": "SIX_DISTINCT_PEOPLE" } } },
+          "then": { "properties": { "allowed_dual_hat_role_pairs": { "maxItems": 0 } } }
+        },
+        {
+          "if": { "properties": { "separation_mode": { "const": "DUAL_HAT_ALLOWED" } } },
+          "then": { "properties": { "allowed_dual_hat_role_pairs": { "minItems": 1 } } }
+        },
+        {
+          "if": { "properties": { "separation_mode": { "type": "null" } } },
+          "then": { "properties": { "allowed_dual_hat_role_pairs": { "maxItems": 0 } } }
+        }
+      ]
     },
     "approvalRecord": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["approver_ref", "approved_decision_digest", "approved_at"],
+      "required": ["approver_identity", "approved_decision_digest", "approved_at"],
       "properties": {
-        "approver_ref": { "anyOf": [{ "$ref": "#/$defs/personReference" }, { "type": "null" }] },
-        "approved_decision_digest": { "anyOf": [{ "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }, { "type": "null" }] },
+        "approver_identity": { "anyOf": [{ "$ref": "#/$defs/canonicalPersonIdentity" }, { "type": "null" }] },
+        "approved_decision_digest": { "anyOf": [{ "$ref": "#/$defs/sha256Digest" }, { "type": "null" }] },
         "approved_at": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "approver_identity": { "type": "null" } } },
+          "then": {
+            "properties": {
+              "approved_decision_digest": { "type": "null" },
+              "approved_at": { "type": "null" }
+            }
+          },
+          "else": {
+            "properties": {
+              "approved_decision_digest": { "$ref": "#/$defs/sha256Digest" },
+              "approved_at": { "type": "string", "format": "date-time" }
+            }
+          }
+        }
+      ]
+    },
+    "emptyApprovalRecord": {
+      "type": "object",
+      "properties": {
+        "approver_identity": { "type": "null" },
+        "approved_decision_digest": { "type": "null" },
+        "approved_at": { "type": "null" }
+      }
+    },
+    "completedApprovalRecord": {
+      "type": "object",
+      "properties": {
+        "approver_identity": { "$ref": "#/$defs/canonicalPersonIdentity" },
+        "approved_decision_digest": { "$ref": "#/$defs/sha256Digest" },
+        "approved_at": { "type": "string", "format": "date-time" }
       }
     },
     "approvals": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["security", "privacy", "legal", "platform_operations", "database_operations", "curve_engineering", "decision_date", "next_review_at"],
+      "required": ["identity_policy", "security", "privacy", "legal", "platform_operations", "database_operations", "curve_engineering", "decision_date", "next_review_at"],
       "properties": {
+        "identity_policy": { "$ref": "#/$defs/approvalIdentityPolicy" },
         "security": { "$ref": "#/$defs/approvalRecord" },
         "privacy": { "$ref": "#/$defs/approvalRecord" },
         "legal": { "$ref": "#/$defs/approvalRecord" },

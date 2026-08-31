@@ -7,8 +7,8 @@
 | Package | P0-12 (retention, backup, legal-hold, tombstone, and erasure decision package) |
 | Decision | D-009 (retention, deletion, backup, and legal-hold policy) |
 | Status | `PUBLISHED_PROPOSAL / PROPOSED / NOT_DECIDED` |
-| Version | 1.4 |
-| Date | 2026-08-29 |
+| Version | 1.5 |
+| Date | 2026-08-31 |
 | Product | Curve |
 | Repository | `git@github.com:faocampo/curve.git` |
 | Publication evidence | [Curve PR #30](https://github.com/faocampo/curve/pull/30) (P0-12 retention-policy decision package) head `b538d06c4e3392a574fafbef7184b24497c7d48b` passed CI and squash-merged as Curve `main` `45590d356fa813a7407f624ee47d1c0ab3bc4cf2` |
@@ -24,7 +24,9 @@ derived copy, backup, version, log projection, and quarantine location. The
 decision sets exact retention periods, start events, deletion eligibility,
 lawful metadata residue, legal-hold behavior, storage inventory, cryptographic
 erasure boundary, restore re-erasure SLA, external-copy reporting, failure
-escalation, cost, and named approvals.
+escalation, cost, contract/evidence revision bindings, canonical approval
+identities, the human-selected approval separation policy, and six functional
+approvals.
 
 The current [D-009 decision worksheet](../../contracts/governance/d009-retention-policy-v1.json)
 (machine-readable retention, backup, hold, erasure, and approval proposal) is
@@ -37,7 +39,8 @@ activation authority.
   approver in each required function can approve the stable decision digest.
 - An AI coding agent cannot change `decision_state` to `DECIDED`, populate an
   approval, select a policy value, or infer an X3M account, region, owner, cost,
-  duration, SLA, legal authority, or provider obligation.
+  duration, SLA, legal authority, provider obligation, identity authority, or
+  separation/dual-hat policy.
 - Partial owner input is recorded as populated cells/inventory entries while
   the exact complement remains in `unresolved_cell_keys`,
   `unresolved_storage_keys`, and `unresolved_requirements`.
@@ -53,7 +56,7 @@ activation authority.
 | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product lifecycle, classifications, retention, erasure, and acceptance criteria) | NFR-010, NFR-011, NFR-018, NFR-020, AC-53, AC-56, and D-009 product invariants |
 | [ADR-009](adr-009-retention-and-erasure.md) (asset inventory, policy matrix, hold/erasure state machine, and fail-closed behavior) | Human-readable policy authority and decision record |
 | [D-009 decision worksheet](../../contracts/governance/d009-retention-policy-v1.json) (all policy cells, storage copies, material blocks, approvals, and activation guard) | Normative owner-fillable decision instance |
-| [D-009 decision schema](../../contracts/schemas/retention-policy-decision.schema.json) (closed machine validation for the decision instance) | Field types, enums, coverage limits, named-person approvals, and unknown-field rejection |
+| [D-009 decision schema](../../contracts/schemas/retention-policy-decision.schema.json) (closed machine validation for the decision instance) | Field types, revision/digest evidence, copy states, per-connection mappings, canonical approval identities, chronology, coverage limits, and unknown-field rejection |
 | [Security and operations specification](security-and-operations.md) (classification, protected-storage, erasure, recovery, and incident controls) | Enforcement points and truthful completion boundary |
 | [P0-05 test strategy](m0-test-strategy.md) (acceptance suites, commands, environments, ownership, and evidence gates) | Cross-repository verification and AC-53/AC-56 ownership |
 | [Amazon S3 versioning deletion guidance](https://docs.aws.amazon.com/AmazonS3/latest/userguide/troubleshooting-versioning.html) (delete markers, noncurrent versions, and permanent version deletion) | S3 current/noncurrent/delete-marker inventory requirement |
@@ -65,6 +68,26 @@ AWS service constraints inform feasibility; they do not select X3M retention
 policy.
 
 ## Required decision coverage
+
+### Contract and evidence binding
+
+The decision records the exact Curve repository, 40-character base revision,
+ADR SHA-256 digest, and decision-schema SHA-256 digest. Every policy, authority,
+lifecycle, proof, runbook, cost assumption, identity-authority, and separation
+policy evidence reference contains:
+
+1. A controlled artifact reference.
+2. An exact source revision.
+3. A `sha256:` content digest of the reviewed bytes.
+
+The semantic validator resolves a `BOUND` base revision as an ancestor of the
+candidate `HEAD` and compares the recorded ADR/schema digests with the exact
+candidate bytes. The stable approval digest includes these bindings, final
+decision state, effective scope, next-review schedule, activation guard, and
+approval identity policy. It canonically orders set-like authority, region, and
+per-connection mappings. It excludes only approval records, their approval
+timestamps, the decision timestamp, derived unresolved projections, and the
+digest field itself.
 
 ### Asset/classification cells
 
@@ -110,17 +133,22 @@ The named operations owners enumerate all eight required copy kinds:
 
 | Required key | Required evidence |
 | --- | --- |
-| `POSTGRESQL_FULL_INCREMENTAL_PITR` | Product/service, AWS account, regions, catalog owner, lifecycle policy, destruction proof |
-| `POSTGRESQL_REPLICA` | Every replica/failover copy and its destruction/restore behavior |
-| `S3_CURRENT_OBJECT` | Current versions, bucket/account/region, lifecycle and proof |
-| `S3_NONCURRENT_VERSION_DELETE_MARKER` | Noncurrent versions, delete markers, Object Lock interaction, and permanent-deletion proof |
-| `S3_INCOMPLETE_MULTIPART_UPLOAD` | Abort lifecycle and empty-parts verification |
-| `S3_REPLICATION_ARCHIVE` | Replicas, archives, replication lag, lifecycle, and destruction proof |
-| `LOG_SIEM_PROJECTION` | Every approved log/SIEM projection and stricter-or-equal retention |
-| `FORENSIC_QUARANTINE_STORE` | Security store, custody, hold, access, and final-disposition proof |
+| `POSTGRESQL_FULL_INCREMENTAL_PITR` | Evidenced `PRESENT`/`ABSENT`/`NOT_DEPLOYED`; when present, product/service, AWS account, regions, catalog owner, lifecycle, destruction proof, and restore behavior |
+| `POSTGRESQL_REPLICA` | Evidenced state for every replica/failover category; when present, destruction and restore behavior |
+| `S3_CURRENT_OBJECT` | Evidenced state; when present, current versions, bucket/account/region, lifecycle, destruction proof, and restore behavior |
+| `S3_NONCURRENT_VERSION_DELETE_MARKER` | Evidenced state; when present, noncurrent versions, delete markers, Object Lock interaction, permanent-deletion proof, and restore behavior |
+| `S3_INCOMPLETE_MULTIPART_UPLOAD` | Evidenced state; when present, abort lifecycle, empty-parts proof, and non-restorable behavior |
+| `S3_REPLICATION_ARCHIVE` | Evidenced state; when present, replicas, archives, lag, lifecycle, destruction proof, and restore behavior |
+| `LOG_SIEM_PROJECTION` | Evidenced state; when present, every approved projection, stricter-or-equal retention, destruction proof, and restore/non-restorable behavior |
+| `FORENSIC_QUARANTINE_STORE` | Evidenced state; when present, security store, custody, hold, access, final-disposition proof, and restore behavior |
 
 An unlisted X3M service that stores or projects protected Curve data adds a new
 reviewed contract version before D-009 can be decided.
+
+`ABSENT` means the applicable governed topology was inventoried and the copy is
+not present. `NOT_DEPLOYED` means the product/capability is not deployed in that
+topology. Both require state evidence and carry no deployed product, account,
+region, lifecycle, destruction, or restore fields.
 
 ## Material decision blocks
 
@@ -129,38 +157,55 @@ reviewed contract version before D-009 can be decided.
 | Key erasure | Workspace/class/object key boundary; customer-managed key type; 7–30-day KMS deletion wait; replica and custom-key-store backup handling; destruction authority; proof; unrelated-data isolation test |
 | Legal hold | Creation/release/conflict authorities; case identifier; derivative/backup scope; read fencing; review cadence; procedure |
 | Restore re-erasure | Quarantine-before-service, deletion-ledger replay, maximum re-erasure duration, verification owner, runbook |
-| External-copy deletion | Per-connection policy, accepted receipt/contract/outside-control reporting, owner, procedure |
+| External-copy deletion | Evidenced exhaustive inventory (`NO_EXTERNAL_CONNECTIONS` or `ENUMERATED`) with explicit connection IDs exactly equal to the mapping IDs; for every enumerated connection, revision/digest-bound policy, receipt/contract/outside-control proof mode and proof; owner; procedure |
 | Failure escalation | Exact bounded retry schedule, incident severity, owner, notice policy, manual recovery runbook |
 | Cost/capacity | Monthly USD estimate, assumptions, active/version/backup/quarantine/scan coverage, approver |
-| Named approvals | Security, Privacy, Legal, Platform Operations, Database Operations, and Curve Engineering people; decision date and next review |
+| Named approvals | Canonical identity authority; human-selected `SIX_DISTINCT_PEOPLE` or `DUAL_HAT_ALLOWED` policy, exact permitted two-role pairs for dual-hat, and policy evidence; authority-scoped subject identity and matching revision/digest-bound subject proof for Security, Privacy, Legal, Platform Operations, Database Operations, and Curve Engineering; decision date and next review |
 
 ## Owner-fill and approval protocol
 
 1. Start from the exact merged Curve revision containing this packet.
 2. A named owner adds one or more complete policy cells or storage inventory
    entries. The same change removes exactly those keys from the unresolved list.
+   A storage entry always records `PRESENT`, `ABSENT`, or `NOT_DEPLOYED` with
+   state evidence; present entries also record restore behavior and evidence.
 3. A named owner completes an entire material block and sets its status to
    `DECIDED`; partial fields keep the block `UNRESOLVED`.
 4. The semantic validator recomputes `unresolved_requirements`. Hand-authored
    progress claims that differ from content fail CI.
-5. When all 39 cells, eight storage entries, and six material blocks are
-   complete, Curve computes `approval_subject_digest` over policy content only.
-6. Six named people independently approve that same digest and record their
-   identity and approval time. The stable digest excludes approvals, avoiding a
-   commit-hash/self-reference cycle.
-7. The recorded decision time follows every approval; `next_review_at` follows
-   the decision time.
-8. Only after all checks pass may an authorized human set `decision_state` to
-   `DECIDED`, `effective_scope` to `CURVE_CONTROLLED_COPIES`, and
-   `implementation_dispatch_allowed` to true in the same reviewed change.
-9. Protected storage, staging, and production flags remain false. Their later
+5. Owners bind the exact Curve base revision and ADR/schema digests, and every
+   supporting evidence reference binds its artifact, revision, and SHA-256
+   digest.
+6. Owners select the canonical identity authority and decide
+   `SIX_DISTINCT_PEOPLE` or `DUAL_HAT_ALLOWED`, with revision/digest-bound
+   authority and separation-policy evidence. A dual-hat selection also records
+   every permitted two-role pair; unlisted reuse and more than two roles for
+   one identity fail closed.
+7. The checked-in record stays `PROPOSED / NONE_FAIL_CLOSED` with null digest,
+   dates, and approvals. Owners create a non-persisted final candidate subject
+   by cloning it in memory, filling every requirement, selecting final
+   `DECIDED / CURVE_CONTROLLED_COPIES` and implementation dispatch, and setting
+   a future `next_review_at`.
+8. Curve computes `approval_subject_digest` from that final candidate subject.
+   The candidate is preparation input, not a schema-valid intermediate record.
+9. One authority-scoped canonical identity record and matching subject proof
+   for each required function approves that same digest. In
+   `SIX_DISTINCT_PEOPLE`, duplicate identity subjects fail; in
+   `DUAL_HAT_ALLOWED`, the selected evidence governs reuse.
+10. An authorized human assembles the final state, digest, six approvals, and a
+    decision time that follows every approval and precedes the bound review
+    date. The complete record is written and validated atomically in one
+    reviewed change; its recomputed subject must equal the approved digest.
+11. Only that complete validated record may carry `DECIDED`,
+    `CURVE_CONTROLLED_COPIES`, and implementation dispatch.
+12. Protected storage, staging, and production flags remain false. Their later
    activation requires implementation, infrastructure, and environment evidence.
 
 ## Acceptance tests
 
 | ID | Given / When / Then |
 | --- | --- |
-| `P0-12-AT-01` | Given the proposal, when validated, then it reports 39 unresolved cells, eight unresolved storage copies, nine unresolved requirements, and no implementation authority. |
+| `P0-12-AT-01` | Given the proposal, when validated, then it reports 39 unresolved cells, eight unresolved storage copies, ten unresolved requirements, and no implementation authority. |
 | `P0-12-AT-02` | Given a missing/reordered catalog value, when validated, then v1 coverage drift fails. |
 | `P0-12-AT-03` | Given duplicate or mismatched cell identity, when validated, then decision coverage fails. |
 | `P0-12-AT-04` | Given partial cells or inventory, when unresolved projections differ from the exact complement, then validation fails. |
@@ -168,10 +213,16 @@ reviewed contract version before D-009 can be decided.
 | `P0-12-AT-06` | Given `DECIDED`, when any of 39 cells or eight storage entries is absent, then validation fails. |
 | `P0-12-AT-07` | Given a decided cell, when duration mode lacks an ISO 8601 duration or a default-denied/not-applicable mode carries one, then schema validation fails. |
 | `P0-12-AT-08` | Given an unresolved material block, missing legal-hold authority, or empty retry schedule, when `DECIDED` is claimed, then validation fails. |
-| `P0-12-AT-09` | Given a complete decision, when content is canonicalized, then every named-person approval binds the same stable digest. |
-| `P0-12-AT-10` | Given a forged digest or approval after decision time, when validated, then approval fails. |
-| `P0-12-AT-11` | Given a decision/review chronology, when the next review is not later, then validation fails. |
-| `P0-12-AT-12` | Given any state, when protected storage, staging, or production is directly enabled by the decision record, then validation fails. |
+| `P0-12-AT-09` | Given contract evidence marked `BOUND`, when repository/base/ADR/schema binding is incomplete, unresolvable, non-ancestral, or byte-inconsistent, then validation fails. |
+| `P0-12-AT-10` | Given any supporting evidence reference, when artifact, revision, or SHA-256 digest is absent, then schema/semantic validation fails. |
+| `P0-12-AT-11` | Given a storage entry, when `PRESENT` lacks deployed/restore evidence, an incomplete multipart upload is marked restorable, or `ABSENT`/`NOT_DEPLOYED` carries deployed fields, then validation fails. |
+| `P0-12-AT-12` | Given the external-copy block, when inventory state, the explicit inventory-ID set, mapping-ID set, unique connection identity, policy, proof mode, or proof evidence contradict, then validation fails. |
+| `P0-12-AT-13` | Given a complete decision, when contract, storage, external-copy, identity-policy, scope, next-review, or activation subject content changes, then the approval digest changes; reordering set-like authority, region, or connection mappings does not. |
+| `P0-12-AT-14` | Given approval records, when an identity uses another authority, a noncanonical subject, or subject proof for a different authority/subject, then validation fails. |
+| `P0-12-AT-15` | Given `SIX_DISTINCT_PEOPLE`, duplicate canonical identities fail; given evidenced `DUAL_HAT_ALLOWED`, only an explicitly permitted two-role pair may reuse one identity, and three-or-more-role reuse fails. |
+| `P0-12-AT-16` | Given a forged digest or approval at/after decision time, when validated, then approval fails. |
+| `P0-12-AT-17` | Given decision/review chronology, when the next review is not later, then validation fails. |
+| `P0-12-AT-18` | Given any state, when protected storage, staging, or production is directly enabled by the decision record, then validation fails. |
 
 ## Exact verification commands
 
@@ -194,8 +245,10 @@ production command belongs to this proposal package.
 - Exact Curve head, per-file context hashes, and aggregate P0-12 digest.
 - Schema compilation, valid proposal, invalid fixture, and semantic test result.
 - Machine-reported populated/unresolved cell, storage, block, and approval counts.
-- Source links or controlled policy references for every completed value.
-- Named-person approval evidence bound to `approval_subject_digest`.
+- Artifact, exact revision, and SHA-256 content digest for every completed
+  evidence value, plus bound base/ADR/schema context.
+- Canonical authority/subject approval evidence and the selected separation
+  policy bound to `approval_subject_digest`.
 - Review of AWS lifecycle feasibility and cost against the selected periods.
 - Explicit confirmation that the decision unblocks implementation review only.
 
