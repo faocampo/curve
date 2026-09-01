@@ -4,8 +4,8 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `DEFINITION_PREPARED / OPTION 3 APPROVED / EXACT PLANE GRANT REQUIRED / NOT IMPLEMENTATION AUTHORITY` |
-| Version | 1.2 |
+| Status | `ACCEPTED_AND_MERGED / LOCAL_ONLY` |
+| Version | 1.3 |
 | Prepared | 2026-08-30 |
 | Product | Curve |
 | Work package | RUNTIME-M0-01 (graceful Curve worker shutdown classification) |
@@ -16,9 +16,19 @@
 | Verified target base | `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c` |
 | Intended feature branch | `curve/runtime-m0-01-graceful-worker-shutdown` |
 | Tracking evidence | [Curve issue #46](https://github.com/faocampo/curve/issues/46) (intentional `SIGINT`/`SIGTERM` lifecycle classification defect and acceptance criteria) |
+| Implementation evidence | [RUNTIME-M0-01 implementation evidence](runtime-m0-01-implementation-evidence.md) (accepted Plane head and merge, deterministic tests, live signals, CI, security, cleanup, and rollback) |
 | Data boundary | Synthetic `INTERNAL` local-development data only; literal public local PostgreSQL/Temporal connection settings are permitted; external, protected, staging, and production credentials, secrets, and data are prohibited |
 | External spend | US$0 |
 | Authority boundary | This definition authorizes no Plane mutation, command execution, branch push, PR creation, merge, deployment, provider call, credential use, or infrastructure change. |
+
+This packet is retained as the immutable implementation definition. Its local
+scope was implemented and accepted through Plane PR #15 at head
+`88921d95e8b5b997d2578a170fe79e260b61c8c2`, squash-merged as
+`c516a612a29751b0d24bcbd32bfcba1bd73fe3af`. See the
+[RUNTIME-M0-01 implementation evidence](runtime-m0-01-implementation-evidence.md)
+(accepted implementation, tests, live signal proof, CI, security, cleanup, and
+rollback). The historical authority boundary above remains the boundary of the
+definition itself.
 
 ## Demonstrable outcome
 

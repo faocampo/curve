@@ -116,11 +116,11 @@ test("substantively reconciled governance documents advance document control", (
   for (const [name, contents, version, dateLabel, date] of [
     ["architecture", architecture, "0.9", "Last updated", "2026-08-30"],
     ["coding-agent decision", codingDecision, "1.2", "Prepared", "2026-08-30"],
-    ["RUNTIME-M0-01 packet", runtimePacket, "1.2", "Prepared", "2026-08-30"],
+    ["RUNTIME-M0-01 packet", runtimePacket, "1.3", "Prepared", "2026-08-30"],
     ["development", development, "1.21", "Last updated", "2026-08-31"],
     ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
     ["M0 readiness board", readiness, "1.40", "Date", "2026-09-01"],
-    ["M0 completion audit", m0Audit, "1.12", "Date", "2026-09-01"],
+    ["M0 completion audit", m0Audit, "1.13", "Date", "2026-09-01"],
     ["M0 test strategy", strategy, "1.8", "Last updated", "2026-08-31"],
     ["GitHub Project execution map", projectMap, "1.18", "Date", "2026-08-29"],
     ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],
@@ -141,20 +141,13 @@ test("next work and later-milestone status remain truthfully executable", () => 
   assert.ok(nextSequence, "M0 next executable sequence is required");
   assert.match(
     nextSequence[1],
-    /^1\. Use the approved paired simplified outcome in the/m,
-  );
-  assert.match(nextSequence[1], /Authority Option 3/);
-  assert.match(nextSequence[1], /deferred machine profile/);
-  assert.match(
-    nextSequence[1],
-    /^2\. Obtain exact-revision approval for the\s+\[RUNTIME-M0-01 human execution grant\]/m,
-  );
-  assert.match(
-    nextSequence[1],
-    /^3\. Revalidate the live Plane base and local image\/tool\/workspace evidence,\s+implement the three-file correction in one human-operated worktree,[\s\S]*publish Curve implementation evidence/m,
+    /^1\. Merge the \[RUNTIME-M0-01 implementation evidence\]/m,
   );
   assert.match(nextSequence[1], /Curve issue #46/);
-  assert.match(nextSequence[1], /Machine dispatch remains fail closed/);
+  assert.match(nextSequence[1], /mark its Project item\s+Done/);
+  assert.doesNotMatch(nextSequence[1], /Obtain exact-revision approval/);
+  assert.doesNotMatch(nextSequence[1], /implement the three-file correction/);
+  assert.match(nextSequence[1], /Curve issue #46/);
   assert.doesNotMatch(nextSequence[1], /Publish the RUNTIME-M0-01 machine packet/);
   assert.match(nextSequence[1], /D-009 \(retention, backup, legal-hold, tombstone, and erasure/);
 

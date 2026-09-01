@@ -25,6 +25,9 @@ const m0Audit = read("docs/technical/m0-completion-audit.md");
 const grant = read(
   "docs/technical/runtime-m0-01-human-execution-grant.md",
 );
+const evidence = read(
+  "docs/technical/runtime-m0-01-implementation-evidence.md",
+);
 
 test("RUNTIME-M0-01 context is canonical, complete, and repository-resolvable", () => {
   const requiredPaths = [
@@ -54,6 +57,7 @@ test("RUNTIME-M0-01 context is canonical, complete, and repository-resolvable", 
     "docs/technical/m0-traceability.md",
     "docs/technical/runtime-m0-01-graceful-shutdown-task-packet.md",
     "docs/technical/runtime-m0-01-human-execution-grant.md",
+    "docs/technical/runtime-m0-01-implementation-evidence.md",
     "docs/technical/security-and-operations.md",
     "scripts/lib/coding-agent-task-packet.mjs",
     "scripts/lib/context-pack.mjs",
@@ -112,12 +116,12 @@ test("RUNTIME-M0-01 pins one bounded Plane correction and exact rollback", () =>
   ]);
 });
 
-test("runtime definition approves human operation while machine dispatch stays fail closed", () => {
+test("runtime definition records accepted human operation while machine dispatch stays fail closed", () => {
   assert.match(
     packet,
-    /`DEFINITION_PREPARED \/ OPTION 3 APPROVED \/ EXACT PLANE GRANT REQUIRED \/ NOT IMPLEMENTATION AUTHORITY`/,
+    /`ACCEPTED_AND_MERGED \/ LOCAL_ONLY`/,
   );
-  assert.match(packet, /^\| Version \| 1\.2 \|$/m);
+  assert.match(packet, /^\| Version \| 1\.3 \|$/m);
   assert.match(decision, /^\| Version \| 1\.2 \|$/m);
   assert.match(
     decision,
@@ -303,9 +307,9 @@ test("runtime definition approves human operation while machine dispatch stays f
   assert.doesNotMatch(m0Audit, /proposal selects/i);
 });
 
-test("prepared human grant binds one exact local Plane attempt", () => {
+test("consumed human grant and implementation evidence bind one accepted local Plane attempt", () => {
   for (const value of [
-    "PREPARED / EXACT HUMAN APPROVAL REQUIRED / NO PLANE MUTATION",
+    "CONSUMED / IMPLEMENTATION ACCEPTED_AND_MERGED / LOCAL_ONLY",
     "f8e2f4b3d497f747f9e8a3b7db7508510400bae9",
     "866032fa42e2cb57ad1a4e662d9561f742983f79",
     "git@github.com:faocampo/plane.git",
@@ -353,6 +357,26 @@ test("prepared human grant binds one exact local Plane attempt", () => {
   assert.match(packet, /--task-queue-type workflow --output json/);
   assert.match(packet, /--task-queue-type activity --output json/);
   assert.match(packet, /missing or stale workflow\/activity poller stops the case/);
+
+  for (const value of [
+    "ACCEPTED_AND_MERGED / LOCAL_ONLY",
+    "030644db40e5a949ac02a193ad47b0c86f96dcab",
+    "b5d611ae77d5404e326f1ffa31694fbcead2cb94",
+    "88921d95e8b5b997d2578a170fe79e260b61c8c2",
+    "c516a612a29751b0d24bcbd32bfcba1bd73fe3af",
+    "9bee343ffc7f9ba983bcef40a276f87553e8a342",
+    "33563636894",
+    "33563639296",
+    "33563642356",
+    "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "382 passed",
+    "900 passed",
+    "DONE_LOCAL",
+  ]) {
+    assert.ok(evidence.includes(value), value);
+  }
+  assert.match(evidence, /zero `critical` or `high` findings/i);
+  assert.match(evidence, /Curve machine dispatch remains fail closed/i);
 });
 
 test("active indexes and test ownership expose the same runtime boundary", () => {
@@ -367,21 +391,19 @@ test("active indexes and test ownership expose the same runtime boundary", () =>
   }
   const traceability = read("docs/technical/m0-traceability.md");
   assert.match(traceability, /RUNTIME-M0-01 graceful worker-shutdown checkpoint/);
-  assert.match(traceability, /after exact grant approval/);
-  const normalizedStatus = "DEFINITION_PREPARED / OPTION 3 APPROVED / EXACT PLANE GRANT REQUIRED / NOT IMPLEMENTATION AUTHORITY";
+  assert.match(traceability, /`DONE_LOCAL`/);
+  assert.match(packet, /`ACCEPTED_AND_MERGED \/ LOCAL_ONLY`/);
+  assert.match(technicalIndex, /RUNTIME-M0-01 implementation evidence/);
+  assert.match(technicalIndex, /`ACCEPTED_AND_MERGED \/ LOCAL_ONLY`/);
   for (const [name, contents] of [
-    ["packet", packet],
     ["development", development],
     ["readiness", readiness],
     ["traceability", traceability],
-    ["technical index", technicalIndex],
     ["completion audit", m0Audit],
-  ]) {
-    assert.ok(contents.includes(normalizedStatus), `${name} status`);
-  }
+  ]) assert.match(contents, /RUNTIME-M0-01[\s\S]{0,1200}`?DONE_LOCAL`?/i, name);
   assert.match(strategy, /R1-03 \(full disaster-recovery exercise\) retains complete AC-58 ownership/);
   assert.match(strategy, /`HUMAN_EXECUTION_CANDIDATE \/ MACHINE_UNAVAILABLE`/);
-  assert.match(strategy, /outside Curve\s+dispatch under one exact Plane grant/);
+  assert.match(strategy, /outside Curve dispatch under\s+one consumed exact Plane grant/);
   assert.match(
     strategy,
     /until M4 provides the approved OpenHands\/gVisor tool, authority, lease, and\s+execution-evidence profile/,

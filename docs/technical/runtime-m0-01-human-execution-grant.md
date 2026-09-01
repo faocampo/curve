@@ -4,14 +4,22 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PREPARED / EXACT HUMAN APPROVAL REQUIRED / NO PLANE MUTATION` |
-| Version | 1.1 |
+| Status | `CONSUMED / IMPLEMENTATION ACCEPTED_AND_MERGED / LOCAL_ONLY` |
+| Version | 1.2 |
 | Prepared | 2026-09-01 |
 | Product | Curve |
 | Work package | RUNTIME-M0-01 (graceful Curve worker-shutdown correction) |
 | Governing decision | [Coding-agent local execution and authority decision](coding-agent-local-execution-decision.md) (approved human-operated coding outside Curve dispatch and deferred machine execution profile) |
 | Implementation definition | [RUNTIME-M0-01 task packet](runtime-m0-01-graceful-shutdown-task-packet.md) (worker-shutdown behavior, exact Plane scope, verification, live signals, stop conditions, and rollback) |
 | Decision evidence | Curve PR #50 approved at head `f8e2f4b3d497f747f9e8a3b7db7508510400bae9` and squash-merged as `866032fa42e2cb57ad1a4e662d9561f742983f79` |
+| Grant publication | Curve PR #65 squash-merged as `030644db40e5a949ac02a193ad47b0c86f96dcab` |
+| Completion evidence | [RUNTIME-M0-01 implementation evidence](runtime-m0-01-implementation-evidence.md) (accepted Plane implementation, exact CI, live signals, security, cleanup, and rollback) |
+
+This one-attempt grant has been consumed. Plane PR #15 completed at exact
+rebased head `88921d95e8b5b997d2578a170fe79e260b61c8c2` and squash-merged into
+`preview` as `c516a612a29751b0d24bcbd32bfcba1bd73fe3af`. The prepared tuple and
+boundaries below remain the historical authorization record; they are not
+reusable authority for another attempt.
 
 ## Prepared exact grant tuple
 
