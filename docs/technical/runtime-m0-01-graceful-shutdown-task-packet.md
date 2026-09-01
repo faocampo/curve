@@ -4,8 +4,8 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `DEFINITION_PREPARED / MANUAL_BOOTSTRAP_PROPOSED / OWNER_DECISION_REQUIRED / NOT_IMPLEMENTATION_AUTHORITY` |
-| Version | 1.1 |
+| Status | `DEFINITION_PREPARED / OPTION 3 APPROVED / EXACT PLANE GRANT REQUIRED / NOT IMPLEMENTATION AUTHORITY` |
+| Version | 1.2 |
 | Prepared | 2026-08-30 |
 | Product | Curve |
 | Work package | RUNTIME-M0-01 (graceful Curve worker shutdown classification) |
@@ -13,10 +13,10 @@
 | Implementer | Codex |
 | Target repository | `git@github.com:faocampo/plane.git` |
 | Target branch | `preview` |
-| Verified target base | `99a73b4eab5ee21fd012d7358bc9259252d47f71` |
+| Verified target base | `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c` |
 | Intended feature branch | `curve/runtime-m0-01-graceful-worker-shutdown` |
 | Tracking evidence | [Curve issue #46](https://github.com/faocampo/curve/issues/46) (intentional `SIGINT`/`SIGTERM` lifecycle classification defect and acceptance criteria) |
-| Data boundary | Synthetic `INTERNAL` local-development data only; no protected bodies or credentials |
+| Data boundary | Synthetic `INTERNAL` local-development data only; literal public local PostgreSQL/Temporal connection settings are permitted; external, protected, staging, and production credentials, secrets, and data are prohibited |
 | External spend | US$0 |
 | Authority boundary | This definition authorizes no Plane mutation, command execution, branch push, PR creation, merge, deployment, provider call, credential use, or infrastructure change. |
 
@@ -82,8 +82,8 @@ separate runtime/infrastructure decision and is outside this packet.
 - Dependency or SDK upgrades.
 - Changes to Compose files, `stop_grace_period`, Kubernetes, AWS, Temporal
   topology, or infrastructure.
-- Protected data, credentials, provider/model calls, external spend, staging,
-  production, deployment, merge, or release.
+- Protected data, external/protected/staging/production credentials or secrets,
+  provider/model calls, external spend, deployment, merge, or release.
 - General worker refactoring unrelated to shutdown classification.
 
 ## Required implementation behavior
@@ -130,7 +130,7 @@ exercise it without triggering worker environment validation or
 | RT-07 | No stop was requested | Worker completes normally | The existing fail-closed worker `RuntimeError` is raised. |
 | RT-08 | No stop was requested | Relay completes normally | The existing fail-closed relay `RuntimeError` is raised. |
 | RT-09 | Any tested exit path | Cleanup completes | Worker shutdown is called exactly once when active and zero times when already terminal; worker, relay, stop-waiter, and shutdown-supervision tasks are all terminal. |
-| RT-10 | Local Curve profile is running | `SIGTERM` and `SIGINT` are exercised separately | Each exits `0` within ten seconds, produces no false traceback, and returns healthy after restart. |
+| RT-10 | The pinned worker image mounts the exact feature worktree in isolated disposable containers | `SIGTERM` and `SIGINT` are exercised separately | Each exits `0` within ten seconds and produces no false traceback; an ordered recovery container becomes healthy; the long-lived worker and dependencies keep the same healthy identities. |
 | RT-11 | The implementation head is complete | Curve Temporal replay/cancellation/duplicate-effect and contract suites run | Existing behavior remains green with no migration drift. |
 | RT-12 | The implementation head is pushed | Repository-native CI and CodeQL run | CI has no regression and no Critical/High security finding. |
 | RT-13 | Stop and relay failure are simultaneous | Final results are gathered | The original relay exception is propagated after cleanup. |
@@ -155,7 +155,7 @@ packet claims only the bounded process-lifecycle correction and evidence.
 ## Candidate verification commands
 
 The repository-native command forms below are the required evidence. Their
-machine-dispatch representation remains unavailable. The proposed
+machine-dispatch representation remains unavailable. The approved
 [local execution and authority decision](coding-agent-local-execution-decision.md)
 (human-operated bootstrap, deferred machine profile, and production
 fail-closed boundary) permits a human operator to run these exact commands
@@ -166,9 +166,9 @@ reviewed machine grammar before any command runs.
 
 ### Planned command-phase map
 
-Every row remains `HUMAN_EXECUTION_CANDIDATE / MACHINE_UNAVAILABLE` until
-Federico selects the proposed manual bootstrap or another authority/tool pair.
-Under the manual proposal, the human operator records exact argv, image,
+Every row is `HUMAN_EXECUTION_APPROVED_PATH / MACHINE_UNAVAILABLE`; execution
+still requires the separate exact human grant. Under the approved manual path,
+the human operator records exact argv, image,
 repository, output, timing, exit, and cleanup evidence. A future machine packet
 must encode argv arrays and helper inputs rather than a shell string.
 
@@ -203,7 +203,7 @@ The feature worktree must begin without `apps/api/.env` (ignored local API
 environment file). The operator creates that ignored file only by installing
 the tracked `apps/api/.env.example` (public synthetic API environment template)
 bytes with mode `0600`. At the pinned Plane base, the tracked template digest is
-`sha256:e731bb2ae230e12379b06c0ded1a66e7bca520294ef64b273087151eec7b49c7`.
+`sha256:2eb008a8042a6b4c10e51e4323eb180fc1548e3caaa7fde55d12f0a835a35173`.
 The operator requires that exact source digest, verifies the destination digest
 is identical, and appends no secret. The template contains only public
 synthetic local values; Django generates a process-local test secret when
@@ -225,7 +225,7 @@ attempt-created `.env` and proves it is absent before the clean-tree result.
 | `CMD-TEST` regression | `docker compose --project-name curve-runtime-m0-01-validation --project-directory . -f docker-compose-test.yml run --rm --pull never --entrypoint python api-tests -m pytest plane/curve/tests -q` followed by a separate `docker compose --project-name curve-runtime-m0-01-validation --project-directory . -f docker-compose-test.yml run --rm --pull never --entrypoint python api-tests manage.py makemigrations --check --dry-run` invocation | Two separately recorded human-operated commands; no compound execution receipt. |
 | `CMD-TEST` complete backend | `docker compose --project-name curve-runtime-m0-01-validation --project-directory . -f docker-compose-test.yml run --rm --pull never --entrypoint python api-tests -m pytest -q` | Complete Plane API pytest collection using isolated ephemeral test dependencies. |
 | `CMD-SECURITY` local | `docker compose --project-name curve-runtime-m0-01-validation --project-directory . -f docker-compose-test.yml run --rm --pull never --no-deps --entrypoint python api-tests -m ruff check --no-cache --select S plane/curve/temporal/worker.py plane/curve/temporal/worker_lifecycle.py` | Human-operated production-file security pass using paths relative to container `/code`; commit-bound Plane CodeQL remains the PR security gate. |
-| `CMD-LOCAL-RUN` | Separate human-operated `SIGTERM` and `SIGINT` proofs against the existing Curve Compose worker, each with a ten-second deadline, fresh log cursor, exit-state capture, restart, and health check | The operator first proves the synthetic workspace has no non-terminal Operation, no undelivered worker-owned Temporal outbox event, and no active Curve workflow affected by the worker stop. |
+| `CMD-LOCAL-RUN` | Separate human-operated `SIGTERM` and `SIGINT` proofs against disposable containers created from the pinned Curve worker image, mounted to the exact feature worktree, connected only to the existing local `plane_dev_env` network, and assigned task queue `curve-runtime-m0-01-validation-v1` | The operator proves the synthetic workspace and worker-owned delivery state are quiescent, verifies the exact source mount and image, requires health before each signal, captures exit/log evidence within ten seconds, recreates a healthy worker after each signal, and removes only the three named disposable containers. |
 | Supplemental diff hygiene | `git --no-pager diff --no-ext-diff --no-textconv --ignore-submodules=all --check` | Human-operated read-only Git check; the future machine profile must use the retained closed `GIT_READ_ONLY` grammar. |
 | Local cleanup | `docker compose --project-name curve-runtime-m0-01-validation --project-directory . -f docker-compose-test.yml down --volumes --remove-orphans --timeout 10`, followed by separate `/bin/rm apps/api/.env` and `docker image rm curve-runtime-m0-01-validation-api-tests:latest` commands | Three separately recorded authorized commands in `finally`. Cleanup removes only the `.env`, resources, and alias whose preflight proved absent before this attempt; source image layers remain. |
 
@@ -249,47 +249,68 @@ worker correction.
 
 ### Live local signal proof
 
-Use the existing local Plane Docker stack and Curve profile only through the
-separately approved human execution grant under the simplified proposal. A
-future machine profile would require the equivalent trusted-controller `OTHER`
-effect. The authorized operator performs this exact algorithm for each signal:
+Use the existing local Plane data services without replacing or signaling the
+long-lived `plane-curve-worker-1` container. The separately approved human grant
+binds network `plane_dev_env`, exact observed network ID
+`2fad83313a6d22a09ee6ce52633559d5199a8d034f6f80774cc5a726e6daac29`,
+healthy local services `plane-plane-db-1` and `plane-temporal-1`, Docker DNS aliases
+`plane-db` and `temporal`, worker image
+`sha256:afaf09281c96e984df0f5510657e5609e9bb88200b12f040bc0cb672d9706617`,
+the feature-worktree `/code` mount, and the disposable names
+`curve-runtime-m0-01-sigterm`, `curve-runtime-m0-01-sigint`, and
+`curve-runtime-m0-01-recovery`. Any identity drift stops the proof.
 
-1. Resolve one `curve-worker` container from the pinned Compose project and
-   files; fail on zero or multiple matches. Record its immutable container ID,
-   image digest, source-mount revision, original `unless-stopped` restart
-   policy, start time, health state, and a fresh pre-signal log cursor.
-2. Prove the purpose-created synthetic workspace has no Operation outside the
-   terminal set `SUCCEEDED`, `FAILED`, and `CANCELLED`; no OutboxEvent in any
-   state other than `DELIVERED` whose
-   destination is `CURVE_TEMPORAL_OPERATION_V1`; and no open Curve workflow in
-   namespace `curve-local` on task queue `curve-control-plane-v1`. Inventory
-   pending application destinations such as `CURVE_LOCAL` separately because
-   the worker relay never claims them. Abort before a signal if worker-owned
-   quiescence is incomplete or unrelated worker-owned work exists.
-3. Temporarily set the resolved container's restart policy to `no` so exit
-   state cannot race automatic restart. For the
-   `SIGTERM` case invoke container stop with signal `SIGTERM` and timeout ten
-   seconds. In a separately recreated healthy case, invoke the same operation
-   with signal `SIGINT` and timeout ten seconds. The exact human-authorized
-   operator owns these Docker effects; Curve machine dispatch remains disabled.
-4. Before any restart, inspect the same container ID and require terminal exit
-   code `0` within ten seconds. Capture only the post-cursor log window, hash
-   its exact bytes, and fail on the lifecycle `RuntimeError`, any traceback,
-   forced-kill marker, timeout, or surviving worker process.
-5. Restore `unless-stopped`, start the same Compose service, resolve its current
-   container identity, and require Docker `running` plus the declared
-   `plane.curve.temporal.health` check to become healthy within its configured
-   health window. Record the restart identity and health observation.
-6. In `finally`, restore the original restart policy and desired running state,
-   remove task-local logs/resources, and record cleanup. If signal, inspection,
-   restart, or cleanup fails, mark the proof failed and preserve the redacted
-   evidence digest for review; never continue to the second signal from an
-   unhealthy first case.
+Before a container starts, prove the purpose-created synthetic workspace has no
+Operation outside `SUCCEEDED`, `FAILED`, and `CANCELLED`; no OutboxEvent outside
+`DELIVERED` whose destination is `CURVE_TEMPORAL_OPERATION_V1`; and no open
+Curve workflow in namespace `curve-local` on task queue
+`curve-runtime-m0-01-validation-v1`. Inventory pending application destinations
+such as `CURVE_LOCAL` separately. Prove all three disposable names are absent,
+the network and two dependency containers match the grant, and the existing
+long-lived Curve worker remains healthy and untouched.
 
-Each signal case therefore records the exact Compose files/project, original
-and restarted container IDs, signal mechanism, command times, ten-second
-deadline result, pre-signal cursor, post-cursor log digest, exit state, restored
-restart policy, final health observation, and cleanup outcome.
+For each disposable worker, invoke `docker run` with exact literal arguments:
+
+```text
+docker run --detach --name <approved-name> --network plane_dev_env --read-only --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m --volume /private/tmp/plane-runtime-m0-01-graceful-worker-shutdown-20260901/apps/api:/code:ro --env DJANGO_SETTINGS_MODULE=plane.settings.curve_worker --env DATABASE_URL=postgresql://plane:plane@plane-db:5432/plane --env CURVE_ENABLED=1 --env CURVE_ENABLED_WORKSPACE_SLUGS=curve-local-proof --env CURVE_ENVIRONMENT=LOCAL --env CURVE_TELEMETRY_MODE=DISABLED --env TEMPORAL_ADDRESS=temporal:7233 --env TEMPORAL_NAMESPACE=curve-local --env TEMPORAL_TASK_QUEUE=curve-runtime-m0-01-validation-v1 --env TEMPORAL_WORKER_IDENTITY=<approved-identity> --env LOG_LEVEL=INFO --security-opt no-new-privileges:true --cap-drop ALL --pids-limit 256 --cpus 2.0 --memory 8g sha256:afaf09281c96e984df0f5510657e5609e9bb88200b12f040bc0cb672d9706617 python -m plane.curve.temporal.worker
+```
+
+The literal PostgreSQL and Temporal values are public synthetic local-service
+configuration. External, protected, staging, and production credentials or
+secrets are prohibited. The only substitutions are the ordered pair
+`curve-runtime-m0-01-sigterm`/`curve-runtime-m0-01-sigterm-v1`, then
+`curve-runtime-m0-01-sigint`/`curve-runtime-m0-01-sigint-v1`, then
+`curve-runtime-m0-01-recovery`/`curve-runtime-m0-01-recovery-v1`.
+
+For every container, verify `/code` resolves to the exact feature worktree
+mount and `python -m plane.curve.temporal.health` succeeds. Then run both
+read-only poller observations below from `plane-temporal-1`, with each JSON
+result required to contain the container's approved identity and a poll time no
+older than 30 seconds:
+
+```text
+temporal task-queue describe --namespace curve-local --task-queue curve-runtime-m0-01-validation-v1 --task-queue-type workflow --output json
+temporal task-queue describe --namespace curve-local --task-queue curve-runtime-m0-01-validation-v1 --task-queue-type activity --output json
+```
+
+Retry each observation at most once every two seconds for no more than 30
+seconds; a missing or stale workflow/activity poller stops the case before any
+signal. Record the immutable container and image IDs. For the first two
+containers, invoke respectively
+`docker stop --signal SIGTERM --timeout 10 <approved-name>` and
+`docker stop --signal SIGINT --timeout 10 <approved-name>`. Require exit code
+`0`; hash the complete dedicated-container log bytes; reject the lifecycle
+`RuntimeError`, any traceback, forced-kill marker, timeout, or surviving process;
+then remove that stopped named container.
+
+After each signal, start the next ordered container and require health. The
+third recovery container proves post-`SIGINT` recovery through both poller
+observations; stop it with `SIGTERM` under the same ten-second/exit-zero/log
+requirements and remove it. In `finally`,
+remove only these three names if they were created, verify their absence, and
+prove `plane-curve-worker-1`, `plane-plane-db-1`, and `plane-temporal-1` remain
+healthy with unchanged container IDs. Any failure stops the attempt and
+preserves only redacted evidence digests for review.
 
 ### Commit-bound checks
 
@@ -305,8 +326,8 @@ merge itself.
 
 ## Deferred machine-publication blueprint
 
-The canonical JSON remains absent from the registry under the simplified
-manual-bootstrap proposal. This table preserves the future machine-publication
+The canonical JSON remains absent from the registry under the approved
+human-operated path. This table preserves the future machine-publication
 blueprint for M4; it is neither a packet nor implementation authority.
 
 | Field | Required RUNTIME-M0-01 value or blocker |
@@ -314,14 +335,14 @@ blueprint for M4; it is neither a packet nor implementation authority.
 | Identity | `packet_id: CURVE-RUNTIME-M0-01`; `work_package_id: RUNTIME-M0-01`; version `1`; size `S`; non-user-facing `STANDARD` risk. |
 | Workspace | Resolved local synthetic workspace: `c6d757e7-7c0d-4721-990b-4cfbf4063e8e`. Before every live proof, revalidate the UUID/slug binding plus worker-owned quiescence; fixture UUIDs cannot be reused. |
 | Project tracking | Project `faocampo/2`; existing WORK_PACKAGE item `PVTI_lAHOBNjuQc4BgZzOzg4kt70`; issue [#46](https://github.com/faocampo/curve/issues/46) (graceful worker shutdown defect and acceptance). No duplicate item. |
-| Repository | `git@github.com:faocampo/plane.git`; `preview`; exact base `99a73b4eab5ee21fd012d7358bc9259252d47f71` or a revalidated live descendant; feature branch `curve/runtime-m0-01-graceful-worker-shutdown`; exact-remote-tip stale-base policy. |
+| Repository | `git@github.com:faocampo/plane.git`; `preview`; exact base `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c`; feature branch `curve/runtime-m0-01-graceful-worker-shutdown`; exact-remote-tip stale-base policy. |
 | Governance state | Four digest-bound state records for PRD, Architecture, ADR-001, and Development Plan. |
 | Dependency and decisions | One M0-06 (accepted local Temporal skeleton) dependency record plus D-001 (Plane foundation) and D-003 (local runtime topology) decision records. |
 | Contract applicability | API, schema, event, workflow, policy, persistence, and migration are all `NOT_APPLICABLE`, each with an exact rationale: this process supervisor changes no corresponding public/domain contract. |
 | Policies | Seven digest-bound state records: data, model, tool, sandbox, budget, external effects, and rollback. Together with governance, dependency, and decision records, the minimum is fourteen state records. |
-| Commands | Human evidence phases remain `HUMAN_EXECUTION_CANDIDATE / MACHINE_UNAVAILABLE` until Federico selects the proposal. Under Authority Option 3, B-CODING-TOOLS-01 is `DEFERRED_TO_M4` and no machine packet is published for this correction. |
+| Commands | Human evidence phases are `HUMAN_EXECUTION_APPROVED_PATH / MACHINE_UNAVAILABLE` and still require the separate exact grant. Under Authority Option 3, B-CODING-TOOLS-01 is `DEFERRED_TO_M4` and no machine packet is published for this correction. |
 | Data/model/budget | Synthetic `INTERNAL`; no protected data; model mode `NONE` with zero calls; US$0 external spend; one attempt; at most 120 compute minutes. |
-| Sandbox | The proposed human-operated path uses one dedicated local worktree, synthetic data, no Curve-managed credential, the existing test/runtime containers, and writes limited to the declared worker/helper/test files. The M4 machine sandbox remains separately unresolved. |
+| Sandbox | The approved human-operated path uses one dedicated local worktree, synthetic data, no Curve-managed credential, pinned test images, and three disposable signal-proof containers connected to the existing local development network. Writes remain limited to the declared worker/helper/test files. The M4 machine sandbox remains separately unresolved. |
 | External effects | Candidate-tree creation has none. The exact human grant must authorize the local worker stop/restart proof and VCS branch/push/draft-PR effects. Curve machine dispatch performs none of them. A future machine packet requires separately reviewed controller contracts. |
 
 ### Future machine artifact paths
@@ -340,18 +361,22 @@ If M4 materializes this correction as a machine exercise, publication uses
 that cite it; the Context Manifest binds exact `S` bytes; the source catalog
 descends from every evidence revision; and the sealed packet is the only file
 added at `P`. The separate implementation authorization follows `P` and still
-requires trusted verification plus one durable attempt lease. The proposed
+requires trusted verification plus one durable attempt lease. The approved
 human-operated RUNTIME-M0-01 implementation does not create these artifacts or
 claim this publication path.
 
 ## Tool, publication, and authority gates
 
-The proposed human-operated path becomes executable only when all of the
+The approved human-operated path becomes executable only when all of the
 following are true:
 
-1. Federico approves B-CODING-AUTHORITY-01 Option 3 and records
-   B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at one exact merged Curve revision.
-2. Federico grants one exact Plane execution scope binding the live base,
+1. Federico approved B-CODING-AUTHORITY-01 Option 3 and recorded
+   B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at merged Curve revision
+   `866032fa42e2cb57ad1a4e662d9561f742983f79`.
+2. Federico approves the prepared
+   [RUNTIME-M0-01 human execution grant](runtime-m0-01-human-execution-grant.md)
+   (exact Plane base, branch, scope, commands, effects, tests, validity, and
+   rollback), binding the live base,
    feature branch, files, commands, synthetic-data boundary, local Docker
    effects, VCS effects, tests, review, rollback, and validity window.
 3. The operator revalidates Plane `preview`, the local image/tool probes, the
@@ -393,9 +418,9 @@ Project status remains visual metadata and cannot satisfy these gates.
 ## Definition-ready exit
 
 This human-readable packet is definition-complete when Curve validation passes
-and its Project evidence is linked. Under the simplified proposal, it becomes
-human-executable only after the exact-revision decision and separate exact Plane
-execution grant are verified. It remains machine-unavailable and produces no
+and its Project evidence is linked. Under the approved simplified path, it
+becomes human-executable only after the separate exact Plane execution grant is
+verified. It remains machine-unavailable and produces no
 Curve dispatch claim. A future machine version becomes `READY` only after its
 tool profile, exact state evidence and authority sources, Context Manifest,
 source catalog, registry publication chain, exact-digest implementation

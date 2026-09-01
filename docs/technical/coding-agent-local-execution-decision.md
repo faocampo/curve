@@ -4,8 +4,8 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `ANALYZED / SIMPLIFIED BOOTSTRAP PROPOSED / OWNER DECISION REQUIRED / NOT IMPLEMENTATION AUTHORITY` |
-| Version | 1.1 |
+| Status | `DECIDED / OPTION 3 HUMAN-OPERATED / MACHINE PROFILE DEFERRED TO M4 / NOT IMPLEMENTATION AUTHORITY` |
+| Version | 1.2 |
 | Prepared | 2026-08-30 |
 | Product | Curve |
 | Decisions | B-CODING-TOOLS-01 (local coding-tool execution profile) and B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) |
@@ -14,7 +14,7 @@
 | First consumer | [RUNTIME-M0-01 task packet](runtime-m0-01-graceful-shutdown-task-packet.md) (graceful Curve worker shutdown classification, tests, evidence, and rollback) |
 | Activation boundary | No command execution, code mutation, provider access, credential use, infrastructure change, deployment, or production dispatch is authorized by this packet. |
 
-## Decision outcome required
+## Decision outcome
 
 The coding-agent contracts merged through Curve PR #48 require every `READY`
 command that executes repository code to run in a digest-pinned gVisor
@@ -29,11 +29,10 @@ independent boundary also prevents production dispatch until Curve can verify
 the approving human's current authority and atomically acquire one durable
 attempt lease.
 
-Federico must either select one execution profile plus Authority Option 1 or 2,
-or select Authority Option 3 and explicitly defer the machine execution profile
-to M4 (OpenHands automation and gVisor runner integration). An AI coding agent
-may prepare and validate the alternatives but cannot select the security
-architecture.
+Federico selected Authority Option 3 and explicitly deferred the machine
+execution profile to M4 (OpenHands automation and gVisor runner integration).
+Human-operated implementation still requires a separate exact repository grant;
+this decision does not authorize Plane mutation.
 
 ### Current v1 representation boundary
 
@@ -287,27 +286,22 @@ The 2026-08-30 local audit used Curve `main`
 | Plane API test definition | The `api-tests` entrypoint installs `requirements/test.txt`; the stack includes shell entrypoints, mutable dependency tags, environment-file reads, and an egress-capable bridge | Option A or C requires a new image supply-chain decision, sanitized Compose model, trusted helper, receipt schema, and adversarial validation before machine use. |
 | Synthetic local workspace | Workspace `c6d757e7-7c0d-4721-990b-4cfbf4063e8e`; zero non-terminal Operations; zero undelivered `CURVE_TEMPORAL_OPERATION_V1` events; 95 pending `CURVE_LOCAL` application events | Worker shutdown quiescence must examine worker-owned Temporal work. Application-local events are inventoried separately and do not block the signal proof. |
 
-## Simplified bootstrap proposal
+## Decided simplified bootstrap
 
-Select B-CODING-AUTHORITY-01 Option 3 (human-operated coding outside Curve
-dispatch) for local bootstrap development and record B-CODING-TOOLS-01 as
-`DEFERRED_TO_M4`. RUNTIME-M0-01 (graceful Curve worker shutdown classification)
-then proceeds as an ordinary human-supervised Plane change with repository-
-native tests, local signal verification, commit-bound CI, CodeQL, review, and
-post-merge Curve evidence. Curve machine dispatch remains fail closed until M4
-implements the production-relevant OpenHands/gVisor execution and authority
-boundary.
-
-This proposal requires Federico's exact-revision approval. The document does
-not decide it.
+Federico approved B-CODING-AUTHORITY-01 Option 3 (human-operated coding outside
+Curve dispatch) and B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at Curve PR #50 head
+`f8e2f4b3d497f747f9e8a3b7db7508510400bae9`, squash-merged as
+`866032fa42e2cb57ad1a4e662d9561f742983f79`. RUNTIME-M0-01 (graceful Curve
+worker shutdown classification) may proceed as an ordinary human-supervised
+Plane change after its separate exact grant. Curve machine dispatch remains
+fail closed until M4 implements the production-relevant OpenHands/gVisor
+execution and authority boundary.
 
 ## Acceptance before implementation
 
-1. Federico approves either one exact tool option plus Authority Option 1 or 2,
-   or the paired simplified outcome: Authority Option 3 plus
-   `B-CODING-TOOLS-01: DEFERRED_TO_M4`.
-2. The selected decision text is committed and merged at an exact Curve
-   revision.
+1. Authority Option 3 plus `B-CODING-TOOLS-01: DEFERRED_TO_M4` is approved and
+   merged at exact Curve revision `866032fa42e2cb57ad1a4e662d9561f742983f79`.
+2. The consuming task has a separately approved exact human execution grant.
 3. For Authority Option 1 or 2, the command classifier, schema, fixtures,
    adversarial tests, ordered machine packet, trusted authority receipt, and
    current-attempt lease must exist before Plane mutation.
@@ -318,12 +312,16 @@ not decide it.
 5. GitHub Project items reflect visual progress without being used as evidence
    of approval or authority.
 
+The prepared [RUNTIME-M0-01 human execution grant](runtime-m0-01-human-execution-grant.md)
+(exact Plane base, branch, scope, Docker/VCS effects, tests, exclusions,
+validity, and rollback) is the first consumer-specific grant proposal. It
+requires its own exact-revision approval.
+
 ## Rollback
 
-Before decision approval, close or revert this documentation package. After a
-machine profile is implemented, disable the selected local profile, revoke any
-active bootstrap authorization, terminate its attempt, remove its local
-worktree, and return dispatch to fail closed. Under Authority Option 3, abandon
-or revert the human-operated feature branch and keep machine dispatch fail
-closed. No application data or migration is involved in the decision packet
-itself.
+Before a consumer grant is approved, close or revert its preparation package.
+After a machine profile is implemented, disable the selected local profile,
+revoke any active bootstrap authorization, terminate its attempt, remove its
+local worktree, and return dispatch to fail closed. Under Authority Option 3,
+abandon or revert the human-operated feature branch and keep machine dispatch
+fail closed. No application data or migration is involved in this decision.

@@ -22,6 +22,9 @@ const strategy = read("docs/technical/m0-test-strategy.md");
 const technicalIndex = read("docs/technical/README.md");
 const contractIndex = read("contracts/README.md");
 const m0Audit = read("docs/technical/m0-completion-audit.md");
+const grant = read(
+  "docs/technical/runtime-m0-01-human-execution-grant.md",
+);
 
 test("RUNTIME-M0-01 context is canonical, complete, and repository-resolvable", () => {
   const requiredPaths = [
@@ -50,6 +53,7 @@ test("RUNTIME-M0-01 context is canonical, complete, and repository-resolvable", 
     "docs/technical/m0-test-strategy.md",
     "docs/technical/m0-traceability.md",
     "docs/technical/runtime-m0-01-graceful-shutdown-task-packet.md",
+    "docs/technical/runtime-m0-01-human-execution-grant.md",
     "docs/technical/security-and-operations.md",
     "scripts/lib/coding-agent-task-packet.mjs",
     "scripts/lib/context-pack.mjs",
@@ -72,7 +76,7 @@ test("RUNTIME-M0-01 context is canonical, complete, and repository-resolvable", 
 test("RUNTIME-M0-01 pins one bounded Plane correction and exact rollback", () => {
   for (const value of [
     "git@github.com:faocampo/plane.git",
-    "99a73b4eab5ee21fd012d7358bc9259252d47f71",
+    "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
     "curve/runtime-m0-01-graceful-worker-shutdown",
     "apps/api/plane/curve/temporal/worker.py",
     "apps/api/plane/curve/temporal/worker_lifecycle.py",
@@ -108,16 +112,16 @@ test("RUNTIME-M0-01 pins one bounded Plane correction and exact rollback", () =>
   ]);
 });
 
-test("runtime definition proposes human operation while machine dispatch stays fail closed", () => {
+test("runtime definition approves human operation while machine dispatch stays fail closed", () => {
   assert.match(
     packet,
-    /`DEFINITION_PREPARED \/ MANUAL_BOOTSTRAP_PROPOSED \/ OWNER_DECISION_REQUIRED \/ NOT_IMPLEMENTATION_AUTHORITY`/,
+    /`DEFINITION_PREPARED \/ OPTION 3 APPROVED \/ EXACT PLANE GRANT REQUIRED \/ NOT IMPLEMENTATION AUTHORITY`/,
   );
-  assert.match(packet, /^\| Version \| 1\.1 \|$/m);
-  assert.match(decision, /^\| Version \| 1\.1 \|$/m);
+  assert.match(packet, /^\| Version \| 1\.2 \|$/m);
+  assert.match(decision, /^\| Version \| 1\.2 \|$/m);
   assert.match(
     decision,
-    /`ANALYZED \/ SIMPLIFIED BOOTSTRAP PROPOSED \/ OWNER DECISION REQUIRED \/ NOT IMPLEMENTATION AUTHORITY`/,
+    /`DECIDED \/ OPTION 3 HUMAN-OPERATED \/ MACHINE PROFILE DEFERRED TO M4 \/ NOT IMPLEMENTATION AUTHORITY`/,
   );
   assert.match(packet, /B-CODING-TOOLS-01/);
   assert.match(packet, /B-CODING-AUTHORITY-01/);
@@ -135,21 +139,24 @@ test("runtime definition proposes human operation while machine dispatch stays f
     /^### Option 3 — Continue human-operated coding outside Curve dispatch$/m,
   );
   assert.doesNotMatch(decision, /Option (?:A|1)[^\n]*\(recommended\)/);
-  assert.match(decision, /cannot select the security\s+architecture/);
   assert.match(
     decision,
-    /Select B-CODING-AUTHORITY-01 Option 3 \(human-operated coding outside Curve\s+dispatch\)[\s\S]*`DEFERRED_TO_M4`/,
+    /Curve PR #50 head\s+`f8e2f4b3d497f747f9e8a3b7db7508510400bae9`/,
   );
   assert.match(
     decision,
-    /Curve machine dispatch remains fail closed until M4\s+implements the production-relevant OpenHands\/gVisor execution and authority\s+boundary/,
+    /approved B-CODING-AUTHORITY-01 Option 3 \(human-operated coding outside\s+Curve dispatch\)[\s\S]*`DEFERRED_TO_M4`/i,
+  );
+  assert.match(
+    decision,
+    /Curve machine dispatch remains\s+fail closed until M4 implements the production-relevant OpenHands\/gVisor\s+execution and authority boundary/,
   );
 
   assert.doesNotMatch(packet, /docker compose[^\n]*sh -c/);
   for (const phase of ["CMD-LINT", "CMD-BUILD", "CMD-TEST", "CMD-SECURITY", "CMD-LOCAL-RUN"]) {
     assert.ok(packet.includes(phase), phase);
   }
-  assert.match(packet, /`HUMAN_EXECUTION_CANDIDATE \/ MACHINE_UNAVAILABLE`/);
+  assert.match(packet, /`HUMAN_EXECUTION_APPROVED_PATH \/ MACHINE_UNAVAILABLE`/);
   assert.doesNotMatch(packet, /`PLANNED \/ UNAVAILABLE`/);
   assert.doesNotMatch(packet, /docker compose[^\n]*--build/);
   assert.match(packet, /zero open `critical` or `high` alerts/);
@@ -158,7 +165,7 @@ test("runtime definition proposes human operation while machine dispatch stays f
   assert.doesNotMatch(packet, /`CMD-SECURITY`[^\n]*test_curve_worker_lifecycle\.py/);
   assert.match(packet, /ruff check --no-cache/);
   assert.match(packet, /`CMD-TEST` complete backend/);
-  assert.match(packet, /temporarily set[^\n]*restart policy to `no`/i);
+  assert.doesNotMatch(packet, /temporarily set[^\n]*restart policy to `no`/i);
   assert.match(packet, /plane-m1-01a-initiative-core-20260829-api-tests:latest/);
   assert.match(packet, /curve-runtime-m0-01-validation/);
   assert.doesNotMatch(packet, /--project-name plane-m1-01a-initiative-core-20260829/);
@@ -171,7 +178,7 @@ test("runtime definition proposes human operation while machine dispatch stays f
   );
   assert.match(
     packet,
-    /sha256:e731bb2ae230e12379b06c0ded1a66e7bca520294ef64b273087151eec7b49c7/,
+    /sha256:2eb008a8042a6b4c10e51e4323eb180fc1548e3caaa7fde55d12f0a835a35173/,
   );
   assert.match(packet, /appends no secret/);
   assert.match(packet, /Cleanup responsibility begins immediately after the\s+successful `install`/);
@@ -217,19 +224,19 @@ test("runtime definition proposes human operation while machine dispatch stays f
   assert.doesNotMatch(packet, /UNRESOLVED_WORKSPACE_ID/);
   assert.match(
     packet,
-    /no Operation outside the\s+terminal set `SUCCEEDED`, `FAILED`, and `CANCELLED`/,
+    /no\s+Operation outside `SUCCEEDED`, `FAILED`, and `CANCELLED`/,
   );
   assert.match(
     packet,
-    /no OutboxEvent in any\s+state other than `DELIVERED` whose\s+destination is `CURVE_TEMPORAL_OPERATION_V1`/,
+    /no OutboxEvent outside\s+`DELIVERED` whose destination is `CURVE_TEMPORAL_OPERATION_V1`/,
   );
   assert.match(
     packet,
-    /namespace `curve-local` on task queue `curve-control-plane-v1`/,
+    /namespace `curve-local` on task queue\s+`curve-runtime-m0-01-validation-v1`/,
   );
   assert.match(
     packet,
-    /Inventory\s+pending application destinations such as `CURVE_LOCAL` separately because\s+the worker relay never claims them/,
+    /Inventory pending application destinations\s+such as `CURVE_LOCAL` separately/,
   );
   assert.match(
     decision,
@@ -240,11 +247,11 @@ test("runtime definition proposes human operation while machine dispatch stays f
 
   assert.match(
     packet,
-    /Federico approves B-CODING-AUTHORITY-01 Option 3 and records\s+B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at one exact merged Curve revision/,
+    /Federico approved B-CODING-AUTHORITY-01 Option 3 and recorded\s+B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at merged Curve revision/,
   );
   assert.match(
     packet,
-    /Federico grants one exact Plane execution scope binding the live base,\s+feature branch, files, commands, synthetic-data boundary, local Docker\s+effects, VCS effects, tests, review, rollback, and validity window/,
+    /Federico approves the prepared[\s\S]*RUNTIME-M0-01 human execution grant[\s\S]*binding the live base,\s+feature branch, files, commands, synthetic-data boundary, local Docker\s+effects, VCS effects, tests, review, rollback, and validity window/,
   );
   assert.match(
     packet,
@@ -296,6 +303,58 @@ test("runtime definition proposes human operation while machine dispatch stays f
   assert.doesNotMatch(m0Audit, /proposal selects/i);
 });
 
+test("prepared human grant binds one exact local Plane attempt", () => {
+  for (const value of [
+    "PREPARED / EXACT HUMAN APPROVAL REQUIRED / NO PLANE MUTATION",
+    "f8e2f4b3d497f747f9e8a3b7db7508510400bae9",
+    "866032fa42e2cb57ad1a4e662d9561f742983f79",
+    "git@github.com:faocampo/plane.git",
+    "9f9bb14f46b80e1d05b4c900d25c1af7a229b55c",
+    "curve/runtime-m0-01-graceful-worker-shutdown",
+    "/private/tmp/plane-runtime-m0-01-graceful-worker-shutdown-20260901",
+    "apps/api/plane/curve/temporal/worker.py",
+    "apps/api/plane/curve/temporal/worker_lifecycle.py",
+    "apps/api/plane/curve/tests/test_curve_worker_lifecycle.py",
+    "sha256:2eb008a8042a6b4c10e51e4323eb180fc1548e3caaa7fde55d12f0a835a35173",
+    "sha256:5dcd00dec45aebe57fd0965e0b04e1765cad6dcce32af474fbc29073bbe834d7",
+    "sha256:468d34fefd6338031787c7b8e94078975b3aaf4d66c7ead25c39cd3ba46a15c6",
+    "sha256:10328d00120dc14fbc87b2ed61b7677ddbb0d011e705361b4788329a0ec69a93",
+    "sha256:611107e29cce05c2acd968325d5dcbde7e2fee404970f1ead75fdb22be2821b3",
+    "sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e",
+    "sha256:afaf09281c96e984df0f5510657e5609e9bb88200b12f040bc0cb672d9706617",
+    "plane_dev_env",
+    "2fad83313a6d22a09ee6ce52633559d5199a8d034f6f80774cc5a726e6daac29",
+    "plane-plane-db-1",
+    "plane-temporal-1",
+    "plane-curve-worker-1",
+    "curve-runtime-m0-01-validation-v1",
+    "curve-runtime-m0-01-sigterm",
+    "curve-runtime-m0-01-sigint",
+    "curve-runtime-m0-01-recovery",
+    "DATABASE_URL=postgresql://plane:plane@plane-db:5432/plane",
+    "TEMPORAL_ADDRESS=temporal:7233",
+    "US$0 external spend; one attempt; at most 120 local compute minutes",
+    "2026-09-03T23:59:59Z",
+    "CURVE_ENABLED=0",
+  ]) {
+    assert.ok(grant.includes(value), value);
+  }
+
+  assert.match(grant, /open one draft Plane pull request into `preview`/);
+  assert.match(grant, /No image build, pull, package installation/);
+  assert.match(grant, /long-lived worker mutation/);
+  assert.match(grant, /external\/protected\/staging\/production credentials or secrets/);
+  assert.match(grant, /The approval permits one attempt\s+and no merge/);
+  assert.match(grant, /Plane mutation begins only\s+after Federico approves the exact Curve revision/);
+  assert.match(grant, /must equal their\s+preflight values after cleanup/);
+  assert.match(grant, /Curve machine dispatch remains unavailable/i);
+  assert.match(grant, /exact read-only `temporal task-queue describe` commands/);
+  assert.match(grant, /poll time no older than 30 seconds/);
+  assert.match(packet, /--task-queue-type workflow --output json/);
+  assert.match(packet, /--task-queue-type activity --output json/);
+  assert.match(packet, /missing or stale workflow\/activity poller stops the case/);
+});
+
 test("active indexes and test ownership expose the same runtime boundary", () => {
   for (const [name, contents] of [
     ["development plan", development],
@@ -308,8 +367,8 @@ test("active indexes and test ownership expose the same runtime boundary", () =>
   }
   const traceability = read("docs/technical/m0-traceability.md");
   assert.match(traceability, /RUNTIME-M0-01 graceful worker-shutdown checkpoint/);
-  assert.match(traceability, /after owner selection and exact Plane grant/);
-  const normalizedStatus = "DEFINITION_PREPARED / MANUAL_BOOTSTRAP_PROPOSED / OWNER_DECISION_REQUIRED / NOT_IMPLEMENTATION_AUTHORITY";
+  assert.match(traceability, /after exact grant approval/);
+  const normalizedStatus = "DEFINITION_PREPARED / OPTION 3 APPROVED / EXACT PLANE GRANT REQUIRED / NOT IMPLEMENTATION AUTHORITY";
   for (const [name, contents] of [
     ["packet", packet],
     ["development", development],

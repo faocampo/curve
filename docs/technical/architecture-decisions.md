@@ -4,9 +4,9 @@
 
 | Field | Value |
 | ----- | ----- |
-| Status | Decision index; D-001 (Plane upstream foundation decision) is decided; D-003 (runtime topology and trust-zone decision) local private-platform profile is decided and implemented; remaining activation scopes and cross-cutting coding-agent execution/authority profiles require owner approval and applicable proof |
-| Version | 1.6 |
-| Last updated | 2026-08-31 |
+| Status | Decision index; D-001 (Plane upstream foundation decision), D-003 (runtime topology and trust-zone decision) local scope, B-CODING-AUTHORITY-01 Option 3, and B-CODING-TOOLS-01 deferral are decided; remaining activation scopes require owner approval and applicable proof |
+| Version | 1.7 |
+| Last updated | 2026-09-01 |
 | Source | [Curve PRD v0.13 decision register](../curve-ai-native-sdlc-prd.md#decision-register) (controlled product and architecture decisions, approved Product core, Curve-first shell, and accepted local Temporal proof) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
 
@@ -45,8 +45,8 @@ identifier:
 
 | Blocker | Status | Decision packet | Blocks | Minimum evidence before decision |
 | --- | --- | --- | --- | --- |
-| B-CODING-TOOLS-01 (local coding-tool execution profile) | PROPOSED / `DEFERRED_TO_M4` UNDER SIMPLIFIED PATH | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (machine-tool alternatives, verified local feasibility, and human-operated bootstrap proposal) | Machine-`READY` Python/Docker task packets; it does not block human-operated work outside Curve dispatch if Authority Option 3 is approved | Authority Option 1 or 2 requires a selected trust tier, helper owner, exact tool/image versions and digests, argv/path/environment/network/output grammar, adversarial tests, cleanup, and residual-risk acceptance. Authority Option 3 explicitly defers these controls to M4. |
-| B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) | PROPOSED / SIMPLIFIED OPTION 3 READY FOR OWNER DECISION | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (authority alternatives, exact manual grant boundary, production verifier/lease requirements, and fail-closed behavior) | Curve-dispatched implementation; Authority Option 3 permits human-operated coding under ordinary repository authority and creates no Curve dispatch claim | Federico selects the exact option. Option 3 binds the human execution tuple and production fail-closed state; Option 1 or 2 additionally requires authoritative identity/receipt, nonce/freshness/replay, atomic lease, lifecycle/recovery, and kill-switch evidence. |
+| B-CODING-TOOLS-01 (local coding-tool execution profile) | DECIDED / `DEFERRED_TO_M4` | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (approved machine-profile deferral, verified local feasibility, and human-operated bootstrap boundary) | Machine-`READY` Python/Docker task packets remain unavailable; human-operated work may proceed under a separate exact grant | Federico approved deferral with Authority Option 3 at Curve PR #50 head `f8e2f4b...`, merged as `866032f...`. M4 must implement and approve the production OpenHands/gVisor command profile before Curve dispatch. |
+| B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) | DECIDED / OPTION 3 HUMAN-OPERATED / PRODUCTION DISPATCH FAIL CLOSED | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (approved human-operated option, exact manual-grant boundary, production verifier/lease requirements, and fail-closed behavior) | Human-operated local implementation uses ordinary developer authority and a separate exact grant; every Curve-dispatched implementation remains blocked | Federico approved Option 3 at Curve PR #50 head `f8e2f4b...`, merged as `866032f...`. The [RUNTIME-M0-01 human execution grant](runtime-m0-01-human-execution-grant.md) (exact Plane base, scope, effects, tests, validity, and rollback) is prepared and still requires exact-revision approval. |
 
 An AI agent may prepare these records and prove negative fail-closed behavior.
 Only Federico Ocampo, with any reassigned Security/Platform reviewers, may
