@@ -115,17 +115,17 @@ test("exact-preview local runtime evidence binds the durable verified control pa
 test("substantively reconciled governance documents advance document control", () => {
   for (const [name, contents, version, dateLabel, date] of [
     ["architecture", architecture, "0.9", "Last updated", "2026-08-30"],
-    ["coding-agent decision", codingDecision, "1.1", "Prepared", "2026-08-30"],
-    ["RUNTIME-M0-01 packet", runtimePacket, "1.1", "Prepared", "2026-08-30"],
+    ["coding-agent decision", codingDecision, "1.2", "Prepared", "2026-08-30"],
+    ["RUNTIME-M0-01 packet", runtimePacket, "1.2", "Prepared", "2026-08-30"],
     ["development", development, "1.21", "Last updated", "2026-08-31"],
     ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
-    ["M0 readiness board", readiness, "1.39", "Date", "2026-08-31"],
-    ["M0 completion audit", m0Audit, "1.11", "Date", "2026-08-31"],
+    ["M0 readiness board", readiness, "1.40", "Date", "2026-09-01"],
+    ["M0 completion audit", m0Audit, "1.12", "Date", "2026-09-01"],
     ["M0 test strategy", strategy, "1.8", "Last updated", "2026-08-31"],
     ["GitHub Project execution map", projectMap, "1.18", "Date", "2026-08-29"],
     ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],
     ["M1-M7 catalog", laterPackets, "1.11", "Date", "2026-08-31"],
-    ["architecture decision index", decisions, "1.6", "Last updated", "2026-08-31"],
+    ["architecture decision index", decisions, "1.7", "Last updated", "2026-09-01"],
     ["later-milestone index", laterIndex, "1.4", "Prepared", "2026-08-31"],
     ["implemented ERD", implementedErd, "1.2", "Last updated", "2026-08-30"],
   ]) {
@@ -141,13 +141,13 @@ test("next work and later-milestone status remain truthfully executable", () => 
   assert.ok(nextSequence, "M0 next executable sequence is required");
   assert.match(
     nextSequence[1],
-    /^1\. Decide the paired simplified outcome in the/m,
+    /^1\. Use the approved paired simplified outcome in the/m,
   );
   assert.match(nextSequence[1], /Authority Option 3/);
-  assert.match(nextSequence[1], /B-CODING-TOOLS-01\/B-CODING-AUTHORITY-01 pair/);
+  assert.match(nextSequence[1], /deferred machine profile/);
   assert.match(
     nextSequence[1],
-    /^2\. Merge that exact decision revision and obtain one exact human Plane execution\s+grant for RUNTIME-M0-01/m,
+    /^2\. Obtain exact-revision approval for the\s+\[RUNTIME-M0-01 human execution grant\]/m,
   );
   assert.match(
     nextSequence[1],

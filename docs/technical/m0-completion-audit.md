@@ -5,13 +5,13 @@
 | Field | Value |
 | --- | --- |
 | Status | `AUDITED / M0 INCOMPLETE / LOCAL SKELETON ACCEPTED` |
-| RUNTIME-M0-01 package status | `DEFINITION_PREPARED / MANUAL_BOOTSTRAP_PROPOSED / OWNER_DECISION_REQUIRED / NOT_IMPLEMENTATION_AUTHORITY` |
-| Version | 1.11 |
-| Date | 2026-08-31 |
+| RUNTIME-M0-01 package status | `DEFINITION_PREPARED / OPTION 3 APPROVED / EXACT PLANE GRANT REQUIRED / NOT IMPLEMENTATION AUTHORITY` |
+| Version | 1.12 |
+| Date | 2026-09-01 |
 | Product | Curve |
 | Owner and human reviewer | Federico Ocampo |
 | Audit scope | M0 (foundation and control plane), its P0 (foundation-readiness) decisions/proofs, Plane implementation evidence, and the next executable package |
-| Audited Curve contract baseline | `c55686c8061f092f4f82ab73681e06f97d80893f`, the squash merge of [Curve PR #49](https://github.com/faocampo/curve/pull/49) (RUNTIME-M0-01 definition and local execution/authority decision preparation), containing [Curve PR #48](https://github.com/faocampo/curve/pull/48) (coding-agent task-packet schemas, publication chain, safe-command boundary, and fail-closed dispatch contract) and [Curve PR #47](https://github.com/faocampo/curve/pull/47) (exact-preview local runtime refresh evidence) |
+| Audited Curve contract baseline | `866032fa42e2cb57ad1a4e662d9561f742983f79`, the squash merge of [Curve PR #50](https://github.com/faocampo/curve/pull/50) (RUNTIME-M0-01 manual-bootstrap decision alternatives and feasibility), containing [Curve PR #49](https://github.com/faocampo/curve/pull/49) (RUNTIME-M0-01 definition), [Curve PR #48](https://github.com/faocampo/curve/pull/48) (coding-agent task-packet and fail-closed dispatch contracts), and [Curve PR #47](https://github.com/faocampo/curve/pull/47) (exact-preview local runtime refresh evidence) |
 | Merged Plane `preview` baseline | `99a73b4eab5ee21fd012d7358bc9259252d47f71`, the squash merge of Plane PR #14 (M1-01A Initiative backend foundation), containing the accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63` |
 | Authority boundary | This audit records evidence and gaps. It authorizes no decision transition, code mutation, provider access, credential use, infrastructure change, deployment, or merge. |
 
@@ -39,11 +39,11 @@ as a whole remains incomplete because:
    Curve worker signal classification, deterministic tests, live proof, and
    rollback) is the next bounded Plane correction. The verified local tool and
    runtime state makes the original temporary machine-bootstrap path a separate
-   controller/image/lease program. The simplified proposal pairs
-   B-CODING-AUTHORITY-01 Option 3 (human-operated coding outside Curve dispatch)
-   with B-CODING-TOOLS-01 as `DEFERRED_TO_M4`; Federico's exact-revision
-   decision and exact Plane execution grant remain required. Generic Curve
-   machine dispatch stays fail closed.
+   controller/image/lease program. Federico approved B-CODING-AUTHORITY-01
+   Option 3 (human-operated coding outside Curve dispatch) with
+   B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at Curve PR #50 head `f8e2f4b...`,
+   merged as `866032f...`. The separate exact Plane execution grant remains
+   required. Generic Curve machine dispatch stays fail closed.
 
 No broad M0 (foundation and control plane) completion claim is valid until the
 remaining rows below satisfy their own completion boundaries.
@@ -66,6 +66,7 @@ remaining rows below satisfy their own completion boundaries.
 | [Curve PR #47](https://github.com/faocampo/curve/pull/47) (exact-preview local runtime refresh evidence) | Squash-merged as `a0d21bee7f98f2477d9cfe69708a8ac043c4fc69`; commit-bound documentation and contract CI passed. | Exact-preview runtime evidence checkpoint in the current baseline ancestry |
 | [Curve PR #48](https://github.com/faocampo/curve/pull/48) (coding-agent task-packet contract hardening) | Reviewed head `b8e02b9579b0ab76daca2aaf04e44b521cd79f88` squash-merged as `68a05e9f2920454752e9039d596271dbb39d6e6e`; Documentation contracts CI passed. | Task-packet contract checkpoint in the current baseline ancestry; establishes non-circular packet publication, closed command grammars, and fail-closed implementation authority |
 | [Curve PR #49](https://github.com/faocampo/curve/pull/49) (RUNTIME-M0-01 readiness definition) | Head `d837c84b6ce8945c16a3e3f8bed8cf2093f1d6f4` squash-merged as `c55686c8061f092f4f82ab73681e06f97d80893f`; Documentation contracts CI passed. | Current audited Curve baseline; defines the bounded shutdown correction and preserves fail-closed machine authority pending the follow-up owner decision |
+| [Curve PR #50](https://github.com/faocampo/curve/pull/50) (RUNTIME-M0-01 manual-bootstrap decision) | Approved head `f8e2f4b3d497f747f9e8a3b7db7508510400bae9` squash-merged as `866032fa42e2cb57ad1a4e662d9561f742983f79`; Documentation contracts CI passed. | Approved Authority Option 3 and B-CODING-TOOLS-01 deferral checkpoint; Plane implementation still requires a separate exact grant |
 | [Plane PR #10](https://github.com/faocampo/plane/pull/10) (M0-S6A durable orchestration implementation) | Approved head `af8335c42fa3c57e66f76c6ebd80220640630cf8` squash-merged as `ad5772c0565c934e64ea90f892be1374819979be`. Both commits resolve to Git tree `dde7e50afa1710b729ab86f9ed99e4c462c763d0`. | Canonical merged Plane baseline |
 | [Plane API and Curve CI](https://github.com/faocampo/plane/actions/runs/32844162011) (M0-S6A API, Curve, replay, and migration validation) | Passed. | Accepted implementation evidence |
 | [Plane CodeQL](https://github.com/faocampo/plane/actions/runs/32844164027) (M0-S6A security analysis) | Passed. | Accepted security evidence |
@@ -97,17 +98,18 @@ remaining rows below satisfy their own completion boundaries.
 | M0-S9A (local provider-registry substrate) | Workspace-scoped connection/capability persistence, typed registry, fake adapter, synchronous reconciliation, bounded local delivery, and Option B authorization | [Plane PR #12](https://github.com/faocampo/plane/pull/12) (M0-S9A local provider-registry implementation) approved and merged; [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md) (exact contract/context, implementation, CI, regression, dependency disposition, security boundary, and rollback) binds local acceptance. | `ACCEPTED_LOCAL` | None for the local synthetic substrate. Keep M0-09 open for M0-S9B and M0-S9C. |
 | M0-S9B (external provider transport and administration) | Human administration, credentials/endpoints, callbacks, webhooks, scheduling, and real adapters | [M0-S9B task packet](m0-s9b-provider-transport-task-packet.md) (six independently reviewable children for administration, credentials/endpoints, callback ingress, outgoing webhooks, scheduled reconciliation, and named-provider activation) is published through [Curve PR #40](https://github.com/faocampo/curve/pull/40) (M0-S9B/M0-S9C definition gates) | `PREPARED_BLOCKED_DECISIONS` | Materialize only a child whose exact identity, security, data, infrastructure, provider, owner, budget, and external-effect decisions are approved. |
 | M0-S9C (Model Gateway routing and failover) | Model/provider catalog, routing, failover equivalence, actual-route evidence, and no silent fallback | [M0-S9C task packet](m0-s9c-model-gateway-task-packet.md) (five independently reviewable children for candidate decisions/data policy, runtime contracts, policy/budget, OpenRouter transport, and failover/reconciliation) is published through [Curve PR #40](https://github.com/faocampo/curve/pull/40) (M0-S9B/M0-S9C definition gates); M0-S9C1A (candidate Model Gateway architecture and data-policy contracts) adds unselected D-004/D-005 proposals, closed schemas, fixtures, and empty fail-closed policy candidates | `PREPARED_BLOCKED_DECISIONS` | Decide D-004 (Curve Model Gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision), then materialize one runtime child at a time. D-009 applies before protected prompt or response persistence. |
-| [RUNTIME-M0-01](runtime-m0-01-graceful-shutdown-task-packet.md) (graceful Curve worker shutdown classification) | Intentional `SIGINT`/`SIGTERM` is classified as graceful; independent worker/relay failure remains fail closed; cleanup is proven within the existing Compose deadline | [Curve issue #46](https://github.com/faocampo/curve/issues/46) (verified defect and acceptance criteria), exact Plane base `99a73b4...`, verified local image/tool/workspace evidence, and the prepared implementation definition | `DEFINITION_PREPARED / MANUAL_BOOTSTRAP_PROPOSED / OWNER_DECISION_REQUIRED / NOT_IMPLEMENTATION_AUTHORITY` | Federico decides the paired simplified outcome—B-CODING-AUTHORITY-01 Option 3 plus B-CODING-TOOLS-01 `DEFERRED_TO_M4`—or another complete tool/authority pair. Under Option 3, one exact human Plane grant permits the local correction outside Curve dispatch and the result is recorded afterward. |
+| [RUNTIME-M0-01](runtime-m0-01-graceful-shutdown-task-packet.md) (graceful Curve worker shutdown classification) | Intentional `SIGINT`/`SIGTERM` is classified as graceful; independent worker/relay failure remains fail closed; cleanup is proven within the existing Compose deadline | [Curve issue #46](https://github.com/faocampo/curve/issues/46) (verified defect and acceptance criteria), exact Plane base `9f9bb14...`, verified local images/template boundary, approved human-operated authority option, and the prepared implementation definition | `DEFINITION_PREPARED / OPTION 3 APPROVED / EXACT PLANE GRANT REQUIRED / NOT IMPLEMENTATION AUTHORITY` | Federico approves the [RUNTIME-M0-01 human execution grant](runtime-m0-01-human-execution-grant.md) (exact Plane tuple, file scope, local/VCS effects, tests, exclusions, validity, and rollback). The result is recorded afterward without a Curve machine-dispatch claim. |
 
 ## Next executable sequence
 
-1. Decide the paired simplified outcome in the
+1. Use the approved paired simplified outcome in the
    [local execution and authority decision packet](coding-agent-local-execution-decision.md)
-   (verified feasibility, Authority Option 3, deferred machine profile, and
-   production fail-closed boundary), or select another complete
-   B-CODING-TOOLS-01/B-CODING-AUTHORITY-01 pair.
-2. Merge that exact decision revision and obtain one exact human Plane execution
-   grant for RUNTIME-M0-01 (graceful Curve worker shutdown classification). The
+   (Authority Option 3, deferred machine profile, and production fail-closed
+   boundary), merged as Curve `866032f...`.
+2. Obtain exact-revision approval for the
+   [RUNTIME-M0-01 human execution grant](runtime-m0-01-human-execution-grant.md)
+   (exact Plane tuple, file scope, effects, tests, exclusions, validity, and
+   rollback). The
    bounded defect is tracked by
    [Curve issue #46](https://github.com/faocampo/curve/issues/46) (intentional
    signal classification and traceback correction).
