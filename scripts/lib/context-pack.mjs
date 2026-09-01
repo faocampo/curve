@@ -228,6 +228,7 @@ export const RUNTIME_M0_01_CONTEXT_PATHS = Object.freeze(
     "docs/technical/m0-traceability.md",
     "docs/technical/runtime-m0-01-graceful-shutdown-task-packet.md",
     "docs/technical/runtime-m0-01-human-execution-grant.md",
+    "docs/technical/runtime-m0-01-implementation-evidence.md",
     "docs/technical/security-and-operations.md",
     "scripts/lib/coding-agent-task-packet.mjs",
     "scripts/lib/context-pack.mjs",

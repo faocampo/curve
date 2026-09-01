@@ -175,10 +175,12 @@ informative for every other package while its global-successor status remains
 | --- | --- | --- | --- |
 | [RUNTIME-M0-01](runtime-m0-01-graceful-shutdown-task-packet.md) (graceful Curve worker shutdown classification) | FR-015, FR-022, NFR-004-NFR-005, and the local enabling portion of AC-58 | Focused async lifecycle tests, the complete Curve backend and migration-drift regression, repository-native CI/CodeQL, and separate live `SIGINT` plus `SIGTERM` Compose proofs | Intentional signal exit is graceful within the existing ten-second container deadline; independent worker/relay failures remain fail closed; no task survives cleanup. R1-03 (full disaster-recovery exercise) retains complete AC-58 ownership across database, Temporal, gateway, Onyx, runner, and VCS disruption with measured RPO/RTO. |
 
-RUNTIME-M0-01's exact definition-local commands are
-`HUMAN_EXECUTION_CANDIDATE / MACHINE_UNAVAILABLE`. If Federico approves the
-human-operated bootstrap, the operator executes and records them outside Curve
-dispatch under one exact Plane grant. The machine AC matrix remains `PLANNED`
+RUNTIME-M0-01's exact definition-local commands were executed as
+`HUMAN_EXECUTION_CANDIDATE / MACHINE_UNAVAILABLE` outside Curve dispatch under
+one consumed exact Plane grant. The accepted results are bound in the
+[RUNTIME-M0-01 implementation evidence](runtime-m0-01-implementation-evidence.md)
+(Plane merge, deterministic tests, live signals, CI, security, cleanup, and
+rollback). The machine AC matrix remains `PLANNED`
 until M4 provides the approved OpenHands/gVisor tool, authority, lease, and
 execution-evidence profile.
 
