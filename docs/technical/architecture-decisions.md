@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Decision index; D-001 (Plane upstream foundation decision) is decided; D-003 (runtime topology and trust-zone decision) local private-platform profile is decided and implemented; remaining activation scopes and cross-cutting coding-agent execution/authority profiles require owner approval and applicable proof |
-| Version | 1.5 |
+| Version | 1.6 |
 | Last updated | 2026-08-31 |
 | Source | [Curve PRD v0.13 decision register](../curve-ai-native-sdlc-prd.md#decision-register) (controlled product and architecture decisions, approved Product core, Curve-first shell, and accepted local Temporal proof) |
 | Audience | Decision owners, architects, security, operations, product, licensing, and AI planning agents |
@@ -45,8 +45,8 @@ identifier:
 
 | Blocker | Status | Decision packet | Blocks | Minimum evidence before decision |
 | --- | --- | --- | --- | --- |
-| B-CODING-TOOLS-01 (local coding-tool execution profile) | PROPOSED | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (trusted-local versus gVisor profiles, Python/Docker command boundary, security evidence, and rollback) | Machine-`READY` Python/Docker task packets, beginning with RUNTIME-M0-01 (graceful Curve worker shutdown classification) | Selected trust tier, helper owner, exact tool/image versions and digests, argv/path/environment/network/output grammar, adversarial tests, cleanup, and residual-risk acceptance. |
-| B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) | PROPOSED | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (bootstrap authority alternatives, production verifier/lease requirements, and fail-closed behavior) | Implementation dispatch after registry publication and read-only readiness preflight; it does not block `S -> E1..En -> C -> P` publication | Authoritative identity/role and approval/revocation receipt sources, nonce/freshness/replay rules, required roles, atomic attempt-lease provider, lifecycle/recovery tests, kill switch, and named approval. |
+| B-CODING-TOOLS-01 (local coding-tool execution profile) | PROPOSED / `DEFERRED_TO_M4` UNDER SIMPLIFIED PATH | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (machine-tool alternatives, verified local feasibility, and human-operated bootstrap proposal) | Machine-`READY` Python/Docker task packets; it does not block human-operated work outside Curve dispatch if Authority Option 3 is approved | Authority Option 1 or 2 requires a selected trust tier, helper owner, exact tool/image versions and digests, argv/path/environment/network/output grammar, adversarial tests, cleanup, and residual-risk acceptance. Authority Option 3 explicitly defers these controls to M4. |
+| B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) | PROPOSED / SIMPLIFIED OPTION 3 READY FOR OWNER DECISION | [Local execution and authority decision packet](coding-agent-local-execution-decision.md) (authority alternatives, exact manual grant boundary, production verifier/lease requirements, and fail-closed behavior) | Curve-dispatched implementation; Authority Option 3 permits human-operated coding under ordinary repository authority and creates no Curve dispatch claim | Federico selects the exact option. Option 3 binds the human execution tuple and production fail-closed state; Option 1 or 2 additionally requires authoritative identity/receipt, nonce/freshness/replay, atomic lease, lifecycle/recovery, and kill-switch evidence. |
 
 An AI agent may prepare these records and prove negative fail-closed behavior.
 Only Federico Ocampo, with any reassigned Security/Platform reviewers, may

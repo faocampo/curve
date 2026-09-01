@@ -87,7 +87,7 @@ for (const name of [...packetNames, indexName]) {
 
 assert.match(
   documents.get(indexName),
-  /^\| Version \| 1\.3 \|$/m,
+  /^\| Version \| 1\.4 \|$/m,
   `${indexName}: reconciled version`,
 );
 assert.match(
@@ -126,9 +126,21 @@ assert.match(
   /DECISION-READINESS PACKETS PREPARED \/ OWNER DECISIONS OPEN \/ IMPLEMENTATION PACKETS UNMATERIALIZED/,
   "index must distinguish decision preparation from implementation authority",
 );
+assert.match(
+  index,
+  /\| `B-CODING-TOOLS-01`[^\n]*\| M4-04 \(trusted runner controller\)[^\n]*\| A human-operated bootstrap may defer this decision to M4; Curve machine commands remain unavailable until it is decided and implemented \|/,
+  "machine coding tools remain unavailable and are owned by M4-04",
+);
+assert.match(
+  index,
+  /\| `B-CODING-AUTHORITY-01`[^\n]*M4-04 owns the production implementation[^\n]*\| Schema\/catalog publication and read-only preflight may proceed\. An approved Option 3 manual bootstrap remains outside Curve dispatch and makes no authority claim; automated implementation authority remains false until this decision is implemented \|/,
+  "Option 3 must remain outside machine authority while M4-04 owns production controls",
+);
 
 const developmentPlan = documents.get(developmentPlanName);
 const packageCatalog = documents.get(packageCatalogName);
+assert.match(developmentPlan, /^\| Version \| 1\.21 \|$/m);
+assert.match(packageCatalog, /^\| Version \| 1\.11 \|$/m);
 for (const [name, document] of [
   [developmentPlanName, developmentPlan],
   [packageCatalogName, packageCatalog],
@@ -146,6 +158,14 @@ for (const [name, document] of [
     assert.match(document, new RegExp(`\\b${phase}\\b`), `${name}: mandatory ${phase} phase`);
   }
 }
+assert.match(
+  developmentPlan,
+  /A separately approved human-operated bootstrap path may execute outside Curve\s+dispatch using ordinary developer repository authority[\s\S]*exact human grant[\s\S]*cannot satisfy or weaken\s+the machine `READY`\/authorization\/lease contract/,
+);
+assert.match(
+  packageCatalog,
+  /A separately approved human-operated bootstrap path remains outside\s+this machine contract and cannot satisfy it/,
+);
 
 const decisionPacketOwnership = new Map([
   ["D-002", "d002-d004-d005-m1-decision-readiness.md"],
@@ -221,7 +241,25 @@ assert.match(packageCatalog, /M7 remains outside the active .* catalog/i);
 assert.match(packageCatalog, /M7.*(?:DEFERRED|deferred)/s);
 
 assert.match(packageRow(developmentPlan, "M4-03"), /P0-08/);
-assert.match(packageRow(developmentPlan, "M4-04"), /P0-07/);
+const developmentRunner = packageRow(developmentPlan, "M4-04");
+const catalogRunner = packageRow(packageCatalog, "M4-04");
+for (const [name, row] of [
+  [developmentPlanName, developmentRunner],
+  [packageCatalogName, catalogRunner],
+]) {
+  assert.match(row, /P0-07/, `${name}: gVisor proof`);
+  assert.match(row, /B-CODING-TOOLS-01/, `${name}: machine tool profile`);
+  assert.match(row, /B-CODING-AUTHORITY-01/, `${name}: production authority and lease`);
+}
+assert.match(
+  developmentRunner,
+  /consumes any B-CODING-TOOLS-01\/B-CODING-AUTHORITY-01 controls deferred during human-operated bootstrap/,
+);
+assert.match(catalogRunner, /production human authority and durable attempt lease/);
+assert.match(
+  developmentPlan,
+  /M4 exit requires[\s\S]*deferred machine execution\/authority decisions to be implemented with gVisor isolation, independently verified human authority, and one durable attempt lease/,
+);
 assert.match(packageRow(developmentPlan, "M5-01"), /P0-11/);
 assert.match(packageRow(developmentPlan, "M5-02"), /P0-07/);
 assert.match(packageRow(developmentPlan, "M5-02"), /P0-11/);
