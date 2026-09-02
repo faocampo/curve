@@ -33,6 +33,11 @@ test("M1-01B binds one exact human-operated frontend attempt", () => {
   assert.match(grant, /manual UX\/UI[\s\S]*before merge/i);
   assert.match(grant, /zero open Critical or High finding/);
   assert.match(grant, /no protected body, credential, secret/);
+  assert.match(grant, /incomplete offline store after downloading zero packages/);
+  assert.match(grant, /package\.json[\s\S]*pnpm-lock\.yaml[\s\S]*pnpm-workspace\.yaml/);
+  assert.match(grant, /copy-on-write clones every ignored `node_modules`/);
+  assert.match(grant, /verifies that no tracked file changed/);
+  assert.match(packet, /copy-on-write reuse every ignored `node_modules` directory/);
 });
 
 test("M1-01B keeps machine and production dispatch fail closed", () => {
