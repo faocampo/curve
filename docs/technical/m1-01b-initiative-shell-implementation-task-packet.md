@@ -257,7 +257,7 @@ security execution boundary.
 
 | Phase | Exact command | Evidence |
 | --- | --- | --- |
-| Install precondition | `pnpm install --frozen-lockfile --offline --ignore-scripts`; if the offline store is incomplete with zero downloads, copy-on-write reuse every ignored `node_modules` directory from a local Plane worktree whose `package.json`, `pnpm-lock.yaml`, and `pnpm-workspace.yaml` digests exactly match the target | Uses only the resolved local package graph; records source and digest pairs, preserves pnpm links, changes no tracked file, and fails closed on mismatch, missing directory, invalid link, or validation failure. |
+| Install precondition | `pnpm install --frozen-lockfile --offline --ignore-scripts`; if the offline store is incomplete with zero downloads, copy-on-write reuse every ignored `node_modules` directory from a local Plane worktree whose root `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, and every workspace-package `package.json` digest exactly match the target | Uses only the resolved local package graph; records source and every definition digest pair, preserves pnpm links, regenerates ignored pnpm workspace-state paths/timestamp after verification, runs with `--config.verify-deps-before-run=error`, changes no tracked file, and fails closed on mismatch, missing directory, invalid link, pnpm status error, or validation failure. |
 | Focused lint | `pnpm --filter=web check:lint` | Existing web lint script. |
 | Focused types | `pnpm --filter=web check:types` | React Router type generation and TypeScript check. |
 | Focused tests | `pnpm --filter=web test -- tests/curve/curve-initiative-service.test.ts tests/curve/curve-initiative-shell.test.tsx` | Typed client and UI acceptance cases. |

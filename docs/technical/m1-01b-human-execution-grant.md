@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Status | `ACTIVE / HUMAN_OPERATED_OUTSIDE_CURVE_DISPATCH / LOCAL_ONLY` |
-| Version | 1.1 |
+| Version | 1.2 |
 | Effective date | 2026-09-01 |
 | Product | Curve |
 | Work package | M1-01B (Curve-first Initiative shell) |
@@ -100,19 +100,26 @@ The primary install precondition is
 `pnpm install --frozen-lockfile --offline --ignore-scripts`. When pnpm reports
 an incomplete offline store after downloading zero packages, the human-operated
 controller may instead reuse an already-installed local Plane dependency tree
-only when all three source and target digests match exactly:
+only when the complete source and target workspace definition matches exactly:
 
 1. `package.json` (workspace package-manager and script contract).
 2. `pnpm-lock.yaml` (complete resolved dependency graph).
 3. `pnpm-workspace.yaml` (workspace package topology).
+4. Every workspace-package `package.json` discovered from that topology
+   (package-local dependencies, scripts, name, and version).
 
 The reuse procedure copy-on-write clones every ignored `node_modules`
-directory while preserving relative pnpm links, records the source worktree and
-the three digest pairs, verifies that no tracked file changed, and then runs the
-complete required validation below. A digest mismatch, missing workspace
-dependency directory, invalid pnpm link, or failed validation stops the
-attempt. Package download, lifecycle scripts, registry fallback, provider
-access, and arbitrary egress remain excluded.
+directory while preserving relative pnpm links and records the source worktree
+plus every definition digest pair. It then regenerates pnpm's ignored
+`.pnpm-workspace-state-v1.json` for the target absolute workspace paths and a
+post-verification timestamp; that generated state may never replace or modify a
+tracked manifest or lockfile. The controller must run pnpm with
+`--config.verify-deps-before-run=error`, verify that no tracked file changed,
+and then run the complete required validation below. A digest mismatch,
+missing workspace dependency directory, invalid pnpm link, pnpm dependency
+status error, or failed validation stops the attempt. Package download,
+lifecycle scripts, registry fallback, provider access, and arbitrary egress
+remain excluded.
 
 Required evidence at the exact implementation head is:
 
