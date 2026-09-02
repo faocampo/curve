@@ -319,8 +319,9 @@ test("M0-S9C context pins the Model Gateway readiness and no-silent-routing boun
     /actual-route failover\s+matrix passes/,
   ]) assert.match(packet, boundary);
 
-  assert.match(packet, /Observed Curve contract base[\s\S]*`1c38a5398b9e6c7cf83c8ee7e8a4615f8f2450d1`/);
-  assert.match(packet, /Observed Plane implementation base[\s\S]*`9f9bb14f46b80e1d05b4c900d25c1af7a229b55c`/);
+  assert.match(packet, /Observed Curve contract base[\s\S]*`97c896ba0d82da14b3c4c8eeba54ef73c7803b01`/);
+  assert.match(packet, /original M0-S9C1A decision survey at `1c38a539\.\.\.` remains immutable historical evidence/);
+  assert.match(packet, /Observed Plane implementation base[\s\S]*`4ae3a77f665368cf8f6a39e9434c2733551cf9d8`/);
   assert.match(packet, /grants no[\s\S]*implementation[\s\S]*dispatch authority/i);
 
   const matrix = JSON.parse(read("contracts/testing/ac-test-matrix-v2.json"));

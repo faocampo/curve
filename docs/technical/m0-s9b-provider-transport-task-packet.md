@@ -7,13 +7,13 @@
 | Package | M0-S9B (external provider transport and administration foundation), a decision-gated child of M0-09 (provider integration foundation) |
 | Task ID | `CURVE-M0-S9B-PROVIDER-TRANSPORT` (external provider transport and administration parent planning packet) |
 | Status | `PREPARED / BLOCKED / NO_DISPATCH` |
-| Version | 0.3 |
-| Date | 2026-08-31 |
+| Version | 0.4 |
+| Date | 2026-09-02 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Candidate Curve base | Curve `main` at `e7aa7e6ff23491cfae02379d74508822a8ded238`; dispatch additionally requires the accepted merge containing the exact child decision and contracts |
-| Observed Plane base | `preview` at `99a73b4eab5ee21fd012d7358bc9259252d47f71`; `0007_initiative_gateassignment.py` (Initiative and gate-assignment migration) is current and migration slot `0008` is observational only, not reserved; every implementation dispatch revalidates both values |
+| Candidate Curve base | Curve `main` source revision `97c896ba0d82da14b3c4c8eeba54ef73c7803b01`; the original M0-S9B decision survey at `e7aa7e6...` remains immutable historical evidence, and dispatch additionally requires the accepted merge containing the exact child decision and contracts |
+| Observed Plane base | `preview` at `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`; `0007_initiative_gateassignment.py` (Initiative and gate-assignment migration) remains the latest accepted Curve migration and migration slot `0008` is observational only, not reserved; every implementation dispatch revalidates both values |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | Unassigned until an exact child packet is authorized; Codex may implement only under a later bounded authorization |
 | Risk | `MATERIAL`; public administration, secret references, network endpoints, provider callbacks, outgoing notifications, schedules, and external state |

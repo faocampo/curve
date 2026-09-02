@@ -139,7 +139,7 @@ assert.match(
 
 const developmentPlan = documents.get(developmentPlanName);
 const packageCatalog = documents.get(packageCatalogName);
-assert.match(developmentPlan, /^\| Version \| 1\.21 \|$/m);
+assert.match(developmentPlan, /^\| Version \| 1\.22 \|$/m);
 assert.match(packageCatalog, /^\| Version \| 1\.11 \|$/m);
 for (const [name, document] of [
   [developmentPlanName, developmentPlan],

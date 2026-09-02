@@ -5,8 +5,8 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Execution blueprint for architecture approval and AI coding-agent delivery |
-| Version | 1.21 |
-| Last updated | 2026-08-31 |
+| Version | 1.22 |
+| Last updated | 2026-09-02 |
 | Source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, approved Product core, Curve-first shell invariant, lifecycle, security invariants, acceptance criteria, and accepted D-003 (runtime topology and trust-zone decision) local implementation) |
 | Audience | Engineering leads, architects, security, operations, QA, and AI coding agents |
 | Planning unit | Repository-local work package materialized against the approved public Plane fork and an exact merged base SHA under D-001 (Plane upstream foundation decision) |
@@ -33,7 +33,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 
 ## Planning assumptions
 
-- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` remains the historical foundation. Plane PR #12 established the accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; the current accepted Plane `preview` after M1-00A and M1-01A is `99a73b4eab5ee21fd012d7358bc9259252d47f71`.
+- The Curve repository is the documentation/contract authority and the public Plane fork is the implementation repository under decided D-001 (Plane upstream foundation decision). Accepted candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` is merged; fork `preview` foundation `549db1aea8f3307b337b3686dbb844a87549cd95` remains the historical foundation. Plane PR #12 established accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; M1-00A and M1-01A established historical capability checkpoint `99a73b4eab5ee21fd012d7358bc9259252d47f71`; runtime-shutdown and Critical/High dependency-remediation descendants advanced the current accepted Plane `preview` to `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`.
 - Federico Ocampo decided the original D-003 (runtime topology and trust-zone decision) local scope at approved head `7826f403...`, merged as `097016f...`, and approved the [private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, service identity, controls, and revised proof) at head `5e165c...`, merged as `aece539...`. Temporal Python SDK 1.31.0 remains fixed. M0-S3 (local Temporal round-trip implementation packet) accepted Plane `dev_env`, direct loopback ports, replay, restart, cancellation, security, and rollback at merge `d99342f...`; P0-06A (isolated Temporal feasibility proof) and P0-06B (least-privilege Plane integration proof) remain superseded standalone gates. Environment activation remains package-gated.
 - Component names in this plan are logical. The architecture may co-deploy compatible components, but ownership, contracts, trust boundaries, and failure isolation remain distinct.
 - Relative sizes are planning signals: `S` is a bounded adapter/schema/UI slice, `M` is a component with several contracts, and `L` must be decomposed before dispatch. They are not calendar estimates.
@@ -198,15 +198,19 @@ The final proof report contains exact versions/digests, topology/configuration, 
 | M0-S9B (external provider transport and administration) | M, decomposed | Human administration/role source, credential/endpoint profiles, authenticated callback ingress, outgoing webhooks, scheduled reconciliation, and provider activation packets | M0-S9A (local provider substrate) and each child/provider's applicable decided identity/security/data/infrastructure/external-effect record; D-007 (MCP trust and delegated-action decision) only for MCP/Orca | FR-003 (provider registration), FR-023 (provider lifecycle), FR-044 (provider reconciliation), NFR-005 (reliability), NFR-008 (recovery), NFR-013 (provider isolation), completes AC-33 (provider conformance) | `PREPARED / BLOCKED`; the [M0-S9B task packet](m0-s9b-provider-transport-task-packet.md) (six independently reviewable external-transport children, exact security invariants, acceptance, commands, and rollback) prohibits parent-wide dispatch and requires child-specific approval. |
 | M0-S9C (Model Gateway routing and failover) | M, decomposed | Immutable model policy, budget reservation, provider-neutral ModelGateway, OpenRouter transport, actual-route usage evidence, failover, and reconciliation | M0-S9A (local provider substrate); D-004 (Model Gateway architecture decision), D-005 (model/provider and data-policy decision), D-014 (budget-policy decision); D-009 (retention, deletion, backup, and legal-hold decision) before protected model bodies | AC-57 (Model Gateway routing) plus the model-enabled portions of FR-002 (Idea Brief refinement), FR-005 (research), FR-010 (planning), FR-017 (quality review) and NFR-006 through NFR-008 (model governance, cost, and recovery), NFR-017 (model traceability) | `PREPARED / BLOCKED`; M0-S9C1A (candidate Model Gateway architecture and data-policy contracts) now supplies unselected closed D-004/D-005 proposals, schemas, fixtures, empty policy candidates, raw-byte bindings, and semantic validation. The [M0-S9C task packet](m0-s9c-model-gateway-task-packet.md) (candidate decisions, runtime contracts, policy/budget kernel, OpenRouter transport, failover, conformance, commands, and rollback) keeps exact model/provider/data/budget decisions and runtime authority unresolved and forbids provider-default or silent routing. |
 
-The last verified Plane implementation base is `preview`
-`99a73b4eab5ee21fd012d7358bc9259252d47f71`, which includes accepted M0-S9A
+The current accepted Plane implementation base is `preview`
+`4ae3a77f665368cf8f6a39e9434c2733551cf9d8`, which includes accepted M0-S9A
 (provider-neutral registry and reconciliation foundation), accepted M0-S6A
 (durable parent/child Temporal orchestration) from Plane PR #10, and descends
 from M0-S5B merge `1b06153f6f49848f208808f4f09385a581a55d26`;
 M0-S1, M0-S2, M0-03, M0-S3, M0-S4, M0-S5A, M0-S5B, M0-S6A, M0-S9A, and the
 defined M0-06 (Temporal workflow-skeleton work package) are complete for their
 approved local scopes. The current descendant additionally contains accepted
-M1-00A (minimal Product core) and M1-01A (Initiative domain and API foundation).
+M1-00A (minimal Product core), M1-01A (Initiative domain and API foundation),
+RUNTIME-M0-01 (graceful Curve worker shutdown), and the accepted Critical/High
+security and production-dependency remediations. The `99a73b4...` revision
+remains the historical M1-01A capability checkpoint and exact-preview
+local-runtime evidence source.
 M0-S2 satisfies M0-02 (core aggregate persistence) and M0-05 (transactional
 delivery kernel) through [M0-S2 implementation evidence](m0-s2-implementation-evidence.md)
 (exact contract, context, implementation, validation, and merge binding).

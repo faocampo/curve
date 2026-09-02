@@ -31,6 +31,8 @@ const laterIndex = read("docs/technical/later-milestone-decision-readiness-index
 const implementedErd = read("docs/technical/implemented-entity-relationship-model.md");
 const projectMap = read("docs/technical/github-project-execution-map.md");
 const runtimeRefresh = read("docs/technical/local-runtime-refresh-evidence.md");
+const providerTransportPacket = read("docs/technical/m0-s9b-provider-transport-task-packet.md");
+const modelGatewayPacket = read("docs/technical/m0-s9c-model-gateway-task-packet.md");
 const projectSync = read("scripts/sync-github-project.mjs");
 
 const versionMatch = prd.match(/^\| Version\s+\|\s+([0-9.]+)\s+\|$/m);
@@ -49,7 +51,7 @@ test("active architecture specifications bind the current PRD version", () => {
 });
 
 test("active current-state documents bind one accepted Plane preview", () => {
-  const currentPlane = "99a73b4eab5ee21fd012d7358bc9259252d47f71";
+  const currentPlane = "4ae3a77f665368cf8f6a39e9434c2733551cf9d8";
   for (const [name, contents] of [
     ["engineering", engineering],
     ["remediation", remediation],
@@ -58,6 +60,8 @@ test("active current-state documents bind one accepted Plane preview", () => {
     ["foundation", foundation],
     ["readiness", readiness],
     ["M0 completion audit", m0Audit],
+    ["M0-S9B transport packet", providerTransportPacket],
+    ["M0-S9C Model Gateway packet", modelGatewayPacket],
   ]) {
     assert.match(contents, new RegExp(currentPlane), name);
   }
@@ -67,15 +71,15 @@ test("active current-state documents bind one accepted Plane preview", () => {
   assert.doesNotMatch(foundation, /current `origin\/preview` `e762fbb/);
   assert.match(
     readiness,
-    /\| Accepted Plane capability baseline \| Fork `preview` checkpoint `99a73b4eab5ee21fd012d7358bc9259252d47f71`/,
+    /\| Accepted Plane capability baseline \| Fork `preview` at `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`/,
   );
   assert.match(
     readiness,
-    /\| Observed Plane implementation base \| Plane `preview` at `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c`/,
+    /\| Observed Plane implementation base \| Plane `preview` at `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`/,
   );
   assert.match(
     readiness,
-    /\| Observed Curve contract base \| Curve `main` at `7069acba643942c9670521b8b1ebc1774b5ea7fb`/,
+    /\| Observed Curve contract base \| Curve `main` source revision `97c896ba0d82da14b3c4c8eeba54ef73c7803b01`/,
   );
   assert.match(readiness, /grants no decision, implementation, provider-call, or dispatch authority/);
   assert.match(m0Audit, /c55686c8061f092f4f82ab73681e06f97d80893f/);
@@ -120,21 +124,41 @@ test("substantively reconciled governance documents advance document control", (
     ["architecture", architecture, "0.9", "Last updated", "2026-08-30"],
     ["coding-agent decision", codingDecision, "1.2", "Prepared", "2026-08-30"],
     ["RUNTIME-M0-01 packet", runtimePacket, "1.3", "Prepared", "2026-08-30"],
-    ["development", development, "1.21", "Last updated", "2026-08-31"],
-    ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
-    ["M0 readiness board", readiness, "1.40", "Date", "2026-09-01"],
+    ["development", development, "1.22", "Last updated", "2026-09-02"],
+    ["foundation", foundation, "1.5", "Review date", "2026-09-02"],
+    ["M0 readiness board", readiness, "1.41", "Date", "2026-09-02"],
     ["M0 completion audit", m0Audit, "1.15", "Date", "2026-09-02"],
     ["M0 test strategy", strategy, "1.8", "Last updated", "2026-08-31"],
     ["GitHub Project execution map", projectMap, "1.19", "Date", "2026-09-02"],
     ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],
     ["M1-M7 catalog", laterPackets, "1.11", "Date", "2026-08-31"],
-    ["architecture decision index", decisions, "1.7", "Last updated", "2026-09-01"],
+    ["architecture decision index", decisions, "1.8", "Last updated", "2026-09-02"],
     ["later-milestone index", laterIndex, "1.4", "Prepared", "2026-08-31"],
     ["implemented ERD", implementedErd, "1.2", "Last updated", "2026-08-30"],
   ]) {
     assert.match(contents, new RegExp(`^\\| Version \\| ${version.replace(".", "\\.")} \\|$`, "m"), name);
     assert.match(contents, new RegExp(`^\\| ${dateLabel} \\| ${date} \\|$`, "m"), name);
   }
+});
+
+test("M0-S9B and M0-S9C stay fail closed while observational baselines advance", () => {
+  for (const [name, contents] of [
+    ["M0-S9B transport packet", providerTransportPacket],
+    ["M0-S9C Model Gateway packet", modelGatewayPacket],
+  ]) {
+    assert.match(contents, /\| Status \| `PREPARED \/ BLOCKED \/ NO_DISPATCH` \|/, name);
+    assert.match(contents, /97c896ba0d82da14b3c4c8eeba54ef73c7803b01/, name);
+    assert.match(contents, /4ae3a77f665368cf8f6a39e9434c2733551cf9d8/, name);
+  }
+
+  assert.match(providerTransportPacket, /B-ADMIN/);
+  assert.match(providerTransportPacket, /B-IDENTITY/);
+  assert.match(providerTransportPacket, /B-ENDPOINT/);
+  assert.match(providerTransportPacket, /D-009 \(retention, legal-hold, backup, and erasure decision\)/);
+  assert.match(modelGatewayPacket, /D-004 \(Model Gateway architecture decision\)/);
+  assert.match(modelGatewayPacket, /D-005 \(model, provider, and data-policy decision\)/);
+  assert.match(modelGatewayPacket, /D-014 \(budget-policy decision\)/);
+  assert.match(modelGatewayPacket, /no account, key, model, provider, route, or data policy is approved/);
 });
 
 test("next work and later-milestone status remain truthfully executable", () => {
