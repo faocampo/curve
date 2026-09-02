@@ -35,9 +35,13 @@ test("M1-01B binds one exact human-operated frontend attempt", () => {
   assert.match(grant, /no protected body, credential, secret/);
   assert.match(grant, /incomplete offline store after downloading zero packages/);
   assert.match(grant, /package\.json[\s\S]*pnpm-lock\.yaml[\s\S]*pnpm-workspace\.yaml/);
+  assert.match(grant, /Every workspace-package `package\.json`/);
   assert.match(grant, /copy-on-write clones every ignored `node_modules`/);
-  assert.match(grant, /verifies that no tracked file changed/);
-  assert.match(packet, /copy-on-write reuse every ignored `node_modules` directory/);
+  assert.match(grant, /\.pnpm-workspace-state-v1\.json/);
+  assert.match(grant, /--config\.verify-deps-before-run=error/);
+  assert.match(grant, /verify that no tracked file changed/);
+  assert.match(packet, /copy-on-write reuse every ignored `node_modules` directory[\s\S]*every workspace-package `package\.json`/);
+  assert.match(packet, /regenerates ignored pnpm workspace-state paths\/timestamp/);
 });
 
 test("M1-01B keeps machine and production dispatch fail closed", () => {
