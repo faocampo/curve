@@ -120,7 +120,7 @@ test("substantively reconciled governance documents advance document control", (
     ["development", development, "1.21", "Last updated", "2026-08-31"],
     ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
     ["M0 readiness board", readiness, "1.40", "Date", "2026-09-01"],
-    ["M0 completion audit", m0Audit, "1.13", "Date", "2026-09-01"],
+    ["M0 completion audit", m0Audit, "1.14", "Date", "2026-09-02"],
     ["M0 test strategy", strategy, "1.8", "Last updated", "2026-08-31"],
     ["GitHub Project execution map", projectMap, "1.18", "Date", "2026-08-29"],
     ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],
@@ -141,15 +141,20 @@ test("next work and later-milestone status remain truthfully executable", () => 
   assert.ok(nextSequence, "M0 next executable sequence is required");
   assert.match(
     nextSequence[1],
-    /^1\. Merge the \[RUNTIME-M0-01 implementation evidence\]/m,
+    /^1\. Complete D-009 \(retention, backup, legal-hold, tombstone, and erasure/m,
   );
-  assert.match(nextSequence[1], /Curve issue #46/);
-  assert.match(nextSequence[1], /mark its Project item\s+Done/);
+  assert.match(nextSequence[1], /M0-04 \(protected object storage and\s+erasure\)/);
+  assert.match(nextSequence[1], /M0-S9B \(external provider transport and administration\)/);
+  assert.match(nextSequence[1], /M0-S9C \(Model Gateway\s+routing and failover\)/);
   assert.doesNotMatch(nextSequence[1], /Obtain exact-revision approval/);
   assert.doesNotMatch(nextSequence[1], /implement the three-file correction/);
-  assert.match(nextSequence[1], /Curve issue #46/);
+  assert.doesNotMatch(nextSequence[1], /Curve issue #46/);
+  assert.doesNotMatch(nextSequence[1], /Merge the \[RUNTIME-M0-01 implementation evidence\]/);
   assert.doesNotMatch(nextSequence[1], /Publish the RUNTIME-M0-01 machine packet/);
   assert.match(nextSequence[1], /D-009 \(retention, backup, legal-hold, tombstone, and erasure/);
+  assert.match(m0Audit, /de16d05c96fcdf099cffdbf725ca9f6b8c304816/);
+  assert.match(m0Audit, /Curve PR #66/);
+  assert.match(m0Audit, /Canonical RUNTIME-M0-01 completion evidence/);
 
   assert.match(
     development,
