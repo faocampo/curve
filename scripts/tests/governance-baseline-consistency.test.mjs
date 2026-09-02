@@ -80,7 +80,10 @@ test("active current-state documents bind one accepted Plane preview", () => {
   assert.match(readiness, /grants no decision, implementation, provider-call, or dispatch authority/);
   assert.match(m0Audit, /c55686c8061f092f4f82ab73681e06f97d80893f/);
   assert.match(m0Audit, /68a05e9f2920454752e9039d596271dbb39d6e6e/);
-  assert.match(m0Audit, /accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`/);
+  assert.match(
+    m0Audit,
+    /accepted M0-S9A \(local provider-registry substrate\) checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`/,
+  );
 });
 
 test("exact-preview local runtime evidence binds the durable verified control path", () => {
@@ -120,9 +123,9 @@ test("substantively reconciled governance documents advance document control", (
     ["development", development, "1.21", "Last updated", "2026-08-31"],
     ["foundation", foundation, "1.4", "Review date", "2026-08-29"],
     ["M0 readiness board", readiness, "1.40", "Date", "2026-09-01"],
-    ["M0 completion audit", m0Audit, "1.14", "Date", "2026-09-02"],
+    ["M0 completion audit", m0Audit, "1.15", "Date", "2026-09-02"],
     ["M0 test strategy", strategy, "1.8", "Last updated", "2026-08-31"],
-    ["GitHub Project execution map", projectMap, "1.18", "Date", "2026-08-29"],
+    ["GitHub Project execution map", projectMap, "1.19", "Date", "2026-09-02"],
     ["M1 alignment", m1Alignment, "1.7", "Date", "2026-08-30"],
     ["M1-M7 catalog", laterPackets, "1.11", "Date", "2026-08-31"],
     ["architecture decision index", decisions, "1.7", "Last updated", "2026-09-01"],
@@ -152,8 +155,8 @@ test("next work and later-milestone status remain truthfully executable", () => 
   assert.doesNotMatch(nextSequence[1], /Merge the \[RUNTIME-M0-01 implementation evidence\]/);
   assert.doesNotMatch(nextSequence[1], /Publish the RUNTIME-M0-01 machine packet/);
   assert.match(nextSequence[1], /D-009 \(retention, backup, legal-hold, tombstone, and erasure/);
-  assert.match(m0Audit, /de16d05c96fcdf099cffdbf725ca9f6b8c304816/);
-  assert.match(m0Audit, /Curve PR #66/);
+  assert.match(m0Audit, /95fb52721992fda43fc300a58aca31228651b22e/);
+  assert.match(m0Audit, /Curve PR #70/);
   assert.match(m0Audit, /Canonical RUNTIME-M0-01 completion evidence/);
 
   assert.match(
@@ -234,14 +237,14 @@ test("M1-00A merged local lifecycle and open conformance variance agree across a
   }
 });
 
-test("GitHub Project snapshot accounts for all 97 current items", () => {
+test("GitHub Project snapshot accounts for all 127 current items", () => {
   const liveCounts = projectMap.match(
     /Project #2 had (\d+) items: (\d+) draft issues, (\d+) issues, and (\d+) pull requests/,
   );
   assert.ok(liveCounts, "live Project count summary is required");
   const [, liveTotal, draftIssues, issues, pullRequests] = liveCounts.map(Number);
   assert.equal(draftIssues + issues + pullRequests, liveTotal);
-  assert.deepEqual([liveTotal, draftIssues, issues, pullRequests], [97, 81, 5, 11]);
+  assert.deepEqual([liveTotal, draftIssues, issues, pullRequests], [127, 88, 5, 34]);
 
   const countFor = (labelPattern) => {
     const match = projectMap.match(
@@ -263,6 +266,13 @@ test("GitHub Project snapshot accounts for all 97 current items", () => {
     "P0-03A \\(later-milestone decision-readiness packets\\) checkpoint",
     "M0-S9B-D1 \\(external-provider transport definition gate\\) checkpoint",
     "M0-S9C-D1 \\(Model Gateway definition gate\\) checkpoint",
+    "M1-01B \\(Curve-first Initiative shell\\) checkpoint",
+    "M0-S9B1 \\(provider administration contracts\\) checkpoint",
+    "P0-12C \\(D-009 retention contract integrity\\) checkpoint",
+    "M0-S9C-R1 \\(Model Gateway baseline reconciliation\\) checkpoint",
+    "M0-S9C1A \\(candidate Model Gateway governance contracts\\) checkpoint",
+    "M1-01B-P \\(Initiative-shell packet-chain publication\\) checkpoint",
+    "M0-S9B2 \\(provider credential and endpoint profiles\\) checkpoint",
   ].reduce((total, label) => total + countFor(label), 0);
   const standaloneIssues =
     countFor("SEC-M0-01 \\(inherited High dependency advisories\\) issue") +
@@ -274,7 +284,7 @@ test("GitHub Project snapshot accounts for all 97 current items", () => {
 
   assert.deepEqual(
     { canonical, checkpoints, standaloneIssues, trackedPullRequests, documentedTotal },
-    { canonical: 71, checkpoints: 10, standaloneIssues: 5, trackedPullRequests: 11, documentedTotal: 97 },
+    { canonical: 71, checkpoints: 17, standaloneIssues: 5, trackedPullRequests: 34, documentedTotal: 127 },
   );
   assert.equal(canonical + checkpoints + standaloneIssues + trackedPullRequests, documentedTotal);
   assert.match(projectMap, /P0-02 \(runtime and repository topology\).*`Done`/);
