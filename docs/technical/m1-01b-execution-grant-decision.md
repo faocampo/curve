@@ -4,15 +4,17 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `MATERIAL_OWNER_DECISION_REQUIRED / NO_SELECTION / NO_DISPATCH` |
-| Version | 1.0 |
+| Status | `DECIDED / HUMAN_OPERATED_OUTSIDE_CURVE_DISPATCH / MACHINE_DISPATCH_BLOCKED` |
+| Version | 1.1 |
 | Prepared | 2026-08-31 |
+| Decided | 2026-09-01 |
 | Work package | M1-01B (Curve-first Initiative shell) |
 | Decision owner | Federico Ocampo, CTO at X3M |
 | Preparation base | Curve `f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe` |
-| Target base | Plane `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c` |
+| Target base | Plane `c516a612a29751b0d24bcbd32bfcba1bd73fe3af` |
 | Governing analysis | [Coding-agent local execution and authority decision packet](coding-agent-local-execution-decision.md) (trust-tiered tool alternatives, exact human grant, durable attempt lease, production fail-closed behavior, and rollback) |
 | Implementation definition | [M1-01B implementation task packet](m1-01b-initiative-shell-implementation-task-packet.md) (exact frontend scope, Plane paths, API behavior, acceptance, commands, blockers, and rollback) |
+| Exact grant | [M1-01B human execution grant](m1-01b-human-execution-grant.md) (current Plane base, frontend paths, local tools, CI/security evidence, manual UX gate, exclusions, and rollback) |
 
 ## Decision purpose
 
@@ -21,9 +23,26 @@ becoming machine `READY` and, separately, from receiving execution authority.
 It does not approve UX changes, alter the Initiative contract, authorize Plane
 mutation, or weaken the production fail-closed boundary.
 
-An AI coding agent may populate objective tool and digest evidence after a
-choice. Only the named human owner selects the security architecture and grants
-an exact implementation attempt.
+The alternatives below are retained as the historical decision surface. The
+selected bootstrap path is B-CODING-AUTHORITY-01 Option 3 (human-operated coding
+outside Curve dispatch), already approved in Curve PR #50. Federico's
+2026-09-01 standing delegation permits autonomous coding-only technical work;
+product decisions and manual UX/UI acceptance remain explicit human gates.
+
+## Selected local path
+
+- Authority: `HUMAN_OPERATED_OUTSIDE_CURVE_V1`.
+- Machine execution: B-CODING-TOOLS-01 remains `DEFERRED_TO_M4`.
+- Local procedure: observed Node.js 26.7.0 and pnpm 11.3.0, offline frozen
+  install with lifecycle scripts disabled, repository-native lint/type/test/build.
+- Security acceptance: commit-bound Plane CodeQL plus an exact-ref query proving
+  zero open Critical or High finding.
+- Merge gate: Federico manually accepts the exact implementation UX/UI head.
+
+The selected path is recorded in the
+[M1-01B human execution grant](m1-01b-human-execution-grant.md) (exact local
+frontend attempt, tools, security evidence, manual UX gate, and rollback). It
+does not activate Curve machine dispatch or production execution.
 
 ## Decision A — Node/pnpm execution profile
 
@@ -142,17 +161,20 @@ prohibited_actions:
 rollback: revert or delete the feature branch before merge; after merge set CURVE_ENABLED=0 and omit the Curve Compose profile
 ```
 
-The final grant becomes effective only after the exact packet and context
-exist, the selected tool/security controls pass, the human receipt is published
-and independently verified, and one matching lease is atomically acquired.
+The machine-dispatch form above remains fail closed. The separately documented
+human-operated path uses ordinary repository authority and therefore has no
+Curve authorization receipt or attempt lease.
 
 ## Current outcome
 
 ```yaml
-decision_status: REQUIRED
-node_execution_profile: null
-security_profile: null
-authority_profile: null
+decision_status: DECIDED
+node_execution_profile: HUMAN_OPERATED_LOCAL_NODE_PNPM
+security_profile: LOCAL_STATIC_AND_COMMIT_CODEQL_M1_01B_V1
+authority_profile: HUMAN_OPERATED_OUTSIDE_CURVE_V1
 implementation_authority_granted: false
-dispatch_status: BLOCKED
+human_execution_grant: ACTIVE
+manual_ux_acceptance_required_before_merge: true
+curve_machine_dispatch_status: BLOCKED
+production_dispatch_status: BLOCKED
 ```

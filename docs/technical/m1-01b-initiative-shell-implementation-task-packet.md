@@ -4,9 +4,10 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `IMPLEMENTATION_DEFINITION_PREPARED / MACHINE_PUBLICATION_SEQUENCE_REQUIRED / TOOL_DECISION_REQUIRED / DISPATCH_AUTHORITY_REQUIRED / NOT_IMPLEMENTATION_AUTHORITY` |
-| Version | 1.0 |
+| Status | `HUMAN_EXECUTION_GRANTED / MACHINE_DISPATCH_BLOCKED / UX_ACCEPTANCE_REQUIRED_BEFORE_MERGE` |
+| Version | 1.1 |
 | Prepared | 2026-08-31 |
+| Execution binding | 2026-09-01 |
 | Product | Curve |
 | Work package | M1-01B (Curve-first Initiative shell) |
 | Owner and human reviewer | Federico Ocampo (`faocampo`) |
@@ -14,12 +15,13 @@
 | Target repository | `git@github.com:faocampo/plane.git` |
 | Target branch | `preview` |
 | Verified target base | `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c` |
+| Human-operated execution base | `c516a612a29751b0d24bcbd32bfcba1bd73fe3af`; no intervening target-path overlap |
 | Intended feature branch | `curve/m1-01b-initiative-shell` |
 | Curve preparation base | `f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe`; the final normative source revision is assigned only after this definition is merged |
 | GitHub Project item | `PVTI_lAHOBNjuQc4BgZzOzg4vNto` (`WORK_PACKAGE`, Project 2) |
 | Data boundary | Existing authorized workspace projections plus synthetic `INTERNAL` local-test data; no protected body or credential |
 | External spend | US$0 |
-| Authority boundary | This definition authorizes no Plane mutation, command execution, branch push, PR creation, merge, deployment, provider call, credential use, or infrastructure change. |
+| Authority boundary | The [M1-01B human execution grant](m1-01b-human-execution-grant.md) (exact current Plane base, frontend scope, tools, CI/security evidence, manual UX gate, and rollback) authorizes local implementation, validation, branch push, draft PR, and Project updates outside Curve dispatch. Merge remains gated by manual UX acceptance. |
 
 ## Readiness verdict
 
@@ -38,8 +40,9 @@ Two independent control layers remain open:
    selected, implemented, independently verified bootstrap or production
    execution-authority path and an exact current-attempt lease.
 
-The prepared machine packet therefore remains `BLOCKED`, and dispatch remains
-separately fail closed.
+The prepared machine packet therefore remains `BLOCKED`, and Curve dispatch
+remains fail closed. The separately approved Option 3 human-operated path is
+active at the exact newer Plane base recorded in the human execution grant.
 
 ## Demonstrable outcome
 
@@ -318,16 +321,18 @@ is merged; none may be promoted from this preparation branch unchanged.
 
 | Blocker | Exact closure |
 | --- | --- |
-| B-CODING-TOOLS-01 (local coding-tool execution profile) | Select and implement a Node/pnpm profile plus an exact no-download security command/evidence path; pin tool/image bytes, argv grammar, mounts, network, timeouts, outputs, and cleanup. |
-| B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) | Select the local bootstrap or production authority option; publish an exact human grant receipt; independently verify it; atomically acquire and maintain one current-attempt lease. |
+| B-CODING-TOOLS-01 (machine coding-tool execution profile) | `DEFERRED_TO_M4`; remains a blocker only for Curve machine dispatch. The human-operated grant records observed local Node/pnpm and repository-native commands without claiming machine enforcement. |
+| B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) | Option 3 is selected for local bootstrap. The exact human-operated grant permits this Plane attempt; production dispatch remains fail closed and still requires the M4 authority/lease implementation. |
 | B-M1-01B-PUBLICATION (ordered machine publication) | Complete S -> E1 -> E2 -> C -> P with real descendant revisions, exact digests, and a passing clean-checkout preflight. |
 | B-M1-01B-SECURITY (commit-bound security evidence) | Attach complete same-head Plane CI/CodeQL evidence and prove zero Critical/High finding before human merge review. |
 | B-M1-01B-UX-ACCEPTANCE (implementation UX acceptance) | After implementation, Federico manually verifies the browser-visible desktop/mobile/keyboard behavior and either accepts it or reports corrections. |
 
-The exact choices requested from the human owner are recorded in the
+The selected local path is recorded in the
 [M1-01B execution-grant decision record](m1-01b-execution-grant-decision.md)
-(minimal Node/security profile and implementation-authority selections). No
-coding agent selects those material security alternatives.
+(human-operated authority, local tool procedure, commit-bound security, and
+production fail-closed boundary) and the
+[M1-01B human execution grant](m1-01b-human-execution-grant.md) (exact attempt,
+scope, commands, UX gate, exclusions, and rollback).
 
 ## Stop conditions
 
