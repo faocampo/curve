@@ -5,14 +5,14 @@
 | Field | Value |
 | --- | --- |
 | Status | Active visual-tracking contract |
-| Version | 1.18 |
-| Date | 2026-08-29 |
+| Version | 1.19 |
+| Date | 2026-09-02 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (71-package delivery catalog, dependencies, and evidence) |
 | Project administrator | Federico Ocampo (`faocampo`) |
 | Human reviewer | Federico Ocampo |
-| Last verified live reconciliation | 2026-08-29: Project #2 had 97 items: 81 draft issues, 5 issues, and 11 pull requests. P0-02 (runtime and repository topology), P0-05 (test strategy and audit closure), M0-S6A (durable orchestration), M0-S9A (local provider registry), M1-00A (minimal Product core), and Curve PR #45 (governance baseline reconciliation and implemented ERD) were `Done`; M1-01 (Initiative capability) was `In progress`; Curve PR #43 (Initiative-shell UX definition) was `In review`; R-027 (Product timestamp/schema-version contract reconciliation) and RUNTIME-M0-01 (graceful Curve worker shutdown classification) were `Backlog`. |
-| Required publication-time reconciliation | Preserve P0-02 (runtime and repository topology) and the other accepted packages as `Done`; retain M1-01 (Initiative capability) as `In progress`; retain Curve PR #43 (Initiative-shell UX definition) in review until its approval record is published; refresh synchronizer-owned bodies from the next canonical Curve revision without duplicating items. |
+| Last verified live reconciliation | 2026-09-02: Project #2 had 127 items: 88 draft issues, 5 issues, and 34 pull requests. Status totals were 64 `Done`, 57 `Backlog`, 3 `In progress`, and 3 `In review`. P0-02 (runtime and repository topology), P0-05 (test strategy and audit closure), M1-00A (minimal Product core), SEC-M0-01 (inherited High dependency advisories), RUNTIME-M0-01 (graceful Curve worker shutdown classification), and Plane PR #18 (High production-dependency remediation) were `Done`; P0-03 (decision ADR set), M0-09 (provider integration foundation), and M1-01 (Initiative capability) were `In progress`; P0-12 (retention decision package), M1-01B (Curve-first Initiative shell), and Plane PR #17 (Initiative-shell implementation) were `In review`. |
+| Required publication-time reconciliation | Preserve accepted packages and SEC-M0-01 (inherited High dependency advisories) as `Done`; retain P0-03 (decision ADR set), M0-09 (provider integration foundation), and M1-01 (Initiative capability) as `In progress`; retain P0-12 (retention decision package), M1-01B (Curve-first Initiative shell), and Plane PR #17 (Initiative-shell implementation) in review until their applicable decision or manual UX evidence is accepted; refresh synchronizer-owned bodies from the next canonical Curve revision without duplicating items. |
 
 ## Purpose and authority boundary
 
@@ -61,14 +61,21 @@ grant. Execution systems evaluate their own authoritative inputs independently.
 | M0-S9A (provider-neutral registry and local reconciliation) checkpoint | Readiness child of M0-09 (provider integration foundation) | 1 | `Done`; accepted Plane PR #12 and M0-S9A implementation evidence (provider-registry acceptance record) |
 | M0-S6A-E1 (durable-orchestration evidence reconciliation) checkpoint | Acceptance-evidence reconciliation for M0-S6A (durable parent/child Temporal orchestration) | 1 | `Done` |
 | P0-03A (later-milestone decision-readiness packets) checkpoint | Decision-ready owner-input packets for later milestones | 1 | `Done` |
-| SEC-M0-01 (inherited High dependency advisories) issue | Production dependency-remediation tracking | 1 | `Backlog`; tracked by Curve issue #38 |
+| SEC-M0-01 (inherited High dependency advisories) issue | Production dependency-remediation tracking | 1 | `Done`; [Curve issue #38](https://github.com/faocampo/curve/issues/38) (High production-dependency remediation) closed by [Plane PR #18](https://github.com/faocampo/plane/pull/18) (patched production dependency graph), merged as `4ae3a77f665368cf8f6a39e9434c2733551cf9d8` |
 | R-027 (Product timestamp/schema-version contract reconciliation) issue | Material decision tracking for Product timestamp authority and schema-version enforcement | 1 | `Backlog`, `P1`, `S`; tracked by [Curve issue #44](https://github.com/faocampo/curve/issues/44) (timestamp/schema-version architecture decision) |
-| RUNTIME-M0-01 (graceful Curve worker shutdown classification) issue | Intentional-SIGTERM lifecycle classification and traceback correction | 1 | `Backlog`, `P2`, `S`; tracked by [Curve issue #46](https://github.com/faocampo/curve/issues/46) (worker graceful-shutdown defect and acceptance boundary) |
+| RUNTIME-M0-01 (graceful Curve worker shutdown classification) issue | Intentional-SIGTERM lifecycle classification and traceback correction | 1 | `Done`; [Curve issue #46](https://github.com/faocampo/curve/issues/46) (worker graceful-shutdown defect and acceptance boundary) closed by [Plane PR #15](https://github.com/faocampo/plane/pull/15) (deterministic Curve worker shutdown) and its accepted implementation evidence |
 | M0-S9B-D1 (external-provider transport definition gate) checkpoint | External-provider transport definition gate | 1 | `Done`; definition complete, implementation remains decision-gated |
 | M0-S9C-D1 (Model Gateway definition gate) checkpoint | Model Gateway definition gate | 1 | `Done`; definition complete, implementation remains decision-gated |
+| M1-01B (Curve-first Initiative shell) checkpoint | Product-test child of M1-01 (Initiative capability) | 1 | `In review`; Plane PR #17 awaits manual desktop/mobile/keyboard UX acceptance |
+| M0-S9B1 (provider administration contracts) checkpoint | Definition child of M0-S9B (external provider transport and administration) | 1 | `Done`; implementation remains decision-gated |
+| P0-12C (D-009 retention contract integrity) checkpoint | Contract-correction child of P0-12 (retention decision package) | 1 | `Done`; D-009 remains in human decision review |
+| M0-S9C-R1 (Model Gateway baseline reconciliation) checkpoint | Traceability child of M0-S9C (Model Gateway routing and failover) | 1 | `Done`; implementation remains decision-gated |
+| M0-S9C1A (candidate Model Gateway governance contracts) checkpoint | Candidate architecture/data-policy child of M0-S9C (Model Gateway routing and failover) | 1 | `Done`; D-004, D-005, and D-014 remain unselected |
+| M1-01B-P (Initiative-shell packet-chain publication) checkpoint | Ordered-packet child of M1-01B (Curve-first Initiative shell) | 1 | `Done` |
+| M0-S9B2 (provider credential and endpoint profiles) checkpoint | Definition child of M0-S9B (external provider transport and administration) | 1 | `Done`; implementation remains decision-gated |
 | M7 intelligence extension issues | M7-01 (expense intelligence) and M7-02 (budget optimization) outside the active 71-row catalog | 2 | Backlog; governed by the separate M7 extension charter (future intelligence and automation scope) |
-| Tracked pull-request evidence items | Curve and Plane implementation/governance pull requests | 11 | Nine `Done`; two `In review` at the 2026-08-29 snapshot |
-| **Current visual total** |  | **97** |  |
+| Tracked pull-request evidence items | Curve and Plane implementation/governance pull requests | 34 | 33 `Done`; Plane PR #17 (Initiative-shell implementation) `In review` at the 2026-09-02 snapshot |
+| **Current visual total** |  | **127** |  |
 
 ## Field mapping
 

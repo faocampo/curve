@@ -6,13 +6,13 @@
 | --- | --- |
 | Status | `AUDITED / M0 INCOMPLETE / LOCAL SKELETON ACCEPTED` |
 | RUNTIME-M0-01 package status | `DONE_LOCAL` |
-| Version | 1.14 |
+| Version | 1.15 |
 | Date | 2026-09-02 |
 | Product | Curve |
 | Owner and human reviewer | Federico Ocampo |
 | Audit scope | M0 (foundation and control plane), its P0 (foundation-readiness) decisions/proofs, Plane implementation evidence, and the next executable package |
-| Audited Curve contract baseline | `de16d05c96fcdf099cffdbf725ca9f6b8c304816`, the current `origin/main` descendant containing [Curve PR #66](https://github.com/faocampo/curve/pull/66) (accepted RUNTIME-M0-01 implementation evidence) and the later M1-01B dependency-binding corrections; those later corrections do not change an M0 decision or completion boundary |
-| Merged Plane `preview` baseline | `c516a612a29751b0d24bcbd32bfcba1bd73fe3af`, the squash merge of [Plane PR #15](https://github.com/faocampo/plane/pull/15) (deterministic Curve worker shutdown), containing the accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, M1-01A Initiative foundation, and [Plane PR #16](https://github.com/faocampo/plane/pull/16) (Critical/High CodeQL remediation) |
+| Audited Curve contract baseline | `95fb52721992fda43fc300a58aca31228651b22e`, the `origin/main` source revision from which this v1.15 audit was produced, containing [Curve PR #70](https://github.com/faocampo/curve/pull/70) (current-state M0 audit reconciliation) |
+| Merged Plane `preview` baseline | `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`, the squash merge of [Plane PR #18](https://github.com/faocampo/plane/pull/18) (High production-dependency remediation), containing the accepted M0-S9A (local provider-registry substrate) checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, M1-01A (Initiative foundation), [Plane PR #16](https://github.com/faocampo/plane/pull/16) (Critical/High CodeQL remediation), and the accepted RUNTIME-M0-01 (graceful Curve worker shutdown classification) checkpoint `c516a612a29751b0d24bcbd32bfcba1bd73fe3af` |
 | Authority boundary | This audit records evidence and gaps. It authorizes no decision transition, code mutation, provider access, credential use, infrastructure change, deployment, or merge. |
 
 ## Audit outcome
@@ -21,7 +21,7 @@ The local M0 (foundation and control plane) vertical skeleton is implemented and
 accepted through the M0-S9A Plane `preview` checkpoint
 `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, and the same control path was
 reverified on the current accepted descendant
-`c516a612a29751b0d24bcbd32bfcba1bd73fe3af`. M0 (foundation and control plane)
+`4ae3a77f665368cf8f6a39e9434c2733551cf9d8`. M0 (foundation and control plane)
 as a whole remains incomplete because:
 
 1. M0-04 (protected object storage and erasure) is blocked by D-009 (retention,
@@ -118,9 +118,6 @@ remaining rows below satisfy their own completion boundaries.
    data-policy decision), and D-014
    (budget-policy decision) before materializing an M0-S9C (Model Gateway
    routing and failover) child.
-4. Remediate the inherited High production dependency advisories recorded in
-   [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md)
-   (dependency audit disposition) before pilot release.
 
 ## Completion-claim rule
 
@@ -135,6 +132,9 @@ The following narrower statements are currently evidence-backed:
   merged for its synthetic `LOCAL_ONLY` scope.”
 - “RUNTIME-M0-01 (graceful Curve worker shutdown classification) is
   implemented, accepted, and merged for its `LOCAL_ONLY` scope.”
+- “SEC-M0-01 (High production-dependency remediation) is complete: the merged
+  Plane production graph has zero Critical and zero High advisories at the
+  accepted audit threshold.”
 - “M0-S9B (external provider transport and administration) and M0-S9C (Model
   Gateway routing and failover) have validated, independently decomposed task
   packets; their external-effect children remain decision-blocked and

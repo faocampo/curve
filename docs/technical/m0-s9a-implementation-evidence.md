@@ -7,7 +7,7 @@
 | Status | `ACCEPTED_AND_MERGED / LOCAL_ONLY` |
 | Package | M0-S9A (provider-neutral registry and reconciliation foundation) |
 | Parent | M0-09 (provider integration foundation) |
-| Evidence version | 1.0 |
+| Evidence version | 1.1 |
 | Acceptance date | 2026-08-28 |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | Codex |
@@ -122,21 +122,32 @@ The comparison is a no-regression result rather than a claim that the entire
 repository suite is green. The implementation-specific Plane CI and the
 complete Curve suite are green.
 
-### Dependency audit disposition
+### Dependency audit disposition and closure
 
-`pnpm audit --prod --audit-level high` reports five High advisories inherited
-from the Plane base:
+At M0-S9A (provider-neutral registry and reconciliation foundation)
+acceptance, `pnpm audit --prod --audit-level high` reported five High
+advisories inherited from the Plane base:
 
 - `brace-expansion`: [GHSA-mh99-v99m-4gvg](https://github.com/advisories/GHSA-mh99-v99m-4gvg) and [GHSA-rgw5-rvv9-x895](https://github.com/advisories/GHSA-rgw5-rvv9-x895);
 - `react-router`: [GHSA-qwww-vcr4-c8h2](https://github.com/advisories/GHSA-qwww-vcr4-c8h2); and
 - `nanoid`: [GHSA-28wg-ghj8-5hjv](https://github.com/advisories/GHSA-28wg-ghj8-5hjv) and [GHSA-2v37-7h3g-55p8](https://github.com/advisories/GHSA-2v37-7h3g-55p8).
 
-M0-S9A changes no package manifest, Python requirement file, or lockfile. The
-base and accepted head use the same `pnpm-lock.yaml` blob,
-`454debf594e2b3e657f223ce3e026fb4a0b4b95a`. [Curve issue #38](https://github.com/faocampo/curve/issues/38)
-(SEC-M0-01 inherited High production dependency remediation) tracks this
-repository security debt as a release blocker before the Curve pilot; its
-remediation is outside this provider-registry package.
+M0-S9A changed no package manifest, Python requirement file, or lockfile. The
+base and accepted head used the same `pnpm-lock.yaml` blob,
+`454debf594e2b3e657f223ce3e026fb4a0b4b95a`. A later current-base audit also
+identified `nanoid` advisory
+[GHSA-xwg4-73v4-xw9w](https://github.com/advisories/GHSA-xwg4-73v4-xw9w).
+
+[Curve issue #38](https://github.com/faocampo/curve/issues/38) (SEC-M0-01 High
+production-dependency remediation) is closed. [Plane PR #18](https://github.com/faocampo/plane/pull/18)
+(patched production dependency graph) upgraded React Router to 7.18.2,
+`brace-expansion` to 5.0.9, and `nanoid` to 3.3.18, then squash-merged into
+`preview` as `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`. Its commit-bound evidence
+includes 60/60 repository checks, 16/16 build tasks, 27/27 web tests, complete
+Curve backend and migration-drift CI, CodeQL for Python and JavaScript,
+copyright, i18n, an empty exact-ref CodeQL alert query, and a production audit
+with zero Critical and zero High advisories. One Moderate advisory remains
+outside SEC-M0-01 (High production-dependency remediation) scope.
 
 ## Acceptance mapping
 
