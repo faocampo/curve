@@ -7,13 +7,13 @@
 | Package | M0-S9C (Curve Model Gateway routing, policy, usage, and failover), a decision-gated child of M0-09 (provider integration foundation) |
 | Task ID | `CURVE-M0-S9C-MODEL-GATEWAY` |
 | Status | `PREPARED / BLOCKED / NO_DISPATCH` |
-| Version | 0.3 |
-| Date | 2026-08-31 |
+| Version | 0.4 |
+| Date | 2026-09-02 |
 | Product | Curve |
 | Contract repository | `git@github.com:faocampo/curve.git` |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
-| Observed Curve contract base | Curve `main` at `1c38a5398b9e6c7cf83c8ee7e8a4615f8f2450d1`, containing the current governed baseline; this observation grants no D-004 (Model Gateway architecture decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), implementation, provider-call, or dispatch authority |
-| Observed Plane implementation base | `preview` at `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c`, which descends from accepted M0-S9A (provider-neutral registry and reconciliation foundation) and M1-01A (Initiative domain and API foundation); the consuming child must revalidate and receive exact-base authorization before mutation |
+| Observed Curve contract base | Curve `main` source revision `97c896ba0d82da14b3c4c8eeba54ef73c7803b01`; the original M0-S9C1A decision survey at `1c38a539...` remains immutable historical evidence, and this observation grants no D-004 (Model Gateway architecture decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), implementation, provider-call, or dispatch authority |
+| Observed Plane implementation base | `preview` at `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`, which descends from accepted M0-S9A (provider-neutral registry and reconciliation foundation) and M1-01A (Initiative domain and API foundation) and includes the accepted runtime/security remediations; the consuming child must revalidate and receive an exact-base execution grant before mutation |
 | Owner and human reviewer | Federico Ocampo, CTO at X3M |
 | Implementer | Unassigned until exact child authorization |
 | Risk | `MATERIAL`; model/provider routing, prompt destinations, usage/cost, streaming, cancellation, and data-policy enforcement |

@@ -7,8 +7,8 @@
 | Status | Engineering baseline; implementation remains blocked by applicable non-decided decisions |
 | Owner | X3M Curve engineering |
 | Audience | Engineers, reviewers, security and platform teams, and AI coding agents |
-| Version | 0.6 |
-| Last updated | 2026-08-29 |
+| Version | 0.7 |
+| Last updated | 2026-09-02 |
 | Normative source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current product, lifecycle, security, and acceptance contract) |
 | Architecture | [Curve Technical Architecture](./architecture.md) (logical components, deployment profiles, trust zones, and operability) |
 
@@ -354,7 +354,7 @@ The table distinguishes a fixed contract from an unresolved production selection
 
 | Capability | Technology or boundary | Status | Decision / implementation constraint |
 | --- | --- | --- | --- |
-| Work-management foundation | Plane community edition | `ADR_DECIDED`; accepted base pinned | D-001 (Plane upstream, licensing, fork, and upgrade decision) approves candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`, the reuse boundary, and upstream process; fork `preview` foundation is `549db1aea8f3307b337b3686dbb844a87549cd95`. Historical checkpoints are M0-S4 (Operation API, SSE, and Curve-first UI) at `e762fbb...`, M0-S9A (provider-neutral registry and reconciliation foundation) at `af7187d...`, and M1-00A (minimal Product core) at `afdb593...`; the current accepted Plane `preview` after M1-01A (Initiative domain and API foundation) is `99a73b4eab5ee21fd012d7358bc9259252d47f71`. |
+| Work-management foundation | Plane community edition | `ADR_DECIDED`; accepted base pinned | D-001 (Plane upstream, licensing, fork, and upgrade decision) approves candidate `d380678912e9b46805ef852d2e05411f1fea6d8b`, the reuse boundary, and upstream process; fork `preview` foundation is `549db1aea8f3307b337b3686dbb844a87549cd95`. Historical checkpoints are M0-S4 (Operation API, SSE, and Curve-first UI) at `e762fbb...`, M0-S9A (provider-neutral registry and reconciliation foundation) at `af7187d...`, M1-00A (minimal Product core) at `afdb593...`, and M1-01A (Initiative domain and API foundation) at `99a73b4...`; the current accepted Plane `preview`, including the graceful-shutdown and Critical/High dependency-remediation descendants, is `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`. |
 | Curve relational state | PostgreSQL category used by Plane/Curve | `FIXED_CONTRACT`; connectivity direction selected; activation inputs open | Local development reuses Plane PostgreSQL over shared `dev_env`; private X3M environments use workspace-scoped PostgreSQL access through the approved private-platform direction. Exact persistence placement, HA, backup, recovery, and operations evidence remain environment-package inputs. |
 | Large immutable bodies | Workspace-scoped immutable object storage | `FIXED_CONTRACT`; product open | D-003 (runtime topology and trust-zone decision) and D-009 (retention, deletion, backup, and legal-hold decision) select product, topology, retention, erasure, and backup |
 | Durable orchestration | Temporal | `PRD_SELECTED`; local profile and private-platform connectivity selected; activation inputs open | D-003 (runtime topology and trust-zone decision) pins CLI 1.8.1/server 1.31.2/SDK 1.31.0 and disposable local SQLite, shared `dev_env`, loopback-only host ports, private EKS `ClusterIP`, internal VPN-only UI exposure, and authenticated non-local clients. Non-local persistence/visibility placement, HA, certificates, backup, and recovery evidence remain open; workflow version/replay rules are fixed. |
