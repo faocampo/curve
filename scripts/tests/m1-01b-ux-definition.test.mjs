@@ -15,13 +15,13 @@ const prototype = fs.readFileSync(
   "utf8",
 );
 
-test("M1-01B records exact-commit UX approval and prepared implementation without authorizing Plane mutation", () => {
+test("M1-01B records exact-commit UX approval and the separate human execution path", () => {
   const readinessRow = readiness
     .split("\n")
     .find(
       (line) =>
         line.startsWith("| M1-01B (Initiative shell) |") &&
-        line.includes("`IMPLEMENTATION_DEFINITION_PREPARED / MACHINE_BLOCKED / NO_DISPATCH`"),
+        line.includes("`HUMAN_EXECUTION_GRANTED / MACHINE_DISPATCH_BLOCKED / UX_ACCEPTANCE_REQUIRED`"),
     );
 
   assert.ok(readinessRow, "M1-01B readiness row must exist");
@@ -34,9 +34,10 @@ test("M1-01B records exact-commit UX approval and prepared implementation withou
   assert.match(contract, /result: PASS/);
   assert.match(contract, /test_executor: Codex/);
   assert.match(contract, /test_result: PASS/);
-  assert.match(readinessRow, /`IMPLEMENTATION_DEFINITION_PREPARED \/ MACHINE_BLOCKED \/ NO_DISPATCH`/);
-  assert.match(readinessRow, /B-CODING-TOOLS-01/);
-  assert.match(readinessRow, /B-CODING-AUTHORITY-01/);
+  assert.match(readinessRow, /`HUMAN_EXECUTION_GRANTED \/ MACHINE_DISPATCH_BLOCKED \/ UX_ACCEPTANCE_REQUIRED`/);
+  assert.match(readinessRow, /m1-01b-human-execution-grant\.md/);
+  assert.match(readinessRow, /human-operated/);
+  assert.match(readinessRow, /manual UX acceptance/);
   assert.doesNotMatch(readinessRow, /`DONE/);
 });
 

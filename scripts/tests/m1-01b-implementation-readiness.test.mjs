@@ -57,6 +57,7 @@ const sourceCatalogPath = "contracts/task-packet-sources/m1-01b-prepared-v1.json
 const stateDirectory = join(repoRoot, "contracts/state/m1-01b");
 const implementationPacketPath = "docs/technical/m1-01b-initiative-shell-implementation-task-packet.md";
 const grantDecisionPath = "docs/technical/m1-01b-execution-grant-decision.md";
+const humanGrantPath = "docs/technical/m1-01b-human-execution-grant.md";
 
 const packet = readJson(packetPath);
 const context = readJson(contextPath);
@@ -219,6 +220,7 @@ test("prepared human state records bind exact packet subjects and existing autho
 test("implementation packet and grant record preserve scope and authority separation", () => {
   const implementation = read(implementationPacketPath);
   const grant = read(grantDecisionPath);
+  const humanGrant = read(humanGrantPath);
   for (const required of [
     planeRevision,
     projectItemId,
@@ -233,18 +235,18 @@ test("implementation packet and grant record preserve scope and authority separa
   ]) {
     assert.match(implementation, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
   }
-  for (const excluded of [
-    "no backend/migration",
-    "no protected body or credential",
-    "no Plane mutation",
-  ]) {
+  for (const excluded of ["no backend/migration", "no protected body or credential"]) {
     assert.match(`${implementation}\n${grant}`, new RegExp(excluded.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
   }
-  assert.match(grant, /MATERIAL_OWNER_DECISION_REQUIRED \/ NO_SELECTION \/ NO_DISPATCH/);
-  assert.match(grant, /node_execution_profile: null/);
-  assert.match(grant, /security_profile: null/);
-  assert.match(grant, /authority_profile: null/);
+  assert.match(grant, /DECIDED \/ HUMAN_OPERATED_OUTSIDE_CURVE_DISPATCH \/ MACHINE_DISPATCH_BLOCKED/);
+  assert.match(grant, /node_execution_profile: HUMAN_OPERATED_LOCAL_NODE_PNPM/);
+  assert.match(grant, /security_profile: LOCAL_STATIC_AND_COMMIT_CODEQL_M1_01B_V1/);
+  assert.match(grant, /authority_profile: HUMAN_OPERATED_OUTSIDE_CURVE_V1/);
   assert.match(grant, /implementation_authority_granted: false/);
+  assert.match(grant, /human_execution_grant: ACTIVE/);
+  assert.match(grant, /curve_machine_dispatch_status: BLOCKED/);
+  assert.match(humanGrant, /c516a612a29751b0d24bcbd32bfcba1bd73fe3af/);
+  assert.match(humanGrant, /manual UX\/UI[\s\S]*test[\s\S]*remains unmerged/i);
   assert.match(grant, /BOOTSTRAP_LOCAL_MANUAL_V1/);
   assert.match(grant, /PRODUCTION_AUTHORITY_FIRST_V1/);
   assert.match(grant, /HUMAN_OPERATED_OUTSIDE_CURVE_V1/);
