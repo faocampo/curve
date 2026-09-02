@@ -6,12 +6,12 @@
 | --- | --- |
 | Status | `AUDITED / M0 INCOMPLETE / LOCAL SKELETON ACCEPTED` |
 | RUNTIME-M0-01 package status | `DONE_LOCAL` |
-| Version | 1.13 |
-| Date | 2026-09-01 |
+| Version | 1.14 |
+| Date | 2026-09-02 |
 | Product | Curve |
 | Owner and human reviewer | Federico Ocampo |
 | Audit scope | M0 (foundation and control plane), its P0 (foundation-readiness) decisions/proofs, Plane implementation evidence, and the next executable package |
-| Audited Curve contract baseline | `030644db40e5a949ac02a193ad47b0c86f96dcab`, the squash merge of [Curve PR #65](https://github.com/faocampo/curve/pull/65) (RUNTIME-M0-01 exact human execution grant), containing the prior definition, authority decision, and fail-closed machine-dispatch contracts |
+| Audited Curve contract baseline | `de16d05c96fcdf099cffdbf725ca9f6b8c304816`, the current `origin/main` descendant containing [Curve PR #66](https://github.com/faocampo/curve/pull/66) (accepted RUNTIME-M0-01 implementation evidence) and the later M1-01B dependency-binding corrections; those later corrections do not change an M0 decision or completion boundary |
 | Merged Plane `preview` baseline | `c516a612a29751b0d24bcbd32bfcba1bd73fe3af`, the squash merge of [Plane PR #15](https://github.com/faocampo/plane/pull/15) (deterministic Curve worker shutdown), containing the accepted M0-S9A checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, M1-01A Initiative foundation, and [Plane PR #16](https://github.com/faocampo/plane/pull/16) (Critical/High CodeQL remediation) |
 | Authority boundary | This audit records evidence and gaps. It authorizes no decision transition, code mutation, provider access, credential use, infrastructure change, deployment, or merge. |
 
@@ -62,9 +62,10 @@ remaining rows below satisfy their own completion boundaries.
 | [Curve PR #45](https://github.com/faocampo/curve/pull/45) (governance-baseline reconciliation and implemented physical ERD) | Squash-merged as `a1a34c142bc37bf331cc58056dba858851db9cbf`; CI passed. | Current governance, physical-schema, and accepted-preview reconciliation ancestor |
 | [Curve PR #47](https://github.com/faocampo/curve/pull/47) (exact-preview local runtime refresh evidence) | Squash-merged as `a0d21bee7f98f2477d9cfe69708a8ac043c4fc69`; commit-bound documentation and contract CI passed. | Exact-preview runtime evidence checkpoint in the current baseline ancestry |
 | [Curve PR #48](https://github.com/faocampo/curve/pull/48) (coding-agent task-packet contract hardening) | Reviewed head `b8e02b9579b0ab76daca2aaf04e44b521cd79f88` squash-merged as `68a05e9f2920454752e9039d596271dbb39d6e6e`; Documentation contracts CI passed. | Task-packet contract checkpoint in the current baseline ancestry; establishes non-circular packet publication, closed command grammars, and fail-closed implementation authority |
-| [Curve PR #49](https://github.com/faocampo/curve/pull/49) (RUNTIME-M0-01 readiness definition) | Head `d837c84b6ce8945c16a3e3f8bed8cf2093f1d6f4` squash-merged as `c55686c8061f092f4f82ab73681e06f97d80893f`; Documentation contracts CI passed. | Current audited Curve baseline; defines the bounded shutdown correction and preserves fail-closed machine authority pending the follow-up owner decision |
+| [Curve PR #49](https://github.com/faocampo/curve/pull/49) (RUNTIME-M0-01 readiness definition) | Head `d837c84b6ce8945c16a3e3f8bed8cf2093f1d6f4` squash-merged as `c55686c8061f092f4f82ab73681e06f97d80893f`; Documentation contracts CI passed. | Historical definition baseline; defines the bounded shutdown correction and preserves fail-closed machine authority pending the follow-up owner decision |
 | [Curve PR #50](https://github.com/faocampo/curve/pull/50) (RUNTIME-M0-01 manual-bootstrap decision) | Approved head `f8e2f4b3d497f747f9e8a3b7db7508510400bae9` squash-merged as `866032fa42e2cb57ad1a4e662d9561f742983f79`; Documentation contracts CI passed. | Approved Authority Option 3 and B-CODING-TOOLS-01 deferral checkpoint; the later one-attempt grant is now consumed |
 | [Curve PR #65](https://github.com/faocampo/curve/pull/65) (RUNTIME-M0-01 exact human execution grant) | Head `624e9f105c167baf8fe0644a3822591988b1c047` squash-merged as `030644db40e5a949ac02a193ad47b0c86f96dcab`; Documentation contracts CI passed. | Consumed exact Plane implementation grant and canonical definition baseline |
+| [Curve PR #66](https://github.com/faocampo/curve/pull/66) (RUNTIME-M0-01 accepted implementation evidence) | Squash-merged as `77ab31d4ed4bc2fdd1a9800d92ff9b3f6604aac5`; exact accepted Plane head and merge, deterministic tests, live signals, CI, security, cleanup, rollback, consumed authority, and Project closure are recorded. | Canonical RUNTIME-M0-01 completion evidence in the current Curve baseline ancestry |
 | [Plane PR #10](https://github.com/faocampo/plane/pull/10) (M0-S6A durable orchestration implementation) | Approved head `af8335c42fa3c57e66f76c6ebd80220640630cf8` squash-merged as `ad5772c0565c934e64ea90f892be1374819979be`. Both commits resolve to Git tree `dde7e50afa1710b729ab86f9ed99e4c462c763d0`. | Canonical merged Plane baseline |
 | [Plane API and Curve CI](https://github.com/faocampo/plane/actions/runs/32844162011) (M0-S6A API, Curve, replay, and migration validation) | Passed. | Accepted implementation evidence |
 | [Plane CodeQL](https://github.com/faocampo/plane/actions/runs/32844164027) (M0-S6A security analysis) | Passed. | Accepted security evidence |
@@ -105,25 +106,19 @@ remaining rows below satisfy their own completion boundaries.
 
 ## Next executable sequence
 
-1. Merge the [RUNTIME-M0-01 implementation evidence](runtime-m0-01-implementation-evidence.md)
-   (accepted Plane head and merge, deterministic tests, live signals, CI,
-   security, cleanup, and rollback), then close
-   [Curve issue #46](https://github.com/faocampo/curve/issues/46) (graceful
-   worker-shutdown defect and acceptance criteria) and mark its Project item
-   Done.
-2. Complete D-009 (retention, backup, legal-hold, tombstone, and erasure
+1. Complete D-009 (retention, backup, legal-hold, tombstone, and erasure
    decision) using the published P0-12 (retention-policy decision package), then
    materialize the separately reviewable M0-04 (protected object storage and
    erasure) task packet.
-3. Materialize an M0-S9B (external provider transport and administration)
+2. Materialize an M0-S9B (external provider transport and administration)
    child only after its applicable
    identity, security, data, infrastructure, provider, owner, budget, and
    external-side-effect decisions are approved.
-4. Decide D-004 (Curve Model Gateway decision), D-005 (model/provider
+3. Decide D-004 (Curve Model Gateway decision), D-005 (model/provider
    data-policy decision), and D-014
    (budget-policy decision) before materializing an M0-S9C (Model Gateway
    routing and failover) child.
-5. Remediate the inherited High production dependency advisories recorded in
+4. Remediate the inherited High production dependency advisories recorded in
    [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md)
    (dependency audit disposition) before pilot release.
 
