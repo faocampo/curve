@@ -145,6 +145,13 @@ history read authorizes decision rationale independently and cannot bypass
 lawful erasure or revoked source/evidence access. Immutable body history and
 decision status are separate: rejection does not rewrite a submitted body.
 
+The [decision persistence contract](../../docs/technical/prd-review-decision-records.md)
+(protected UTF-8 rationale and immutable exact-subject metadata) and
+[record schema](../schemas/prd-review-decision-record-v1.schema.json)
+(closed durable decision representation) define this separation without changing
+the existing authorized Decision wire projection. Metadata contains only a
+protected rationale ObjectRef and its envelope/retention references.
+
 The current submitted checkpoint ID and digest are the approval subject.
 Submission authority is a current action-specific decision for the authenticated
 creator or authorized contributor. Bind it to workspace, Initiative, source
