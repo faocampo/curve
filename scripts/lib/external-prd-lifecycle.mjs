@@ -1,0 +1,83 @@
+// Pure synthetic conformance model. Callers supply trusted test observations.
+// No database, HTTP route, provider transport, production policy, or stored body.
+import { captureSyntheticCheckpoint, evaluateSyntheticApproval, validCheckpointTime } from "./google-docs-checkpoint.mjs";
+
+function requireValue(condition, code) {
+  if (!condition) throw new Error(code);
+}
+
+function immutable(value) {
+  if (value && typeof value === "object") {
+    Object.values(value).forEach(immutable);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+function authorize({ initiative, binding, actor, request, synthetic }) {
+  requireValue(synthetic === true, "SYNTHETIC_ONLY");
+  requireValue(typeof actor?.id === "string" && actor.id.trim().length > 0 && actor.human === true && actor.active === true && actor.object_access === true, "ACTOR_DENIED");
+  requireValue(actor.workspace_id === initiative.workspace_id && binding.workspace_id === initiative.workspace_id, "WORKSPACE_MISMATCH");
+  requireValue(binding.initiative_id === initiative.id, "BINDING_MISMATCH");
+  requireValue(Number.isSafeInteger(initiative.version) && initiative.version > 0 && initiative.version < Number.MAX_SAFE_INTEGER, "INVALID_INITIATIVE_VERSION");
+  requireValue(request?.expected_version === initiative.version, "INITIATIVE_VERSION_CONFLICT");
+}
+
+export function submitSyntheticPrd(input) {
+  authorize(input);
+  const { initiative, binding, actor, request, previous_checkpoint, before, after, content, provenance } = input;
+  requireValue(actor.id === initiative.creator_id, "SUBMITTER_DENIED");
+  requireValue(["ALIGNING", "PRD_REVIEW"].includes(initiative.state), "INVALID_STATE");
+  // The request schema is deliberately closed. Identity and capture evidence
+  // come from server-side fixtures rather than command payload fields.
+  requireValue(Object.keys(request).length === 1, "UNKNOWN_REQUEST_FIELD");
+  requireValue(typeof provenance?.checkpoint_id === "string" && provenance.checkpoint_id.trim(), "MISSING_PROVENANCE");
+  const predecessor = previous_checkpoint ?? null;
+  requireValue((initiative.current_checkpoint_id ?? null) === (predecessor?.checkpoint_id ?? null), "SUPERSEDED_CHECKPOINT");
+  requireValue(initiative.state !== "PRD_REVIEW" || predecessor !== null, "MISSING_SUBMISSION");
+  if (predecessor) {
+    requireValue(predecessor.synthetic === true && predecessor.workspace_id === initiative.workspace_id && predecessor.initiative_id === initiative.id && predecessor.external_document_binding_id === binding.id && predecessor.provider_connection_id === binding.provider_connection_id && predecessor.provider_file_id === binding.provider_file_id && predecessor.provider_container_id === binding.provider_container_id, "BINDING_MISMATCH");
+    requireValue(Number.isSafeInteger(predecessor.checkpoint_number) && predecessor.checkpoint_number > 0 && predecessor.checkpoint_number < Number.MAX_SAFE_INTEGER, "INVALID_CHECKPOINT_NUMBER");
+    requireValue(provenance.checkpoint_id !== predecessor.checkpoint_id, "CHECKPOINT_ID_REUSED");
+  }
+  const checkpoint = captureSyntheticCheckpoint({
+    binding, before, after, content,
+    provenance: {
+      ...provenance,
+      synthetic: true,
+      actor_id: actor.id,
+      predecessor_id: predecessor?.checkpoint_id ?? null,
+      checkpoint_number: (predecessor?.checkpoint_number ?? 0) + 1,
+    },
+  });
+  return immutable({
+    initiative: { ...structuredClone(initiative), state: "PRD_REVIEW", version: initiative.version + 1, current_checkpoint_id: checkpoint.checkpoint_id },
+    checkpoint,
+    event: {
+      event_type: "prd.submitted", workspace_id: initiative.workspace_id,
+      initiative_id: initiative.id, actor_id: actor.id,
+      checkpoint_id: checkpoint.checkpoint_id, content_digest: checkpoint.content_digest,
+      aggregate_version: initiative.version + 1, recorded_at: checkpoint.recorded_at,
+    },
+  });
+}
+
+export function approveSyntheticPrd(input) {
+  authorize(input);
+  const { initiative, request, actor, checkpoint, approval_recorded_at } = input;
+  requireValue(Object.keys(request).length === 3 && ["expected_version", "checkpoint_id", "content_digest"].every((field) => Object.hasOwn(request, field)), "UNKNOWN_REQUEST_FIELD");
+  requireValue(validCheckpointTime(approval_recorded_at) && validCheckpointTime(checkpoint.recorded_at) && Date.parse(approval_recorded_at) >= Date.parse(checkpoint.recorded_at), "INVALID_APPROVAL_TIME");
+  const approval = evaluateSyntheticApproval(input);
+  return immutable({
+    initiative: { ...structuredClone(initiative), state: approval.state, version: initiative.version + 1 },
+    decision: {
+      decision: "APPROVED", checkpoint_id: checkpoint.checkpoint_id,
+      external_document_binding_id: checkpoint.external_document_binding_id,
+      provider_connection_id: checkpoint.provider_connection_id,
+      provider_file_id: checkpoint.provider_file_id, provider_version: checkpoint.provider_version,
+      content_digest: checkpoint.content_digest, evidence_snapshot_id: checkpoint.evidence_snapshot_id,
+      workspace_id: initiative.workspace_id, initiative_id: initiative.id,
+      actor_id: actor.id, recorded_at: approval_recorded_at,
+    },
+  });
+}
