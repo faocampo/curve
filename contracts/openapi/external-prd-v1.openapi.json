@@ -23,9 +23,9 @@
   "paths": {
     "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/decisions": {
       "get": {
-        "operationId": "listExternalPrdApprovals",
-        "summary": "List immutable Product Approval history",
-        "description": "Authorized metadata only, ordered by decided_at then id. Historical approvals remain visible after source changes or lawful body erasure. This candidate exposes approved decisions; changes-requested and rejection commands require their consuming lifecycle contracts.",
+        "operationId": "listExternalPrdDecisions",
+        "summary": "List immutable Product Review decisions",
+        "description": "Authorized decision history, ordered by decided_at then id, including approvals, requested changes and rejections. Rationale is protected user-authored content: apply classification and current decision/source/evidence access before returning it; unavailable rationale requires a separate availability projection. Retain historical subjects after source changes or lawful body erasure. History visibility never grants access to an erased body.",
         "parameters": [
           { "$ref": "#/components/parameters/WorkspaceSlug" },
           { "$ref": "#/components/parameters/InitiativeId" },
@@ -34,7 +34,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Authorized approval history",
+            "description": "Authorized decision history",
             "content": {
               "application/json": {
                 "schema": {
@@ -42,7 +42,7 @@
                   "additionalProperties": false,
                   "required": ["results", "next_cursor"],
                   "properties": {
-                    "results": { "type": "array", "items": { "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Approval" } },
+                    "results": { "type": "array", "items": { "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Decision" } },
                     "next_cursor": { "type": ["string", "null"] }
                   }
                 }
@@ -52,6 +52,43 @@
           "401": { "$ref": "#/components/responses/Problem" },
           "404": { "$ref": "#/components/responses/Problem" },
           "422": { "$ref": "#/components/responses/Problem" }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/return-for-revision": {
+      "post": {
+        "operationId": "ReturnExternalPrdForRevision",
+        "summary": "Request changes or reject the displayed submitted PRD",
+        "description": "Current assigned active human Product Approver in PRD Review only. Resolve the decision-specific PRD_REQUEST_CHANGES or PRD_REJECT policy action. Bind every displayed checkpoint/artifact/digest/provider-version/evidence/risk field. Recheck current assignment, membership, separation and source/checkpoint/evidence access. A changed live document can coexist with a negative decision on the current immutable submission. Append the decision/rationale, advance the Initiative version and return to Aligning atomically; preserve the checkpoint pointer for successor lineage. No approval is created and a new submission is required before another review. Rationale never appears in audit, outbox, logs or Operation summaries.",
+        "parameters": [
+          { "$ref": "#/components/parameters/WorkspaceSlug" },
+          { "$ref": "#/components/parameters/InitiativeId" },
+          { "$ref": "#/components/parameters/IfMatch" },
+          { "$ref": "#/components/parameters/IdempotencyKey" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "../schemas/external-prd-v1.schema.json#/$defs/ReturnForRevision" } } }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted or replayed. Follow the Operation; acceptance alone does not change the lifecycle.",
+            "headers": {
+              "Location": { "required": true, "schema": { "type": "string" } },
+              "ETag": { "required": true, "schema": { "type": "string" } }
+            },
+            "content": { "application/json": { "schema": { "$ref": "../schemas/operation-summary.schema.json" } } }
+          },
+          "400": { "$ref": "#/components/responses/Problem" },
+          "401": { "$ref": "#/components/responses/Problem" },
+          "403": { "$ref": "#/components/responses/Problem" },
+          "404": { "$ref": "#/components/responses/Problem" },
+          "409": { "$ref": "#/components/responses/Problem" },
+          "412": { "$ref": "#/components/responses/Problem" },
+          "422": { "$ref": "#/components/responses/Problem" },
+          "428": { "$ref": "#/components/responses/Problem" },
+          "429": { "$ref": "#/components/responses/Problem" },
+          "503": { "$ref": "#/components/responses/Problem" }
         }
       }
     },

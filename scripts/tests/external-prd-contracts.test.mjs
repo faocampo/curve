@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
-import { validateCheckpointGraph, validateApprovalGraph } from "../lib/external-prd-records.mjs";
+import { validateCheckpointGraph, validateApprovalGraph, validateDecisionGraph } from "../lib/external-prd-records.mjs";
 
 const read = (path) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), "utf8"));
 const contract = read("contracts/schemas/external-prd-v1.schema.json");
@@ -31,7 +31,7 @@ for (const name of ["Binding", "Checkpoint", "Approval"]) {
   test(`${name} metadata validates and every required field is enforced`, () => {
     const value = fixture()[name.toLowerCase()];
     assert.equal(validate(name, value), true);
-    for (const field of contract.$defs[name].required) {
+    for (const field of contract.$defs[name === "Approval" ? "Decision" : name].required) {
       const missing = structuredClone(value); delete missing[field];
       assert.equal(validate(name, missing), false, field);
     }
@@ -50,13 +50,14 @@ test("metadata rejects insecure URLs, numeric source versions, bot attribution a
   assert.equal(validate("Approval", { ...approval, policy_version_ids: [] }), false);
 });
 
-test("five command shapes reject caller authority, credentials, source URLs and duplicate version fields", () => {
+test("six command shapes reject caller authority, credentials, source URLs and duplicate version fields", () => {
   const { approval } = fixture();
   const commands = {
     Link: { provider_connection_id: id(5), provider_file_id: "fictional-document", selection_receipt_id: id(40) },
     Create: { provider_connection_id: id(5), template_configuration_id: id(41), destination_configuration_id: id(42) },
     Submit: { external_document_binding_id: id(3), evidence_snapshot_id: id(11), completeness_check_id: id(13) },
     Approve: Object.fromEntries(contract.$defs.Approve.required.map((key) => [key, approval[key]])),
+    ReturnForRevision: { ...Object.fromEntries(contract.$defs.Approve.required.map((key) => [key, approval[key]])), decision: "CHANGES_REQUESTED" },
     Reconcile: {},
   };
   for (const [name, value] of Object.entries(commands)) {
@@ -71,10 +72,10 @@ test("OpenAPI keeps every mutation asynchronous and scoped by both precondition 
   assert.equal(api["x-curve-activation"], "DISABLED_PENDING_CONSUMING_CONTRACTS");
   assert.deepEqual(api.security, [{ planeSession: [] }]);
   const posts = Object.values(api.paths).flatMap((path) => path.post ? [path.post] : []);
-  assert.equal(posts.length, 5);
+  assert.equal(posts.length, 6);
   const reads = Object.values(api.paths).flatMap((path) => path.get ? [path.get] : []);
   assert.equal(reads.length, 4);
-  assert.ok(reads.some((operation) => operation.operationId === "listExternalPrdApprovals"));
+  assert.ok(reads.some((operation) => operation.operationId === "listExternalPrdDecisions"));
   for (const operation of posts) {
     const refs = operation.parameters.map((param) => param.$ref);
     for (const name of ["WorkspaceSlug", "InitiativeId", "IfMatch", "IdempotencyKey"]) {
@@ -91,6 +92,36 @@ test("OpenAPI keeps every mutation asynchronous and scoped by both precondition 
   assert.equal(validateProblem(safe), true);
   assert.equal(validateProblem({ ...safe, provider_response: "restricted content" }), false);
 });
+
+for (const state of ["CHANGES_REQUESTED", "REJECTED"]) {
+  test(`${state} is a closed exact-subject decision and cannot masquerade as approval`, () => {
+    const f = fixture(), decision = { ...f.approval, state };
+    assert.equal(validate("Decision", decision), true);
+    assert.equal(validate("Approval", decision), false);
+    assert.equal(validateDecisionGraph({ ...f, decision }), true);
+    assert.throws(() => validateApprovalGraph({ ...f, approval: decision }), /APPROVED_DECISION_REQUIRED/);
+    for (const field of contract.$defs.Decision.required) {
+      const missing = { ...decision }; delete missing[field];
+      assert.equal(validate("Decision", missing), false, field);
+    }
+    const command = { ...Object.fromEntries(contract.$defs.Approve.required.map((key) => [key, decision[key]])), decision: state };
+    assert.equal(validate("ReturnForRevision", command), true);
+    for (const field of contract.$defs.ReturnForRevision.required) {
+      const missing = { ...command }; delete missing[field];
+      assert.equal(validate("ReturnForRevision", missing), false, field);
+    }
+    for (const rationale of ["", " \n\t", "x".repeat(2001), null]) {
+      assert.equal(validate("ReturnForRevision", { ...command, rationale }), false);
+      assert.equal(validate("Decision", { ...decision, rationale }), false);
+    }
+    for (const invalid of ["APPROVED", "CANCELLED", "PENDING", "SUPERSEDED"]) {
+      assert.equal(validate("ReturnForRevision", { ...command, decision: invalid }), false);
+    }
+    for (const field of ["workspace_id", "initiative_id", "checkpoint_id", "artifact_version_id", "content_digest", "provider_version", "evidence_snapshot_id", "gate_assignment_id"]) {
+      assert.throws(() => validateDecisionGraph({ ...f, decision: { ...decision, [field]: id(99) } }));
+    }
+  });
+}
 
 test("checkpoint and approval record graphs preserve exact tenant, object and decision identity", () => {
   const f = fixture(); const original = structuredClone(f);

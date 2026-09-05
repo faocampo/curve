@@ -33,6 +33,7 @@ This package supplies no private deployment values or retention defaults.
 | Creator or authorized contributor submits while Aligning | Capture immutable checkpoint 1 and enter PRD Review |
 | Creator or authorized contributor submits a successor during review | Increment checkpoint number, retain predecessor and advance the Initiative version |
 | Assigned active human approves the exact unchanged checkpoint | Append a decision identifying the binding, provider connection/file/version, digest and evidence snapshot; enter Planning |
+| Assigned Product Approver requests changes or rejects the displayed submission | Append an attributed decision and rationale; return to Aligning, retain checkpoint history and require a successor submission |
 | Source version or normalized content changes during review | Reject approval; require a successor submission |
 | Actor loses workspace/object/source/evidence access | Reject the affected command |
 | Binding, workspace or provider connection is substituted | Reject the affected command |
@@ -59,12 +60,49 @@ this context through the consuming approved policy; these fixtures grant no
 live capability and do not alter the pinned Initiative v1 policy.
 
 The [lifecycle model](../../scripts/lib/external-prd-lifecycle.mjs) (pure submit,
-successor and approval transitions) returns new immutable values. It preserves
+successor, approval and return-for-revision transitions) returns new immutable values. It preserves
 its input, emits content-free submission metadata, derives attribution from the
 trusted synthetic actor and rejects extra command fields. It verifies expected
 Initiative versions and current checkpoint identity. Repeating a transition
 with a stale version fails; durable idempotent replay remains an API/database
 implementation requirement.
+
+### Product review return path
+
+`CHANGES_REQUESTED` and `REJECTED` implement the
+[product lifecycle](../curve-ai-native-sdlc-prd.md) (PRD Review to Aligning under
+the Product Approver). Both address the displayed current checkpoint and append
+a human rationale. They preserve the immutable checkpoint and its current
+pointer for predecessor lineage; a fresh submission is required before another
+approval. `REJECTED` is a PRD review outcome and returns to Aligning. Initiative
+cancellation remains a separate lifecycle command.
+
+The pure model requires a closed trusted
+`curve.prd-review-authorization/v1-candidate` decision bound to the current actor,
+workspace, Initiative/version, binding, checkpoint/digest, evidence snapshot,
+Product Approver assignment and policy identity. Its action must match
+`PRD_REQUEST_CHANGES` or `PRD_REJECT`; the decision is valid at the review instant
+and unexpired. The runtime derives this context from current membership,
+assignment/separation, risk and policy checks, never request payload authority.
+The recorded access-evaluation identity represents fresh source, protected
+checkpoint and material-evidence reads. Those current checks remain mandatory.
+
+An author may edit the live document while review is pending. Negative review
+still addresses the displayed immutable submission; it need not assert equality
+with the edited live document. It never treats those edits as approved. A
+superseded checkpoint, stale aggregate version, inaccessible source/checkpoint
+or evidence, absent rationale, or wrong actor/action fails without a transition.
+The provider-validation cutoff records the fresh access observation, not content
+equality, for these negative outcomes. Source deletion or permission loss uses
+the separately authorized lifecycle recovery controls rather than this review.
+
+Decision history includes all three terminal review outcomes. Rationale is
+classified user-authored content, retained and accessed under its approved
+policy; it is excluded from audit/outbox, logs and Operation summaries. The
+content-free event is `prd.changes_requested` or `prd.rejected`. The synthetic
+model tests the return/resubmit/approve chain and retains the old decision;
+durable decision IDs, transaction races, retries and browser review remain
+consuming implementation requirements.
 
 ## Checkpoint and content boundary
 
@@ -118,9 +156,9 @@ the read options. Google's [Drive files reference](https://developers.google.com
 ## Remaining runtime work and verification
 
 The [runtime metadata schema](../../contracts/schemas/external-prd-v1.schema.json)
-(closed binding, protected-reference checkpoint, approval and command shapes),
+(closed binding, protected-reference checkpoint, review decision and command shapes),
 [candidate OpenAPI](../../contracts/openapi/external-prd-v1.openapi.json)
-(five asynchronous commands and authorized metadata/history reads), and
+(six asynchronous commands and authorized metadata/history reads), and
 [persistence contract](../../contracts/database/external-prd-v1-relational-contract.md)
 (tenant foreign keys, append-only records, transaction boundaries, replay,
 provider races and rollback) now define the next implementation boundary.

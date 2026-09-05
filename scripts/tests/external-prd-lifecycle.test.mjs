@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { submitSyntheticPrd, approveSyntheticPrd } from "../lib/external-prd-lifecycle.mjs";
+import { submitSyntheticPrd, approveSyntheticPrd, returnSyntheticPrdForRevision } from "../lib/external-prd-lifecycle.mjs";
 import { projectPostApprovalChange } from "../lib/google-docs-checkpoint.mjs";
 import { readinessFixture, withCurrentReadiness } from "./helpers/prd-readiness-fixture.mjs";
 
@@ -28,6 +28,141 @@ function review(f = fixture()) {
     approval_recorded_at: "2026-09-05T12:05:00Z",
   };
 }
+
+function revision(decision = "CHANGES_REQUESTED") {
+  const f = review();
+  return {
+    ...f, checkpointReadable: true, review_recorded_at: f.approval_recorded_at,
+    review_access_evaluation_id: "review-access-example",
+    request: { ...f.request, decision, rationale: "Clarify the fictional onboarding acceptance criteria." },
+    review_authorization: {
+      schema_version: "curve.prd-review-authorization/v1-candidate",
+      decision_id: "review-decision-example", policy_version_id: "review-policy-example",
+      gate_assignment_id: "product-assignment-example", actor_id: f.actor.id,
+      workspace_id: f.initiative.workspace_id, initiative_id: f.initiative.id,
+      binding_id: f.binding.id, initiative_version: f.initiative.version,
+      checkpoint_id: f.checkpoint.checkpoint_id, content_digest: f.checkpoint.content_digest,
+      evidence_snapshot_id: f.checkpoint.evidence_snapshot_id,
+      action: decision === "CHANGES_REQUESTED" ? "PRD_REQUEST_CHANGES" : "PRD_REJECT",
+      role: "PRODUCT_APPROVER", effect: "ALLOW", evaluated_at: f.approval_recorded_at,
+      expires_at: "2026-09-05T12:06:00Z",
+    },
+  };
+}
+
+for (const decision of ["CHANGES_REQUESTED", "REJECTED"]) {
+  test(`${decision} returns to Aligning and requires a successor before later approval`, () => {
+    const f = revision(decision), original = structuredClone(f);
+    const returned = returnSyntheticPrdForRevision(f);
+    assert.equal(returned.initiative.state, "ALIGNING");
+    assert.equal(returned.initiative.version, 4);
+    assert.equal(returned.initiative.current_checkpoint_id, f.checkpoint.checkpoint_id);
+    assert.equal(returned.decision.decision, decision);
+    assert.equal(returned.decision.rationale, f.request.rationale);
+    assert.equal(returned.decision.access_evaluation_id, f.review_access_evaluation_id);
+    assert.equal(returned.event.event_type, decision === "REJECTED" ? "prd.rejected" : "prd.changes_requested");
+    assert.equal(JSON.stringify(returned.event).includes(f.request.rationale), false);
+    assert.deepEqual(f, original);
+    assert.throws(() => { returned.decision.rationale = "overwrite"; }, TypeError);
+    const approvalRequest = { expected_version: 4, checkpoint_id: f.checkpoint.checkpoint_id, content_digest: f.checkpoint.content_digest };
+    assert.throws(() => approveSyntheticPrd({ ...f, initiative: returned.initiative, request: approvalRequest }), /INVALID_STATE/);
+    assert.throws(() => returnSyntheticPrdForRevision({ ...f, initiative: returned.initiative }), /INITIATIVE_VERSION_CONFLICT/);
+    const next = submitSyntheticPrd(withCurrentReadiness({ ...fixture(), initiative: returned.initiative,
+      previous_checkpoint: f.checkpoint, request: { expected_version: 4 },
+      submission_authorization: { ...fixture().submission_authorization, initiative_version: 4,
+        evaluated_at: "2026-09-05T12:06:00Z", expires_at: "2026-09-05T12:07:00Z" },
+      provenance: { ...fixture().provenance, checkpoint_id: "checkpoint-example-2", recorded_at: "2026-09-05T12:06:00Z" },
+    }));
+    assert.equal(next.checkpoint.predecessor_id, f.checkpoint.checkpoint_id);
+    assert.equal(next.checkpoint.checkpoint_number, 2);
+    assert.throws(() => approveSyntheticPrd({ ...f, initiative: next.initiative, request: { ...approvalRequest, expected_version: 5 } }), /SUPERSEDED_CHECKPOINT/);
+    const approved = approveSyntheticPrd({ ...f, initiative: next.initiative, checkpoint: next.checkpoint, approval_recorded_at: "2026-09-05T12:08:00Z", request: { expected_version: 5, checkpoint_id: next.checkpoint.checkpoint_id, content_digest: next.checkpoint.content_digest } });
+    assert.equal(approved.initiative.state, "PLANNING");
+    assert.equal(returned.decision.decision, decision);
+  });
+
+  test(`${decision} addresses the displayed checkpoint despite subsequent live edits`, () => {
+    const f = revision(decision);
+    f.after.version = "9007199254740994";
+    f.content.tabs[0].documentTab.body.content[1].paragraph.elements[0].textRun.content = "Edited live outcome";
+    const returned = returnSyntheticPrdForRevision(f);
+    assert.equal(returned.decision.provider_version, f.checkpoint.provider_version);
+    assert.equal(returned.decision.content_digest, f.checkpoint.content_digest);
+    assert.equal(returned.initiative.state, "ALIGNING");
+  });
+}
+
+for (const [label, mutate, code] of [
+  ["service actor", (f) => { f.actor.human = false; }, "ACTOR_DENIED"],
+  ["inactive actor", (f) => { f.actor.active = false; }, "ACTOR_DENIED"],
+  ["object access lost", (f) => { f.actor.object_access = false; }, "ACTOR_DENIED"],
+  ["different approver", (f) => { f.initiative = { ...f.initiative, product_approver_id: "someone-else" }; }, "APPROVER_DENIED"],
+  ["workspace substitution", (f) => { f.actor.workspace_id = "other"; }, "WORKSPACE_MISMATCH"],
+  ["stale ETag", (f) => { f.request.expected_version = 2; }, "INITIATIVE_VERSION_CONFLICT"],
+  ["unknown command field", (f) => { f.request.authority = true; }, "UNKNOWN_REQUEST_FIELD"],
+  ["approval disguised as return", (f) => { f.request.decision = "APPROVED"; }, "INVALID_REVIEW_DECISION"],
+  ["blank rationale", (f) => { f.request.rationale = " \n"; }, "REVIEW_RATIONALE_REQUIRED"],
+  ["oversize rationale", (f) => { f.request.rationale = "x".repeat(2001); }, "REVIEW_RATIONALE_REQUIRED"],
+  ["missing access evidence", (f) => { delete f.review_access_evaluation_id; }, "REVIEW_ACCESS_EVALUATION_REQUIRED"],
+  ["protected checkpoint denied", (f) => { f.checkpointReadable = false; }, "CHECKPOINT_ACCESS_DENIED"],
+  ["material evidence denied", (f) => { f.evidenceReadable = false; }, "EVIDENCE_ACCESS_DENIED"],
+  ["source denied before read", (f) => { f.before.actorCanRead = false; }, "SOURCE_ACCESS_DENIED"],
+  ["source denied after read", (f) => { f.after.integrationCanRead = false; }, "SOURCE_ACCESS_DENIED"],
+  ["disallowed source location", (f) => { f.after.locationAllowed = false; }, "SOURCE_LOCATION_DENIED"],
+  ["deleted source", (f) => { f.after.trashed = true; }, "SOURCE_UNAVAILABLE"],
+  ["wrong checkpoint", (f) => { f.request.checkpoint_id = "other"; }, "SUPERSEDED_CHECKPOINT"],
+  ["wrong digest", (f) => { f.request.content_digest = "other"; }, "CHECKPOINT_DIGEST_MISMATCH"],
+  ["before submission", (f) => { f.review_recorded_at = "2026-09-05T11:59:00Z"; }, "INVALID_REVIEW_TIME"],
+  ["invalid clock", (f) => { f.review_recorded_at = "2026-09-05T12:00:60Z"; }, "INVALID_REVIEW_TIME"],
+]) {
+  test(`negative review rejects ${label}`, () => {
+    const f = revision(); mutate(f); const original = structuredClone(f);
+    assert.throws(() => returnSyntheticPrdForRevision(f), new RegExp(code));
+    assert.deepEqual(f, original);
+  });
+}
+
+test("negative review requires an exact current action-specific trusted policy decision", () => {
+  const good = revision();
+  for (const field of Object.keys(good.review_authorization)) {
+    const missing = revision(); delete missing.review_authorization[field];
+    assert.throws(() => returnSyntheticPrdForRevision(missing), /REVIEWER_DENIED/, field);
+  }
+  for (const field of ["actor_id", "workspace_id", "initiative_id", "binding_id", "initiative_version", "checkpoint_id", "content_digest", "evidence_snapshot_id", "action", "role", "effect", "schema_version"]) {
+    const wrong = revision(); wrong.review_authorization[field] = "wrong";
+    assert.throws(() => returnSyntheticPrdForRevision(wrong), /REVIEWER_DENIED/, field);
+  }
+  for (const mutate of [
+    (f) => { delete f.review_authorization; },
+    (f) => { f.review_authorization.allow = true; },
+    (f) => { f.review_authorization.expires_at = f.review_recorded_at; },
+    (f) => { f.review_authorization.evaluated_at = "2026-09-05T12:04:59Z"; },
+    (f) => { f.request.decision = "REJECTED"; },
+  ]) {
+    const f = revision(); mutate(f);
+    assert.throws(() => returnSyntheticPrdForRevision(f), /REVIEWER_DENIED/);
+  }
+});
+
+test("negative review is limited to PRD Review and preserves checkpoint integrity", () => {
+  for (const state of ["DRAFT", "ALIGNING", "PLANNING", "PAUSED", "CANCELLED", "FAILED"]) {
+    const f = revision(); f.initiative = { ...f.initiative, state };
+    assert.throws(() => returnSyntheticPrdForRevision(f), /INVALID_STATE/);
+  }
+  const f = revision(); f.checkpoint = structuredClone(f.checkpoint);
+  f.checkpoint.normalized_content.tabs[0].documentTab.body.content[1].paragraph.elements[0].textRun.content = "Tampered checkpoint";
+  assert.throws(() => returnSyntheticPrdForRevision(f), /CHECKPOINT_DIGEST_MISMATCH/);
+  for (const mutate of [
+    (checkpoint) => { checkpoint.provider_version = 9007199254740992; },
+    (checkpoint) => { checkpoint.provider_version = "unknown"; },
+    (checkpoint) => { checkpoint.normalized_content.complete = false; },
+    (checkpoint) => { checkpoint.normalized_content.normalization_version = "unknown"; },
+    (checkpoint) => { checkpoint.normalized_content.tabs = []; },
+  ]) {
+    const invalid = revision(); invalid.checkpoint = structuredClone(invalid.checkpoint); mutate(invalid.checkpoint);
+    assert.throws(() => returnSyntheticPrdForRevision(invalid), /INVALID_CHECKPOINT/);
+  }
+});
 
 test("Aligning submission enters PRD Review; exact assigned human approval enters Planning", () => {
   const f = fixture(); const before = structuredClone(f);

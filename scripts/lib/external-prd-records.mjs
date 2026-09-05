@@ -27,6 +27,12 @@ export function validateCheckpointGraph({ binding, checkpoint, predecessor = nul
 }
 
 export function validateApprovalGraph({ binding, checkpoint, predecessor = null, approval, assignments, active_human_ids }) {
+  requireValue(approval?.state === "APPROVED", "APPROVED_DECISION_REQUIRED");
+  return validateDecisionGraph({ binding, checkpoint, predecessor, decision: approval, assignments, active_human_ids });
+}
+
+export function validateDecisionGraph({ binding, checkpoint, predecessor = null, decision: approval, assignments, active_human_ids }) {
+  requireValue(["APPROVED", "CHANGES_REQUESTED", "REJECTED"].includes(approval?.state), "REVIEW_DECISION_REQUIRED");
   validateCheckpointGraph({ binding, checkpoint, predecessor });
   requireValue(sameScope(checkpoint, approval), "APPROVAL_SCOPE_MISMATCH");
   requireValue(approval.checkpoint_id === checkpoint.id && approval.artifact_version_id === checkpoint.artifact_version_id && approval.content_digest === checkpoint.content_digest && approval.provider_version === checkpoint.provider_version && approval.evidence_snapshot_id === checkpoint.evidence_snapshot_id, "APPROVAL_SUBJECT_MISMATCH");

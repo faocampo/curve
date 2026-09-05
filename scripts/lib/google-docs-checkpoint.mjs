@@ -95,12 +95,14 @@ export function captureSyntheticCheckpoint({ binding, before, after, content, pr
   });
 }
 
-export function evaluateSyntheticApproval({ initiative, checkpoint, binding, before, after, content, actor, request, evidenceReadable }) {
+function verifyReviewSubject({ initiative, checkpoint, binding, actor, request }) {
   requireValue(checkpoint.synthetic === true, "SYNTHETIC_ONLY");
   for (const field of ["checkpoint_id", "external_document_binding_id", "provider_connection_id", "workspace_id", "initiative_id", "normalized_content_ref", "evidence_snapshot_id", "access_evaluation_id", "submitted_or_approved_by"]) {
     requireValue(typeof checkpoint[field] === "string" && checkpoint[field].trim().length > 0, "INVALID_CHECKPOINT");
   }
   requireValue(checkpoint.checkpoint_type === "SUBMITTED" && Number.isSafeInteger(checkpoint.checkpoint_number) && checkpoint.checkpoint_number > 0, "INVALID_CHECKPOINT");
+  requireValue(typeof checkpoint.provider_version === "string" && /^[1-9][0-9]*$/.test(checkpoint.provider_version), "INVALID_CHECKPOINT");
+  requireValue(checkpoint.normalized_content?.normalization_version === "curve.google-docs.normalized/v1-candidate" && checkpoint.normalized_content.complete === true && checkpoint.normalized_content.unsupported_nodes === 0 && Array.isArray(checkpoint.normalized_content.tabs) && checkpoint.normalized_content.tabs.length > 0, "INVALID_CHECKPOINT");
   requireValue(Number.isSafeInteger(initiative.version) && initiative.version > 0, "INVALID_INITIATIVE_VERSION");
   requireValue(initiative.state === "PRD_REVIEW", "INVALID_STATE");
   requireValue(request.expected_version === initiative.version, "INITIATIVE_VERSION_CONFLICT");
@@ -110,6 +112,10 @@ export function evaluateSyntheticApproval({ initiative, checkpoint, binding, bef
   requireValue(binding.artifact_kind === "PRD" && checkpoint.artifact_kind === "PRD" && checkpoint.provider_connection_id === binding.provider_connection_id, "BINDING_MISMATCH");
   requireValue(initiative.current_checkpoint_id === checkpoint.checkpoint_id && request.checkpoint_id === checkpoint.checkpoint_id, "SUPERSEDED_CHECKPOINT");
   requireValue(checkpoint.content_digest === contentDigest(checkpoint.normalized_content) && request.content_digest === checkpoint.content_digest, "CHECKPOINT_DIGEST_MISMATCH");
+}
+
+export function evaluateSyntheticApproval({ initiative, checkpoint, binding, before, after, content, actor, request, evidenceReadable }) {
+  verifyReviewSubject({ initiative, checkpoint, binding, actor, request });
   verifySource(binding, before);
   verifySource(binding, after);
   requireValue(before.version === after.version, "SOURCE_CHANGED_DURING_CAPTURE");
@@ -118,6 +124,18 @@ export function evaluateSyntheticApproval({ initiative, checkpoint, binding, bef
   requireValue(after.version === checkpoint.provider_version && contentDigest(content) === checkpoint.content_digest, "STALE_SUBMISSION");
   requireValue(evidenceReadable === true, "EVIDENCE_ACCESS_DENIED");
   return immutable({ state: "PLANNING", checkpoint_id: checkpoint.checkpoint_id, content_digest: checkpoint.content_digest, approved_by: actor.id });
+}
+
+export function evaluateSyntheticReviewReturn(input) {
+  verifyReviewSubject(input);
+  // A negative review addresses the displayed immutable checkpoint even when
+  // the author has since edited the live document. Current permissions still
+  // apply to source, stored checkpoint and material evidence independently.
+  verifySource(input.binding, input.before);
+  verifySource(input.binding, input.after);
+  requireValue(input.checkpointReadable === true, "CHECKPOINT_ACCESS_DENIED");
+  requireValue(input.evidenceReadable === true, "EVIDENCE_ACCESS_DENIED");
+  return immutable({ state: "ALIGNING", checkpoint_id: input.checkpoint.checkpoint_id });
 }
 
 export function projectPostApprovalChange({ checkpoint, live_version, live_digest, material_declaration }) {

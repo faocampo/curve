@@ -11,7 +11,7 @@
       "$ref": "#/$defs/Checkpoint"
     },
     {
-      "$ref": "#/$defs/Approval"
+      "$ref": "#/$defs/Decision"
     }
   ],
   "$defs": {
@@ -300,6 +300,12 @@
       }
     },
     "Approval": {
+      "allOf": [
+        { "$ref": "#/$defs/Decision" },
+        { "properties": { "state": { "const": "APPROVED" } } }
+      ]
+    },
+    "Decision": {
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -375,7 +381,7 @@
           ]
         },
         "state": {
-          "const": "APPROVED"
+          "enum": ["APPROVED", "CHANGES_REQUESTED", "REJECTED"]
         },
         "decided_by": {
           "type": "object",
@@ -404,7 +410,8 @@
         "rationale": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 2000
+          "maxLength": 2000,
+          "pattern": "\\S"
         }
       }
     },
@@ -516,8 +523,29 @@
         "rationale": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 2000
+          "maxLength": 2000,
+          "pattern": "\\S"
         }
+      }
+    },
+    "ReturnForRevision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gate_assignment_id", "checkpoint_id", "artifact_version_id",
+        "content_digest", "provider_version", "evidence_snapshot_id",
+        "confirmed_risk_tier", "decision", "rationale"
+      ],
+      "properties": {
+        "gate_assignment_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+        "checkpoint_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+        "artifact_version_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+        "content_digest": { "$ref": "common.schema.json#/$defs/Digest" },
+        "provider_version": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "^[A-Za-z0-9._~-]+$" },
+        "evidence_snapshot_id": { "$ref": "common.schema.json#/$defs/OpaqueId" },
+        "confirmed_risk_tier": { "enum": ["LOW", "STANDARD", "HIGH"] },
+        "decision": { "enum": ["CHANGES_REQUESTED", "REJECTED"] },
+        "rationale": { "type": "string", "minLength": 1, "maxLength": 2000, "pattern": "\\S" }
       }
     },
     "Reconcile": {

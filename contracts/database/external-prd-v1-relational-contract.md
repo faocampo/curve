@@ -20,8 +20,8 @@ duration or private deployment value is part of this contract.
 ## Published wire contract
 
 The [external PRD schema](../schemas/external-prd-v1.schema.json) (closed binding,
-checkpoint, approval and command shapes) and [candidate OpenAPI](../openapi/external-prd-v1.openapi.json)
-(workspace-scoped reads and asynchronous link/create/submit/approve/reconcile)
+checkpoint, review decision and command shapes) and [candidate OpenAPI](../openapi/external-prd-v1.openapi.json)
+(workspace-scoped reads and asynchronous link/create/submit/approve/return/reconcile)
 define the runtime-facing boundary. The OpenAPI extension is separate from the
 existing pinned API edition and explicitly disabled pending consuming contracts.
 It uses the current Plane default session cookie name; deployments must bind
@@ -89,7 +89,7 @@ the lawful metadata history.
 
 ## Command processing and concurrency
 
-All five commands require the current Initiative `If-Match` and an
+All six commands require the current Initiative `If-Match` and an
 `Idempotency-Key`. The server derives actor, workspace, current memberships,
 object ACL, policy and approved connection/configuration. Unknown request
 fields fail validation, including supplied actor identities and direct URLs.
@@ -119,6 +119,31 @@ fields fail validation, including supplied actor identities and direct URLs.
 6. Conflict, cancellation or lost access leaves domain state unchanged and
    records a safe failure. A captured but unreferenced object follows the
    approved orphan-cleanup policy.
+
+Return-for-revision is a separate command for `CHANGES_REQUESTED` or `REJECTED`.
+Apply the same current human assignment, membership, separation, risk, scoped
+policy and exact displayed-subject checks, with the decision-specific
+`PRD_REQUEST_CHANGES` or `PRD_REJECT` action. Recheck current source, stored
+checkpoint and evidence access outside the database transaction and again
+validate their authority at commit. Live document edits do not replace the
+reviewed checkpoint and do not prevent a negative decision on that exact current
+submission. The provider cutoff describes access validation for this outcome.
+
+Under the Initiative lock, require PRD Review and the original aggregate version
+and current checkpoint, append the negative GateDecision, return to Aligning,
+increment the version and write result/audit/outbox atomically. Retain the
+checkpoint pointer and immutable body for successor lineage. A subsequent
+submission creates a new checkpoint even if its body digest is unchanged.
+Approval, return and successor submission racing on the same version have one
+winner; a delayed request never acts on a different checkpoint. Duplicate-key
+replay returns the original decision after authorization, with no second event.
+
+Rationale is required, nonblank and bounded. Treat it as classified user-authored
+content under the approved retention/access policy; it must not leak through
+audit/outbox, logs, notification previews, errors or Operation summaries. A
+history read authorizes decision rationale independently and cannot bypass
+lawful erasure or revoked source/evidence access. Immutable body history and
+decision status are separate: rejection does not rewrite a submitted body.
 
 The current submitted checkpoint ID and digest are the approval subject.
 Submission authority is a current action-specific decision for the authenticated
