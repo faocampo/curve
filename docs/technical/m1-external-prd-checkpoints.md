@@ -103,10 +103,22 @@ the read options. Google's [Drive files reference](https://developers.google.com
 
 ## Remaining runtime work and verification
 
+The [runtime metadata schema](../../contracts/schemas/external-prd-v1.schema.json)
+(closed binding, protected-reference checkpoint, approval and command shapes),
+[candidate OpenAPI](../../contracts/openapi/external-prd-v1.openapi.json)
+(five asynchronous commands and authorized metadata/history reads), and
+[persistence contract](../../contracts/database/external-prd-v1-relational-contract.md)
+(tenant foreign keys, append-only records, transaction boundaries, replay,
+provider races and rollback) now define the next implementation boundary.
+The [record tests](../../scripts/tests/external-prd-contracts.test.mjs)
+(schema completeness, request injection, exact-subject and assignment checks)
+verify these additions. The runtime API is still unimplemented and disabled.
+
 The following are implementation prerequisites, not completed features:
 
-1. Publish the binding/checkpoint API, relational model, events and complete
-   PRD/evidence schema and completeness rules in the consuming child packet.
+1. Complete the ArtifactVersion, PRD/evidence and event schemas, completeness
+   rules, policy extension and exact physical migration in the consuming child
+   packet against the candidate API and relational contracts.
 2. Implement authenticated server-side policy and provider reads with current
    actor, workspace, object ACL, assignment, evidence and connection scope.
 3. Implement transactional optimistic concurrency, append-only audit/outbox,
