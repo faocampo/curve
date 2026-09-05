@@ -2,10 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { submitSyntheticPrd, approveSyntheticPrd } from "../lib/external-prd-lifecycle.mjs";
 import { projectPostApprovalChange } from "../lib/google-docs-checkpoint.mjs";
+import { readinessFixture, withCurrentReadiness } from "./helpers/prd-readiness-fixture.mjs";
 
 function fixture() {
   const before = { provider_file_id: "doc-example", provider_container_id: "container-example", version: "9007199254740993", mimeType: "application/vnd.google-apps.document", locationAllowed: true, actorCanRead: true, integrationCanRead: true, trashed: false };
-  return {
+  return withCurrentReadiness({
     synthetic: true,
     initiative: { id: "initiative-example", workspace_id: "workspace-example", state: "ALIGNING", version: 2, creator_id: "author-example", product_approver_id: "reviewer-example", current_checkpoint_id: null },
     binding: { id: "binding-example", workspace_id: "workspace-example", initiative_id: "initiative-example", provider_connection_id: "connection-example", provider_file_id: "doc-example", provider_container_id: "container-example", artifact_kind: "PRD" },
@@ -13,9 +14,9 @@ function fixture() {
     submission_authorization: { schema_version: "curve.prd-submission-authorization/v1-candidate", decision_id: "decision-example", policy_version_id: "policy-example", actor_id: "author-example", workspace_id: "workspace-example", initiative_id: "initiative-example", binding_id: "binding-example", initiative_version: 2, action: "PRD_SUBMIT", role: "CREATOR", effect: "ALLOW", evaluated_at: "2026-09-05T12:00:00Z", expires_at: "2026-09-05T12:01:00Z" },
     request: { expected_version: 2 },
     before, after: structuredClone(before),
-    content: { normalization_version: "curve.google-docs.normalized/v1-candidate", complete: true, unsupported_nodes: 0, tabs: [{ text: "Synthetic PRD for fictional onboarding" }] },
+    content: readinessFixture().prd.content,
     provenance: { checkpoint_id: "checkpoint-example-1", normalized_content_ref: "synthetic-object-1", recorded_at: "2026-09-05T12:00:00Z", evidenceReadable: true, evidence_snapshot_id: "evidence-example", access_evaluation_id: "access-example" },
-  };
+  });
 }
 
 function review(f = fixture()) {
@@ -51,12 +52,12 @@ test("Aligning submission enters PRD Review; exact assigned human approval enter
 test("changed document requires successor submission; old checkpoint cannot approve it", () => {
   const r = review();
   r.before.version = r.after.version = "9007199254740994";
-  r.content.tabs[0].text = "Revised synthetic scope";
+  r.content.tabs[0].documentTab.body.content[1].paragraph.elements[0].textRun.content = "Revised synthetic scope";
   assert.throws(() => approveSyntheticPrd(r), /STALE_SUBMISSION/);
-  const successor = submitSyntheticPrd({ ...r, actor: fixture().actor, submission_authorization: { ...r.submission_authorization, initiative_version: 3 }, request: { expected_version: 3 }, previous_checkpoint: r.checkpoint, provenance: { ...r.provenance, checkpoint_id: "checkpoint-example-2", normalized_content_ref: "synthetic-object-2" } });
+  const successor = submitSyntheticPrd(withCurrentReadiness({ ...r, actor: fixture().actor, submission_authorization: { ...r.submission_authorization, initiative_version: 3 }, request: { expected_version: 3 }, previous_checkpoint: r.checkpoint, provenance: { ...r.provenance, checkpoint_id: "checkpoint-example-2", normalized_content_ref: "synthetic-object-2" } }));
   assert.equal(successor.checkpoint.checkpoint_number, 2);
   assert.equal(successor.checkpoint.predecessor_id, r.checkpoint.checkpoint_id);
-  assert.equal(r.checkpoint.normalized_content.tabs[0].text, "Synthetic PRD for fictional onboarding");
+  assert.equal(r.checkpoint.normalized_content.tabs[0].documentTab.body.content[1].paragraph.elements[0].textRun.content, "Synthetic PRD for fictional onboarding\n");
   assert.throws(() => approveSyntheticPrd({ ...r, initiative: successor.initiative, request: { ...r.request, expected_version: 4 } }), /SUPERSEDED_CHECKPOINT/);
   const approved = approveSyntheticPrd({ ...r, initiative: successor.initiative, checkpoint: successor.checkpoint, request: { expected_version: 4, checkpoint_id: successor.checkpoint.checkpoint_id, content_digest: successor.checkpoint.content_digest } });
   assert.equal(approved.initiative.state, "PLANNING");
@@ -158,4 +159,19 @@ test("post-approval change preserves Planning and the immutable approved checkpo
   assert.equal(projection.state, approved.initiative.state);
   assert.equal(projection.comparison, "CHANGED_SINCE_APPROVAL");
   assert.equal(projection.approved_checkpoint_id, approved.decision.checkpoint_id);
+});
+
+test("submission requires current readiness for the exact PRD, Idea Brief and inventory", () => {
+  for (const mutate of [
+    (f) => { delete f.readiness; },
+    (f) => { f.readiness = { ...f.readiness, status: "BLOCKED", reasons: ["BLOCKERS_UNRESOLVED"] }; },
+    (f) => { f.current_idea_brief.id = "new-brief-version"; },
+    (f) => { f.current_idea_brief.content_digest = "different"; },
+    (f) => { f.current_readiness_inventory_digest = "different"; },
+    (f) => { f.content.tabs[0].documentTab.body.content[1].paragraph.elements[0].textRun.content = "Changed after readiness"; },
+  ]) {
+    const f = fixture(); mutate(f); const original = structuredClone(f);
+    assert.throws(() => submitSyntheticPrd(f), /PRD_READINESS_REQUIRED|PRD_READINESS_STALE/);
+    assert.deepEqual(f, original);
+  }
 });

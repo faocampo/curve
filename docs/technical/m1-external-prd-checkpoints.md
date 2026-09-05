@@ -139,10 +139,11 @@ The following are implementation prerequisites, not completed features:
    (immutable submitted versions, exact snapshots and record linkage), and
    complete PRD body/completeness, event and policy contracts plus the exact
    physical migration in the consuming child packet.
-   PRD capture completeness (`content.complete`) is distinct from product
-   readiness: Idea Brief and PRD completeness, resolved blockers, and assumptions
-   with owners and validation plans must be verified against the exact submitted
-   body/evidence versions before live submission can be enabled.
+   The [submission-readiness candidate](prd-submission-readiness.md) (required
+   sections, requirement/acceptance coverage, resolved blockers, owned assumption
+   plans and exact-version reports) is now required by the synthetic submission
+   model. Its runtime capture, inventory and persistence integration remains
+   required before live submission can be enabled.
 2. Implement authenticated server-side policy and provider reads with current
    actor, workspace, object ACL, assignment, evidence and connection scope.
 3. Implement transactional optimistic concurrency, append-only audit/outbox,

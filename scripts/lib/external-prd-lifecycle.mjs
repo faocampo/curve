@@ -1,6 +1,7 @@
 // Pure synthetic conformance model. Callers supply trusted test observations.
 // No database, HTTP route, provider transport, production policy, or stored body.
 import { captureSyntheticCheckpoint, evaluateSyntheticApproval, validCheckpointTime } from "./google-docs-checkpoint.mjs";
+import { requireCurrentPrdReadiness } from "./prd-readiness.mjs";
 
 function requireValue(condition, code) {
   if (!condition) throw new Error(code);
@@ -57,6 +58,15 @@ export function submitSyntheticPrd(input) {
       checkpoint_number: (predecessor?.checkpoint_number ?? 0) + 1,
     },
   });
+  requireCurrentPrdReadiness(input.readiness, {
+    id: provenance.completeness_check_id, workspace_id: initiative.workspace_id,
+    initiative_id: initiative.id, initiative_version: initiative.version,
+    prd_binding_id: binding.id, provider_file_id: binding.provider_file_id, provider_version: checkpoint.provider_version,
+    content_digest: checkpoint.content_digest, evidence_snapshot_id: provenance.evidence_snapshot_id,
+    idea_brief_version_id: input.current_idea_brief?.id,
+    idea_brief_digest: input.current_idea_brief?.content_digest,
+    inventory_digest: input.current_readiness_inventory_digest, checked_at: provenance.recorded_at,
+  });
   return immutable({
     initiative: { ...structuredClone(initiative), state: "PRD_REVIEW", version: initiative.version + 1, current_checkpoint_id: checkpoint.checkpoint_id },
     checkpoint,
@@ -66,6 +76,7 @@ export function submitSyntheticPrd(input) {
       checkpoint_id: checkpoint.checkpoint_id, content_digest: checkpoint.content_digest,
       aggregate_version: initiative.version + 1, recorded_at: checkpoint.recorded_at,
       authorization_decision_id: grant.decision_id, policy_version_id: grant.policy_version_id,
+      completeness_check_id: input.readiness.id, readiness_profile_digest: input.readiness.profile_digest,
     },
   });
 }
