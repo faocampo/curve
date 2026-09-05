@@ -1,0 +1,820 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Curve external PRD candidate API",
+    "version": "0.1.0",
+    "license": {
+      "name": "GNU Affero General Public License v3.0 only",
+      "identifier": "AGPL-3.0-only"
+    },
+    "description": "Candidate metadata and asynchronous commands. Runtime, child policy, protected storage and provider activation remain separately gated. All reads are side-effect-free and workspace/object-authorized."
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "security": [
+    {
+      "planeSession": []
+    }
+  ],
+  "x-curve-activation": "DISABLED_PENDING_CONSUMING_CONTRACTS",
+  "paths": {
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/decisions": {
+      "get": {
+        "operationId": "listExternalPrdDecisions",
+        "summary": "List immutable Product Review decisions",
+        "description": "Authorized decision history, ordered by decided_at then id, including approvals, requested changes and rejections. Rationale is protected user-authored content: apply classification and current decision/source/evidence access before returning it; unavailable rationale requires a separate availability projection. Retain historical subjects after source changes or lawful body erasure. History visibility never grants access to an erased body.",
+        "parameters": [
+          { "$ref": "#/components/parameters/WorkspaceSlug" },
+          { "$ref": "#/components/parameters/InitiativeId" },
+          { "$ref": "#/components/parameters/After" },
+          { "$ref": "#/components/parameters/Limit" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized decision history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["results", "next_cursor"],
+                  "properties": {
+                    "results": { "type": "array", "items": { "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Decision" } },
+                    "next_cursor": { "type": ["string", "null"] }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Problem" },
+          "404": { "$ref": "#/components/responses/Problem" },
+          "422": { "$ref": "#/components/responses/Problem" }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/return-for-revision": {
+      "post": {
+        "operationId": "ReturnExternalPrdForRevision",
+        "summary": "Request changes or reject the displayed submitted PRD",
+        "description": "Current assigned active human Product Approver in PRD Review only. Resolve the decision-specific PRD_REQUEST_CHANGES or PRD_REJECT policy action. Bind every displayed checkpoint/artifact/digest/provider-version/evidence/risk field. Recheck current assignment, membership, separation and source/checkpoint/evidence access. A changed live document can coexist with a negative decision on the current immutable submission. Append the decision/rationale, advance the Initiative version and return to Aligning atomically; preserve the checkpoint pointer for successor lineage. No approval is created and a new submission is required before another review. Rationale never appears in audit, outbox, logs or Operation summaries.",
+        "parameters": [
+          { "$ref": "#/components/parameters/WorkspaceSlug" },
+          { "$ref": "#/components/parameters/InitiativeId" },
+          { "$ref": "#/components/parameters/IfMatch" },
+          { "$ref": "#/components/parameters/IdempotencyKey" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "../schemas/external-prd-v1.schema.json#/$defs/ReturnForRevision" } } }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted or replayed. Follow the Operation; acceptance alone does not change the lifecycle.",
+            "headers": {
+              "Location": { "required": true, "schema": { "type": "string" } },
+              "ETag": { "required": true, "schema": { "type": "string" } }
+            },
+            "content": { "application/json": { "schema": { "$ref": "../schemas/operation-summary.schema.json" } } }
+          },
+          "400": { "$ref": "#/components/responses/Problem" },
+          "401": { "$ref": "#/components/responses/Problem" },
+          "403": { "$ref": "#/components/responses/Problem" },
+          "404": { "$ref": "#/components/responses/Problem" },
+          "409": { "$ref": "#/components/responses/Problem" },
+          "412": { "$ref": "#/components/responses/Problem" },
+          "422": { "$ref": "#/components/responses/Problem" },
+          "428": { "$ref": "#/components/responses/Problem" },
+          "429": { "$ref": "#/components/responses/Problem" },
+          "503": { "$ref": "#/components/responses/Problem" }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/link": {
+      "post": {
+        "operationId": "LinkExternalPrd",
+        "summary": "Link a user-selected external PRD",
+        "description": "Creator in Aligning only. Verify the one-use Picker receipt against actor, workspace, connection and file; independently check current human/provider permissions and approved location. Reject replacement of an existing binding; rebinding requires a separate policy. Never trust a client URL or inherit managed-identity access.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/WorkspaceSlug"
+          },
+          {
+            "$ref": "#/components/parameters/InitiativeId"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Link"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted or replayed. Follow the Operation; lifecycle changes only after validated completion.",
+            "headers": {
+              "Location": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/operation-summary.schema.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "412": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "428": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "429": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/create": {
+      "post": {
+        "operationId": "CreateExternalPrd",
+        "summary": "Create and link a PRD from an approved template",
+        "description": "Creator in Aligning only. Resolve template and destination configurations through the workspace-scoped allowlist. Commit an Operation and outbox before provider mutation. Reconcile ambiguous creation by stable marker before retrying.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/WorkspaceSlug"
+          },
+          {
+            "$ref": "#/components/parameters/InitiativeId"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted or replayed. Follow the Operation; lifecycle changes only after validated completion.",
+            "headers": {
+              "Location": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/operation-summary.schema.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "412": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "428": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "429": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/submit": {
+      "post": {
+        "operationId": "SubmitExternalPrd",
+        "summary": "Submit the current PRD for Product Approval",
+        "description": "Creator or authorized contributor in Aligning or PRD Review. Resolve current PRD_SUBMIT permission for this actor, workspace, Initiative, binding and aggregate version; never accept a caller contributor flag. Recheck current source/evidence access and completeness for the exact content. Stable provider reads, immutable protected checkpoint and final aggregate compare-and-swap precede PRD Review. Resubmission appends a successor with predecessor lineage.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/WorkspaceSlug"
+          },
+          {
+            "$ref": "#/components/parameters/InitiativeId"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Submit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted or replayed. Follow the Operation; lifecycle changes only after validated completion.",
+            "headers": {
+              "Location": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/operation-summary.schema.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "412": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "428": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "429": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/approve": {
+      "post": {
+        "operationId": "ApproveExternalPrd",
+        "summary": "Approve the exact unchanged submitted PRD",
+        "description": "Assigned active human Product Approver in PRD Review only. Bind displayed checkpoint, artifact version, digest, provider version, evidence and risk. Recheck all assignments, separation, current access and live document. Record final provider cutoff; append decision and advance to Planning atomically. Changed or inaccessible sources fail closed.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/WorkspaceSlug"
+          },
+          {
+            "$ref": "#/components/parameters/InitiativeId"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Approve"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted or replayed. Follow the Operation; lifecycle changes only after validated completion.",
+            "headers": {
+              "Location": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/operation-summary.schema.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "412": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "428": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "429": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/reconcile": {
+      "post": {
+        "operationId": "ReconcileExternalPrd",
+        "summary": "Request authoritative document reconciliation",
+        "description": "Authorized creator, assigned reviewer or administrator. Read current provider state through the scoped connection; callbacks are invalidation hints. Keep approved checkpoints immutable and lifecycle unchanged. Material-change transitions require a separate approved policy.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/WorkspaceSlug"
+          },
+          {
+            "$ref": "#/components/parameters/InitiativeId"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Reconcile"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted or replayed. Follow the Operation; lifecycle changes only after validated completion.",
+            "headers": {
+              "Location": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/operation-summary.schema.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "403": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "409": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "412": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "428": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "429": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd": {
+      "get": {
+        "operationId": "getExternalPrdBinding",
+        "summary": "Read linked PRD metadata",
+        "description": "Workspace/object-authorized metadata only. GET never captures, reconciles or creates documents; inaccessible and absent records share a safe not-found response.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/WorkspaceSlug"
+          },
+          {
+            "$ref": "#/components/parameters/InitiativeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized Binding metadata. Body retrieval requires the approved protected-storage interface.",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Binding"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/checkpoints": {
+      "get": {
+        "operationId": "listExternalPrdCheckpoints",
+        "summary": "List authorized checkpoint metadata",
+        "description": "Stable cursor order by checkpoint_number then id, scoped to Initiative and binding. No bodies, credentials or temporary access URLs.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/WorkspaceSlug"
+          },
+          {
+            "$ref": "#/components/parameters/InitiativeId"
+          },
+          {
+            "$ref": "#/components/parameters/After"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized checkpoint page",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "results",
+                    "next_cursor"
+                  ],
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Checkpoint"
+                      }
+                    },
+                    "next_cursor": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_slug}/curve/initiatives/{initiative_id}/prd/checkpoints/{checkpoint_id}": {
+      "get": {
+        "operationId": "getExternalPrdCheckpoint",
+        "summary": "Read exact checkpoint metadata",
+        "description": "Verify workspace, Initiative and checkpoint ACL before lookup. Protected-body reads require current source/evidence access through the separately approved storage interface.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/WorkspaceSlug"
+          },
+          {
+            "$ref": "#/components/parameters/InitiativeId"
+          },
+          {
+            "$ref": "#/components/parameters/CheckpointId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized Checkpoint metadata. Body retrieval requires the approved protected-storage interface.",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/external-prd-v1.schema.json#/$defs/Checkpoint"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "404": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "503": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "planeSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "session-id",
+        "description": "Plane human session with server-side CSRF and current Curve policy enforcement."
+      }
+    },
+    "parameters": {
+      "WorkspaceSlug": {
+        "name": "workspace_slug",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "InitiativeId": {
+        "name": "initiative_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "CheckpointId": {
+        "name": "checkpoint_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "IfMatch": {
+        "name": "If-Match",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "pattern": "^\"[1-9][0-9]*\"$"
+        },
+        "description": "Strong current Initiative ETag. Recheck in final transaction. Missing returns 428; stale returns 412."
+      },
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "description": "Scope by workspace, authenticated actor, command and Initiative. Same key with different payload returns 409. Replay rechecks current permission."
+      },
+      "After": {
+        "name": "after",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "Limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25
+        }
+      }
+    },
+    "responses": {
+      "Problem": {
+        "description": "Safe stable error. Exclude source content, credentials and raw provider responses.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "title",
+                "status",
+                "code",
+                "correlation_id"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "format": "uri-reference"
+                },
+                "title": {
+                  "type": "string",
+                  "maxLength": 160
+                },
+                "status": {
+                  "type": "integer",
+                  "minimum": 400,
+                  "maximum": 599
+                },
+                "code": {
+                  "type": "string",
+                  "enum": [
+                    "REQUEST_INVALID",
+                    "AUTHENTICATION_REQUIRED",
+                    "RESOURCE_UNAVAILABLE",
+                    "COMMAND_CONFLICT",
+                    "INITIATIVE_VERSION_CONFLICT",
+                    "PRECONDITION_REQUIRED",
+                    "RATE_LIMITED",
+                    "CAPABILITY_UNAVAILABLE",
+                    "SOURCE_ACCESS_DENIED",
+                    "SOURCE_CHANGED",
+                    "COMPLETENESS_REQUIRED",
+                    "EVIDENCE_ACCESS_DENIED",
+                    "APPROVER_DENIED",
+                    "CHECKPOINT_SUPERSEDED"
+                  ]
+                },
+                "correlation_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

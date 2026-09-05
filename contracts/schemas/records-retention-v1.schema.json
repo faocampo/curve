@@ -1,0 +1,472 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.example.invalid/contracts/schemas/records-retention-v1.schema.json",
+  "title": "Records closure and retention eligibility candidate",
+  "description": "Trusted server-side conformance input, not a client request or deletion grant. No retention periods, storage configuration, bodies or owner approvals are provided by this contract.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Close"
+    },
+    {
+      "$ref": "#/$defs/Erase"
+    }
+  ],
+  "$defs": {
+    "Record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "workspace_id",
+        "version",
+        "owner_actor_id",
+        "state",
+        "closure"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "workspace_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "owner_actor_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "state": {
+          "enum": [
+            "OPEN",
+            "CLOSED",
+            "ERASED"
+          ]
+        },
+        "closure": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "closed_at",
+                "inventory_version",
+                "policy_version_id",
+                "policy_digest",
+                "actor_id"
+              ],
+              "properties": {
+                "id": {
+                  "$ref": "common.schema.json#/$defs/OpaqueId"
+                },
+                "closed_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                },
+                "inventory_version": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                },
+                "policy_version_id": {
+                  "$ref": "common.schema.json#/$defs/OpaqueId"
+                },
+                "policy_digest": {
+                  "$ref": "common.schema.json#/$defs/Digest"
+                },
+                "actor_id": {
+                  "$ref": "common.schema.json#/$defs/OpaqueId"
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "Inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_id",
+        "record_set_id",
+        "version",
+        "checked_at",
+        "complete",
+        "uses"
+      ],
+      "properties": {
+        "workspace_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "record_set_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "uses": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "workspace_id",
+              "kind",
+              "state"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "common.schema.json#/$defs/OpaqueId"
+              },
+              "workspace_id": {
+                "$ref": "common.schema.json#/$defs/OpaqueId"
+              },
+              "kind": {
+                "enum": [
+                  "PRODUCT",
+                  "FEATURE"
+                ]
+              },
+              "state": {
+                "enum": [
+                  "ACTIVE",
+                  "ENDED"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "Actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "workspace_id",
+        "actor_type",
+        "active",
+        "object_access"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "workspace_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "actor_type": {
+          "enum": [
+            "HUMAN",
+            "SERVICE"
+          ]
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "object_access": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_id",
+        "record_set_id",
+        "id",
+        "content_digest",
+        "state",
+        "effective_at",
+        "expires_at"
+      ],
+      "properties": {
+        "workspace_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "record_set_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "content_digest": {
+          "$ref": "common.schema.json#/$defs/Digest"
+        },
+        "state": {
+          "enum": [
+            "APPROVED",
+            "PROPOSED",
+            "REVOKED"
+          ]
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        }
+      }
+    },
+    "Hold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_id",
+        "record_set_id",
+        "state",
+        "checked_at"
+      ],
+      "properties": {
+        "workspace_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "record_set_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "state": {
+          "enum": [
+            "CLEAR",
+            "HELD",
+            "UNKNOWN"
+          ]
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        }
+      }
+    },
+    "Schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_id",
+        "record_set_id",
+        "closure_id",
+        "policy_version_id",
+        "policy_digest",
+        "eligible_at",
+        "calculated_at"
+      ],
+      "properties": {
+        "workspace_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "record_set_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "closure_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "policy_version_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "policy_digest": {
+          "$ref": "common.schema.json#/$defs/Digest"
+        },
+        "eligible_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "calculated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        }
+      }
+    },
+    "Close": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record",
+        "inventory",
+        "actor",
+        "policy",
+        "hold",
+        "expected_version",
+        "now",
+        "action",
+        "closure_id",
+        "authorization"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.records-retention/v1-candidate"
+        },
+        "record": {
+          "$ref": "#/$defs/Record"
+        },
+        "inventory": {
+          "$ref": "#/$defs/Inventory"
+        },
+        "actor": {
+          "$ref": "#/$defs/Actor"
+        },
+        "policy": {
+          "$ref": "#/$defs/Policy"
+        },
+        "hold": {
+          "$ref": "#/$defs/Hold"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "now": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "action": {
+          "const": "CLOSE_RECORDS"
+        },
+        "closure_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "authorization": {
+          "$ref": "#/$defs/Authorization"
+        }
+      }
+    },
+    "Erase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record",
+        "inventory",
+        "actor",
+        "policy",
+        "hold",
+        "expected_version",
+        "now",
+        "action",
+        "schedule",
+        "authorization"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.records-retention/v1-candidate"
+        },
+        "record": {
+          "$ref": "#/$defs/Record"
+        },
+        "inventory": {
+          "$ref": "#/$defs/Inventory"
+        },
+        "actor": {
+          "$ref": "#/$defs/Actor"
+        },
+        "policy": {
+          "$ref": "#/$defs/Policy"
+        },
+        "hold": {
+          "$ref": "#/$defs/Hold"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "now": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "action": {
+          "const": "EVALUATE_ERASURE"
+        },
+        "schedule": {
+          "$ref": "#/$defs/Schedule"
+        },
+        "authorization": {
+          "$ref": "#/$defs/Authorization"
+        }
+      }
+    },
+    "Authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "workspace_id",
+        "record_set_id",
+        "actor_id",
+        "action",
+        "effect",
+        "policy_version_id",
+        "evaluated_at",
+        "expires_at"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "workspace_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "record_set_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "actor_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "action": {
+          "enum": [
+            "CLOSE_RECORDS",
+            "EVALUATE_ERASURE"
+          ]
+        },
+        "effect": {
+          "enum": [
+            "ALLOW",
+            "DENY"
+          ]
+        },
+        "policy_version_id": {
+          "$ref": "common.schema.json#/$defs/OpaqueId"
+        },
+        "evaluated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        }
+      }
+    }
+  }
+}
