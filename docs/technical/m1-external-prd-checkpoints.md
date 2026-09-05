@@ -121,9 +121,10 @@ It contains no retention periods and changes no existing D-009 policy pin.
 
 The following are implementation prerequisites, not completed features:
 
-1. Complete the ArtifactVersion, PRD/evidence and event schemas, completeness
-   rules, policy extension and exact physical migration in the consuming child
-   packet against the candidate API and relational contracts.
+1. Integrate the [artifact/evidence metadata candidate](prd-artifact-evidence-records.md)
+   (immutable submitted versions, exact snapshots and record linkage), and
+   complete PRD body/completeness, event and policy contracts plus the exact
+   physical migration in the consuming child packet.
 2. Implement authenticated server-side policy and provider reads with current
    actor, workspace, object ACL, assignment, evidence and connection scope.
 3. Implement transactional optimistic concurrency, append-only audit/outbox,
