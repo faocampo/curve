@@ -9,7 +9,7 @@ related_targets: ["docs/technical/ux-m1-01b-initiative-shell.md"]
 
 ## User and job
 
-An authenticated X3M workspace member needs to find, create, understand, and
+An authenticated Example Organization workspace member needs to find, create, understand, and
 manage a governed manual-first Initiative while seeing its Product, lifecycle,
 risk, and three mandatory human gate assignments.
 
@@ -34,6 +34,6 @@ text labels independent of color, and reduced-motion support.
 ## Review boundary
 
 Synthetic static data only. No network, API, repository, provider, credential,
-protected-data, deployment, or workflow side effect. Federico Ocampo must
+protected-data, deployment, or workflow side effect. Designated reviewer must
 approve UX-006-M1-01B and UX-007-M1-01B at an exact Curve commit before Plane
 implementation begins.

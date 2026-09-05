@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/model-gateway-architecture-decision.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/model-gateway-architecture-decision.schema.json",
   "title": "D-004 candidate Model Gateway architecture decision",
   "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
   "type": "object",

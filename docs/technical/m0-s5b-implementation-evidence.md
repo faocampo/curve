@@ -1,5 +1,9 @@
 # M0-S5B Local Observability Integration Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,7 +12,7 @@
 | Evidence date | 2026-08-22 |
 | Task | M0-S5B (local observability integration) |
 | Parent work package | M0-08 (audit and observability foundation) |
-| Human owner and reviewer | Federico Ocampo (`faocampo`), CTO at X3M |
+| Human owner and reviewer | Designated reviewer (`example-reviewer`), Designated technical owner |
 | Binding decision | [OBS-BIND-001](obs-bind-001-local-observability-binding.md) (local Docker OTLP, Prometheus, Grafana, health, cleanup, and promotion contract) |
 | Curve contract revision | `43480ca8463d0b40d436145aeb19fbbc8c2be472` on `main` |
 | Approved Curve contract head | `5a3ab82d7b960c862ea83c6ebf89e086be19b758` |
@@ -55,7 +59,7 @@ decision inputs) with aggregate digest
 
 ## Approval, CI, and merge binding
 
-Federico Ocampo approved exact Plane head
+Designated reviewer approved exact Plane head
 `320c4b92b6c9e417410e32a83409a33a64518df0`, authorized marking
 [Plane PR #8](https://github.com/faocampo/plane/pull/8) (M0-S5B local
 observability integration) ready, and authorized squash merge into `preview`
@@ -86,7 +90,7 @@ The squash merge preserves the exact approved implementation:
 
 The merge commit is the current `origin/preview` revision at evidence creation.
 
-Federico Ocampo approved exact Curve evidence head
+Designated reviewer approved exact Curve evidence head
 `b261de697c18c903e3fcbdaf5ca356436f8206f1`. The Curve validation job passed,
 and GitHub subsequently squash-merged
 [Curve PR #25](https://github.com/faocampo/curve/pull/25) (post-merge M0-S5B

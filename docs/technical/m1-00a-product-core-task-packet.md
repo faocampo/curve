@@ -1,5 +1,9 @@
 # M1-00A Minimal Product Core Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Date | 2026-08-28 |
 | Product | Curve |
 | Work package | M1-00A (minimal Product core) |
-| Owner and human reviewer | Federico Ocampo (`faocampo`) |
+| Owner and human reviewer | Designated reviewer (`example-reviewer`) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Accepted target/base | `preview` from base `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; reviewed head `d4ab9ea...` squash-merged as `afdb593...` |
 | Accepted Curve contract revision | `46880350e0ca1e57dd08b6fb5a6a6546f37c4473` |
@@ -195,7 +199,7 @@ The approved dispatch required:
 3. the live Plane `preview` base and migration chain are reverified;
 4. the M1-00A context pack digest is generated from merged bytes;
 5. exact repository commands are reconfirmed against that base; and
-6. Federico explicitly dispatches the implementation packet.
+6. Designated reviewer explicitly dispatches the implementation packet.
 
 All six requirements were satisfied by the accepted dispatch binding recorded
 in [M1-00A implementation evidence](m1-00a-product-core-implementation-evidence.md)

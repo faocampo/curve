@@ -1,5 +1,9 @@
 # Coding-Agent Local Execution and Authority Decision Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,8 +13,8 @@
 | Prepared | 2026-08-30 |
 | Product | Curve |
 | Decisions | B-CODING-TOOLS-01 (local coding-tool execution profile) and B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) |
-| Decision owner | Federico Ocampo, CTO at X3M |
-| Security/architecture reviewers | Federico Ocampo until reassigned |
+| Decision owner | Designated reviewer, Designated technical owner |
+| Security/architecture reviewers | Designated reviewer until reassigned |
 | First consumer | [RUNTIME-M0-01 task packet](runtime-m0-01-graceful-shutdown-task-packet.md) (graceful Curve worker shutdown classification, tests, evidence, and rollback) |
 | Activation boundary | No command execution, code mutation, provider access, credential use, infrastructure change, deployment, or production dispatch is authorized by this packet. |
 
@@ -29,7 +33,7 @@ independent boundary also prevents production dispatch until Curve can verify
 the approving human's current authority and atomically acquire one durable
 attempt lease.
 
-Federico selected Authority Option 3 and explicitly deferred the machine
+Designated reviewer selected Authority Option 3 and explicitly deferred the machine
 execution profile to M4 (OpenHands automation and gVisor runner integration).
 Human-operated implementation still requires a separate exact repository grant;
 this decision does not authorize Plane mutation.
@@ -198,7 +202,7 @@ nonce, packet digest, authorization digest, process identity, worktree path,
 holder, acquired/heartbeat/expiry times, and state. Only the holder may renew
 or release it. Expiry alone does not permit takeover: stale recovery also
 requires the recorded process to be absent, the exact worktree to be clean or
-quarantined, and a Federico-attributed recovery record that closes the prior
+quarantined, and a Designated reviewer-attributed recovery record that closes the prior
 attempt before a new transaction can acquire the scope. Crash recovery and
 double-acquire races are mandatory tests. This local store is bootstrap
 coordination evidence; it is not the production authority or lease provider.
@@ -207,7 +211,7 @@ coordination evidence; it is not the production authority or lease provider.
 
 Block all further automated implementation until Curve integrates:
 
-1. X3M's authenticated human identity/role source;
+1. Example Organization's authenticated human identity/role source;
 2. an immutable approval/revocation receipt verifiable independently of the
    task-packet repository;
 3. a PostgreSQL-backed atomic lease for the exact non-terminal attempt; and
@@ -220,7 +224,7 @@ security/control-plane package and its deployment boundary.
 
 ### Option 3 — Continue human-operated coding outside Curve dispatch
 
-Keep the machine registry and production dispatcher blocked. Federico may
+Keep the machine registry and production dispatcher blocked. Designated reviewer may
 operate Codex manually using ordinary repository authorization, branch review,
 and CI, and Curve records the resulting implementation evidence afterward.
 
@@ -288,7 +292,7 @@ The 2026-08-30 local audit used Curve `main`
 
 ## Decided simplified bootstrap
 
-Federico approved B-CODING-AUTHORITY-01 Option 3 (human-operated coding outside
+Designated reviewer approved B-CODING-AUTHORITY-01 Option 3 (human-operated coding outside
 Curve dispatch) and B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at Curve PR #50 head
 `f8e2f4b3d497f747f9e8a3b7db7508510400bae9`, squash-merged as
 `866032fa42e2cb57ad1a4e662d9561f742983f79`. RUNTIME-M0-01 (graceful Curve
@@ -305,7 +309,7 @@ execution and authority boundary.
 3. For Authority Option 1 or 2, the command classifier, schema, fixtures,
    adversarial tests, ordered machine packet, trusted authority receipt, and
    current-attempt lease must exist before Plane mutation.
-4. For Authority Option 3, Federico supplies one exact human execution grant
+4. For Authority Option 3, Designated reviewer supplies one exact human execution grant
    binding the Plane base, branch, scope, data boundary, commands, external
    effects, tests, rollback, and review. The implementation is recorded as
    human-operated rather than Curve-dispatched.

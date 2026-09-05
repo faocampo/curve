@@ -1,5 +1,9 @@
 # OBS-BIND-001 Local Observability Binding
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Version | 1.0 |
 | Date | 2026-08-22 |
 | Product | Curve |
-| Decision owner | Federico Ocampo, CTO at X3M |
+| Decision owner | Designated reviewer, Designated technical owner |
 | Local environment owner | Developer running the local environment |
 | Platform Operations approval | Not required for this disposable local proof |
 | Machine contract | [OBS-BIND-001 v1](../../contracts/observability/obs-bind-001-local-v1.json) (exact local topology, images, endpoints, provisioning, health, cleanup, and promotion values) |
@@ -230,7 +234,7 @@ external infrastructure mutation is involved.
 ## Promotion boundary
 
 This decision authorizes local development only. Staging requires a separate
-binding that identifies X3M-managed OTLP/TLS/authentication, private service
+binding that identifies Example Organization-managed OTLP/TLS/authentication, private service
 discovery, Prometheus/Grafana provisioning ownership, alert routing, retention,
 backup, and operational approval. Local image or port choices do not silently
 become staging defaults.

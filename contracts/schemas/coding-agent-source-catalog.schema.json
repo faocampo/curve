@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/coding-agent-source-catalog.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/coding-agent-source-catalog.schema.json",
   "title": "Curve coding-agent source catalog",
   "description": "Machine-readable work-package catalog published after normative and evidence inputs, and before the sealed task-packet registry, for dispatch preflight.",
   "type": "object",

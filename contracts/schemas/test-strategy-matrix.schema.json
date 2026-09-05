@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/test-strategy-matrix.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/test-strategy-matrix.schema.json",
   "title": "Curve acceptance-criteria test strategy matrix",
   "type": "object",
   "additionalProperties": false,

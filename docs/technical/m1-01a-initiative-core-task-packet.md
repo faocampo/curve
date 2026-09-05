@@ -1,5 +1,9 @@
 # M1-01A Initiative Domain and API Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Date | 2026-08-29 |
 | Product | Curve |
 | Work package | M1-01A (Initiative domain and API foundation) |
-| Owner and human reviewer | Federico Ocampo (`faocampo`) |
+| Owner and human reviewer | Designated reviewer (`example-reviewer`) |
 | Implementer | Codex |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Candidate target | `preview`; dispatch pins the live post-M1-00A base |
@@ -155,7 +159,7 @@ commit-bound CI at reviewed head `7e712e0...`, and squash-merged to
 
 [M1-01A implementation evidence](m1-01a-initiative-core-implementation-evidence.md)
 (exact dispatch, implementation, verification, merge, security boundary, and
-rollback) is the acceptance record. Federico approved the M1-01B (Curve-first
+rollback) is the acceptance record. Designated reviewer approved the M1-01B (Curve-first
 Initiative shell) screen contract and test evidence at exact Curve commit
 `656a196...`; the child remains open for implementation-packet finalization and
 separate dispatch authorization.

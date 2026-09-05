@@ -143,7 +143,7 @@ Relevant capability descriptions are OpenRouter
 [model fallbacks](https://openrouter.ai/docs/guides/routing/model-fallbacks)
 (ordered model fallback behavior), and
 [Zero Data Retention](https://openrouter.ai/docs/guides/features/zdr)
-(request and endpoint ZDR controls). These sources do not establish X3M account
+(request and endpoint ZDR controls). These sources do not establish Example Organization account
 configuration, contract terms, exact endpoints, entitlements, or measured
 behavior; those remain owner-provided decision evidence.
 

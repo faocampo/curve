@@ -1,5 +1,9 @@
 # D-009 (Retention, Legal Hold, and Erasure) Owner Workshop Guide
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -10,7 +14,7 @@
 | Product | Curve |
 | Scope | D-009 (retention, backup, legal-hold, tombstone, and erasure decision) |
 | Required accountable functions | Security; Privacy; Legal; Platform Operations; Database Operations; Curve Engineering |
-| Prepared by | Codex under Federico Ocampo's review |
+| Prepared by | Codex under Designated reviewer's review |
 | Governing baseline | Exact Curve revision named by the eventual decision PR |
 | Activation boundary | Protected-object storage and every staging/production activation remain disabled until the completed decision is approved |
 
@@ -59,7 +63,7 @@ Choose exactly one evidenced state for each required kind:
 - `NOT_DEPLOYED`: evidence that the product/capability does not exist in the
   governed topology.
 
-If another X3M service stores, caches, indexes, replicates, scans, or projects
+If another Example Organization service stores, caches, indexes, replicates, scans, or projects
 protected Curve data, leave D-009 unresolved and add the copy kind through a
 reviewed contract version.
 

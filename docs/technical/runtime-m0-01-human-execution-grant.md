@@ -1,5 +1,9 @@
 # RUNTIME-M0-01 Human Execution Grant
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -31,12 +35,12 @@ reusable authority for another attempt.
 | Exact base SHA | `9f9bb14f46b80e1d05b4c900d25c1af7a229b55c` |
 | Feature branch | `curve/runtime-m0-01-graceful-worker-shutdown` |
 | Dedicated worktree | `/private/tmp/plane-runtime-m0-01-graceful-worker-shutdown-20260901` |
-| Owner and human reviewer | Federico Ocampo (`faocampo`) |
-| Implementer | Codex, operated by Federico Ocampo outside Curve dispatch |
+| Owner and human reviewer | Designated reviewer (`example-reviewer`) |
+| Implementer | Codex, operated by Designated reviewer outside Curve dispatch |
 | Data boundary | Synthetic `INTERNAL` local-development data only; literal public local PostgreSQL/Temporal connection settings are permitted; external, protected, staging, and production credentials, secrets, and data are prohibited |
 | Model and provider boundary | No model/provider runtime call and no Curve provider access |
 | Budget | US$0 external spend; one attempt; at most 120 local compute minutes |
-| Approval validity | From Federico's exact approval timestamp through `2026-09-03T23:59:59Z`; any bound-value change invalidates the grant immediately |
+| Approval validity | From Designated reviewer's exact approval timestamp through `2026-09-03T23:59:59Z`; any bound-value change invalidates the grant immediately |
 
 ## Authorized Plane file scope
 
@@ -183,7 +187,7 @@ stops the attempt.
 ## Approval boundary
 
 This prepared document is not an execution grant. Plane mutation begins only
-after Federico approves the exact Curve revision containing these bytes and
+after Designated reviewer approves the exact Curve revision containing these bytes and
 repeats the repository, base SHA, branch, scope, local/VCS effects, exclusions,
 budget, validity, and rollback authorization. The approval permits one attempt
 and no merge. Curve machine dispatch remains unavailable until the deferred M4

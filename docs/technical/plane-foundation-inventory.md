@@ -1,5 +1,9 @@
 # Plane Foundation Inventory for Curve
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -55,7 +59,7 @@ D-001 is `DECIDED`. The verification run exposed and corrected an i18n type-gene
 | Webhooks and API tokens | Webhook models/logs/tasks, developer token UI/services, API schema generation | **Reuse patterns, not ambient credentials.** Curve provider connections, signed callbacks, controller credentials, idempotency, and reconciliation are workspace-scoped Curve boundaries. |
 | API conventions | DRF base endpoints/pagination/middleware, URL modules, schema endpoint and tests | **Reuse framework conventions.** Curve remains versioned under `/api/v1/workspaces/{workspace_slug}/curve/` with its stronger ETag, idempotency, Problem Details, SSE, and authorization contract. |
 | Background processing | Celery tasks for notification, export, cleanup, webhooks and bounded synchronization | **Reuse for bounded Plane work only.** Temporal exclusively owns durable Curve lifecycle waits/orchestration; Celery never advances Curve initiative state. |
-| Deployment examples | AIO, CLI, Kubernetes and Swarm manifests | **Reference only.** X3M's approved Kubernetes/AWS topology and D-003 determine actual Curve deployment. |
+| Deployment examples | AIO, CLI, Kubernetes and Swarm manifests | **Reference only.** Example Organization's approved Kubernetes/AWS topology and D-003 determine actual Curve deployment. |
 | Frontend extension seams | Workspace route tables, services packages, shared state, UI/editor/constants/hooks packages | **Reuse additive patterns.** Curve entry points are disabled by default and removable without changing unrelated Plane navigation. |
 | Gantt/scheduling | Public source contains work-item/module Gantt components, stores, layout roots, constants, types, and project-view wiring under `apps/web/core` and `packages`; the candidate production build passed | **Reuse only as a presentation primitive after an M2 integration proof.** It does not supply Curve Roadmap, Milestone, Feature, immutable snapshot, approval, or dependency truth. Curve owns those semantics and may project them into the public Gantt UI. |
 
@@ -89,13 +93,13 @@ The inspected repository contains the complete GNU AGPL v3 license in `LICENSE.t
 
 The Curve implementation MUST:
 
-1. Build and test only the pinned public/community source plus X3M's AGPL-covered modifications.
+1. Build and test only the pinned public/community source plus Example Organization's AGPL-covered modifications.
 2. Treat an `extended` route, license gate, subscription constant, placeholder, or enterprise-reference comment as unavailable until the D-001 evidence proves the community implementation and legal permission.
 3. Implement missing Curve behavior additively instead of copying or depending on non-public/commercial source.
 4. Preserve AGPL license/notices and the exact-version corresponding-source release procedure.
 5. Record every reused Plane primitive and every new dependency in the dependency/license manifest.
 
-Federico Ocampo accepted the documented D-001 reuse/license boundary in his engineering and licensing-review roles. Qualified counsel remains the escalation authority for newly discovered licensing ambiguity and the release-qualification work tracked by R-020; directory names alone are not legal evidence.
+Designated reviewer accepted the documented D-001 reuse/license boundary in his engineering and licensing-review roles. Qualified counsel remains the escalation authority for newly discovered licensing ambiguity and the release-qualification work tracked by R-020; directory names alone are not legal evidence.
 
 ## Safe upstream-integration procedure
 
@@ -139,9 +143,9 @@ The candidate correction was committed, published, reviewed, and accepted under 
 
 ### Local deployment-smoke evidence
 
-The smoke test intentionally reused the existing local `plane` Docker Compose project and its named development volumes (`plane_pgdata`, `plane_redisdata`, `plane_rabbitmq_data`, and `plane_uploads`). The candidate checkout was `/Users/federico.ocampo/Development/tools/project_management/plane` at `d380678912e9b46805ef852d2e05411f1fea6d8b`.
+The smoke test intentionally reused the existing local `plane` Docker Compose project and its named development volumes (`plane_pgdata`, `plane_redisdata`, `plane_rabbitmq_data`, and `plane_uploads`). The candidate checkout was `/workspace/plane` at `d380678912e9b46805ef852d2e05411f1fea6d8b`.
 
-An unrelated `x3m-hr-local-frappe-1` container already owned host ports `8000` and `9000`. It was not stopped or modified. A temporary, non-repository Compose override therefore exposed candidate Plane API/MinIO only on `127.0.0.1:18000`, `127.0.0.1:19000`, and `127.0.0.1:19090`; in-container service addresses and existing volumes were unchanged.
+An unrelated `unrelated-local-service` container already owned host ports `8000` and `9000`. It was not stopped or modified. A temporary, non-repository Compose override therefore exposed candidate Plane API/MinIO only on `127.0.0.1:18000`, `127.0.0.1:19000`, and `127.0.0.1:19090`; in-container service addresses and existing volumes were unchanged.
 
 | Check | Result | Evidence |
 | ----- | ------ | -------- |
@@ -180,14 +184,14 @@ any Plane code change.
 - [x] Product sponsor selects official Plane upstream, fork-based development, and the non-destructive integration-branch strategy.
 - [x] Fork baseline and selected upstream commit are pinned with an ancestry/divergence report.
 - [x] Repository-level community-versus-commercial capability proof covers work items, pages, estimates, relations, Gantt, APIs, webhooks, auth, notifications, UI conventions, deployment, and public extension seams.
-- [x] Reuse/build matrix is technically prepared and mapped to Curve logical components; Federico Ocampo is the named engineering approver and licensing reviewer.
+- [x] Reuse/build matrix is technically prepared and mapped to Curve logical components; Designated reviewer is the named engineering approver and licensing reviewer.
 - [x] Full frontend checks, production build, and backend tests pass on the candidate tree.
 - [x] The i18n generator correction is committed and the resulting candidate foundation SHA is pinned.
 - [x] Deployment smoke test passes on that exact candidate foundation commit in the approved local non-production topology.
 - [x] D-001 allocates additive migration/rollback and feature-disabled behavior proof to the M0-01 acceptance contract.
-- [x] Federico Ocampo formally accepts the license/notices/corresponding-source impact against the exact ADR version/digest.
-- [x] Federico Ocampo is recorded as the Plane support/upgrade owner with review at every Plane foundation upgrade, material licensing change, or ownership change.
-- [x] Federico Ocampo reviews the exact head of both draft PRs and [ADR-001](adr-001-plane-upstream-foundation.md) (Plane upstream, licensing, fork, and upgrade decision) receives a complete approval record.
+- [x] Designated reviewer formally accepts the license/notices/corresponding-source impact against the exact ADR version/digest.
+- [x] Designated reviewer is recorded as the Plane support/upgrade owner with review at every Plane foundation upgrade, material licensing change, or ownership change.
+- [x] Designated reviewer reviews the exact head of both draft PRs and [ADR-001](adr-001-plane-upstream-foundation.md) (Plane upstream, licensing, fork, and upgrade decision) receives a complete approval record.
 - [x] Merge the approved candidate and pin resulting fork `preview` SHA `549db1aea8f3307b337b3686dbb844a87549cd95` before M0-01 (additive Curve module shell) dispatch.
 - [x] Complete M0-01 (additive Curve module shell) migration, disabled-state, workspace-isolation, and rollback proof; Plane PR #2 (M0-01 module-shell implementation) merged at `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`.
 - [x] Complete M0-S2 workspace-scoped persistence, immutable-history, idempotency, outbox/inbox, recovery, migration, and regression proof; Plane PR #3 merged at `eff8686a69aa112ea8fda79be0e1316dc1fd97d6`. See [M0-S2 implementation evidence](m0-s2-implementation-evidence.md) (exact contract, context, validation, and merge record).

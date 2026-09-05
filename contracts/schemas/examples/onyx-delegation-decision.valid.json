@@ -65,7 +65,7 @@
     "source_content_can_expand_authority": false,
     "access_rechecked_at_material_use": true
   },
-  "owners": { "security_identity": null, "onyx_operations": null, "curve_product": "Federico Ocampo" },
+  "owners": { "security_identity": null, "onyx_operations": null, "curve_product": "Designated reviewer" },
   "approvals": [
     { "role": "SECURITY_IDENTITY", "approved_by": null, "approved_at": null, "decision_payload_digest": null },
     { "role": "ONYX_OPERATIONS", "approved_by": null, "approved_at": null, "decision_payload_digest": null },

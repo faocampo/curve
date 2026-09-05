@@ -1,5 +1,9 @@
 # RUNTIME-M0-01 (Graceful Curve Worker Shutdown Classification) Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Prepared | 2026-08-30 |
 | Product | Curve |
 | Work package | RUNTIME-M0-01 (graceful Curve worker shutdown classification) |
-| Owner and human reviewer | Federico Ocampo (`faocampo`) |
+| Owner and human reviewer | Designated reviewer (`example-reviewer`) |
 | Implementer | Codex |
 | Target repository | `git@github.com:faocampo/plane.git` |
 | Target branch | `preview` |
@@ -155,7 +159,7 @@ materialization they map one-to-one to schema-valid acceptance identifiers:
 
 This is a supplemental local M0-06 (Temporal workflow-skeleton work package)
 checkpoint. It inherits M0-06 ownership of FR-015 (durable workflow wait/resume
-behavior), FR-022 (versioned X3M workflow templates), NFR-004 (durability and
+behavior), FR-022 (versioned Example Organization workflow templates), NFR-004 (durability and
 recovery), and the local enabling portion of AC-58 (dependency-disruption
 recovery). NFR-005 (idempotent replay) is a regression constraint: shutdown
 must create no duplicate branch, signal, event, or effect. R1-03 (full disaster-
@@ -169,7 +173,7 @@ machine-dispatch representation remains unavailable. The approved
 [local execution and authority decision](coding-agent-local-execution-decision.md)
 (human-operated bootstrap, deferred machine profile, and production
 fail-closed boundary) permits a human operator to run these exact commands
-outside Curve dispatch after Federico grants the exact Plane execution scope.
+outside Curve dispatch after Designated reviewer grants the exact Plane execution scope.
 Curve records commit-bound evidence afterward and makes no machine-execution
 claim. Selecting Authority Option 1 or 2 instead would still require the full
 reviewed machine grammar before any command runs.
@@ -380,10 +384,10 @@ claim this publication path.
 The approved human-operated path becomes executable only when all of the
 following are true:
 
-1. Federico approved B-CODING-AUTHORITY-01 Option 3 and recorded
+1. Designated reviewer approved B-CODING-AUTHORITY-01 Option 3 and recorded
    B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at merged Curve revision
    `866032fa42e2cb57ad1a4e662d9561f742983f79`.
-2. Federico approves the prepared
+2. Designated reviewer approves the prepared
    [RUNTIME-M0-01 human execution grant](runtime-m0-01-human-execution-grant.md)
    (exact Plane base, branch, scope, commands, effects, tests, validity, and
    rollback), binding the live base,

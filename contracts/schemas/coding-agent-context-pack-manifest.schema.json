@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/coding-agent-context-pack-manifest.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/coding-agent-context-pack-manifest.schema.json",
   "title": "Curve coding-agent context-pack manifest",
   "description": "Versioned manifest for the exact Curve blobs included in a coding-agent context pack.",
   "type": "object",

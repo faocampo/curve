@@ -17,8 +17,8 @@ const initiative = readJson("contracts/schemas/examples/initiative.valid.json");
 const policy = readJson("contracts/policy/initiative-policy-v1.json");
 
 test("Initiative keyword validation is case-preserving and uniqueness is case-insensitive", () => {
-  assert.equal(canonicalKeyword("Loomit-SDK-panel"), "loomit-sdk-panel");
-  assert.equal(canonicalKeyword("loomit-sdk-panel"), "loomit-sdk-panel");
+  assert.equal(canonicalKeyword("Example-Product-SDK-panel"), "example-product-sdk-panel");
+  assert.equal(canonicalKeyword("example-product-sdk-panel"), "example-product-sdk-panel");
   assert.throws(() => canonicalKeyword("invalid_keyword"), /INVALID_INITIATIVE_KEYWORD/);
 });
 

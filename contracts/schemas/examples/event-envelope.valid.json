@@ -12,7 +12,7 @@
   "actor": { "actor_type": "HUMAN", "actor_id": "developer-1" },
   "correlation_id": "synthetic-correlation-1",
   "classification": "INTERNAL",
-  "payload_schema": "https://curve.x3m.internal/contracts/schemas/operation-event-v1.schema.json",
+  "payload_schema": "https://curve.example.invalid/contracts/schemas/operation-event-v1.schema.json",
   "payload": {
     "workspace_id": "10000000-0000-4000-8000-000000000002",
     "operation_id": "18000000-0000-4000-8000-000000000002",

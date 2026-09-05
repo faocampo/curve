@@ -487,9 +487,9 @@
         <a class="brand" href="#" aria-label="Curve home">
           <img src="../m0-s4-foundation-probe/curve-logo-light-ui-v1.webp" alt="Curve" />
         </a>
-        <button class="workspace" type="button" aria-label="Switch workspace, current X3M">
-          <span class="workspace-mark" aria-hidden="true">X3</span>
-          <span class="workspace-copy"><strong>X3M</strong><span>Internal workspace</span></span>
+        <button class="workspace" type="button" aria-label="Switch workspace, current Example Organization">
+          <span class="workspace-mark" aria-hidden="true">EX</span>
+          <span class="workspace-copy"><strong>Example Organization</strong><span>Example workspace</span></span>
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m8 10 4 4 4-4"/></svg>
         </button>
         <nav aria-label="Workspace">
@@ -514,7 +514,7 @@
           </div>
         </nav>
         <footer class="sidebar-footer">
-          <div class="identity"><span class="avatar" aria-hidden="true">FO</span><span class="identity-copy"><strong>Federico Ocampo</strong><span>Workspace administrator</span></span></div>
+          <div class="identity"><span class="avatar" aria-hidden="true">FO</span><span class="identity-copy"><strong>Reviewer Delta</strong><span>Workspace administrator</span></span></div>
           <a class="source-link" href="https://github.com/faocampo/plane">AGPL source · exact release</a>
         </footer>
       </aside>
@@ -567,14 +567,14 @@
         <form class="form" id="initiative-form" novalidate>
           <div class="form-grid">
             <div class="field full"><label for="title">Title <span>Required</span></label><input id="title" name="title" autocomplete="off" placeholder="e.g. Improve experiment rollout confidence" required aria-describedby="title-error" /><span class="field-error" id="title-error">Enter a title.</span></div>
-            <div class="field"><label for="product">Product <span>Active only</span></label><select id="product" name="product"><option>Loomit</option><option>X3M Platform</option><option>Sachiel</option></select></div>
+            <div class="field"><label for="product">Product <span>Active only</span></label><select id="product" name="product"><option>Example Product</option><option>Example Organization Platform</option><option>Example frontend</option></select></div>
             <div class="field"><label for="keyword">Keyword <span>Workspace unique</span></label><input id="keyword" name="keyword" autocomplete="off" placeholder="e.g. rollout-confidence" pattern="[A-Za-z0-9][A-Za-z0-9-]{0,49}" required aria-describedby="keyword-error" /><span class="field-error" id="keyword-error">Use letters, numbers, and hyphens.</span></div>
             <div class="field"><label for="risk">Risk tier</label><select id="risk" name="risk" aria-describedby="approver-rule"><option>STANDARD</option><option>LOW</option><option>HIGH</option></select></div>
             <div class="field"><label for="mode">Mode</label><select id="mode" name="mode"><option>STANDALONE</option><option disabled>ROADMAP — available in M2</option></select></div>
             <div class="field full"><label for="description">Problem and intended outcome <span>Required · Markdown</span></label><textarea id="description" name="description" placeholder="Describe the problem, intended outcome, and important constraints." required aria-describedby="description-error"></textarea><span class="field-error" id="description-error">Describe the problem and intended outcome.</span></div>
-            <div class="field"><label for="product-approver">Product Approver</label><select id="product-approver" aria-describedby="approver-rule approver-error"><option value="paula-ortega" data-initials="PO" data-name="Paula Ortega">Paula Ortega · PO</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
-            <div class="field"><label for="technical-approver">Technical Approver</label><select id="technical-approver" aria-describedby="approver-rule approver-error"><option value="tomas-lopez" data-initials="TL" data-name="Tomás López">Tomás López · TL</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
-            <div class="field full"><label for="code-approver">Code Approver</label><select id="code-approver" aria-describedby="approver-rule approver-error"><option value="diego-vega" data-initials="DV" data-name="Diego Vega">Diego Vega · Dev</option><option value="federico-ocampo" data-initials="FO" data-name="Federico Ocampo">Federico Ocampo · CTO</option></select></div>
+            <div class="field"><label for="product-approver">Product Approver</label><select id="product-approver" aria-describedby="approver-rule approver-error"><option value="paula-ortega" data-initials="PO" data-name="Reviewer Alpha">Reviewer Alpha · PO</option><option value="reviewer-delta" data-initials="FO" data-name="Reviewer Delta">Reviewer Delta · CTO</option></select></div>
+            <div class="field"><label for="technical-approver">Technical Approver</label><select id="technical-approver" aria-describedby="approver-rule approver-error"><option value="tomas-lopez" data-initials="TL" data-name="Reviewer Beta">Reviewer Beta · TL</option><option value="reviewer-delta" data-initials="FO" data-name="Reviewer Delta">Reviewer Delta · CTO</option></select></div>
+            <div class="field full"><label for="code-approver">Code Approver</label><select id="code-approver" aria-describedby="approver-rule approver-error"><option value="diego-vega" data-initials="DV" data-name="Reviewer Gamma">Reviewer Gamma · Dev</option><option value="reviewer-delta" data-initials="FO" data-name="Reviewer Delta">Reviewer Delta · CTO</option></select></div>
           </div>
           <p class="form-note" id="approver-rule">Only active humans are listed. STANDARD and HIGH risk require a different person for each gate. Creating the Initiative records the initial DRAFT state and all three assignments atomically.</p>
           <p class="form-error" id="approver-error" role="alert" hidden>Choose three different people for Product, Technical, and Code approval at STANDARD or HIGH risk.</p>
@@ -609,10 +609,10 @@
       };
 
       let initiatives = [
-        { id: "init-1", title: "Loomit SDK compatibility panel", keyword: "sdk-compatibility-panel", product: "Loomit", state: "ALIGNING", risk: "STANDARD", description: "Give product and support teams one reliable view of the installed Loomit SDK version, the recommended version, and whether an upgrade is required before configuration work proceeds.", approvers: [["PO", "Paula Ortega", "Product Approver"], ["TL", "Tomás López", "Technical Approver"], ["DV", "Diego Vega", "Code Approver"]], updated: "Refinement accepted", time: "12 minutes ago" },
-        { id: "init-2", title: "Experiment rollout confidence", keyword: "rollout-confidence", product: "Loomit", state: "DRAFT", risk: "HIGH", description: "Reduce uncertainty when validated experiments move toward staged rollout by making assumptions, protected metrics, stop conditions, and ownership visible before planning.", approvers: [["PO", "Paula Ortega", "Product Approver"], ["FO", "Federico Ocampo", "Technical Approver"], ["DV", "Diego Vega", "Code Approver"]], updated: "Draft updated", time: "38 minutes ago" },
-        { id: "init-3", title: "Internal release evidence ledger", keyword: "release-evidence-ledger", product: "X3M Platform", state: "PAUSED", pausedFrom: "DRAFT", risk: "STANDARD", description: "Create an attributable record of repository checks, security findings, review decisions, and deployment references for each releasable vertical slice.", approvers: [["MC", "María Costa", "Product Approver"], ["FO", "Federico Ocampo", "Technical Approver"], ["LV", "Lucía Vidal", "Code Approver"]], updated: "Paused by creator", time: "Yesterday" },
-        { id: "init-4", title: "Legacy campaign rules cleanup", keyword: "campaign-rules-cleanup", product: "Sachiel", state: "CANCELLED", risk: "LOW", description: "Retire duplicated campaign rules after confirming ownership and historical references.", approvers: [["PO", "Paula Ortega", "Product Approver"], ["TL", "Tomás López", "Technical Approver"], ["DV", "Diego Vega", "Code Approver"]], updated: "Initiative cancelled", time: "3 days ago" }
+        { id: "init-1", title: "Example capability overview", keyword: "capability-overview", product: "Example Product", state: "ALIGNING", risk: "STANDARD", description: "Give product and support teams one reliable view of the current example capability and its next proposed improvement.", approvers: [["PO", "Reviewer Alpha", "Product Approver"], ["TL", "Reviewer Beta", "Technical Approver"], ["DV", "Reviewer Gamma", "Code Approver"]], updated: "Refinement accepted", time: "12 minutes ago" },
+        { id: "init-2", title: "Experiment rollout confidence", keyword: "rollout-confidence", product: "Example Product", state: "DRAFT", risk: "HIGH", description: "Reduce uncertainty when validated experiments move toward staged rollout by making assumptions, protected metrics, stop conditions, and ownership visible before planning.", approvers: [["PO", "Reviewer Alpha", "Product Approver"], ["FO", "Reviewer Delta", "Technical Approver"], ["DV", "Reviewer Gamma", "Code Approver"]], updated: "Draft updated", time: "38 minutes ago" },
+        { id: "init-3", title: "Internal release evidence ledger", keyword: "release-evidence-ledger", product: "Example Organization Platform", state: "PAUSED", pausedFrom: "DRAFT", risk: "STANDARD", description: "Create an attributable record of repository checks, security findings, review decisions, and deployment references for each releasable vertical slice.", approvers: [["MC", "María Costa", "Product Approver"], ["FO", "Reviewer Delta", "Technical Approver"], ["LV", "Lucía Vidal", "Code Approver"]], updated: "Paused by creator", time: "Yesterday" },
+        { id: "init-4", title: "Legacy campaign rules cleanup", keyword: "campaign-rules-cleanup", product: "Example frontend", state: "CANCELLED", risk: "LOW", description: "Retire duplicated campaign rules after confirming ownership and historical references.", approvers: [["PO", "Reviewer Alpha", "Product Approver"], ["TL", "Reviewer Beta", "Technical Approver"], ["DV", "Reviewer Gamma", "Code Approver"]], updated: "Initiative cancelled", time: "3 days ago" }
       ];
 
       let selectedId = "init-1";
@@ -649,8 +649,8 @@
           <div class="detail-body"><div class="detail-main">
             <section class="section"><h3>Problem and intended outcome</h3><p class="description">${item.description}</p></section>
             <section class="section"><h3>Mandatory human gates</h3><div class="gate-list">${item.approvers.map(([initials,name,role]) => `<div class="gate"><span class="gate-avatar" aria-hidden="true">${initials}</span><span class="gate-copy"><strong>${role}</strong><span>${name}</span></span><span class="active-human">Active human</span></div>`).join("")}</div></section>
-            <section class="section"><h3>Recent history</h3><ol class="timeline"><li><strong>${item.updated}</strong><span>Federico Ocampo · ${item.time}</span></li><li><strong>Gate assignments verified</strong><span>Curve policy · ${item.time}</span></li><li><strong>Initiative created</strong><span>Federico Ocampo · 29 Aug 2026</span></li></ol></section>
-          </div><aside class="detail-aside"><dl><div class="fact"><dt>Mode</dt><dd>Standalone</dd></div><div class="fact"><dt>Workflow</dt><dd>${item.state === "DRAFT" ? "Pins after refinement" : "Manual-first v1"}</dd></div><div class="fact"><dt>Creator</dt><dd>Federico Ocampo</dd></div><div class="fact"><dt>Optimistic version</dt><dd>v${item.state === "DRAFT" ? 2 : 4} · current</dd></div><div class="fact"><dt>External resources</dt><dd>None linked</dd></div><div class="fact"><dt>Data classification</dt><dd>Internal · synthetic prototype</dd></div></dl></aside></div>`;
+            <section class="section"><h3>Recent history</h3><ol class="timeline"><li><strong>${item.updated}</strong><span>Reviewer Delta · ${item.time}</span></li><li><strong>Gate assignments verified</strong><span>Curve policy · ${item.time}</span></li><li><strong>Initiative created</strong><span>Reviewer Delta · 29 Aug 2026</span></li></ol></section>
+          </div><aside class="detail-aside"><dl><div class="fact"><dt>Mode</dt><dd>Standalone</dd></div><div class="fact"><dt>Workflow</dt><dd>${item.state === "DRAFT" ? "Pins after refinement" : "Manual-first v1"}</dd></div><div class="fact"><dt>Creator</dt><dd>Reviewer Delta</dd></div><div class="fact"><dt>Optimistic version</dt><dd>v${item.state === "DRAFT" ? 2 : 4} · current</dd></div><div class="fact"><dt>External resources</dt><dd>None linked</dd></div><div class="fact"><dt>Data classification</dt><dd>Internal · synthetic prototype</dd></div></dl></aside></div>`;
       }
 
       function render() {

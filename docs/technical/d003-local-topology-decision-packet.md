@@ -1,5 +1,9 @@
 # D-003 (Local Runtime Topology and Trust-Zone Decision) Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,28 +12,28 @@
 | Version | 1.1 |
 | Date | 2026-08-18 |
 | Decision | D-003 (runtime topology and trust-zone decision), `LOCAL_ONLY` scope |
-| Decision owner | Federico Ocampo, CTO at X3M |
-| Human reviewer | Federico Ocampo (`faocampo`) |
+| Decision owner | Designated reviewer, Designated technical owner |
+| Human reviewer | Designated reviewer (`example-reviewer`) |
 | Curve baseline | Approved head `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`; merge `097016ffe2eb259cc780ad2a6cd41ca3422366b2` on `main` |
 | Plane baseline | `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` on `preview` |
 | Consuming package | M0-S3 (local Temporal round-trip implementation packet) |
 | Non-local scope | Staging and production remain undecided and fail closed |
-| Live applicability | Historical approval evidence. Its two-internal-network implementation contract is superseded when [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, revised security boundary, and M0-S3 acceptance) is exact-head approved and merged. |
+| Live applicability | Historical approval evidence. Its two-internal-network implementation contract is superseded when [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private deployment requirements, revised security boundary, and M0-S3 acceptance) is exact-head approved and merged. |
 
 ## 2026-08-20 supersession notice
 
 This packet preserves the exact architecture and approval evidence accepted on
-2026-08-18. Federico subsequently directed Curve to use Plane's shared local
-Docker network and X3M's private EKS/VPC/VPN platform boundary. The live
+2026-08-18. Designated reviewer subsequently directed Curve to use Plane's shared local
+Docker network and Example Organization's private deployment platform boundary. The live
 contract is [ADR-003](adr-003-runtime-topology.md) (current runtime topology
 decision) interpreted through the [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md)
-(shared-network decision, EKS direction, security controls, and revised proof).
+(shared-network decision, private deployment requirements, security controls, and revised proof).
 The historical diagrams, approval quote, and P0 supersession evidence below
 remain unchanged for auditability.
 
 ## Approved decision
 
-Federico Ocampo approved the least-privilege local topology in this packet at
+Designated reviewer approved the least-privilege local topology in this packet at
 exact head `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb` and authorized the
 following governance correction. Curve PR #9 merged the approved head as
 `097016ffe2eb259cc780ad2a6cd41ca3422366b2` after its `validate` check passed:

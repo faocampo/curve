@@ -1,5 +1,9 @@
 # Curve Experience Blueprint Gate
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Purpose
 
 This gate keeps Curve’s product experience centered on user decisions while Plane-backed work management and control-plane details remain in their appropriate contexts. It is a delivery prerequisite for every package that creates or materially changes a user-facing flow.
@@ -36,7 +40,7 @@ The Curve shell exposes Plane attribution, open-source notices, and the exact-ve
 | Work package | Experience record | Review state | Implementation effect |
 | --- | --- | --- | --- |
 | M0-S4 (API, SSE, and minimal UI implementation packet) | [Foundation probe experience](ux-m0-s4-foundation-probe.md) (clickable local foundation-status flow and screen contract) | `IMPLEMENTED_AND_ACCEPTED` | UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) were approved at exact head `a463876...` and merged through Curve PR #17 as `42ea329...`; Plane PR #6 merged the accepted implementation as `e762fbb...`; see [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (exact context, tests, product/security acceptance, and rollback). |
-| M1-01B (Curve-first Initiative shell) | [Initiative shell experience](ux-m1-01b-initiative-shell.md) (clickable list/create/detail/lifecycle prototype, state matrix, accessibility contract, and task-based review) | `UX_APPROVED / IMPLEMENTATION_DEFINITION_PREPARED` | Federico approved UX-006-M1-01B (clickable prototype and task-based review) and UX-007-M1-01B (work-package-linked screen contract) at exact tested Curve commit `656a196...`. The [M1-01B implementation task packet](m1-01b-initiative-shell-implementation-task-packet.md) (typed API/UI scope, exact Plane base/paths, acceptance, commands, publication sequence, blockers, and rollback) now carries the production behavior. Plane mutation remains blocked by B-CODING-TOOLS-01 (local coding-tool execution profile), ordered machine publication, and B-CODING-AUTHORITY-01 (trusted human authority and attempt lease). |
+| M1-01B (Curve-first Initiative shell) | [Initiative shell experience](ux-m1-01b-initiative-shell.md) (clickable list/create/detail/lifecycle prototype, state matrix, accessibility contract, and task-based review) | `UX_APPROVED / IMPLEMENTATION_DEFINITION_PREPARED` | Designated reviewer approved UX-006-M1-01B (clickable prototype and task-based review) and UX-007-M1-01B (work-package-linked screen contract) at exact tested Curve commit `656a196...`. The [M1-01B implementation task packet](m1-01b-initiative-shell-implementation-task-packet.md) (typed API/UI scope, exact Plane base/paths, acceptance, commands, publication sequence, blockers, and rollback) now carries the production behavior. Plane mutation remains blocked by B-CODING-TOOLS-01 (local coding-tool execution profile), ordered machine publication, and B-CODING-AUTHORITY-01 (trusted human authority and attempt lease). |
 
 ## Experience model
 
@@ -119,7 +123,7 @@ The following v1 mockups establish a shared visual direction for the first Curve
 
 | Surface | Concept artifact | Primary user decision |
 | --- | --- | --- |
-| Main dashboard | [Dashboard](../design/mockups/curve-dashboard-v1.png) | Select the next initiative-level decision. |
+| Main dashboard | [Dashboard public reference](../design/mockups/dashboard-public-reference.md) (decision queue and portfolio requirements) | Select the next initiative-level decision. |
 | Projects, roadmaps, and tasks | [Product planning](../design/mockups/curve-planning-v1.png) | Sequence work, identify dependencies, and act on the critical path. |
 | Kanban board | [Delivery board lifecycle](../design/mockups/curve-kanban-delivery-lifecycle-v2.png) | Move work from definition through pre-production, monitored customer rollout, verified use, and closure. |
 | Task details and coding-agent execution | [Task execution](../design/mockups/curve-task-execution-v1.png) | Review progress and evidence, answer a scoped question, and control the run. |

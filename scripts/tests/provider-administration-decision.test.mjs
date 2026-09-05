@@ -182,7 +182,7 @@ function human(
     identity_authority: "GITHUB_USER_ID",
     subject_id: subjectId,
     identity_proof_ref: identityProof(subjectId, proofSuffix),
-    name: "Federico Ocampo",
+    name: "Designated reviewer",
     role,
   };
 }
@@ -302,10 +302,10 @@ function completeApprovedManifest() {
     "1003",
     "platform-owner",
   );
-  manifest.owners.decision_owner = human("X3M CTO", "github:faocampo", "1001", "product");
+  manifest.owners.decision_owner = human("Example Organization CTO", "github:faocampo", "1001", "product");
   manifest.owners.delivery_owner = human(
     "Curve engineering owner",
-    "github:federico.ocampo",
+    "github:example.user",
     "1001",
     "delivery-alias",
   );
@@ -340,7 +340,7 @@ function completeDeferredManifest() {
     option.selected = optionName === "governance_identity_authority" ? "GITHUB_USER_ID" : "DEFER";
   }
   manifest.owners.decision_owner = human(
-    "X3M CTO",
+    "Example Organization CTO",
     "github:product-owner",
     "2001",
     "deferred-product",
@@ -372,7 +372,7 @@ test("canonical M0-S9B1 proposal is exact and fail closed", () => {
   assert.deepEqual(canonicalManifest.baseline, PROVIDER_ADMIN_BASELINE);
   assert.deepEqual(canonicalManifest.fixed_invariants, PROVIDER_ADMIN_FIXED_INVARIANTS);
   assert.deepEqual(PROVIDER_ADMIN_IDENTITY_AUTHORITIES, [
-    "X3M_IDP_SUBJECT",
+    "ORGANIZATION_IDP_SUBJECT",
     "PLANE_USER_ID",
     "GITHUB_USER_ID",
   ]);
@@ -1044,26 +1044,26 @@ test("Plane governance subjects use canonical lowercase UUIDs", () => {
 
 test("canonical identity subjects reject leading or trailing whitespace", () => {
   const manifest = completeApprovedManifest();
-  manifest.material_options.governance_identity_authority.selected = "X3M_IDP_SUBJECT";
+  manifest.material_options.governance_identity_authority.selected = "ORGANIZATION_IDP_SUBJECT";
   const ids = {
-    decision_owner: "x3m:user-1",
-    delivery_owner: "x3m:user-1",
-    human_reviewer: "x3m:user-1",
-    security_identity_owner: "x3m:user-2",
-    platform_administration_owner: "x3m:user-3",
+    decision_owner: "example:user-1",
+    delivery_owner: "example:user-1",
+    human_reviewer: "example:user-1",
+    security_identity_owner: "example:user-2",
+    platform_administration_owner: "example:user-3",
   };
   for (const [ownerName, subjectId] of Object.entries(ids)) {
     const owner = manifest.owners[ownerName];
-    owner.identity_authority = "X3M_IDP_SUBJECT";
+    owner.identity_authority = "ORGANIZATION_IDP_SUBJECT";
     owner.subject_id = subjectId;
-    owner.identity_proof_ref.identity_authority = "X3M_IDP_SUBJECT";
+    owner.identity_proof_ref.identity_authority = "ORGANIZATION_IDP_SUBJECT";
     owner.identity_proof_ref.subject_id = subjectId;
   }
   bindApprovals(manifest);
   assert.equal(validateProviderAdministrationDecisionSemantics(manifest).outcome, "APPROVED");
 
-  manifest.owners.security_identity_owner.subject_id = " x3m:user-2";
-  manifest.owners.security_identity_owner.identity_proof_ref.subject_id = " x3m:user-2";
+  manifest.owners.security_identity_owner.subject_id = " example:user-2";
+  manifest.owners.security_identity_owner.identity_proof_ref.subject_id = " example:user-2";
   bindApprovals(manifest);
   assert.throws(
     () => validateProviderAdministrationDecisionSemantics(manifest),

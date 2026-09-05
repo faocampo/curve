@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/mcp/orca-tools-v1.schema.json",
+  "$id": "https://curve.example.invalid/contracts/mcp/orca-tools-v1.schema.json",
   "title": "Curve Orca MCP v1.1 tool invocation payload",
   "type": "object",
   "additionalProperties": false,

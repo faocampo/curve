@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/coding-agent-task-packet.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/coding-agent-task-packet.schema.json",
   "title": "Curve coding-agent task packet",
   "description": "Closed readiness evidence for one repository-local coding change. A packet never grants implementation authority.",
   "type": "object",

@@ -14,7 +14,7 @@ Curve may handle evidence, prompts, transcripts, source code, patches, logs, rep
 
 ## Decision drivers and weighted criteria
 
-1. X3M legal, privacy, contractual, and security obligations.
+1. Example Organization legal, privacy, contractual, and security obligations.
 2. Data minimization and reliable deletion.
 3. Evidence/audit integrity and legal-hold precedence.
 4. Backup recoverability and post-restore re-erasure.
@@ -96,7 +96,7 @@ Blank cells block the affected capability.
 | Raw provider callbacks/payloads | Quarantine/protected object storage only when required for reconciliation | Provider connection, external reference/digest, received time, normalized event and deletion receipt | Provider remains authoritative for its own state/copy. |
 | Audit and lineage metadata | Append-only PostgreSQL and approved backup | Lawful non-sensitive event, actor/effective principal, action, subject/version/digest, result and erasure event | Log/SIEM projections must use the same or stricter approved policy. |
 | Tombstones and erasure receipts | PostgreSQL; receipt body protected if necessary | Workspace, object/digest reference, policy/authority, requested/eligible/completed times, method, verification outcome | None beyond approved audit/backup projections. |
-| Database backups/object versions | X3M-approved encrypted backup/version stores | Backup/catalog identifier, coverage window, key/policy version, expiry and destruction/restore ledger | Cross-region/archive/vendor copies must be enumerated before approval. |
+| Database backups/object versions | Example Organization-approved encrypted backup/version stores | Backup/catalog identifier, coverage window, key/policy version, expiry and destruction/restore ledger | Cross-region/archive/vendor copies must be enumerated before approval. |
 | Forensic quarantine | Isolated security-owned encrypted store | Incident/case reference, classification, authority, hold, digest, custody and final disposition | Security tools or investigators receiving a copy must be named policy destinations. |
 
 ### Owner-completed period matrix
@@ -154,7 +154,7 @@ must then prove the selected values are feasible against these upstream facts:
   backup considerations) constrains the key-erasure proof and its completion
   semantics.
 
-These constraints provide feasibility evidence; they select no X3M policy
+These constraints provide feasibility evidence; they select no Example Organization policy
 value.
 
 ### Erasure state machine

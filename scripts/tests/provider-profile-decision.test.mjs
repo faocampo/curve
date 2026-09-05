@@ -41,7 +41,7 @@ const fixtureCases = [
 for (const [name, valid] of fixtureCases) {
   test(`${name} ${valid ? "valid" : "invalid"} fixture is classified correctly`, () => {
     const schema = ajv.getSchema(
-      `https://curve.x3m.internal/contracts/schemas/${name}.schema.json`,
+      `https://curve.example.invalid/contracts/schemas/${name}.schema.json`,
     );
     const fixture = readJson(`contracts/schemas/examples/${name}.${valid ? "valid" : "invalid"}.json`);
     assert.equal(schema(fixture), valid, JSON.stringify(schema.errors));
@@ -50,7 +50,7 @@ for (const [name, valid] of fixtureCases) {
 
 test("canonical M0-S9B2 proposal is structurally valid, semantically fail closed, and raw-byte bound", () => {
   const schema = ajv.getSchema(
-    "https://curve.x3m.internal/contracts/schemas/provider-profile-decision.schema.json",
+    "https://curve.example.invalid/contracts/schemas/provider-profile-decision.schema.json",
   );
   assert.equal(schema(canonical), true, JSON.stringify(schema.errors));
   assert.deepEqual(validateProviderProfileDecisionSemantics(canonical), {

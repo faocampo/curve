@@ -69,7 +69,7 @@ function decidedFixture() {
   fixture.activation.live_retrieval_authorized = true;
   fixture.approvals = fixture.approvals.map((approval, index) => ({
     ...approval,
-    approved_by: ["Security Owner", "Onyx Owner", "Federico Ocampo"][index],
+    approved_by: ["Security Owner", "Onyx Owner", "Designated reviewer"][index],
     approved_at: "2026-08-22T23:00:00Z",
   }));
   fixture.unresolved_requirements = [];

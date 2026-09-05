@@ -1,5 +1,9 @@
 # M1-01B (Curve-First Initiative Shell) Implementation Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -10,7 +14,7 @@
 | Execution binding | 2026-09-01 |
 | Product | Curve |
 | Work package | M1-01B (Curve-first Initiative shell) |
-| Owner and human reviewer | Federico Ocampo (`faocampo`) |
+| Owner and human reviewer | Designated reviewer (`example-reviewer`) |
 | Implementer | Codex |
 | Target repository | `git@github.com:faocampo/plane.git` |
 | Target branch | `preview` |
@@ -325,7 +329,7 @@ is merged; none may be promoted from this preparation branch unchanged.
 | B-CODING-AUTHORITY-01 (trusted human authority and attempt lease) | Option 3 is selected for local bootstrap. The exact human-operated grant permits this Plane attempt; production dispatch remains fail closed and still requires the M4 authority/lease implementation. |
 | B-M1-01B-PUBLICATION (ordered machine publication) | Complete S -> E1 -> E2 -> C -> P with real descendant revisions, exact digests, and a passing clean-checkout preflight. |
 | B-M1-01B-SECURITY (commit-bound security evidence) | Attach complete same-head Plane CI/CodeQL evidence and prove zero Critical/High finding before human merge review. |
-| B-M1-01B-UX-ACCEPTANCE (implementation UX acceptance) | After implementation, Federico manually verifies the browser-visible desktop/mobile/keyboard behavior and either accepts it or reports corrections. |
+| B-M1-01B-UX-ACCEPTANCE (implementation UX acceptance) | After implementation, Designated reviewer manually verifies the browser-visible desktop/mobile/keyboard behavior and either accepts it or reports corrections. |
 
 The selected local path is recorded in the
 [M1-01B execution-grant decision record](m1-01b-execution-grant-decision.md)

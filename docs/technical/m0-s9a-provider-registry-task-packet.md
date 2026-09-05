@@ -1,5 +1,9 @@
 # M0-S9A Provider-Neutral Registry and Reconciliation Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -16,7 +20,7 @@
 | Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) and reserving provider migration `0005` after policy migration `0004` |
 | Implementation branch | `curve/m0-s9a-provider-registry-foundation` |
 | Accepted Plane implementation | [Plane PR #12](https://github.com/faocampo/plane/pull/12) (M0-S9A local provider-registry implementation) approved at exact head `d48a7d09f6824f045a1077ce2de256bd3dcde5d4` and squash-merged into `preview` as `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`; both commits share Git tree `d43bdc22413627399f2232f1b17e2092d9e31cb1` |
-| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Owner and human reviewer | Designated reviewer, Designated technical owner |
 | Implementer | One AI coding agent distinct from the human reviewer |
 | Risk | `STANDARD`; local synthetic provider metadata only |
 | Product trace | FR-003, FR-023, FR-044; NFR-005, NFR-008, NFR-013; partial AC-33 |
@@ -45,7 +49,7 @@ target workspace only for provider registration/administration actions.
 
 All product, architecture, security, data, licensing, infrastructure, scope,
 test, budget, and rollback inputs required by this package were resolved before
-dispatch. Federico Ocampo authorized the exact Curve contract revision
+dispatch. Designated reviewer authorized the exact Curve contract revision
 `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`, canonical context digest
 `sha256:9e07550799a6e4d88a6734f9a98e0de59812402d983bc7291396332a6b214cb0`,
 and Plane base `ad5772c0565c934e64ea90f892be1374819979be`. He later approved the
@@ -120,9 +124,9 @@ The publication and accepted-dispatch evidence are fixed below:
 | M0-S9A independent-review correction | Satisfied | [Curve PR #36](https://github.com/faocampo/curve/pull/36) (six-finding M0-S9A contract correction) passed [Curve CI run 33181156641](https://github.com/faocampo/curve/actions/runs/33181156641) (contract and documentation validation), was approved at exact head `737c52c52f6f8f8b5f59ec4c69450b2edcacea8d`, and squash-merged as `da44d27c3bde73b11640b165d3ddbca8451cd1f6`; both commits share Git tree `3596a70feecb6fd72f65e3394d7091141b3bbba8` |
 | Canonical M0-S9A context | Satisfied | Curve contract revision `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`; context digest `sha256:9e07550799a6e4d88a6734f9a98e0de59812402d983bc7291396332a6b214cb0` |
 | Plane base revalidation | Satisfied | Plane `preview` base `ad5772c0565c934e64ea90f892be1374819979be`, containing merged Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation), was revalidated at dispatch |
-| Owner/reviewer | Satisfied | Federico Ocampo |
+| Owner/reviewer | Satisfied | Designated reviewer |
 | Material decisions | `PUBLISHED / SATISFIED` | The local outbox/inbox delivery model and Option B registration authority are published. D-007 (MCP trust model and Orca access profile) remains MCP-specific and is not a dependency. |
-| Renewed exact-revision and context-digest implementation authorization | Satisfied | Federico Ocampo authorized the exact contract revision, digest, base, branch, scope, exclusions, synthetic data, US$25 budget, and rollback, then approved exact implementation head `d48a7d09f6824f045a1077ce2de256bd3dcde5d4` for squash merge |
+| Renewed exact-revision and context-digest implementation authorization | Satisfied | Designated reviewer authorized the exact contract revision, digest, base, branch, scope, exclusions, synthetic data, US$25 budget, and rollback, then approved exact implementation head `d48a7d09f6824f045a1077ce2de256bd3dcde5d4` for squash merge |
 | Post-merge implementation evidence | Satisfied | [M0-S9A implementation evidence](m0-s9a-implementation-evidence.md) (accepted local implementation, exact revisions, CI, regression, dependency disposition, and rollback) binds Plane merge `af7187d049c6ee6d0c82a5c70b686d4c444e9b63` |
 
 The immutable authorization record bound the exact merged Curve revision,
@@ -139,7 +143,7 @@ evidence record preserves those bindings after merge.
 | Repository authority | Named Plane feature branch only; no merge, deployment, GitHub Project, or infrastructure mutation by the coding agent |
 | Network | Repository dependency/build access only when required by the pinned lock; provider runtime network is prohibited and tested |
 | Secrets | No secret reference lookup, value, environment read, token, credential, or protected object body |
-| Sandbox | Repository-local build/test limits; no Docker topology or X3M service change |
+| Sandbox | Repository-local build/test limits; no Docker topology or Example Organization service change |
 | Stop behavior | Missing exact base/context, owner/reviewer, command, test, budget, policy, or migration value stops before mutation |
 
 ## Scope
@@ -497,7 +501,7 @@ dead-letter local outbox rows remain inspectable and inert while the feature is
 disabled. Persistent rollback keeps the additive tables in place until the
 compatibility window closes; the disposable migration proof alone runs the
 reverse migration. A failed package reverts only the Plane feature branch and
-leaves current `preview`, GitHub Project state, X3M infrastructure, and external
+leaves current `preview`, GitHub Project state, Example Organization infrastructure, and external
 systems unchanged.
 
 ## Completion boundary

@@ -93,7 +93,7 @@ const OPTION_CATALOG = Object.freeze({
     "DEFER",
   ],
   credential_broker_profile: [
-    "X3M_SECRETS_MANAGER_BROKER",
+    "ORGANIZATION_SECRETS_MANAGER_BROKER",
     "ABSTRACT_CREDENTIAL_BROKER",
     "DEFER",
   ],

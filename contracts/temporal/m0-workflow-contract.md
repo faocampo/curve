@@ -27,7 +27,7 @@
 
 ## Trace-context header compatibility
 
-M0-S5 (observability kernel and X3M binding) adds the optional Temporal header
+M0-S5 (observability kernel and Example Organization binding) adds the optional Temporal header
 `_curve_traceparent_v1`. Its payload is one lowercase W3C version `00`
 `traceparent` with non-zero trace and parent IDs. A Curve-owned header-only
 client/worker interceptor injects it on workflow start/signal, copies it

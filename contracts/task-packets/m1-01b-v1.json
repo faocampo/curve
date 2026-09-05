@@ -4,7 +4,7 @@
   "work_package_id": "M1-01B",
   "workspace_id": "10000000-0000-4000-8000-000000000001",
   "packet_version": 3,
-  "packet_digest": "sha256:61a225084486994f06fb6c0c2660aa03d6dcfb98397b2a2f5a947ba0f7ec680a",
+  "packet_digest": "sha256:22d2acde91442ab6ff184ba27349a570961c5aad1cfc6baad6869280838fc324",
   "status": "BLOCKED",
   "size": "M",
   "user_facing": true,
@@ -209,13 +209,13 @@
   "people": {
     "owner": {
       "actor_type": "HUMAN",
-      "name": "Federico Ocampo",
-      "handle": "faocampo"
+      "name": "Designated reviewer",
+      "handle": "example-reviewer"
     },
     "human_reviewer": {
       "actor_type": "HUMAN",
-      "name": "Federico Ocampo",
-      "handle": "faocampo"
+      "name": "Designated reviewer",
+      "handle": "example-reviewer"
     },
     "implementer": {
       "actor_type": "AI_CODING_AGENT",

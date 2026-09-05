@@ -1,4 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
+import { assertPublicationNotWithdrawn } from "./publication-withdrawal.mjs";
 import { execFileSync } from "node:child_process";
 import {
   existsSync,
@@ -1580,6 +1581,7 @@ export function authorizeCodingAgentTaskPacketForExecution(
       );
     }
   }
+  assertPublicationNotWithdrawn(packet);
   return authorizeCodingAgentTaskPacketForExecutionInternal(packet, authorization, {
     ...options,
     validatePreflight: validateCodingAgentTaskPacketForDispatch,

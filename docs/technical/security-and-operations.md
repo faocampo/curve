@@ -7,8 +7,8 @@
 | Status | Derived security and operations baseline; production enablement is blocked by applicable non-decided ADRs |
 | Owner | X3M security, platform operations, and Curve engineering |
 | Audience | Security, identity, platform, SRE, backend, provider-adapter, and AI coding-agent teams |
-| Version | 0.7 |
-| Last updated | 2026-08-22 |
+| Version | 0.8 |
+| Last updated | 2026-09-04 |
 | Normative source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, security invariants, acceptance criteria, and accepted local Temporal proof) |
 | Companion documents | [Architecture](architecture.md) (components and trust boundaries), [Domain model](domain-model.md) (entities, ownership, and persistence invariants), [Workflows and sequences](workflows-and-sequences.md) (durable lifecycle interactions), and [Integration contracts](integration-contracts.md) (provider-neutral interfaces and error behavior) |
 
@@ -117,7 +117,7 @@ M0-03 implements this boundary through the [core policy manifest](../../contract
 (immutable effect/reason/digest/projection output), and
 [M0-03 policy relational contract](../../contracts/database/m0-03-policy-contract.md)
 (decision persistence, lookup order, transaction binding, migration, and
-rollback). Those artifacts remain `PROPOSED` until Federico Ocampo approves the
+rollback). Those artifacts remain `PROPOSED` until Designated reviewer approves the
 exact published Curve head.
 
 | Principal | May do | Must not do |
@@ -163,6 +163,41 @@ D-002 (Onyx delegated-identity decision) controls the final Onyx delegation prot
 | Unknown | Inherits the most restrictive applicable source class | Same as `RESTRICTED` until classified | No raw propagation. |
 
 An `AccessEnvelope` is immutable, versioned metadata recording sources, classification, permitted audiences/destinations, transformations, expiry/revocation conditions, legal-hold flags, and required attribution. Any generated artifact or finding inherits the most restrictive source classification unless a recorded authorized transformation lowers it. An actor cannot approve material they cannot read in its required form; Gate 1/2/3 therefore checks evidence access before showing a decision control.
+
+### Public-repository disclosure control
+
+The Curve source repository and its GitHub collaboration surfaces are public
+destinations. No information internal to X3M may be placed in source,
+documentation, schemas, examples, fixtures, generated artifacts, screenshots,
+logs, traces, command output, commits, branches, issues, pull requests, review
+comments, or releases.
+
+An AI coding agent must classify information as internal unless it is already
+available from an approved public source or an authorized X3M reviewer approves
+that exact value for public disclosure. An ambiguous value fails closed. The
+agent stops the outbound operation and requests a synthetic or explicitly
+approved replacement.
+
+Internal information includes real identities and email addresses; customers,
+documents, business data, and Initiative content; Workspace domains, Drive or
+folder names and IDs, file IDs and URLs, groups and permissions; credentials,
+service identities, endpoints, tenant/account identifiers, infrastructure and
+monitoring topology; internal policies, retention values, incidents, metrics,
+roadmaps, prompts, tool output, and source excerpts. A digest, identifier, or
+metadata value is also internal when it can confirm or correlate an internal
+resource.
+
+Public examples use fictional actors and organizations, opaque fake IDs,
+reserved domains such as `example.invalid`, and deterministic synthetic
+content. Redaction must remove both the direct value and reconstructive context.
+Secrets scanning supplements but does not replace classification and disclosure
+review.
+
+Before any public Git or GitHub mutation, the initiating human or agent reviews
+the complete outbound diff together with attached and generated artifacts. A
+failed review blocks publication. Environment-specific configuration is stored
+only in an approved private X3M system and is referenced publicly by a generic
+configuration contract, never by its real value or location.
 
 ### Evidence and context storage
 
@@ -369,7 +404,7 @@ Every release candidate needs a signed evidence index that pins the policy/ADR/d
 | Decision | Required security/operations output | Fail-closed behavior until decided |
 | --- | --- | --- |
 | D-002 | Delegation, token exchange, revocation, storage and audit proof | Protected Onyx retrieval remains disabled unless a separately D-002-approved connection profile exists. |
-| D-003 (runtime topology and trust-zone decision) | Environments, residency, networking, cluster/runtime, managed services, backups, secrets, HA, RPO/RTO owners | The effective 2026-08-20 [private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, service identity, controls, and revised proof) supersedes the local two-network contract. [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact context, merge, tests, runtime proof, security acceptance, and rollback) accepts shared-`dev_env` health, Temporal/PostgreSQL connectivity, loopback-only host exposure, duplicate/restart/cancellation/replay safety, leakage prevention, disabled baseline, and cleanup. Development EKS, staging, and production use private X3M networking, `ClusterIP`, internal VPN access, workload identity/Secrets Manager, and authenticated Temporal clients; activation still requires D-009 plus the environment's persistence, certificate, backup, HA, ownership, and recovery evidence. |
+| D-003 (runtime topology and trust-zone decision) | Environments, residency, networking, runtime, backups, secrets, availability and recovery requirements | [Connectivity requirements](d003-private-platform-connectivity-amendment.md) (provider-neutral communication and verification controls) define the public boundary. Actual topology, service identities and deployment evidence remain in private configuration. Activation requires approved identity, retention, persistence, encryption, backup, ownership and recovery evidence. |
 | D-004/D-005 | Gateway image/routing and approved model/data-class/destination matrix | Direct model calls disabled outside development stub; restricted input blocked. |
 | D-006 | Orca client/version, developer-delegation, capability, ownership/support/license proof | OpenHands automation may proceed; Orca MCP remains disabled. |
 | D-007 | MCP registry, transport, read/write risk, delegated auth, idempotency and pre-authorized actions | Only a separately approved read-only MCP profile may operate; the generic registry implementation and all writes remain disabled until their exact D-007 scope is approved. |

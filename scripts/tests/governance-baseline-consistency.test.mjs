@@ -90,30 +90,20 @@ test("active current-state documents bind one accepted Plane preview", () => {
   );
 });
 
-test("exact-preview local runtime evidence binds the durable verified control path", () => {
-  for (const value of [
-    "99a73b4eab5ee21fd012d7358bc9259252d47f71",
-    "/Users/federico.ocampo/Development/tools/project_management/plane-runtime-preview",
-    "/Users/federico.ocampo/Development/tools/project_management/plane-runtime-preview/docker-compose-local.yml",
-    "/Users/federico.ocampo/Development/tools/project_management/plane-runtime-preview/docker-compose-curve.yml",
-    "--project-directory /Users/federico.ocampo/Development/tools/project_management/plane",
-    "7129cc4e-a914-4331-acba-8cf2754c15bf",
-    "7897ba9c-90cc-40f5-b970-c099234f7d19",
-    "bf4b5743-2ef4-4a03-9f6e-c8044e18f100",
-    "d8082c6c-4954-4c45-adb8-7aff29e7768b",
-    "29e27d7b-9e89-4b6b-a2be-472c13110a8d",
-  ]) {
-    assert.match(runtimeRefresh, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
-  }
+test("public runtime guide preserves verification controls without private run evidence", () => {
+  assert.match(runtimeRefresh, /Private evidence records exact commit/);
+  assert.match(runtimeRefresh, /This public document grants no execution/);
+  assert.match(runtimeRefresh, /duplicate delivery, cancellation, restart/);
+  assert.doesNotMatch(runtimeRefresh, /[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/i);
   assert.match(runtimeRefresh, /Curve issue #46/);
   assert.match(runtimeRefresh, /RUNTIME-M0-01 graceful Curve worker shutdown classification/);
   assert.match(runtimeRefresh, /Broad M0 completion remains open/);
-  assert.match(runtimeRefresh, /verified symptom, suspected\s+race/);
+  assert.match(runtimeRefresh, /verified\s+symptom and a suspected race/);
   assert.doesNotMatch(
     runtimeRefresh,
     /project_management\/plane\/docker-compose-local\.yml/,
   );
-  assert.match(runtimeRefresh, /D-009 \(retention, backup, legal-hold, tombstone, and erasure decision\)/);
+  assert.match(runtimeRefresh, /D-009 \(retention, backup, legal-hold, tombstone, and\s+erasure decision\)/);
   assert.match(readiness, /\[Exact-preview local runtime refresh evidence\]\(local-runtime-refresh-evidence\.md\)/);
   assert.match(foundation, /\[exact-preview local runtime refresh evidence\]\(local-runtime-refresh-evidence\.md\)/);
   assert.match(technicalIndex, /\[Exact-preview local runtime refresh evidence\]\(local-runtime-refresh-evidence\.md\)/);

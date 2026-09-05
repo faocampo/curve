@@ -1,5 +1,9 @@
 # M1 Alignment, Evidence, and PRD Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -15,7 +19,7 @@
 | Delivery baseline | [Development plan](development-plan.md) (M1 dependencies, traceability, and completion evidence) and [M1-M7 packet catalog](m1-m7-task-packets.md) (later-milestone materialization controls) |
 | Minimum published Curve ancestor | `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`, containing accepted M0-S9A lifecycle evidence and P0-05 in its ancestry; publication pins the merged Product-contract revision, and dispatch pins that exact Curve revision plus its context digest |
 | Implementation repository | `git@github.com:faocampo/plane.git`, target `preview`, exact live base assigned only after the consuming M0 evidence merges |
-| Owner and reviewer | Federico Ocampo (`faocampo`) until explicitly reassigned; the coding agent cannot satisfy human review |
+| Owner and reviewer | Designated reviewer (`example-reviewer`) until explicitly reassigned; the coding agent cannot satisfy human review |
 | Default data | Synthetic `INTERNAL` fixtures; protected bodies and live provider access disabled |
 | Default model/tool policy | No runtime model or external research call; fake providers only |
 | Migration policy | Additive forward migration with pre-release reverse proof; no existing Plane roadmap or project migration |
@@ -57,7 +61,7 @@ activate only after their material decision and exact provider contract pass.
 | --- | --- |
 | M0 foundation | Accepted M0-02 (workspace persistence), M0-03 (core authorization), M0-05 (delivery kernel), M0-06 (Temporal skeleton), M0-07 (API/SSE), M0-08 (audit/observability), and M0-09 (provider registry) evidence at one exact Plane base |
 | Curve contracts | One merged Curve revision containing the final M1 schemas, OpenAPI, event, workflow, authorization, and state-transition contracts plus a deterministic context digest |
-| Human ownership | Federico Ocampo or a recorded replacement owns and reviews each exact packet |
+| Human ownership | Designated reviewer or a recorded replacement owns and reviews each exact packet |
 | Runtime | Curve-enabled local Plane stack healthy; feature disabled by default; no live provider or model credential in the coding-agent environment |
 | Provider foundation | Accepted M0-09 (provider registry and reconciliation) evidence before M1-03A (fake KnowledgeProvider) or any live provider packet; it does not gate Product, Initiative, manual artifact authoring, metadata-only evidence, research-skip, PRD, or Gate 1 packets |
 | Protected evidence | D-009 (retention and erasure decision) `DECIDED` plus accepted M0-04 (protected storage) evidence before any protected body is persisted |
@@ -66,7 +70,7 @@ activate only after their material decision and exact provider contract pass.
 
 ### Exit evidence
 
-An authorized X3M user creates or selects a Product, creates an Initiative,
+An authorized Example Organization user creates or selects a Product, creates an Initiative,
 authors an attributed Idea Brief,
 uses currently authorized evidence, creates and submits an immutable PRD version,
 and receives a human Gate 1 decision bound to that exact version and evidence
@@ -95,7 +99,7 @@ These blockers are decision inputs, not selected solutions:
 ## Repository-local implementation packets
 
 Each row becomes a separately dispatchable Plane PR after its listed contracts
-and dependencies are merged. Combining rows requires Federico's exact packet
+and dependencies are merged. Combining rows requires Designated reviewer's exact packet
 approval and cannot cross a material activation boundary.
 
 | Packet | Scope | Dependencies and material gates | Required evidence |
@@ -212,7 +216,7 @@ not invented by the coding agent.
 | --- | --- | --- |
 | M1-00A (minimal Product core) | `MERGED_LOCAL_IMPLEMENTATION / CONFORMANCE_VARIANCE_OPEN` | Plane PR #13 merged the locally verified implementation and commit-bound CI to `preview` as `afdb593...`; R-027 (Product timestamp/schema-version contract reconciliation) remains required before production qualification or successor Product persistence |
 | M1-01A (Initiative domain/API) | `DONE_LOCAL` | Plane PR #14 merged reviewed head `7e712e0...` as `99a73b4...`; [implementation evidence](m1-01a-initiative-core-implementation-evidence.md) (exact context, CI, tests, merge tree, data boundary, and rollback) binds acceptance |
-| M1-01B (Initiative shell) | `HUMAN_EXECUTION_GRANTED / MACHINE_DISPATCH_BLOCKED / UX_ACCEPTANCE_REQUIRED` | The [M1-01B implementation task packet](m1-01b-initiative-shell-implementation-task-packet.md) (approved UI scope, typed API behavior, tests, commands, policy envelope, machine-publication boundary, and rollback) binds the approved [M1-01B experience contract](ux-m1-01b-initiative-shell.md) (clickable Curve-first flow, state matrix, accessibility criteria, task-based review, and exact-commit evidence). The [M1-01B human execution grant](m1-01b-human-execution-grant.md) (Plane `c516a61...` base, exact frontend paths, local tools, CI/security, manual UX gate, exclusions, and rollback) permits one human-operated ordinary-repository implementation outside Curve dispatch. Machine execution remains blocked pending M4; the implementation PR waits for same-head CI/CodeQL and Federico's manual UX acceptance. |
+| M1-01B (Initiative shell) | `HUMAN_EXECUTION_GRANTED / MACHINE_DISPATCH_BLOCKED / UX_ACCEPTANCE_REQUIRED` | The [M1-01B implementation task packet](m1-01b-initiative-shell-implementation-task-packet.md) (approved UI scope, typed API behavior, tests, commands, policy envelope, machine-publication boundary, and rollback) binds the approved [M1-01B experience contract](ux-m1-01b-initiative-shell.md) (clickable Curve-first flow, state matrix, accessibility criteria, task-based review, and exact-commit evidence). The [M1-01B human execution grant](m1-01b-human-execution-grant.md) (Plane `c516a61...` base, exact frontend paths, local tools, CI/security, manual UX gate, exclusions, and rollback) permits one human-operated ordinary-repository implementation outside Curve dispatch. Machine execution remains blocked pending M4; the implementation PR waits for same-head CI/CodeQL and Designated reviewer's manual UX acceptance. |
 | M1-02A (manual Idea Brief) | `BLOCKED_ARCHITECTURE_CONTRACT` | M1-01A (Initiative domain/API); `B-ARTIFACT-BODY-01` (manual artifact-body persistence contract); Idea Brief/ArtifactVersion contracts; UI contract; exact dispatch values |
 | M1-02B and M1-06C (model authoring) | `BLOCKED_MATERIAL_DECISIONS` | M0-S9C (Model Gateway routing/failover), D-004 (model-gateway decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), evaluations, and exact model/prompt/tool/budget pins |
 | M1-03A (fake KnowledgeProvider) | `PREPARED` | M0-09; provider contract and fixtures; exact dispatch values |

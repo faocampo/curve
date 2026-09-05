@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 
 import { validateTestStrategyMatrixSemantics } from "./lib/test-strategy.mjs";
+import { validatePublicContractEdition } from "./lib/public-contract-edition.mjs";
 import { validateTemporalOrchestrationSemantics } from "./lib/temporal-orchestration.mjs";
 import { validateRetentionPolicyDecisionSemantics } from "./lib/retention-policy.mjs";
 import {
@@ -45,6 +46,10 @@ import {
 } from "./lib/coding-agent-implementation-authorization.mjs";
 
 const root = process.cwd();
+validatePublicContractEdition(
+  readFileSync(join(root, "contracts/publication/public-contract-edition-v1.json")),
+  (path) => readFileSync(join(root, path)),
+);
 
 function canonicalJson(value) {
   if (Array.isArray(value)) return value.map(canonicalJson);
@@ -434,11 +439,11 @@ validateTestStrategyMatrixSemantics({
 const immutableTestStrategyV1Digests = new Map([
   [
     testStrategyMatrixSchema,
-    "64fb3ce685c0d05ea5c5821b36843a76552361f0ad482397aa5d3bdadc5e7d16",
+    "bc4f9c2f5492fd5ef3c4ee1200bc0f7e1aa5d91052a1ef7b27b6545ebaa507fe",
   ],
   [
     testStrategyMatrixPath,
-    "bad1a5a710ca16b3de399e1b0ff4b265d0c8ce64c203521f20e0d3f5ab2d3e3a",
+    "7a32160db6b6ac32eeb623f729ef2c6b8d773447c0c0016b3a0486a3ec2be0d9",
   ],
 ]);
 for (const [path, expectedDigest] of immutableTestStrategyV1Digests) {
@@ -558,7 +563,7 @@ if (corePolicyManifestV1Digest !== "e0c4a03e27fd2b53b0109856c1599804865469ebebfc
 const corePolicyManifestV1SchemaDigest = createHash("sha256")
   .update(readFileSync(corePolicyManifestSchema))
   .digest("hex");
-if (corePolicyManifestV1SchemaDigest !== "bdc10bd52e9189a6d1994248bb791b07c5011eeb1c3ffc668ba44bf8d523f46f") {
+if (corePolicyManifestV1SchemaDigest !== "16c0b832107b830c3a1628a49798598dd7d5e316639a46be9b1bc7538eb63d80") {
   throw new Error("contracts/schemas/core-policy-manifest.schema.json changed instead of publishing a new version");
 }
 const expectedCorePolicyDenyPrecedence = [
@@ -684,7 +689,7 @@ if (corePolicyManifestV2Digest !== "2895b63392236afa07e6f0572d6ddb1c91aa7f40d372
 const corePolicyManifestV2SchemaDigest = createHash("sha256")
   .update(readFileSync(corePolicyManifestV2Schema))
   .digest("hex");
-if (corePolicyManifestV2SchemaDigest !== "05e77c1f3db002cfc4d26c743d031c71661cf7106f8ac9c27b14a5aacaff38b9") {
+if (corePolicyManifestV2SchemaDigest !== "a53c68d10a84de64885363e7e236c88d0f07faf3d253678986e6ccd3ebd90f5d") {
   throw new Error("contracts/schemas/core-policy-manifest-v2.schema.json changed without a reviewed successor");
 }
 const expectedTrustedRoleSources = [
@@ -802,7 +807,7 @@ const telemetryManifestSchemaDocument = JSON.parse(readFileSync(telemetryManifes
 const telemetryManifestSchemaDigest = createHash("sha256")
   .update(JSON.stringify(canonicalJson(telemetryManifestSchemaDocument)))
   .digest("hex");
-if (telemetryManifestSchemaDigest !== "1d65abeb873ad5d7b4a7785e5d1e2010e4fd41d5f307d5e355a63ebe3f160a60") {
+if (telemetryManifestSchemaDigest !== "f5b59b3edf50f0c5da744c892b6287e9600cb64693da0d8f43031356216a4366") {
   throw new Error(
     "contracts/schemas/telemetry-manifest.schema.json changed without a new reviewed contract version",
   );
@@ -820,7 +825,7 @@ const observabilityBindingSchemaDocument = JSON.parse(readFileSync(observability
 const observabilityBindingSchemaDigest = createHash("sha256")
   .update(JSON.stringify(canonicalJson(observabilityBindingSchemaDocument)))
   .digest("hex");
-if (observabilityBindingSchemaDigest !== "589b9facb39efaa47ed0277ec9e8c31ed9b4106cd7ae8da5f0e5d4bccf085602") {
+if (observabilityBindingSchemaDigest !== "17c9e04deccc85cce27eea7ad869337deef9f2d644ac1ea7a13479bef95c15ce") {
   throw new Error(
     "contracts/schemas/observability-binding.schema.json changed without a new reviewed contract version",
   );
@@ -828,7 +833,7 @@ if (observabilityBindingSchemaDigest !== "589b9facb39efaa47ed0277ec9e8c31ed9b410
 const observabilityBindingDigest = createHash("sha256")
   .update(JSON.stringify(canonicalJson(observabilityBinding)))
   .digest("hex");
-if (observabilityBindingDigest !== "8cd9f61e3abd88a7f4cc7557650915c341f323863df0a9953aeda9c9420bcbc2") {
+if (observabilityBindingDigest !== "92e34c97e0de75d7dc25944c6cfac44a43510f0f9c014f5072ddf09b96815487") {
   throw new Error(
     "contracts/observability/obs-bind-001-local-v1.json changed without a new reviewed contract version",
   );
@@ -885,12 +890,12 @@ const expectedProviderEvents = [
 const expectedProviderEventPayloadContracts = [
   {
     aggregate_type: "PROVIDER_CONNECTION",
-    payload_schema: "https://curve.x3m.internal/contracts/schemas/provider-connection-event-v1.schema.json",
+    payload_schema: "https://curve.example.invalid/contracts/schemas/provider-connection-event-v1.schema.json",
     event_types: expectedProviderEvents,
   },
   {
     aggregate_type: "OPERATION",
-    payload_schema: "https://curve.x3m.internal/contracts/schemas/provider-reconciliation-event-v1.schema.json",
+    payload_schema: "https://curve.example.invalid/contracts/schemas/provider-reconciliation-event-v1.schema.json",
     event_types: ["curve.provider_reconciliation.completed", "curve.provider_reconciliation.failed"],
   },
 ];

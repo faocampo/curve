@@ -1,5 +1,9 @@
 # Curve Later-Milestone Decision Readiness Index
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Prepared | 2026-08-31 |
 | Product | Curve |
 | Scope | D-002 (Onyx delegation) through D-016 (KPI and rollout guardrails), excluding already decided D-003 (runtime topology for local scope) |
-| Owner and reviewer | Federico Ocampo until specialist owners are named |
+| Owner and reviewer | Designated reviewer until specialist owners are named |
 | Prepared by | Codex |
 | Activation boundary | A packet makes an owner decision executable; it does not make the decision `DECIDED` and authorizes no code, provider, credential, infrastructure, deployment, or external mutation |
 
@@ -40,7 +44,7 @@ No coding agent may perform the second transition.
 | D-012 (Docusaurus documentation-delivery profile) | `PROPOSED / REPOSITORY PROFILE INPUTS REQUIRED` | [Delivery and rollout decision-readiness packet](d012-d016-rollout-decision-readiness.md) (documentation, roadmap, budgets, pilot, and KPI/rollout inputs) | M5-12 (Docusaurus documentation slice) | Product Documentation; repository technical owner | Applicable documentation delivery blocked; pilot remains `NOT_APPLICABLE` |
 | D-013 (no-migration and new-initiative policy) | `PROPOSED / PRODUCT OPERATIONS APPROVAL REQUIRED` | [Delivery and rollout decision-readiness packet](d012-d016-rollout-decision-readiness.md) (documentation, no-migration roadmap adoption, budgets, pilot, and KPI/rollout inputs) | M2 (product roadmap and schedule) | Product Operations; data steward; Curve Product | New Curve initiatives only; no inferred import or existing-roadmap mutation; any future import requires a separate approved decision |
 | D-014 (budget accounting and exception policy) | `PROPOSED / ACCOUNTING AND OWNER INPUTS REQUIRED` | [Delivery and rollout decision-readiness packet](d012-d016-rollout-decision-readiness.md) (documentation, roadmap, budgets, pilot, and KPI/rollout inputs) | Paid M1 (research), M4 (execution), M6 (budget), and R0B work | Product; Finance; Platform Operations; AI Platform | No paid action beyond a separately authorized proof budget; exhaustion pauses |
-| D-015 (Loomit SDK Compatibility pilot profile) | `PROPOSED / NAMED PEOPLE AND ENVIRONMENT EVIDENCE REQUIRED` | [Delivery and rollout decision-readiness packet](d012-d016-rollout-decision-readiness.md) (documentation, roadmap, budgets, pilot, and KPI/rollout inputs) | R0A/R0B pilot dispatch | Product and Engineering; CIA/Sachiel technical owners | No coding-agent pilot dispatch |
+| D-015 (Example feature delivery pilot profile) | `PROPOSED / NAMED PEOPLE AND ENVIRONMENT EVIDENCE REQUIRED` | [Delivery and rollout decision-readiness packet](d012-d016-rollout-decision-readiness.md) (documentation, roadmap, budgets, pilot, and KPI/rollout inputs) | R0A/R0B pilot dispatch | Product and Engineering; Example backend/Example frontend technical owners | No coding-agent pilot dispatch |
 | D-016 (KPI definitions and rollout guardrails) | `PROPOSED / EVENT DEFINITIONS AND PRODUCT APPROVAL REQUIRED` | [Delivery and rollout decision-readiness packet](d012-d016-rollout-decision-readiness.md) (documentation, roadmap, budgets, pilot, and KPI/rollout inputs) | M6-04 (KPI computation), pilot evaluation, and broad R1 rollout | Product; Analytics/Data; Engineering; AppSec | Baseline instrumentation and binary pilot report only; no broad rollout claim |
 
 ## Milestone readiness projection

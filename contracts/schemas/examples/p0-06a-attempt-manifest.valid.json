@@ -328,5 +328,5 @@
     "terminal_projection_head": [{ "name": "validate", "app_id": 1 }],
     "terminal_projection_merge": [{ "name": "validate", "app_id": 1 }]
   },
-  "security_incident_owner": "Federico Ocampo"
+  "security_incident_owner": "Designated reviewer"
 }

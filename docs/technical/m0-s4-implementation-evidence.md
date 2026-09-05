@@ -1,5 +1,9 @@
 # M0-S4 API, SSE, and Curve-First UI Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,7 +12,7 @@
 | Evidence date | 2026-08-21 |
 | Task | M0-S4 (API, SSE, and minimal Curve-first UI implementation packet) |
 | Parent work package | M0-07 (public API and resumable SSE foundation work package) |
-| Human owner and reviewer | Federico Ocampo (`faocampo`), CTO at X3M |
+| Human owner and reviewer | Designated reviewer (`example-reviewer`), Designated technical owner |
 | Curve implementation-contract revision | `79c7cd6cced82f8f3dede6cbad2706ae3d7befb8` |
 | Curve planning merge | `ccd3c3aa6de46e0f2ee197905226cb40db0515b3` on `main` |
 | Plane base | `d99342f589db4eb488695487d3ae3f2c16bf0874` on `preview` |
@@ -48,14 +52,14 @@ record) with aggregate digest
 
 ## Approval and merge binding
 
-Federico Ocampo approved exact Curve head
+Designated reviewer approved exact Curve head
 `79c7cd6cced82f8f3dede6cbad2706ae3d7befb8` and authorized its squash merge
 into `main`. GitHub merged it on 2026-08-21 as
 `ccd3c3aa6de46e0f2ee197905226cb40db0515b3` with parent
 `42ea32981a3d5ce814a74c18e458ac8152a7e2fa`. The Curve validation check was
 green at the approved head.
 
-Federico Ocampo separately approved exact Plane head
+Designated reviewer separately approved exact Plane head
 `a1748c790a060434928b8ed521692b13b3f9739e` and authorized its squash merge
 into `preview`. GitHub merged it on 2026-08-21 as
 `e762fbbd2c1726a2833745add8245a1679c60d88` with parent
@@ -171,9 +175,9 @@ connections, and later product screens remain owned by their consuming
 milestones.
 
 M0-S5A (telemetry kernel and static observability assets) may use Plane
-`preview` at `e762fbb...` as its implementation base after Federico approves
+`preview` at `e762fbb...` as its implementation base after Designated reviewer approves
 the exact M0-S5 (local audit and observability implementation packet) contract
 head and its deterministic M0-08 (audit and observability foundation work
-package) context digest. M0-S5B (X3M local observability integration proof)
-also requires OBS-BIND-001 (local X3M OTLP, Prometheus, Grafana, and independent
+package) context digest. M0-S5B (Example Organization local observability integration proof)
+also requires OBS-BIND-001 (local Example Organization OTLP, Prometheus, Grafana, and independent
 path-health binding).

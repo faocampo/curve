@@ -1,5 +1,9 @@
 # M1-00A Product Core Relational Contract
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](../../docs/technical/public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,7 +12,7 @@
 | Version | 1.1 |
 | Date | 2026-08-29 |
 | Work package | M1-00A (minimal Product core) |
-| Owner and reviewer | Federico Ocampo (`faocampo`) |
+| Owner and reviewer | Designated reviewer (`example-reviewer`) |
 | Applies to | Curve-owned PostgreSQL tables in the public Plane fork |
 
 ## Purpose and scope

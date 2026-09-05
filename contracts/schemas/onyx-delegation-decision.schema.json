@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/onyx-delegation-decision.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/onyx-delegation-decision.schema.json",
   "title": "D-002 Onyx delegated-identity decision",
   "type": "object",
   "additionalProperties": false,
@@ -204,7 +204,7 @@
       "properties": {
         "security_identity": { "$ref": "#/$defs/nullableText" },
         "onyx_operations": { "$ref": "#/$defs/nullableText" },
-        "curve_product": { "const": "Federico Ocampo" }
+        "curve_product": { "const": "Designated reviewer" }
       }
     },
     "approvals": {

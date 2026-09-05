@@ -1,5 +1,9 @@
 # M0 Authorization and State Matrices
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -7,7 +11,7 @@
 | Status | `IMPLEMENTED_FOR_M0`; provider-specific extensions remain gated by their consuming decisions |
 | Version | 1.3 |
 | Last updated | 2026-08-20 |
-| Owner and reviewer | Federico Ocampo, CTO at X3M (`faocampo`) |
+| Owner and reviewer | Designated reviewer, Designated technical owner (`example-reviewer`) |
 | Product source | [Curve PRD v0.11](../curve-ai-native-sdlc-prd.md) (product requirements, risk roles, accepted local Temporal proof, and acceptance scenarios) |
 | Machine contracts | [Core policy v1 manifest](../../contracts/policy/core-policy-v1.json) (immutable original action allowlist and deny precedence), [core policy v2 manifest](../../contracts/policy/core-policy-v2.json) (Option B role source and provider-registration action), [policy evaluation schema](../../contracts/schemas/policy-evaluation.schema.json) (safe evaluator input), and [policy decision schema](../../contracts/schemas/policy-decision.schema.json) (immutable decision output) |
 

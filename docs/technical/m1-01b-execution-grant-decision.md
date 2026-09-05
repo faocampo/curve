@@ -1,5 +1,9 @@
 # M1-01B (Curve-First Initiative Shell) Execution-Grant Decision
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Prepared | 2026-08-31 |
 | Decided | 2026-09-01 |
 | Work package | M1-01B (Curve-first Initiative shell) |
-| Decision owner | Federico Ocampo, CTO at X3M |
+| Decision owner | Designated reviewer, Designated technical owner |
 | Preparation base | Curve `f7c211cfcd7cfff7fd026d9cdd7b57a6fe6c95fe` |
 | Target base | Plane `c516a612a29751b0d24bcbd32bfcba1bd73fe3af` |
 | Governing analysis | [Coding-agent local execution and authority decision packet](coding-agent-local-execution-decision.md) (trust-tiered tool alternatives, exact human grant, durable attempt lease, production fail-closed behavior, and rollback) |
@@ -25,7 +29,7 @@ mutation, or weaken the production fail-closed boundary.
 
 The alternatives below are retained as the historical decision surface. The
 selected bootstrap path is B-CODING-AUTHORITY-01 Option 3 (human-operated coding
-outside Curve dispatch), already approved in Curve PR #50. Federico's
+outside Curve dispatch), already approved in Curve PR #50. Designated reviewer's
 2026-09-01 standing delegation permits autonomous coding-only technical work;
 product decisions and manual UX/UI acceptance remain explicit human gates.
 
@@ -37,7 +41,7 @@ product decisions and manual UX/UI acceptance remain explicit human gates.
   install with lifecycle scripts disabled, repository-native lint/type/test/build.
 - Security acceptance: commit-bound Plane CodeQL plus an exact-ref query proving
   zero open Critical or High finding.
-- Merge gate: Federico manually accepts the exact implementation UX/UI head.
+- Merge gate: Designated reviewer manually accepts the exact implementation UX/UI head.
 
 The selected path is recorded in the
 [M1-01B human execution grant](m1-01b-human-execution-grant.md) (exact local
@@ -97,8 +101,8 @@ authority and attempt lease):
 | Value | Exact meaning for M1-01B |
 | --- | --- |
 | `BOOTSTRAP_LOCAL_MANUAL_V1` | Use the analyzed Option 1: one exact human grant plus a controller-owned local SQLite attempt lease outside both repositories. The bootstrap authority applies only to this synthetic, local-only task. Production authority remains unresolved and fail closed. |
-| `PRODUCTION_AUTHORITY_FIRST_V1` | Use Option 2: block M1-01B dispatch until the independent X3M identity/role receipt verifier and production atomic lease are implemented and accepted. |
-| `HUMAN_OPERATED_OUTSIDE_CURVE_V1` | Use Option 3: Federico operates the coding tool through ordinary repository authority, and Curve records evidence afterward. The work is not represented as Curve-authorized machine dispatch. |
+| `PRODUCTION_AUTHORITY_FIRST_V1` | Use Option 2: block M1-01B dispatch until the independent Example Organization identity/role receipt verifier and production atomic lease are implemented and accepted. |
+| `HUMAN_OPERATED_OUTSIDE_CURVE_V1` | Use Option 3: Designated reviewer operates the coding tool through ordinary repository authority, and Curve records evidence afterward. The work is not represented as Curve-authorized machine dispatch. |
 | `DEFER` | No implementation attempt is authorized. |
 
 Selecting `BOOTSTRAP_LOCAL_MANUAL_V1` also requires the local SQLite lease
@@ -114,7 +118,7 @@ implementation authority false.
 
 ```yaml
 decision_id: M1-01B-EXECUTION-GRANT-01
-decision_owner: Federico Ocampo
+decision_owner: Designated reviewer
 decision_status: APPROVED | DEFERRED
 decided_at: <exact ISO-8601 timestamp>
 node_execution_profile: LOCAL_TRUSTED_NODE_M1_01B_V1 | GVISOR_NODE_M1_01B_V1 | DEFER

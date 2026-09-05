@@ -27,13 +27,13 @@
     "people": {
       "owner": {
         "actor_type": "HUMAN",
-        "name": "Federico Ocampo",
-        "handle": "faocampo"
+        "name": "Designated reviewer",
+        "handle": "example-reviewer"
       },
       "human_reviewer": {
         "actor_type": "HUMAN",
-        "name": "Federico Ocampo",
-        "handle": "faocampo"
+        "name": "Designated reviewer",
+        "handle": "example-reviewer"
       },
       "implementer": {
         "actor_type": "AI_CODING_AGENT",
@@ -71,9 +71,18 @@
         },
         "record_pointer": "",
         "assertions": [
-          { "pointer": "/subject_type", "expected": "POLICY" },
-          { "pointer": "/subject_id", "expected": "EXTERNAL-EFFECTS-POLICY" },
-          { "pointer": "/state", "expected": "APPROVED" }
+          {
+            "pointer": "/subject_type",
+            "expected": "POLICY"
+          },
+          {
+            "pointer": "/subject_id",
+            "expected": "EXTERNAL-EFFECTS-POLICY"
+          },
+          {
+            "pointer": "/state",
+            "expected": "APPROVED"
+          }
         ],
         "approval_subject_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
         "unresolved_blocker_id": null
@@ -97,9 +106,18 @@
         },
         "record_pointer": "",
         "assertions": [
-          { "pointer": "/subject_type", "expected": "POLICY" },
-          { "pointer": "/subject_id", "expected": "ROLLBACK-POLICY" },
-          { "pointer": "/state", "expected": "APPROVED" }
+          {
+            "pointer": "/subject_type",
+            "expected": "POLICY"
+          },
+          {
+            "pointer": "/subject_id",
+            "expected": "ROLLBACK-POLICY"
+          },
+          {
+            "pointer": "/state",
+            "expected": "APPROVED"
+          }
         ],
         "approval_subject_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
         "unresolved_blocker_id": null
@@ -115,14 +133,14 @@
     "valid_from": "2026-08-30T10:00:00Z",
     "expires_at": "2026-08-30T12:00:00Z"
   },
-  "approval_subject_digest": "sha256:2466a531563cf63b836f9416a7790993c783f23ea609ce82a05a1f00c4a815e4",
+  "approval_subject_digest": "sha256:b92f179b8c122d75eb9c72a3750f8f673b3ba6495010fac12edff5c83d8504bc",
   "attestations": [
     {
       "actor_type": "HUMAN",
       "authority_role": "IMPLEMENTATION_APPROVER",
-      "actor_id": "faocampo",
-      "actor_name": "Federico Ocampo",
-      "subject_digest": "sha256:2466a531563cf63b836f9416a7790993c783f23ea609ce82a05a1f00c4a815e4",
+      "actor_id": "example-reviewer",
+      "actor_name": "Designated reviewer",
+      "subject_digest": "sha256:b92f179b8c122d75eb9c72a3750f8f673b3ba6495010fac12edff5c83d8504bc",
       "attested_at": "2026-08-30T09:55:00Z",
       "authority_receipt": {
         "kind": "EXTERNAL_TRUSTED_HUMAN_AUTHORITY",

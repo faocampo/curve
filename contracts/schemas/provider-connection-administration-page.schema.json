@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/provider-connection-administration-page.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/provider-connection-administration-page.schema.json",
   "title": "Curve provider-connection administration page",
   "description": "Candidate-only M0-S9B1 safe page envelope. It is not normative until B-ADMIN-M0-S9B1 is approved and the successor OpenAPI contract is materialized.",
   "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",

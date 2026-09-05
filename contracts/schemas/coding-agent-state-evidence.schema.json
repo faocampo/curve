@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/coding-agent-state-evidence.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/coding-agent-state-evidence.schema.json",
   "title": "Curve coding-agent machine state evidence",
   "description": "Digest-bound state record whose attestations bind one canonical approval subject.",
   "type": "object",

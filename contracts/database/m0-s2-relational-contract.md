@@ -1,5 +1,9 @@
 # M0-S2 Relational Contract
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](../../docs/technical/public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,7 +12,7 @@
 | Version | 1.0 |
 | Date | 2026-08-15 |
 | Work package | `M0-S2 (operation and delivery kernel)` |
-| Owner and reviewer | Federico Ocampo (`faocampo`) |
+| Owner and reviewer | Designated reviewer (`example-reviewer`) |
 | Applies to | Curve-owned PostgreSQL tables in the Plane fork |
 
 ## Purpose and boundaries

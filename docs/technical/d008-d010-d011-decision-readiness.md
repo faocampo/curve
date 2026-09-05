@@ -1,5 +1,9 @@
 # Curve D-008 (Trusted VCS), D-010 (Quality Policy), and D-011 (Feature Flags) Decision Readiness Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -22,7 +26,7 @@ The decisions are ready for named-owner workshops when the inputs in this packet
 
 1. D-008 (trusted VCS controller identity and permissions) needs exact GitHub and GitLab identities, minimum permissions, credential rotation, signing, webhook, allowlist, base-drift, reconciliation, and emergency-disable profiles.
 2. D-010 (quality, security, license, and waiver policy) needs a licensed and pinned scanner set, rulepacks, severity normalization, policy precedence, disposition authority, prohibited-license policy, and deterministic waiver rules.
-3. D-011 (OpenFeature backend and delivery conventions) needs the Curve control-plane flag backend, OpenFeature provider/runtime profile, environment conventions, failure behavior, targeting/audit controls, and a separately registered Sachiel Flipt delivery profile.
+3. D-011 (OpenFeature backend and delivery conventions) needs the Curve control-plane flag backend, OpenFeature provider/runtime profile, environment conventions, failure behavior, targeting/audit controls, and a separately registered Example frontend Flipt delivery profile.
 
 Each decision can be reviewed independently. D-008 (trusted VCS controller identity and permissions) and D-010 (quality, security, license, and waiver policy) must both be decided before M5 (quality and VCS delivery) can create an automatic draft. D-011 (OpenFeature backend and delivery conventions) is required only when a delivery contract contains an applicable runtime-flag obligation.
 
@@ -54,14 +58,14 @@ GitHub Apps start with no permissions. HTTP Git requires the repository `Content
 - GitLab, [Access token scopes](https://docs.gitlab.com/security/tokens/access_token_scopes/) (`write_repository` Git access and `api` API access boundaries).
 - GitLab, [Merge requests API](https://docs.gitlab.com/api/merge_requests/) (draft state, source/target/head observations, creation, update, and reconciliation fields).
 
-GitLab `write_repository` permits Git-over-HTTP pull/push but cannot authenticate API calls. A project token with `api` can mutate APIs within the project and is broader than a draft-only permission. D-008 (trusted VCS controller identity and permissions) must therefore explicitly accept that GitLab limitation, separate Git and API credentials if required by X3M policy, and compensate with project isolation, Developer-level role, controller-side action allowlists, expiry, audit, and emergency revocation.
+GitLab `write_repository` permits Git-over-HTTP pull/push but cannot authenticate API calls. A project token with `api` can mutate APIs within the project and is broader than a draft-only permission. D-008 (trusted VCS controller identity and permissions) must therefore explicitly accept that GitLab limitation, separate Git and API credentials if required by Example Organization policy, and compensate with project isolation, Developer-level role, controller-side action allowlists, expiry, audit, and emergency revocation.
 
 ### Quality and CodeQL licensing
 
 - GitHub, [CodeQL CLI license](https://github.com/github/codeql-cli-binaries/blob/main/LICENSE.md) (permitted use and restrictions for private/proprietary code and CI/CD).
 - GitHub, [CodeQL CLI binaries](https://github.com/github/codeql-cli-binaries) (distribution and license notice).
 
-The public CodeQL CLI terms permit analysis of OSI-licensed open-source code under specified conditions. They do not authorize ordinary automated analysis of private or proprietary repositories without a qualifying paid GitHub Advanced Security license or separate written rights. D-010 (quality, security, license, and waiver policy) must record X3M's applicable license evidence or select and validate an approved alternative for private GitLab repositories.
+The public CodeQL CLI terms permit analysis of OSI-licensed open-source code under specified conditions. They do not authorize ordinary automated analysis of private or proprietary repositories without a qualifying paid GitHub Advanced Security license or separate written rights. D-010 (quality, security, license, and waiver policy) must record Example Organization's applicable license evidence or select and validate an approved alternative for private GitLab repositories.
 
 ### OpenFeature and Flipt
 
@@ -73,7 +77,7 @@ The public CodeQL CLI terms permit analysis of OSI-licensed open-source code und
 - Flipt, [OFREP configuration](https://docs.flipt.io/v1/reference/openfeature/configuration) (remote-provider capabilities and cache invalidation).
 - Flipt, [OFREP single-flag evaluation](https://docs.flipt.io/v1/reference/openfeature/flag-evaluation) (targeting context and resolution result).
 
-The OpenFeature API provides a provider-neutral evaluation boundary; provider behavior, storage, availability, audit, and targeting remain backend responsibilities. Flipt supplies OpenFeature providers, but its current documentation warns that its providers have not yet been updated for Flipt v2's `environments` concept. D-011 (OpenFeature backend and delivery conventions) must pin the Flipt major version and provider package versions used by Sachiel rather than assuming cross-version environment behavior.
+The OpenFeature API provides a provider-neutral evaluation boundary; provider behavior, storage, availability, audit, and targeting remain backend responsibilities. Flipt supplies OpenFeature providers, but its current documentation warns that its providers have not yet been updated for Flipt v2's `environments` concept. D-011 (OpenFeature backend and delivery conventions) must pin the Flipt major version and provider package versions used by Example frontend rather than assuming cross-version environment behavior.
 
 ## Fixed invariants
 
@@ -89,10 +93,10 @@ The following are already governed Curve requirements and are not reopened by th
 | Quality threshold | Open `CRITICAL` or `MAJOR` findings block. External `HIGH` normalizes to Curve `MAJOR`. |
 | Non-waivable classes | Verified secrets, authorization bypass, sandbox escape, destructive-data risk, restricted-data leakage, prohibited licenses, and explicit security-policy failures cannot be waived. |
 | Human decisions | AI can report findings but cannot grant waivers, close security false positives, reclassify protected findings, approve Gate 3, or decide flag applicability. |
-| Repository policy | Repository-native checks may strengthen the X3M baseline and cannot silently weaken it. |
+| Repository policy | Repository-native checks may strengthen the Example Organization baseline and cannot silently weaken it. |
 | Runtime flags | Applicable new runtime behavior uses an OpenFeature-compatible flag, defaults off unless the approved PRD says otherwise, and has enabled/disabled tests. |
 | Flag applicability | Product and Technical Approvers decide `NOT_APPLICABLE` at Gate 2. It is not a waiver. |
-| Pilot flag | The Sachiel profile uses `sdk-compatibility-panel-enabled`, default off and initially targeted to approved pilot organizations or users. |
+| Pilot flag | The Example frontend profile uses `example-feature-enabled`, default off and initially targeted to approved pilot organizations or users. |
 
 ## D-008 (trusted VCS controller identity and permissions)
 
@@ -163,14 +167,14 @@ The D-008 (trusted VCS controller identity and permissions) decision PR must pub
 
 ### Decision statement
 
-Pin the X3M baseline checks, scanner images and versions, rulesets, license rights, severity normalization, policy precedence, required evidence, false-positive/reclassification authority, waiver eligibility, prohibited licenses, update cadence, and emergency response behavior.
+Pin the Example Organization baseline checks, scanner images and versions, rulesets, license rights, severity normalization, policy precedence, required evidence, false-positive/reclassification authority, waiver eligibility, prohibited licenses, update cadence, and emergency response behavior.
 
 ### Required baseline composition
 
 | Layer | Contents | Precedence |
 | --- | --- | --- |
 | Curve mandatory controls | Secrets, authorization, sandbox/data leakage, destructive change, prohibited license, and exact-head evidence checks | Cannot be disabled or weakened by a repository |
-| X3M quality baseline | Approved static, dependency, image/configuration, secret, license, AI code-review, and security-review checks | Minimum organization baseline |
+| Example Organization quality baseline | Approved static, dependency, image/configuration, secret, license, AI code-review, and security-review checks | Minimum organization baseline |
 | Repository-native policy | Build, lint, type, test, compatibility, migrations, CI, ownership, and additional security checks | Additive; stricter result wins |
 | Delivery-contract checks | Observability, documentation, feature toggle, and initiative-specific obligations | Apply when Gate 2 declares them applicable |
 
@@ -182,9 +186,9 @@ The policy resolver must retain every source, version, conflict, and resolution.
 | --- | --- | --- |
 | Secret scanning | Gitleaks | Image digest, version, rules/config digest, license review, baseline fixture, update owner |
 | Dependency/image/configuration | Trivy | Image digest, version, databases and update timestamp, rules/config digest, license review, fixture |
-| Static analysis | Opengrep or X3M-approved equivalent | Image digest, version, rulepack digest, language coverage, license review, false-positive baseline |
+| Static analysis | Opengrep or Example Organization-approved equivalent | Image digest, version, rulepack digest, language coverage, license review, false-positive baseline |
 | CodeQL | Licensed GitHub Code Security/Advanced Security use or replacement | Written entitlement for each private/proprietary repository and CI mode, or explicit exclusion plus equivalent coverage |
-| License policy | X3M-approved scanner/source | Detected-license taxonomy, source/package confidence, unknown handling, prohibited/review lists, legal owner |
+| License policy | Example Organization-approved scanner/source | Detected-license taxonomy, source/package confidence, unknown handling, prohibited/review lists, legal owner |
 | AI code review | Approved model/provider through D-004 (Curve Model Gateway decision) and D-005 (model/provider data-policy decision) | Prompt/model/policy digest, independence rule, data class, deterministic-check precedence |
 | Repository checks | Repository-declared commands and native CI | Exact command discovery, trusted execution, required-check mapping, timeout and evidence rules |
 
@@ -223,7 +227,7 @@ A waiver never changes the finding's severity and never applies to another head 
 | Waivers | Exact eligible classes/severities, approver, maximum duration, expiry behavior, follow-up owner, and renewal rule |
 | Tool outage | Pause duration, incident escalation, fail-closed behavior, and whether any local-only development proof may continue |
 | Policy updates | Owner, review cadence, emergency-rule path, compatibility window, and active-initiative re-evaluation behavior |
-| Repository precedence | Conflict-resolution rules when repository-native and X3M results disagree |
+| Repository precedence | Conflict-resolution rules when repository-native and Example Organization results disagree |
 | Evidence retention | D-009 (retention, backup, legal-hold, tombstone, and erasure decision)-compatible references for logs/reports, while digests and immutable audit remain queryable |
 
 ### Required machine contracts
@@ -245,7 +249,7 @@ The D-010 (quality, security, license, and waiver policy) decision PR must publi
 | --- | --- |
 | Severity normalization | Every external severity/category fixture resolves to one stable Curve severity and reason. |
 | Mandatory blocking | Required-check failure/error, open `CRITICAL`/`MAJOR`, unknown required license, and every non-waivable class block. |
-| Repository precedence | A repository can add or strengthen checks and cannot remove or weaken the Curve/X3M minimum. |
+| Repository precedence | A repository can add or strengthen checks and cannot remove or weaken the Curve/Example Organization minimum. |
 | AI review boundary | AI may create a finding and rationale; it cannot make deterministic evidence pass or decide a disposition. |
 | False-positive authority | Authorized independent evidence can close the exact result; unauthorized, agent, stale-head, and insufficient-evidence attempts fail. |
 | Waiver authority | Only the approved human role can waive an eligible class; rationale, expiry, follow-up, policy/tool/rule/head are mandatory. |
@@ -258,14 +262,14 @@ The D-010 (quality, security, license, and waiver policy) decision PR must publi
 
 ### Decision statement
 
-Select Curve's control-plane flag backend and provider profiles, environment/naming conventions, evaluation locations, targeting attributes, availability and cache behavior, audit/ownership, rollout/kill-switch controls, expiry/cleanup, and the separately registered Sachiel Flipt delivery profile.
+Select Curve's control-plane flag backend and provider profiles, environment/naming conventions, evaluation locations, targeting attributes, availability and cache behavior, audit/ownership, rollout/kill-switch controls, expiry/cleanup, and the separately registered Example frontend Flipt delivery profile.
 
 ### Boundary between two flag uses
 
 | Use | Owner | Backend/profile | Purpose |
 | --- | --- | --- | --- |
-| Curve control-plane flags | Curve/X3M Platform Operations | Unresolved D-011 (OpenFeature backend and delivery conventions) backend behind OpenFeature | Enable Curve capabilities by workspace/environment without coupling Curve code to one vendor |
-| Target-repository delivery flags | Owning product/service team | Registered provider profile; Sachiel uses its existing Flipt integration | Satisfy a Feature Delivery Contract for runtime behavior implemented in that repository |
+| Curve control-plane flags | Curve/Example Organization Platform Operations | Unresolved D-011 (OpenFeature backend and delivery conventions) backend behind OpenFeature | Enable Curve capabilities by workspace/environment without coupling Curve code to one vendor |
+| Target-repository delivery flags | Owning product/service team | Registered provider profile; the target repository uses its approved provider integration | Satisfy a Feature Delivery Contract for runtime behavior implemented in that repository |
 
 Curve does not administer a target repository's flags through an agent. A trusted provider adapter may create or validate a flag only when D-011 (OpenFeature backend and delivery conventions) explicitly authorizes that capability; otherwise Curve consumes human-provided flag evidence and evaluates the delivery contract.
 
@@ -288,7 +292,7 @@ Curve does not administer a target repository's flags through an agent. A truste
 
 | Input | Required owner answer |
 | --- | --- |
-| Existing X3M backend | Product/version, ownership, license, deployment topology, HA/SLO, data store, backup/recovery, and API/provider support |
+| Existing Example Organization backend | Product/version, ownership, license, deployment topology, HA/SLO, data store, backup/recovery, and API/provider support |
 | OpenFeature runtime | SDK/provider package and exact version for Python/Django, TypeScript/React, and any target runtime |
 | Evaluation location | Server, browser, or hybrid per flag class; exposure and consistency consequences |
 | Environment model | Backend projects/namespaces/environments and promotion/copy process |
@@ -297,7 +301,7 @@ Curve does not administer a target repository's flags through an agent. A truste
 | Administration | Human roles and trusted service capabilities allowed to create/update/disable flags |
 | Audit integration | Provider audit source, Curve evidence ingestion, immutable digest, and D-009 (retention, backup, legal-hold, tombstone, and erasure decision) mapping |
 | Lifecycle | Naming, owner, review date, maximum lifetime, cleanup definition, and stale-flag escalation |
-| Sachiel profile | Flipt major/server version, provider packages, namespace/environment mapping, API endpoint, auth, evaluation location, and owner |
+| Example frontend profile | Flipt major/server version, provider packages, namespace/environment mapping, API endpoint, auth, evaluation location, and owner |
 | Pilot targeting | Exact organization/user identifiers or approved derived attributes and removal date |
 | Flag evidence | What proves creation, default-off behavior, targeted-on behavior, propagation, outage safety, and cleanup |
 
@@ -310,7 +314,7 @@ The D-011 (OpenFeature backend and delivery conventions) decision PR must publis
 3. A flag-evaluation evidence envelope containing provider/config version, context-field names and sanitized digest, result value/variant/reason/error, evaluated time, environment, and application/head version.
 4. An applicability decision contract binding Product and Technical Approvers, Gate 2, plan generation, and rationale for `NOT_APPLICABLE`.
 5. A provider-outage and stale-cache policy with observable reason codes and metrics.
-6. A Curve control-plane profile and a distinct Sachiel Flipt profile.
+6. A Curve control-plane profile and a distinct Example frontend Flipt profile.
 7. A lifecycle runbook for create, target, expand, disable, expire, remove, and verify cleanup.
 
 ### D-011 (OpenFeature backend and delivery conventions) acceptance suite
@@ -326,17 +330,17 @@ The D-011 (OpenFeature backend and delivery conventions) decision PR must publis
 | Authorization | Agents, Orca, and unapproved services cannot administer flags or decide applicability. |
 | Audit | Every configuration change records attributable before/after evidence and provider version. |
 | Expiry/cleanup | Expired flags create non-compliance; verified code/config removal closes the cleanup item without leaving dead branches. |
-| Sachiel pilot | `sdk-compatibility-panel-enabled` is default off, targeted only to the approved pilot cohort, blocks direct access when ineligible, and has four-state regression evidence. |
+| Example frontend pilot | `example-feature-enabled` is default off, targeted only to the approved pilot cohort, blocks direct access when ineligible, and has four-state regression evidence. |
 
 ## Required decision records and ownership
 
 | Decision | Accountable owner to name | Required reviewers | Status after this packet |
 | --- | --- | --- | --- |
-| D-008 (trusted VCS controller identity and permissions) | One named Developer Platform owner | Security, repository owners, Federico Ocampo as Curve engineering approver | `PROPOSED / OWNER INPUTS REQUIRED` |
-| D-010 (quality, security, license, and waiver policy) | One named Application Security owner | Legal/licensing, Developer Platform, repository owners, Federico Ocampo | `PROPOSED / OWNER INPUTS REQUIRED` |
-| D-011 (OpenFeature backend and delivery conventions) | One named Platform Operations owner | Product, Security/Privacy, Sachiel owner, Federico Ocampo | `OPEN / OWNER INPUTS REQUIRED` |
+| D-008 (trusted VCS controller identity and permissions) | One named Developer Platform owner | Security, repository owners, Designated reviewer as Curve engineering approver | `PROPOSED / OWNER INPUTS REQUIRED` |
+| D-010 (quality, security, license, and waiver policy) | One named Application Security owner | Legal/licensing, Developer Platform, repository owners, Designated reviewer | `PROPOSED / OWNER INPUTS REQUIRED` |
+| D-011 (OpenFeature backend and delivery conventions) | One named Platform Operations owner | Product, Security/Privacy, Example frontend owner, Designated reviewer | `OPEN / OWNER INPUTS REQUIRED` |
 
-Federico Ocampo may prepare and review all three decisions under the current project convention. A named accountable person for each specialist owner role must approve its evidence before the decision record becomes `DECIDED`. A coding agent cannot perform that transition.
+Designated reviewer may prepare and review all three decisions under the current project convention. A named accountable person for each specialist owner role must approve its evidence before the decision record becomes `DECIDED`. A coding agent cannot perform that transition.
 
 ## Dependency and execution order
 
@@ -348,7 +352,7 @@ flowchart LR
 
     B8 --> C8[Provider conformance proof]
     B10 --> C10[Quality and waiver conformance proof]
-    B11 --> C11[OpenFeature and Sachiel proof]
+    B11 --> C11[OpenFeature and Example frontend proof]
 
     C8 --> D8[Named approval: trusted VCS decision]
     C10 --> D10[Named approval: quality policy decision]
@@ -362,10 +366,10 @@ flowchart LR
 
 Recommended preparation order without implying approval:
 
-1. Inventory X3M's current GitHub/GitLab service identities, quality services/licenses, and feature-flag backend versions.
+1. Inventory Example Organization's current GitHub/GitLab service identities, quality services/licenses, and feature-flag backend versions.
 2. Draft three separate ADRs and machine-contract sets from this packet.
 3. Validate schemas and run provider fakes before any live credential or provider proof.
-4. Authorize bounded proofs separately for GitHub, GitLab, the quality toolchain, Curve flags, and Sachiel Flipt.
+4. Authorize bounded proofs separately for GitHub, GitLab, the quality toolchain, Curve flags, and Example frontend Flipt.
 5. Record proof evidence and residual risks against the exact decision PR head.
 6. Obtain named-owner approvals and merge the decision contracts.
 7. Generate implementation task packets pinned to the resulting Curve `main` revision and context digest.

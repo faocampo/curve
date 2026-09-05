@@ -1,5 +1,9 @@
 # M0-S5A Local Observability Kernel Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,7 +12,7 @@
 | Evidence date | 2026-08-22 |
 | Task | M0-S5A (telemetry kernel and static observability assets) |
 | Parent work package | M0-08 (audit and observability foundation work package) |
-| Human owner and reviewer | Federico Ocampo (`faocampo`), CTO at X3M |
+| Human owner and reviewer | Designated reviewer (`example-reviewer`), Designated technical owner |
 | Curve implementation-contract revision | `fa6fd677fc41d0bc73a8587e78d33d55a6824429` |
 | Curve planning merge | `a23dab99e9afcc9dbfad7f5a3dc8b394ef60e529` on `main` |
 | Context digest | `sha256:720a70bb9146761e7b4f1852e889127460812d25d84cbafd1304e20caa18ac1a` |
@@ -44,9 +48,9 @@ accepted Plane implementation adds:
 7. Process-local exporter-failure diagnostics, bounded gauge queries, worker
    heartbeat, deterministic shutdown, a repository-owned Grafana dashboard,
    four Prometheus alert rules, and static contract/asset checks.
-8. No live X3M collector, Prometheus, Grafana, credentials, routing, alert
+8. No live Example Organization collector, Prometheus, Grafana, credentials, routing, alert
    receiver, infrastructure, or deployment mutation. Those bindings remain in
-   M0-S5B (X3M local observability integration proof).
+   M0-S5B (Example Organization local observability integration proof).
 
 The implementation is bound to the
 [M0-S5 context manifest](https://github.com/faocampo/plane/blob/39920769daf78fce29a10c7f4e4bb8779671b004/apps/api/plane/curve/contracts/m0-s5-context.json)
@@ -56,7 +60,7 @@ execution input record) with aggregate digest
 
 ## Approval and merge binding
 
-Federico Ocampo approved exact Curve head
+Designated reviewer approved exact Curve head
 `fa6fd677fc41d0bc73a8587e78d33d55a6824429` and authorized its squash merge
 into `main`. GitHub merged it on 2026-08-21 as
 `a23dab99e9afcc9dbfad7f5a3dc8b394ef60e529` with parent
@@ -65,7 +69,7 @@ into `main`. GitHub merged it on 2026-08-21 as
 (documentation, schema, contract, context, and Project-synchronizer checks) was
 green at the approved head.
 
-Federico Ocampo separately approved exact Plane head
+Designated reviewer separately approved exact Plane head
 `c258ef12221964dae67286e0f6a6c2dc58b997fe` and authorized marking
 [Plane PR #7](https://github.com/faocampo/plane/pull/7) (M0-S5A local audit and
 observability kernel) ready and squash-merging it into `preview` while CI
@@ -143,7 +147,7 @@ and temporary test configuration were removed after verification.
 7. Observable-gauge SQL uses a bounded statement timeout, cache, static query,
    and safe omission on failure.
 8. Static dashboard and alert assets are validated against the manifest rather
-   than live X3M data-source identifiers or routing configuration.
+   than live Example Organization data-source identifiers or routing configuration.
 
 ## Rollback proof and procedure
 
@@ -175,8 +179,8 @@ receiver mutation, or production operation is required for M0-S5A rollback.
 
 M0-S5A (telemetry kernel and static observability assets) is complete. M0-08
 (audit and observability foundation work package) remains open and visually
-`In progress` because M0-S5B (X3M local observability integration proof) still
-requires OBS-BIND-001 (X3M OTLP, Prometheus, Grafana, alert-routing, and
+`In progress` because M0-S5B (Example Organization local observability integration proof) still
+requires OBS-BIND-001 (Example Organization OTLP, Prometheus, Grafana, alert-routing, and
 independent path-health binding). This evidence does not authorize live export,
 staging/production activation, infrastructure mutation, or M0-08 completion.
 

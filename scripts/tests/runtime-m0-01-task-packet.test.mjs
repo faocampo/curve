@@ -251,11 +251,11 @@ test("runtime definition records accepted human operation while machine dispatch
 
   assert.match(
     packet,
-    /Federico approved B-CODING-AUTHORITY-01 Option 3 and recorded\s+B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at merged Curve revision/,
+    /Designated reviewer approved B-CODING-AUTHORITY-01 Option 3 and recorded\s+B-CODING-TOOLS-01 as `DEFERRED_TO_M4` at merged Curve revision/,
   );
   assert.match(
     packet,
-    /Federico approves the prepared[\s\S]*RUNTIME-M0-01 human execution grant[\s\S]*binding the live base,\s+feature branch, files, commands, synthetic-data boundary, local Docker\s+effects, VCS effects, tests, review, rollback, and validity window/,
+    /Designated reviewer approves the prepared[\s\S]*RUNTIME-M0-01 human execution grant[\s\S]*binding the live base,\s+feature branch, files, commands, synthetic-data boundary, local Docker\s+effects, VCS effects, tests, review, rollback, and validity window/,
   );
   assert.match(
     packet,
@@ -349,7 +349,7 @@ test("consumed human grant and implementation evidence bind one accepted local P
   assert.match(grant, /long-lived worker mutation/);
   assert.match(grant, /external\/protected\/staging\/production credentials or secrets/);
   assert.match(grant, /The approval permits one attempt\s+and no merge/);
-  assert.match(grant, /Plane mutation begins only\s+after Federico approves the exact Curve revision/);
+  assert.match(grant, /Plane mutation begins only\s+after Designated reviewer approves the exact Curve revision/);
   assert.match(grant, /must equal their\s+preflight values after cleanup/);
   assert.match(grant, /Curve machine dispatch remains unavailable/i);
   assert.match(grant, /exact read-only `temporal task-queue describe` commands/);

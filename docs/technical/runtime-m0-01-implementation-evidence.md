@@ -1,5 +1,9 @@
 # RUNTIME-M0-01 Graceful Worker Shutdown Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Accepted value |
@@ -10,7 +14,7 @@
 | Parent | M0-06 (Temporal workflow-skeleton work package) |
 | Evidence version | 1.0 |
 | Acceptance date | 2026-09-01 |
-| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Owner and human reviewer | Designated reviewer, Designated technical owner |
 | Implementer | Codex, human-operated outside Curve dispatch |
 | Curve definition baseline | `030644db40e5a949ac02a193ad47b0c86f96dcab` |
 | Plane rebased implementation base | `b5d611ae77d5404e326f1ffa31694fbcead2cb94` |

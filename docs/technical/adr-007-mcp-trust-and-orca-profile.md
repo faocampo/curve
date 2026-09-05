@@ -50,10 +50,10 @@ Prohibited operations include gate decisions, waivers, finding reclassification,
 
 ### Delegated authentication proposal
 
-- Use X3M's authorization server with OAuth 2.1 Authorization Code plus PKCE and [OAuth Protected Resource Metadata](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization). Device flow, client registration, and token exchange remain disabled unless Security explicitly adds and proves them.
+- Use Example Organization's authorization server with OAuth 2.1 Authorization Code plus PKCE and [OAuth Protected Resource Metadata](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization). Device flow, client registration, and token exchange remain disabled unless Security explicitly adds and proves them.
 - The protected-resource audience is the exact Curve MCP service. Proposed scopes are `curve:mcp:read` and `curve:mcp:orca-workflow-write`; the write scope never implies a read or administrative scope outside the effective developer's object permissions.
 - Access tokens are short-lived, proposed maximum ten minutes, and held in client memory only. Curve validates issuer, audience/resource, subject, authorized client, scope, expiry/not-before, token identifier or equivalent revocation handle, and current user/workspace status on every call.
-- Online revocation/introspection or a signed-token denylist must make explicit revocation effective before the next write. If X3M identity cannot provide this property, the write profile fails its proof. Expiry or identity-service uncertainty never falls back to a service account or cached creator identity.
+- Online revocation/introspection or a signed-token denylist must make explicit revocation effective before the next write. If Example Organization identity cannot provide this property, the write profile fails its proof. Expiry or identity-service uncertainty never falls back to a service account or cached creator identity.
 - The server derives immutable `actor_id`, effective principal, issuer, client, and delegation reference from validated identity. No tool argument or context content can supply or override attribution.
 
 The identity mechanism, ten-minute ceiling, client registration, issuer/audience, and revocation method are proposals pending the named D-007 proof; they are not production defaults.

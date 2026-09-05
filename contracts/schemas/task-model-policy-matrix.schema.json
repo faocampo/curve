@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/task-model-policy-matrix.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/task-model-policy-matrix.schema.json",
   "title": "Curve candidate task-to-model policy matrix",
   "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
   "type": "object",

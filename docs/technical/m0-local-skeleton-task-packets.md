@@ -1,5 +1,9 @@
 # M0 Local Skeleton Task Packets
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -29,8 +33,8 @@ dependency below is resolved; otherwise the coding agent stops before mutation.
 | Curve revision | At least accepted Curve baseline `43480ca8463d0b40d436145aeb19fbbc8c2be472`; every materialization records the exact merged Curve revision containing its packet and deterministic context digest |
 | GitHub Project item | Exact visual-tracking item in [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2), derived from the owning M0 package and maintained during delivery |
 | Branch | One feature branch per packet, created from the exact accepted Plane base recorded at dispatch |
-| Human owner | Federico Ocampo for M0-S1 through M0-S5 unless reassigned; every packet records its named person at dispatch; role-only values are invalid |
-| Human reviewer | Federico Ocampo (`faocampo`) for the current phase, distinct from the coding agent; any replacement must be named at dispatch |
+| Human owner | Designated reviewer for M0-S1 through M0-S5 unless reassigned; every packet records its named person at dispatch; role-only values are invalid |
+| Human reviewer | Designated reviewer (`example-reviewer`) for the current phase, distinct from the coding agent; any replacement must be named at dispatch |
 | Data | Synthetic `INTERNAL` local fixtures only; no protected object bodies, repository secrets, customer data, or production data |
 | Model policy | Dispatcher-approved coding model; no Curve Model Gateway or runtime model call; no silent model/provider substitution |
 | Tool policy | Repository read/write, `git` read-only status/diff, `pnpm`, Docker Compose, and test tools only; no push, PR, deploy, cloud console, or external-system mutation |
@@ -49,12 +53,12 @@ overwrite an existing environment file.
 | Blocker | Required resolution |
 | --- | --- |
 | `B-PUBLISH` | Satisfied through M0-S5A: Curve planning merge `a23dab9...` and Plane implementation merge `3992076...` are published. Each later packet still requires its exact Curve context publication. |
-| `B-REVIEW` | Satisfied through M0-S5A: Federico approved Plane PR #7 exact head `c258ef1...`, merged as `3992076...`. Each later implementation output still requires its own exact-head review. |
+| `B-REVIEW` | Satisfied through M0-S5A: Designated reviewer approved Plane PR #7 exact head `c258ef1...`, merged as `3992076...`. Each later implementation output still requires its own exact-head review. |
 | `B-BASE` | Satisfied through M0-S5B: reviewed upstream-sync, M0-S1, M0-S2, M0-03, M0-S3, M0-S4, M0-S5A, and the locally verified M0-S5B integration are preserved in fork history; current accepted `preview` is `1b06153f6f49848f208808f4f09385a581a55d26`. |
-| `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Federico Ocampo against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
+| `B-D001` | Satisfied on 2026-08-15: D-001 is `DECIDED` by Designated reviewer against ADR digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`; [approval record](https://github.com/faocampo/curve/pull/1#issuecomment-5302192671). |
 | `B-P002` | Satisfied for `LOCAL_ONLY`: Curve PR #9 merged the original decision as `097016f...`; Curve PR #15 merged its shared-network amendment as `aece539...`. |
-| `B-D003` | Satisfied for local M0-S3: the effective [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, EKS direction, controls, and revised proof) selects Plane `dev_env`, direct loopback Temporal ports, and the private-EKS connectivity/security model. Environment activation still requires its reviewable operations package. |
-| `B-PEOPLE` | Satisfied for M0-S1 through M0-S5: Federico Ocampo is the named human owner and reviewer unless reassigned; the AI coding agent remains the separate implementer. |
+| `B-D003` | Satisfied for local M0-S3: the effective [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private deployment requirements, controls, and revised proof) selects Plane `dev_env`, direct loopback Temporal ports, and the approved connectivity/security requirements. Environment activation still requires its reviewable operations package. |
+| `B-PEOPLE` | Satisfied for M0-S1 through M0-S5: Designated reviewer is the named human owner and reviewer unless reassigned; the AI coding agent remains the separate implementer. |
 | `B-CONTEXT` | Satisfied through M0-S4: the accepted M0-S4 context binds Curve revision `79c7cd6...`, 38 path/file digests, aggregate digest `sha256:79cf9f3...`, Plane base `d99342f...`, owner, reviewer, and task ID. Later packets require new manifests. |
 | `B-PROJECT` | Satisfied for M0-S3: item `PVTI_lAHOBNjuQc4BgZzOzg3CeqQ` exists exactly once and is `Done` in GitHub Project #2. Its status is informational and does not gate dispatch. |
 
@@ -68,7 +72,7 @@ No coding agent may resolve these blockers or change an ADR from `PROPOSED` to
 | Task ID | `CURVE-M0-S1-MODULE-SHELL` |
 | Status | `COMPLETED`: merged through Plane PR #2 at exact implementation head `81712b66e22f1a60883a619c5db63a2101dc365d` and merge commit `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`; Project item M0-01 is `Done` |
 | Risk | `STANDARD`; new workspace authorization and application route boundary |
-| Human owner and reviewer | Federico Ocampo (`faocampo`); the AI coding agent is the separate implementer |
+| Human owner and reviewer | Designated reviewer (`example-reviewer`); the AI coding agent is the separate implementer |
 | Outcome | Add a dedicated `plane.curve` Django app and an additive workspace UI shell, both disabled by default, without changing unrelated Plane behavior. |
 | Traceability | FR-001, FR-022; NFR-015-NFR-016; AC-01, AC-35 |
 | In scope | `apps/api/plane/curve/`; `apps/api/plane/settings/common.py`; `apps/api/plane/urls.py`; Curve-only tests; `apps/web/app/routes/`; Curve UI namespace; `packages/types/`; `packages/services/`; minimal configuration seam; minimal `apps/web` Vitest and React Testing Library harness for Curve tests |
@@ -120,7 +124,7 @@ pnpm build
 | Task ID | `CURVE-M0-S2-DELIVERY-KERNEL` |
 | Status | `COMPLETED`: Plane PR #3 merged approved implementation head `f520075493290389aa54532baec36268c34e2885` into `preview` at `eff8686a69aa112ea8fda79be0e1316dc1fd97d6`; M0-02 and M0-05 Project items are `Done` |
 | Risk | `STANDARD`; transactional and immutable control-plane state |
-| Human owner and reviewer | Federico Ocampo (`faocampo`); the AI coding agent is the separate implementer |
+| Human owner and reviewer | Designated reviewer (`example-reviewer`); the AI coding agent is the separate implementer |
 | Outcome | Persist workspace-scoped Operation, durable DomainEvent, outbox, inbox, digest-only idempotency, and append-only audit records atomically. |
 | Traceability | FR-007, FR-021, FR-023, FR-044; NFR-004-NFR-005, NFR-018; AC-08, AC-26, AC-33-AC-34, AC-56 |
 | In scope | Curve models/migrations, uniqueness/check constraints, command service, transaction boundaries, optimistic concurrency, relay claim/ack/retry/dead-letter primitives, safe audit metadata, unit/contract/concurrency tests |
@@ -186,7 +190,7 @@ bind approved implementation head `a807dd7...` and merge `922dd6d...`.
 | Task ID | `CURVE-M0-S3-TEMPORAL-ROUND-TRIP` |
 | Status | `COMPLETED`: Plane PR #5 merged approved head `7fd231b062dc485b37078979a78ec83618be78d8` as `d99342f589db4eb488695487d3ae3f2c16bf0874`; [M0-S3 implementation evidence](m0-s3-implementation-evidence.md) (exact context, merge, tests, runtime proof, security acceptance, and rollback) is the acceptance record |
 | Risk | `STANDARD`; durable asynchronous control flow, local synthetic data only |
-| Human owner and reviewer | Federico Ocampo (`faocampo`); the AI coding agent is the separate implementer |
+| Human owner and reviewer | Designated reviewer (`example-reviewer`); the AI coding agent is the separate implementer |
 | Plane repository/base | `git@github.com:faocampo/plane.git`; `preview` at `922dd6de5d5ed5081f35cd88343154022867ccad` |
 | Feature branch | `curve/m0-s3-temporal-round-trip` |
 | Curve context | Explicit `M0-S3` path manifest in `scripts/lib/context-pack.mjs`; the Plane implementation stores the post-merge Curve revision, per-file SHA-256 values, aggregate digest, and ownership before mutation |
@@ -195,7 +199,7 @@ bind approved implementation head `a807dd7...` and merge `922dd6d...`.
 | Traceability | FR-015, FR-022; NFR-004; AC-17-AC-21, AC-58 |
 | In scope | `temporalio==1.31.0`; separate Curve worker entrypoint built from the API image; Curve-only `docker-compose-curve.yml` overlay and `curve` profile; shared Plane `dev_env`; direct loopback-only Temporal gRPC/UI ports; worker environment and credential allowlist; namespace/task queue; workflow/activity contracts; relay dispatch; cancellation; replay corpus; local health, dependency-connectivity, exposure, restart, leakage, and rollback checks |
 | Out of scope | Staging/production Temporal, OpenHands, gVisor, protected payloads, Celery replacement, business workflows |
-| Contracts | [M0 workflow contract](../../contracts/temporal/m0-workflow-contract.md) (workflow identifiers, payloads, retries, cancellation, and replay); Operation/Event/Outbox/Inbox/Audit schemas; [ADR-003](adr-003-runtime-topology.md) (live topology, pins, evidence, and rollback); [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, security boundary, and revised acceptance) |
+| Contracts | [M0 workflow contract](../../contracts/temporal/m0-workflow-contract.md) (workflow identifiers, payloads, retries, cancellation, and replay); Operation/Event/Outbox/Inbox/Audit schemas; [ADR-003](adr-003-runtime-topology.md) (live topology, pins, evidence, and rollback); [D-003 connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private deployment requirements, security boundary, and revised acceptance) |
 | Migration | Additive Operation workflow fields/indexes only if the reviewed contract requires them; otherwise no migration. |
 | Rollback | Disable relay dispatch and the `curve` profile; stop the Curve worker/Temporal services; retain inspectable terminal/cancelled operations; revert the packet commit. |
 
@@ -250,7 +254,7 @@ docker compose -f docker-compose-local.yml ps
 | Field | Dispatch specification |
 | --- | --- |
 | Task ID | `CURVE-M0-S4-API-SSE-UI` |
-| Status | `ACCEPTED_AND_MERGED`: Federico Ocampo approved Plane head `a1748c790a060434928b8ed521692b13b3f9739e`; Plane PR #6 squash-merged it into `preview` as `e762fbbd2c1726a2833745add8245a1679c60d88`; [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (exact context, approvals, merge, tests, UX/security acceptance, and rollback) closes M0-S4 and the local M0-07 API/SSE scope. |
+| Status | `ACCEPTED_AND_MERGED`: Designated reviewer approved Plane head `a1748c790a060434928b8ed521692b13b3f9739e`; Plane PR #6 squash-merged it into `preview` as `e762fbbd2c1726a2833745add8245a1679c60d88`; [M0-S4 implementation evidence](m0-s4-implementation-evidence.md) (exact context, approvals, merge, tests, UX/security acceptance, and rollback) closes M0-S4 and the local M0-07 API/SSE scope. |
 | Risk | `STANDARD`; authenticated user-visible API and workspace boundary |
 | Outcome | Expose authorized Operation create/read/cancel behavior, resumable workspace events, and a minimal local foundation-probe UI. |
 | Traceability | FR-023; NFR-002-NFR-005, NFR-013; AC-01, AC-20, AC-35 |
@@ -316,7 +320,7 @@ docker compose -f docker-compose-test.yml up --build --abort-on-container-exit -
 The executable scenarios, closed telemetry surface, configuration behavior,
 cardinality limits, required tests, evidence, stop conditions, and two-stage
 rollback are governed by the [standalone M0-S5 task packet](m0-s5-observability-task-packet.md)
-(safe telemetry kernel and X3M local-integration proof). Its M0-S5A acceptance
+(safe telemetry kernel and Example Organization local-integration proof). Its M0-S5A acceptance
 uses deterministic in-memory exporters. Its M0-S5B acceptance uses only the
 owner-approved [OBS-BIND-001](obs-bind-001-local-observability-binding.md)
 (local Docker OTLP, Prometheus, Grafana, path-health, cleanup, and promotion

@@ -1,5 +1,9 @@
 # M0-S9A Provider Registry Relational Contract
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](../../docs/technical/public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,7 +12,7 @@
 | Version | 1.8 |
 | Date | 2026-08-28 |
 | Work package | M0-S9A (provider-neutral registry and reconciliation foundation) |
-| Owner and reviewer | Federico Ocampo (`faocampo`) |
+| Owner and reviewer | Designated reviewer (`example-reviewer`) |
 | Applies to | Curve-owned PostgreSQL tables in the public Plane fork |
 | Plane base | Exact `preview` commit `ad5772c0565c934e64ea90f892be1374819979be`, containing Plane PR #10 (M0-S6A durable parent/child Temporal orchestration implementation) |
 | Published Curve contract baseline | Curve `main` `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb`, the squash merge of [Curve PR #37](https://github.com/faocampo/curve/pull/37) (M0-S9A post-correction lifecycle reconciliation) |

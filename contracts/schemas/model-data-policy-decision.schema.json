@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/model-data-policy-decision.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/model-data-policy-decision.schema.json",
   "title": "D-005 candidate model and provider data-policy decision",
   "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
   "type": "object",

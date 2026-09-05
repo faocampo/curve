@@ -14,39 +14,39 @@
   "predecessor_bindings": [
     {
       "path": "contracts/governance/m0-s9b1-provider-administration-v1.json",
-      "sha256": "sha256:7930bc55f8ee05abee88b23ecfbaf940368da24bc5f14c78cd16c92006cf9427"
+      "sha256": "sha256:32ba00e9ad8118dbb7d5c057c7e18ea57dd646ff9702fbb0c9d384ec0bfb791c"
     },
     {
       "path": "contracts/providers/m0-s9a-provider-registry-v1.json",
-      "sha256": "sha256:393c33fa5343beb1fe05a445a015333334a27bf491d7850c64dcf0a7f265071a"
+      "sha256": "sha256:ac9a7e854b917591f0c747d8ec55a6d051bcf6abe8680bbb341ca3763b368fbb"
     }
   ],
   "schema_bindings": [
     {
       "path": "contracts/schemas/provider-credential-reference.schema.json",
-      "sha256": "sha256:3a9a1dd86d5ac845362ac6780117b47f16d19040e457222e69f94c4e5f663ece",
-      "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-credential-reference.schema.json",
+      "sha256": "sha256:8c3c5d05d4d23c81fd7b965baf098f88e321bf5903b243cd66e35a72deb9135b",
+      "schema_id": "https://curve.example.invalid/contracts/schemas/provider-credential-reference.schema.json",
       "contract_state": "PROPOSED_NOT_NORMATIVE",
       "promotion_decision": "B-PROFILE-M0-S9B2"
     },
     {
       "path": "contracts/schemas/provider-endpoint-profile.schema.json",
-      "sha256": "sha256:9d49886177b47140d87a5926f21c0e743b0e1ba5d5ce378e7a07409b4cca91b4",
-      "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-endpoint-profile.schema.json",
+      "sha256": "sha256:b7d69cde617994dccc2eb26b10e2fca9e954e2c213607ba58c1dfa906fef05e0",
+      "schema_id": "https://curve.example.invalid/contracts/schemas/provider-endpoint-profile.schema.json",
       "contract_state": "PROPOSED_NOT_NORMATIVE",
       "promotion_decision": "B-PROFILE-M0-S9B2"
     },
     {
       "path": "contracts/schemas/provider-profile-binding.schema.json",
-      "sha256": "sha256:e458de6d3898e4c7b356dba223c005334664920037a7aa0ee3fdab2a9a41318e",
-      "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-profile-binding.schema.json",
+      "sha256": "sha256:6ef40290427c81279482d2d959b742142a0d5743d645dddc7ee4956ab4974ddb",
+      "schema_id": "https://curve.example.invalid/contracts/schemas/provider-profile-binding.schema.json",
       "contract_state": "PROPOSED_NOT_NORMATIVE",
       "promotion_decision": "B-PROFILE-M0-S9B2"
     },
     {
       "path": "contracts/schemas/provider-profile-decision.schema.json",
-      "sha256": "sha256:a25ba567486b3bbf40c42e3bf395f1865b959f609fbba4f9dc721fbec5744c1d",
-      "schema_id": "https://curve.x3m.internal/contracts/schemas/provider-profile-decision.schema.json",
+      "sha256": "sha256:8412cb809efc27072099b03d07e3a08dd4cbdc5b5fc0234f92a0ed375787e991",
+      "schema_id": "https://curve.example.invalid/contracts/schemas/provider-profile-decision.schema.json",
       "contract_state": "PROPOSED_NOT_NORMATIVE",
       "promotion_decision": "B-PROFILE-M0-S9B2"
     }
@@ -61,7 +61,7 @@
       "selected": null
     },
     "credential_broker_profile": {
-      "allowed": ["X3M_SECRETS_MANAGER_BROKER", "ABSTRACT_CREDENTIAL_BROKER", "DEFER"],
+      "allowed": ["ORGANIZATION_SECRETS_MANAGER_BROKER", "ABSTRACT_CREDENTIAL_BROKER", "DEFER"],
       "selected": null
     },
     "credential_reference_protocol": {

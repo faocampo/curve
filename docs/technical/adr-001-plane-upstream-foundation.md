@@ -1,13 +1,17 @@
 # ADR-001: Use official Plane upstream as Curve's updateable foundation
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 - Status: DECIDED
 - Decision version: 1.0 (approved); evidence addendum updated 2026-08-18
 - PRD decision: D-001
-- Owner and engineering approver: Federico Ocampo, CTO at X3M
-- Licensing reviewer: Federico Ocampo, CTO at X3M
-- Plane support/upgrade owner: Federico Ocampo, CTO at X3M
+- Owner and engineering approver: Designated reviewer, Designated technical owner
+- Licensing reviewer: Designated reviewer, Designated technical owner
+- Plane support/upgrade owner: Designated reviewer, Designated technical owner
 - Product sponsor approval: Upstream-baseline direction approved on 2026-08-12
-- Interim human reviewer for both PRs: Federico Ocampo, CTO at X3M (`faocampo`)
+- Interim human reviewer for both PRs: Designated reviewer, Designated technical owner (`example-reviewer`)
 - Advisory reviewers when a consuming milestone triggers their scope: Release owner, application security, and platform operations
 - Decision date: 2026-08-15
 - Required by: M0 architecture sign-off
@@ -15,7 +19,7 @@
 
 ## Context and constraints
 
-Curve is an additive AGPL-covered module in Federico Ocampo's Plane fork. It needs to reuse Plane's work-management capabilities while allowing controlled uptake of new official Plane releases. The shared fork branch `preview` must not be force-rebased or otherwise rewritten, upstream pushes must be impossible from the normal integration remote, and every Curve task must start from an exact accepted foundation SHA.
+Curve is an additive AGPL-covered module in Designated reviewer's Plane fork. It needs to reuse Plane's work-management capabilities while allowing controlled uptake of new official Plane releases. The shared fork branch `preview` must not be force-rebased or otherwise rewritten, upstream pushes must be impossible from the normal integration remote, and every Curve task must start from an exact accepted foundation SHA.
 
 The product sponsor confirmed that the intended model is to use the original Plane repository as the code baseline, implement Curve in the fork, and periodically incorporate official Plane updates.
 
@@ -33,9 +37,9 @@ The product sponsor confirmed that the intended model is to use the original Pla
 
 | Option | Outcome | Reason |
 | ------ | ------- | ------ |
-| Official Plane upstream plus X3M fork and isolated integration branches | SELECTED DIRECTION | Preserves ownership while providing a reproducible upstream update path and controlled conflict resolution. |
+| Official Plane upstream plus Example Organization fork and isolated integration branches | SELECTED DIRECTION | Preserves ownership while providing a reproducible upstream update path and controlled conflict resolution. |
 | Permanently freeze the current fork | REJECTED | Avoids near-term integration work but accumulates security, compatibility, and maintenance debt. |
-| Develop directly in official Plane upstream | REJECTED | Does not preserve X3M's release control and cannot assume upstream acceptance of Curve-specific scope. |
+| Develop directly in official Plane upstream | REJECTED | Does not preserve Example Organization's release control and cannot assume upstream acceptance of Curve-specific scope. |
 | Force-rebase shared fork `preview` for every update | REJECTED | Rewrites published history and creates avoidable coordination and rollback risk. |
 
 ## Evidence and proof results
@@ -56,7 +60,7 @@ The product sponsor confirmed that the intended model is to use the original Pla
 | Accepted Curve governance baseline | Curve PR #1 squash-merged to `main` at `1529b8b7f04f226ac8be151f89104b6582650b42`; post-merge validation run 31887095811 passed |
 | Frontend verification | `pnpm check`: 60/60 successful at the exact candidate SHA; `pnpm build`: 16/16 successful on the pre-commit-equivalent candidate tree |
 | Backend verification | Repository Compose suite: 516 passed, 92 warnings, 84.10 seconds; exit code 0 |
-| Local deployment smoke | PASS at exact candidate SHA using the existing local Plane Compose project and persistent development volumes: migrator `0`/no pending migrations, API health `200`, `check --deploy` exit `0` with five expected local-profile warnings, worker and Beat initialized, and safe nonexistent-asset task consumed. An unrelated X3M HR container required temporary Plane host-port remapping; it was untouched. |
+| Local deployment smoke | PASS at exact candidate SHA using the existing local Plane Compose project and persistent development volumes: migrator `0`/no pending migrations, API health `200`, `check --deploy` exit `0` with five expected local-profile warnings, worker and Beat initialized, and safe nonexistent-asset task consumed. Unrelated local workloads were preserved. |
 | Candidate correction | `packages/i18n/scripts/generate-types.ts` emits the type-union semicolon on the final member so the generated ignored file satisfies pinned `oxfmt`; commit hooks also changed two `.sort()` calls to `.toSorted()` under repository lint policy |
 | Cleanup | Test containers, network, and disposable volumes removed without `--remove-orphans` |
 | Public-source license evidence | Root `LICENSE.txt` contains GNU AGPL v3; README identifies AGPL v3; inspected source uses `SPDX-License-Identifier: AGPL-3.0-only` |
@@ -67,11 +71,11 @@ The full command/result narrative and capability matrix are in the [Plane founda
 
 ## Decision
 
-Use the official public Plane repository as Curve's upstream code baseline and Federico Ocampo's public fork as the Curve implementation and release repository. Fetch official changes through a remote named `upstream` whose push URL is disabled. Prepare every update on a new `curve/plane-upstream-sync-<date>` integration branch, compare exact ancestry/delta, and never force-rebase or force-push shared `preview`.
+Use the official public Plane repository as Curve's upstream code baseline and Designated reviewer's public fork as the Curve implementation and release repository. Fetch official changes through a remote named `upstream` whose push URL is disabled. Prepare every update on a new `curve/plane-upstream-sync-<date>` integration branch, compare exact ancestry/delta, and never force-rebase or force-push shared `preview`.
 
 Keep the Curve and Plane repositories separate. The Curve repository is the governance and normative-contract source for PRDs, ADRs, security decisions, architecture, and immutable task packets. The public Plane fork owns deployable Curve code, migrations, UI, worker/runtime configuration, generated clients, and a pinned implementation snapshot or reference to the approved Curve contracts. This avoids a combined monorepo while allowing code and generated artifacts to change atomically in Plane. This repository boundary is approved by D-001.
 
-The accepted Plane `preview` merge commit `549db1aea8f3307b337b3686dbb844a87549cd95` is the historical foundation base for the first Curve implementation task packets. Plane PR #2 completed M0-S1 (Curve module shell) and advanced the implementation base at the time of this decision to `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`. The local repository-level commercial/community audit, reuse/build recommendation, additive migration, feature-disabled behavior, workspace-isolation, and rollback proof are complete. Federico Ocampo approved the applicable exact heads on 2026-08-15 and both changes merged through their authorized methods.
+The accepted Plane `preview` merge commit `549db1aea8f3307b337b3686dbb844a87549cd95` is the historical foundation base for the first Curve implementation task packets. Plane PR #2 completed M0-S1 (Curve module shell) and advanced the implementation base at the time of this decision to `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`. The local repository-level commercial/community audit, reuse/build recommendation, additive migration, feature-disabled behavior, workspace-isolation, and rollback proof are complete. Designated reviewer approved the applicable exact heads on 2026-08-15 and both changes merged through their authorized methods.
 
 The 2026-08-18 evidence addendum preserves the approved D-001 decision and its
 version-1.0 digest. It records that Plane PR #3 completed M0-S2 (operation
@@ -90,7 +94,7 @@ binding) and [M0-03 implementation evidence](m0-03-implementation-evidence.md)
 | Decision | D-001 |
 | Approved subject | ADR-001 decision content plus the explicitly approved M0-01 gate allocation |
 | Approved ADR content digest | `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488` |
-| Approver and roles | Federico Ocampo, CTO at X3M; Curve engineering approver, licensing reviewer, Plane support/upgrade owner, and interim human reviewer |
+| Approver and roles | Designated reviewer, Designated technical owner; Curve engineering approver, licensing reviewer, Plane support/upgrade owner, and interim human reviewer |
 | Decision time | 2026-08-15; recorded at `2026-08-15T09:17:55-03:00` |
 | Scope and environment | Plane foundation, public-fork implementation/release boundary, Curve governance boundary, licensing strategy, and upgrade process for all Curve environments. Each implementation package remains subject to its other decision and environment gates. |
 | Exact Curve disposition | Approved Curve PR #1 at `62e144f37d4fea3064ae7cd21868117b9eb78edb` |
@@ -137,10 +141,10 @@ The D-001 decision evidence and the independently tracked M0-01 implementation p
 - [x] The i18n generator correction is committed at an exact candidate foundation SHA and the full frontend check passes at that SHA.
 - [x] Deployment smoke passes on that exact SHA in the approved local non-production topology.
 - [x] Repository-level community-versus-commercial capability proof and reuse/build recommendation are documented.
-- [x] Named engineering approver and licensing reviewer are assigned: Federico Ocampo, CTO at X3M.
-- [x] Federico Ocampo records formal acceptance of the reuse/build boundary and AGPL, notices, dependency, and corresponding-source consequences against an exact ADR version/digest.
-- [x] Plane support/upgrade ownership and event-driven review cadence are recorded: Federico Ocampo; review at every Plane foundation upgrade, material licensing change, or change of support owner.
-- [x] Federico Ocampo records a disposition for the exact head of both draft PRs.
+- [x] Named engineering approver and licensing reviewer are assigned: Designated reviewer, Designated technical owner.
+- [x] Designated reviewer records formal acceptance of the reuse/build boundary and AGPL, notices, dependency, and corresponding-source consequences against an exact ADR version/digest.
+- [x] Plane support/upgrade ownership and event-driven review cadence are recorded: Designated reviewer; review at every Plane foundation upgrade, material licensing change, or change of support owner.
+- [x] Designated reviewer records a disposition for the exact head of both draft PRs.
 - [x] The ADR approval record contains decision time, scope/environment, evidence, exceptions, and review/expiry date.
 - [x] Merge the approved Plane candidate and pin resulting fork `preview` SHA `549db1aea8f3307b337b3686dbb844a87549cd95` before dispatching M0-01.
 - [x] M0-01 proves additive migration, feature-disabled behavior, workspace isolation, and rollback; Plane PR #2 exact head `81712b66e22f1a60883a619c5db63a2101dc365d` merged into `preview` at `7685bbc7cc5e1ab34f11e3912d9e47d31c365a9a`.

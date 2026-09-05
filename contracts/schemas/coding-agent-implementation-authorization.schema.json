@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/coding-agent-implementation-authorization.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/coding-agent-implementation-authorization.schema.json",
   "title": "Curve coding-agent implementation authorization",
   "description": "A human-attested, time-bounded execution grant for one exact preflight-approved coding-agent task packet. The authorization is separate from packet readiness and contains no command-execution mechanism.",
   "type": "object",

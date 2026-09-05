@@ -1,5 +1,9 @@
 # M1-M7 Coding-Agent Task Packets
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -10,7 +14,7 @@
 | Product baseline | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, approved Product core, Curve-first shell, lifecycle, security invariants, and acceptance criteria) |
 | Delivery baseline | [Development plan](development-plan.md) (milestones, package dependencies, product trace, and completion evidence) and [M1 task packet](m1-alignment-evidence-prd-task-packet.md) (manual-first/provider-enhanced lanes, implementation slices, contracts, tests, and readiness gates) |
 | Decision readiness | [Later-milestone decision-readiness index](later-milestone-decision-readiness-index.md) (D-002 (Onyx delegation) through D-016 (KPI and rollout guardrails) owner inputs, machine contracts, acceptance evidence, and fail-closed milestone effects) |
-| Default owner and reviewer | Federico Ocampo (`faocampo`) until explicitly reassigned |
+| Default owner and reviewer | Designated reviewer (`example-reviewer`) until explicitly reassigned |
 | Implementation repository | `git@github.com:faocampo/plane.git`, except an approved repository-specific delivery slice |
 
 ## Dispatch contract
@@ -88,7 +92,7 @@ revision.
 | Control | Inherited value before materialization |
 | --- | --- |
 | Repository/branch | Public Plane fork `git@github.com:faocampo/plane.git`, target `preview`; a repository-specific delivery slice requires its approved binding and base SHA. |
-| Owner/reviewer | Federico Ocampo (`faocampo`) for both roles until an explicit replacement is recorded; the implementer cannot satisfy human review. |
+| Owner/reviewer | Designated reviewer (`example-reviewer`) for both roles until an explicit replacement is recorded; the implementer cannot satisfy human review. |
 | Data | Synthetic `INTERNAL` data only by default. Protected or permissioned data requires its classification, AccessEnvelope, D-009 (retention and erasure decision), and destination policy. |
 | Runtime model | None by default. Model-enabled work requires D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision), plus exact model/provider/prompt/tool versions and budget. |
 | Network/egress | Dependency/build access only by default. Provider or destination traffic requires an exact workspace allowlist, approved connection, and package-specific conformance tests. |
@@ -136,7 +140,7 @@ children that consume them:
 | M1-06 (PRD versions) | Immutable manual PRD versions, structural diff, submit/supersede/review UI, and separately activated model generation | `B-ARTIFACT-BODY-01` (manual artifact-body persistence contract) before manual PRD body persistence; M0-S9C (Model Gateway routing/failover), D-004 (model-gateway decision), D-005 (model/provider data-policy decision), and D-014 (budget-policy decision) only for model generation | Immutable version, source access, concurrent edit, completeness, diff, provenance, and supersession tests | Disable generation; preserve manual metadata/version lineage and prior immutable versions |
 | M1-07 (Gate 1) | Exact-version Product Approval workflow with changes requested and rejection | Product authority/role policy from approved PRD | Unauthorized/agent decision denial, evidence accessibility, risk confirmation, notification, and exact-version invalidation tests | Disable submission; leave draft PRDs editable and decisions immutable |
 
-M1 exits when an authorized X3M user completes an evidence-backed PRD and each
+M1 exits when an authorized Example Organization user completes an evidence-backed PRD and each
 material approver can access every cited evidence item through their own identity.
 The [M1 task packet](m1-alignment-evidence-prd-task-packet.md)
 (manual-first/provider-enhanced lanes, implementation slices, contracts, tests,
@@ -179,7 +183,7 @@ and readiness gates) is the normative decomposition for materialization.
 
 | Packet | Repository-local outcome | Material gates | Executable completion evidence | Rollback or disablement |
 | --- | --- | --- | --- | --- |
-| M5-01 (Quality policy) | Versioned policy merge with non-reducible X3M baseline, additive repository policy, tool/rulepack/image pins, applicability, and thresholds | P0-11 (quality/security/license baseline proof) and D-010 (quality, security, license, waiver, and severity decision) | Precedence, unknown-license, non-waivable, pinned-tool, and commit-invalidation fixtures | Disable new policy version; last approved deterministic/security baseline remains fail-closed |
+| M5-01 (Quality policy) | Versioned policy merge with non-reducible Example Organization baseline, additive repository policy, tool/rulepack/image pins, applicability, and thresholds | P0-11 (quality/security/license baseline proof) and D-010 (quality, security, license, waiver, and severity decision) | Precedence, unknown-license, non-waivable, pinned-tool, and commit-invalidation fixtures | Disable new policy version; last approved deterministic/security baseline remains fail-closed |
 | M5-02 (Isolated preflight) | gVisor command runner for build/type/lint/test/browser/security checks, protected logs, and exact-SHA attestation | P0-07 (gVisor runner proof), P0-11 (quality/security/license baseline proof), M5-01 (Quality policy), and approved runner profile | Seeded pass/fail/flaky/malicious cases, secret/egress isolation, and exact-SHA attestation | Stop new jobs, cancel/clean runners, preserve safe metadata, and keep mandatory checks blocking |
 | M5-03 (Independent review) | Independent AI code/security review, normalized findings, fingerprints, severity, dispositions, and re-review | P0-11 (quality/security/license baseline proof), M0-S9C (Model Gateway routing/failover), D-004 (model-gateway decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), and D-010 (quality/security/license policy) | Model/prompt pins, precision corpus, no self-approval, deterministic-check precedence, and commit invalidation | Disable AI review; deterministic and mandatory security checks remain authoritative |
 | M5-04 (Waivers/applicability) | Human waiver and `NOT_APPLICABLE` decision workflows with authority, non-waivable matrix, expiry, and follow-up | D-010 (quality, security, license, waiver, and severity decision); product applicability authority | Unauthorized/agent/non-waivable denial, expiry, stale-commit, and non-compliant projection tests | Revoke/expire decision and recompute readiness; immutable history remains |
@@ -286,7 +290,7 @@ a value that the dispatcher may invent.
 - [ ] Exact Curve revision and context digest recorded.
 - [ ] A versioned Context Manifest resolves every entry and reproduces the canonical context-pack digest.
 - [ ] Exact repository, base branch, live base SHA, and feature branch recorded.
-- [ ] Federico Ocampo is owner/reviewer or an explicit replacement is recorded.
+- [ ] Designated reviewer is owner/reviewer or an explicit replacement is recorded.
 - [ ] Dependency edges are satisfied by merged, head-bound evidence.
 - [ ] Applicable material decisions are approved; routine project-status changes are excluded.
 - [ ] Contracts and migrations are versioned, compatible, and linked.

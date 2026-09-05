@@ -1,5 +1,9 @@
 # D-006 (Orca Ownership) and D-007 (MCP Trust) Decision Readiness
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -10,7 +14,7 @@
 | Product | Curve |
 | Scope | D-006 (Orca ownership, compatibility, and support decision) and D-007 (MCP trust, delegated authorization, and write-back decision) |
 | Intended owners | Agent Platform; Security; Platform Administration; Identity; Licensing; Curve Engineering |
-| Prepared by | Codex under Federico Ocampo's review |
+| Prepared by | Codex under Designated reviewer's review |
 | Governing baseline | Exact Curve revision named by the eventual decision PR |
 | Activation boundary | No MCP implementation, identity configuration, network access, provider activation, repository mutation, or environment activation is authorized by this packet |
 
@@ -231,7 +235,7 @@ record:
 - Orca `1.4.188` protocol conformance evidence
 - Named Agent Platform, Security, Platform Administration, Identity, licensing,
   and support owners
-- Exact X3M authorization-server and client-registration values
+- Exact Example Organization authorization-server and client-registration values
 - Exact rate/body/concurrency/token/revocation values
 - MCP transport/catalog binding contracts and full fixtures
 - D-009 (retention, backup, legal-hold, and erasure decision) for idempotency

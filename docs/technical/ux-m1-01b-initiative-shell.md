@@ -1,5 +1,9 @@
 # M1-01B Initiative Shell Experience Contract
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,14 +13,14 @@
 | Status | `UX_APPROVED / IMPLEMENTATION_PACKET_REQUIRED` |
 | Version | 0.2 |
 | Date | 2026-08-29 |
-| Product owner and approver | Federico Ocampo |
+| Product owner and approver | Designated reviewer |
 | Backend prerequisite | [M1-01A implementation evidence](m1-01a-initiative-core-implementation-evidence.md) (accepted Initiative domain/API implementation, tests, merge tree, data boundary, and rollback) |
 | Prototype | [M1-01B Initiative shell prototype](../design/prototypes/m1-01b-initiative-shell/index.html) (clickable synthetic list, create, detail, lifecycle, and recovery-state review surface) |
 | Implementation authority | `NOT_AUTHORIZED`; the approved UX record enables separate Plane implementation-packet finalization and dispatch approval |
 
 ## Product intent
 
-M1-01B gives an authenticated X3M workspace member one Curve-owned place to
+M1-01B gives an authenticated Example Organization workspace member one Curve-owned place to
 find, create, understand, and manage manual-first Initiatives. It exposes the
 accepted M1-01A lifecycle without introducing Idea Brief, PRD, provider, model,
 agent-execution, or roadmap behavior.
@@ -192,7 +196,7 @@ of the production UI.
 | Check | Evidence |
 | --- | --- |
 | Desktop render | [Desktop review capture](../../.impeccable/review/desktop.png) (default Initiative list/detail state at the 1440 by 1000 review viewport) |
-| Mobile render | [Mobile review capture](../../.impeccable/review/mobile.png) (four-row filtered-list and stacked-detail state at the 390 by 844 review viewport) |
+| Mobile render | [Mobile review capture](../../.impeccable/review/mobile.png) (sanitized default first viewport at 390 by 844) |
 | Responsive layout | No horizontal overflow at either review width; every filtered Initiative remains visible in the mobile list before the stacked detail, and the shell, portfolio, filters, drawer, and dialog remain within the viewport |
 | Creation | Each opening starts with blank authored fields and safe selector defaults; required-field validation, accepted keyword-format validation, elevated-risk three-person separation, selection-derived gate assignments, focus placement, status announcement, successful Draft creation, selection, and count update exercised |
 | Lifecycle | `DRAFT -> ALIGNING -> PAUSED -> ALIGNING -> CANCELLED` exercised; cancellation confirmation displayed and terminal actions removed |
@@ -206,17 +210,17 @@ UX review. It does not populate the approval record or authorize Plane code.
 
 ## Manual review iteration 1
 
-Federico Ocampo reported T1, T2, T3, and T5 as passing on 2026-08-29. T4 was
+Designated reviewer reported T1, T2, T3, and T5 as passing on 2026-08-29. T4 was
 reported as passing with pending validation; T6 and the remaining tasks have not
 yet received a final result. The five annotated findings from this review remain
-part of the exact-commit gate until Federico retests the corrected prototype.
+part of the exact-commit gate until Designated reviewer retests the corrected prototype.
 
 | Finding | Reported issue | Correction in this iteration | Retest state |
 | --- | --- | --- | --- |
 | MR-01 | The Standard/High three-distinct-human rule did not block creation | Creation now rejects duplicate people, identifies every duplicated selector, focuses the first invalid selector, announces the recovery, and derives the created gate assignments from the corrected selections | Required |
 | MR-02 | The `Paused` list badge had inconsistent alignment and size | List-state badges now use one centered 76 px geometry and align to the same row edge | Required |
 | MR-03 | Initials were misaligned in mandatory-gate avatars | Gate-avatar layout is isolated from descriptive-text selectors and centers initials with explicit flex geometry and line height | Required |
-| MR-04 | Initials were misaligned in the signed-in-user avatar | Footer identity copy has a dedicated selector; the avatar keeps explicit centered geometry | Required, including Federico's pending validations |
+| MR-04 | Initials were misaligned in the signed-in-user avatar | Footer identity copy has a dedicated selector; the avatar keeps explicit centered geometry | Required, including Designated reviewer's pending validations |
 | MR-05 | The Help icon required verification | The control retains the accessible name `Help` and uses an explicit circle, question curve, and visible dot with consistent authored stroke geometry | Required |
 
 This correction record documents prototype behavior and review evidence. It does
@@ -225,9 +229,9 @@ UX-007-M1-01B (work-package-linked Initiative screen contract) approved.
 
 ## Manual review iteration 2
 
-Federico Ocampo reported T6, T7, and T8 as passing on 2026-08-29. T9 passed
+Designated reviewer reported T6, T7, and T8 as passing on 2026-08-29. T9 passed
 functionally with visual follow-ups. T10 identified that the mobile list exposed
-only the selected Initiative regardless of filters. Federico also reported that
+only the selected Initiative regardless of filters. Designated reviewer also reported that
 the New Initiative form retained values from the prior creation attempt.
 
 | Finding | Reported issue | Correction in this iteration | Retest state |
@@ -240,20 +244,20 @@ the New Initiative form retained values from the prior creation attempt.
 
 Codex executed T9 and T10 on 2026-08-29 against exact Curve commit
 `ea1500a759d290283157686788c3a5a0547581ca`. This verification closes the
-reported correction retests while keeping Federico Ocampo's accountable Product
+reported correction retests while keeping Designated reviewer's accountable Product
 approval separate.
 
 | Check | Result and evidence |
 | --- | --- |
 | T9 recovery states | Passed loading, empty, permission, and error differentiation; heading focus; state-specific icons; recovery actions; fresh empty-state creation; desktop fit; and 390 px mobile fit |
-| T10 mobile list | Passed at 390 by 844: all four unfiltered Initiatives remain visible, Paused returns one row, Standard risk returns two rows, `Loomit` returns two rows, and every row selects its matching stacked detail |
+| T10 mobile list | Passed at 390 by 844: all four unfiltered Initiatives remain visible, Paused returns one row, Standard risk returns two rows, `Example Product` returns two rows, and every row selects its matching stacked detail |
 | T10 keyboard semantics | Passed native-button focusability, deterministic tab order, reverse-Tab focus containment, Escape closure/focus return, invalid-submit focus recovery, and keyboard-reachable create/cancel paths |
 | Approver invariant | Passed: Standard risk marks all three duplicate approver controls invalid and exposes the recovery message; distinct defaults permit Draft creation |
 | Form reset | Passed before and after successful creation: authored fields are blank, validation is cleared, risk returns to Standard, and three distinct approver defaults are restored |
 | Browser and layout diagnostics | Passed with zero application exceptions and zero horizontal overflow; the local server's absent favicon was excluded from application diagnostics |
 | Repository validation | Passed 71 Markdown files, 48 Mermaid diagrams, 47 JSON Schemas with 126 fixtures, 106 contract/project tests, and GitHub Project dry-run consistency |
 
-The execution verdict for T9 and T10 is `PASS`. Federico Ocampo approved the
+The execution verdict for T9 and T10 is `PASS`. Designated reviewer approved the
 tested UX record at exact Curve commit
 `656a196aaba884ad297d48d6ed150ef7f246f194` on 2026-08-29. The approval closes
 the UX definition gate and grants no Plane implementation authority.
@@ -265,7 +269,7 @@ records:
   - UX-006-M1-01B
   - UX-007-M1-01B
 status: APPROVED
-reviewer: Federico Ocampo
+reviewer: Designated reviewer
 reviewed_curve_commit: 656a196aaba884ad297d48d6ed150ef7f246f194
 result: PASS
 test_executor: Codex
