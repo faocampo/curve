@@ -114,6 +114,11 @@ The [record tests](../../scripts/tests/external-prd-contracts.test.mjs)
 (schema completeness, request injection, exact-subject and assignment checks)
 verify these additions. The runtime API is still unimplemented and disabled.
 
+The [records-closure candidate](records-retention-closure.md) (active-use
+inventory, explicit owner closure, hold and policy-bound eligibility checks)
+provides a separate retention seam for the protected-storage prerequisite.
+It contains no retention periods and changes no existing D-009 policy pin.
+
 The following are implementation prerequisites, not completed features:
 
 1. Complete the ArtifactVersion, PRD/evidence and event schemas, completeness
