@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Status | Derived architecture baseline; implementation remains blocked by applicable non-decided decisions |
-| Owner | X3M Curve engineering |
+| Owner | Example Organization Curve engineering |
 | Audience | Architecture, engineering, security, platform operations, product, and AI coding agents |
 | Version | 0.9 |
 | Last updated | 2026-08-30 |
@@ -334,7 +334,7 @@ flowchart TB
 
 The local PostgreSQL/Temporal boundary is fixed by D-003 (runtime topology and
 trust-zone decision) and its [private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md)
-(shared local network, private EKS direction, service identity, and revised
+(shared local network, private deployment requirements, service identity, and revised
 proof): existing Plane PostgreSQL is business truth; disposable Temporal SQLite
 stores synthetic local history; Plane, Curve, Temporal, and PostgreSQL use
 existing `dev_env`. Non-local persistence, backup/restore, retention, and
@@ -406,17 +406,12 @@ The workspace baseline is non-reducible. Repository policy may add requirements 
 
 ## Deployment capability profiles
 
-D-003 owns the concrete topology. Its connectivity direction selects X3M's
-private AWS EKS/VPC/VPN environment, standard Kubernetes DNS/`ClusterIP`, a
-dedicated Curve namespace by default, internal Temporal UI ingress, existing
-X3M platform policy, workload identity/Secrets Manager, and authenticated
-Temporal clients. Detailed persistence, certificate, HA, backup/recovery,
-capacity, cost, and ownership remain environment-package inputs.
+D-003 defines the runtime trust boundary. Concrete platform selection, network layout, service exposure, identity bindings, secret storage, persistence, certificates, HA, recovery, capacity, cost and ownership are supplied by a separately approved private deployment profile. Non-local clients require authentication and least-privilege authorization.
 
 | Profile | Required logical services | Permitted data and integrations | Availability posture |
 | --- | --- | --- | --- |
 | Local development | Plane/Curve app, relational store, object-store substitute, Temporal development service, outbox relay, stub adapters, fake webhook receiver on shared Plane `dev_env` | Synthetic/unrestricted fixtures only; direct loopback Temporal ports; no production delegation or mutation identity | Developer convenience; no R1 SLA claim |
-| Internal staging | Full control plane, durable Temporal, object storage, policy engine, provider test connections, isolated runner/preview fleet, reconciliation, sanitized telemetry in private X3M EKS using `ClusterIP` and authenticated Temporal clients | Operational activation requires D-009 plus reviewed persistence, certificate, HA, backup/recovery, ownership, and environment evidence. | Required recovery and security-test environment after its activation gates pass |
+| Internal staging | Full control plane, durable Temporal, object storage, policy engine, provider test connections, isolated runner/preview fleet, reconciliation, sanitized telemetry in the approved private environment and authenticated Temporal clients | Operational activation requires D-009 plus reviewed persistence, certificate, HA, backup/recovery, ownership, and environment evidence. | Required recovery and security-test environment after its activation gates pass |
 | R0A | Production-like definition/control-plane subset through Gate 1 | Manual-first definition remains available; live Onyx requires D-002 (Onyx delegated identity), protected bodies require D-009/M0-04 (retention and protected storage), and D-005 (model/data policy) applies only before a model destination; no VCS mutation | Must meet M0/M1 exit tests for enabled components |
 | R0B pilot | Selected GitLab/OpenHands path with repository-local slices or an approved external prerequisite | Named pilot only after its blocking decisions and Gate 2 authorization | Pilot SLO measured, not advertised as R1 |
 | R1 production | Full M0-M6 logical topology, both VCS adapters, OpenHands automated execution, Orca developer-operated MCP assistance, HA/persistence/backups, isolated execution, audited secrets and telemetry | Data and providers allowed by decided classification, residency, retention, and model policies | `NFR-001` through `NFR-020` and AC-01 through AC-60 |
@@ -574,7 +569,7 @@ The architecture must qualify against `NFR-001` through `NFR-020`, including:
 - Qualification for 100 concurrent interactive users, 50 active initiative workflows, 20 concurrent sandboxes, 20 repositories and 100 slices per initiative, and 100 PR/MR bindings per set.
 - Streaming support for 5 MiB API artifact bodies, 100 MiB evidence attachments, and 500 MiB mounted Context Packs without loading a complete object into an API process.
 
-These figures are qualification targets. The approved private EKS/VPC/VPN
+These figures are qualification targets. The approved private deployment
 connectivity direction becomes deployable only through an environment package
 that supplies the still-open persistence, certificate, backup, HA, recovery,
 capacity, cost, and named-ownership evidence required by D-003 and D-009.
@@ -616,7 +611,7 @@ The PRD records agreed planning directions as `PROPOSED` and leaves genuinely un
 | --- | --- | --- |
 | D-001 | Pinned Plane commit, reuse/build inventory, extension seams, supported upgrade/rebase baseline | M0 architecture sign-off |
 | D-002 | Onyx per-operation delegation protocol, token lifecycle, revocation, audit, failure proof | Live Onyx retrieval in M1; manual definition remains independent |
-| D-003 | Dev/staging/prod topology, region/residency, trust zones, data services, HA, backups, secrets, Langfuse, ownership | Shared local `dev_env` plus private X3M EKS/VPC/VPN, `ClusterIP`, dedicated namespace by default, internal UI ingress, workload identity/Secrets Manager, and authenticated non-local Temporal clients are effective through the merged 2026-08-20 amendment. M0-S3 accepts the local implementation at Plane merge `d99342f...`; environment activation still requires its persistence, certificate, HA, backup/recovery, capacity, cost, and ownership evidence. |
+| D-003 | Dev/staging/prod topology, region/residency, trust zones, data services, HA, backups, secrets, Langfuse, ownership | Public reference: local synthetic proof and authenticated non-local clients. Concrete connectivity, platform, persistence, identity, secret storage and operational evidence are private deployment-profile inputs. Environment activation remains blocked until the applicable D-003 and D-009 gates pass. |
 | D-004 | In-process Curve Model Gateway and OpenRouter contract, allowlists, routing/fallback constraints, operations, security, license, and replacement evaluation | Model-enabled M1/M3/M5 |
 | D-005 | Task/data-class model allowlist, residency/training/retention terms, fallback equivalence, evaluation baseline | Model-enabled M1/M3/M5 and provider/model destinations; manual/deterministic children remain independent |
 | D-006 | Orca supported MCP client/version, delegated auth, bounded capability profile, ownership, support and license | Orca-enabled M4 / R1 human-assistance completeness |

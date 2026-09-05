@@ -19,7 +19,7 @@
   "attestations": [
     {
       "actor_type": "HUMAN",
-      "actor_id": "faocampo",
+      "actor_id": "example-reviewer",
       "actor_role": "PRODUCT_APPROVER",
       "authority_source": {
         "source_type": "CURVE_APPROVAL_RECORD",

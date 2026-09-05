@@ -62,28 +62,28 @@
     {
       "contract_id": "MODEL_CATALOG",
       "path": "contracts/models/m0-s9c1a-model-catalog-v1.json",
-      "schema_id": "https://curve.x3m.internal/contracts/schemas/model-catalog.schema.json",
+      "schema_id": "https://curve.example.invalid/contracts/schemas/model-catalog.schema.json",
       "content_digest": "sha256:aa6dadabe1a0d6f14eb01d09b1ca9aad47667c0be7dc22dbe7dc3fe5e81e4d98",
       "promotion_state": "PROPOSED_NOT_NORMATIVE"
     },
     {
       "contract_id": "TASK_MODEL_POLICY_MATRIX",
       "path": "contracts/models/m0-s9c1a-task-model-policy-v1.json",
-      "schema_id": "https://curve.x3m.internal/contracts/schemas/task-model-policy-matrix.schema.json",
+      "schema_id": "https://curve.example.invalid/contracts/schemas/task-model-policy-matrix.schema.json",
       "content_digest": "sha256:c18088d7aff04300bfc09388dcf58b7fdac41f2efce26b94bbc4db7c54f03995",
       "promotion_state": "PROPOSED_NOT_NORMATIVE"
     },
     {
       "contract_id": "FALLBACK_EQUIVALENCE",
       "path": "contracts/models/m0-s9c1a-fallback-equivalence-v1.json",
-      "schema_id": "https://curve.x3m.internal/contracts/schemas/fallback-equivalence.schema.json",
+      "schema_id": "https://curve.example.invalid/contracts/schemas/fallback-equivalence.schema.json",
       "content_digest": "sha256:35cfc4fdd0f549f43f3bb3626b52484e4f863f5a67ba9419244725ab991f2040",
       "promotion_state": "PROPOSED_NOT_NORMATIVE"
     },
     {
       "contract_id": "RESTRICTED_ROUTE_EVIDENCE",
       "path": "contracts/models/m0-s9c1a-restricted-route-evidence-v1.json",
-      "schema_id": "https://curve.x3m.internal/contracts/schemas/restricted-route-evidence.schema.json",
+      "schema_id": "https://curve.example.invalid/contracts/schemas/restricted-route-evidence.schema.json",
       "content_digest": "sha256:e354a42f1655f135e257f44d5000c80d70dbcd65b23cde13eaba598d09b45aad",
       "promotion_state": "PROPOSED_NOT_NORMATIVE"
     }

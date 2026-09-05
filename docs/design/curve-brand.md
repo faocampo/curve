@@ -54,4 +54,4 @@ The [Curve UI lockup](prototypes/m0-s4-foundation-probe/curve-logo-light-ui-v1.w
 
 ## Asset provenance
 
-The logo proposal derives from the Curve mark selected in the [main dashboard mockup](mockups/curve-dashboard-v1.png). The two assets in `docs/design/brand/` are the canonical raster references for v1. A vector source should be created from the approved geometry before production implementation at favicon, app-icon, or print sizes.
+The two assets in `docs/design/brand/` are the canonical raster references for v1. The identifying dashboard capture has been withdrawn; [dashboard public reference](mockups/dashboard-public-reference.md) (decision queue and portfolio requirements) preserves its functional guidance. A vector source should be created from the approved geometry before production implementation at favicon, app-icon, or print sizes.

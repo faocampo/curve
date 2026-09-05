@@ -1,5 +1,9 @@
 # M0-03 Core Policy Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -7,7 +11,7 @@
 | Status | `ACCEPTED_AND_MERGED` |
 | Date | 2026-08-18 |
 | Package | M0-03 (core authorization and policy kernel) |
-| Human owner and reviewer | Federico Ocampo, CTO at X3M (`faocampo`) |
+| Human owner and reviewer | Designated reviewer, Designated technical owner (`example-reviewer`) |
 | Curve contract revision | `097016ffe2eb259cc780ad2a6cd41ca3422366b2` |
 | Context digest | `sha256:113fcd3cf9795585a5db5a59e5d21965dd4e6ba9525fe5ea9d3bd4b15e546359` |
 | Plane base | `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` on `preview` |
@@ -67,7 +71,7 @@ The approved implementation tree and squash-merge tree are identical:
 | Monorepo builds | `pnpm build`: 16/16 tasks passed |
 | Patch hygiene | `git diff --check` passed; no credential/debug indicator was introduced |
 | Runtime dependencies | Existing local Plane PostgreSQL, Valkey, RabbitMQ, and MinIO services were reused; no second persistent stack or non-local infrastructure was created |
-| GitHub checks | The Plane fork reported no automated check suite for this branch; the accepted evidence is the reproducible local validation above and Federico Ocampo's exact-head approval |
+| GitHub checks | The Plane fork reported no automated check suite for this branch; the accepted evidence is the reproducible local validation above and Designated reviewer's exact-head approval |
 
 ## Security acceptance
 

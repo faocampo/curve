@@ -73,19 +73,19 @@ const MODEL_CONTRACT_IDS = Object.freeze([
 const MODEL_CONTRACT_COORDINATES = Object.freeze({
   FALLBACK_EQUIVALENCE: {
     path: "contracts/models/m0-s9c1a-fallback-equivalence-v1.json",
-    schema_id: "https://curve.x3m.internal/contracts/schemas/fallback-equivalence.schema.json",
+    schema_id: "https://curve.example.invalid/contracts/schemas/fallback-equivalence.schema.json",
   },
   MODEL_CATALOG: {
     path: "contracts/models/m0-s9c1a-model-catalog-v1.json",
-    schema_id: "https://curve.x3m.internal/contracts/schemas/model-catalog.schema.json",
+    schema_id: "https://curve.example.invalid/contracts/schemas/model-catalog.schema.json",
   },
   RESTRICTED_ROUTE_EVIDENCE: {
     path: "contracts/models/m0-s9c1a-restricted-route-evidence-v1.json",
-    schema_id: "https://curve.x3m.internal/contracts/schemas/restricted-route-evidence.schema.json",
+    schema_id: "https://curve.example.invalid/contracts/schemas/restricted-route-evidence.schema.json",
   },
   TASK_MODEL_POLICY_MATRIX: {
     path: "contracts/models/m0-s9c1a-task-model-policy-v1.json",
-    schema_id: "https://curve.x3m.internal/contracts/schemas/task-model-policy-matrix.schema.json",
+    schema_id: "https://curve.example.invalid/contracts/schemas/task-model-policy-matrix.schema.json",
   },
 });
 

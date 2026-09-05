@@ -62,9 +62,9 @@ export function validateProductCoreDecision(decision) {
   requireEqual(decision?.decision_id, "M1-00A", "decision identifier");
   requireEqual(decision?.status, "APPROVED", "decision status");
   requireEqual(decision?.approved_by, {
-    name: "Federico Ocampo",
-    github_login: "faocampo",
-    title: "CTO at X3M",
+    name: "Designated reviewer",
+    github_login: "example-reviewer",
+    title: "Designated technical owner",
   }, "decision approver");
   requireEqual(decision?.semantics?.key, {
     pattern: PRODUCT_KEY_PATTERN,

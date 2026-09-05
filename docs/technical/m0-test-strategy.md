@@ -1,5 +1,9 @@
 # Curve M0 quality and test strategy
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,8 +12,8 @@
 | Work package | P0-05 (test-harness strategy and R1 acceptance traceability) |
 | Status | `ACCEPTED / DONE` |
 | Version | 1.8 |
-| Owner | Federico Ocampo, CTO at X3M |
-| Human reviewer | Federico Ocampo |
+| Owner | Designated reviewer, Designated technical owner |
+| Human reviewer | Designated reviewer |
 | Last updated | 2026-08-31 |
 | Product source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (current product requirements, lifecycle, decisions, and AC-01 through AC-60) |
 | Delivery source | [Development plan](development-plan.md) (milestones, packages, dependencies, and completion evidence) |
@@ -34,7 +38,7 @@ P0-05 is complete when:
    package;
 6. positive schema validation, negative-fixture rejection, semantic validation,
    Markdown validation, and repository structure checks pass; and
-7. Federico Ocampo approves the exact PR head and the change is merged.
+7. Designated reviewer approves the exact PR head and the change is merged.
 
 The strategy governs test planning and evidence. A consuming implementation
 package remains responsible for its executable test code, exact base SHA,
@@ -42,7 +46,7 @@ environment authorization, and package-level acceptance result.
 
 ## Acceptance record
 
-Federico Ocampo approved exact Curve head
+Designated reviewer approved exact Curve head
 `7d2794bad87a6e2e733ee8a53a650d8ea7658d22`. [Curve PR #27](https://github.com/faocampo/curve/pull/27)
 (P0-05 test strategy and audit closure) passed the
 [documentation-contract CI run](https://github.com/faocampo/curve/actions/runs/32619264292)
@@ -62,7 +66,7 @@ the record above; it is not back-written into immutable contract bytes.
 The v2 successor separates provider conformance by trust boundary and aligns
 decision gating with the current plan. It remains `IN_REVIEW`, is validated
 only as a candidate, and grants no package-readiness or implementation
-authority. Accepting v2 requires Federico Ocampo's approval of its exact PR head.
+authority. Accepting v2 requires Designated reviewer's approval of its exact PR head.
 
 ## Test principles
 
@@ -140,10 +144,10 @@ computed from the machine contract rather than edited in dashboards by hand.
 | `E-TEMPORAL-LOCAL` | Workflow, replay, restart, cancellation, and delivery integration | Synthetic only | Available under D-003 (local runtime topology and trust-zone decision) `LOCAL_ONLY` |
 | `E-DISPOSABLE-PROVIDER` | Provider, GitHub, GitLab, Onyx, MCP, and ambiguity conformance | Synthetic only | Provider decision, scoped identity, cleanup, and external-write authorization required |
 | `E-GVISOR-STAGING` | Runner and preview containment | Approved staging data only | Platform activation plus applicable D-003 (runtime topology), D-009 (retention), and D-014 (budget) decisions |
-| `E-X3M-STAGING` | Integrated recovery, monitoring, flags, evidence, and release-readiness proof | Approved staging data only | Consuming decision set and Platform Operations activation required |
+| `E-EXAMPLE-STAGING` | Integrated recovery, monitoring, flags, evidence, and release-readiness proof | Approved staging data only | Consuming decision set and Platform Operations activation required |
 | `E-RELEASE-CI` | Public deployed-release compliance | Public release metadata | R1-04 (release licensing, SBOM, provenance, and source qualification) publishes the exact command and evidence contract |
 
-Local proof uses X3M's approved Docker topology and disposable volumes.
+Local proof uses Example Organization's approved Docker topology and disposable volumes.
 Staging fault or sandbox tests require explicit infrastructure authorization,
 bounded targets, abort conditions, and cleanup evidence.
 

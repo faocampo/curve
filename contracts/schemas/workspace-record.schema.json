@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/workspace-record.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/workspace-record.schema.json",
   "title": "Curve workspace-scoped mutable record fields",
   "type": "object",
   "additionalProperties": false,

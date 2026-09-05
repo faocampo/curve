@@ -5,7 +5,8 @@
   "license": "AGPL-3.0-only",
   "packageManager": "pnpm@11.3.0",
   "scripts": {
-    "check": "pnpm run check:markdown && pnpm run check:contracts && pnpm run check:structure && pnpm run check:project",
+    "check": "pnpm run check:disclosure && pnpm run check:markdown && pnpm run check:contracts && pnpm run check:structure && pnpm run check:project",
+    "check:disclosure": "node scripts/check-public-disclosure.mjs",
     "check:markdown": "markdownlint-cli2 \"docs/**/*.md\" \"contracts/**/*.md\"",
     "check:contracts": "redocly lint contracts/openapi/curve-v1.openapi.yaml && node scripts/validate-contracts.mjs",
     "check:structure": "node scripts/validate-docs.mjs",

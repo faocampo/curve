@@ -1,5 +1,9 @@
 # M0-S4 Foundation Probe Experience Contract
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -7,12 +11,12 @@
 | Record IDs | UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) |
 | Work package | CURVE-M0-S4-API-SSE-UI (Operation API, resumable SSE, and minimal workspace UI) |
 | Status | `IMPLEMENTED_AND_ACCEPTED` |
-| Owner and approver | Federico Ocampo, CTO at X3M |
+| Owner and approver | Designated reviewer, Designated technical owner |
 | Target implementation repository | `github.com/faocampo/plane`, branch created from the exact accepted M0-S3 (local Temporal round-trip implementation packet) merge |
 | Source baseline | Curve PR #17 approved at exact head `a4638761bcbdb8e522e8db0af5a2ae00cb6480a8` and squash-merged as `42ea32981a3d5ce814a74c18e458ac8152a7e2fa`; Plane PR #6 approved at exact head `a1748c790a060434928b8ed521692b13b3f9739e` and squash-merged into `preview` as `e762fbbd2c1726a2833745add8245a1679c60d88` |
 | Last updated | 2026-08-21 |
 
-This record satisfies the artifact requirements of the [Curve Experience Blueprint](curve-experience-blueprint.md) (user-facing flow approval gate) for the M0-S4 (API, SSE, and minimal UI implementation packet) surface. Federico approved UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) against exact Curve head `a4638761bcbdb8e522e8db0af5a2ae00cb6480a8`. GitHub recorded that head in [Curve PR #17](https://github.com/faocampo/curve/pull/17), whose validation passed before it was squash-merged as `42ea32981a3d5ce814a74c18e458ac8152a7e2fa`.
+This record satisfies the artifact requirements of the [Curve Experience Blueprint](curve-experience-blueprint.md) (user-facing flow approval gate) for the M0-S4 (API, SSE, and minimal UI implementation packet) surface. Designated reviewer approved UX-004-M0-S4 (clickable prototype and task-based review) and UX-005-M0-S4 (work-package-linked screen contract) against exact Curve head `a4638761bcbdb8e522e8db0af5a2ae00cb6480a8`. GitHub recorded that head in [Curve PR #17](https://github.com/faocampo/curve/pull/17), whose validation passed before it was squash-merged as `42ea32981a3d5ce814a74c18e458ac8152a7e2fa`.
 
 ## Product intent
 
@@ -178,7 +182,11 @@ The static [M0-S4 foundation probe prototype](../design/prototypes/m0-s4-foundat
 
 Prototype-only controls in the lower-right corner let a reviewer enter states that would normally be produced by the API or SSE stream. They are labeled `Prototype controls` and are excluded from the production screen contract.
 
-![M0-S4 Curve-first foundation probe success state](../design/mockups/curve-foundation-probe-v2.png)
+![Sanitized M0-S4 foundation probe ready state](../design/mockups/curve-foundation-probe-v2.png)
+
+This public capture was regenerated from the synthetic local prototype during
+disclosure cleanup. It illustrates the ready state and supplies no runtime or
+historical approval evidence.
 
 ## Task-based review script
 
@@ -186,7 +194,7 @@ Prototype-only controls in the lower-right corner let a reviewer enter states th
 
 | Field | Value |
 | --- | --- |
-| Participant | Federico Ocampo acting as the authorized workspace engineer and accountable product approver |
+| Participant | Designated reviewer acting as the authorized workspace engineer and accountable product approver |
 | Artifact | Exact committed prototype linked above |
 | Starting condition | `Ready` prototype state at a desktop viewport; repeat core actions at 1280 px and 768 px widths |
 | Assistance | Task prompts only; findings recorded after each task |
@@ -207,8 +215,8 @@ Prototype-only controls in the lower-right corner let a reviewer enter states th
 
 | Finding | Severity | Disposition | Owner |
 | --- | --- | --- | --- |
-| V1 represented Plane as the product shell and Curve as a peer module | Major | `RESOLVED_IN_V2`: Curve owns the logo and shell; Plane-backed capabilities are grouped under Work management; Foundation status is under Platform | Federico Ocampo |
-| Task-based review of the Curve-first v2 flow | Resolved | `PASS`: Federico approved UX-004-M0-S4 and UX-005-M0-S4 against exact head `a463876...`; PR #17 validation passed and the approved artifacts were squash-merged as `42ea329...` | Federico Ocampo |
+| V1 represented Plane as the product shell and Curve as a peer module | Major | `RESOLVED_IN_V2`: Curve owns the logo and shell; Plane-backed capabilities are grouped under Work management; Foundation status is under Platform | Designated reviewer |
+| Task-based review of the Curve-first v2 flow | Resolved | `PASS`: Designated reviewer approved UX-004-M0-S4 and UX-005-M0-S4 against exact head `a463876...`; PR #17 validation passed and the approved artifacts were squash-merged as `42ea329...` | Designated reviewer |
 
 ## UX-004 and UX-005 approval record
 
@@ -218,15 +226,15 @@ record_ids:
   - UX-005-M0-S4
 work_package: CURVE-M0-S4-API-SSE-UI
 status: APPROVED_READY_FOR_IMPLEMENTATION
-owner: Federico Ocampo
-approver: Federico Ocampo
+owner: Designated reviewer
+approver: Designated reviewer
 target_role: Authorized workspace engineer or platform operator
 user_job: Verify and recover the local Curve foundation end to end
 information_architecture: Curve product shell > Platform > Foundation status
 prototype_review:
   artifact: docs/design/prototypes/m0-s4-foundation-probe/index.html
   participants:
-    - Federico Ocampo
+    - Designated reviewer
   tasks: T1-T7 in this record
   result: PASS
   findings_and_disposition: Plane-first v1 shell replaced by the approved Curve-first v2 shell; no blocking UX finding remains

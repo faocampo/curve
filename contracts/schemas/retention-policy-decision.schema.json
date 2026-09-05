@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/retention-policy-decision.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/retention-policy-decision.schema.json",
   "title": "Curve D-009 retention policy decision",
   "type": "object",
   "additionalProperties": false,

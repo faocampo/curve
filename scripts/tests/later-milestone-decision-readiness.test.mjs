@@ -218,9 +218,9 @@ assert.match(rollout, /USD 50/);
 assert.match(rollout, /USD 10/);
 assert.match(rollout, /USD 25/);
 assert.match(rollout, /Two allocated runtime hours per attempt/);
-assert.match(rollout, /At least 60% reduction/);
-assert.match(rollout, /At least 50% reduction/);
-assert.match(rollout, /At least 70%/);
+assert.match(rollout, /owner-approved private active-effort baseline and target/);
+assert.match(rollout, /owner-approved private baseline and target/);
+assert.match(rollout, /configured aggregate target/);
 assert.match(rollout, /No Critical\/High security finding/);
 
 const planPackages = [...packageIds(developmentPlan)].sort();

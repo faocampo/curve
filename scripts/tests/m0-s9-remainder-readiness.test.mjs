@@ -235,7 +235,7 @@ test("M0-S9B1 context pins the fail-closed provider-administration decision gate
   assert.equal(decision.activation.plane_implementation_authorized, false);
   assert.equal(decision.unresolved_requirements.length, 17);
   assert.deepEqual(decision.material_options.governance_identity_authority, {
-    allowed: ["X3M_IDP_SUBJECT", "PLANE_USER_ID", "GITHUB_USER_ID"],
+    allowed: ["ORGANIZATION_IDP_SUBJECT", "PLANE_USER_ID", "GITHUB_USER_ID"],
     selected: null,
   });
   assert.deepEqual(decision.material_options.async_operation_profile, {
@@ -261,7 +261,7 @@ test("M0-S9B1 context pins the fail-closed provider-administration decision gate
     assert.match(followingText, /^\s+\([^)]{1,240}\)/, link[0]);
   }
   for (const identityOption of [
-    "X3M_IDP_SUBJECT",
+    "ORGANIZATION_IDP_SUBJECT",
     "PLANE_USER_ID",
     "GITHUB_USER_ID",
   ]) assert.ok(decisionDoc.includes(`\`${identityOption}\``), identityOption);

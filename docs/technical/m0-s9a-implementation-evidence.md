@@ -1,5 +1,9 @@
 # M0-S9A Provider Registry Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Accepted value |
@@ -9,7 +13,7 @@
 | Parent | M0-09 (provider integration foundation) |
 | Evidence version | 1.1 |
 | Acceptance date | 2026-08-28 |
-| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Owner and human reviewer | Designated reviewer, Designated technical owner |
 | Implementer | Codex |
 | Curve contract revision | `e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb` |
 | Context digest | `sha256:9e07550799a6e4d88a6734f9a98e0de59812402d983bc7291396332a6b214cb0` |
@@ -53,8 +57,8 @@ infrastructure change, deployment, or staging/production mutation.
 | Relational contract | [M0-S9A relational contract at the accepted contract revision](https://github.com/faocampo/curve/blob/e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb/contracts/database/m0-s9a-provider-registry-contract.md) (tables, constraints, transactions, delivery, migration, and rollback) |
 | Machine contract | [M0-S9A provider-registry manifest](https://github.com/faocampo/curve/blob/e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb/contracts/providers/m0-s9a-provider-registry-v1.json) (closed local authority, lifecycle, replay, delivery, persistence, and event rules) |
 | Authorization decision | [M0-S9A registration authorization decision](https://github.com/faocampo/curve/blob/e6e43ea7fdf99baf79922a4ae506bbcb73e7c4cb/docs/technical/m0-s9a-registration-authorization-decision.md) (approved Option B workspace-admin role mapping and target) |
-| Implementation authorization | Federico Ocampo authorized the exact Curve contract revision and digest, Plane base, existing branch, local-only implementation, migration, tests, commit, push, draft PR, Project updates, synthetic data boundary, exclusions, budget, and rollback. |
-| Exact-head merge approval | Federico Ocampo approved Plane head `d48a7d09f6824f045a1077ce2de256bd3dcde5d4` and authorized its squash merge into `preview` while commit-bound CI remained green. |
+| Implementation authorization | Designated reviewer authorized the exact Curve contract revision and digest, Plane base, existing branch, local-only implementation, migration, tests, commit, push, draft PR, Project updates, synthetic data boundary, exclusions, budget, and rollback. |
+| Exact-head merge approval | Designated reviewer approved Plane head `d48a7d09f6824f045a1077ce2de256bd3dcde5d4` and authorized its squash merge into `preview` while commit-bound CI remained green. |
 
 ## Plane implementation
 

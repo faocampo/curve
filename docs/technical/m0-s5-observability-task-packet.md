@@ -1,5 +1,9 @@
 # M0-S5 Audit and Observability Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -15,9 +19,9 @@
 | Implementation base | M0-S5B starts from Plane `preview` at M0-S5A merge `39920769daf78fce29a10c7f4e4bb8779671b004`; the approved Plane PR #7 head `c258ef12221964dae67286e0f6a6c2dc58b997fe` and merge share Git tree `87db1b646cd473f1c407b8aebbc43c27e62d9f8c` |
 | Context readiness | Satisfied for M0-S5A by Curve merge `a23dab9...` and digest `sha256:720a70...`; satisfied for M0-S5B by Curve merge `43480ca...` and digest `sha256:36933053249f2159d2b768e3ff62c3e114a587a5fa650df9b262b4f7d9b28d3b`. |
 | Implementation evidence | [M0-S5A implementation evidence](m0-s5a-implementation-evidence.md) (telemetry kernel acceptance) and [M0-S5B implementation evidence](m0-s5b-implementation-evidence.md) (local platform binding, CI, live proof, security, cleanup, and rollback) |
-| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Owner and human reviewer | Designated reviewer, Designated technical owner |
 | Risk | `STANDARD`, with telemetry treated as a data-exfiltration boundary |
-| Implementation branches | `curve/m0-s5a-observability-kernel` and, after OBS-BIND-001 approval, `curve/m0-s5b-x3m-observability-binding` |
+| Implementation branches | `curve/m0-s5a-observability-kernel` and, after OBS-BIND-001 approval, `curve/m0-s5b-example-observability-binding` |
 | Data and tool policy | Synthetic `INTERNAL` fixtures only; no customer/protected bodies, model/provider calls, dependency upgrade, repository mutation outside the Plane branch, or GitHub/infrastructure write by the coding agent |
 | Budget and sandbox | M0-S5A uses repository-local/CI resource limits with outbound telemetry and network disabled; M0-S5B uses only the local `dev_env`, loopback host ports, no OTLP credential, synthetic data, bounded proof lifetime, and cleanup contract in OBS-BIND-001 |
 | Product trace | FR-021 and FR-024 (audit and measurable lifecycle requirements); NFR-001 through NFR-014 (performance, reliability, security, privacy, and operations requirements); AC-34, AC-36, and AC-53 (audit, KPI, and protected-data acceptance criteria) |
@@ -29,7 +33,7 @@ workspace-scoped Curve operation across HTTP, PostgreSQL, the transactional
 outbox, Temporal workflow/activity execution, audit history, and resumable SSE.
 It emits only explicitly allowlisted telemetry, preserves immutable Curve audit
 records as the authoritative evidence, and integrates through an approved OTLP
-binding with X3M's existing logging/tracing, Prometheus, and Grafana services
+binding with Example Organization's existing logging/tracing, Prometheus, and Grafana services
 after the local binding is approved.
 
 This packet divides delivery into two independently reviewable changes:
@@ -82,10 +86,10 @@ later documentation commit cannot silently change an active implementation.
 
 | Field | Required dispatch value |
 | --- | --- |
-| Implementer | One AI coding agent, distinct from Federico Ocampo as owner and human reviewer |
+| Implementer | One AI coding agent, distinct from Designated reviewer as owner and human reviewer |
 | Model policy | Dispatcher-approved coding model; no runtime model call, silent model/provider substitution, or Curve Model Gateway dependency |
 | Cost limit | US$25 maximum automated attempt; pause before exceeding the limit |
-| Repository authority | Read/write only on the named Plane feature branch; the agent does not merge, deploy, change GitHub Project state, or mutate X3M infrastructure |
+| Repository authority | Read/write only on the named Plane feature branch; the agent does not merge, deploy, change GitHub Project state, or mutate Example Organization infrastructure |
 | Network policy | M0-S5A permits repository dependency/build traffic only when the pinned Plane lock and image inputs require it; all telemetry export is disabled. M0-S5B uses the shared local `dev_env`, Docker service discovery, and loopback-only host ports in OBS-BIND-001; no external telemetry or alert destination is configured. |
 | Data policy | Synthetic `INTERNAL` values and the sentinel corpus only; no customer, credential, protected, source-body, prompt, response, patch, evidence-body, or tool-output value enters telemetry or PR evidence |
 | Stop behavior | Missing owner, reviewer, exact base/context, command, budget, or policy value stops before mutation |
@@ -106,10 +110,10 @@ All conditions must be true before code mutation:
   final Curve revision must include [M0-S4 implementation evidence](m0-s4-implementation-evidence.md)
   (exact M0-S4 context, merge, tests, usability acceptance, and rollback) in
   that manifest before the digest is dispatch-authoritative.
-- Federico Ocampo approves the exact contract head and is the named human
+- Designated reviewer approves the exact contract head and is the named human
   reviewer for the implementation PR.
 - The implementation packet contains exact build/test commands and synthetic
-  sentinel values. It contains no X3M secret or protected evidence body.
+  sentinel values. It contains no Example Organization secret or protected evidence body.
 
 ### M0-S5B entry gates
 
@@ -167,7 +171,7 @@ Absent or partial values leave OTLP export disabled. They do not block M0-S5A
 - An explicit `BatchSpanProcessor` and `PeriodicExportingMetricReader` using
   every queue, interval, batch, export-timeout, flush, and shutdown value in the
   telemetry manifest.
-- Allowlisted structured JSON logs written to stdout for X3M's existing log
+- Allowlisted structured JSON logs written to stdout for Example Organization's existing log
   collection path. M0 does not configure an OpenTelemetry log exporter.
 - HMAC-SHA256 workspace scopes for traces and structured logs, with key ID and
   rotation support.
@@ -285,7 +289,7 @@ unit tests never instantiate network exporters.
 5. M0-S5A derives expected Prometheus names using the manifest-pinned
    `UnderscoreEscapingWithSuffixes` strategy: dotted attributes become
    underscore labels, while counter and unit suffixes remain part of the
-   contracted queries. M0-S5B proves the approved X3M path produces those exact
+   contracted queries. M0-S5B proves the approved Example Organization path produces those exact
    names before provisioning the dashboard or rules.
 6. Every metric attribute has a closed value set in the telemetry manifest.
    Runtime values outside the set map to a documented bounded fallback or are
@@ -322,11 +326,11 @@ unit tests never instantiate network exporters.
 | Provider isolation | Construct private tracer/meter providers and obtain instruments directly from them. Supply the manifest-pinned static resource, sampler, span limits, temporality, views, exemplar filter, and manual shutdown settings as constructor arguments. Do not call global provider setters, `Resource.create`, `DjangoInstrumentor().instrument()`, Plane license-telemetry endpoint helpers, or generic OpenTelemetry auto-instrumentation. |
 | API lifecycle | A thread-safe bootstrap service lazily initializes at most one provider bundle in each post-fork API process after Curve feature/workspace checks. Disabled mode returns a no-op bundle without registering handlers or exit hooks. |
 | Worker lifecycle | The worker constructs its provider bundle after environment/policy validation and before `Client.connect`; shutdown runs after the Temporal worker and relay stop, with bounded idempotent flush/close. Workflow code never emits or exports telemetry. |
-| Signals | OTLP exports traces and non-local-only metrics. Structured Curve logs use one allowlist-backed JSON stdout formatter/adapter and the existing X3M log collection route; no OpenTelemetry log exporter is created in M0. The local exporter-failure metric is available only to deterministic in-memory tests. |
+| Signals | OTLP exports traces and non-local-only metrics. Structured Curve logs use one allowlist-backed JSON stdout formatter/adapter and the existing Example Organization log collection route; no OpenTelemetry log exporter is created in M0. The local exporter-failure metric is available only to deterministic in-memory tests. |
 | Propagation | Parse and inject only W3C `traceparent`; invalid input starts a new trace; never accept, persist, or forward `tracestate` or `baggage` in M0. |
 | Instrument registry | One typed registry maps manifest names to instruments; unknown metric/span/log event names fail tests |
 | Redaction | Deny known forbidden name/value classes, then allow only declared fields; recursively scrub exception/context mappings |
-| Workspace scope | Injected HMAC service with key ID; tests use synthetic keys; production/local values come from X3M Secrets Manager |
+| Workspace scope | Injected HMAC service with key ID; tests use synthetic keys; production/local values come from the approved secret broker |
 | Event persistence | Continue reading operation-event v1. A command span injects its outgoing context into a new instrumented operation-event v2 payload; the only additive field is optional validated `traceparent`, and the existing JSON payload column is unchanged. Never rewrite historical event bytes or schema references. |
 | Temporal | Implement a Curve-owned client/worker interceptor over the pinned public SDK APIs. The relay extracts operation-event v2 context, creates the dispatch child span, and the client interceptor serializes only that span's `traceparent` under `_curve_traceparent_v1`; deterministic workflow interception copies the opaque validated header to activity commands; activity interception extracts it and creates `curve.activity.run`. V1/no-header histories start a safe local trace; their existing application correlation and operation/event/audit lineage remains authoritative outside exported telemetry. Replay fixtures cover pre-header and post-header histories. |
 | SSE | Extract the latest authorized operation-event v2 context to create the publish span; v1/no-context events start a local span. SSE payloads expose the application correlation/event metadata defined by M0-S4 but do not expose telemetry `traceparent`, `tracestate`, or `baggage`; the application correlation ID is excluded from the span and structured log. |
@@ -358,7 +362,7 @@ metric series dynamically.
 
 Each checkpoint is one independently reviewable Plane change. A dispatcher may
 combine adjacent checkpoints in one PR only when the combined diff remains
-repository-local, preserves the stated test isolation, and Federico approves
+repository-local, preserves the stated test isolation, and Designated reviewer approves
 the exact dispatch packet.
 
 | Checkpoint | Scope | Required evidence |
@@ -451,7 +455,7 @@ merged-tree equivalence, live acceptance, security, cleanup, and rollback).
 
 ### M0-S5B executable acceptance
 
-1. Given the approved OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding),
+1. Given the approved OBS-BIND-001 (local Example Organization OTLP/Prometheus/Grafana binding),
    when the local Curve profile starts, then telemetry reaches only the approved
    endpoint over the approved transport, the contracted metric translation is
    observed, and no external fallback is contacted.
@@ -559,7 +563,7 @@ The coding agent stops before mutation or publication when any of these occurs:
 - A secret, credential, protected body, raw workspace identifier, or customer
   value would enter source, fixtures, logs, traces, metrics, or PR evidence.
 - Plane's external default telemetry endpoint would be inherited or contacted.
-- M0-S5B lacks any OBS-BIND-001 (local X3M OTLP/Prometheus/Grafana binding)
+- M0-S5B lacks any OBS-BIND-001 (local Example Organization OTLP/Prometheus/Grafana binding)
   field, or the live configuration differs from the approved record.
 - No independent collector/platform signal can detect a complete OTLP-path
   outage while Curve telemetry is expected to be enabled.

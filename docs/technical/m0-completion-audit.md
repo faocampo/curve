@@ -1,5 +1,9 @@
 # Curve M0 Completion Audit
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Version | 1.15 |
 | Date | 2026-09-02 |
 | Product | Curve |
-| Owner and human reviewer | Federico Ocampo |
+| Owner and human reviewer | Designated reviewer |
 | Audit scope | M0 (foundation and control plane), its P0 (foundation-readiness) decisions/proofs, Plane implementation evidence, and the next executable package |
 | Audited Curve contract baseline | `95fb52721992fda43fc300a58aca31228651b22e`, the `origin/main` source revision from which this v1.15 audit was produced, containing [Curve PR #70](https://github.com/faocampo/curve/pull/70) (current-state M0 audit reconciliation) |
 | Merged Plane `preview` baseline | `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`, the squash merge of [Plane PR #18](https://github.com/faocampo/plane/pull/18) (High production-dependency remediation), containing the accepted M0-S9A (local provider-registry substrate) checkpoint `af7187d049c6ee6d0c82a5c70b686d4c444e9b63`, M1-01A (Initiative foundation), [Plane PR #16](https://github.com/faocampo/plane/pull/16) (Critical/High CodeQL remediation), and the accepted RUNTIME-M0-01 (graceful Curve worker shutdown classification) checkpoint `c516a612a29751b0d24bcbd32bfcba1bd73fe3af` |

@@ -68,7 +68,7 @@ record keeps `selected: null` for every row.
 | --- | --- | --- |
 | Credential persistence placement | `DEDICATED_PROFILE_RECORD`, `PROVIDER_CONNECTION_EXTENSION`, `DEFER` | Entity ownership, workspace isolation, lifecycle, migration, rollback, and query-plan review. |
 | Endpoint persistence placement | `DEDICATED_PROFILE_RECORD`, `PROVIDER_CONNECTION_EXTENSION`, `DEFER` | Entity ownership, workspace isolation, lifecycle, migration, rollback, and query-plan review. |
-| Credential broker profile | `X3M_SECRETS_MANAGER_BROKER`, `ABSTRACT_CREDENTIAL_BROKER`, `DEFER` | Security owner, platform owner, broker availability, authentication, authorization, audit, outage, rotation, and revocation evidence. |
+| Credential broker profile | `ORGANIZATION_SECRETS_MANAGER_BROKER`, `ABSTRACT_CREDENTIAL_BROKER`, `DEFER` | Security owner, platform owner, broker availability, authentication, authorization, audit, outage, rotation, and revocation evidence. |
 | Credential-reference protocol | `OPAQUE_VERSIONED_REFERENCE`, `DEFER` | Exact reference grammar, allowed broker namespace, version rules, validation, redaction, and non-enumerability review. |
 | Endpoint transport policy | `HTTPS_ALLOWLISTED_ORIGINS`, `LOCAL_PROCESS_ONLY`, `DEFER` | Exact origins, protocol, TLS/certificate, DNS/IP/source, redirect, timeout, and egress rules. |
 | Rotation and revocation policy | `BROKER_VERSIONED_ROTATION_AND_TERMINAL_REVOCATION`, `PROVIDER_MANAGED_ROTATION_AND_TERMINAL_REVOCATION`, `DEFER` | Rotation trigger/overlap, terminal revocation, active-attempt behavior, capability revalidation, audit, and recovery evidence. |

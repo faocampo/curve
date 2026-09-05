@@ -1,5 +1,9 @@
 # Curve GitHub Project Tracking Map
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,8 +13,8 @@
 | Date | 2026-09-02 |
 | Project | [Curve GitHub Project #2](https://github.com/users/faocampo/projects/2) |
 | Normative work catalog | [Development plan](development-plan.md#work-package-catalog) (71-package delivery catalog, dependencies, and evidence) |
-| Project administrator | Federico Ocampo (`faocampo`) |
-| Human reviewer | Federico Ocampo |
+| Project administrator | Designated reviewer (`example-reviewer`) |
+| Human reviewer | Designated reviewer |
 | Last verified live reconciliation | 2026-09-02: Project #2 had 127 items: 88 draft issues, 5 issues, and 34 pull requests. Status totals were 64 `Done`, 57 `Backlog`, 3 `In progress`, and 3 `In review`. P0-02 (runtime and repository topology), P0-05 (test strategy and audit closure), M1-00A (minimal Product core), SEC-M0-01 (inherited High dependency advisories), RUNTIME-M0-01 (graceful Curve worker shutdown classification), and Plane PR #18 (High production-dependency remediation) were `Done`; P0-03 (decision ADR set), M0-09 (provider integration foundation), and M1-01 (Initiative capability) were `In progress`; P0-12 (retention decision package), M1-01B (Curve-first Initiative shell), and Plane PR #17 (Initiative-shell implementation) were `In review`. |
 | Required publication-time reconciliation | Preserve accepted packages and SEC-M0-01 (inherited High dependency advisories) as `Done`; retain P0-03 (decision ADR set), M0-09 (provider integration foundation), and M1-01 (Initiative capability) as `In progress`; retain P0-12 (retention decision package), M1-01B (Curve-first Initiative shell), and Plane PR #17 (Initiative-shell implementation) in review until their applicable decision or manual UX evidence is accepted; refresh synchronizer-owned bodies from the next canonical Curve revision without duplicating items. |
 
@@ -33,7 +37,7 @@ informational metadata. Changing it does not:
 - change the state of a future Curve project, initiative, slice, attempt, gate,
   or quality run.
 
-Federico Ocampo and authorized automation may update Project statuses whenever
+Designated reviewer and authorized automation may update Project statuses whenever
 needed to keep the visual board useful. These administrative writes require no
 separate governance approval, lease, task-packet authorization, or signed start
 grant. Execution systems evaluate their own authoritative inputs independently.
@@ -82,13 +86,13 @@ grant. Execution systems evaluate their own authoritative inputs independently.
 | GitHub Project field | Source | Administrative rule |
 | --- | --- | --- |
 | Title | Work-package ID plus deliverable | The stable ID prefix is the synchronization key. |
-| Status | Team's current visual progress assessment | Federico or authorized automation may update it directly. |
+| Status | Team's current visual progress assessment | Designated reviewer or authorized automation may update it directly. |
 | Size | Development-plan size | `S`, `M`, or `L`; the current synchronizer leaves this Project field unchanged. |
 | Priority | Product planning | Set when useful for planning; it is not inferred from phase. |
 | Estimate | Delivery planning | Set when an estimate exists. |
 | Iteration | Delivery planning | Set when the package is scheduled. |
 | Assignees | Delivery ownership | Set when an owner is known. |
-| Reviewers | Review ownership | Federico Ocampo is the interim reviewer. |
+| Reviewers | Review ownership | Designated reviewer is the interim reviewer. |
 
 ## Visual status convention
 
@@ -136,7 +140,7 @@ M0-S3 (local Temporal round-trip implementation packet) is a packet checkpoint
 inside M0-06 rather than a second canonical work package. M0-S4 (API, SSE, and
 minimal Curve-first UI implementation packet) is a checkpoint that completes
 the local M0-07 API/SSE scope, and M0-S4-UX (Definition/UX checkpoint) is its
-child evidence projection. Their draft items are managed directly by Federico
+child evidence projection. Their draft items are managed directly by Designated reviewer
 Ocampo or authorized automation and are excluded from the 71-row catalog
 synchronizer. M7-01/M7-02 are separate GitHub issues governed by the
 [M7 intelligence extension](m7-intelligence-and-automation-extension.md)

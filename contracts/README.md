@@ -1,5 +1,9 @@
 # Curve Contract Pack
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](../docs/technical/public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 This directory is the normative machine-readable interface source for Curve. Implementations and generated clients record the exact Curve repository commit used.
 
 | Contract | Location | Stability |
@@ -51,7 +55,7 @@ This directory is the normative machine-readable interface source for Curve. Imp
 | P0-06 terminal proof-stage projection | [`schemas/p0-06-stage-projection-v3.schema.json`](schemas/p0-06-stage-projection-v3.schema.json) | Strict terminal `SUPERSEDED` projection binding D-003 `LOCAL_ONLY`, the approved/merged decision revision, the historical v2 record, and replacement M0-S3 proof. |
 | P0-05 AC test matrix v1 | [`testing/ac-test-matrix-v1.json`](testing/ac-test-matrix-v1.json) (immutable suite, environment, command, gate, coverage, and evidence ownership for AC-01 through AC-60) | Accepted as exact bytes at Curve merge `fdae85b...`; its embedded `IN_REVIEW` field is retained as historical data rather than rewritten after approval. |
 | P0-05 test-matrix schema v1 | [`schemas/test-strategy-matrix.schema.json`](schemas/test-strategy-matrix.schema.json) (immutable closed machine contract used by the accepted v1 matrix) | Byte-pinned accepted history; incompatible changes require a reviewed successor. |
-| P0-05 AC test matrix v2 | [`testing/ac-test-matrix-v2.json`](testing/ac-test-matrix-v2.json) (candidate split provider-conformance commands and current decision-gating semantics) | `IN_REVIEW`; validated as a candidate and grants no package-readiness or implementation authority until Federico approves an exact head. |
+| P0-05 AC test matrix v2 | [`testing/ac-test-matrix-v2.json`](testing/ac-test-matrix-v2.json) (candidate split provider-conformance commands and current decision-gating semantics) | `IN_REVIEW`; validated as a candidate and grants no package-readiness or implementation authority until Designated reviewer approves an exact head. |
 | P0-05 test-matrix schema v2 | [`schemas/test-strategy-matrix-v2.schema.json`](schemas/test-strategy-matrix-v2.schema.json) (closed successor contract for the candidate v2 matrix) | `IN_REVIEW`; schema availability does not imply matrix acceptance. |
 | M0-S6A durable orchestration manifest | [`temporal/m0-orchestration-v1.json`](temporal/m0-orchestration-v1.json) (model-free parent/child workflow types, authoritative initialization/continuation, safe payloads, DAG scheduling, idempotent signals, timers, cancellation, continue-as-new, versioning, and acceptance-test IDs) | Immutable local-only v1 control contract; provider/domain integration requires a later versioned package. |
 | M0-S6A durable orchestration schema | [`schemas/temporal-orchestration.schema.json`](schemas/temporal-orchestration.schema.json) (closed machine validation for the M0-S6A orchestration manifest) | Rejects broadened environments, payloads, providers, external effects, workflow handlers, and replay behavior. |
@@ -65,7 +69,7 @@ This directory is the normative machine-readable interface source for Curve. Imp
 | M0-S9C1A RESTRICTED-route evidence candidate | [`models/m0-s9c1a-restricted-route-evidence-v1.json`](models/m0-s9c1a-restricted-route-evidence-v1.json) (empty route allowlist and exact ZDR, DLP, residency, retention/training, telemetry, and legal evidence set) | `DRAFT / DENY_ALL`; validated by [`schemas/restricted-route-evidence.schema.json`](schemas/restricted-route-evidence.schema.json) (closed RESTRICTED-evidence schema), with D-005, D-009, and D-014 required before activation. |
 | D-002 Onyx delegation proposal | [`governance/d002-onyx-delegation-v1.json`](governance/d002-onyx-delegation-v1.json) (fail-closed deployed-version, principal, credential, endpoint, proof, owner, approval, and activation record) | `PROPOSED`; live Onyx retrieval and adapter dispatch remain disabled until every computed gap closes and three digest-bound human approvals exist. |
 | D-002 decision schema | [`schemas/onyx-delegation-decision.schema.json`](schemas/onyx-delegation-decision.schema.json) (closed v1 identity-delegation decision vocabulary) | Semantic validation requires exact proof/approval/capability sets and recomputes readiness; schema validity alone grants no authority. |
-| M1-00A (minimal Product core) decision | [`governance/m1-00a-product-core-v1.json`](governance/m1-00a-product-core-v1.json) (Federico-approved immutable key, metadata, timezone, owner, lifecycle, authority, retirement, and M2 boundary) | Approved exact Product semantics; consumed by accepted Plane PR #13 (M1-00A Product implementation) at Curve revision `4688035...` and context digest `sha256:951fd8...`. |
+| M1-00A (minimal Product core) decision | [`governance/m1-00a-product-core-v1.json`](governance/m1-00a-product-core-v1.json) (Designated reviewer-approved immutable key, metadata, timezone, owner, lifecycle, authority, retirement, and M2 boundary) | Approved exact Product semantics; consumed by accepted Plane PR #13 (M1-00A Product implementation) at Curve revision `4688035...` and context digest `sha256:951fd8...`. |
 | Product resource and requests | [`schemas/product.schema.json`](schemas/product.schema.json) (workspace Product representation, human owner, optimistic version, and state-dependent archival fields) plus adjacent create/update/reassign schemas | Additive M1 v1; key and lifecycle mutations occur only through explicit commands. |
 | Product event payload | [`schemas/product-event-v1.schema.json`](schemas/product-event-v1.schema.json) (created, metadata, owner, archive, and restore evidence) | Timezone changes bind old/new IANA values and never rewrite history. |
 | Product policy | [`policy/product-policy-v1.json`](policy/product-policy-v1.json) (Plane Admin `20`, Product owner, human-only actions, terminal Initiative set, and preconditions) | Additive M1 policy after immutable M0 authorization; default deny and no external effects. |
@@ -98,7 +102,7 @@ The resulting publication ancestry is `S -> E1..En -> C -> P`: normative
 source; ordered authority/state/context evidence; source catalog; sealed
 registry packet. Implementation authorization is a later, separate grant.
 
-JSON Schema uses draft 2020-12. OpenAPI is 3.1 so schemas share the same dialect. Every example uses synthetic identifiers and contains no X3M data.
+JSON Schema uses draft 2020-12. OpenAPI is 3.1 so schemas share the same dialect. Every example uses synthetic identifiers and contains no Example Organization data.
 
 Materialized packet JSON lives under
 [`contracts/task-packets/`](task-packets/README.md) (discovery root and

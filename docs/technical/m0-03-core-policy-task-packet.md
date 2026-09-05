@@ -1,5 +1,9 @@
 # M0-03 Core Authorization and Policy Kernel Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,7 +12,7 @@
 | Status | `COMPLETED`; Plane PR #4 merged approved implementation head `a807dd7a3f7b81f13ca815b165fba4f4bc068d9e` as `922dd6de5d5ed5081f35cd88343154022867ccad` |
 | Risk | `HIGH`; authorization and tenant-isolation control plane |
 | Date | 2026-08-18 |
-| Human owner and reviewer | Federico Ocampo, CTO at X3M (`faocampo`) |
+| Human owner and reviewer | Designated reviewer, Designated technical owner (`example-reviewer`) |
 | Implementer | AI coding agent; separate from human approval |
 | Repository | `git@github.com:faocampo/plane.git` |
 | Base branch | `preview` |
@@ -35,7 +39,7 @@ Implement one provider-neutral, deny-first Curve authorization kernel that:
 
 ## Material security decisions in this packet
 
-Federico Ocampo's exact-head approval accepts these implementation choices:
+Designated reviewer's exact-head approval accepts these implementation choices:
 
 1. M0-03 adds one append-only `PolicyDecision` table. `AuditEvent` references the
    exact decision; safe inputs are represented by a digest rather than copied
@@ -127,7 +131,7 @@ requires a new digest and review disposition.
 | D-003 (runtime topology and trust-zone decision) | Not applicable | This packet adds no Temporal/runtime/infrastructure capability. |
 | D-007 (MCP trust-model decision) | Not applicable | This packet exposes no MCP capability. |
 | D-009 (retention and erasure decision) | Not applicable to local implementation | Only synthetic input and minimum safe policy/audit metadata are persisted; protected bodies remain disabled. |
-| Exact packet approval | Required | Federico approves the published Curve head and authorizes its merge before Plane code dispatch. |
+| Exact packet approval | Required | Designated reviewer approves the published Curve head and authorizes its merge before Plane code dispatch. |
 
 ## Scope
 
@@ -452,7 +456,7 @@ The coding agent stops before mutation when:
   transaction-bound receipt;
 - implementation requires provider, network side effect, protected storage, or
   unresolved D-003/D-007/D-009 behavior;
-- a test requires real X3M data or credentials;
+- a test requires real Example Organization data or credentials;
 - a migration would modify an existing Plane table;
 - any ambiguity changes tenant isolation, role precedence, classification,
   separation of duties, audit persistence, or failure posture.
@@ -476,7 +480,7 @@ M0-03 is `DONE`. The completion conditions were satisfied as follows:
    recorded context digest `sha256:113fcd3c...`.
 3. The accepted validation is recorded in [M0-03 implementation evidence](m0-03-implementation-evidence.md)
    (exact contract/context, tests, migration proof, security evidence, and rollback).
-4. Federico Ocampo approved Plane head `a807dd7...`; Plane PR #4 merged it into
+4. Designated reviewer approved Plane head `a807dd7...`; Plane PR #4 merged it into
    `preview` as `922dd6d...`.
 5. The approved and merged trees both equal `a9ca8dd5...`.
 6. M0 readiness and downstream traceability are updated by the dispatch-readiness

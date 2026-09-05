@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/provider-profile-decision.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/provider-profile-decision.schema.json",
   "title": "Curve M0-S9B2 provider profile decision",
   "description": "Candidate-only M0-S9B2 decision worksheet. It grants no provider, credential, endpoint, network, implementation, or dispatch authority.",
   "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
@@ -208,7 +208,7 @@
       "additionalProperties": false,
       "required": ["allowed", "selected"],
       "properties": {
-        "allowed": { "const": ["X3M_SECRETS_MANAGER_BROKER", "ABSTRACT_CREDENTIAL_BROKER", "DEFER"] },
+        "allowed": { "const": ["ORGANIZATION_SECRETS_MANAGER_BROKER", "ABSTRACT_CREDENTIAL_BROKER", "DEFER"] },
         "selected": { "type": "null" }
       }
     },

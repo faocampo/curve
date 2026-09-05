@@ -136,7 +136,7 @@ OpenRouter's
 (OpenRouter metadata and optional prompt/response collection), and
 [Zero Data Retention](https://openrouter.ai/docs/guides/features/zdr)
 (account, guardrail, model-group, request, and endpoint ZDR behavior) are source
-inputs. Exact X3M contractual terms, account settings, endpoints, regions, and
+inputs. Exact Example Organization contractual terms, account settings, endpoints, regions, and
 measured evidence remain required before any route can be approved.
 
 ## Evaluation and drift

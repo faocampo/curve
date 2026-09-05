@@ -1,5 +1,9 @@
 # D-012 (Documentation) Through D-016 (KPIs) Delivery and Rollout Decision Readiness
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,9 +12,9 @@
 | Version | 1.0 |
 | Prepared | 2026-08-27 |
 | Product | Curve |
-| Scope | D-012 (Docusaurus documentation-delivery profile), D-013 (roadmap migration and new-initiative policy), D-014 (budget accounting and exception policy), D-015 (Loomit SDK Compatibility pilot profile), and D-016 (KPI definitions and rollout guardrails) |
-| Intended owners | Product Documentation; Product Operations; Product; Finance; Platform Operations; Engineering; CIA and Sachiel technical owners; Curve Product and Engineering |
-| Prepared by | Codex under Federico Ocampo's review |
+| Scope | D-012 (Docusaurus documentation-delivery profile), D-013 (roadmap migration and new-initiative policy), D-014 (budget accounting and exception policy), D-015 (Example feature delivery pilot profile), and D-016 (KPI definitions and rollout guardrails) |
+| Intended owners | Product Documentation; Product Operations; Product; Finance; Platform Operations; Engineering; Example backend and Example frontend technical owners; Curve Product and Engineering |
+| Prepared by | Codex under Designated reviewer's review |
 | Governing baseline | Exact Curve revision named by the eventual decision PR |
 | Activation boundary | No documentation MR, roadmap import, paid provider action, coding-agent pilot dispatch, deployment, production access, or broad rollout is authorized by this packet |
 
@@ -22,10 +26,10 @@ profiles, executable proofs, and exact approval digests.
 
 | Decision | Fixed direction | First consuming scope |
 | --- | --- | --- |
-| D-012 (Docusaurus documentation-delivery profile) | Use the [X3M Docusaurus repository](https://gitlab.com/etermax/ads/x3m/docusaurus.git) (documentation application and build source); create a feature-named branch only when documentation is applicable; run `pnpm build`; the first pilot is `NOT_APPLICABLE` | M5-12 (Docusaurus documentation slice) |
+| D-012 (Docusaurus documentation-delivery profile) | Use the [Example Organization Docusaurus repository](https://vcs.example.invalid/example/repository) (documentation application and build source); create a feature-named branch only when documentation is applicable; run `pnpm build`; the first pilot is `NOT_APPLICABLE` | M5-12 (Docusaurus documentation slice) |
 | D-013 (roadmap migration and new-initiative policy) | No migration or inferred import; Curve begins with new initiatives and references existing Plane identifiers without repurposing them | M2-01 (roadmap domain), M2-02 (delivery identity), and M2-06 (manual import) |
 | D-014 (budget accounting and exception policy) | R0B caps are USD 300/workspace/month, USD 50/initiative, USD 10/research activity, USD 25/attempt, and two sandbox-hours/attempt; exhaustion pauses work; Product and Platform jointly approve exceptions | Metered M1 research, M4 execution, M6 budget administration, and R0B pilot |
-| D-015 (Loomit SDK Compatibility pilot profile) | CIA backend is an external versioned-contract/staging prerequisite; Sachiel is the only agent-dispatched slice; PO/TL/Dev hold the three approval roles; classification is `CONFIDENTIAL`; the flag defaults off | R0A/R0B pilot preparation and dispatch |
+| D-015 (Example feature delivery pilot profile) | Example backend backend is an external versioned-contract/staging prerequisite; Example frontend is the only agent-dispatched slice; PO/TL/Dev hold the three approval roles; classification is `CONFIDENTIAL`; the flag defaults off | R0A/R0B pilot preparation and dispatch |
 | D-016 (KPI definitions and rollout guardrails) | Measure four primary KPIs; report the first pilot as binary; establish broader numeric targets only after three comparable initiatives | M6-04 (KPI computation), pilot evaluation, and broad R1 rollout |
 
 Each decision is independently reviewable. No coding agent may change a status
@@ -61,7 +65,7 @@ exact Curve revision.
 - GitLab, [Merge requests API](https://docs.gitlab.com/api/merge_requests/)
   (draft merge-request identity and reconciliation fields).
 
-These sources define product capabilities. The X3M repository's exact default
+These sources define product capabilities. The Example Organization repository's exact default
 branch, Node/pnpm versions, scripts, ownership, CI, preview, and release process
 remain authoritative for D-012 (Docusaurus documentation-delivery profile).
 
@@ -69,20 +73,20 @@ remain authoritative for D-012 (Docusaurus documentation-delivery profile).
 
 ### Decision statement
 
-Select the exact X3M Docusaurus repository profile, branch/build/link/navigation
+Select the exact Example Organization Docusaurus repository profile, branch/build/link/navigation
 commands, trusted GitLab identity, ownership, preview behavior, applicability
 contract, reconciliation, and release relationship used by Curve documentation
 slices.
 
 ### Fixed boundary
 
-- Repository: [X3M Docusaurus](https://gitlab.com/etermax/ads/x3m/docusaurus.git)
+- Repository: [Example Organization Docusaurus](https://vcs.example.invalid/example/repository)
   (documentation application and build source).
 - A documentation branch is created only when an approved delivery contract
   declares documentation applicable.
 - The branch name derives from the developed feature.
 - `pnpm build` is mandatory.
-- The Loomit SDK Compatibility pilot records documentation as
+- The Example feature delivery pilot records documentation as
   `NOT_APPLICABLE` at Gate 2 and creates no documentation branch or MR.
 - Agents receive no GitLab mutation credential; any future automated branch or
   draft creation uses the trusted VCS controller under D-008 (trusted VCS
@@ -105,7 +109,7 @@ slices.
 
 ### Required machine contracts
 
-1. A closed `DocumentationProviderProfile` schema and sanitized X3M fixture.
+1. A closed `DocumentationProviderProfile` schema and sanitized Example Organization fixture.
 2. A versioned applicability record binding initiative, delivery contract,
    approvers, rationale, evidence, and decision time.
 3. Command/result contracts for validate repository, prepare candidate,
@@ -245,7 +249,7 @@ exception. Curve never changes model/provider silently after exhaustion.
 | Sandbox time | Running, waiting, pause, cancellation, timeout, and cleanup fixtures produce the approved accounting. |
 | Reset/version change | Period reset and prospective policy changes preserve historical calculations. |
 
-## D-015 (Loomit SDK Compatibility pilot profile)
+## D-015 (Example feature delivery pilot profile)
 
 ### Decision statement
 
@@ -253,69 +257,31 @@ Bind the selected pilot to exact Products, repositories, external prerequisites,
 base SHAs, people, organizations/users, staging fixtures, data classification,
 flag profile, manual regression, measurement events, and stop/rollback rules.
 
-### Fixed pilot boundary
+### Public pilot boundary
 
-- Product: Loomit Admin web UI.
-- Initiative: application-level Loomit SDK Compatibility panel in App Details.
-- Agent-dispatched repository: [Sachiel](https://gitlab.com/etermax/ads/x3m/back-office/sachiel)
-  (Loomit Admin web UI), clone URL
-  `git@gitlab.com:etermax/ads/x3m/back-office/sachiel.git`, base branch `main`.
-- CIA owns the backend contract and is an external prerequisite; Curve records
-  the deployed staging contract version before Sachiel dispatch.
-- Backend source registry: [X3M General Config](https://gitlab.com/etermax/ads/x3m/general-config)
-  (CIA ownership context); the target route ownership must be proven by the
-  authoritative CIA artifact.
-- Approver roles: PO as Product Approver, TL as Technical Approver, and Dev as
-  Code Approver.
-- Data classification: `CONFIDENTIAL`.
-- Feature flag: `sdk-compatibility-panel-enabled`, default off and initially
-  limited to approved pilot organizations/users.
-- Manual regression covers compliant, upgrade required, unknown installed
-  version, unavailable compatibility data, App Details navigation, and adjacent
-  tabs.
-- Documentation is `NOT_APPLICABLE` for this pilot.
+Use a fictional Product, synthetic repositories and disposable fixtures in
+public examples. Actual application behavior, source repository identities,
+external prerequisites, feature flags, people, staging profiles, metrics and
+operational decisions remain private.
 
-### Owner inputs required
+### Required owner inputs
 
-| Input | Required exact value or evidence |
-| --- | --- |
-| Named people | PO, TL, Dev, CIA TL, Sachiel TL, regression owner, staging owner, and support/escalation owner |
-| Product identity | Curve Product key/name/owner and exact Initiative title/keyword |
-| Sachiel binding | Immutable GitLab project ID, canonical URL, exact `main` base SHA, toolchain, commands, CI requirements, and CODEOWNERS |
-| CIA contract | Authoritative repository/artifact, OpenAPI digest, endpoint, optional wire fields, deployed staging version, owner approval, and compatibility proof |
-| Organizations/users | Exact synthetic or approved pilot IDs, authorization, targeting owner, and removal date |
-| Staging | Environment identity, VPN/access path, test accounts, fixture ownership, data policy, and reset procedure |
-| UI applicability | Exact existing App Details route, `new-placement-view` behavior, direct-route denial, adjacent tabs, and browser support |
-| Manual regression | Case steps, expected outputs, actor, evidence format, candidate head binding, invalidation, and sign-off |
-| Stop/rollback | Flag disablement, branch cancellation, external-prerequisite failure, staging incident, and evidence preservation |
-| Baseline classification | Whether the historical seven-day value is active human effort, elapsed idea-to-production lead time, or both with separate sources |
+Owners supply exact scope, repository and contract versions, approver
+assignments, access classification, default-off rollout, regression cases,
+measurement definitions and rollback. The decision remains blocked until
+those inputs are approved in the private control plane.
 
 ### Required machine contracts
 
-1. A closed pilot-profile schema and one approved instance.
-2. A CIA external-prerequisite contract binding OpenAPI/deployed version,
-   staging evidence, owner, and validity window.
-3. A Sachiel repository profile with exact commands, base, CI, flag, and
-   allowed paths.
-4. A six-case manual-regression evidence schema bound to candidate head.
-5. A pilot-user/organization targeting reference that stores no credential and
-   follows D-009 (retention, backup, legal-hold, tombstone, and erasure
-   decision).
-6. A task DAG proving CIA staging acceptance precedes Sachiel dispatch.
-7. A rollback/termination report and immutable role-time event contract.
+Publish provider-neutral binding, evidence, authorization, versioning and
+rollback schemas with synthetic fixtures. Keep real deployment values outside
+source and public collaboration surfaces.
 
 ### Acceptance suite
 
-| Proof | Required result |
-| --- | --- |
-| External prerequisite | Missing, stale, incompatible, or unapproved CIA contract prevents Sachiel dispatch. |
-| Repository binding | Dispatch stops when repository ID, base branch/SHA, commands, or allowed paths differ. |
-| Flag boundary | Disabled/uneligible users cannot see or directly access the panel; targeted users receive only approved behavior. |
-| Four data states | Compliant, upgrade-required, unknown installed version, and unavailable compatibility data render deterministically. |
-| Regression | Navigation and adjacent tabs pass at the exact candidate head; a new commit invalidates evidence. |
-| Roles | Product, Technical, and Code Readiness decisions use their named human roles and exact versions/heads. |
-| No documentation side effect | `NOT_APPLICABLE` creates no Docusaurus branch, build, or MR. |
-| Rollback | Flag off removes exposure while preserving attributable implementation/evidence history. |
+Verify least privilege, exact-version dependencies, direct-route authorization,
+default-off exposure, unavailable data, current-head quality evidence,
+cancellation, rollback and public-disclosure protection.
 
 ## D-016 (KPI definitions and rollout guardrails)
 
@@ -329,9 +295,9 @@ broad-rollout decision thresholds.
 
 | KPI | Pilot target or rule |
 | --- | --- |
-| Human execution effort | At least 60% reduction against an approved active-effort baseline |
-| Idea-to-draft lead time | At least 50% reduction against the five-day baseline |
-| First-pass acceptance | At least 70% for aggregate reporting; the first pilot is recorded as pass/fail without implementation rework |
+| Human execution effort | Compare against an owner-approved private active-effort baseline and target |
+| Idea-to-draft lead time | Compare elapsed time against an owner-approved private baseline and target |
+| First-pass acceptance | Apply the configured aggregate target; the first pilot is recorded as pass/fail without implementation rework |
 | Security and native CI | No Critical/High security finding and no regression in repository-native CI |
 
 The first pilot cannot prove a stable portfolio rate. Product sets broad-R1
@@ -345,7 +311,7 @@ versioned definitions.
 | Owners | Named Product owner, data/analytics owner, Engineering owner, AppSec owner, and rollout decision body |
 | Clocks | Exact start/end events for idea-to-draft, idea-to-ready, merge, deployment, and post-release observation |
 | Human effort | Included roles/activities, unit, timer method, parallel work, interruption, rework, external wait, and missing-entry behavior |
-| Baselines | Source/evidence for seven days, five days, 60% first-pass, and manual regression; active effort and elapsed lead time stored separately |
+| Baselines | Private evidence for comparable active effort, elapsed time, first-pass acceptance and manual regression; store each measure separately |
 | First pass | Exact implementation-rework boundary, allowed documentation/test/evidence correction, rejected attempt, and multi-slice aggregation |
 | Security | Tool/policy version, normalized severity, open/closed/stale finding treatment, and exact candidate head |
 | Native CI | Required job set, skipped/cancelled/manual job treatment, pre-existing failure, flaky retry, and base comparison |
@@ -372,7 +338,7 @@ versioned definitions.
 | Proof | Required result |
 | --- | --- |
 | Clock separation | Active effort, idea-to-draft, idea-to-ready, merge, deployment, and external wait remain distinct. |
-| Time attribution | PO, TL, Dev, and CIA entries are attributable; missing entries remain visible and do not become zero. |
+| Time attribution | PO, TL, Dev, and Example backend entries are attributable; missing entries remain visible and do not become zero. |
 | First pass | Implementation rework deterministically changes the outcome; evidence-only correction follows the approved rule. |
 | Security/CI | Results bind exact head/tool/policy/jobs; stale or unavailable required evidence cannot pass. |
 | One-pilot report | Shows binary outcomes, raw values, definitions, and sample size one without claiming an aggregate rate. |
@@ -387,7 +353,7 @@ versioned definitions.
    (product roadmaps and schedule) implementation.
 3. Complete D-014 (budget accounting and exception policy) before any paid
    model/provider execution or R0B pilot attempt.
-4. Complete D-015 (Loomit SDK Compatibility pilot profile) and D-016 (KPI
+4. Complete D-015 (Example feature delivery pilot profile) and D-016 (KPI
    definitions and rollout guardrails) before pilot dispatch/evaluation.
 5. Complete D-012 (Docusaurus documentation-delivery profile) before the first
    applicable M5-12 (Docusaurus documentation slice); its pilot

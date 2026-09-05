@@ -1,5 +1,9 @@
 # M1-01A Initiative Core Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Accepted value |
@@ -9,7 +13,7 @@
 | Parent | M1-01 (Initiative aggregate and APIs) |
 | Evidence version | 1.0 |
 | Acceptance date | 2026-08-29 |
-| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Owner and human reviewer | Designated reviewer, Designated technical owner |
 | Implementer | Codex |
 | Curve contract revision | `ebbf22745e7939a633dd667246e7207a57ef526a` |
 | Approved contract head | `9e5bb5042139746338e22dcfd71c5f975adc4ab6` |
@@ -111,6 +115,6 @@ revert.
 M1-01A is complete for its approved `LOCAL_ONLY`, synthetic-data backend
 scope. M1-01 remains open. M1-01B (Curve-first Initiative shell) still owns the
 list/create/detail experience, assignment and lifecycle controls, accessibility,
-responsive behavior, browser tests, and Plane implementation. Federico approved
+responsive behavior, browser tests, and Plane implementation. Designated reviewer approved
 its screen contract and test evidence at exact Curve commit `656a196...`; packet
 finalization and separate dispatch authority remain pending.

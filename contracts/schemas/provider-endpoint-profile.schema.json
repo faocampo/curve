@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/provider-endpoint-profile.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/provider-endpoint-profile.schema.json",
   "title": "Curve candidate provider endpoint-profile metadata",
   "description": "Candidate-only metadata projection for M0-S9B2. It contains no endpoint, origin, DNS name, certificate, signature key, or callback value and is not normative until B-PROFILE-M0-S9B2 is approved.",
   "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",

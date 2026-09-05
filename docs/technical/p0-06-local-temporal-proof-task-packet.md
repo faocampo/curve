@@ -1,5 +1,9 @@
 # P0-06 (Two-Stage Local Temporal Proof) Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,17 +12,17 @@
 | Current stage | `P0-06_SUPERSEDED` (terminal historical projection) |
 | Current state | `SUPERSEDED`; this packet grants no dispatch or execution authority |
 | Decision | D-003 (runtime topology and trust-zone decision) is `DECIDED` for `LOCAL_ONLY`; M0-S3 (local Temporal round-trip implementation packet) is the executable proof |
-| Decision owner | Federico Ocampo, CTO at X3M, acting as Platform Operations decision owner for `LOCAL_ONLY` |
-| Human reviewer | Federico Ocampo (`faocampo`) |
-| Technical operator | OpenAI Codex under Federico Ocampo's oversight |
-| Original scope approval | On 2026-08-15 Federico approved the `LOCAL_ONLY` sections of ADR proposal revision `sha256:cac4dcac2a03156faf21b0deffdc22bec611da1b070a421b4d5b631bfec8a142` as a proof basis; staging and production content in that revision was not approved |
-| Current interpretation | Historical proof design only. The live M0-S3 network contract is governed by [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private EKS direction, and revised proof acceptance). |
-| Two-stage direction | On 2026-08-15 Federico approved P0-06A (isolated Temporal feasibility proof) followed by a separately designed and approved P0-06B (least-privilege Plane integration proof) |
+| Decision owner | Designated reviewer, Designated technical owner, acting as Platform Operations decision owner for `LOCAL_ONLY` |
+| Human reviewer | Designated reviewer (`example-reviewer`) |
+| Technical operator | OpenAI Codex under Designated reviewer's oversight |
+| Original scope approval | On 2026-08-15 Designated reviewer approved the `LOCAL_ONLY` sections of ADR proposal revision `sha256:cac4dcac2a03156faf21b0deffdc22bec611da1b070a421b4d5b631bfec8a142` as a proof basis; staging and production content in that revision was not approved |
+| Current interpretation | Historical proof design only. The live M0-S3 network contract is governed by [D-003 private-platform connectivity amendment](d003-private-platform-connectivity-amendment.md) (shared local network, private deployment requirements, and revised proof acceptance). |
+| Two-stage direction | On 2026-08-15 Designated reviewer approved P0-06A (isolated Temporal feasibility proof) followed by a separately designed and approved P0-06B (least-privilege Plane integration proof) |
 | Durable supersession evidence | [Curve PR #9](https://github.com/faocampo/curve/pull/9), approved head `7826f4031a6f3862ed29d48c9f16292e8a1ab8bb`, green `validate`, merge `097016ffe2eb259cc780ad2a6cd41ca3422366b2` |
 | P0-06A (isolated Temporal feasibility proof) authorization | `SUPERSEDED_UNISSUED`; proposed authorization `D003-LOCAL-PROOF-A-2026-08-15-01` was never activated |
 | P0-06B (least-privilege Plane integration proof) authorization | `SUPERSEDED_UNISSUED`; no attempt was authorized |
 
-Federico Ocampo retired both stages as standalone gates on 2026-08-18. The
+Designated reviewer retired both stages as standalone gates on 2026-08-18. The
 historical design below is retained for audit and explains the superseded
 control model. Its readiness lists, commands, leases, and state transitions are
 inactive. The active implementation and proof contract is M0-S3 (local
@@ -63,7 +67,7 @@ P0-06B (least-privilege Plane integration proof) must replace the historical,
 superseded shared-`dev_env` and Plane-application-environment candidate. Its
 new design must enumerate the
 minimum services, ports, credentials, data, and filesystem access required by
-the Curve worker. Any revised topology requires Federico's separate exact-head
+the Curve worker. Any revised topology requires Designated reviewer's separate exact-head
 approval before execution. P0-06A supplies no authority for that design.
 
 ## P0-06A (isolated Temporal feasibility proof) readiness gates
@@ -79,7 +83,7 @@ P0-06A stays `Backlog` until all conditions are true:
    index/platform/config digests, SBOM and provenance, runs unit/security tests,
    and records the exact source revision. Local execution never builds code or
    resolves dependencies.
-4. Federico publishes the canonical exact-head approval described below for the
+4. Designated reviewer publishes the canonical exact-head approval described below for the
    harness PR. It merges with green
    post-merge CI. The versioned P0-06 (two-stage local Temporal proof) stage
    record captures its source, bundle, image, SBOM, provenance, and approval
@@ -99,7 +103,7 @@ P0-06A stays `Backlog` until all conditions are true:
    resources.
 6. A separate attempt-authorization PR commits the complete immutable
    `docs/technical/proofs/p0-06a/authorization/` bundle.
-   Federico publishes its canonical exact-head approval including the
+   Designated reviewer publishes its canonical exact-head approval including the
    authorization ID; the PR merges with green head and post-merge CI. Because a
    tracked file cannot contain the SHA or approval URL of its own containing
    commit, a subsequent projection-only PR records the three earlier execution-authority approvals and
@@ -249,7 +253,7 @@ revision to be an ancestor of the approved attempt head and requires identical
 bundle bytes and harness content at the immutable revision, approved head, and
 current merged `main`.
 
-Each approval is a new, unedited GitHub PR conversation comment by `faocampo`.
+Each approval is a new, unedited GitHub PR conversation comment by `example-reviewer`.
 The documentation approval body is exactly:
 
 ```text
@@ -283,7 +287,7 @@ supersedes an earlier run with the same name/App identity.
 
 The fourth PR is a repository-integrity projection, distinct from the three
 execution approvals. Its only changed file is
-`docs/technical/proofs/p0-06-stage-record.json`. Federico's unedited comment is
+`docs/technical/proofs/p0-06-stage-record.json`. Designated reviewer's unedited comment is
 exactly:
 
 ```text
@@ -312,7 +316,7 @@ and rule types are defined by GitHub REST rulesets documentation
 
 ### GitHub Project visual-tracking protocol
 
-GitHub Project #2 is an administrative visualization. Federico Ocampo or
+GitHub Project #2 is an administrative visualization. Designated reviewer or
 authorized automation may move P0-06 (two-stage local Temporal proof) between
 `Backlog`, `Ready`, `In progress`, `In review`, and `Done` to represent the
 team's current view. These writes require authenticated Project access and
@@ -477,7 +481,7 @@ conformance must prove that the controller cannot widen a method, resource, ref,
 SHA, force flag, before/after state, call count, or
 idempotency key.
 
-GitHub Project status is visual tracking metadata. Federico Ocampo or authorized
+GitHub Project status is visual tracking metadata. Designated reviewer or authorized
 administrative automation may update it independently of this proof. The broker
 performs a two-phase claim-time check. Immediately before permitting the
 single claim request, it independently re-fetches the claim ruleset by approved
@@ -512,7 +516,7 @@ specific so a single allowlist entry cannot be reused under another lease:
 execution permits `create-claim-ref` and `create-evidence-ref`; reconciliation
 permits `create-reconciliation-evidence-ref`, `update-evidence-ref`, and
 `write-evidence-objects`; review disposition produces a signed, immutable receipt
-for Federico's exact-evidence-head decision and has no GitHub Project authority;
+for Designated reviewer's exact-evidence-head decision and has no GitHub Project authority;
 terminal projection permits only the three publication operations enumerated
 below. The execution lease permits preflight, claim, exact evidence-branch
 creation, and signed
@@ -525,7 +529,7 @@ expiry. It cannot claim, start/restart Docker, change approval evidence, or
 mutate another ref.
 
 The review-disposition lease is unavailable during proof execution and
-execution-evidence publication. After Federico records an attributable
+execution-evidence publication. After Designated reviewer records an attributable
 exact-evidence-head disposition, it validates and signs the immutable
 disposition receipt that the later terminal projection consumes. It has no
 GitHub Project, repository-ref, merge, gate, deployment, or Docker authority and
@@ -576,7 +580,7 @@ path, second PR, force push, mismatched base/head, or ambiguous response consume
 the attempt and cannot be retried under the consumed lease. The lease cannot
 mutate Project fields, either runtime evidence branch, another repository ref,
 approval, checks, workflow configuration, rulesets, merge state, or deployment
-state. Federico reviews and merges through normal repository governance; the
+state. Designated reviewer reviews and merges through normal repository governance; the
 publication controller cannot approve or merge its own PR. The merge SHA,
 ancestry, app-bound post-merge checks, and equality of the merged bytes to that
 attested PR head are separate post-merge observations; the attestation does not
@@ -590,7 +594,7 @@ Applied identity, executable, configuration, allowlist, scope, and expiry
 checks must pass before use. No controller is named or authorized by this
 packet; the attempt-authorization PR must supply and approve every value. The
 execution lease must be consumed and expire before reconciliation is issued;
-reconciliation must be consumed and expire before Federico's evidence review;
+reconciliation must be consumed and expire before Designated reviewer's evidence review;
 the disposition lease is issued only after that review and after evidence merge
 checks, then consumed before its expiry. Its authority window ends before the
 terminal-projection publication lease is issued; the publication lease is
@@ -634,7 +638,7 @@ write-once. A terminal value never transitions back to an earlier value.
 | `claim.reconciliation_branch_state` | `UNAVAILABLE`, `UNCREATED`, `CREATED_EXACT`, `CREATED_OTHER`, `PREEXISTING`, `AMBIGUOUS`, `EVIDENCE_MERGED` | `UNAVAILABLE` | A non-exact claim or pre-ticket failure makes the fixed reconciliation branch eligible and projects `UNAVAILABLE -> UNCREATED`. Under the reconciliation lease, `create-reconciliation-evidence-ref` produces exactly one observed create result; only `CREATED_EXACT -> EVIDENCE_MERGED` after exact-head review, merge, merge checks, and byte equality. It is never used after the normal execution-evidence branch reaches `CREATED_EXACT`. | Fixed branch `refs/heads/agent/p0-06a-reconciliation-evidence-d003-2026-08-15-01`, create request ID/time, base/head reads, evidence PR number/head/merge/check evidence. |
 | `claim.ticket_state` | `UNAVAILABLE`, `UNISSUED`, `ISSUED`, `ACKNOWLEDGED`, `START_GRANTED`, `CONSUMED`, `REJECTED`, `REPLAYED`, `AMBIGUOUS` | P0-06A: `UNISSUED`; P0-06B: `UNAVAILABLE` | The success path is `UNISSUED -> ISSUED -> ACKNOWLEDGED -> START_GRANTED -> CONSUMED`; validation failure yields `REJECTED`, duplicate consumption yields `REPLAYED`, and an unreconciled response yields `AMBIGUOUS`. Only a `CREATED_EXACT` branch may enter `ISSUED`; only `CONSUMED` permits container creation. | Ticket ID/digest/issue/acknowledgment times, start-grant digest/consumption time, signature/key ID, and wrapper receipt. |
 | Each lease state | Execution: `UNISSUED`, `ISSUED`, `CONSUMED`, `REVOKED`, `EXPIRED`; later leases: `UNAVAILABLE`, `ISSUED`, `CONSUMED`, `REVOKED`, `EXPIRED` | Execution: `UNISSUED`; reconciliation, disposition, publication: `UNAVAILABLE` | Execution issues only after exact authorization/routing validation. If it is redeemed to send a claim, it is `CONSUMED` regardless of the claim result; `REVOKED` or `EXPIRED` is valid only before any claim request, leaves `claim.state=UNCLAIMED`, and uses no runtime-marker path. Reconciliation issues after execution authority ends; disposition issues after evidence review/merge checks and reconciliation authority ends; terminal publication issues after successful disposition and its authority window ends. `ISSUED -> CONSUMED` on one broker redemption; `ISSUED` transitions to `REVOKED` on revocation or `EXPIRED` at its deadline. The terminal PR may project the publication lease only through `ISSUED`; its later `CONSUMED` result exists solely in the signed external publication attestation. | Non-null lease ID, principal, `issued_at`, and `expires_at`; `consumed_at` for the first three leases is recorded in immutable operation evidence. Publication consumption/time is recorded only by the signed external attestation. Each predecessor expiry is no later than the successor issue time. |
-| `review.disposition` | `PENDING`, `ACCEPT_STAGE_A`, `REJECT_STAGE_A`, `NEW_AUTHORIZATION_REQUIRED`; P0-06B may use `UNAVAILABLE` before design | `PENDING` | `PENDING ->` one terminal Federico disposition on the exact evidence head. The review deadline permits acceptance/rejection; after it, only `NEW_AUTHORIZATION_REQUIRED` is valid. | Immutable review URL, exact evidence revision, `reviewed_at`, author, canonical body, PR head/merge/check evidence. |
+| `review.disposition` | `PENDING`, `ACCEPT_STAGE_A`, `REJECT_STAGE_A`, `NEW_AUTHORIZATION_REQUIRED`; P0-06B may use `UNAVAILABLE` before design | `PENDING` | `PENDING ->` one terminal Designated reviewer disposition on the exact evidence head. The review deadline permits acceptance/rejection; after it, only `NEW_AUTHORIZATION_REQUIRED` is valid. | Immutable review URL, exact evidence revision, `reviewed_at`, author, canonical body, PR head/merge/check evidence. |
 
 Terminal evidence requirements are outcome-specific:
 
@@ -725,7 +729,7 @@ be accepted while quarantine disposition is unresolved.
 The committed manifest records all source/context/platform/image digests,
 runtime limits, applied inspections, scenario results, deadline events,
 sentinel scans, and baseline/post-cleanup resource IDs. It is immutable at the
-reviewed evidence revision. Federico's attributable review record contains the
+reviewed evidence revision. Designated reviewer's attributable review record contains the
 exact evidence revision, timestamp, disposition (`ACCEPT_STAGE_A`,
 `REJECT_STAGE_A`, or `NEW_AUTHORIZATION_REQUIRED`), rationale, residual risks,
 and P0-06B recommendations. The review-disposition lease copies only the
@@ -735,7 +739,7 @@ retained only when the sanitized canonical evidence is independently
 sufficient; unavailable secret-bearing bytes are not presented as reproducible
 evidence.
 
-Federico records the disposition as a new, unedited comment on the exact
+Designated reviewer records the disposition as a new, unedited comment on the exact
 evidence PR head. The evidence PR then merges normally to Curve `main`; the
 later stage-record disposition update references this immutable URL and time.
 The comment body is exactly:
@@ -753,7 +757,7 @@ lease creates a draft terminal-projection PR whose final three-file head contain
 the v2 stage record, disposition-operation evidence, and the precomputable
 publication intent. The signed post-publication attestation remains outside the
 PR. After independently verifying that attestation, live GitHub state, the exact
-head, and all three bytes/digests, Federico's integrity-review comment is exactly:
+head, and all three bytes/digests, Designated reviewer's integrity-review comment is exactly:
 
 ```text
 Projection-Review-Contract: curve.projection-review/v1
@@ -826,11 +830,11 @@ quarantine entry.
    or expires without terminal-publication authority; it cannot overlap the earlier
    execution lease.
 4. An unclaimed authorization at `claim_by` becomes `EXPIRED`. Once the review
-   deadline passes, `ACCEPT_STAGE_A` and `REJECT_STAGE_A` are invalid; Federico
+   deadline passes, `ACCEPT_STAGE_A` and `REJECT_STAGE_A` are invalid; Designated reviewer
    records an exact-evidence-head `NEW_AUTHORIZATION_REQUIRED` disposition.
-5. Federico reviews the exact evidence head; its app-bound head checks, merge,
+5. Designated reviewer reviews the exact evidence head; its app-bound head checks, merge,
    and merge checks complete without changing the reviewed bytes. Only then is
-   the disposition lease issued. It validates Federico's review and emits the
+   the disposition lease issued. It validates Designated reviewer's review and emits the
    signed immutable disposition receipt without Project or repository mutation.
    After the disposition lease's
    authority window ends, the terminal-publication lease creates a draft PR and
@@ -845,7 +849,7 @@ quarantine entry.
    the exact final terminal-projection PR head before merge, all three file
    digests, response IDs, principal, and times. The later merge SHA, ancestry,
    app-bound checks, and merged-byte equality are verified separately.
-   Federico verifies and binds that attestation in the canonical
+   Designated reviewer verifies and binds that attestation in the canonical
    `P0-06A_TERMINAL_PROJECTION` integrity review; app-bound head/merge checks
    pass and the PR merges. `REJECT_STAGE_A` or
    `NEW_AUTHORIZATION_REQUIRED` leaves no reusable attempt. `ACCEPT_STAGE_A`
@@ -871,6 +875,6 @@ prove:
   Plane regression, rollback and cleanup evidence;
 - committed/reviewed executable harness, immutable image supply chain, resource
   limits, time window, protected claim ledger and evidence schema; and
-- a separate exact-head approval by Federico Ocampo.
+- a separate exact-head approval by Designated reviewer.
 
 P0-06A cannot supply, infer, or waive any of these values.

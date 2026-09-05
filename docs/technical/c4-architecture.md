@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Status | Derived architecture baseline; implementation remains blocked by applicable non-decided decisions |
-| Owner | X3M Curve engineering |
+| Owner | Example Organization Curve engineering |
 | Audience | Architecture, engineering, security, platform operations, product, and AI coding agents |
 | Version | 0.2 |
 | Last updated | 2026-08-29 |

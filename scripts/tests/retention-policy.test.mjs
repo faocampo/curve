@@ -212,7 +212,7 @@ function decidedManifest() {
   manifest.activation_guard.implementation_dispatch_allowed = true;
   manifest.approvals.identity_policy = {
     status: "DECIDED",
-    canonical_authority_ref: "identity:x3m-workforce",
+    canonical_authority_ref: "identity:example-workforce",
     authority_evidence_ref: evidenceRef("policy:workforce-identity-authority", "v1"),
     separation_mode: "SIX_DISTINCT_PEOPLE",
     allowed_dual_hat_role_pairs: [],
@@ -225,10 +225,10 @@ function decidedManifest() {
   for (const role of APPROVAL_ROLES) {
     manifest.approvals[role] = {
       approver_identity: {
-        authority_ref: "identity:x3m-workforce",
+        authority_ref: "identity:example-workforce",
         subject_id: role.replaceAll("_", "-"),
         identity_proof_ref: identityProofRef(
-          "identity:x3m-workforce",
+          "identity:example-workforce",
           role.replaceAll("_", "-"),
         ),
       },
@@ -657,7 +657,7 @@ test("a proposal cannot claim approval, implementation dispatch, or effective sc
     () => validate((manifest) => {
       manifest.approvals.security = {
         approver_identity: {
-          authority_ref: "identity:x3m-workforce",
+          authority_ref: "identity:example-workforce",
           subject_id: "security-owner",
         },
         approved_decision_digest: `sha256:${"0".repeat(64)}`,

@@ -1,5 +1,9 @@
 # D-002 (Onyx Delegation), D-004 (Model Gateway), and D-005 (Model Data Policy) M1 Decision Readiness
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -10,7 +14,7 @@
 | Product | Curve |
 | Scope | D-002 (Onyx delegated-identity decision), D-004 (Curve Model Gateway decision), and D-005 (model/provider data-policy decision) |
 | Intended owners | Security and Identity; Onyx Operations; AI Platform; Platform Operations; AI Governance; Privacy and Legal; FinOps; Curve Product and Engineering |
-| Prepared by | Codex under Federico Ocampo's review |
+| Prepared by | Codex under Designated reviewer's review |
 | Governing baseline | Exact Curve revision named by the eventual decision PR |
 | Activation boundary | No provider credential, model allowlist, data-routing approval, live retrieval, protected persistence, or model call is authorized by this packet |
 
@@ -24,7 +28,7 @@ protected persistence, or model-call authority.
 | Decision | Required outcome | First consuming scope |
 | --- | --- | --- |
 | D-002 (Onyx delegated identity) | One supported initiating-human delegation mechanism with exact deployed Onyx and identity evidence | M1-03B (live Onyx retrieval and Gate 1 access proof) |
-| D-004 (Curve Model Gateway) | Versioned in-process gateway contract over approved X3M OpenRouter access | First model-enabled M1 (alignment, evidence, PRD, and Gate 1) operation |
+| D-004 (Curve Model Gateway) | Versioned in-process gateway contract over approved Example Organization OpenRouter access | First model-enabled M1 (alignment, evidence, PRD, and Gate 1) operation |
 | D-005 (model/provider data policy) | Task/classification model and provider policy, evaluation baseline, retention/residency terms, and fallback equivalence | Every model-enabled M1 (alignment and Gate 1), M3 (architecture and planning), and M5 (quality and VCS) operation |
 
 D-009 (retention, deletion, backup, and legal-hold policy) separately controls
@@ -43,7 +47,7 @@ limits and exception authority.
 
 The public API documents user-permission-aware PATs and application OIDC. It
 does not establish the specific short-lived, audience-bound, per-operation
-server delegation required by Curve. The deployed X3M version, OpenAPI, identity
+server delegation required by Curve. The deployed Example Organization version, OpenAPI, identity
 configuration, and proof environment remain authoritative.
 
 ### OpenRouter
@@ -63,7 +67,7 @@ configuration, and proof environment remain authoritative.
 - [OpenRouter data collection](https://openrouter.ai/docs/guides/privacy/data-collection)
   (prompt/response logging choices and metadata collection)
 
-These are capability descriptions. X3M account configuration, contracts,
+These are capability descriptions. Example Organization account configuration, contracts,
 entitlements, routes, selected models/endpoints, and measured behavior remain
 decision evidence.
 
@@ -76,7 +80,7 @@ The pending M1 branch already provides:
 - Initiating-human identity, no reusable PAT/refresh-token persistence, durable
   reauthorization, access recheck, and prompt-injection invariants.
 - Explicit fail-closed activation flags.
-- Candidate mechanisms: X3M token exchange/on-behalf-of, trusted delegation
+- Candidate mechanisms: Example Organization token exchange/on-behalf-of, trusted delegation
   proxy, supported session forwarding, or operation-scoped ephemeral token.
 
 ### Required owner inputs
@@ -100,7 +104,7 @@ The pending M1 branch already provides:
   per-operation delegation invariant without a separately approved broker that
   prevents Curve from receiving or persisting it.
 - Onyx application OIDC login does not prove a backend on-behalf-of API. Its
-  refresh-token and PKCE configuration must be evaluated against the exact X3M
+  refresh-token and PKCE configuration must be evaluated against the exact Example Organization
   deployment.
 - A service/admin API key cannot prove initiating-human source permissions.
 
@@ -124,7 +128,7 @@ architecture.
 ### D-004 (Curve Model Gateway decision) owner inputs
 
 - Named AI Platform, Platform Operations, Security, FinOps, and support owners.
-- Exact X3M OpenRouter account/workspace, endpoint/base URL, entitlement, API
+- Exact Example Organization OpenRouter account/workspace, endpoint/base URL, entitlement, API
   version, key ownership/rotation, and environment mapping.
 - Account and guardrail configuration digests.
 - Allowed request features and maximum request/response sizes.
@@ -164,7 +168,7 @@ model route.
 | Classification | Allowed model/provider endpoints for `INTERNAL`, `CONFIDENTIAL`, and `RESTRICTED` |
 | Residency | Approved processing regions and routing evidence |
 | Training/retention | Endpoint-specific prompt/output training and retention terms plus proof date |
-| ZDR | Whether OpenRouter's endpoint policy and in-memory caching interpretation satisfy X3M requirements |
+| ZDR | Whether OpenRouter's endpoint policy and in-memory caching interpretation satisfy Example Organization requirements |
 | Logging | Account, organization, guardrail, provider, and request logging settings and drift detection |
 | DLP | Required pre-call classification/redaction/block evidence and post-call leak scan |
 | Capabilities | Required context size, structured output, tool calling, streaming, reasoning, and multimodal behavior per task |
@@ -200,14 +204,14 @@ In either shape:
 ## Cross-decision acceptance suite
 
 1. Merge and rebase the pending M1 contract branch onto canonical Curve `main`.
-2. Obtain the deployed Onyx and X3M identity facts for D-002 (Onyx
+2. Obtain the deployed Onyx and Example Organization identity facts for D-002 (Onyx
    delegated-identity decision).
 3. Run D-002 (Onyx delegated-identity decision)'s twelve-case two-user and
    durable-reauthorization proof.
 4. Publish D-004 (Curve Model Gateway decision) and D-005 (model/provider
    data-policy decision) ADRs, machine schemas, fixtures, and owner-fillable
    decision instances.
-5. Populate the X3M OpenRouter gateway and model catalog from controlled account
+5. Populate the Example Organization OpenRouter gateway and model catalog from controlled account
    evidence.
 6. Run gateway failure, routing, usage, data-policy, evaluation, red-team, and
    fallback-equivalence proofs.
@@ -234,7 +238,7 @@ In either shape:
   prepared; exact selections, runtime invocation/usage/stream contracts,
   routing evidence, error/failure matrix, replacement test, and named owners
   remain open
-- Exact X3M OpenRouter account/API/auth/configuration/operations evidence
+- Exact Example Organization OpenRouter account/API/auth/configuration/operations evidence
 
 ### D-005 (model/provider data-policy decision)
 

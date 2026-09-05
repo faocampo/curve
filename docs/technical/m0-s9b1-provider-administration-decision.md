@@ -1,5 +1,9 @@
 # M0-S9B1 (Provider Administration Decision and Readiness Gate)
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -10,9 +14,9 @@
 | Version | 0.3 |
 | Date | 2026-08-31 |
 | Product | Curve |
-| Decision owner | Federico Ocampo, CTO at X3M |
-| Candidate delivery owner | Federico Ocampo |
-| Candidate human reviewer | Federico Ocampo; owner/reviewer separation remains an explicit unresolved choice |
+| Decision owner | Designated reviewer, Designated technical owner |
+| Candidate delivery owner | Designated reviewer |
+| Candidate human reviewer | Designated reviewer; owner/reviewer separation remains an explicit unresolved choice |
 | Contract baseline | Curve `main` at `e7aa7e6ff23491cfae02379d74508822a8ded238` |
 | Observed implementation baseline | Plane `preview` at `99a73b4eab5ee21fd012d7358bc9259252d47f71`; `0007_initiative_gateassignment.py` (Initiative and gate-assignment migration) is current and migration slot `0008` is observational only, not reserved |
 | Data boundary | Synthetic `INTERNAL` provider metadata only |
@@ -283,7 +287,7 @@ encoded by the machine validator.
 
 | Option | Canonical human subject | Consequence |
 | --- | --- | --- |
-| `X3M_IDP_SUBJECT` | Exact `(X3M_IDP_SUBJECT, immutable IdP subject)` pair | Uses the X3M identity provider as the equality and separation authority. |
+| `ORGANIZATION_IDP_SUBJECT` | Exact `(ORGANIZATION_IDP_SUBJECT, immutable IdP subject)` pair | Uses the Example Organization identity provider as the equality and separation authority. |
 | `PLANE_USER_ID` | Exact `(PLANE_USER_ID, immutable Plane user ID)` pair | Uses Plane's persisted user identifier as the equality and separation authority. |
 | `GITHUB_USER_ID` | Exact `(GITHUB_USER_ID, immutable GitHub user ID)` pair | Uses the verified GitHub user identifier as the equality and separation authority. |
 
@@ -293,7 +297,7 @@ different authority, cannot establish equality or distinctness. A cross-system
 mapping is evidence metadata until an approved, digest-bound subject proof
 binds it to the selected canonical authority. The selection remains unresolved,
 so this record remains `PROPOSED / OWNER_SELECTION_REQUIRED / NO_DISPATCH`.
-The machine contract accepts X3M subjects only in the closed
+The machine contract accepts Example Organization subjects only in the closed
 `[A-Za-z0-9][A-Za-z0-9._:@/-]{0,254}` alphabet, Plane subjects only as canonical
 UUIDs, and GitHub subjects only as non-zero decimal user IDs. Whitespace-only,
 leading/trailing-whitespace, login-derived, email-derived, and malformed
@@ -362,7 +366,7 @@ Duplicate references do not expand the set and do not satisfy a missing target.
 | `SAME_PERSON_BOOTSTRAP_EXCEPTION` | One named human may own and review this bootstrap child under an exact, digest-bound exception whose validity window contains the decision time and extends strictly beyond the next review. |
 | `DEFER` | No implementation packet is prepared. |
 
-This decision reconciles the existing Federico-as-default-reviewer convention
+This decision reconciles the existing Designated reviewer-as-default-reviewer convention
 with the M0-S9B (external provider transport and administration foundation)
 parent packet's distinct-reviewer requirement. No coding agent
 may infer the choice.

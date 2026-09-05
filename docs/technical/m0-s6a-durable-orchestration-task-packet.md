@@ -1,5 +1,9 @@
 # M0-S6A Durable Temporal Orchestration Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Dispatch specification |
@@ -19,7 +23,7 @@
 | Plane branch | `curve/m0-s6a-durable-orchestration` |
 | Approved Plane head | `af8335c42fa3c57e66f76c6ebd80220640630cf8` |
 | Plane squash merge | `ad5772c0565c934e64ea90f892be1374819979be` on `preview` |
-| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Owner and human reviewer | Designated reviewer, Designated technical owner |
 | Implementer | Codex, distinct from the human reviewer |
 | Risk | `STANDARD`; durable asynchronous state and cancellation, using synthetic `INTERNAL` data only |
 | Product decisions | No new material product decision; D-003 (local runtime topology and trust-zone decision) is already `DECIDED / LOCAL_ONLY` |
@@ -59,7 +63,7 @@ satisfaction is recorded in the
 | `B-P005` (accepted test-strategy baseline) | Satisfied by P0-05 (test strategy and audit closure) at Curve `main` `fdae85b33a235cd494dd36565698b2b5033a3389`; its matrix remains broader than this packet and assigns only partial AC-17, AC-20, and AC-58 evidence here |
 | `B-PLANE` (implementation base) | Plane `preview` resolves exactly to `cb17734280260361cc3c8eccf44170a4bfbcb840`; existing M0-S3 (local Temporal round-trip implementation), M0-S5B (local observability integration), and M0-03A (policy timestamp-ordering regression fix) behavior remains present |
 | `B-D003` (local runtime authority) | D-003 (local runtime topology and trust-zone decision) remains `DECIDED / LOCAL_ONLY`; `temporalio==1.31.0`, namespace `curve-local`, and task queue `curve-control-plane-v1` remain unchanged |
-| `B-OWNER` (human accountability) | Federico Ocampo remains named owner and reviewer; the coding agent is the separate implementer |
+| `B-OWNER` (human accountability) | Designated reviewer remains named owner and reviewer; the coding agent is the separate implementer |
 | `B-CONTEXT` (immutable dispatch context) | The dispatcher records the exact Curve commit, every M0-S6A context path and SHA-256, and the aggregate context digest before Plane mutation |
 | `B-COMMANDS` (executable verification) | Every required command below is available in the pinned Plane base or explicitly added by this packet |
 
@@ -76,7 +80,7 @@ outside the Plane branch, or infrastructure change.
 | Model/tool use | Dispatcher-approved coding model; no runtime LLM, OpenRouter, OpenHands, Orca, Onyx, or MCP call |
 | Budget | US$25 maximum automated coding attempt; pause before exceeding it |
 | Repository authority | Read/write only on the named Plane branch; no merge, deployment, GitHub Project mutation, or external repository write by the coding agent |
-| Runtime authority | Existing local Plane Docker stack and Curve overlay only; no staging, production, AWS, EKS, or X3M infrastructure mutation |
+| Runtime authority | Existing local Plane Docker stack and Curve overlay only; no staging, production, AWS, EKS, or Example Organization infrastructure mutation |
 | Network | Existing dependency/build access and local Docker service connectivity only |
 | Credentials | Existing local stack configuration only; workflow inputs, histories, fixtures, logs, and PR evidence contain no credential |
 
@@ -427,7 +431,7 @@ replaced; a base change that invalidates a command returns the packet to review.
 | Runtime evidence | Sanitized workflow IDs, run IDs, phases, continue-as-new chain, child count, cancellation result, restart result, and command output summaries |
 | Regression evidence | Full Curve backend suite, `pnpm check`, `pnpm build`, existing stack health with and without the Curve profile, and unchanged old replay fixture digest |
 | Security evidence | Sentinel scan, workflow-field allowlist, no credential/protected field, no provider/VCS/network activity, and bounded errors/logs/telemetry |
-| Review evidence | Plane PR number, exact head, green required checks, Federico review, and explicit ready/merge authorization before merge |
+| Review evidence | Plane PR number, exact head, green required checks, Designated reviewer review, and explicit ready/merge authorization before merge |
 
 Evidence uses identifiers, digests, counts, enum states, commands, and links. It
 does not include protected payloads, full histories in PR comments, credentials,
@@ -448,7 +452,7 @@ remain unpolled until the compatible worker is restored.
 M0-S6A was accepted after all twelve acceptance tests passed, the replay corpus
 was committed and replayed deterministically, the local
 restart/cancellation/continue-as-new proof passed, the complete Plane regression
-was green, and Federico Ocampo approved Plane PR #10 at exact head
+was green, and Designated reviewer approved Plane PR #10 at exact head
 `af8335c42fa3c57e66f76c6ebd80220640630cf8`. The PR squash-merged into
 `preview` as `ad5772c0565c934e64ea90f892be1374819979be`; the
 [M0-S6A implementation evidence](m0-s6a-implementation-evidence.md)

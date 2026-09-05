@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
+import { assertPublicationNotWithdrawn } from "../lib/publication-withdrawal.mjs";
 
 import {
   buildM1_01BAuthorityRecords,
@@ -189,6 +190,13 @@ test("packet publication checkout accepts canonical P descendants and rejects si
 });
 
 test("M1-01B ordered publication remains monotonic and fail closed", () => {
+  const current = readJson(M1_01B_PACKET_PATH);
+  if (current.packet_version <= 3) {
+    assert.equal(current.status, "BLOCKED");
+    assert.throws(() => assertPublicationNotWithdrawn(current), /PUBLICATION_WITHDRAWN/);
+    assert.ok(current.people.owner.name.startsWith("Designated"));
+    return;
+  }
   const stage = m1_01bPublicationStage();
   assert.match(stage, /^(?:S|E1|E2|C|P)$/u);
   if (stage === "S") {
@@ -306,7 +314,7 @@ test("M1-01B ordered publication remains monotonic and fail closed", () => {
     ].every(({ status }) => status === "PROPOSED"),
   );
 
-  const targetRoot = "/Users/federico.ocampo/Development/tools/project_management/plane";
+  const targetRoot = "/workspace/plane";
   if (existsSync(targetRoot)) {
     const evidence = validateCodingAgentTaskPacketEvidence(packet, {
       resolveReference: (reference) => execFileSync(

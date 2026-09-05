@@ -1,5 +1,9 @@
 # Product
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](docs/technical/public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 <!-- impeccable:product-schema 1 -->
 
 ## Platform
@@ -8,7 +12,7 @@ web
 
 ## Users
 
-Curve serves X3M product owners, technical leads, developers, and platform
+Curve serves Example Organization product owners, technical leads, developers, and platform
 operators who move product work from an initial idea through approved
 requirements, implementation, quality review, and a draft pull or merge
 request.
@@ -19,7 +23,7 @@ Approver assignments visible before execution begins.
 
 ## Product Purpose
 
-Curve is X3M's AI-native product-development platform. It owns the end-to-end
+Curve is Example Organization's AI-native product-development platform. It owns the end-to-end
 product experience and uses Plane as its work-management foundation. Curve
 combines durable workflow orchestration, governed knowledge, agent execution,
 quality evidence, and human approvals while keeping every action attributable
@@ -34,7 +38,7 @@ decision from the same product surface.
 
 ## Operating Context
 
-- X3M operates Curve internally in local, staging, and production environments.
+- Example Organization operates Curve internally in local, staging, and production environments.
 - The initial implementation uses the public Plane fork and the existing local
   Plane Docker stack.
 - M1 begins with a manual-first lane. Provider, Onyx, model, and protected-body
@@ -100,6 +104,6 @@ layouts, and state communication that does not depend on color alone.
 
 ## Prototype assumptions
 
-The M1-01B prototype uses synthetic X3M examples, a split list/detail desktop
+The M1-01B prototype uses synthetic Example Organization examples, a split list/detail desktop
 layout, and a responsive stacked layout as review hypotheses. These assumptions
-remain unapproved until Federico Ocampo completes the task-based UX review.
+remain unapproved until Designated reviewer completes the task-based UX review.

@@ -1,13 +1,17 @@
 # M0-03 Core Policy Relational Contract
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](../../docs/technical/public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
 | --- | --- |
-| Status | `PROPOSED`; material security contract awaiting Federico Ocampo's exact-head approval |
+| Status | `PROPOSED`; material security contract awaiting Designated reviewer's exact-head approval |
 | Version | 1.0 |
 | Last updated | 2026-08-18 |
-| Owner and reviewer | Federico Ocampo, CTO at X3M (`faocampo`) |
+| Owner and reviewer | Designated reviewer, Designated technical owner (`example-reviewer`) |
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Implementation base | `preview` at `eff8686a69aa112ea8fda79be0e1316dc1fd97d6` |
 | Product trace | FR-043; NFR-009-NFR-012; AC-09, AC-35, AC-52 |

@@ -1,5 +1,9 @@
 # P0-12 Retention, Hold, Backup, and Erasure Decision Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -13,7 +17,7 @@
 | Repository | `git@github.com:faocampo/curve.git` |
 | Publication evidence | [Curve PR #30](https://github.com/faocampo/curve/pull/30) (P0-12 retention-policy decision package) head `b538d06c4e3392a574fafbef7184b24497c7d48b` passed CI and squash-merged as Curve `main` `45590d356fa813a7407f624ee47d1c0ab3bc4cf2` |
 | Prepared for | Named Security, Privacy, Legal, Platform Operations, Database Operations, and Curve Engineering approvers |
-| Interim owner/reviewer | Federico Ocampo, CTO at X3M |
+| Interim owner/reviewer | Designated reviewer, Designated technical owner |
 | Risk | `MATERIAL`; data-governance, deletion, backup, legal-hold, cryptographic-erasure, and non-local activation boundary |
 | Consuming package | M0-04 (protected object-storage foundation) |
 
@@ -38,7 +42,7 @@ activation authority.
 - A person may prepare values for an accountable function, but only the named
   approver in each required function can approve the stable decision digest.
 - An AI coding agent cannot change `decision_state` to `DECIDED`, populate an
-  approval, select a policy value, or infer an X3M account, region, owner, cost,
+  approval, select a policy value, or infer an Example Organization account, region, owner, cost,
   duration, SLA, legal authority, provider obligation, identity authority, or
   separation/dual-hat policy.
 - Partial owner input is recorded as populated cells/inventory entries while
@@ -64,7 +68,7 @@ activation authority.
 | [AWS Backup recovery-point lifecycle API](https://docs.aws.amazon.com/aws-backup/latest/APIReference/API_UpdateRecoveryPointLifecycle.html) (transition, expiry, and cold-storage constraints) | Backup lifecycle feasibility; cold-storage minimums must be checked against selected periods |
 | [AWS KMS key-deletion guidance](https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html) (destructive deletion, 7–30-day wait, replicas, and custom-key-store backup considerations) | Key-boundary, deletion-wait, replica, backup, and proof requirements |
 
-AWS service constraints inform feasibility; they do not select X3M retention
+AWS service constraints inform feasibility; they do not select Example Organization retention
 policy.
 
 ## Required decision coverage
@@ -142,7 +146,7 @@ The named operations owners enumerate all eight required copy kinds:
 | `LOG_SIEM_PROJECTION` | Evidenced state; when present, every approved projection, stricter-or-equal retention, destruction proof, and restore/non-restorable behavior |
 | `FORENSIC_QUARANTINE_STORE` | Evidenced state; when present, security store, custody, hold, access, final-disposition proof, and restore behavior |
 
-An unlisted X3M service that stores or projects protected Curve data adds a new
+An unlisted Example Organization service that stores or projects protected Curve data adds a new
 reviewed contract version before D-009 can be decided.
 
 `ABSENT` means the applicable governed topology was inventoried and the copy is

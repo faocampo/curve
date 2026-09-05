@@ -1,5 +1,9 @@
 # M0-S9C Model Gateway Routing and Failover Task Packet
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -14,7 +18,7 @@
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Observed Curve contract base | Curve `main` source revision `97c896ba0d82da14b3c4c8eeba54ef73c7803b01`; the original M0-S9C1A decision survey at `1c38a539...` remains immutable historical evidence, and this observation grants no D-004 (Model Gateway architecture decision), D-005 (model/provider data-policy decision), D-014 (budget-policy decision), implementation, provider-call, or dispatch authority |
 | Observed Plane implementation base | `preview` at `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`, which descends from accepted M0-S9A (provider-neutral registry and reconciliation foundation) and M1-01A (Initiative domain and API foundation) and includes the accepted runtime/security remediations; the consuming child must revalidate and receive an exact-base execution grant before mutation |
-| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Owner and human reviewer | Designated reviewer, Designated technical owner |
 | Implementer | Unassigned until exact child authorization |
 | Risk | `MATERIAL`; model/provider routing, prompt destinations, usage/cost, streaming, cancellation, and data-policy enforcement |
 | Runtime provider | OpenRouter is the proposed gateway transport; no account, key, model, provider, route, or data policy is approved by this packet |

@@ -1,5 +1,9 @@
 # M0-S2 Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Recorded on | 2026-08-18 |
 | Work package | M0-S2 (operation and delivery kernel) |
 | Plane packages satisfied | M0-02 (core aggregate persistence) and M0-05 (transactional delivery kernel) |
-| Human owner and reviewer | Federico Ocampo (`faocampo`) |
+| Human owner and reviewer | Designated reviewer (`example-reviewer`) |
 | Data classification | `INTERNAL`; synthetic local fixtures only |
 
 ## Purpose

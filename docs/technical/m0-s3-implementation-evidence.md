@@ -1,5 +1,9 @@
 # M0-S3 Local Temporal Round-Trip Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -8,7 +12,7 @@
 | Evidence date | 2026-08-20 |
 | Task | M0-S3 (local Temporal round-trip implementation packet) |
 | Decision | D-003 (runtime topology and trust-zone decision), `LOCAL_ONLY` shared-network profile |
-| Human owner and reviewer | Federico Ocampo (`faocampo`), CTO at X3M |
+| Human owner and reviewer | Designated reviewer (`example-reviewer`), Designated technical owner |
 | Curve contract revision | `aece53943525c6e7f7993551453954fe27b00746` |
 | Plane base | `922dd6de5d5ed5081f35cd88343154022867ccad` on `preview` |
 | Plane approved head | `7fd231b062dc485b37078979a78ec83618be78d8` |
@@ -44,7 +48,7 @@ The implementation is bound to the
 
 ## Approval and merge binding
 
-Federico Ocampo approved exact Plane head
+Designated reviewer approved exact Plane head
 `7fd231b062dc485b37078979a78ec83618be78d8` and authorized its squash merge
 into `preview`. GitHub recorded the merge on 2026-08-20 at
 `d99342f589db4eb488695487d3ae3f2c16bf0874` with parent

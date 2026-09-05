@@ -1,0 +1,297 @@
+{
+  "edition_id": "curve-public-contracts-v1",
+  "edition_version": 1,
+  "status": "PUBLIC_REFERENCE",
+  "execution_authority": "NONE",
+  "legacy_approval_transfer": "PROHIBITED",
+  "contracts": [
+    {
+      "path": "contracts/mcp/orca-tool-result-v1.schema.json",
+      "sha256": "f788543e147463890e65c7c94e70ec09ffa4b46a3da519928edf83cb829547c0"
+    },
+    {
+      "path": "contracts/mcp/orca-tools-v1.schema.json",
+      "sha256": "3382b3e9732d330ebf38ab38a824710cbe1481ab71547b95d592cbc5fc054f12"
+    },
+    {
+      "path": "contracts/observability/obs-bind-001-local-v1.json",
+      "sha256": "79d492585ec7f95f2690f5dbb47a81ab7869fcc922e1296e9a9e69f8c09e37d6"
+    },
+    {
+      "path": "contracts/providers/m0-s9a-provider-registry-v1.json",
+      "sha256": "ac9a7e854b917591f0c747d8ec55a6d051bcf6abe8680bbb341ca3763b368fbb"
+    },
+    {
+      "path": "contracts/schemas/access-envelope.schema.json",
+      "sha256": "eb6c978390675fc3042803ab4633052f7da49fc7a49305f9bf7ff8c284081dd1"
+    },
+    {
+      "path": "contracts/schemas/audit-event.schema.json",
+      "sha256": "26f8e2d2d6f53b689710f826400c9e1ef559cee7d536ff48bea25a6567fb54fd"
+    },
+    {
+      "path": "contracts/schemas/coding-agent-context-pack-manifest.schema.json",
+      "sha256": "62a90f10d066d810efd0a0d648a406fbc0f0d38720f6f5e0d5abb540404ad5c8"
+    },
+    {
+      "path": "contracts/schemas/coding-agent-implementation-authorization.schema.json",
+      "sha256": "c17208d9a308060108b80e048d8a3e38a5a7c8595cf6a11d20a6d49050d11283"
+    },
+    {
+      "path": "contracts/schemas/coding-agent-source-catalog.schema.json",
+      "sha256": "59fd3db3ba4dccda207206b25bb5aa6872fc4601b5aba7db99f8a622a333c31a"
+    },
+    {
+      "path": "contracts/schemas/coding-agent-state-evidence.schema.json",
+      "sha256": "6335e2598186cb98932129f91d739160d548cdd58f565e78e11afabb6e322c96"
+    },
+    {
+      "path": "contracts/schemas/coding-agent-task-packet.schema.json",
+      "sha256": "b01a33b4a008d5f83d63371539c8e69fc4487b4c98cc436af662263339c141a7"
+    },
+    {
+      "path": "contracts/schemas/common.schema.json",
+      "sha256": "54b32643ee06d5458934c033a890b639d6c8f8a75346743ba8ef054320bfc3de"
+    },
+    {
+      "path": "contracts/schemas/core-policy-manifest-v2.schema.json",
+      "sha256": "a53c68d10a84de64885363e7e236c88d0f07faf3d253678986e6ccd3ebd90f5d"
+    },
+    {
+      "path": "contracts/schemas/core-policy-manifest.schema.json",
+      "sha256": "16c0b832107b830c3a1628a49798598dd7d5e316639a46be9b1bc7538eb63d80"
+    },
+    {
+      "path": "contracts/schemas/event-envelope.schema.json",
+      "sha256": "80314014208963a0b0c03c11de3ecc9a8c2ba97dc116a6b0e5ac115df1d89fa8"
+    },
+    {
+      "path": "contracts/schemas/fallback-equivalence.schema.json",
+      "sha256": "cd9efc230f833b59a831905ba980104ce098d15bfdf6049074c2c0f901dd48f9"
+    },
+    {
+      "path": "contracts/schemas/gate-assignment.schema.json",
+      "sha256": "5b614728e2666698e188eaf325f47f000befa056cc514bd743e12e4807070e97"
+    },
+    {
+      "path": "contracts/schemas/idempotency-record.schema.json",
+      "sha256": "96be790daccbf72023c82abd820ed5706899a5d8563790038f9823019853e9d8"
+    },
+    {
+      "path": "contracts/schemas/immutable-history-record.schema.json",
+      "sha256": "95d7c2bc37a2f75a50b75d0b71631005907de65a245bf9bcda0ad71c84301efb"
+    },
+    {
+      "path": "contracts/schemas/inbox-message.schema.json",
+      "sha256": "6281e36861ae48fa39b0bdccf29b3fe26e46a1a31e2a182400bcc60d2bf85b1f"
+    },
+    {
+      "path": "contracts/schemas/initiative-create-request.schema.json",
+      "sha256": "a19b13b4aa44bc10cf997c0b280705a38f11d0e69c89d497099344a9d309cacd"
+    },
+    {
+      "path": "contracts/schemas/initiative-event-v1.schema.json",
+      "sha256": "762b6f12f6f4b88671e7fb8b1c97cee997a836c8174b5f56f96bc0482e64d8c3"
+    },
+    {
+      "path": "contracts/schemas/initiative-transition-request.schema.json",
+      "sha256": "a73aaf0ba546b45da08f9b767263b9ef91329448d3037d5958950adf19bca496"
+    },
+    {
+      "path": "contracts/schemas/initiative-update-request.schema.json",
+      "sha256": "ecaed1c01f41d77236402620be24f51446ff9df29d8b3d4c937292783fa2dace"
+    },
+    {
+      "path": "contracts/schemas/initiative.schema.json",
+      "sha256": "433a464415669ffb640f15665dc068e94837e0aeefa4928bbaaa1910b84f52d5"
+    },
+    {
+      "path": "contracts/schemas/model-catalog.schema.json",
+      "sha256": "439ed57bb11307347df90d35f4fbccc9978215b78678d5d7a5a47cc787677cc4"
+    },
+    {
+      "path": "contracts/schemas/model-data-policy-decision.schema.json",
+      "sha256": "fa807d291df30d896c7105628d9b837ba81d1b082a52074e14c734ddde9dc12c"
+    },
+    {
+      "path": "contracts/schemas/model-gateway-architecture-decision.schema.json",
+      "sha256": "3d66f30b021db4e0a94e6a54c6f8bc26ca0ab4d685ec25aac5bf28a18d43ea23"
+    },
+    {
+      "path": "contracts/schemas/observability-binding.schema.json",
+      "sha256": "6ce1ba05369b0c8670776bdd27186a7fe25892518bdb2b70ee2db791eb010044"
+    },
+    {
+      "path": "contracts/schemas/onyx-delegation-decision.schema.json",
+      "sha256": "3603e5dd8dc16f71f590575af406fb9b9c78a4df1bc272f3f83ff23c50c9c78e"
+    },
+    {
+      "path": "contracts/schemas/operation-event-v1.schema.json",
+      "sha256": "b71330d5989bb27e62ae9a11ad9d4a1ef3a284f76d2c7ecbaf82c09eb2f8e668"
+    },
+    {
+      "path": "contracts/schemas/operation-event-v2.schema.json",
+      "sha256": "23b801c35ad96d8132489b2cf996c24cb892c367e1e06b75b44ec0d3830a8341"
+    },
+    {
+      "path": "contracts/schemas/operation-summary.schema.json",
+      "sha256": "6e33c190d6a17633b446485cd1f872ce5b051ddf049e5f615eb37927170ad50b"
+    },
+    {
+      "path": "contracts/schemas/operation.schema.json",
+      "sha256": "7c97d0208134f72ae012d844fd69090f9634ae3fb0a4eb2d018b9f85980c48c6"
+    },
+    {
+      "path": "contracts/schemas/outbox-event.schema.json",
+      "sha256": "a2aac7224830a70e8fe0b9188f25edea9f59a91315a4f79bcf1fd2cb585a8cb0"
+    },
+    {
+      "path": "contracts/schemas/p0-06-stage-projection-v2.schema.json",
+      "sha256": "45930a62af707ea9906b6b63a8549e9faca556b45091bd353315c6e392f85edb"
+    },
+    {
+      "path": "contracts/schemas/p0-06-stage-projection-v3.schema.json",
+      "sha256": "f82b248df4509819b972c8e90967d64ca4903827f9382c7f6bf7476d6ee270ba"
+    },
+    {
+      "path": "contracts/schemas/p0-06a-attempt-manifest.schema.json",
+      "sha256": "f4e834beb9de20714c448b838de87b7239fede9ed31a51d2dfbce03f5625adfd"
+    },
+    {
+      "path": "contracts/schemas/physical-schema-evidence.schema.json",
+      "sha256": "9686aa5d667dc6bd6bcf4d9bb4857ac9fd18168cf9ff12880a091f6ce941eba2"
+    },
+    {
+      "path": "contracts/schemas/policy-decision.schema.json",
+      "sha256": "2bcedf0aa19d6a84a7b8af45db9e64136da18be883c2b9cc8115ea5919650cad"
+    },
+    {
+      "path": "contracts/schemas/policy-evaluation.schema.json",
+      "sha256": "826610d5af15c28b265aa5882b50c23cf94874158a739473c4ac9937219374c7"
+    },
+    {
+      "path": "contracts/schemas/product-core-decision.schema.json",
+      "sha256": "119ed1ccddf121437a8d3a835befc9c20e6068b3b256cd4db2ae32fbc2ad5adb"
+    },
+    {
+      "path": "contracts/schemas/product-create-request.schema.json",
+      "sha256": "9432ac7d2096d20a0ab48c1ad0d81a2a9d892c0f8285c6b80039f56633a92f3c"
+    },
+    {
+      "path": "contracts/schemas/product-event-v1.schema.json",
+      "sha256": "242abb8745dfccf25bd1812fda965a97e472d9dcc6c51417a62d3e527d1c520d"
+    },
+    {
+      "path": "contracts/schemas/product-policy-manifest.schema.json",
+      "sha256": "6a5684d00b1573f9a67bb4b6491fcdd6eccb79f1db6d757923e09affba12160e"
+    },
+    {
+      "path": "contracts/schemas/product-reassign-owner-request.schema.json",
+      "sha256": "25f33f8f0c2341789ef13aa97d15784b8066b4dd40654986316a8acd53ff8749"
+    },
+    {
+      "path": "contracts/schemas/product-update-request.schema.json",
+      "sha256": "67e083d9c99d3cbf76e5eee403a07cc793cce0443e2d79937a7b2a350ad8865f"
+    },
+    {
+      "path": "contracts/schemas/product.schema.json",
+      "sha256": "ec4c08fe6c3ac71201ec80f7a5554f9c2161436a32687c5547c50735b1626a47"
+    },
+    {
+      "path": "contracts/schemas/provider-administration-decision.schema.json",
+      "sha256": "15b9bea3d9b910896094411e311bc2de5cad74ad5917cad0ff614a3f30d90266"
+    },
+    {
+      "path": "contracts/schemas/provider-capability.schema.json",
+      "sha256": "586cdf823d73dff8b6999218c84c0d22c0a6163c5104ee9d7e4be305ca6cd5b3"
+    },
+    {
+      "path": "contracts/schemas/provider-connection-administration-page.schema.json",
+      "sha256": "75ffb001ee7b0bae1ef5ca2a3dfe9af3319fc359ec881673de0d52cbaf44e1c9"
+    },
+    {
+      "path": "contracts/schemas/provider-connection-administration.schema.json",
+      "sha256": "56d085fec6167495ff9882134a243822041fde00bfde54b4c26ebfcd5babc80b"
+    },
+    {
+      "path": "contracts/schemas/provider-connection-event-v1.schema.json",
+      "sha256": "0e537e74f38dca891ff1f9c5ee299c70853d1907a2f44821d3fdcaf4afbb0639"
+    },
+    {
+      "path": "contracts/schemas/provider-connection-register-request.schema.json",
+      "sha256": "2b692e7dfcace6690770d9eb85e8e392163794992dc975fb616db53427e2e597"
+    },
+    {
+      "path": "contracts/schemas/provider-connection.schema.json",
+      "sha256": "a583c88673202aa00c773e45f2d604d201fa1ebde1cf1ad8028f9a9406ad72ea"
+    },
+    {
+      "path": "contracts/schemas/provider-credential-reference.schema.json",
+      "sha256": "8c3c5d05d4d23c81fd7b965baf098f88e321bf5903b243cd66e35a72deb9135b"
+    },
+    {
+      "path": "contracts/schemas/provider-endpoint-profile.schema.json",
+      "sha256": "b7d69cde617994dccc2eb26b10e2fca9e954e2c213607ba58c1dfa906fef05e0"
+    },
+    {
+      "path": "contracts/schemas/provider-profile-binding.schema.json",
+      "sha256": "6ef40290427c81279482d2d959b742142a0d5743d645dddc7ee4956ab4974ddb"
+    },
+    {
+      "path": "contracts/schemas/provider-profile-decision.schema.json",
+      "sha256": "8412cb809efc27072099b03d07e3a08dd4cbdc5b5fc0234f92a0ed375787e991"
+    },
+    {
+      "path": "contracts/schemas/provider-reconciliation-event-v1.schema.json",
+      "sha256": "4717fdb93e1284514100bbf11f57463d4e34864f21bcc719986e87159d851ad1"
+    },
+    {
+      "path": "contracts/schemas/provider-registry-manifest.schema.json",
+      "sha256": "e3d00a8c9453a4a26e3f83e1c3ddbba3299afde9963d061439e58bba86356dac"
+    },
+    {
+      "path": "contracts/schemas/restricted-route-evidence.schema.json",
+      "sha256": "d1400f5f2d0acb1811a78f9a2540d907ebc33a488059338b3873a705ac8d8797"
+    },
+    {
+      "path": "contracts/schemas/retention-policy-decision.schema.json",
+      "sha256": "f2c00fdd992e559fde201c1c0020765f2d4e5cd98b8c2e816aacdcce350a4299"
+    },
+    {
+      "path": "contracts/schemas/sse-event.schema.json",
+      "sha256": "edf29556d2933d23fb2362cad5b8844fe3db4ce903066dfa3c9aba7d84df7087"
+    },
+    {
+      "path": "contracts/schemas/task-model-policy-matrix.schema.json",
+      "sha256": "e83b1c862dd00714b91f994213b4541375ff8cd39167d82615f0d08b9f25545b"
+    },
+    {
+      "path": "contracts/schemas/telemetry-manifest.schema.json",
+      "sha256": "0eab64dc8ad956fa6b9eff291748f0713f45f7f8f649c0c4ebd0207174f41254"
+    },
+    {
+      "path": "contracts/schemas/temporal-orchestration.schema.json",
+      "sha256": "009c06c7499eda05f49e91de336a69a013b0a7776b4a54ed55779ac837707c7f"
+    },
+    {
+      "path": "contracts/schemas/test-strategy-matrix-v2.schema.json",
+      "sha256": "648b66532871d53e0401e9c5fbb33d1582c6cd73a7006b3fb6e76aa60898a855"
+    },
+    {
+      "path": "contracts/schemas/test-strategy-matrix.schema.json",
+      "sha256": "bc4f9c2f5492fd5ef3c4ee1200bc0f7e1aa5d91052a1ef7b27b6545ebaa507fe"
+    },
+    {
+      "path": "contracts/schemas/workspace-record.schema.json",
+      "sha256": "f0bbb1d7dc2587fe6dfebc83071ab7ab8e97da6384217fa4d953a578bff7d2f1"
+    },
+    {
+      "path": "contracts/testing/ac-test-matrix-v1.json",
+      "sha256": "7a32160db6b6ac32eeb623f729ef2c6b8d773447c0c0016b3a0486a3ec2be0d9"
+    },
+    {
+      "path": "contracts/testing/ac-test-matrix-v2.json",
+      "sha256": "86e0b31476046ad2f14966ce8a322fe1fc9294c965d7977eaff9f92290ca1e0d"
+    }
+  ]
+}

@@ -335,7 +335,7 @@ function bodyFor(task, sourceRevision, allowMissingContext = false) {
 - Phase: ${task.phase}
 - Size: ${task.size}
 - Dependencies: ${task.dependencies}
-${traceLine}- Interim human reviewer: Federico Ocampo (\`faocampo\`)
+${traceLine}- Human reviewer: assigned through the private approval process
 - Normative source revision: \`${sourceRevision}\`
 ${contextLine}${proofLines}- Source: https://github.com/${OWNER}/curve/blob/${sourceRevision}/docs/technical/development-plan.md
 
@@ -363,7 +363,7 @@ function legacyBodyFor(task, status, sourceRevision) {
 - Size: ${task.size}
 - Curve status: ${status}
 - Dependencies: ${task.dependencies}
-${traceLine}- Interim human reviewer: Federico Ocampo (\`faocampo\`)
+${traceLine}- Human reviewer: assigned through the private approval process
 - Normative source revision: \`${sourceRevision}\`
 - Source: https://github.com/${OWNER}/curve/blob/${sourceRevision}/docs/technical/development-plan.md
 

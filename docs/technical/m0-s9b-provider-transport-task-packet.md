@@ -1,5 +1,9 @@
 # M0-S9B (External Provider Transport and Administration Task Packet)
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -14,7 +18,7 @@
 | Implementation repository | `git@github.com:faocampo/plane.git` |
 | Candidate Curve base | Curve `main` source revision `97c896ba0d82da14b3c4c8eeba54ef73c7803b01`; the original M0-S9B decision survey at `e7aa7e6...` remains immutable historical evidence, and dispatch additionally requires the accepted merge containing the exact child decision and contracts |
 | Observed Plane base | `preview` at `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`; `0007_initiative_gateassignment.py` (Initiative and gate-assignment migration) remains the latest accepted Curve migration and migration slot `0008` is observational only, not reserved; every implementation dispatch revalidates both values |
-| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Owner and human reviewer | Designated reviewer, Designated technical owner |
 | Implementer | Unassigned until an exact child packet is authorized; Codex may implement only under a later bounded authorization |
 | Risk | `MATERIAL`; public administration, secret references, network endpoints, provider callbacks, outgoing notifications, schedules, and external state |
 | Data boundary | Metadata-only `INTERNAL` fixtures until D-009 (retention, legal-hold, backup, and erasure decision) permits protected provider bodies |
@@ -200,7 +204,7 @@ approve, merge, deploy, or repeat an ambiguous mutation.
   `(workspace_id, connection_id)` safe-metadata lookup and evaluate the exact
   `PROVIDER_CONNECTION` resource authorization before secret resolution,
   provider-event draining, network access, or scheduling mutation.
-- Secret values remain in X3M Secrets Manager or another explicitly approved
+- Secret values remain in the approved secret broker or another explicitly approved
   broker. Curve persists only opaque versioned references and safe status.
 - Connection disablement stops new calls, callbacks after verification become
   no-effect evidence, schedules stop claiming, and active work reconciles or

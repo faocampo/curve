@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/p0-06a-attempt-manifest.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/p0-06a-attempt-manifest.schema.json",
   "title": "Curve P0-06A isolated Temporal proof attempt manifest",
   "type": "object",
   "additionalProperties": false,

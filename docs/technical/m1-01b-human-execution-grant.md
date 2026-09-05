@@ -1,5 +1,9 @@
 # M1-01B (Curve-First Initiative Shell) Human Execution Grant
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -12,9 +16,9 @@
 | Governing decision | [Coding-agent local execution and authority decision](coding-agent-local-execution-decision.md) (approved human-operated coding outside Curve dispatch, deferred machine profile, and production fail-closed boundary) |
 | Implementation definition | [M1-01B implementation task packet](m1-01b-initiative-shell-implementation-task-packet.md) (typed Initiative client, Curve route, list/detail/create/lifecycle UI, tests, security, and rollback) |
 | Experience contract | [M1-01B Initiative shell experience contract](ux-m1-01b-initiative-shell.md) (approved desktop/mobile behavior, accessibility, visual rules, and manual test cases) |
-| Decision owner | Federico Ocampo, CTO at X3M (`faocampo`) |
-| Human reviewer | Federico Ocampo (`faocampo`) |
-| Implementer | Codex, operated under Federico's standing technical-work delegation |
+| Decision owner | Designated reviewer, Designated technical owner (`example-reviewer`) |
+| Human reviewer | Designated reviewer (`example-reviewer`) |
+| Implementer | Codex, operated under Designated reviewer's standing technical-work delegation |
 
 ## Execution classification
 
@@ -24,9 +28,9 @@ It creates no Curve machine-dispatch claim, authorization receipt, or lease.
 B-CODING-TOOLS-01 (machine coding-tool execution profile) remains
 `DEFERRED_TO_M4`; production automated dispatch remains fail closed.
 
-Federico's 2026-09-01 standing instruction authorizes Codex to make and execute
+Designated reviewer's 2026-09-01 standing instruction authorizes Codex to make and execute
 coding-only technical decisions autonomously. Product decisions and manual
-UX/UI acceptance remain Federico's explicit gates. That instruction activates
+UX/UI acceptance remain Designated reviewer's explicit gates. That instruction activates
 this grant when the exact repository preflight below passes.
 
 ## Exact grant tuple
@@ -132,7 +136,7 @@ Required evidence at the exact implementation head is:
 7. `git --no-pager diff --check --no-ext-diff --no-textconv --ignore-submodules=all`.
 8. Repository-native Plane CI and CodeQL at the exact head.
 9. A trusted exact-ref query proving zero open Critical or High finding.
-10. Manual browser verification by Federico for desktop/mobile layout,
+10. Manual browser verification by Designated reviewer for desktop/mobile layout,
     keyboard/focus behavior, readable recovery states, and overall UX/UI.
 
 ## Exclusions
@@ -159,7 +163,7 @@ Critical/High finding, or failed cleanup.
 ## Review, merge, and rollback
 
 Codex may complete the technical implementation, review, CI remediation, and
-draft-PR preparation autonomously. Federico performs the required manual UX/UI
+draft-PR preparation autonomously. Designated reviewer performs the required manual UX/UI
 test on the exact candidate head. The Plane PR remains unmerged until that test
 is explicitly accepted.
 

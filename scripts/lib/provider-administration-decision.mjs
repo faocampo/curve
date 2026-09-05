@@ -72,7 +72,7 @@ export const PROVIDER_ADMIN_ACCEPTED_ADAPTER_SNAPSHOT = Object.freeze({
   source_schema_version: "curve.provider-registry/v1",
   source_path: "contracts/providers/m0-s9a-provider-registry-v1.json",
   source_content_digest:
-    "sha256:393c33fa5343beb1fe05a445a015333334a27bf491d7850c64dcf0a7f265071a",
+    "sha256:ac9a7e854b917591f0c747d8ec55a6d051bcf6abe8680bbb341ca3763b368fbb",
   accepted_coordinates: [
     {
       provider_type: "FAKE_LOCAL",
@@ -88,10 +88,10 @@ export const PROVIDER_ADMIN_REGISTER_REQUEST = Object.freeze({
   contract_state: "PROPOSED_NOT_NORMATIVE",
   schema_version: "curve.provider-connection-register-request/v1",
   schema_id:
-    "https://curve.x3m.internal/contracts/schemas/provider-connection-register-request.schema.json",
+    "https://curve.example.invalid/contracts/schemas/provider-connection-register-request.schema.json",
   schema_path: "contracts/schemas/provider-connection-register-request.schema.json",
   schema_content_digest:
-    "sha256:03ab2cbbefd45793631874483a8781173069ff827b0b1c850b1d6f0cef17a76a",
+    "sha256:2b692e7dfcace6690770d9eb85e8e392163794992dc975fb616db53427e2e597",
   additional_properties: false,
   required_fields: [
     "schema_version",
@@ -152,27 +152,27 @@ export const PROVIDER_ADMIN_RESPONSE_CONTRACTS = Object.freeze({
     contract_state: "PROPOSED_NOT_NORMATIVE",
     schema_version: "curve.provider-connection-administration/v1",
     schema_id:
-      "https://curve.x3m.internal/contracts/schemas/provider-connection-administration.schema.json",
+      "https://curve.example.invalid/contracts/schemas/provider-connection-administration.schema.json",
     schema_path: "contracts/schemas/provider-connection-administration.schema.json",
     schema_content_digest:
-      "sha256:65b3898dff3b0dda08805f2eced3dc4a8e31f10e1abd621dd97c3e31687b86bd",
+      "sha256:56d085fec6167495ff9882134a243822041fde00bfde54b4c26ebfcd5babc80b",
   }),
   PROVIDER_CONNECTION_ADMINISTRATION_PAGE_V1: Object.freeze({
     contract_state: "PROPOSED_NOT_NORMATIVE",
     schema_version: "curve.provider-connection-administration-page/v1",
     schema_id:
-      "https://curve.x3m.internal/contracts/schemas/provider-connection-administration-page.schema.json",
+      "https://curve.example.invalid/contracts/schemas/provider-connection-administration-page.schema.json",
     schema_path: "contracts/schemas/provider-connection-administration-page.schema.json",
     schema_content_digest:
-      "sha256:7230268285ccd98bad70032d2af1f200e904df550a9fcb9cd433c46966a0d825",
+      "sha256:75ffb001ee7b0bae1ef5ca2a3dfe9af3319fc359ec881673de0d52cbaf44e1c9",
   }),
   OPERATION_SUMMARY_V1: Object.freeze({
     contract_state: "ACCEPTED_BASE_REQUIRES_SELECTED_OPERATION_TYPE_MATERIALIZATION",
     schema_version: "1.0",
-    schema_id: "https://curve.x3m.internal/contracts/schemas/operation-summary.schema.json",
+    schema_id: "https://curve.example.invalid/contracts/schemas/operation-summary.schema.json",
     schema_path: "contracts/schemas/operation-summary.schema.json",
     schema_content_digest:
-      "sha256:3a237b4f66a90b92545446989da0678b0e82f0f19aa2a9a4bf159740dfa80bb1",
+      "sha256:6e33c190d6a17633b446485cd1f872ce5b051ddf049e5f615eb37927170ad50b",
     safe_fields: [
       "schema_version",
       "id",
@@ -504,7 +504,7 @@ export const PROVIDER_ADMIN_OPTION_CATALOG = Object.freeze({
   ],
   coding_budget_profile: ["USD_25_ZERO_PROVIDER_SPEND", "OWNER_SPECIFIED_LOWER_CEILING", "DEFER"],
   governance_identity_authority: [
-    "X3M_IDP_SUBJECT",
+    "ORGANIZATION_IDP_SUBJECT",
     "PLANE_USER_ID",
     "GITHUB_USER_ID",
   ],
@@ -516,7 +516,7 @@ export const PROVIDER_ADMIN_OPTION_CATALOG = Object.freeze({
 });
 
 export const PROVIDER_ADMIN_IDENTITY_AUTHORITIES = Object.freeze([
-  "X3M_IDP_SUBJECT",
+  "ORGANIZATION_IDP_SUBJECT",
   "PLANE_USER_ID",
   "GITHUB_USER_ID",
 ]);
@@ -720,7 +720,7 @@ function subjectIdValidForAuthority(authority, subjectId) {
       subjectId,
     );
   }
-  if (authority === "X3M_IDP_SUBJECT") {
+  if (authority === "ORGANIZATION_IDP_SUBJECT") {
     return /^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,254}$/.test(subjectId);
   }
   return false;

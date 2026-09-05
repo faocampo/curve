@@ -1,12 +1,16 @@
 # M0-S9A Provider Registration Authorization Decision
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
 | --- | --- |
 | Status | `PUBLISHED` |
 | Date | 2026-08-26 |
-| Decision owner | Federico Ocampo, X3M CTO |
+| Decision owner | Designated reviewer, Example Organization CTO |
 | Decision | Plane workspace administrator as Curve platform administrator for the target workspace |
 | Applies to | M0-S9A (provider-neutral registry and reconciliation foundation), local-only registration |
 | Publication | Curve PR #29 approved head `075985a01dd2cac30423d7bc239407ef191da7a2`, squash commit `7ea91188525c63d699e551910834f4602536f082` |
@@ -80,6 +84,6 @@ unchanged for historical decisions.
 - Option C introduced a dedicated Curve platform-administrator assignment
   aggregate and administration lifecycle.
 
-Federico Ocampo approved Option B for simplification on 2026-08-25. Curve PR
+Designated reviewer approved Option B for simplification on 2026-08-25. Curve PR
 number 29 published the exact contract on 2026-08-26. Implementation
 authorization remains a separate gate.

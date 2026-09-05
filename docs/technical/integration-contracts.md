@@ -5,7 +5,7 @@
 | Field | Value |
 | ----- | ----- |
 | Status | Architecture baseline; implementation is subject to the PRD decision register |
-| Version | 0.2 |
+| Version | 0.3 |
 | Source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product integration, approved Product core, workspace, lifecycle, security, and acceptance requirements) |
 | Audience | API, workflow, integration, platform, security, and test engineers; AI coding agents |
 | Scope | Curve public API, internal commands/events, provider adapters, webhooks, SSE, idempotency, and reconciliation |
@@ -26,6 +26,165 @@ The generated OpenAPI, JSON Schema, and provider conformance suites are executab
 6. Events are facts in past tense. Commands express intent and can be rejected.
 7. Provider-specific states and identifiers never leak into domain state without a normalized representation plus the raw provider reference.
 8. Unsupported provider capabilities fail before Gate 2; adapters never silently degrade behavior.
+
+## External document authoring and Google Workspace
+
+### Status and product boundary
+
+This section defines the proposed public integration contract for externally
+authored Idea Briefs and PRDs. It does not select or expose an
+environment-specific Google Workspace deployment, credential, folder, tenant,
+retention value, or internal document. D-012 (documentation-provider decision)
+and D-009 (retention, legal-hold, backup, and erasure decision) remain
+authoritative for activation and retained approval snapshots.
+
+Google Docs may remain the human-visible authoring system while Curve remains
+authoritative for Initiative lifecycle, submission, approval, and audit. Curve
+does not present a second editable copy as a competing document repository.
+The primary editing action opens the provider document. Curve may show a
+permission-checked read-only preview and safe metadata.
+
+The provider-neutral domain surface is:
+
+```text
+ExternalDocumentBinding
+  workspace_id
+  initiative_id
+  artifact_kind
+  provider_connection_id
+  provider_file_id
+  provider_container_id
+  canonical_url
+  current_provider_version
+  current_revision_id
+  current_modified_at
+  synchronization_status
+  access_status
+  last_reconciled_at
+
+DocumentCheckpoint
+  external_document_binding_id
+  checkpoint_number
+  checkpoint_type
+  provider_version
+  revision_id
+  normalized_content_ref
+  content_digest
+  schema_version
+  submitted_or_approved_by
+  recorded_at
+```
+
+Provider file, revision, container, and connection identifiers are opaque.
+Public schemas, examples, tests, and documentation use synthetic values only.
+Actual Workspace configuration and identities belong exclusively in an
+approved private deployment profile.
+
+### Selection, creation, and access
+
+The Google Workspace adapter supports two explicit commands:
+
+1. Link a user-selected Google Doc through Google Picker using the narrowest
+   approved per-file OAuth scope.
+2. Create a Google Doc from an approved template in an authorized destination
+   and bind the returned file identity.
+
+Every read, preview, create, or synchronization call rechecks the Curve actor,
+workspace, binding, provider connection, and current Google permission. A
+provider link never grants Curve access by itself. Access loss is represented
+as `ACCESS_REVOKED`; Curve does not use a broader identity as a silent fallback.
+
+### Change detection and reconciliation
+
+Google notifications are invalidation signals, not authoritative document
+events. A notification queues an idempotent reconciliation that reads the
+provider change feed and current file metadata before updating the Curve
+projection. Notification channels are renewed before expiry. A scheduled,
+bounded reconciliation detects missed notifications, expired channels, moved
+files, access revocation, and deletion.
+
+The normalized synchronization states are:
+
+- `CURRENT`;
+- `CHANGED_SINCE_SUBMISSION`;
+- `CHANGED_SINCE_APPROVAL`;
+- `ACCESS_REVOKED`;
+- `MOVED_OUTSIDE_POLICY`;
+- `DELETED`;
+- `PROVIDER_UNAVAILABLE`;
+- `RECONCILIATION_REQUIRED`.
+
+Provider revision history may be compacted or incomplete. Drive version and
+revision identifiers detect change but are not sufficient approval evidence.
+Curve therefore binds submission and approval to an immutable
+`DocumentCheckpoint` containing the provider identity/version, normalized
+content reference, schema version, and canonical content digest.
+
+### Submission and approval behavior
+
+The manual-first lifecycle is:
+
+```text
+ALIGNING
+  -> submit current external document checkpoint
+PRD_REVIEW
+  -> approve the exact unchanged checkpoint
+PLANNING
+```
+
+If the provider document changes after submission, Curve marks the checkpoint
+stale and disables approval until an authorized human submits a successor
+checkpoint. If the document changes after approval, the approved checkpoint
+remains immutable and the live document becomes a visible candidate successor.
+A separately approved product policy decides whether a material successor
+returns the Initiative to `PRD_REVIEW`; the adapter never changes Initiative
+state from an unclassified provider notification.
+
+### Public and private configuration split
+
+The public Curve repository contains only:
+
+- provider-neutral interfaces and normalized Google adapter behavior;
+- synthetic schemas, fixtures, examples, and deterministic provider doubles;
+- lifecycle, authorization, reconciliation, failure, and rollback rules;
+- capability requirements and minimum OAuth-scope guidance.
+
+An approved private X3M deployment profile contains the actual Workspace
+domain, Google Cloud project, OAuth client, service identity, Shared Drive and
+folder IDs, authorized groups, callback endpoints, secret references,
+retention values, operational ownership, and incident procedures. Those values
+must never enter this public repository or its public collaboration surfaces.
+
+### Required validation
+
+The first implementation packet must include deterministic tests for:
+
+- Picker selection and user-authorized file binding;
+- template-based creation in an allowed synthetic container;
+- least-privilege access, revocation, and prohibited fallback;
+- notification deduplication, channel renewal, missed-event reconciliation,
+  provider outage, moved files, and deletion;
+- revision compaction and an incomplete revision list;
+- immutable submission checkpoints and canonical digest reproducibility;
+- edits before review, edits during approval, and edits after approval;
+- inaccessible content at Gate 1 and exact-checkpoint decision binding;
+- preview/open behavior, keyboard access, responsive presentation, and safe
+  errors;
+- a disclosure scan proving that fixtures, logs, screenshots, traces, commits,
+  and PR evidence contain only synthetic public-safe data.
+
+### Provider references
+
+- [Google Picker API overview](https://developers.google.com/workspace/drive/api/guides/picker)
+  (user-mediated file selection and Picker integration requirements);
+- [Google Drive API authorization](https://developers.google.com/workspace/drive/api/guides/api-specific-auth)
+  (OAuth scope selection and restricted-scope considerations);
+- [Google Drive change tracking](https://developers.google.com/workspace/drive/api/guides/manage-changes)
+  (change tokens, change-feed polling, and push notification behavior);
+- [Google Drive revisions list](https://developers.google.com/workspace/drive/api/reference/rest/v3/revisions/list)
+  (revision listing behavior and revision-history limitations);
+- [Google Docs API document concepts](https://developers.google.com/workspace/docs/api/concepts/document)
+  (document structure and content model).
 
 ## Public API conventions
 

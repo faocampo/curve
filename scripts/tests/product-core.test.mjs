@@ -55,7 +55,7 @@ test("IANA timezone validation accepts named zones and rejects offsets or unknow
   assert.equal(isIanaTimeZone("America/Argentina/Buenos_Aires"), true);
   assert.equal(isIanaTimeZone("UTC"), true);
   assert.equal(isIanaTimeZone("-03:00"), false);
-  assert.equal(isIanaTimeZone("X3M/Unknown"), false);
+  assert.equal(isIanaTimeZone("Example Organization/Unknown"), false);
 });
 
 test("Product record requires a valid IANA timezone and human owner", () => {

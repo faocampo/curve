@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://curve.x3m.internal/contracts/schemas/restricted-route-evidence.schema.json",
+  "$id": "https://curve.example.invalid/contracts/schemas/restricted-route-evidence.schema.json",
   "title": "Curve candidate restricted model-route evidence contract",
   "x-curve-contract-state": "PROPOSED_NOT_NORMATIVE",
   "type": "object",

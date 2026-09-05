@@ -1,11 +1,15 @@
 # Curve: AI-Native Product Development Platform
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](technical/public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field        | Value                                                                      |
 | ------------ | -------------------------------------------------------------------------- |
 | Status       | Remediation in progress; D-001 decided; D-003 local shared-network profile decided and implemented; non-local activation and remaining packages retain their prerequisites |
-| Owner        | X3M                                                                        |
+| Owner        | Example Organization                                                                        |
 | Audience     | Product, engineering, design, security, operations, and company leadership |
 | Version      | 0.13                                                                       |
 | Last updated | 2026-08-23                                                                 |
@@ -19,20 +23,20 @@
 | 0.13 | 2026-08-23 | Approved the M1-00A minimal Product core: immutable workspace-unique lowercase key, mutable metadata and prospective IANA timezone, one human owner, reversible ACTIVE/ARCHIVED lifecycle, archive guard, archived historical reads, Initiative rejection, and exact administrator/owner authority; retained all roadmap entities in M2. |
 | 0.12 | 2026-08-21 | Established Curve as the user-facing product shell and brand; grouped Plane-backed capabilities under Work management; placed Foundation status under Platform; and separated product-surface ownership from Plane data and service authority. |
 | 0.11 | 2026-08-20 | Recorded effective D-003 private-platform amendment merge `aece539...` and accepted M0-S3 local Temporal implementation merge `d99342f...`, including deterministic context, replay, restart, cancellation, security, migration, and rollback evidence; retained all non-local activation gates. |
-| 0.10 | 2026-08-20 | Replaced Curve-specific local network segmentation with Plane's shared `dev_env`; selected Kubernetes `ClusterIP`, private EKS/VPC/VPN exposure, a dedicated Curve namespace by default, internal Temporal UI ingress, X3M workload identity/Secrets Manager, and authenticated non-local Temporal clients; removed M0-S3 negative-reachability acceptance while retaining agent-sandbox isolation. Effective after exact-head approval and merge. |
+| 0.10 | 2026-08-20 | Revised the local synthetic runtime contract. Environment-specific connectivity and operational choices are maintained in the private deployment profile; activation and sandbox-isolation gates remain required. |
 | 0.9 | 2026-08-18 | Recorded D-003 `LOCAL_ONLY` approval at exact head `7826f403...` and merge `097016f...`; fixed Temporal Python SDK 1.31.0 and the two-network Compose overlay; retired P0-06A/P0-06B as standalone gates; selected M0-S3 as the executable local proof; retained fail-closed staging/production decisions. |
 | 0.8 | 2026-08-15 | Recorded owner-approved D-001 foundation, licensing, repository-boundary, exact-head, and review-cadence decisions; allocated additive migration, disabled-state, and rollback implementation proof to M0-01; recorded merged Curve baseline `1529b8b...` and Plane base `549db1a...`; retained all other package gates. |
 | 0.7 | 2026-08-13 | Reconciled the public API namespace with the versioned OpenAPI contract and completed the initial M0 persistence, delivery, audit, provider-connection, and Access Envelope schema inventory without changing milestone scope or owner-gated decisions. |
 | 0.6 | 2026-08-12 | Made M0 progressively codeable: selected OpenHands as the sole automated execution provider; redefined Orca as a developer-operated MCP client with delegated workflow write-back; separated foundation-readiness from just-in-time integration proofs; moved model and VCS provider decisions to their consuming milestones; and made D-009 gate protected storage and non-local activation without blocking independent local M0 work. |
-| 0.5 | 2026-08-12 | Recorded planning choices as owner-gated proposals; aligned GitLab/OpenHands R0B versus full R1; selected the thin Curve/OpenRouter gateway boundary; defined the Loomit pilot contract, external CIA prerequisite, quality/waiver rules, budget ledger, package credentials, AGPL release gate, proof packages, and remediation ledger. |
+| 0.5 | 2026-08-12 | Recorded planning choices as owner-gated proposals; aligned GitLab/OpenHands R0B versus full R1; selected the thin Curve/OpenRouter gateway boundary; defined the Example Product pilot contract, external Example backend prerequisite, quality/waiver rules, budget ledger, package credentials, AGPL release gate, proof packages, and remediation ledger. |
 | 0.4 | 2026-08-11 | Made the PRD architecture-planning ready: resolved lifecycle and gate contradictions; added release baselines, normative state/cardinality/API/event contracts, two-phase quality, trusted-controller and evidence controls, measurable NFRs, traceable acceptance scenarios, decision ownership, and architecture handoff criteria. |
 | 0.3 | 2026-08-11 | Added Product roadmaps, schedules, snapshots, and Feature Delivery Contract concepts. |
 
 ## Executive summary
 
-Curve is an AI-native product development platform for X3M. It will manage the complete product and software-development lifecycle, from long-lived product roadmaps and milestone planning through an initial problem or idea, research, prototyping, product requirements, architecture planning, implementation, automated quality analysis, and creation of a reviewed draft pull or merge request.
+Curve is an AI-native product development platform for Example Organization. It will manage the complete product and software-development lifecycle, from long-lived product roadmaps and milestone planning through an initial problem or idea, research, prototyping, product requirements, architecture planning, implementation, automated quality analysis, and creation of a reviewed draft pull or merge request.
 
-Curve will present a Curve-branded product shell and extend [Plane](https://plane.so/) as its embedded work-management foundation. Plane will remain authoritative for projects, work items, pages, views, comments, and human coordination. [Temporal](https://temporal.io/) will execute durable, resumable workflows. X3M's existing on-premise [Onyx](https://www.onyx.app/) deployment will provide permission-aware access to internal knowledge. [OpenHands](https://github.com/OpenHands/OpenHands) is the initial automated coding-agent execution provider. Orca is a developer-operated client that reads approved work and reports bounded workflow updates through authenticated MCP; it is not an automated `AgentExecutionProvider`.
+Curve will present a Curve-branded product shell and extend [Plane](https://plane.so/) as its embedded work-management foundation. Plane will remain authoritative for projects, work items, pages, views, comments, and human coordination. [Temporal](https://temporal.io/) will execute durable, resumable workflows. Example Organization's existing on-premise [Onyx](https://www.onyx.app/) deployment will provide permission-aware access to internal knowledge. [OpenHands](https://github.com/OpenHands/OpenHands) is the initial automated coding-agent execution provider. Orca is a developer-operated client that reads approved work and reports bounded workflow updates through authenticated MCP; it is not an automated `AgentExecutionProvider`.
 
 Curve will connect Product roadmaps, immutable roadmap snapshots, approved PRD revisions, development schedules, coding-agent runs, and coordinated pull or merge requests. Roadmap-backed Feature Delivery will be governed by a versioned Feature Delivery Contract covering observability, Docusaurus documentation, and OpenFeature-compatible toggling.
 
@@ -42,7 +46,7 @@ The first usable release will support one complete reference path:
 
 For roadmap-backed delivery, Curve also derives aggregate Feature release readiness from the coordinated PR or MR set and the Feature Delivery Contract. Curve observes later merges, deployments, and post-release verification when integrations provide them; it never performs merge or deployment in R1.
 
-Curve is X3M-first, but its workflow, model, knowledge, coding-agent, prototype, and version-control integrations will use provider boundaries that allow future productization.
+Curve is Example Organization-first, but its workflow, model, knowledge, coding-agent, prototype, and version-control integrations will use provider boundaries that allow future productization.
 
 ### Decision-completeness declaration
 
@@ -58,14 +62,14 @@ The target product is intentionally broader than a single thin prototype. Releas
 
 | Release | Included milestones | Supported scope | Exit meaning |
 | ------- | ------------------- | --------------- | ------------ |
-| R0A: Definition alpha | M0-M1 | One X3M workspace; alignment, delegated Onyx evidence, artifact versioning, and the PRD gate | Validates evidence-backed product definition; no coding-agent promise. |
-| R0B: Delivery pilot | Selected M0-M1 and M3-M5 capabilities | One standalone initiative using GitLab and OpenHands, with repository-local slices or an explicitly approved external contract/deployment prerequisite; preflight, automatic draft MR creation, VCS validation, and Code Readiness; research and prototype may be skipped | The named X3M validation configuration only; it is not provider-complete, roadmap-complete, prototype-complete, or generally supported R1. |
+| R0A: Definition alpha | M0-M1 | One Example Organization workspace; alignment, delegated Onyx evidence, artifact versioning, and the PRD gate | Validates evidence-backed product definition; no coding-agent promise. |
+| R0B: Delivery pilot | Selected M0-M1 and M3-M5 capabilities | One standalone initiative using GitLab and OpenHands, with repository-local slices or an explicitly approved external contract/deployment prerequisite; preflight, automatic draft MR creation, VCS validation, and Code Readiness; research and prototype may be skipped | The named Example Organization validation configuration only; it is not provider-complete, roadmap-complete, prototype-complete, or generally supported R1. |
 | R1: First usable release | M0-M6 | Both initiative modes, product roadmaps, GitHub and GitLab, OpenHands automation, developer-operated Orca MCP assistance, coordinated repository-local slices, Feature Delivery Contracts, and both prototype paths | Every R1 acceptance scenario passes against the production-like environment, the OpenHands provider suite, and the Orca MCP suite. |
 | R1.x: Integration expansion | M7 | Additional collaboration, design, support, monitoring, and deployment-event integrations | Adds integrations without changing the three-gate lifecycle. |
 
 All FR-001 through FR-044 are R1 **Must** requirements. R0 configurations may implement a documented subset, but cannot be presented as R1 compliant. M7 capabilities are post-R1 unless an acceptance scenario explicitly says Curve only observes an external event.
 
-R0B validates the first automated-provider path; it does not redefine R1. R1 requires OpenHands provider conformance and the separate developer-operated Orca MCP contract, not an invented Orca execution-provider API. Prototype execution remains optional for every individual initiative, while both the authenticated runnable-preview and Lovable prompt-package capabilities remain required for R1. The Loomit pilot may omit prototype work without removing M6 from the release contract.
+R0B validates the first automated-provider path; it does not redefine R1. R1 requires OpenHands provider conformance and the separate developer-operated Orca MCP contract, not an invented Orca execution-provider API. Prototype execution remains optional for every individual initiative, while both the authenticated runnable-preview and Lovable prompt-package capabilities remain required for R1. The Example Product pilot may omit prototype work without removing M6 from the release contract.
 
 ### Scope invariants
 
@@ -110,9 +114,9 @@ Curve is the product users enter and navigate. Its product surface MUST use the 
 
 Plane remains the implementation and authority foundation for its native work-management concepts. Curve integrates those capabilities through additive bindings, services, routes, and reusable components. Plane attribution, open-source notices, and the exact-version AGPL source link remain accessible from the Curve product surface while Curve remains the primary product identity.
 
-## X3M context and problem statement
+## Example Organization context and problem statement
 
-X3M develops mobile advertising technology products and services, with Loomit as its principal product. Its development process spans idea discovery, conceptualization, feasibility analysis, solution design, development, pre-production validation, release, monitoring, and maintenance.
+The fictional reference organization develops software products. Its development process spans idea discovery, conceptualization, feasibility analysis, solution design, development, pre-production validation, release, monitoring, and maintenance. Actual business context and product portfolios remain private configuration inputs.
 
 Today, the information required to execute that process is distributed across meetings, recordings, internal documentation, source repositories, Slack, Google Workspace, Figma, support channels, monitoring systems, and the knowledge already indexed by Onyx. Humans repeatedly reconstruct context, translate requirements into technical plans, divide plans into tasks, prompt coding agents, inspect their output, and manually connect the resulting code with the original product intent.
 
@@ -122,7 +126,7 @@ Existing project-management systems track work but generally do not preserve the
 
 | Term | Normative definition |
 | ---- | -------------------- |
-| Product | A long-lived X3M product or platform that owns Features, Roadmaps, and Initiatives. |
+| Product | A long-lived Example Organization product or platform that owns Features, Roadmaps, and Initiatives. |
 | Feature | A reusable product capability. A Feature is not a delivery attempt and can appear in multiple Milestones. |
 | Roadmap Item | The milestone-specific scope of one Feature, including dates, confidence, health, progress, and one defining Initiative in R1. |
 | Initiative | One governed change effort in one workspace and Product. It is either roadmap-backed or standalone. |
@@ -170,7 +174,7 @@ Signed webhooks are the fast path. A workspace-scoped reconciliation job polls e
 | G-04 | Delegate automated slices to OpenHands and support developer-operated Orca assistance through bounded MCP context and workflow updates. |
 | G-05 | Apply deterministic and AI-assisted quality gates before opening a draft PR or MR.                           |
 | G-06 | Preserve provenance across evidence, prompts, decisions, artifacts, agent runs, commits, tests, and reviews. |
-| G-07 | Use X3M's existing Onyx knowledge investment instead of creating a duplicate general knowledge index.        |
+| G-07 | Use Example Organization's existing Onyx knowledge investment instead of creating a duplicate general knowledge index.        |
 | G-08 | Support GitHub and GitLab through a normalized version-control interface.                                    |
 | G-09 | Minimize idea-to-ready lead time while holding fixed quality and safety thresholds.                          |
 | G-10 | Keep provider boundaries clean enough to add future agents, models, tools, and workflows.                    |
@@ -388,7 +392,7 @@ The alignment process captures:
 - Business value and success measurements.
 - Known constraints and explicit non-goals.
 - Customer, product, technical, security, legal, and operational considerations.
-- Existing behavior and affected X3M products.
+- Existing behavior and affected Example Organization products.
 - Links to meetings, recordings, Slack channels, Drive files, designs, support cases, and repositories.
 - Assumptions, contradictions, and unresolved questions.
 - A unique initiative keyword used to correlate future evidence.
@@ -535,13 +539,13 @@ The configured human code approver decides Code Readiness for each required curr
 | FR-013 | Dispatch an automated slice to OpenHands through `AgentExecutionProvider`, or allow an authorized developer to claim it for human-assisted Orca work through the bounded MCP contract. |
 | FR-014 | Stream normalized attempt state, activity, cost, questions, errors, candidate changes, and completion into Curve without giving agents VCS mutation credentials. |
 | FR-015 | Pause a durable workflow for human questions, notify permitted responders through Plane, and resume the same execution after an attributed answer. |
-| FR-016 | Execute repository-defined checks and the X3M baseline quality policy.                                                 |
+| FR-016 | Execute repository-defined checks and the Example Organization baseline quality policy.                                                 |
 | FR-017 | Run independent code and security review agents and normalize their findings.                                          |
 | FR-018 | Block draft creation on preflight failures or unresolved Critical and Major findings at the candidate head SHA. |
 | FR-019 | Automatically and idempotently open a draft GitHub PR or GitLab MR through the trusted controller after preflight passes. |
 | FR-020 | Synchronize post-draft VCS checks and require a configured human Code Readiness approval at the current head before explicitly converting a draft to ready. |
 | FR-021 | Preserve an auditable lineage from evidence through artifacts, approvals, agent runs, commits, checks, and PRs.        |
-| FR-022 | Support versioned X3M workflow templates without requiring a general visual workflow builder.                          |
+| FR-022 | Support versioned Example Organization workflow templates without requiring a general visual workflow builder.                          |
 | FR-023 | Expose signed Curve webhooks and versioned APIs for integrations.                                                      |
 | FR-024 | Measure idea-to-draft, idea-to-ready, observed idea-to-merge, active human effort, quality outcomes, cost, and evidence coverage. |
 | FR-025 | Create and manage the approved minimal Product identity, ownership, timezone, and reversible lifecycle; M2 extends it with working Roadmaps, typed Milestones, Features, and milestone-specific Roadmap Items. |
@@ -699,7 +703,7 @@ flowchart TB
 | Initiative           | Workspace-scoped change effort, mode, Product, keyword, risk, ownership, lifecycle, and current versions. |
 | InitiativeRepository | Connection between an initiative and an affected repository.                                    |
 | FeatureDelivery      | One roadmap-backed Initiative plus Roadmap Item, approved PRD, approved plan, contract, and PR set. |
-| WorkflowTemplate     | Reusable X3M lifecycle definition.                                                              |
+| WorkflowTemplate     | Reusable Example Organization lifecycle definition.                                                              |
 | WorkflowVersion      | Immutable stages, gates, policies, roles, and required artifacts used by one initiative.        |
 | Artifact             | Logical Idea Brief, Research Dossier, PRD, Architecture Delta, or Execution Plan.               |
 | ArtifactVersion      | Immutable content, schema version, provenance, and approval state.                              |
@@ -719,7 +723,7 @@ flowchart TB
 | Budget               | Versioned hard limits, scope, currency, period, price catalog, reservations, settlements, exceptions, and immutable usage ledger for a workspace, initiative, activity, or attempt. |
 | BudgetReservation    | Atomic provisional charge against every applicable hard limit before an external metered action starts. |
 | UsageRecord          | Immutable provider/tool/sandbox usage observation and monetary settlement linked to its reservation, source event, pricing version, and reconciliation status. |
-| QualityPolicyVersion | Immutable merge of the X3M baseline and additive repository checks, including rulepacks, images, thresholds, and applicability. |
+| QualityPolicyVersion | Immutable merge of the Example Organization baseline and additive repository checks, including rulepacks, images, thresholds, and applicability. |
 | QualityRun           | One execution of repository and Curve quality policies.                                         |
 | QualityCheck         | Normalized deterministic check and result.                                                      |
 | ReviewFinding        | AI or tool finding with severity, evidence, disposition, and resolution.                        |
@@ -759,12 +763,12 @@ Workspace monthly limits reset at the policy's recorded timezone and period boun
 | ---------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------ |
 | KnowledgeProvider      | Onyx MCP                                              | Permission-aware search, retrieval, and source metadata.                 |
 | ToolProvider           | HTTP MCP registry                                     | Tool discovery, authentication, scopes, invocation, and audit.           |
-| ModelGateway           | Thin in-process Curve gateway over X3M's approved OpenRouter access | Unified model invocation, allowlists, classification and budget enforcement, fail-closed fallback, and normalized usage without adding a new gateway service in R0B. |
+| ModelGateway           | Thin in-process Curve gateway over Example Organization's approved OpenRouter access | Unified model invocation, allowlists, classification and budget enforcement, fail-closed fallback, and normalized usage without adding a new gateway service in R0B. |
 | AgentExecutionProvider | OpenHands                                             | Start, monitor, question, resume, cancel, and normalize automated runs.  |
 | HumanAssistanceProvider | Orca over authenticated MCP                         | Read approved task/context data and report developer-attributed workflow updates without VCS, gate, waiver, or deployment authority. |
 | VcsProvider            | GitHub and GitLab                                     | Repositories, branches, commits, checks, comments, and draft PRs or MRs. |
 | PrototypeProvider      | Internal preview runner and Lovable package generator | Create, publish, expire, and collect prototype feedback.                 |
-| QualityProvider        | Repository commands and X3M scanners                  | Execute and normalize tests, builds, scans, and review findings.         |
+| QualityProvider        | Repository commands and Example Organization scanners                  | Execute and normalize tests, builds, scans, and review findings.         |
 | FeatureFlagProvider    | OpenFeature adapter with a configurable backend       | Resolve flags, environments, rollout metadata, and lifecycle evidence.   |
 | DocumentationProvider  | Configured Docusaurus repository through VCS          | Create or link documentation changes and validate documentation builds.  |
 | RoadmapExportProvider  | Internal PDF and image renderer                       | Export immutable Roadmap Snapshots without changing their content.       |
@@ -872,7 +876,7 @@ Every event envelope carries `event_id`, `schema_version`, `workspace_id`, `aggr
 
 ## Knowledge, context, and evidence
 
-X3M already operates Onyx on-premise with an internal vector database, indexed company knowledge, MCP access, and an `llms-full.txt` SDK documentation corpus. Curve will consume this capability rather than replicate it.
+Curve consumes an approved knowledge-provider integration with permission-aware retrieval and MCP access. Actual deployment, indexes, corpora and source identities are private configuration inputs. The public contract defines capabilities without asserting any organization's deployed systems.
 
 ### Retrieval rules
 
@@ -941,7 +945,7 @@ Runnable previews use a separate untrusted runtime profile and authenticated gat
 
 ## Quality policy
 
-Curve combines repository-defined checks with an X3M-wide baseline. The versioned X3M baseline is the non-reducible precedence layer. A repository may add checks, narrow applicability safely, or strengthen a threshold; it cannot remove, suppress, downgrade, or override a baseline rule unless that exact baseline rule is marked waivable and the waiver policy authorizes the actor, reason, duration, and evidence. `QualityPolicyVersion` pins rulepacks, tool images/digests, commands, thresholds, suppressions, applicability, severity mapping, false-positive/reclassification rules, prohibited licenses, and waiver rules.
+Curve combines repository-defined checks with an Example Organization-wide baseline. The versioned Example Organization baseline is the non-reducible precedence layer. A repository may add checks, narrow applicability safely, or strengthen a threshold; it cannot remove, suppress, downgrade, or override a baseline rule unless that exact baseline rule is marked waivable and the waiver policy authorizes the actor, reason, duration, and evidence. `QualityPolicyVersion` pins rulepacks, tool images/digests, commands, thresholds, suppressions, applicability, severity mapping, false-positive/reclassification rules, prohibited licenses, and waiver rules.
 
 Policy resolution is deterministic and occurs at Gate 2 against the repository policy/instructions at the pinned base SHA. It evaluates repository language/build mode, changed paths, initiative risk and classification, runtime/data/migration impact, and Feature Delivery Contract applicability. Unknown applicability fails closed for a potentially relevant baseline security, license, authorization, data, sandbox, or destructive-change rule. A `NOT_APPLICABLE` result names the rule, predicate inputs, evidence, policy version, and human authority; an agent cannot declare it.
 
@@ -1051,10 +1055,10 @@ Curve synchronizes human and bot review comments on linked drafts. Authorized us
 | ------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | Work management          | [Plane](https://github.com/makeplane/plane)                                             | AGPL foundation; the derived architecture must inventory which required primitives exist in the pinned community edition and which Curve must build. |
 | Durable workflows        | [Temporal](https://github.com/temporalio/temporal)                                      | Durable execution, retries, timers, signals, and long human waits.                    |
-| Knowledge                | [Onyx](https://github.com/onyx-dot-app/onyx)                                            | Existing X3M deployment, connectors, permissions, search, and MCP server.             |
+| Knowledge                | [Onyx](https://github.com/onyx-dot-app/onyx)                                            | Existing Example Organization deployment, connectors, permissions, search, and MCP server.             |
 | Automated coding agent  | [OpenHands](https://github.com/OpenHands/OpenHands)                                     | Open agent SDK and remote sandbox execution behind `AgentExecutionProvider`.          |
-| Human-assisted coding   | X3M Orca                                                                                | Developer-operated MCP client for approved task retrieval and bounded workflow write-back; it receives no Curve-managed VCS or approval authority. |
-| LLM application boundary | Thin Curve Model Gateway over X3M's approved [OpenRouter](https://openrouter.ai/docs) access | Provider-neutral API, administrator allowlists, data-class policy, budgets, retry/fallback constraints, and normalized usage without a new R0B infrastructure service. |
+| Human-assisted coding   | Example Organization Orca                                                                                | Developer-operated MCP client for approved task retrieval and bounded workflow write-back; it receives no Curve-managed VCS or approval authority. |
+| LLM application boundary | Thin Curve Model Gateway over Example Organization's approved [OpenRouter](https://openrouter.ai/docs) access | Provider-neutral API, administrator allowlists, data-class policy, budgets, retry/fallback constraints, and normalized usage without a new R0B infrastructure service. |
 | Future gateway option    | Portkey OSS, Envoy AI Gateway, or another approved implementation behind `ModelGateway` | Not selected for R0B. Adoption requires an ADR covering operational ownership, license, supply chain, policy parity, migration, and conformance. |
 | LLM observability        | [Langfuse](https://github.com/langfuse/langfuse)                                        | Prompt management, traces, datasets, evaluations, costs, and feedback.                |
 | Structural code context  | [Tree-sitter](https://tree-sitter.github.io/tree-sitter/)                               | Language-aware syntax parsing and structural extraction.                              |
@@ -1064,7 +1068,7 @@ Curve synchronizes human and bot review comments on linked drafts. Authorized us
 | Security scanning        | [Trivy](https://github.com/aquasecurity/trivy), [Gitleaks](https://github.com/gitleaks/gitleaks), and [Opengrep](https://github.com/opengrep/opengrep) | Initial concrete baseline for dependency/image/configuration, secret, and static analysis; exact pinned toolchain is D-010. |
 | Telemetry                | [OpenTelemetry](https://opentelemetry.io/) with Prometheus and Grafana                  | Vendor-neutral correlation across workflows, agents, tools, and services.             |
 | Feature flag API         | [OpenFeature](https://openfeature.dev/)                                                 | Vendor-neutral flag evaluation and provider portability.                              |
-| Feature flag backend     | X3M-provided backend selected by D-011; registered target-repository profiles may use another existing provider | Curve adds no flag infrastructure before D-011. The Loomit target profile uses Sachiel's existing Flipt integration; all providers remain behind the OpenFeature-compatible boundary. |
+| Feature flag backend     | Example Organization-provided backend selected by D-011; registered target-repository profiles may use another existing provider | Curve adds no flag infrastructure before D-011. The Example Product target profile uses the registered target feature-flag provider; all providers remain behind the OpenFeature-compatible boundary. |
 | Product documentation    | [Docusaurus](https://docusaurus.io/)                                                    | Existing Markdown or MDX documentation target with deterministic builds.               |
 
 ### Rejected or deferred alternatives
@@ -1073,10 +1077,10 @@ Curve synchronizes human and bot review comments on linked drafts. Authorized us
 | ----------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------ |
 | Daytona as the foundational sandbox             | Not selected for R1 | Does not replace the required trusted-controller plus gVisor security model. Reconsider only through a cited license, security, and operability ADR. |
 | LiteLLM in the first release                    | Not selected for R1 | Curve will implement one gateway baseline behind its adapter. Additional gateways require a supply-chain, license, policy, and conformance ADR. |
-| New Portkey or Envoy infrastructure for R0B     | Not selected for R0B | The in-process Curve gateway uses existing X3M OpenRouter access. A later service adoption requires D-004 supersession and conformance evidence. |
+| New Portkey or Envoy infrastructure for R0B     | Not selected for R0B | The in-process Curve gateway uses existing Example Organization OpenRouter access. A later service adoption requires D-004 supersession and conformance evidence. |
 | LangGraph as the top-level SDLC workflow engine | Defer         | Useful for bounded reasoning graphs, but Temporal is the authority for durable business workflows and human waits. |
-| A second general vector database                | Reject        | Duplicates X3M's Onyx investment and creates competing retrieval truth.                                            |
-| A general visual workflow builder               | Defer         | Versioned X3M templates prove the lifecycle with significantly less initial complexity.                            |
+| A second general vector database                | Reject        | Duplicates Example Organization's Onyx investment and creates competing retrieval truth.                                            |
+| A general visual workflow builder               | Defer         | Versioned Example Organization templates prove the lifecycle with significantly less initial complexity.                            |
 | Multi-repository agent transactions             | Reject for R1 | Increase rollback, review, ownership, and merge complexity.                                                        |
 | Autonomous merge and deployment                 | Reject for R1 | Exceeds the selected human-control boundary.                                                                       |
 
@@ -1089,13 +1093,13 @@ Curve generates SBOMs and provenance attestations for its services, runner image
 | Milestone                      | Outcome                                                                                                                           | Exit criteria                                                                                |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | M0: Foundation                 | Curve domain, workspace authorization, workflow versions, three gate types, audit storage, policy engine, API conventions, Temporal, outbox/inbox, and reconciliation; protected-object storage follows D-009 | D-001 and the applicable D-003/D-007 development profiles are resolved; the local durable sample workflow passes replay tests without duplicate effects. Protected storage and staging/production activation remain blocked until D-009. |
-| M1: Alignment and PRD          | Conversation-plus-artifact UI, per-operation Onyx/MCP delegation, evidence/access envelopes, PRD generation, and Gate 1 | D-002 and D-005 resolved; an authorized X3M user approves a cited PRD and revoked/inaccessible evidence fails closed. |
+| M1: Alignment and PRD          | Conversation-plus-artifact UI, per-operation Onyx/MCP delegation, evidence/access envelopes, PRD generation, and Gate 1 | D-002 and D-005 resolved; an authorized Example Organization user approves a cited PRD and revoked/inaccessible evidence fails closed. |
 | M2: Product roadmaps           | Product hierarchy, typed Milestones, Roadmap Items, PRD linkage, scope history, Portfolio Roadmap, period Gantt, and snapshots | D-013 resolved; a Product roadmap publishes a reproducible immutable export while preserving manual and execution progress. |
 | M3: Architecture and planning  | Repository binding, deterministic inspection, typed DAG, repository-local slices, Context Packs/Manifests, and Gate 2 | D-008 resolved; a two-repository plan has no cycle, full traceability, pinned base SHAs, bounded authorization, and no permissioned evidence in Git. |
 | M4: Agent execution            | OpenHands adapter, trusted controller, isolated runners, questions, cancellation, retries, event streaming, and developer-operated Orca MCP assistance | D-006, D-007, and D-014 resolved; OpenHands passes execution-provider conformance, Orca passes its MCP conformance suite, and loss/cancellation produces no duplicate attempt or mutation. |
 | M5: Quality and VCS            | Versioned baseline, two-phase quality, Feature Delivery Contracts, review-comment rework, coordinated PR sets, both VCS adapters, and automatic draft creation | D-010-D-012 resolved; GitHub and GitLab each prove draft eligibility, post-draft checks, current-head human readiness, aggregate contract evidence, and replay safety. |
 | M6: Prototype and optimization | Authenticated preview runtime, Lovable exports, feedback, dashboards, budgets, and KPI instrumentation | D-015 and D-016 resolved; both prototype paths satisfy isolation/expiry tests and idea-to-ready lead time is measurable end to end. |
-| M7: Integration expansion      | Slack, Drive, Calendar, Figma, Fireflies, support, monitoring, and deployment-event observation through policy-controlled MCP or connectors | Selected X3M workflows operate without manual context transfer while preserving permissions; merge and deployment remain externally controlled. |
+| M7: Integration expansion      | Slack, Drive, Calendar, Figma, Fireflies, support, monitoring, and deployment-event observation through policy-controlled MCP or connectors | Selected Example Organization workflows operate without manual context transfer while preserving permissions; merge and deployment remain externally controlled. |
 
 ### Rollout strategy
 
@@ -1109,114 +1113,22 @@ Curve generates SBOMs and provenance attestations for its services, runner image
 
 Curve performs no migration or inferred import of existing Plane roadmaps in R0B or R1. It begins with new Curve initiatives and roadmaps. Plane workspace, user, project, and work-item IDs are referenced, not copied or repurposed. Workflow/policy v1 is seeded explicitly. A future import capability requires a new approved decision, validated mapping, error report, reconciliation owner, and rollback design. Rollback may disable Curve entry points and new workflow dispatch while retaining new tables and external resources for reconciliation; it must not apply destructive down-migrations to Plane data.
 
-## R0B reference pilot: Loomit SDK Compatibility
+## R0B reference pilot
 
-### Objective, roles, and boundary
+The public reference pilot uses a fictional Product, a synthetic repository
+and disposable test data. Actual product scope, repository identities,
+contracts, flags, user cohorts, baselines and targets belong in an approved
+private deployment profile.
 
-The named R0B pilot validates the Curve path by adding an internal SDK Compatibility tab to the Loomit Admin App Details experience. The Product Approver is the PO, the Technical Approver is the TL, and the Code Approver is a Dev. Role assignments resolve to authenticated X3M principals at initiative creation; role labels alone never authorize a decision.
+Gate 2 binds exact repository and external-contract versions, authorized
+humans, data classification and a rollback plan. External prerequisite changes
+invalidate the dependent attempt. Gate 3 requires current-head quality,
+authorization, manual regression and immutable review evidence.
 
-The pilot is `CONFIDENTIAL`, standalone, GitLab-based, OpenHands-first, and prototype-optional. It does not exercise roadmap migration, GitHub, Orca, a Docusaurus slice, merge, deployment, or production access. These exclusions constrain the pilot only and do not remove R1 requirements.
-
-The inspected `general-config` repository does not own the deployed `GET /mm/organizations/{orgId}/apps/{appId}` route. For R0B, CIA is therefore an **external contract and staging prerequisite**, not an agent-dispatched Curve slice. Curve records, but does not implement, merge, or deploy, the CIA change. The only agent-dispatched implementation slice is the Sachiel repository.
-
-```mermaid
-flowchart LR
-    contract["CIA OpenAPI contract approved"] --> backend["CIA normal implementation, review, merge, and staging deployment outside Curve"]
-    backend --> evidence["Curve records deployed contract version and staging evidence"]
-    evidence --> ui["Sachiel repository-local OpenHands slice"]
-    ui --> preflight["Commit-bound preflight"]
-    preflight --> draft["Trusted controller opens one draft GitLab MR"]
-    draft --> postdraft["Native CI, security, and manual regression at current head SHA"]
-    postdraft --> gate3["Dev Code Readiness decision"]
-```
-
-Gate 2 cannot dispatch the Sachiel slice until the external prerequisite contains:
-
-- The authoritative OpenAPI document URL or protected artifact identity, immutable digest, and contract version.
-- CIA owner and approver identities plus the authoritative change/deployment reference.
-- The staging environment identity, deployed service or image version, deployment time, and successful contract probe bound to that deployment.
-- Android/iOS selection and version-policy ownership.
-- Backward-compatibility validation proving old consumers tolerate the optional field.
-- Authorization for Sachiel and the pilot reviewers to access the staging contract and fixtures.
-
-Any contract version or deployed backend version change makes the prerequisite stale and pauses or replans the dependent Sachiel attempt.
-
-### CIA wire contract
-
-The deployed App response is extended backward-compatibly with the optional snake-case property below. Existing Sachiel wire representations use snake case; its mapper converts the response into camel-case domain fields.
-
-```ts
-type SdkCompatibilityStatus = "COMPLIANT" | "UPGRADE_REQUIRED" | "UNKNOWN";
-
-interface AppRepresentationExtension {
-  sdk_compatibility?: {
-    installed_sdk_version: string | null;
-    recommended_sdk_version: string | null;
-    status: SdkCompatibilityStatus;
-  };
-}
-```
-
-Normative contract behavior is:
-
-1. CIA owns version selection and compatibility policy. It returns the correct Android or iOS values for the App; Sachiel displays the supplied status and MUST NOT independently infer an upgrade.
-2. If either version is missing, invalid, or not comparable under CIA policy, status is `UNKNOWN`; the service MUST NOT return an unsupported upgrade claim.
-3. If compatibility data is not available at all but the App is available, the App request returns its normal success response with `sdk_compatibility` omitted. This is the pilot's **unavailable compatibility data** state.
-4. Failure of the complete App request remains the existing App Details error behavior and is not misrepresented as compatibility-only unavailability.
-5. R0B does not display stale compatibility as current. If CIA later adds caching, the contract must add freshness metadata and an approved stale-data policy before Sachiel renders it.
-6. Unknown enum values or structurally invalid compatibility objects fail the compatibility mapper closed to unavailable data, emit redacted telemetry, and do not break the rest of App Details.
-
-The approved OpenAPI schema and consumer fixtures are authoritative if they are more restrictive than the illustrative TypeScript shape above.
-
-### Sachiel implementation contract
-
-The target is `git@gitlab.com:etermax/ads/x3m/back-office/sachiel.git`, base branch `main`; Gate 2 resolves and pins the current base SHA instead of reusing the review-time SHA. The slice produces one feature-named branch and at most one active draft MR.
-
-The implementation MUST:
-
-- Add SDK Compatibility as another App Details tab only when App Details is the active experience: `new-placement-view` is disabled.
-- Require default-off Flipt flag `sdk-compatibility-panel-enabled`, initially targeted only to approved pilot organizations or users.
-- Apply the same eligibility predicate to navigation and direct-route access. When ineligible, do not fetch or reveal compatibility data and redirect through the existing authorized App Details fallback.
-- Render installed version, recommended version, and a clear status for `COMPLIANT`, `UPGRADE_REQUIRED`, `UNKNOWN`, and unavailable compatibility data.
-- Preserve existing App Details navigation, authorization, error behavior, and adjacent tabs.
-- Add a minimal Vitest and React Testing Library harness with deterministic mapper, state-rendering, flag, App Details eligibility, and direct-route tests.
-- Declare Docusaurus documentation `NOT_APPLICABLE` at Gate 2 for this internal pilot; no documentation branch or MR is created.
-
-### Pilot quality and human evidence
-
-Sachiel preflight runs from a clean checkout of the Gate 2 base plus the candidate tree:
-
-```text
-pnpm install --frozen-lockfile
-pnpm exec eslint .
-pnpm test --run
-pnpm build
-```
-
-`pnpm exec eslint .` is intentionally non-mutating; the existing fix-mode script is not valid preflight evidence. Gate 2 must update these commands if repository-native instructions at the pinned base SHA differ. Dependency installation uses approved read-only registry credentials and egress.
-
-After automatic draft creation, Curve binds GitLab pipeline/status results and manual evidence to the exact MR head SHA. The R0B manual-review mechanism is a Code Approver checkout of that exact head using the repository's approved local run instructions against approved staging or synthetic fixtures. The evidence records reviewer, timestamp, head SHA, environment/fixture identities, result, notes, and attachments. A commit change invalidates the evidence.
-
-Manual regression covers:
-
-1. Compliant.
-2. Upgrade required.
-3. Unknown installed version.
-4. Unavailable compatibility data with the App otherwise available.
-5. App Details navigation, direct-route protection, and adjacent-tab regression with both relevant flags enabled and disabled.
-
-Code Readiness additionally requires the current-head native pipeline, approved Curve security scan, no open non-waivable result, no Critical/Major finding, and no native-CI regression. The Code Approver can approve readiness only after all evidence is current. Curve does not merge or deploy the MR.
-
-### Pilot KPI protocol
-
-| Measure | Baseline | Pilot target and calculation |
-| ------- | -------- | ---------------------------- |
-| Active human execution effort | The supplied `7 days to production` is provisional because it does not yet distinguish elapsed time from active person-time. | If Product confirms seven active person-days under the same inclusion policy, target is at most 2.8 active person-days. Otherwise collect a comparable baseline before claiming the 60% reduction. Sum attributable PO, TL, Dev, and CIA active minutes without counting unattended agent/runtime wait. |
-| Idea-to-draft lead time | 5 elapsed days for a comparable change. | At most 2.5 elapsed days from `initiative.refinement_accepted` to the Sachiel draft MR opening at its first qualifying preflight SHA. Report CIA external-prerequisite wait separately and also in end-to-end elapsed time. |
-| First-pass acceptance | Historical generated-implementation acceptance is 60%. | The one pilot is binary: the Sachiel implementation is accepted without an implementation rework commit after review, or it is not. The `>=70%` aggregate target is evaluated only after at least three comparable initiatives with a published numerator and denominator. |
-| Security and native CI | Manual regression and repository-native CI baseline. | No Critical/Major security finding, no non-waivable failure, and no regression in repository-native checks at the qualifying head. Post-merge or production results are observed separately because merge and deployment are outside Curve. |
-
-Every metric uses immutable, attributable, workspace-scoped events and a versioned inclusion policy. Waiting, active-human, model, tool, sandbox, external-dependency, approval, and rework intervals are recorded separately so reductions cannot be created by reclassification.
+Pilot validation covers positive behavior, unavailable data, denied access,
+stale dependencies, default-off exposure, cancellation and rollback. Metrics
+separate active human effort, elapsed time, external waits and rework. Owners
+approve private numeric baselines and targets before any improvement claim.
 
 ## KPIs
 
@@ -1343,9 +1255,9 @@ The derived plan assigns every risk an owner, likelihood, impact, trigger, leadi
 
 - Curve is the product name.
 - Curve owns the product shell, approved logo, top-level navigation, and lifecycle terminology.
-- R1 is optimized for X3M but enforces workspace and provider boundaries needed for future productization.
+- R1 is optimized for Example Organization but enforces workspace and provider boundaries needed for future productization.
 - Plane remains the embedded project-management foundation and authority for its native work-management concepts.
-- X3M's Onyx instance, knowledge index, MCP server, and SDK documentation remain available.
+- Example Organization's Onyx instance, knowledge index, MCP server, and SDK documentation remain available.
 - Onyx can authenticate each protected operation through the effective human principal or a secure short-lived delegation selected in D-002.
 - Temporal can be deployed as an additional internal service.
 - GitHub and GitLab are both required in R1 and pass the same VCS conformance suite.
@@ -1371,26 +1283,26 @@ The derived plan assigns every risk an owner, likelihood, impact, trigger, leadi
 
 ## Decision register
 
-These are controlled prerequisites, not ambiguous product behavior. An architecture agent may analyze options and draft the specified ADR, but only the named X3M owner may mark a decision `DECIDED`. `PROPOSED` records an agreed planning direction that still lacks owner approval or required proof; it is not implementation authorization. Until a blocking decision is `DECIDED`, the conservative default applies and implementation of the blocked package fails closed.
+These are controlled prerequisites, not ambiguous product behavior. An architecture agent may analyze options and draft the specified ADR, but only the named Example Organization owner may mark a decision `DECIDED`. `PROPOSED` records an agreed planning direction that still lacks owner approval or required proof; it is not implementation authorization. Until a blocking decision is `DECIDED`, the conservative default applies and implementation of the blocked package fails closed.
 
 | ID | Required decision | Decision/evidence and remaining actions | Owner | Due / blocks | Conservative default until decided | Status |
 | -- | ----------------- | -------------------------------------- | ----- | ------------ | ---------------------------------- | ------ |
-| D-001 | Pin the Plane community-edition commit and complete a reuse-versus-build inventory for work items, pages, estimates, relationships, Gantt, APIs, webhooks, auth, and UI conventions. | Federico Ocampo approved [ADR-001](technical/adr-001-plane-upstream-foundation.md) (Plane baseline, licensing, and upgrade strategy) on 2026-08-15 against content digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`. Official Plane upstream is Curve's updateable baseline; Curve code is implemented/released from the public Plane fork; governance/contracts remain in the separate Curve repository. Official `upstream/preview` base `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` and approved candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` produced accepted fork `preview` merge `549db1aea8f3307b337b3686dbb844a87549cd95`. Curve PR #1 produced governance baseline `1529b8b7f04f226ac8be151f89104b6582650b42`; post-merge CI passed. Community/commercial reuse, AGPL/notices/corresponding-source obligations, ownership, both exact-head dispositions, and review triggers are accepted. M0-01 owns additive migration, disabled-state, and rollback proof. | Federico Ocampo, CTO at X3M | Review at every Plane foundation upgrade, material licensing change, repository-boundary change, or support-owner change | Keep implementation blocked until the consuming package's remaining gates pass. | DECIDED |
-| D-002 | Select and prove Onyx per-operation delegation using a short-lived initiating-user identity. | Use X3M Onyx with initiating-user OAuth delegation and workspace-approved technical sources. Prove issuer, audience, scopes, token exchange or pass-through flow, expiry, revocation, durable-wait reauthorization, source ACLs, and audit; never store user PATs. | Security and identity owner | Before M1; blocks protected M1 retrieval | Do not enable protected retrieval. | PROPOSED |
-| D-003 | Approve development/staging/production topology, trust zones, residency, persistence, backups, secrets, observability, and HA. | The original `LOCAL_ONLY` evidence remains in [ADR-003](technical/adr-003-runtime-topology.md) (live Temporal topology, pins, evidence, and rollback). Federico approved [D-003 private-platform connectivity amendment](technical/d003-private-platform-connectivity-amendment.md) (shared `dev_env`, private EKS/VPC/VPN direction, authenticated non-local Temporal clients, security boundary, and revised M0-S3 proof) at exact head `5e165c...`, merged as `aece539...`: no Curve-specific local or initial-R1 `NetworkPolicy`; dedicated `curve` namespace by default; Kubernetes `ClusterIP`; internal VPN-only Temporal UI ingress; X3M workload identity and Secrets Manager. [M0-S3 implementation evidence](technical/m0-s3-implementation-evidence.md) (exact context, Plane merge, tests, runtime proof, security acceptance, and rollback) accepts the local implementation at `d99342f...`. Detailed Helm values, database/certificate placement, HA, backup/restore, RPO/RTO, cost, and operational ownership remain deployment-package inputs. | Federico Ocampo for connectivity/trust direction; Platform Operations for environment activation | Before every staging/production activation | Synthetic local data only until package gates pass; private connectivity direction grants no deployment, protected-data, or SLA claim. | DECIDED AND IMPLEMENTED for `LOCAL_ONLY`; activation details OPEN |
-| D-004 | Select the model-gateway baseline and approve its release boundary, routing, failure behavior, policy, telemetry, and ownership. | Implement a thin Curve Model Gateway as an additive application component above X3M's approved OpenRouter access; do not provision Portkey or Envoy for R0B. Pin the OpenRouter contract and approved models, prove classification/budget enforcement and fail-closed behavior, and document an exit path to another gateway behind `ModelGateway`. | AI platform and operations | Before model-enabled M1/M3/M5 | Direct provider calls remain disabled outside a development stub. | PROPOSED |
+| D-001 | Pin the Plane community-edition commit and complete a reuse-versus-build inventory for work items, pages, estimates, relationships, Gantt, APIs, webhooks, auth, and UI conventions. | Designated reviewer approved [ADR-001](technical/adr-001-plane-upstream-foundation.md) (Plane baseline, licensing, and upgrade strategy) on 2026-08-15 against content digest `sha256:0c780a0264dcc1a301ee412dfce18c3c50453436679c8d4a55729052bdcdc488`. Official Plane upstream is Curve's updateable baseline; Curve code is implemented/released from the public Plane fork; governance/contracts remain in the separate Curve repository. Official `upstream/preview` base `1c8a60f858d8472aa56e29994ec1c7926da2c6ce` and approved candidate `d380678912e9b46805ef852d2e05411f1fea6d8b` produced accepted fork `preview` merge `549db1aea8f3307b337b3686dbb844a87549cd95`. Curve PR #1 produced governance baseline `1529b8b7f04f226ac8be151f89104b6582650b42`; post-merge CI passed. Community/commercial reuse, AGPL/notices/corresponding-source obligations, ownership, both exact-head dispositions, and review triggers are accepted. M0-01 owns additive migration, disabled-state, and rollback proof. | Designated reviewer, Designated technical owner | Review at every Plane foundation upgrade, material licensing change, repository-boundary change, or support-owner change | Keep implementation blocked until the consuming package's remaining gates pass. | DECIDED |
+| D-002 | Select and prove Onyx per-operation delegation using a short-lived initiating-user identity. | Use Example Organization Onyx with initiating-user OAuth delegation and workspace-approved technical sources. Prove issuer, audience, scopes, token exchange or pass-through flow, expiry, revocation, durable-wait reauthorization, source ACLs, and audit; never store user PATs. | Security and identity owner | Before M1; blocks protected M1 retrieval | Do not enable protected retrieval. | PROPOSED |
+| D-003 | Approve development/staging/production topology, trust zones, residency, persistence, backups, secrets, observability, and HA. | Public reference: local synthetic proof, authenticated non-local clients, and approved private deployment configuration. Platform, network, service exposure, identity, persistence and operational evidence are private inputs. Public documentation supplies no environment activation authority. | Designated reviewer for connectivity/trust direction; Platform Operations for environment activation | Before every staging/production activation | Synthetic local data only until package gates pass; private connectivity direction grants no deployment, protected-data, or SLA claim. | DECIDED AND IMPLEMENTED for `LOCAL_ONLY`; activation details OPEN |
+| D-004 | Select the model-gateway baseline and approve its release boundary, routing, failure behavior, policy, telemetry, and ownership. | Implement a thin Curve Model Gateway as an additive application component above Example Organization's approved OpenRouter access; do not provision Portkey or Envoy for R0B. Pin the OpenRouter contract and approved models, prove classification/budget enforcement and fail-closed behavior, and document an exit path to another gateway behind `ModelGateway`. | AI platform and operations | Before model-enabled M1/M3/M5 | Direct provider calls remain disabled outside a development stub. | PROPOSED |
 | D-005 | Approve models/providers by task and data classification, including residency, training/retention terms, fallback equivalence, and evaluation baseline. | Platform administrators configure approved planning, coding, and review models. Gate 2 pins provider, model, policy, budget, and data classification. All classifications are representable; `RESTRICTED` requires an approved zero-data-retention allowlist and DLP evidence. Complete model evaluations, terms, residency, fallback equivalence, and red-team evidence. | AI governance and security | Before model-enabled M1/M3/M5 | No silent fallback; `RESTRICTED` model calls remain blocked. | PROPOSED |
 | D-006 | Approve Orca's developer-operated MCP client profile, ownership, support boundary, version compatibility, and license classification. | Orca is not an `AgentExecutionProvider`. It may read assigned slices, approved task packets, acceptance criteria, sanitized Context Manifests, questions, and workflow state; it may write only developer-attributed claim, release, heartbeat, progress, question, completion, and VCS-reference updates allowed by D-007. | Agent platform owner | Before Orca-enabled M4 and R1 qualification | No Orca MCP integration; OpenHands automation may proceed independently. | PROPOSED |
 | D-007 | Approve MCP protocol/transports, workspace trust registry, read/write classification, delegated authentication, and the pre-authorized action allowlist. | Use a workspace-approved authenticated registry over Streamable HTTP. General integrations remain read-only. The Orca profile may invoke only the named workflow updates using a short-lived developer-delegated token, workspace/object authorization, idempotency key, expected aggregate version, and immutable attribution. MCP cannot approve, waive, re-plan, upload executable artifacts, mutate VCS, or deploy. | Security and platform administration | Before MCP-enabled M0/M1/M4 | Existing Onyx read access only; Orca write-back remains disabled. | PROPOSED |
 | D-008 | Select VCS controller identities and scopes, signing, rotation, revocation, and repository allowlists. | Use a GitHub App for GitHub and project-scoped GitLab tokens for approved pilot repositories, held only by the trusted Curve controller. Agents receive no push, PR/MR, approval, merge, deployment, or production credentials. Prove least-privilege scopes, rotation/revocation, signing/attribution, webhook security, and controller conformance. | Developer platform and security | Before VCS mutation in M3/M5 | Read-only repository inspection; no push or draft creation. | PROPOSED |
 | D-009 | Set retention, backup, tombstone, legal-hold, and cryptographic-erasure periods for each data class and artifact category. | Artifact/evidence cleanup is human-governed with legal-hold checks; sandbox credentials, previews, and runner resources expire automatically. The exact class-by-asset and backup periods, deletion eligibility, audit/body split, tombstones, and erasure behavior remain unresolved. | Security, privacy, and legal | Before M0-04 protected storage or any staging/production activation | Protected bodies remain disabled; synthetic local proofs only. | OPEN |
-| D-010 | Pin X3M quality/security/license policy: tools, images, rulepacks, severity mapping, prohibited licenses, coverage, suppressions, and non-waivable classes. | Block Critical/High findings and non-waivable secret, authorization, sandbox, restricted-data, destructive-data, prohibited-license, and security-policy failures. Only the TL may waive Low/Info non-security findings with rationale, expiry, tool/rule version, and commit SHA. Confirm licensed CodeQL use or an X3M-approved equivalent; pin all tools/rules and normalize `High` to PRD `Major`. | Application security | Before automatic-draft M5 | All Critical/Major, non-waivable, and unknown-license results block. | PROPOSED |
-| D-011 | Select the R1 OpenFeature backend and environment/flag naming, ownership, rollout, audit, and cleanup conventions. | Use a provider-neutral `FeatureFlagProvider`. Sachiel's pilot delivery profile targets its existing Flipt integration with default-off `sdk-compatibility-panel-enabled`. The Curve control-plane backend and complete X3M conventions remain unresolved. | Platform operations | Before runtime flag delivery in M5 | Contract planning may use the interface; unregistered runtime flag delivery is blocked. | OPEN |
-| D-012 | Configure the initial Docusaurus repository, target branch, owners, build/link commands, navigation, preview, and release relationship. | Target `https://gitlab.com/etermax/ads/x3m/docusaurus.git`; when documentation is applicable, use a feature-named branch and run `pnpm build`. Resolve default branch, owners, authentication, link/navigation checks, preview, and release relationship. The Loomit pilot declares documentation `NOT_APPLICABLE` at Gate 2 and opens no documentation MR. | Product documentation owner | Before an applicable documentation slice in M5 | Applicable documentation checks fail. | PROPOSED |
+| D-010 | Pin Example Organization quality/security/license policy: tools, images, rulepacks, severity mapping, prohibited licenses, coverage, suppressions, and non-waivable classes. | Block Critical/High findings and non-waivable secret, authorization, sandbox, restricted-data, destructive-data, prohibited-license, and security-policy failures. Only the TL may waive Low/Info non-security findings with rationale, expiry, tool/rule version, and commit SHA. Confirm licensed CodeQL use or an Example Organization-approved equivalent; pin all tools/rules and normalize `High` to PRD `Major`. | Application security | Before automatic-draft M5 | All Critical/Major, non-waivable, and unknown-license results block. | PROPOSED |
+| D-011 | Select the R1 OpenFeature backend and environment/flag naming, ownership, rollout, audit, and cleanup conventions. | Use a provider-neutral `FeatureFlagProvider`. The target pilot delivery profile uses an approved feature-flag provider with default-off `example-feature-enabled`. The Curve control-plane backend and complete Example Organization conventions remain unresolved. | Platform operations | Before runtime flag delivery in M5 | Contract planning may use the interface; unregistered runtime flag delivery is blocked. | OPEN |
+| D-012 | Configure the initial Docusaurus repository, target branch, owners, build/link commands, navigation, preview, and release relationship. | Target `https://vcs.example.invalid/example/repository`; when documentation is applicable, use a feature-named branch and run `pnpm build`. Resolve default branch, owners, authentication, link/navigation checks, preview, and release relationship. The Example Product pilot declares documentation `NOT_APPLICABLE` at Gate 2 and opens no documentation MR. | Product documentation owner | Before an applicable documentation slice in M5 | Applicable documentation checks fail. | PROPOSED |
 | D-013 | Choose the existing Product/Roadmap migration behavior and define reconciliation ownership. | No migration or inferred import. Curve begins with new initiatives and references existing Plane identifiers without copying or repurposing them. A later import capability requires a new approved decision and validated mapping. Record Product Operations approval and rollback/reconciliation implications. | Product operations | Before roadmap M2 | New Curve initiatives only; no existing-roadmap mutation. | PROPOSED |
 | D-014 | Set initial workspace, initiative, research, model, tool, and sandbox budgets plus escalation authority. | R0B caps are USD 300/workspace/month, USD 50/initiative, USD 10/research activity, USD 25/attempt, and two sandbox-hours per attempt; exhaustion pauses work and Product plus Platform jointly approve exceptions. Define reservation, concurrency, reconciliation, currency/reset, cost scope, and exception expiry. | Product, finance, and platform owners | Before R0B/M4 | Minimal development limits; exhaustion pauses. | PROPOSED |
-| D-015 | Select the pilot Product, repositories/dependencies, initiative, users, data class, and baseline comparison method. | Pilot the Loomit Admin SDK Compatibility panel. For R0B, CIA is an external versioned-contract and staging prerequisite because the supplied General Config repository does not own the target route; Sachiel is the only agent-dispatched slice at `git@gitlab.com:etermax/ads/x3m/back-office/sachiel.git` on `main`. Product/Technical/Code approvers are PO/TL/Dev; classification is `CONFIDENTIAL`; the flag is default-off. Obtain named-owner approval of the reference-pilot contract and metric definitions. | Product and engineering leads | Before R0A/R0B dispatch | No coding-agent pilot dispatch. | PROPOSED |
-| D-016 | Set numeric KPI targets and rollout guardrails. | Pilot targets are at least 60% less active human execution effort, at least 50% less idea-to-draft lead time, first-pass acceptance without implementation rework, no Critical/High findings, and no native-CI regression. Report one pilot as binary; define the broader-R1 aggregate target after three comparable initiatives using versioned metric definitions. | Product owner | Before pilot evaluation and broad R1 rollout | Instrument and report baseline plus binary pilot outcomes only. | PROPOSED |
+| D-015 | Select the pilot Product, repositories/dependencies, initiative, users, data class, and baseline comparison method. | Use a fictional capability and synthetic repositories in public examples. Bind real Product scope, repository ownership, dependencies, approvers, classification and rollback through the private pilot profile. Every external prerequisite requires current evidence and every dispatched slice stays repository-local. | Product and engineering leads | Before R0A/R0B dispatch | No coding-agent pilot dispatch. | PROPOSED |
+| D-016 | Set numeric KPI targets and rollout guardrails. | Keep numeric effort, lead-time and acceptance targets in an owner-approved private profile. Require no Critical/High findings and no native-CI regression. Report one pilot as binary; validate comparability before publishing any aggregate improvement claim. | Product owner | Before pilot evaluation and broad R1 rollout | Instrument and report baseline plus binary pilot outcomes only. | PROPOSED |
 
 ### Non-blocking product questions
 
@@ -1398,7 +1310,7 @@ The following do not change the R1 architecture contract and may remain open:
 
 1. Which M7 integrations should follow first: Slack, Drive, Figma, support, monitoring, or deployment events?
 2. When should externally shareable Roadmap views be introduced, and which redaction/publishing model should they use?
-3. What evidence would justify a general visual workflow designer beyond versioned X3M templates?
+3. What evidence would justify a general visual workflow designer beyond versioned Example Organization templates?
 4. Should M7 post-release verification remain manual-first for some Products even after a MonitoringProvider exists?
 
 ## Architecture and technical-plan handoff
@@ -1437,7 +1349,7 @@ In particular:
 - External access, hosted productization, or distribution can broaden the set of recipients entitled to source and license information.
 - Separate services and process boundaries can clarify component ownership and licensing, but do not automatically determine whether combined components are derivative works.
 - Every recommended dependency requires its own license, notice, redistribution, source-offer, and compatibility review.
-- X3M should obtain qualified legal advice before commercial distribution or external hosting.
+- Example Organization should obtain qualified legal advice before commercial distribution or external hosting.
 
 R1 operational requirements are:
 

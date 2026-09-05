@@ -1,5 +1,9 @@
 # M1-00A Product Core Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Date | 2026-08-29 |
 | Product | Curve |
 | Work package | M1-00A (minimal Product core required before Initiative implementation) |
-| Owner and human reviewer | Federico Ocampo |
+| Owner and human reviewer | Designated reviewer |
 | Implementation repository | [faocampo/plane](https://github.com/faocampo/plane) (public Plane fork containing Curve application code) |
 | Implementation pull request | [Plane PR #13](https://github.com/faocampo/plane/pull/13) (minimal Product core implementation) |
 | Environment and data | `LOCAL_ONLY`; synthetic `INTERNAL` identifiers; US$0 external spend |

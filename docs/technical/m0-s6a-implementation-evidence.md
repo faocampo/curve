@@ -1,5 +1,9 @@
 # M0-S6A Durable Temporal Orchestration Implementation Evidence
 
+> Sanitized public reference. Fictional identities cannot authorize execution.
+> Historical approvals apply only to their original bytes; see
+> [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
+
 ## Document control
 
 | Field | Accepted value |
@@ -10,7 +14,7 @@
 | Evidence version | 1.0 |
 | Acceptance date | 2026-08-25 |
 | Reconciled | 2026-08-26 |
-| Owner and human reviewer | Federico Ocampo, CTO at X3M |
+| Owner and human reviewer | Designated reviewer, Designated technical owner |
 | Implementer | Codex |
 | Curve contract revision | `d97cc053a5d0eac7bc2aa9bebe263a245c95894f` |
 | Context digest | `sha256:fcde6b95800c6bf657afe0cdf10cc28e1ddbb44aa16257833ca84f43714eedde` |
@@ -48,7 +52,7 @@ staging activation, or production activation.
 | Product and workflow contract | [Curve PR #28](https://github.com/faocampo/curve/pull/28) (approved M0-S6A contract publication) squash-merged the exact contract as `d97cc053...` |
 | Task packet | [M0-S6A task packet at the approved revision](https://github.com/faocampo/curve/blob/d97cc053a5d0eac7bc2aa9bebe263a245c95894f/docs/technical/m0-s6a-durable-orchestration-task-packet.md) (immutable dispatch scope, tests, stop conditions, and rollback) |
 | Machine workflow manifest | [M0-S6A orchestration manifest](https://github.com/faocampo/curve/blob/d97cc053a5d0eac7bc2aa9bebe263a245c95894f/contracts/temporal/m0-orchestration-v1.json) (workflow identities, payloads, signals, scheduling, cancellation, Continue-As-New, and acceptance cases) |
-| Implementation authorization | Federico Ocampo authorized branch `curve/m0-s6a-durable-orchestration`, the exact Plane base, Curve contract, context digest, owner/reviewer, Codex implementer, local-only scope, tests, commit/push/draft authority, US$25 limit, and rollback |
+| Implementation authorization | Designated reviewer authorized branch `curve/m0-s6a-durable-orchestration`, the exact Plane base, Curve contract, context digest, owner/reviewer, Codex implementer, local-only scope, tests, commit/push/draft authority, US$25 limit, and rollback |
 | Runtime topology | D-003 (local runtime topology and trust-zone decision) remained `DECIDED / LOCAL_ONLY`, with Temporal Python SDK 1.31.0, Temporal server 1.31.2, namespace `curve-local`, and queue `curve-control-plane-v1` |
 
 ## Plane implementation
@@ -128,10 +132,10 @@ same Git tree, and the exact-head CI above is the bound automated evidence.
 
 ### Human evidence and authorization
 
-- Federico Ocampo recorded a local Plane smoke test in
+- Designated reviewer recorded a local Plane smoke test in
   [Plane PR #10 comment](https://github.com/faocampo/plane/pull/10#issuecomment-5409812990)
   (human local application smoke-test evidence).
-- Federico approved exact head
+- Designated reviewer approved exact head
   `af8335c42fa3c57e66f76c6ebd80220640630cf8` after the attached CI passed and
   authorized its squash merge into `preview`.
 - Plane PR #10 merged on 2026-08-25 as

@@ -58,16 +58,16 @@ test("both test-strategy versions bind all 60 PRD criteria by exact source diges
   }
 });
 
-test("accepted v1 bytes remain immutable", () => {
+test("sanitized v1 reference remains unapproved and byte-pinned", () => {
   assert.equal(MATRIX_V1.status, "IN_REVIEW");
   assert.equal(MATRIX_V1.source.prd_version, "0.12");
   assert.equal(
     createHash("sha256").update(MATRIX_V1_BYTES).digest("hex"),
-    "bad1a5a710ca16b3de399e1b0ff4b265d0c8ce64c203521f20e0d3f5ab2d3e3a",
+    "7a32160db6b6ac32eeb623f729ef2c6b8d773447c0c0016b3a0486a3ec2be0d9",
   );
   assert.equal(
     createHash("sha256").update(SCHEMA_V1_BYTES).digest("hex"),
-    "64fb3ce685c0d05ea5c5821b36843a76552361f0ad482397aa5d3bdadc5e7d16",
+    "bc4f9c2f5492fd5ef3c4ee1200bc0f7e1aa5d91052a1ef7b27b6545ebaa507fe",
   );
 });
 

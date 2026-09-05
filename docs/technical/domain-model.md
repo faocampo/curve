@@ -208,7 +208,7 @@ remain readable and the Initiative creation service rejects them until restore.
 | `Activity.output_artifact_version_id` | `OpaqueId` | YES | Immutable output or partial result. |
 | `Activity.coverage_gap` | text | YES | Required when budget/provider failure yields partial research. |
 | `Activity.preview_expires_at` | `Instant` | CONDITIONAL | Required for a published runnable preview; default R1 TTL is 72 hours. |
-| `WorkflowTemplate.name` | text | NO | Reusable X3M lifecycle definition. |
+| `WorkflowTemplate.name` | text | NO | Reusable Example Organization lifecycle definition. |
 | `WorkflowTemplate.active_version_id` | `OpaqueId` | YES | Default for new Initiatives only. |
 | `WorkflowVersion.template_id`, `version_number` | `OpaqueId`, positive integer | NO | Unique immutable version. |
 | `WorkflowVersion.definition` | `ObjectRef` | NO | Versioned stages, gates, policies, roles, and required artifacts. |
@@ -491,7 +491,7 @@ An attempt in `LOST` never resumes. Its artifacts remain quarantined, its JIT id
 | Entity.attribute | Type | Nullable | Lifecycle ownership and constraint |
 | --- | --- | --- | --- |
 | `QualityPolicyVersion.policy_name`, `version_number` | text, positive integer | NO | Immutable resolved policy. |
-| `QualityPolicyVersion.baseline_ref`, `repository_policy_refs` | `VersionRef`, list of `VersionRef` | NO | X3M baseline plus additive repository policy. Repository policy cannot weaken baseline. |
+| `QualityPolicyVersion.baseline_ref`, `repository_policy_refs` | `VersionRef`, list of `VersionRef` | NO | Example Organization baseline plus additive repository policy. Repository policy cannot weaken baseline. |
 | `QualityPolicyVersion.definition`, `digest` | `ObjectRef`, `Digest` | NO | Commands, tools, image digests, rulepacks, thresholds, applicability, waivability, and non-waivable classes. Production definition blocked by D-010. |
 | `QualityRun.vertical_slice_id`, `pull_request_binding_id` | `OpaqueId` | NO, YES | Binding absent for preflight and present when run concerns a draft. |
 | `QualityRun.phase` | `QualityPhase` | NO | `PREFLIGHT` or `VCS_VALIDATION`. Post-release contract verification is modeled as contract evidence, not silently mixed here. |
