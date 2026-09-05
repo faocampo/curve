@@ -30,8 +30,8 @@ This package supplies no private deployment values or retention defaults.
 
 | Command or observation | Conformance result |
 | --- | --- |
-| Creator submits while Aligning | Capture immutable checkpoint 1 and enter PRD Review |
-| Creator submits a successor during review | Increment checkpoint number, retain predecessor and advance the Initiative version |
+| Creator or authorized contributor submits while Aligning | Capture immutable checkpoint 1 and enter PRD Review |
+| Creator or authorized contributor submits a successor during review | Increment checkpoint number, retain predecessor and advance the Initiative version |
 | Assigned active human approves the exact unchanged checkpoint | Append a decision identifying the binding, provider connection/file/version, digest and evidence snapshot; enter Planning |
 | Source version or normalized content changes during review | Reject approval; require a successor submission |
 | Actor loses workspace/object/source/evidence access | Reject the affected command |
@@ -41,8 +41,22 @@ This package supplies no private deployment values or retention defaults.
 
 The existing app owns Draft to Aligning. This conformance model starts from
 Aligning and does not claim a completed browser flow. It rejects submission
-from Draft, Paused, Cancelled and Planning. Submissions use the creator-only
-candidate policy; broader contributor rights require an explicit policy version.
+from Draft, Paused, Cancelled and Planning. Submission supports the creator or
+an authorized contributor, matching the PRD lifecycle authority. Both require
+a current server-derived `PRD_SUBMIT` decision bound to actor, workspace,
+Initiative, document binding, aggregate version and policy version. A browser
+role claim or general membership is insufficient. The model records the decision
+and policy identity with the actual submitter while preserving the creator.
+
+The internal synthetic decision uses
+`curve.prd-submission-authorization/v1-candidate` and closed fields:
+`decision_id`, `policy_version_id`, `actor_id`, `workspace_id`, `initiative_id`,
+`binding_id`, `initiative_version`, `action`, `role`, `effect`, `evaluated_at`,
+`expires_at`, and `schema_version`. Its role is `CREATOR` or `CONTRIBUTOR`;
+the effect must be `ALLOW`, the action `PRD_SUBMIT`, and the decision must be
+fresh at capture with unexpired authorization. Runtime must derive and recheck
+this context through the consuming approved policy; these fixtures grant no
+live capability and do not alter the pinned Initiative v1 policy.
 
 The [lifecycle model](../../scripts/lib/external-prd-lifecycle.mjs) (pure submit,
 successor and approval transitions) returns new immutable values. It preserves
@@ -125,6 +139,10 @@ The following are implementation prerequisites, not completed features:
    (immutable submitted versions, exact snapshots and record linkage), and
    complete PRD body/completeness, event and policy contracts plus the exact
    physical migration in the consuming child packet.
+   PRD capture completeness (`content.complete`) is distinct from product
+   readiness: Idea Brief and PRD completeness, resolved blockers, and assumptions
+   with owners and validation plans must be verified against the exact submitted
+   body/evidence versions before live submission can be enabled.
 2. Implement authenticated server-side policy and provider reads with current
    actor, workspace, object ACL, assignment, evidence and connection scope.
 3. Implement transactional optimistic concurrency, append-only audit/outbox,

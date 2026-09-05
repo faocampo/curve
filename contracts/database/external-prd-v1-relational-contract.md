@@ -109,7 +109,7 @@ fields fail validation, including supplied actor identities and direct URLs.
    evidence and rule profile still match.
 4. For submission, obtain an immutable protected-object reference through the
    approved adapter. At commit, lock the workspace-scoped Initiative and current
-   binding, recheck original version, cancellation fence, creator authority,
+   binding, recheck original version, cancellation fence, creator/contributor authority,
    evidence/access validity and policy. Append ArtifactVersion/checkpoint,
    advance its number/pointer, enter PRD Review and commit audit/outbox/result.
 5. For approval, recheck current assignment IDs, active membership, object and
@@ -121,6 +121,11 @@ fields fail validation, including supplied actor identities and direct URLs.
    approved orphan-cleanup policy.
 
 The current submitted checkpoint ID and digest are the approval subject.
+Submission authority is a current action-specific decision for the authenticated
+creator or authorized contributor. Bind it to workspace, Initiative, source
+binding, aggregate version and policy version, then re-evaluate it at final
+commit. Persist its decision identity with submission audit metadata. Neither a
+general workspace role nor a client-supplied contributor flag grants submission.
 Metadata-only provider version drift conservatively requires a successor.
 Risk confirmation must use the current three active human assignments; Standard
 and High require distinct people. No administrator or service role substitutes

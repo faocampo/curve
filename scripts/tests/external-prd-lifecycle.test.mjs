@@ -10,6 +10,7 @@ function fixture() {
     initiative: { id: "initiative-example", workspace_id: "workspace-example", state: "ALIGNING", version: 2, creator_id: "author-example", product_approver_id: "reviewer-example", current_checkpoint_id: null },
     binding: { id: "binding-example", workspace_id: "workspace-example", initiative_id: "initiative-example", provider_connection_id: "connection-example", provider_file_id: "doc-example", provider_container_id: "container-example", artifact_kind: "PRD" },
     actor: { id: "author-example", workspace_id: "workspace-example", human: true, active: true, object_access: true },
+    submission_authorization: { schema_version: "curve.prd-submission-authorization/v1-candidate", decision_id: "decision-example", policy_version_id: "policy-example", actor_id: "author-example", workspace_id: "workspace-example", initiative_id: "initiative-example", binding_id: "binding-example", initiative_version: 2, action: "PRD_SUBMIT", role: "CREATOR", effect: "ALLOW", evaluated_at: "2026-09-05T12:00:00Z", expires_at: "2026-09-05T12:01:00Z" },
     request: { expected_version: 2 },
     before, after: structuredClone(before),
     content: { normalization_version: "curve.google-docs.normalized/v1-candidate", complete: true, unsupported_nodes: 0, tabs: [{ text: "Synthetic PRD for fictional onboarding" }] },
@@ -52,7 +53,7 @@ test("changed document requires successor submission; old checkpoint cannot appr
   r.before.version = r.after.version = "9007199254740994";
   r.content.tabs[0].text = "Revised synthetic scope";
   assert.throws(() => approveSyntheticPrd(r), /STALE_SUBMISSION/);
-  const successor = submitSyntheticPrd({ ...r, actor: fixture().actor, request: { expected_version: 3 }, previous_checkpoint: r.checkpoint, provenance: { ...r.provenance, checkpoint_id: "checkpoint-example-2", normalized_content_ref: "synthetic-object-2" } });
+  const successor = submitSyntheticPrd({ ...r, actor: fixture().actor, submission_authorization: { ...r.submission_authorization, initiative_version: 3 }, request: { expected_version: 3 }, previous_checkpoint: r.checkpoint, provenance: { ...r.provenance, checkpoint_id: "checkpoint-example-2", normalized_content_ref: "synthetic-object-2" } });
   assert.equal(successor.checkpoint.checkpoint_number, 2);
   assert.equal(successor.checkpoint.predecessor_id, r.checkpoint.checkpoint_id);
   assert.equal(r.checkpoint.normalized_content.tabs[0].text, "Synthetic PRD for fictional onboarding");
@@ -92,11 +93,53 @@ for (const [label, mutate, code] of [
 
 test("successor rejects checkpoint-ID reuse, wrong predecessor and connection substitution", () => {
   const f = fixture(); const submitted = submitSyntheticPrd(f);
-  const args = { ...f, initiative: submitted.initiative, previous_checkpoint: submitted.checkpoint, request: { expected_version: 3 } };
+  const args = { ...f, initiative: submitted.initiative, submission_authorization: { ...f.submission_authorization, initiative_version: 3 }, previous_checkpoint: submitted.checkpoint, request: { expected_version: 3 } };
   assert.throws(() => submitSyntheticPrd(args), /CHECKPOINT_ID_REUSED/);
   assert.throws(() => submitSyntheticPrd({ ...args, previous_checkpoint: null }), /SUPERSEDED_CHECKPOINT/);
   assert.throws(() => submitSyntheticPrd({ ...args, binding: { ...args.binding, provider_connection_id: "other-connection" } }), /BINDING_MISMATCH/);
 });
+
+test("an authorized contributor can submit and is attributed without becoming the creator", () => {
+  const f = fixture(); f.actor.id = "contributor-example";
+  f.submission_authorization.actor_id = f.actor.id; f.submission_authorization.role = "CONTRIBUTOR";
+  const result = submitSyntheticPrd(f);
+  assert.equal(result.initiative.state, "PRD_REVIEW");
+  assert.equal(result.initiative.creator_id, "author-example");
+  assert.equal(result.checkpoint.submitted_or_approved_by, f.actor.id);
+  assert.equal(result.event.actor_id, f.actor.id);
+  assert.equal(result.event.authorization_decision_id, f.submission_authorization.decision_id);
+});
+
+test("submission policy decisions are closed and cannot assign creator authority to another actor", () => {
+  for (const key of Object.keys(fixture().submission_authorization)) {
+    const f = fixture(); delete f.submission_authorization[key];
+    assert.throws(() => submitSyntheticPrd(f), /SUBMITTER_DENIED/, key);
+  }
+  const extra = fixture(); extra.submission_authorization.source_content = "synthetic content";
+  assert.throws(() => submitSyntheticPrd(extra), /SUBMITTER_DENIED/);
+  const forged = fixture(); forged.actor.id = forged.submission_authorization.actor_id = "other-person";
+  assert.throws(() => submitSyntheticPrd(forged), /SUBMITTER_DENIED/);
+});
+
+for (const [label, mutate] of [
+  ["missing decision", (f) => { delete f.submission_authorization; }],
+  ["revoked permission", (f) => { f.submission_authorization.effect = "DENY"; }],
+  ["unapproved role", (f) => { f.submission_authorization.role = "ADMIN"; }],
+  ["wrong action", (f) => { f.submission_authorization.action = "PRD_APPROVE"; }],
+  ["different binding", (f) => { f.submission_authorization.binding_id = "other-binding"; }],
+  ["different workspace", (f) => { f.submission_authorization.workspace_id = "other-workspace"; }],
+  ["different Initiative", (f) => { f.submission_authorization.initiative_id = "other-initiative"; }],
+  ["stale aggregate decision", (f) => { f.submission_authorization.initiative_version = 1; }],
+  ["expired decision", (f) => { f.submission_authorization.expires_at = f.provenance.recorded_at; }],
+  ["stale decision", (f) => { f.submission_authorization.evaluated_at = "2026-09-05T11:00:00Z"; }],
+  ["client contributor flag", (f) => { f.actor.id = "other-person"; f.request.is_contributor = true; }],
+]) {
+  test(`submission rejects ${label}`, () => {
+    const f = fixture(); mutate(f); const original = structuredClone(f);
+    assert.throws(() => submitSyntheticPrd(f), /SUBMITTER_DENIED/);
+    assert.deepEqual(f, original);
+  });
+}
 
 test("approval rejects command injection, lost ACL, switched connection and repeat transition", () => {
   const r = review();

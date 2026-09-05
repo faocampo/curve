@@ -233,7 +233,7 @@
       "post": {
         "operationId": "SubmitExternalPrd",
         "summary": "Submit the current PRD for Product Approval",
-        "description": "Creator in Aligning or PRD Review. Recheck current source/evidence access and completeness for the exact content. Stable provider reads, immutable protected checkpoint and final aggregate compare-and-swap precede PRD Review. Resubmission appends a successor with predecessor lineage.",
+        "description": "Creator or authorized contributor in Aligning or PRD Review. Resolve current PRD_SUBMIT permission for this actor, workspace, Initiative, binding and aggregate version; never accept a caller contributor flag. Recheck current source/evidence access and completeness for the exact content. Stable provider reads, immutable protected checkpoint and final aggregate compare-and-swap precede PRD Review. Resubmission appends a successor with predecessor lineage.",
         "parameters": [
           {
             "$ref": "#/components/parameters/WorkspaceSlug"

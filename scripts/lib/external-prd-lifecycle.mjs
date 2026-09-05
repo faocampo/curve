@@ -25,8 +25,15 @@ function authorize({ initiative, binding, actor, request, synthetic }) {
 
 export function submitSyntheticPrd(input) {
   authorize(input);
-  const { initiative, binding, actor, request, previous_checkpoint, before, after, content, provenance } = input;
-  requireValue(actor.id === initiative.creator_id, "SUBMITTER_DENIED");
+  const { initiative, binding, actor, request, previous_checkpoint, before, after, content, provenance, submission_authorization: grant } = input;
+  // This is a current server-side policy decision, never a client-supplied
+  // contributor flag. It binds the exact action, subject, scope and version.
+  const fields = ["schema_version", "decision_id", "policy_version_id", "actor_id", "workspace_id", "initiative_id", "binding_id", "initiative_version", "action", "role", "effect", "evaluated_at", "expires_at"];
+  requireValue(grant && Object.keys(grant).length === fields.length && fields.every((key) => Object.hasOwn(grant, key)), "SUBMITTER_DENIED");
+  requireValue(grant.schema_version === "curve.prd-submission-authorization/v1-candidate" && [grant.decision_id, grant.policy_version_id].every((id) => typeof id === "string" && id.trim().length > 0), "SUBMITTER_DENIED");
+  requireValue(grant.actor_id === actor.id && grant.workspace_id === initiative.workspace_id && grant.initiative_id === initiative.id && grant.binding_id === binding.id && grant.initiative_version === initiative.version && grant.action === "PRD_SUBMIT" && grant.effect === "ALLOW", "SUBMITTER_DENIED");
+  requireValue((grant.role === "CREATOR" && actor.id === initiative.creator_id) || grant.role === "CONTRIBUTOR", "SUBMITTER_DENIED");
+  requireValue(validCheckpointTime(grant.evaluated_at) && validCheckpointTime(grant.expires_at) && grant.evaluated_at === provenance?.recorded_at && Date.parse(grant.expires_at) > Date.parse(grant.evaluated_at), "SUBMITTER_DENIED");
   requireValue(["ALIGNING", "PRD_REVIEW"].includes(initiative.state), "INVALID_STATE");
   // The request schema is deliberately closed. Identity and capture evidence
   // come from server-side fixtures rather than command payload fields.
@@ -58,6 +65,7 @@ export function submitSyntheticPrd(input) {
       initiative_id: initiative.id, actor_id: actor.id,
       checkpoint_id: checkpoint.checkpoint_id, content_digest: checkpoint.content_digest,
       aggregate_version: initiative.version + 1, recorded_at: checkpoint.recorded_at,
+      authorization_decision_id: grant.decision_id, policy_version_id: grant.policy_version_id,
     },
   });
 }
