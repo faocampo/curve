@@ -22,8 +22,8 @@ The [security specification](security-and-operations.md) (public disclosure,
 tenant isolation, current source access and protected-data controls) and
 [M1 parent packet](m1-alignment-evidence-prd-task-packet.md) (dependencies,
 artifact persistence blocker, child contracts and delivery gates) still apply.
-D-009 (retention, legal hold, backup and erasure), D-012 (documentation-provider
-activation) and the approved protected-storage contract gate live activation.
+D-009 (retention, legal hold, backup and erasure), the approved Google
+identity/transport profile and protected-storage contract gate live activation.
 This package supplies no private deployment values or retention defaults.
 
 ## Implemented behavior
@@ -164,7 +164,10 @@ The [runtime metadata schema](../../contracts/schemas/external-prd-v1.schema.jso
 provider races and rollback) now define the next implementation boundary.
 The [record tests](../../scripts/tests/external-prd-contracts.test.mjs)
 (schema completeness, request injection, exact-subject and assignment checks)
-verify these additions. The runtime API is still unimplemented and disabled.
+verify these additions. The Plane stack now contains candidate acceptance and
+completion implementations; live activation and browser integration remain
+pending. See [coding handoff](coding-handoff.md) (commit-bound implementation
+scope and next task). This JavaScript model remains synthetic conformance.
 
 The [records-closure candidate](records-retention-closure.md) (active-use
 inventory, explicit owner closure, hold and policy-bound eligibility checks)

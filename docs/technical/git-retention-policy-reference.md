@@ -1,6 +1,9 @@
 # Git retention policy versions
 
-Status: additive candidate wire contracts; runtime migration and activation remain pending.
+Status: additive candidate wire contracts; checkpoint, rationale and evidence
+migrations are published in the Plane stack. Accepted-command integration and
+live activation remain pending. See [coding handoff](coding-handoff.md)
+(exact implementation boundary and next task).
 
 The [Git retention reference](../../contracts/schemas/git-retention-policy-reference-v1.schema.json)
 (full commit identity) identifies the exact policy commit. Trusted workspace

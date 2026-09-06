@@ -17,7 +17,10 @@
 This document presents the C4 context, container, and component views of Curve.
 It is a navigational representation of the logical architecture. The [Architecture](architecture.md), [Domain model](domain-model.md), [Workflows and Sequences](workflows-and-sequences.md), and [Integration Contracts](integration-contracts.md) remain authoritative for responsibilities, states, interfaces, and failure behavior.
 
-The diagrams show logical boundaries. They do not select a production placement,
+The diagrams show logical boundaries. The
+[Plane foundation decision](adr-001-plane-upstream-foundation.md) (repository
+ownership and upstream strategy) places governance/contracts in Curve and
+deployable implementation in the Plane fork. These views do not select a production placement,
 network topology, persistence product, capacity, provider implementation, or
 operational owner that remains subject to an unresolved decision.
 
@@ -30,6 +33,7 @@ experience; a developer may use the bounded Orca human-assistance profile.
 
 ```mermaid
 flowchart LR
+    governance["Curve repository: governance and contracts"] -. "Reviewed implementation contracts" .-> curve
     user["Curve user and approvers"] -->|"Plane session and authorized commands"| curve
     developer["Developer"] -->|"Short-lived delegated identity"| orca
 

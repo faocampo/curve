@@ -20,6 +20,12 @@
 
 ## Purpose and authority boundary
 
+The dated reconciliation above is historical evidence. Before any synchronization,
+read live items and the current catalog; preserve newer human changes. A past
+status total or publication instruction does not authorize resetting the board
+to that snapshot. The [coding handoff](coding-handoff.md) (current implementation
+boundary) distinguishes candidate work from accepted and deployed capability.
+
 GitHub Project #2 is a visual index for Curve development. It helps the team see
 the current phase, locate the normative task packet, and follow progress across
 the 71 planned work packages plus explicit packet-level checkpoints used to

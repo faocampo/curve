@@ -17,6 +17,11 @@
 
 ## Executive assessment
 
+This ledger preserves its dated review evidence. For the current published
+implementation boundary and newly reconciled discrepancies, start with
+[coding handoff](coding-handoff.md) (next task and authority scope) and
+[documentation review](documentation-review.md) (audit findings and open decisions).
+
 The Curve direction is technically coherent: Plane remains the work-management foundation, Temporal owns durable Curve workflows, Onyx supplies permission-aware knowledge, OpenHands is the first execution provider, and trusted Curve controllers retain all VCS mutation authority. The proposed Example feature delivery pilot is a suitable bounded validation scenario.
 
 Readiness is now package-specific. D-001 (Plane upstream foundation decision)
@@ -49,7 +54,6 @@ The review covered:
 - The complete [Curve PRD](../curve-ai-native-sdlc-prd.md), including scope, lifecycle, requirements, NFRs, acceptance criteria, risks, decisions, and architecture handoff.
 - The complete technical suite indexed by the [technical README](README.md).
 - The historical Plane review baseline at `31853ab2b8b7810c59dc30d22e52c8f4b5a71a47`, the accepted M0-S4 checkpoint `e762fbbd2c1726a2833745add8245a1679c60d88`, the M1-01A capability checkpoint `99a73b4eab5ee21fd012d7358bc9259252d47f71`, and current accepted Plane `preview` `4ae3a77f665368cf8f6a39e9434c2733551cf9d8`.
-- Target repository baselines and access evidence are supplied through a private, approved source manifest.
 - Target repository baselines and access evidence are supplied through a private, approved source manifest.
 - Official upstream documentation for Temporal, gVisor, OpenHands, Onyx, CodeQL, EKS, OpenFeature, and AGPL obligations.
 
@@ -101,7 +105,9 @@ Repository SHAs above are review evidence, not approved Gate 2 base SHAs. Gate 2
 
 ## Normative corrections required before pilot coding
 
-The next PRD revision must make these distinctions explicit:
+These distinctions are the original review's remediation requirements. Check
+their current PRD representation and each ledger row's closure evidence before
+treating them as new edits:
 
 1. **R0B is a validation configuration, not R1.** The selected R0B may validate GitLab and OpenHands first. It does not satisfy R1 until GitHub, the developer-operated Orca MCP profile, roadmaps, coordinated slices, both prototype modes, and the complete AC-01-AC-60 suite pass.
 2. **OpenHands is the sole automated provider.** Orca is a developer-operated MCP client. It reads approved task/context data and writes only bounded, attributable workflow updates; it cannot approve, waive, re-plan, upload executable artifacts, mutate VCS through Curve, or deploy.

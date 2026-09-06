@@ -6,6 +6,12 @@
 
 ## Purpose
 
+For current work, start with [coding handoff](coding-handoff.md) (authority,
+implementation boundary and next task) and [pending stages](pending-stages.md)
+(concise stage outcomes, gates and exit evidence). This index is the complete
+reference library. Its commit-bound implementation entries describe their
+recorded checkpoints; they are not live deployment status.
+
 This directory is the architecture and implementation handoff derived from the [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product vision, approved Product core, Curve-first shell invariant, requirements, acceptance criteria, rollout, decision register, and accepted local Temporal proof). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
 
 The suite is implementation-oriented. D-001 (Plane foundation, licensing, and

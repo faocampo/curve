@@ -1,6 +1,6 @@
 # ADR-009: Retention, Legal Hold, Backup, and Erasure
 
-- Status: OPEN
+- Status: PROPOSED / MACHINE PROPOSAL PUBLISHED
 - PRD decision: D-009 (retention, deletion, backup, and legal-hold policy)
 - Owner: Security, Privacy, and Legal
 - Reviewers: Platform Operations, database operations, Curve engineering
@@ -9,6 +9,16 @@
 - Supersedes: None
 
 ## Context and constraints
+
+This public ADR and its worksheet describe the complete cross-asset decision
+scope. A separately approved private policy may cover a narrower asset/profile
+scope; its status is resolved from the exact private Git commit and authority
+record, independently of this public proposal. Such approval does not close
+uncovered policy cells or establish deployment/activation evidence. See
+[Git retention references](git-retention-policy-reference.md) (versioned private
+policy identifiers and migration boundary). Keep policy contents and deployment
+evidence in the approved private governance repository, with document bodies and
+secrets confined to protected runtime storage.
 
 Curve may handle evidence, prompts, transcripts, source code, patches, logs, reports, previews, exports, audit metadata, and provider observations across `INTERNAL`, `CONFIDENTIAL`, and `RESTRICTED` classifications. The implementation must not invent retention periods or claim erasure while recoverable copies remain outside the approved policy.
 

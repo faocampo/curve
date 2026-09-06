@@ -23,8 +23,10 @@ envelope is never automatically a permission grant for a reviewer-authored body.
 The metadata representation contains no `rationale`, excerpt, inline body, URL
 or credential fallback. Capture must verify the actual bytes before writing the
 reference. Authorized retrieval must reproduce byte length and digest before
-reconstructing the existing Decision wire projection with `schema_version: 1.0`
-and the original rationale string. Schema validity alone proves neither storage
+reconstructing the declared Decision wire edition and the original rationale
+string: v1 metadata yields `1.0`; v2 metadata yields `2.0`. See
+[Git retention references](git-retention-policy-reference.md) (explicit editions
+and immutable full-commit policy identity). Schema validity alone proves neither storage
 existence nor current permission. An erased, held, revoked or unavailable body
 must follow the current storage/access policy and truthful availability path;
 readers must never invent replacement rationale or recover it from logs.
