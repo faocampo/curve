@@ -5,7 +5,8 @@ Status: **APPROVED** — repository owner confirmation, 2026-09-06.
 ## Scope and authority
 
 This policy governs human-directed development of Curve and its Plane integration.
-Curve integrates into `main`; Plane integrates into `preview`. Recheck live repository
+Curve integrates into `main`; the Plane fork integrates into `curve-integration`
+(its default branch). Recheck live repository
 identity, integration branch, working tree, PRs and protections before acting.
 This policy takes precedence over historical packet-level branching guidance for
 these development sessions. Product-runtime controller rules remain unchanged.
@@ -17,6 +18,21 @@ human UX, product, security and operational gates must be satisfied separately.
 This policy supplies no production deployment or runtime activation authority.
 
 ## Six delivery rules
+
+### Plane upstream tracking
+
+Owner-approved branch separation, 2026-09-06: the fork's `preview` tracks
+`makeplane/plane`'s `preview` exactly. Curve changes and PRs target
+`curve-integration`; never add fork-specific commits to `preview`.
+Before synchronizing, fetch both repositories, record exact tips, and preserve any
+divergent fork work on the integration branch. Use an exact-tip lease for a
+necessary non-fast-forward tracking update. Upstream updates reach Curve through
+a reviewed, tested PR into `curve-integration`; synchronization alone supplies no
+deployment authority. Keep upstream push-triggered publishing disabled in the fork
+unless a separately authorized release requires it. Preserve historical evidence
+pins and dependent PR bases; retarget only PRs aimed at the former integration base.
+
+### Delivery loop
 
 1. **One cohesive outcome per PR.** Use commits for internal implementation steps.
    Rework reuses the existing branch and PR. Before creating either, inspect open,
