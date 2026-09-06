@@ -2,6 +2,9 @@
 
 ## Authority and reading order
 
+Follow the approved [repository delivery policy](repository-delivery-policy.md)
+(cohesive PRs, bounded work in progress, integration and branch retirement).
+
 The [PRD](../curve-ai-native-sdlc-prd.md) (product requirements) defines behavior.
 Approved ADRs define architecture/security decisions within their recorded scope.
 Approved, exact-version schemas define wire format. The
@@ -19,9 +22,10 @@ coverage and unresolved decisions) records this reconciliation.
 
 Snapshot: 2026-09-06; recheck live Git state before using these references.
 
-- [Curve PRs #162–#165](https://github.com/faocampo/curve/pull/165)
-  (stacked external-PRD, review-policy and Git-retention candidate contracts) are
-  candidates; publication is distinct from merge and activation.
+- [Curve PR #166](https://github.com/faocampo/curve/pull/166)
+  (documentation audit including external-PRD and Git-retention contracts) is merged
+  at `06ebf29c8400718c9d493edbddbfaba3c6f3ca99`. Redundant PRs #162–#164 and #167
+  are closed; integration grants no runtime activation authority.
 - [Plane PR #40](https://github.com/faocampo/plane/pull/40)
   (latest stacked evidence-envelope implementation), commit
   `6e7c923f6759575d955d1a996ec4860f0898beb3`, includes preceding metadata,
@@ -35,6 +39,13 @@ Snapshot: 2026-09-06; recheck live Git state before using these references.
   authenticated UI integration and full milestone qualification remain pending.
 
 ## Next cohesive task: PRD command integration
+
+**Integration gate:** the repository owner requires Initiative-shell UX review,
+including documents, reviewer responsibilities and simplified operational flow,
+before Plane PR #17 and dependent PRs #20–#40 merge. Freeze additional dependent
+PR creation. Prepare that reviewable flow and reconcile existing work first;
+independent fixes can proceed. The implementation task below remains within this
+gate and requires a live check for already completed local work before coding.
 
 **Outcome:** carry explicit Git-policy record editions through acceptance,
 protected rationale references and completion, then verify the exact-submission

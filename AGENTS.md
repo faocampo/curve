@@ -2,6 +2,9 @@
 
 ## Reading and execution order
 
+Follow the approved [repository delivery policy](docs/technical/repository-delivery-policy.md)
+(PR scope, two-PR stack limit, integration gates and safe branch retirement).
+
 Start with [coding handoff](docs/technical/coding-handoff.md) (authority, current
 work and next task), then [pending stages](docs/technical/pending-stages.md)
 (stage outcomes and gates). Load the selected packet and its referenced contracts;
