@@ -6,7 +6,8 @@
 
 ## Purpose
 
-For current work, start with [coding handoff](coding-handoff.md) (authority,
+Follow [repository delivery policy](repository-delivery-policy.md) (approved PR,
+integration and branch-cleanup rules). For current work, start with [coding handoff](coding-handoff.md) (authority,
 implementation boundary and next task) and [pending stages](pending-stages.md)
 (concise stage outcomes, gates and exit evidence). This index is the complete
 reference library. Its commit-bound implementation entries describe their
