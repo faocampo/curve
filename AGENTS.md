@@ -1,5 +1,28 @@
 # AI Coding Agent Rules
 
+## Reading and execution order
+
+Start with [coding handoff](docs/technical/coding-handoff.md) (authority, current
+work and next task), then [pending stages](docs/technical/pending-stages.md)
+(stage outcomes and gates). Load the selected packet and its referenced contracts;
+use the full technical index for discovery, not as an instruction to load every
+historical packet into a coding context.
+
+- Separate product requirements, candidate contracts, implementation evidence,
+  merge evidence and deployment evidence. Never promote one into another.
+- Recheck repository, branch, base SHA and live PR status before coding.
+- Preserve immutable schema/context/approval pins. Use a reviewed successor for
+  incompatible changes; retain old evidence with its original scope.
+- Public governance worksheets and fictional identities are examples. Resolve
+  actual approvals from the approved private authority source; ask only for
+  genuinely missing decisions. Never copy private policy values into this repo.
+- Curve-dispatched agents use the controller/lease protocol. A human-operated
+  development session uses its explicit user authorization and repository rules;
+  it cannot self-approve a Curve gate or activate production.
+- Explain each referenced document or task ID with a short parenthetical subject.
+- Run `pnpm check` and relevant implementation tests. Documentation checks alone
+  do not establish runtime behavior. Report exact tested commits and limitations.
+
 ## Public-repository disclosure boundary
 
 This repository is public. AI coding agents working in this repository **MUST

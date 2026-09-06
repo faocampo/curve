@@ -17,6 +17,12 @@
 
 ## Purpose and authority
 
+Read [pending stages](pending-stages.md) (concise remaining work) and
+[coding handoff](coding-handoff.md) (current candidate implementation and next
+task) before materializing a packet. Status and base-SHA statements below are
+dated evidence from this plan's recorded revision; verify live Git/deployment
+state independently. Preserve historical approvals and source-catalog pins.
+
 This plan turns the PRD and the companion technical documents into a dependency-ordered implementation backlog. It is deliberately component-level rather than file-level because the Plane baseline, repository layout, and several infrastructure decisions remain `OPEN` or `PROPOSED`. An AI coding agent must not infer approval from a proposed direction.
 
 The PRD is authoritative for product behavior. The technical documents are authoritative for the approved architecture. This plan is authoritative for delivery order, work-package boundaries, quality evidence, and milestone exit criteria. A work package that conflicts with a PRD invariant must be corrected before implementation.
@@ -28,7 +34,7 @@ The PRD is authoritative for product behavior. The technical documents are autho
 3. Every slice is linked to PRD FR/NFR/AC IDs and to the exact approved technical-document versions.
 4. Database and event changes are additive and backward compatible until the rollback window closes.
 5. External mutations use an outbox/inbox, idempotency key, trusted controller, and reconciliation path before feature code may call them.
-6. Agents have no approval, waiver, VCS mutation, merge, deploy, production, or policy-administration authority.
+6. Curve-dispatched agents have no approval, waiver, VCS mutation, merge, deploy, production, or policy-administration authority. Human-operated development uses the separately authorized bootstrap boundary below; it never self-approves Curve gates.
 7. A package is not complete when code compiles; its deterministic tests, contract tests, security tests, observability, migration/rollback evidence, documentation, and traceability must pass.
 8. New head commits invalidate commit-bound validation. Human readiness remains a separate gate.
 9. No package may introduce a second general knowledge index, a second lifecycle authority, or a provider-specific domain model.
@@ -456,6 +462,12 @@ acceptance criteria.
 
 ## Coding-agent execution protocol
 
+This protocol governs Curve-dispatched execution. Human-operated development
+outside that dispatcher follows its explicit authorization and repository
+instructions, retaining independent review, data controls and truthful evidence.
+Do not require an unimplemented Curve controller to authorize ordinary work that
+the human has explicitly placed outside Curve dispatch.
+
 1. Run structural validation and exact-evidence dispatch preflight before
    editing. Confirm the separate implementation authorization binds this exact
    packet ID/version/digest and repository/context tuple. Report a blocker when
@@ -483,7 +495,7 @@ A slice is done only when:
 - User-facing flows conform to their approved Curve Experience Blueprint; material interaction changes include an updated screen/state flow and prototype-review disposition.
 - Documentation and ADRs are updated without restricted evidence.
 - The implementation report maps every changed behavior to requirement/test IDs.
-- The trusted controller, not the agent, created the draft; Code Readiness remains a human decision.
+- For Curve-dispatched work, the trusted controller created the draft. Human-operated work records its separate authorized VCS path; Code Readiness remains a human decision.
 
 ## Change control
 

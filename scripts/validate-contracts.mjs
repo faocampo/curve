@@ -97,6 +97,7 @@ const corePolicyManifestSchema = join(root, "contracts/schemas/core-policy-manif
 const corePolicyManifestPath = join(root, "contracts/policy/core-policy-v1.json");
 const corePolicyManifestV2Schema = join(root, "contracts/schemas/core-policy-manifest-v2.schema.json");
 const corePolicyManifestV2Path = join(root, "contracts/policy/core-policy-v2.json");
+const prdPolicyManifestSchema = join(root, "contracts/schemas/prd-policy-manifest-v1.schema.json");
 const operationSchema = join(root, "contracts/schemas/operation.schema.json");
 const operationEventV2Schema = join(root, "contracts/schemas/operation-event-v2.schema.json");
 const outboxSchema = join(root, "contracts/schemas/outbox-event.schema.json");
@@ -249,6 +250,7 @@ const fixtureSpecs = [
   ["docs/technical/proofs/p0-06-stage-record.json", p0_06StageProjectionSchema, true],
   ["contracts/policy/core-policy-v1.json", corePolicyManifestSchema, true],
   ["contracts/policy/core-policy-v2.json", corePolicyManifestV2Schema, true],
+  ["contracts/policy/prd-policy-v1.json", prdPolicyManifestSchema, true],
   ["contracts/observability/m0-s5-telemetry-v1.json", telemetryManifestSchema, true],
   ["contracts/observability/obs-bind-001-local-v1.json", observabilityBindingSchema, true],
   ["contracts/testing/ac-test-matrix-v1.json", testStrategyMatrixSchema, true],

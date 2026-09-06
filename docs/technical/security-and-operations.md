@@ -5,11 +5,11 @@
 | Field | Value |
 | --- | --- |
 | Status | Derived security and operations baseline; production enablement is blocked by applicable non-decided ADRs |
-| Owner | X3M security, platform operations, and Curve engineering |
+| Owner | Organization security, platform operations, and Curve engineering |
 | Audience | Security, identity, platform, SRE, backend, provider-adapter, and AI coding-agent teams |
 | Version | 0.8 |
 | Last updated | 2026-09-04 |
-| Normative source | [Curve PRD v0.12](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, security invariants, acceptance criteria, and accepted local Temporal proof) |
+| Normative source | [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product requirements, Curve-first shell invariant, security invariants, acceptance criteria, and accepted local Temporal proof) |
 | Companion documents | [Architecture](architecture.md) (components and trust boundaries), [Domain model](domain-model.md) (entities, ownership, and persistence invariants), [Workflows and sequences](workflows-and-sequences.md) (durable lifecycle interactions), and [Integration contracts](integration-contracts.md) (provider-neutral interfaces and error behavior) |
 
 ## Purpose and authority
@@ -323,7 +323,7 @@ Outbound Curve webhooks are delivered only to administrator-approved HTTPS desti
 
 The `QualityPolicyVersion` selected for the plan is immutable. Evaluation builds an effective policy in this order:
 
-1. X3M organization baseline (always applies and is the floor).
+1. Organization security baseline (always applies and is the floor).
 2. Workspace overlay approved by the security owner; it may add controls or raise thresholds, never weaken a non-waivable baseline.
 3. Repository applicability/configuration approved at Gate 2; it may select relevant checks and proof paths but cannot suppress baseline control classes.
 4. Slice/contract applicability evidence approved in the plan; missing applicability defaults to required, not not-applicable.

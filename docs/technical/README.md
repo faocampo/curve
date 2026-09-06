@@ -6,6 +6,12 @@
 
 ## Purpose
 
+For current work, start with [coding handoff](coding-handoff.md) (authority,
+implementation boundary and next task) and [pending stages](pending-stages.md)
+(concise stage outcomes, gates and exit evidence). This index is the complete
+reference library. Its commit-bound implementation entries describe their
+recorded checkpoints; they are not live deployment status.
+
 This directory is the architecture and implementation handoff derived from the [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product vision, approved Product core, Curve-first shell invariant, requirements, acceptance criteria, rollout, decision register, and accepted local Temporal proof). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
 
 The suite is implementation-oriented. D-001 (Plane foundation, licensing, and
@@ -96,6 +102,7 @@ identifiers are:
 | [RUNTIME-M0-01 implementation evidence](runtime-m0-01-implementation-evidence.md) (accepted Plane head and merge, deterministic tests, live signals, CI, security, cleanup, and rollback) | Commit-bound acceptance record for the graceful worker-shutdown correction | `ACCEPTED_AND_MERGED / LOCAL_ONLY` |
 | [Workflows and sequences](workflows-and-sequences.md) | Initiative, slice, agent, quality, VCS, contract, recovery, and Temporal execution flows | State-transition and orchestration behavior |
 | [Integration contracts](integration-contracts.md) | Public API, commands, events, SSE, webhooks, adapters, external Google Docs authoring, idempotency, and reconciliation | Wire and provider boundaries |
+| [External PRD checkpoint conformance](m1-external-prd-checkpoints.md) (synthetic submission, successor, normalization and exact approval contracts) | Provider-neutral checkpoint metadata and automated Aligning → PRD Review → Planning semantics | In-memory candidate; retained bodies, live providers and app integration remain gated |
 | [Security and operations](security-and-operations.md) | Identity, authorization, data/evidence policy, public-repository disclosure control, isolation, threats, incident response, and service objectives | Security and production controls |
 | [Engineering patterns and technologies](engineering-patterns-and-technologies.md) | Required implementation patterns, Plane extension strategy, technology baseline/candidates, and ADR rules | Engineering conventions and technology use |
 | [Architecture decisions](architecture-decisions.md) | D-001-D-016 evidence, ownership, decision, and supersession process | ADR prerequisites and decision governance |

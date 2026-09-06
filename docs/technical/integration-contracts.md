@@ -34,9 +34,10 @@ The generated OpenAPI, JSON Schema, and provider conformance suites are executab
 This section defines the proposed public integration contract for externally
 authored Idea Briefs and PRDs. It does not select or expose an
 environment-specific Google Workspace deployment, credential, folder, tenant,
-retention value, or internal document. D-012 (documentation-provider decision)
-and D-009 (retention, legal-hold, backup, and erasure decision) remain
-authoritative for activation and retained approval snapshots.
+retention value, or internal document. Live activation requires the approved
+Google identity/transport profile and D-009/M0-04 (retention and protected
+storage) controls. D-012 (Docusaurus delivery profile) applies to M5 delivery
+documentation, not to Google Docs PRD authoring.
 
 Google Docs may remain the human-visible authoring system while Curve remains
 authoritative for Initiative lifecycle, submission, approval, and audit. Curve
