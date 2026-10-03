@@ -150,7 +150,7 @@ The public Curve repository contains only:
 - lifecycle, authorization, reconciliation, failure, and rollback rules;
 - capability requirements and minimum OAuth-scope guidance.
 
-An approved private X3M deployment profile contains the actual Workspace
+An approved private organization-specific deployment profile contains the actual Workspace
 domain, Google Cloud project, OAuth client, service identity, Shared Drive and
 folder IDs, authorized groups, callback endpoints, secret references,
 retention values, operational ownership, and incident procedures. Those values
