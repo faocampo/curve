@@ -1,0 +1,32 @@
+{
+  "tests/test_scoped_prd_bridge.py": {
+    "sha256": "b12f33c02ec722b8e8ac4f14789e72d44054cad116d3ef92cc757b1119f66c4e",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/tests/test_scoped_prd_bridge.py"
+  },
+  "tests/test_scoped_prd_integrity.py": {
+    "sha256": "7c1b644dc73f9d43fdbe614ed6d63ecda7ebc7ff3f7a892589c9f2691167a914",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/tests/test_scoped_prd_integrity.py"
+  },
+  "tests/test_scoped_prd_races.py": {
+    "sha256": "0a57b4b944cac4e235e0dd367cfccc57c17f1cb38ff344d9bf9eb53868f5c6fe",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/tests/test_scoped_prd_races.py"
+  },
+  "tests/test_scoped_prd_temporal.py": {
+    "sha256": "ed196f12bce59927d213567b83fe4a06a394241fb9d7982897e9d6d30f21c941",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/tests/test_scoped_prd_temporal.py"
+  },
+  "tests/test_scoped_prd_views.py": {
+    "sha256": "15bdc153b1a9ae8ab34191db1f972f6933d6fdb5aaea0154c8ed2f6444368523",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/tests/test_scoped_prd_views.py"
+  }
+}

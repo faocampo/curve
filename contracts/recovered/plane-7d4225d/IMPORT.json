@@ -1,0 +1,32 @@
+{
+  "schema_version": "curve.recovered-source-import/v1",
+  "status": "RECOVERED_CONSUMER_MIRRORS_NEW_CURVE_IMPORT",
+  "source_repository": "faocampo/plane",
+  "source_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+  "source_path_prefix": "apps/api/plane/curve/",
+  "original_input_count": 45,
+  "supplemental_source_count": 5,
+  "original_provenance": {
+    "path": "PROVENANCE.json",
+    "sha256": "d9502ecb1a8cdcc4ea68973891657e61613b48d6705942e941b91aa3f51d2f3a"
+  },
+  "supplemental_provenance": {
+    "path": "supplemental-provenance.json",
+    "sha256": "cac4c9a2020147611c723638fec747083409a020c1887dbb5a924077fe832e0d"
+  },
+  "source_bytes_preserved": true,
+  "missing_curve_history_restored": false,
+  "historical_verification_rerun": false,
+  "execution_authority": "NONE",
+  "runtime_activation": false,
+  "unavailable_later_contracts": [
+    "ORIGINAL_LATER_CURVE_CONTRACTS",
+    "MANUAL_DRAFT_PLAN",
+    "NATIVE_SCOPE_READ",
+    "GATE_2_MANUAL_CONTROL"
+  ],
+  "retained_qualification_sha256": {
+    "scope_reopening_qualification.json": "72bdb3b987ec1925754e6a14dee36cecec3c85706605c052d443628d84e7fb52",
+    "project_association_read_qualification.json": "5381243df882c087ab61932cda77e286a76b3b3e4b19853be5eea9cc81574f1b"
+  }
+}
