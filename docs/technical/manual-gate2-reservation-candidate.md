@@ -1,7 +1,7 @@
 # Manual Gate 2 and exclusive task reservations
 
 Status: **qualified successor integrated in local source; default off**,
-2026-10-06. Installed-source regression is being completed. This is newly authored
+2026-10-06. All 100 installed-source and 186 historical regression tests pass. This is newly authored
 reconstruction, not recovery of the missing backend or production activation.
 
 Plane preserves the prospective implementation at local commit
@@ -128,14 +128,17 @@ manifest and malformed commands. Synthetic visual review has five desktop/mobile
 captures, no JavaScript errors or overflow, and a bounded **ship** disposition.
 
 Plane's `candidates/curve-manual-gate2-v2/VERIFICATION.md` (executed native, host,
-web and visual evidence) and `qualification/reviewed-integration.json` within that
-directory (exact pins and verification state) record installed-source results.
-The full combined native suite and historical regression remain pending until their
-final recorded results. An earlier combined run stopped at an obsolete reader
+web and visual evidence) and
+`candidates/curve-manual-gate2-v2/qualification/reviewed-integration.json`
+(exact pins and verification state) record installed-source results.
+The full combined native suite passed **100 tests in 1417.36 seconds** and the
+historical regression passed **186 tests in 525.07 seconds** at `8aede16`. An earlier combined run stopped at an obsolete reader
 inventory assertion after 69 passes; that assertion now verifies both successors.
 No runtime/proof bytes changed for the correction.
 
 Authenticated real browser-to-backend acceptance, operational backup/restore,
 production protected storage and full manual-pilot/R1 qualification remain open.
 Synthetic screenshots and mocked browser transport cannot close those gates.
-No deployment, new remote publication, activation or automatic execution occurred.
+Product defaults remain off. Branch publication and a separately configured
+synthetic localhost review instance require distinct operator instructions; neither
+provides production deployment or automatic execution authority.

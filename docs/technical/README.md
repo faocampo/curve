@@ -4,6 +4,10 @@
 > Historical approvals apply only to their original bytes; see
 > [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
 
+The [implemented feature summary](implemented-features-2026-10-06.md) (new manual
+capabilities, recovered baseline, branches and remaining acceptance) records the
+2026-10-06 review cut.
+
 ## Purpose
 
 Follow [repository delivery policy](repository-delivery-policy.md) (approved PR,

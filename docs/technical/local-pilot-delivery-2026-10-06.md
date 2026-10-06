@@ -96,8 +96,8 @@ passed 23 native tests. Integration is `a69559f990c995f0d2c930306544979afd005d93
 `8aede16b4aee1aa66eb0b9469c4c849b34250f6e` adapts the historical reader inventory
 assertion to verify the unchanged predecessor and exact installed successor.
 Full application TypeScript, 380 web tests, 107 manual host tests and 31 scope host
-tests pass. Combined installed PostgreSQL/API and historical regression are being
-completed separately. No in-progress result is treated as a pass.
+tests pass. Combined installed PostgreSQL/API passes **100 tests in 1417.36 seconds**; all
+**186 historical regressions pass in 525.07 seconds** at the same `8aede16` cut.
 
 Protected-definition preparation and current material reads are implemented;
 provisioning still uses the explicit owner-only synthetic catalog. The real
@@ -217,8 +217,8 @@ Its UI remains unmounted and protected-definition preparation is still pending.
    remains required; synthetic component and visual evidence are separate.
 7. Gate 2 persistence is installed under its own exact successor with native locks,
    DB exclusivity, atomic approval, retained holds, reconciliation and generation-safe
-   release/reacquisition. The prospective native suite passes 23 cases. Record the
-   combined installed suite and historical regression before closing integration.
+   release/reacquisition. The prospective native suite passes 23 cases, the combined
+   installed suite passes 100, and all 186 historical regressions pass.
 8. Complete the bounded Today/decisions and roadmap surfaces, synthetic seeding,
    disablement, backup/restore, observable failure handling and full pilot runbook.
 
