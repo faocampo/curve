@@ -83,67 +83,87 @@ No milestone is marked complete merely from schemas, mocks or collected tests.
 Each checkpoint records its local SHA, exact executed checks and remaining gates.
 No release or runtime qualification is inferred from this plan.
 
-## Tooling and verification status
+## Current implementation and verification checkpoint
 
-GSD progress inspection found no `.planning` phase state in the restored checkout.
-The existing roadmap remains authoritative; no phase numbering is invented.
-Impeccable context resolved the incumbent Curve design system for frontend work.
-Docker is available through the approved local execution path. The dedicated
-test network and synthetic PostgreSQL/Valkey services reached healthy state.
-Docker Desktop then denied the source bind mount under Documents with
-`operation not permitted`; the application container did not start. No database
-migration or API test ran. Operator authorization for Docker Desktop to read the
-restored API directory is required before retrying. No alternative mount or
-permission bypass was attempted; the temporary stack was removed.
+GSD inspection found no local `.planning` phase state; the existing roadmap remains
+authoritative. Current work is staged outside the recovered Plane runtime, whose
+recursive source proof and all 23 migration bytes remain intact. No active route,
+new installed proof, deployment or publication is part of this checkpoint.
 
-The [Python preparation](../../experiments/manual-planning-v2-python/README.md)
-(strict parser, exact schema/identity checks and deterministic inert validation)
-passed 14 unittest methods with adversarial subcases and cross-language parity.
-This is independent validation preparation, not backend completion. It stays
-outside Plane's runtime inventory so the recovered source qualification remains
-unchanged while PostgreSQL qualification is blocked.
+Plane's `candidates/curve-manual-plan-v2` (single Python draft implementation,
+additive migration, policy, resolver, worker, reads and HTTP) now includes:
 
-An independent Plane candidate now implements minimal scope-editor discovery in
-`candidates/curve-scope-editor-v2` (metadata reader, current authority, full bounded
-lineage and session-only HTTP view). It passed 31 host unit/HTTP tests, with ORM
-queries and concurrent changes simulated. It returns only the eight contracted
-fields and fails closed when the successor qualification is unavailable. It is
-staged outside the installed app so the recovered runtime's recursive source pins
-remain intact. No route is active and no database behavior is qualified by these
-tests. Qualified persistent manual-draft storage remains a runtime prerequisite.
+- A transient current-authority DTO from independently checked native actors,
+  owners and reviewers; local monotonic observation counters with no native-version
+  claim; exact per-object current grants and final authority fences.
+- An atomic owner-only catalog producer adapter with compare-and-swap publication,
+  retained original identities and revoked-principal tombstones.
+- Semantic facts derived from exact protected synthetic PRD, workflow, quality,
+  repository and repository-policy body bytes, compared with the fixed catalog.
+- A structural trusted successor loader for the exact additive draft delta, then
+  a distinct scope-reader successor. Both successor pins remain unset.
+- A pure Gate 2 transition kernel with exact subject, assigned approver, exclusive
+  task claims, retained holds and reconciled release; no ORM or active writer.
 
-The Plane test-profile instructions now describe the ordinary macOS Documents
-permission and Docker File sharing controls for the existing read-only source
-mount. No permissions or mount paths were changed, and no Full Disk Access grant
-is required by the isolated test design. Operator access approval remains pending.
+The host suite passes **102 tests**, including JavaScript parity, adversarial
+material/catalog checks and **12 Gate 2 kernel tests**. Host ORM/service doubles
+remain explicitly separate from actual database evidence. The prior Curve Python
+experiment has been consolidated into the single Plane implementation; its
+historical verification remains preserved without a second runnable copy.
 
-## Manual persistence preparation checkpoint
+The operator-authorized retry restored Docker access to the original read-only API
+source mount. No alternate source mount or permission bypass was used. Actual runs:
 
-Plane now has one staged manual-plan implementation in
-`candidates/curve-manual-plan-v2` (models, immutable draft repository, current
-policy checks, fixed synthetic resolver, Linux worker, session-only HTTP views,
-protected reads and a gated additive migration). Its promotion patch registers
-the two models and four routes but has not been applied. The installed recovered
-runtime and all 23 migration bytes remain unchanged.
+| Check | Result / limit |
+| --- | --- |
+| Recovered PostgreSQL/API baseline | **186 passed**, including existing-project association, scope, exact PRD and reopening concurrency |
+| Frozen candidate SQL shape functions | **14 passed**, including valid fixtures and malformed/extra/missing field rejection |
+| Linux validator | **6 passed**, including real jobs, CPU/memory/descriptor limits and cross-process slot behavior |
+| Candidate DDL experiment | **1 passed**, declared delta and empty reversal restore the exact original catalog; no seal/proof/pin installed |
+| Draft UI/client | **27 passed** with synthetic fetch mocks; candidate TypeScript check passed |
+| Visual review | Five synthetic desktop/mobile captures; no JS errors or horizontal overflow; fresh review disposition **ship** for unmounted candidate |
 
-The host suite passed 67 tests, including the prior 14 validation checks,
-JavaScript parity, per-object access/revocation, immutable PRD material binding,
-strict JSON/CSRF handling and save/replay/final-fence orchestration with doubles.
-Two PostgreSQL test files are prepared but unexecuted. This is not evidence of
-real database rollback, concurrency, SQL guard behavior or migration success.
-The earlier Curve Python experiment was consolidated into that Plane package;
-its historical verification remains preserved.
+Real execution found and corrected SQL alias ambiguity, an unintended timestamp
+cast, migration-inspector search-path leakage and truncated bytecode writes under
+the worker file-size ceiling. No complete installed draft migration, positive
+save/replay graph or draft save race has yet been qualified.
 
-Promotion also requires a real current-authority projection with defined native
-membership/source generations, a qualified producer binding semantic facts to
-actual protected PRD/workflow/quality/repository inputs, Linux worker resource
-validation, the reviewed successor loader and the complete PostgreSQL acceptance
-matrix. The absent catalog pin stops the proposed migration before any DDL. No
-observed catalog or source directory was automatically repinned.
+The typed client and native-style draft panel are staged but unmounted. They clear
+old data when user/context changes or access is rechecked, require exact headers
+and closed bounded responses, show that drafts are unapproved, and retain the
+same idempotency key for an explicit retry after an unknown save result. Protected
+definition preparation and the real authenticated API/browser journey remain work.
+The supplied visual captures do not establish backend or full-theme qualification.
 
-The [Gate 2/reservation candidate](manual-gate2-reservation-candidate.md) (exact
-review subject, assigned human approval, exclusive task identity, retained holds
-and reconciled release) prepares the next separate successor. It adds no active
-writer or UI control. Manual lifecycle reconciliation and real race/authorization
-proof remain required. Native UI, Today/decisions, roadmap and the integrated pilot
-runbook remain pending after their runtime prerequisites.
+The separate scope-editor candidate still has its **31 prior host tests**. It
+returns only the eight contracted metadata fields with bounded lineage and fresh
+access checks; its installed proof, real ORM reads and integrated UI remain pending.
+
+## Ordered release gates
+
+1. Build the real ORM positive fixture from the existing exact scoped PRD bridge,
+   retaining the new synthetic PRD/evidence body bytes and grants for all principals.
+2. Qualify producer/consumer generations, final native/material fences and revoked
+   access in actual transactions; host counter and byte tests do not substitute.
+3. Independently review expected DDL and prospective literal pins, then prove the
+   complete gated forward migration, empty reversal and retained-evidence refusal.
+4. Prove new save, append, original replay with current ETag, current/history denial,
+   complete policy/audit/event/outbox/idempotency rollback, raw-SQL attacks and
+   independent-connection save races. The DDL experiment is not that acceptance.
+5. Finalize the exact manual successor, install one implementation, and preserve
+   every prior proof/migration byte. Qualify scope-reader changes as a separate
+   successor, with no new writers or storage.
+6. Complete protected-definition preparation, mount the panel and run full app
+   checks and an authenticated native browser journey.
+7. Persist the Gate 2 kernel under its own successor: native task locks plus DB
+   exclusivity, exact human approval, all-or-none claims, holds, reconciled release,
+   generation-safe reacquisition and corresponding transaction/race/API evidence.
+8. Complete the bounded Today/decisions and roadmap surfaces, synthetic seeding,
+   disablement, backup/restore, observable failure handling and full pilot runbook.
+
+Plane's `candidates/curve-manual-plan-v2/PROMOTION.md` (exact ordered release
+checklist) and `candidates/curve-manual-plan-v2/VERIFICATION.md` (executed evidence
+and remaining acceptance limits) carry the implementation details. The
+[Gate 2 candidate](manual-gate2-reservation-candidate.md) (implemented pure domain
+kernel and required persistence) remains separate from draft qualification.
+No percentage, complete-recovery claim or R1 approval is inferred from these tests.

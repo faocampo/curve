@@ -1,6 +1,7 @@
 # Manual Gate 2 and exclusive task reservation candidate
 
-Status: **design preparation, not an implemented or qualified writer**, 2026-10-06.
+Status: **pure transition kernel implemented; no persisted or qualified writer**,
+2026-10-06.
 
 The assigned TechnicalApprover must approve one exact immutable manual plan and
 reserve its proposed delivery tasks atomically. Saving a draft, belonging to a
@@ -31,9 +32,31 @@ subject. The assigned technical approver needs current access to every original
 material and task. A changed plan, PRD, scope, repository base, policy, owner or
 assignment invalidates the subject rather than silently updating it.
 
-The current draft implementation does not yet produce a qualified transient
-authority projection or derive all semantic facts from protected bodies. Those
-prerequisites must be completed before this review subject can be trusted.
+The draft candidate now constructs a closed transient authority projection from
+fresh native observations and derives semantic facts from protected synthetic
+bodies. Host tests cover those adapters; actual ORM producer/consumer integration
+and final qualification remain prerequisites before their outputs grant authority.
+
+## Implemented pure kernel
+
+Plane's `candidates/curve-manual-plan-v2/gate2/domain.py` (immutable review subject
+and task-reservation transitions) implements the domain rules without IO, ORM,
+HTTP endpoints or persistence. Twelve host tests cover exact-subject preparation,
+current assigned human authority, high-risk separation, complete-set acquisition,
+overlaps, replay, requested changes, retained holds, partial reconciled release,
+reassigned current approver and later reacquisition with increasing generations.
+
+The kernel freezes original definition/input/receipt/PRD/task identities. It
+accepts a server-created current-authority value, not user-supplied authority.
+Approval computes an all-or-none ledger transition; replay returns the original
+decision without reacquisition. Pause/cancel/access loss retain held claims.
+Release requires current assigned TechnicalApprover access and reconciliation of
+the exact claim generations and native fence. History remains immutable.
+
+The pure ledger does not establish concurrent database exclusivity. An ORM adapter,
+existing native task-row locks, database uniqueness/guards, atomic policy/audit/
+event/outbox/idempotency persistence and a separate successor proof remain required.
+No route, plan approval control, completion credit or automatic effect is installed.
 
 ## Proposed records and constraints
 
