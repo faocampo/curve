@@ -110,9 +110,40 @@ queries and concurrent changes simulated. It returns only the eight contracted
 fields and fails closed when the successor qualification is unavailable. It is
 staged outside the installed app so the recovered runtime's recursive source pins
 remain intact. No route is active and no database behavior is qualified by these
-tests. Persistent manual-draft storage remains the next runtime prerequisite.
+tests. Qualified persistent manual-draft storage remains a runtime prerequisite.
 
 The Plane test-profile instructions now describe the ordinary macOS Documents
 permission and Docker File sharing controls for the existing read-only source
 mount. No permissions or mount paths were changed, and no Full Disk Access grant
 is required by the isolated test design. Operator access approval remains pending.
+
+## Manual persistence preparation checkpoint
+
+Plane now has one staged manual-plan implementation in
+`candidates/curve-manual-plan-v2` (models, immutable draft repository, current
+policy checks, fixed synthetic resolver, Linux worker, session-only HTTP views,
+protected reads and a gated additive migration). Its promotion patch registers
+the two models and four routes but has not been applied. The installed recovered
+runtime and all 23 migration bytes remain unchanged.
+
+The host suite passed 67 tests, including the prior 14 validation checks,
+JavaScript parity, per-object access/revocation, immutable PRD material binding,
+strict JSON/CSRF handling and save/replay/final-fence orchestration with doubles.
+Two PostgreSQL test files are prepared but unexecuted. This is not evidence of
+real database rollback, concurrency, SQL guard behavior or migration success.
+The earlier Curve Python experiment was consolidated into that Plane package;
+its historical verification remains preserved.
+
+Promotion also requires a real current-authority projection with defined native
+membership/source generations, a qualified producer binding semantic facts to
+actual protected PRD/workflow/quality/repository inputs, Linux worker resource
+validation, the reviewed successor loader and the complete PostgreSQL acceptance
+matrix. The absent catalog pin stops the proposed migration before any DDL. No
+observed catalog or source directory was automatically repinned.
+
+The [Gate 2/reservation candidate](manual-gate2-reservation-candidate.md) (exact
+review subject, assigned human approval, exclusive task identity, retained holds
+and reconciled release) prepares the next separate successor. It adds no active
+writer or UI control. Manual lifecycle reconciliation and real race/authorization
+proof remain required. Native UI, Today/decisions, roadmap and the integrated pilot
+runbook remain pending after their runtime prerequisites.
