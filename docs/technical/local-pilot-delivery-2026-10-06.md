@@ -88,5 +88,17 @@ No release or runtime qualification is inferred from this plan.
 GSD progress inspection found no `.planning` phase state in the restored checkout.
 The existing roadmap remains authoritative; no phase numbering is invented.
 Impeccable context resolved the incumbent Curve design system for frontend work.
-Docker is available through the approved local execution path. Test dependencies
-and a dedicated isolated test stack are being verified before implementation.
+Docker is available through the approved local execution path. The dedicated
+test network and synthetic PostgreSQL/Valkey services reached healthy state.
+Docker Desktop then denied the source bind mount under Documents with
+`operation not permitted`; the application container did not start. No database
+migration or API test ran. Operator authorization for Docker Desktop to read the
+restored API directory is required before retrying. No alternative mount or
+permission bypass was attempted; the temporary stack was removed.
+
+The [Python preparation](../../experiments/manual-planning-v2-python/README.md)
+(strict parser, exact schema/identity checks and deterministic inert validation)
+passed 14 unittest methods with adversarial subcases and cross-language parity.
+This is independent validation preparation, not backend completion. It stays
+outside Plane's runtime inventory so the recovered source qualification remains
+unchanged while PostgreSQL qualification is blocked.
