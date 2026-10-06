@@ -86,12 +86,15 @@ No release or runtime qualification is inferred from this plan.
 ## Current implementation and verification checkpoint
 
 GSD inspection found no local `.planning` phase state; the existing roadmap remains
-authoritative. Current work is staged outside the recovered Plane runtime, whose
-recursive source proof and all 23 migration bytes remain intact. No active route,
-new installed proof, deployment or publication is part of this checkpoint.
+authoritative. The qualified manual draft is now integrated into the restored
+Plane runtime. Both historical proofs and all 23 historical migration bytes remain
+intact. The new exact manual successor and migration are installed in source,
+with four session/CSRF routes and an explicit default-off feature setting.
+No workspace activation, deployment or publication is part of this checkpoint.
 
-Plane's `candidates/curve-manual-plan-v2` (single Python draft implementation,
-additive migration, policy, resolver, worker, reads and HTTP) now includes:
+Plane's `apps/api/plane/curve/manual_plan_v2` (single Python draft runtime,
+policy, resolver, worker, reads and HTTP), its additive migration and qualification
+now include:
 
 - A transient current-authority DTO from independently checked native actors,
   owners and reviewers; local monotonic observation counters with no native-version
@@ -101,11 +104,11 @@ additive migration, policy, resolver, worker, reads and HTTP) now includes:
 - Semantic facts derived from exact protected synthetic PRD, workflow, quality,
   repository and repository-policy body bytes, compared with the fixed catalog.
 - A structural trusted successor loader for the exact additive draft delta, then
-  a distinct scope-reader successor. Both successor pins remain unset.
+  a distinct scope-reader successor. The manual successor is pinned; the scope-reader pin remains unset.
 - A pure Gate 2 transition kernel with exact subject, assigned approver, exclusive
   task claims, retained holds and reconciled release; no ORM or active writer.
 
-The host suite passes **107 tests**, including JavaScript parity, adversarial
+The host suite passes **107 tests** after promotion, including JavaScript parity, adversarial
 material/catalog checks and **12 Gate 2 kernel tests**. Host ORM/service doubles
 remain explicitly separate from actual database evidence. The prior Curve Python
 experiment has been consolidated into the single Plane implementation; its
@@ -125,6 +128,7 @@ source mount. No alternate source mount or permission bypass was used. Actual ru
 | Complete proposed application | **6 passed**, gated forward migration, exact loader/seals, SQL denial and model/migration consistency |
 | Complete migration reversal | **3 passed**, exact empty reverse/forward and retained evidence refusal, including standalone NO_EFFECT audit |
 | Proposed draft graph/API | **15 passed**, actual append/history/replay, session/CSRF, two first-head races, native/file final rollback and 16 direct-SQL graph omission/substitution cases |
+| Installed-source runtime rerun | **57 passed**, comprising the 14 SQL, 6 installed-guard/model, 3 migration, 15 graph/API, 13 authority and 6 worker tests above, against the actual integrated source |
 | Draft UI/client | **27 passed** with synthetic fetch mocks; candidate TypeScript check passed |
 | Visual review | Five synthetic desktop/mobile captures; no JS errors or horizontal overflow; fresh review disposition **ship** for unmounted candidate |
 
@@ -142,7 +146,10 @@ production loader in disposable container storage. Their proof digest is
 `sha256:b4f16de1a78f0ffb7f62df770f6fe2e50636da3961e22bb193ba5e914b87215b`.
 Both historical proofs and all 23 historical migration bytes remain unchanged.
 No unreviewed observed deployment is accepted as a proof. All 186 historical
-regressions pass with the draft switch disabled; host promotion remains separate.
+regressions pass with the draft switch disabled. The exact tested bytes were then
+moved into the restored application and the 57 runtime tests passed again through
+the original read-only source bind. The duplicate candidate implementation and
+assembly runner were removed; their history remains at Plane `27a16ae`.
 
 The typed client and native-style draft panel are staged but unmounted. They clear
 old data when user/context changes or access is rechecked, require exact headers
@@ -167,9 +174,10 @@ access checks; its installed proof, real ORM reads and integrated UI remain pend
    graph rollback, raw-SQL attacks and independent-connection races pass.
    The complete historical regression also passes; the earlier DDL experiment
    alone does not provide these results.
-5. Finalize the exact manual successor, install one implementation, and preserve
-   every prior proof/migration byte. Qualify scope-reader changes as a separate
-   successor, with no new writers or storage.
+5. The exact manual successor and one implementation are installed in local
+   source, with every prior proof/migration byte preserved and the actual runtime
+   suite passing. Qualify scope-reader changes as a separate successor, with no
+   new writers or storage.
 6. Complete protected-definition preparation, mount the panel and run full app
    checks and an authenticated native browser journey.
 7. Persist the Gate 2 kernel under its own successor: native task locks plus DB
