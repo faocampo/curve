@@ -102,3 +102,17 @@ passed 14 unittest methods with adversarial subcases and cross-language parity.
 This is independent validation preparation, not backend completion. It stays
 outside Plane's runtime inventory so the recovered source qualification remains
 unchanged while PostgreSQL qualification is blocked.
+
+An independent Plane candidate now implements minimal scope-editor discovery in
+`candidates/curve-scope-editor-v2` (metadata reader, current authority, full bounded
+lineage and session-only HTTP view). It passed 31 host unit/HTTP tests, with ORM
+queries and concurrent changes simulated. It returns only the eight contracted
+fields and fails closed when the successor qualification is unavailable. It is
+staged outside the installed app so the recovered runtime's recursive source pins
+remain intact. No route is active and no database behavior is qualified by these
+tests. Persistent manual-draft storage remains the next runtime prerequisite.
+
+The Plane test-profile instructions now describe the ordinary macOS Documents
+permission and Docker File sharing controls for the existing read-only source
+mount. No permissions or mount paths were changed, and no Full Disk Access grant
+is required by the isolated test design. Operator access approval remains pending.
