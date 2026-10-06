@@ -1,5 +1,10 @@
 # Manual planning reconstruction v2 candidate
 
+Current implementation evidence is recorded in the [local pilot record](local-pilot-delivery-2026-10-06.md)
+(draft, scope-reader and Gate 2 integration) and [Gate 2 successor](manual-gate2-reservation-candidate.md)
+(manual approval, exclusive reservations and reconciled release). The original
+contract-first status below is historical; its frozen contract bytes are preserved.
+
 Status: contract-first proposal, 2026-10-05. No backend writer, new migration,
 runtime qualification, Gate 2 approval, task reservation or execution is delivered
 by these contracts. The recovered Plane baseline remains

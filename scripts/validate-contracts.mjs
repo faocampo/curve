@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, relative } from "node:path";
+import { join, relative, sep } from "node:path";
 
 import { validateTestStrategyMatrixSemantics } from "./lib/test-strategy.mjs";
 import { validatePublicContractEdition } from "./lib/public-contract-edition.mjs";
@@ -82,9 +82,17 @@ const schemasById = new Map(
 if (schemasById.size !== schemaFiles.length) {
   throw new Error("Every JSON Schema must have a unique $id");
 }
+// Gate2 snapshots are self-contained bundles with embedded immutable predecessor
+// IDs. Compile every bundle independently instead of registering those IDs twice
+// alongside the standalone predecessor schemas. All other schemas retain the
+// existing shared registry; no schema or fixture validation is skipped.
+const gate2BundleRoot = join(root, "contracts/candidates/manual-gate2-v2") + sep;
+const referencesFor = (file) => file.startsWith(gate2BundleRoot)
+  ? []
+  : schemaFiles.filter((reference) => !reference.startsWith(gate2BundleRoot));
 for (const file of schemaFiles) {
   const args = ["compile", "--spec=draft2020", "--strict=false", "-c", "ajv-formats", "-s", file];
-  for (const referencedSchema of schemaFiles) {
+  for (const referencedSchema of referencesFor(file)) {
     if (referencedSchema !== file) args.push("-r", referencedSchema);
   }
   execFileSync(join(root, "node_modules/.bin/ajv"), args, { stdio: "inherit" });
@@ -1257,7 +1265,7 @@ validateTemporalOrchestrationSemantics(temporalOrchestration);
 for (const [fixtureName, schema, shouldBeValid] of fixtureSpecs) {
   const fixture = join(root, fixtureName);
   const args = ["validate", "--spec=draft2020", "--strict=false", "-c", "ajv-formats", "-s", schema, "-d", fixture];
-  for (const referencedSchema of schemaFiles) {
+  for (const referencedSchema of referencesFor(schema)) {
     if (referencedSchema !== schema) args.push("-r", referencedSchema);
   }
 
@@ -1329,7 +1337,7 @@ try {
     "-d",
     temporaryPayload,
   ];
-  for (const referencedSchema of schemaFiles) {
+  for (const referencedSchema of referencesFor(payloadSchema)) {
     if (referencedSchema !== payloadSchema) args.push("-r", referencedSchema);
   }
   execFileSync(join(root, "node_modules/.bin/ajv"), args, { stdio: "pipe" });

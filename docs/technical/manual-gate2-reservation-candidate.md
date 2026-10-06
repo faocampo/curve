@@ -1,163 +1,141 @@
-# Manual Gate 2 and exclusive task reservation candidate
+# Manual Gate 2 and exclusive task reservations
 
-Status: **pure transition kernel implemented; no persisted or qualified writer**,
-2026-10-06.
+Status: **qualified successor integrated in local source; default off**,
+2026-10-06. Installed-source regression is being completed. This is newly authored
+reconstruction, not recovery of the missing backend or production activation.
 
-The assigned TechnicalApprover must approve one exact immutable manual plan and
-reserve its proposed delivery tasks atomically. Saving a draft, belonging to a
-native project or seeing a task does not grant that authority. Existing projects
-remain the source of work; this design requires no task-manager migration.
+Plane preserves the prospective implementation at local commit
+`8fc8e15fb36fa0a8aa7890b40971c8df814c0753`; integration is
+`a69559f990c995f0d2c930306544979afd005d93`. The historical reader assertion was
+adapted at `8aede16b4aee1aa66eb0b9469c4c849b34250f6e` to validate the immutable
+reader proof followed by the separate exact Gate 2 successor.
 
-The [domain model](domain-model.md) (immutable gate decisions and exact subjects),
-[manual reconstruction contract](manual-planning-reconstruction-v2.md) (draft-only
-writer and preserved proof chain), and [pilot delivery record](local-pilot-delivery-2026-10-06.md)
-(authorized manual rules and remaining milestones) are the starting point.
-This candidate specifies the next reviewable transaction boundary without changing
-those historical contracts or treating unrecovered backend code as present.
+The [domain model](domain-model.md) (immutable decisions and exact subjects),
+[manual reconstruction contract](manual-planning-reconstruction-v2.md) (original
+draft contract and preserved proof chain), [Gate 2 contracts](../../contracts/candidates/manual-gate2-v2/README.md)
+(closed schemas and exact manifest), and [pilot delivery record](local-pilot-delivery-2026-10-06.md)
+(authorized scope and remaining milestones) define the boundary.
 
-## Exact review subject
+## Exact subject and current authority
 
-Prepare a separate immutable subject from a persisted, currently valid draft.
-Its closed identity must include workspace, Product and Initiative; draft revision
-ID/version/digest; definition ObjectRef; retained private input identity digest;
-validator edition and receipt digest; exact scoped PRD subject, controlling PRD
-decision, PRD artifact/body/evidence and scope revision; workflow, quality and
-repository/base/policy inputs; the current three human gate assignments; risk tier;
-and the sorted set of proposed delivery issue identities. A subject digest binds
-all these values. No request may supply an unbound alternate task list.
+PREPARE freezes a currently valid saved draft: original definition/input identity,
+validator receipt, exact approved PRD/evidence/scope, workflow, repository/base and
+policy, risk tier, human gate assignments and proposed delivery issue identities.
+Current native and protected-material access is reacquired for reads, commands and
+original replay, including the original owners and reviewers. Client JSON cannot
+supply an authority object or an alternate task set.
 
-Current ACL, membership, classification and source observations remain transient.
-They must be reacquired before preparing, displaying, approving and replaying the
-subject. The assigned technical approver needs current access to every original
-material and task. A changed plan, PRD, scope, repository base, policy, owner or
-assignment invalidates the subject rather than silently updating it.
+Only the current assigned TechnicalApprover can APPROVE, REQUEST_CHANGES,
+RECONCILE or RELEASE. Creator/contributor authority can prepare a review but does
+not approve it. A replacement draft before approval needs another PREPARE; after
+the first approval, draft editing and pre-plan scope reopening stay closed, even
+when the claims have subsequently been released.
 
-The draft candidate now constructs a closed transient authority projection from
-fresh native observations and derives semantic facts from protected synthetic
-bodies. Thirteen actual ORM tests now cover original PRD/evidence access and
-producer/consumer generations. Proposed draft persistence, API, races and complete
-migration also have isolated PostgreSQL evidence. Host promotion and this separate
-Gate 2 qualification remain prerequisites before their outputs grant plan authority.
+Native Initiative state remains PLANNING. A separate manual control record moves
+through PLAN_REVIEW, CHANGES_REQUESTED, MANUAL_APPROVED and RELEASED. No EXECUTING
+transition, dispatch, provider action, repository write, model call, spending or
+completion credit is authorized.
 
-## Implemented pure kernel
+## Persistence and task ownership
 
-Plane's `candidates/curve-manual-plan-v2/gate2/domain.py` (immutable review subject
-and task-reservation transitions) implements the domain rules without IO, ORM,
-HTTP endpoints or persistence. Twelve host tests cover exact-subject preparation,
-current assigned human authority, high-risk separation, complete-set acquisition,
-overlaps, replay, requested changes, retained holds, partial reconciled release,
-reassigned current approver and later reacquisition with increasing generations.
+Plane's `apps/api/plane/curve/manual_gate2_v2/` (single installed kernel, authority,
+repository, protected reads, service and HTTP modules) adds four models and one
+migration under a separate closed successor. Model registration/policy identity
+and routes are the only replaced predecessor runtime sources; nine modules are
+added. All 24 predecessor migration files remain byte-identical.
 
-The kernel freezes original definition/input/receipt/PRD/task identities. It
-accepts a server-created current-authority value, not user-supplied authority.
-Approval computes an all-or-none ledger transition; replay returns the original
-decision without reacquisition. Pause/cancel/access loss retain held claims.
-Release requires current assigned TechnicalApprover access and reconciliation of
-the exact claim generations and native fence. History remains immutable.
+APPROVE commits the complete control/record/claim/history graph, Initiative version,
+policy, audit, event, outbox and idempotency together. Claims are unique by
+workspace, installation and stable native issue identity. Existing workspace and
+sorted native issue locks serialize first acquisition; the database unique
+constraint and deferred graph guards provide independent enforcement. Concurrent
+commands either acquire the complete delivery set or leave no partial approval.
+Same-workspace serialization is intentional; no throughput claim is made.
 
-The pure ledger does not establish concurrent database exclusivity. An ORM adapter,
-existing native task-row locks, database uniqueness/guards, atomic policy/audit/
-event/outbox/idempotency persistence and a separate successor proof remain required.
-No route, plan approval control, completion credit or automatic effect is installed.
+Pause and cancellation retain physical ACTIVE claims with an effective hold.
+Access loss denies reads and commands while retaining ownership. Moving a native
+issue to another project preserves its claim identity. Release must recheck that
+project's explicit Product association and every current principal's access.
+Context/dependency references confer neither control nor completion credit.
 
-## Proposed records and constraints
+RECONCILE records the exact claim subset, generations, current native observations,
+current approver and protected rationale. The rationale must explicitly attest
+`no_unresolved_controlled_work=true`; started native work is rejected. RELEASE
+requires the same current approver, rationale, claim subset/generations and
+unchanged native fence. This is a human reconciliation attestation, not independent
+proof of external completion. Partial release is explicit. Later acquisition
+increments the generation; replaying an old successful approval never reacquires
+or moves ownership. Replay returns its original receipt and current ETag with only
+a fresh policy and NO_EFFECT audit.
 
-These are model requirements for a new successor, not an installed migration.
+## Frozen proof and database gates
 
-| Record | Immutable identity / relation | Required database protection |
-| --- | --- | --- |
-| Manual plan review subject | Exact draft, original input digest, approved PRD, workflow and proposed-delivery set | Closed metadata; digest; same-workspace composite references; append-only subject |
-| Manual plan decision | Exact subject, assigned PLAN_APPROVAL gate, actor, decision, protected rationale reference and policy receipt | Append-only; fresh assigned human; no native-admin shortcut; one controlling approval per exact generation |
-| Reservation claim | Workspace, provider installation, stable source issue ID, controlling Initiative, plan subject, decision and generation | Exclusive current ownership by task identity across all Initiatives; no project-ID-based escape |
-| Reservation history | Claim/generation, acquire/hold/release event, actor and exact cause | Append-only; no cascade deletion on Initiative pause/cancel or native task movement |
-| Release reconciliation | Exact claims/generations and plan, observed native state, unresolved work/result accounting, current approver and rationale reference | Immutable receipt; must remain current until release transaction commits |
-
-A single current-claim table keyed by `(workspace, installation, source issue)`
-can enforce exclusivity without an application-only “check then insert.” Prior
-claims and releases stay in history; a release cannot erase approval provenance.
-If a partial unique index is chosen instead, its live-state predicate must include
-held claims. The final schema choice must have actual competing-transaction tests.
-Task identities are sorted before locking to reduce deadlock risk. Use the native
-source row or another guaranteed existing lock target when no claim row exists;
-locking an empty query result does not serialize two first acquisitions.
-
-## Proposed command flow
-
-These operations require separate closed schemas, policy editions and a reviewed
-successor proof. Route names and wire versions are not frozen by this document.
-
-1. **Prepare review.** Recheck the exact draft and all current authority; freeze a
-   review subject and move the Initiative into its explicit plan-review lifecycle
-   only under the new qualified transition. No task reservation occurs yet.
-2. **Approve.** Require a human session with CSRF, strong typed Initiative ETag,
-   exact review-subject reference and Idempotency-Key. The actor must match the
-   currently effective PLAN_APPROVAL assignment; maintain all three gates and the
-   required risk-tier separation. Lock authority, scope and sorted task identities.
-3. **Reserve and commit.** Recheck the subject and current source access. Acquire
-   every proposed delivery task or none. Commit the approval, all reservation
-   claims/history, controlling plan identity/version, policy, audit, event, local
-   outbox and completed idempotency result as one graph. Revalidate immediately
-   before commit. Conflicts disclose no inaccessible competing Initiative identity.
-4. **Replay.** Reauthorize against the original exact subject and current access.
-   Return the original decision/reservation receipt and current Initiative ETag.
-   Do not reacquire, duplicate history, move a reservation or run work again.
-5. **Request changes.** Retain the review subject and append the decision. Return
-   through the qualified planning transition without reserving tasks. A later plan
-   requires a fresh exact review subject and approval.
-
-The manual-only lifecycle transition after approval still needs explicit contract
-reconciliation with the existing Initiative states. In particular, a generic
-EXECUTING state must never be interpreted as permission to dispatch agents,
-providers, repository changes, model calls or spending. No lifecycle code or
-execution permission is added by this preparation.
-
-## Holds and release
-
-Pause and cancellation retain reservations. Loss of membership, source access or
-protected material places control on hold and blocks approval/release/resume;
-it does not make the tasks available for another Initiative. Restoring access
-requires a fresh authority check before further action.
-
-Only the currently assigned TechnicalApprover may explicitly release exact claim
-generations after reconciliation. The release transaction locks the claims and
-checks its immutable reconciliation receipt, current source facts and absence of
-unresolved controlled work. Partial release needs an explicit exact subset; it
-cannot be inferred from task completion, cancellation, pause or project removal.
-A stale generation, missing access or changed reconciliation rolls everything back.
-Administrator exceptions are deferred; there is no implicit recovery override.
-
-Other Initiatives may retain context and dependency references to those tasks.
-Those references neither compete for control nor receive duplicate completion
-credit. The proposed delivery set alone drives reservations. Context becomes
-controlled work only through a new exact scope/PRD/plan and explicit approval.
-
-Before plan approval, the assigned ProductApprover retains the existing scoped
-reopening path. It requires a fresh exact PRD and invalidates pending plan subjects.
-After approval, the pre-plan reopening path must refuse; a separate change/release
-protocol must preserve existing control and history.
-
-## Required proof before implementation can be called integrated
-
-| Case | Expected result |
+| Identity | SHA256 |
 | --- | --- |
-| Creator, native project member or administrator tries to approve | Denied unless that person is the current assigned TechnicalApprover with all required access |
-| Changed plan, PRD, scope, policy, owner, gate or repository base | Old review subject rejected; no reservation |
-| Two Initiatives approve overlapping task sets concurrently | At most one complete winner; loser has no partial approval/reservations |
-| Two disjoint task sets | Both can complete without cross-Initiative authority leakage |
-| Same command retries after success or later activity | Original receipt returned under current authorization; one effect |
-| Revoked actor/reviewer/owner/material/source between read and commit | Denial and rollback of the entire graph |
-| Native task moves projects | Stable identity keeps its reservation; access is rechecked |
-| Context/dependency reference to a reserved task | No second control claim or completion credit |
-| Pause, cancel, deleted membership or inaccessible task | Reservation remains held; no automatic release |
-| Stale release generation or reconciliation | No claim released |
-| Explicit authorized reconciled release | Exact claims released once; immutable history retained |
-| Direct SQL omission, forged receipt, rewrite or truncate | Database guard rejects the incomplete/unauthorized graph |
-| Feature disabled, missing proof or incompatible catalog | Fail closed before mutation; no permission from historical evidence |
-| Approval observed by automatic worker | No dispatch, model call, provider action, repository write or spending |
+| Manual predecessor proof | `b4f16de1a78f0ffb7f62df770f6fe2e50636da3961e22bb193ba5e914b87215b` |
+| Scope-reader predecessor proof | `c2e37caa561e943bf4f2883c62d8ed889c74a55809fa1f5ffc93aed5d4ce093e` |
+| Gate 2 successor proof | `34661219609b64ae715466aa7a20f756eb85a17365f30a3ab0d25a926f28c8ec` |
+| Migration 0025 | `29f2864ec4f3670da8798ba5154d8591aecd8b7897de862e724a2901e67cbd13` |
+| Physical catalog | `4d33761d55c0f0cb509af13a729cdb6a7479c7b8ca662fc843f856bce33adb08` |
+| Contract manifest | `72877f8914391b231fe916853faed3c72f5d11456d154b1fe54d9ba6714b8387` |
 
-Use independent PostgreSQL connections for races and real Django session/API
-requests for authorization. Mocks can test orchestration but cannot qualify
-exclusive ownership or atomic release. New migrations, source pins and seals must
-form an explicit successor to the qualified draft writer, preserving its proof.
-No Gate 2 model, route, migration, UI approval control or reservation writer has
-been installed in this checkpoint.
+Plane's `apps/api/plane/curve/manual_gate2_reconstruction_qualification_v2.json`
+(exact runtime, model, migration and physical-catalog inventory) covers 144 modules
+and 25 migrations. The loader validates each successor's declared delta and literal
+pin; observed source/catalog hashes cannot grant permission. Existing predecessor
+proofs and seals are preserved.
+
+The catalog query adds constraint-name ordering to deterministically include all
+composite foreign keys. Empty reversal restores the exact 0024 catalog and its
+verifier. Retained Gate 2 evidence, including standalone NO_EFFECT audit, blocks
+reversal. Disabling features retains records instead of rolling back migrations.
+
+## Manual interface and protected input boundary
+
+The typed client and panel are mounted in the Initiative workspace behind the
+explicit build flag `VITE_CURVE_MANUAL_PLAN_V2_ENABLED=true`, signed-in identity
+and PLANNING/PAUSED/CANCELLED lifecycle. The independent API setting
+`CURVE_MANUAL_GATE2_V2_ENABLED` defaults to false; draft enablement and the workspace
+allowlist are still required. No environment or workspace has been activated.
+
+Preparation lists at most 25 already protected, qualified definitions. It creates
+no grants or documents. Current material reads require fresh exact authorization.
+The UI requires explicit review, separates prepared replacements from the saved
+draft under decision, displays retained holds, and retains one uncertain command
+in memory for deliberate identical retry. Focus, identity changes and errors clear
+previously displayed protected material. The client validates closed responses,
+ETag, scope, returned identity and material bytes/digests; the server remains the
+authority.
+
+Definitions/rationales must already be provisioned in the owner-only synthetic
+catalog with exact grants for all original principals. There is no production
+protected-storage/provider adapter or browser authoring editor in this delivery.
+
+## Executed evidence and remaining acceptance
+
+The final prospective PostgreSQL/API suite passed **23 tests in 359.34 seconds**:
+20 Gate 2 cases and three adapted historical migration gates. It includes real
+session/CSRF, complete positive SQL graphs, 20 omission/substitution attacks,
+immutable mutation/truncate guards, independent-connection races, overlapping
+Initiatives, release/reacquisition and original retry, access loss, native project
+movement, changed definitions and exact proof/seal/model consistency.
+
+The installed host suites passed **107 manual plus 31 scope tests**, including
+12 pure Gate 2 transitions. Full application TypeScript and **380 web tests across
+33 files** passed through normal dependency builds; the manual client/panel subset
+contains 45 cases. Seven schemas compile and ten new contract tests verify the
+manifest and malformed commands. Synthetic visual review has five desktop/mobile
+captures, no JavaScript errors or overflow, and a bounded **ship** disposition.
+
+Plane's `candidates/curve-manual-gate2-v2/VERIFICATION.md` (executed native, host,
+web and visual evidence) and `qualification/reviewed-integration.json` within that
+directory (exact pins and verification state) record installed-source results.
+The full combined native suite and historical regression remain pending until their
+final recorded results. An earlier combined run stopped at an obsolete reader
+inventory assertion after 69 passes; that assertion now verifies both successors.
+No runtime/proof bytes changed for the correction.
+
+Authenticated real browser-to-backend acceptance, operational backup/restore,
+production protected storage and full manual-pilot/R1 qualification remain open.
+Synthetic screenshots and mocked browser transport cannot close those gates.
+No deployment, new remote publication, activation or automatic execution occurred.

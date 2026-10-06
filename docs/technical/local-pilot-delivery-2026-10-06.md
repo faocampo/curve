@@ -83,7 +83,28 @@ No milestone is marked complete merely from schemas, mocks or collected tests.
 Each checkpoint records its local SHA, exact executed checks and remaining gates.
 No release or runtime qualification is inferred from this plan.
 
-## Current implementation and verification checkpoint
+## Current Gate 2 integration checkpoint
+
+The manual draft, separate scope reader and separate Gate 2 successor are now
+installed in local Plane source. The UI is mounted behind an explicit default-off
+flag. The [Gate 2 implementation](manual-gate2-reservation-candidate.md) (exact
+manual review, exclusive task ownership, reconciled release, pins and limits)
+records the current behavior. The checkpoints below remain historical evidence.
+
+The prospective implementation at `8fc8e15fb36fa0a8aa7890b40971c8df814c0753`
+passed 23 native tests. Integration is `a69559f990c995f0d2c930306544979afd005d93`;
+`8aede16b4aee1aa66eb0b9469c4c849b34250f6e` adapts the historical reader inventory
+assertion to verify the unchanged predecessor and exact installed successor.
+Full application TypeScript, 380 web tests, 107 manual host tests and 31 scope host
+tests pass. Combined installed PostgreSQL/API and historical regression are being
+completed separately. No in-progress result is treated as a pass.
+
+Protected-definition preparation and current material reads are implemented;
+provisioning still uses the explicit owner-only synthetic catalog. The real
+browser-to-backend journey, bounded Today/roadmap surfaces and operational pilot
+acceptance remain open. No workspace, API feature or deployment is activated.
+
+## Historical draft and scope verification checkpoint
 
 GSD inspection found no local `.planning` phase state; the existing roadmap remains
 authoritative. The qualified manual draft is now integrated into the restored
@@ -191,17 +212,19 @@ Its UI remains unmounted and protected-definition preparation is still pending.
    source, with every prior proof/migration byte preserved and the actual runtime
    suite passing. The separate scope-reader successor is also installed, with
    no new writers or storage, and the combined 80-test runtime suite passes.
-6. Complete protected-definition preparation, mount the panel and run full app
-   checks and an authenticated native browser journey.
-7. Persist the Gate 2 kernel under its own successor: native task locks plus DB
-   exclusivity, exact human approval, all-or-none claims, holds, reconciled release,
-   generation-safe reacquisition and corresponding transaction/race/API evidence.
+6. Protected-definition preparation and the panel mount are implemented; full app
+   TypeScript and 380 web tests pass. Authenticated native browser acceptance
+   remains required; synthetic component and visual evidence are separate.
+7. Gate 2 persistence is installed under its own exact successor with native locks,
+   DB exclusivity, atomic approval, retained holds, reconciliation and generation-safe
+   release/reacquisition. The prospective native suite passes 23 cases. Record the
+   combined installed suite and historical regression before closing integration.
 8. Complete the bounded Today/decisions and roadmap surfaces, synthetic seeding,
    disablement, backup/restore, observable failure handling and full pilot runbook.
 
 Plane's `candidates/curve-manual-plan-v2/PROMOTION.md` (exact ordered release
 checklist) and `candidates/curve-manual-plan-v2/VERIFICATION.md` (executed evidence
 and remaining acceptance limits) carry the implementation details. The
-[Gate 2 candidate](manual-gate2-reservation-candidate.md) (implemented pure domain
-kernel and required persistence) remains separate from draft qualification.
+[Gate 2 candidate](manual-gate2-reservation-candidate.md) (installed manual writer, task ownership
+and current evidence) remains a distinct successor to draft qualification.
 No percentage, complete-recovery claim or R1 approval is inferred from these tests.

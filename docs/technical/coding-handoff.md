@@ -1,5 +1,15 @@
 # Coding handoff
 
+## Local reconstruction checkpoint — 2026-10-06
+
+The [local pilot delivery record](local-pilot-delivery-2026-10-06.md) (restored
+baseline, new implementation evidence and remaining acceptance) and
+[manual Gate 2 implementation](manual-gate2-reservation-candidate.md) (separate
+qualified successor, exclusive reservations and default-off UI) describe current
+local work. These new commits have no publication, merge, deployment or activation
+authority. The earlier roadmap and historical evidence below retain their original
+scope; local integration does not complete M3, the manual pilot or R1.
+
 ## Authority and reading order
 
 Follow the approved [repository delivery policy](repository-delivery-policy.md)
