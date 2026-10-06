@@ -104,11 +104,13 @@ now include:
 - Semantic facts derived from exact protected synthetic PRD, workflow, quality,
   repository and repository-policy body bytes, compared with the fixed catalog.
 - A structural trusted successor loader for the exact additive draft delta, then
-  a distinct scope-reader successor. The manual successor is pinned; the scope-reader pin remains unset.
+  a distinct scope-reader successor. The manual and separate scope-reader successors are pinned after their
+  independent PostgreSQL/API qualification.
 - A pure Gate 2 transition kernel with exact subject, assigned approver, exclusive
   task claims, retained holds and reconciled release; no ORM or active writer.
 
-The host suite passes **107 tests** after promotion, including JavaScript parity, adversarial
+The manual host suite passes **107 tests** after promotion, with a separate
+**31-test scope-reader host suite**, including JavaScript parity, adversarial
 material/catalog checks and **12 Gate 2 kernel tests**. Host ORM/service doubles
 remain explicitly separate from actual database evidence. The prior Curve Python
 experiment has been consolidated into the single Plane implementation; its
@@ -129,6 +131,9 @@ source mount. No alternate source mount or permission bypass was used. Actual ru
 | Complete migration reversal | **3 passed**, exact empty reverse/forward and retained evidence refusal, including standalone NO_EFFECT audit |
 | Proposed draft graph/API | **15 passed**, actual append/history/replay, session/CSRF, two first-head races, native/file final rollback and 16 direct-SQL graph omission/substitution cases |
 | Installed-source runtime rerun | **57 passed**, comprising the 14 SQL, 6 installed-guard/model, 3 migration, 15 graph/API, 13 authority and 6 worker tests above, against the actual integrated source |
+| Separate proposed scope reader | **23 passed**, real sessions, complete saved-empty lineage, zero writes, current native permissions, final rollback, SQL mutation denial and both actual PostgreSQL blocking orders |
+| Historical regression after reader integration | **186 passed** at Plane `ebbd330`, with both new switches disabled |
+| Combined installed source | **80 passed**, the 57 manual runtime tests plus all 23 scope-reader tests, with the two distinct successors enforced through the original source bind |
 | Draft UI/client | **27 passed** with synthetic fetch mocks; candidate TypeScript check passed |
 | Visual review | Five synthetic desktop/mobile captures; no JS errors or horizontal overflow; fresh review disposition **ship** for unmounted candidate |
 
@@ -158,9 +163,17 @@ same idempotency key for an explicit retry after an unknown save result. Protect
 definition preparation and the real authenticated API/browser journey remain work.
 The supplied visual captures do not establish backend or full-theme qualification.
 
-The separate scope-editor candidate still has its **31 prior host tests**. It
-returns only the eight contracted metadata fields with bounded lineage and fresh
-access checks; its installed proof, real ORM reads and integrated UI remain pending.
+The scope reader is now integrated as a distinct successor with its own default-off
+setting. Its proof is
+`sha256:c2e37caa561e943bf4f2883c62d8ed889c74a55809fa1f5ffc93aed5d4ce093e`.
+The exact delta adds two modules and changes the URL module only; every model,
+migration, catalog, writer and exclusion remains the manual predecessor's.
+It returns eight contracted metadata fields and no task bodies or write authority.
+Intact absence and saved-empty scope differ, while all bounded historical revision
+metadata participates in the final consistency fence. The 23 real tests passed
+before promotion at Plane `90996fb` and again within the combined 80-test installed
+suite. All 31 host tests also passed after the move. The candidate copy was removed.
+Its UI remains unmounted and protected-definition preparation is still pending.
 
 ## Ordered release gates
 
@@ -176,8 +189,8 @@ access checks; its installed proof, real ORM reads and integrated UI remain pend
    alone does not provide these results.
 5. The exact manual successor and one implementation are installed in local
    source, with every prior proof/migration byte preserved and the actual runtime
-   suite passing. Qualify scope-reader changes as a separate successor, with no
-   new writers or storage.
+   suite passing. The separate scope-reader successor is also installed, with
+   no new writers or storage, and the combined 80-test runtime suite passes.
 6. Complete protected-definition preparation, mount the panel and run full app
    checks and an authenticated native browser journey.
 7. Persist the Gate 2 kernel under its own successor: native task locks plus DB
