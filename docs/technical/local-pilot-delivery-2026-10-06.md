@@ -105,7 +105,7 @@ additive migration, policy, resolver, worker, reads and HTTP) now includes:
 - A pure Gate 2 transition kernel with exact subject, assigned approver, exclusive
   task claims, retained holds and reconciled release; no ORM or active writer.
 
-The host suite passes **102 tests**, including JavaScript parity, adversarial
+The host suite passes **107 tests**, including JavaScript parity, adversarial
 material/catalog checks and **12 Gate 2 kernel tests**. Host ORM/service doubles
 remain explicitly separate from actual database evidence. The prior Curve Python
 experiment has been consolidated into the single Plane implementation; its
@@ -117,16 +117,32 @@ source mount. No alternate source mount or permission bypass was used. Actual ru
 | Check | Result / limit |
 | --- | --- |
 | Recovered PostgreSQL/API baseline | **186 passed**, including existing-project association, scope, exact PRD and reopening concurrency |
+| Historical regression on proposed application | **186 passed** with the manual-draft switch disabled and the complete reviewed successor enforced |
 | Frozen candidate SQL shape functions | **14 passed**, including valid fixtures and malformed/extra/missing field rejection |
 | Linux validator | **6 passed**, including real jobs, CPU/memory/descriptor limits and cross-process slot behavior |
 | Candidate DDL experiment | **1 passed**, declared delta and empty reversal restore the exact original catalog; no seal/proof/pin installed |
+| Actual native authority | **13 passed**, original approved normalized PRD, selected evidence body/excerpt, current native and object access, stale ledger and monotonic producer refresh |
+| Complete proposed application | **6 passed**, gated forward migration, exact loader/seals, SQL denial and model/migration consistency |
+| Complete migration reversal | **3 passed**, exact empty reverse/forward and retained evidence refusal, including standalone NO_EFFECT audit |
+| Proposed draft graph/API | **15 passed**, actual append/history/replay, session/CSRF, two first-head races, native/file final rollback and 16 direct-SQL graph omission/substitution cases |
 | Draft UI/client | **27 passed** with synthetic fetch mocks; candidate TypeScript check passed |
 | Visual review | Five synthetic desktop/mobile captures; no JS errors or horizontal overflow; fresh review disposition **ship** for unmounted candidate |
 
 Real execution found and corrected SQL alias ambiguity, an unintended timestamp
 cast, migration-inspector search-path leakage and truncated bytecode writes under
-the worker file-size ceiling. No complete installed draft migration, positive
-save/replay graph or draft save race has yet been qualified.
+the worker file-size ceiling. The real PRD bridge also exposed an incompatible
+synthetic-only body requirement. The adapter now consumes the original approved
+normalized bytes through a conservative single plain-text tab subset, preserving
+the exact metadata, evidence snapshot and all access checks. Unsupported structures,
+unparsed declarations and incomplete traceability fail closed.
+
+The later proposed-application tests differ from the earlier DDL experiment.
+They enforce a reviewed literal catalog pin and exact successor with the actual
+production loader in disposable container storage. Their proof digest is
+`sha256:b4f16de1a78f0ffb7f62df770f6fe2e50636da3961e22bb193ba5e914b87215b`.
+Both historical proofs and all 23 historical migration bytes remain unchanged.
+No unreviewed observed deployment is accepted as a proof. All 186 historical
+regressions pass with the draft switch disabled; host promotion remains separate.
 
 The typed client and native-style draft panel are staged but unmounted. They clear
 old data when user/context changes or access is rechecked, require exact headers
@@ -141,15 +157,16 @@ access checks; its installed proof, real ORM reads and integrated UI remain pend
 
 ## Ordered release gates
 
-1. Build the real ORM positive fixture from the existing exact scoped PRD bridge,
-   retaining the new synthetic PRD/evidence body bytes and grants for all principals.
-2. Qualify producer/consumer generations, final native/material fences and revoked
-   access in actual transactions; host counter and byte tests do not substitute.
-3. Independently review expected DDL and prospective literal pins, then prove the
-   complete gated forward migration, empty reversal and retained-evidence refusal.
-4. Prove new save, append, original replay with current ETag, current/history denial,
-   complete policy/audit/event/outbox/idempotency rollback, raw-SQL attacks and
-   independent-connection save races. The DDL experiment is not that acceptance.
+1. Real ORM PRD/evidence fixture and grants for all principals: verified in the
+   disposable qualification application, preserving its actual approved body.
+2. Producer/consumer generations, native/material fences and revoked access:
+   actual transaction tests pass; host counter tests remain separate evidence.
+3. Reviewed DDL and prospective literal pins: complete gated migration, empty
+   reversal and retained-evidence refusal pass in the temporary application.
+4. Real save, append, original replay with current ETag, protected history,
+   graph rollback, raw-SQL attacks and independent-connection races pass.
+   The complete historical regression also passes; the earlier DDL experiment
+   alone does not provide these results.
 5. Finalize the exact manual successor, install one implementation, and preserve
    every prior proof/migration byte. Qualify scope-reader changes as a separate
    successor, with no new writers or storage.

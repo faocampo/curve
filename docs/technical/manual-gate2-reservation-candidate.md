@@ -34,8 +34,10 @@ assignment invalidates the subject rather than silently updating it.
 
 The draft candidate now constructs a closed transient authority projection from
 fresh native observations and derives semantic facts from protected synthetic
-bodies. Host tests cover those adapters; actual ORM producer/consumer integration
-and final qualification remain prerequisites before their outputs grant authority.
+bodies. Thirteen actual ORM tests now cover original PRD/evidence access and
+producer/consumer generations. Proposed draft persistence, API, races and complete
+migration also have isolated PostgreSQL evidence. Host promotion and this separate
+Gate 2 qualification remain prerequisites before their outputs grant plan authority.
 
 ## Implemented pure kernel
 
