@@ -4,9 +4,11 @@
 
 Start with [project status](project-status.md) (verified integration position and
 next three tasks) and the [consolidation ledger](project-consolidation-2026-10-07.md)
-(branch dispositions, merge evidence and gates). Existing work is being reconciled
-before feature expansion. The September implementation boundary below is dated
-history; inspect October reconstruction source before repeating its next task.
+(branch dispositions, merge evidence and gates). Reconstruction contracts are
+merged through Curve PR #171; application work is consolidated into Plane PR #17,
+held for exact-candidate owner UX acceptance and current-head checks. The September
+implementation boundary below is dated history; use the current status before
+repeating its next task or reopening superseded PRs.
 
 ## Local reconstruction checkpoint — 2026-10-06
 

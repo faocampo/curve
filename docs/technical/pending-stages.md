@@ -1,5 +1,12 @@
 # Pending stages
 
+## Current consolidation checkpoint — 2026-10-07
+
+Start with [project status](project-status.md) (current integration, acceptance
+gates and next three actions). Curve reconstruction contracts are merged; Plane
+application candidates are collected in one draft PR. The October and September
+records below retain their dated scopes and do not supersede current merge evidence.
+
 ## Local reconstruction checkpoint — 2026-10-06
 
 The [local pilot delivery record](local-pilot-delivery-2026-10-06.md) (restored
