@@ -10,8 +10,8 @@ const integrations = read("docs/technical/integration-contracts.md");
 const security = read("docs/technical/security-and-operations.md");
 const technicalIndex = read("docs/technical/README.md");
 
-test("AI coding agents fail closed before disclosing X3M-internal information", () => {
-  assert.match(agentRules, /MUST\s+NOT disclose any information that is internal to X3M/);
+test("AI coding agents fail closed before disclosing an adopting organization's internal information", () => {
+  assert.match(agentRules, /MUST\s+NOT disclose any information that is internal to any adopting organization/);
   assert.match(agentRules, /Uncertainty fails closed/);
   assert.match(agentRules, /inspect the complete outbound diff and all attached\/generated material/);
   assert.match(agentRules, /example\.invalid/);
@@ -23,7 +23,7 @@ test("security policy protects every public repository surface", () => {
   assert.match(security, /An ambiguous value fails closed/);
   assert.match(security, /Before any public Git or GitHub mutation/);
   assert.match(security, /Secrets scanning supplements but does not replace/);
-  assert.match(security, /approved private X3M system/);
+  assert.match(security, /approved private system of the adopting organization/);
 });
 
 test("Google Docs remains external authoring with immutable Curve checkpoints", () => {
@@ -35,9 +35,9 @@ test("Google Docs remains external authoring with immutable Curve checkpoints", 
   assert.match(integrations, /Drive version and\s+revision identifiers detect change but are not sufficient approval evidence/);
 });
 
-test("public contracts exclude the private X3M deployment profile", () => {
+test("public contracts exclude the private organization-specific deployment profile", () => {
   assert.match(integrations, /### Public and private configuration split/);
-  assert.match(integrations, /An approved private X3M deployment profile contains/);
+  assert.match(integrations, /An approved private organization-specific deployment profile contains/);
   assert.match(integrations, /must never enter this public repository/);
   assert.match(integrations, /only synthetic public-safe data/);
   assert.match(technicalIndex, /external Google Docs authoring/);

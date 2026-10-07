@@ -167,13 +167,13 @@ An `AccessEnvelope` is immutable, versioned metadata recording sources, classifi
 ### Public-repository disclosure control
 
 The Curve source repository and its GitHub collaboration surfaces are public
-destinations. No information internal to X3M may be placed in source,
+destinations. No information internal to any adopting organization may be placed in source,
 documentation, schemas, examples, fixtures, generated artifacts, screenshots,
 logs, traces, command output, commits, branches, issues, pull requests, review
 comments, or releases.
 
 An AI coding agent must classify information as internal unless it is already
-available from an approved public source or an authorized X3M reviewer approves
+available from an approved public source or an authorized reviewer for the adopting organization approves
 that exact value for public disclosure. An ambiguous value fails closed. The
 agent stops the outbound operation and requests a synthetic or explicitly
 approved replacement.
@@ -196,7 +196,7 @@ review.
 Before any public Git or GitHub mutation, the initiating human or agent reviews
 the complete outbound diff together with attached and generated artifacts. A
 failed review blocks publication. Environment-specific configuration is stored
-only in an approved private X3M system and is referenced publicly by a generic
+only in an approved private system of the adopting organization and is referenced publicly by a generic
 configuration contract, never by its real value or location.
 
 ### Evidence and context storage

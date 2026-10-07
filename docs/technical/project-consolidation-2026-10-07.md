@@ -57,7 +57,9 @@ replacement evidence and absence of open dependants/active use.
 
 ## Validation and merge results
 
-No new integration merge has been performed at this initial checkpoint.
+Initial status reconciliation merged through [Curve PR #170](https://github.com/faocampo/curve/pull/170)
+(inventory and status entry point), producing `4dc0879606f72a4d97eab4a30a001b89e2dad77a`.
+Its required validation check passed. Application UX acceptance remains pending.
 Git ancestry and live GitHub PR/branch/Project reads were executed on 2026-10-07.
 Historical runtime suites remain dated evidence until rerun on a current candidate.
 Required failures and human gates remain explicit blockers.
@@ -76,3 +78,31 @@ Required failures and human gates remain explicit blockers.
   and credential-bearing links are rejected. Regression verification is underway.
 - First frontend run passed 114 tests; 24 suites could not import unbuilt workspace
   packages. Ten dependency build tasks subsequently passed; rerun is required.
+
+### Subsequent verified results
+
+- Twelve merged intermediate Plane remote branches (#29–#40) were retired with
+  exact-tip leases. Eleven original tips are ancestors of the preserved
+  reconstruction; #39 has the equivalent tree recorded above. Each exact tip is
+  also retained in a local consolidation archive ref. No local branch or stash was
+  removed. Plane remote branch count decreased from 26 to 14.
+- The resolved Plane candidate at `3dc307a483` passed 392 frontend tests across
+  34 files, full web type checking, seven contract tests, 109-file contract
+  integrity verification and five validation-workflow tests. Native backend
+  requalification is running in a separate disposable environment.
+- The combined Curve reconstruction/status tree passed `pnpm check`: 1,071 tests,
+  124 schemas, 186 fixtures, 123 Markdown files and 47 Mermaid diagrams, with no
+  structural findings. Its separate attention experiment passed all 70 tests.
+  Seven loopback tests initially encountered sandbox `EPERM`; the permitted
+  loopback rerun passed without source changes.
+- Project items #97, #99, #100, #110 and #111 were moved to In progress to reflect
+  partial existing implementation. Public issues #78 and #119 were sanitized to
+  organization-neutral wording. Package completion gates remain open.
+- A further clean, unpublished Plane branch, `feature/local-pilot-recovery` at
+  `f2be82077e6d20ec24befbf578dde47736f94cb3`, contains five additional commits:
+  synthetic recovery/persistence qualification and an isolated Today prototype.
+  It is preserved for review. Its dated evidence does not close operational or
+  human UX gates. The running review demo is preserved without restart/reseed.
+- Private governance has only its canonical remote branch. Its clean local
+  checkout is five commits behind that branch, with no local-only work requiring
+  a PR. Actual policy and evidence identifiers stay in the private destination.

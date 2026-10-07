@@ -8,6 +8,16 @@ next three tasks) and the [consolidation ledger](project-consolidation-2026-10-0
 before feature expansion. The September implementation boundary below is dated
 history; inspect October reconstruction source before repeating its next task.
 
+## Local reconstruction checkpoint — 2026-10-06
+
+The [local pilot delivery record](local-pilot-delivery-2026-10-06.md) (restored
+baseline, new implementation evidence and remaining acceptance) and
+[manual Gate 2 implementation](manual-gate2-reservation-candidate.md) (separate
+qualified successor, exclusive reservations and default-off UI) describe current
+local work. These tests and integration records provide no publication, merge, deployment
+or activation authority by themselves. The earlier roadmap and historical evidence below retain their original
+scope; local integration does not complete M3, the manual pilot or R1.
+
 ## Authority and reading order
 
 Follow the approved [repository delivery policy](repository-delivery-policy.md)

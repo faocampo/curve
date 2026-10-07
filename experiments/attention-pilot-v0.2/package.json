@@ -1,0 +1,13 @@
+{
+  "name": "curve-attention-candidate-pilot",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "engines": {"node": "^24.19.0 || ^26.7.0"},
+  "scripts": {
+    "start": "node server.mjs",
+    "mcp": "node mcp.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check lib/core.mjs && node --check lib/demo.mjs && node --check lib/store.mjs && node --check public/app.mjs && node --check public/view-state.mjs && node --check server.mjs && node --check mcp.mjs && node --test tests/*.test.mjs"
+  }
+}

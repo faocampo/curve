@@ -1,0 +1,272 @@
+{
+  "PROJECT-ASSOCIATION-PRECONDITIONS.md": {
+    "sha256": "4c91e2bca80fd89274d3e3d348c58a495852490fb9ca80a774e4381643bd14fc",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/PROJECT-ASSOCIATION-PRECONDITIONS.md"
+  },
+  "PROJECT-ASSOCIATION-READ-VERIFICATION.md": {
+    "sha256": "144954f64043dce40f0156b87671ca36cdd6bfa1a2d2b17ded64ca55f89f84d0",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/PROJECT-ASSOCIATION-READ-VERIFICATION.md"
+  },
+  "PROJECT-ASSOCIATIONS.md": {
+    "sha256": "9a580430e87954ec7f99c6c6f44f90fdfa0c6913f4e5d4815ef515cbf18e104a",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/PROJECT-ASSOCIATIONS.md"
+  },
+  "SCOPE-PROPOSALS.md": {
+    "sha256": "9fe683f709442f394f99b64abc9f6c4d5a6c1b7019854208a1da02feda41f498",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/SCOPE-PROPOSALS.md"
+  },
+  "SCOPE-REOPENING-C2B-VERIFICATION.md": {
+    "sha256": "8f092f325aa825fe83aada364741b810f0e85b8b3fe45dbc6f907a14649fc2f0",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/SCOPE-REOPENING-C2B-VERIFICATION.md"
+  },
+  "SCOPE-REOPENING-C2B.md": {
+    "sha256": "b143e71c6bca3737ae4e2f95ed22e945db9f647dffabb3d657748f27b3bdb0d2",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/SCOPE-REOPENING-C2B.md"
+  },
+  "SCOPE-REOPENING-PRECONDITIONS-C2B.md": {
+    "sha256": "fb5ce8002059233cd89e89058337b7e58c76b2cab15e128732033660cb44b700",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/SCOPE-REOPENING-PRECONDITIONS-C2B.md"
+  },
+  "SCOPED-PRD-C2A-VERIFICATION.md": {
+    "sha256": "1964955d6de7289aed7b8405243686fbb130f77f9f18f58a74ad308b6e6d1290",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/SCOPED-PRD-C2A-VERIFICATION.md"
+  },
+  "SCOPED-PRD-C2A.md": {
+    "sha256": "5e686769447f56e40bb4b363f256dd2124d1666bed67397763c3ad724e9aee61",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/SCOPED-PRD-C2A.md"
+  },
+  "project_association_candidate/policy-v1.json": {
+    "sha256": "0ea402f3db6a7fb0743a79a45644d79235a685781ad844d3c42230da2c548691",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/project_association_candidate/policy-v1.json"
+  },
+  "project_association_candidate/project-association-create-v1.schema.json": {
+    "sha256": "0a96730b32749be3edca8f2cbc47f10736b4cf9bbf7b52df8bc586048261d1d9",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/project_association_candidate/project-association-create-v1.schema.json"
+  },
+  "project_association_candidate/project-association-end-v1.schema.json": {
+    "sha256": "45147a9748f5991001440caa63647375ca5a6bf30892cdc49bea472fd331b137",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/project_association_candidate/project-association-end-v1.schema.json"
+  },
+  "project_association_candidate/project-association-event-v1.schema.json": {
+    "sha256": "4e06f33529203694c5bd24572e5804f57d3b05c8d32c4edb7f503f873711ed13",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/project_association_candidate/project-association-event-v1.schema.json"
+  },
+  "project_association_candidate/project-association-v1.schema.json": {
+    "sha256": "185b9e57ecdfbefe8dad14e07821e751cb9619a0e30aca372b104c1c3a9dde6e",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/project_association_candidate/project-association-v1.schema.json"
+  },
+  "project_association_read_candidate/manifest-v1.json": {
+    "sha256": "0e2ff6eac36ae52e32e87ae75163b0ba08aa9d27e6c0da87a1c085e171201f68",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/project_association_read_candidate/manifest-v1.json"
+  },
+  "project_association_read_candidate/policy-v1.json": {
+    "sha256": "4c0ec88511926e1ea68131afb0887442aa01ece36845b2036d45ec48d9af5bf5",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/project_association_read_candidate/policy-v1.json"
+  },
+  "project_association_read_candidate/project-association-precondition-v1.schema.json": {
+    "sha256": "5c89be086e2cc7a3efdb7a5247d82f5f8280ed88a4df1c74f7efce7298015a60",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/project_association_read_candidate/project-association-precondition-v1.schema.json"
+  },
+  "project_association_read_qualification.json": {
+    "sha256": "5381243df882c087ab61932cda77e286a76b3b3e4b19853be5eea9cc81574f1b",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/project_association_read_qualification.json"
+  },
+  "scope_proposal_candidate/manifest-v1.json": {
+    "sha256": "e30c1bc28c49650ea12c809dbbc579ed7d4248271a75a357827c06e7fa1f211f",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_proposal_candidate/manifest-v1.json"
+  },
+  "scope_proposal_candidate/policy-v1.json": {
+    "sha256": "778bdbd6fb82f51482d791d22ae6cf884a8906e91613b07cdafc6b429d24e266",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_proposal_candidate/policy-v1.json"
+  },
+  "scope_proposal_candidate/scope-proposal-event-v1.schema.json": {
+    "sha256": "40795965ab228c7aac876a8e94acbdfb8eabff05a1f37df503a1c75d170fbe9a",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_proposal_candidate/scope-proposal-event-v1.schema.json"
+  },
+  "scope_proposal_candidate/scope-proposal-replace-v1.schema.json": {
+    "sha256": "09006e1fb18a761ce0568c488ca6fe65edc7f76fb3cd15b35f6aa990175d1530",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_proposal_candidate/scope-proposal-replace-v1.schema.json"
+  },
+  "scope_proposal_candidate/scope-proposal-revision-v1.schema.json": {
+    "sha256": "316b8e8239ecb5d7528b52e2f70a86f9b3b0396928b1850b3e8b760a0dae0665",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_proposal_candidate/scope-proposal-revision-v1.schema.json"
+  },
+  "scope_reopening_candidate/manifest-v1.json": {
+    "sha256": "a16cca4313a159fb8297c9f7f90afbab5ab99c3574305f8be8ccd44eba2780df",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_candidate/manifest-v1.json"
+  },
+  "scope_reopening_candidate/policy-v1.json": {
+    "sha256": "598e492b7dc23369eaf3029d7e208b4fd338d03d3e3388fcb10305e9c02b0094",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_candidate/policy-v1.json"
+  },
+  "scope_reopening_candidate/pre-plan-baseline-v1.json": {
+    "sha256": "f3829e16aa91e055d8bb907477c51b3b5b78ac07e1d58e446cef4b835c2c65bb",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_candidate/pre-plan-baseline-v1.json"
+  },
+  "scope_reopening_candidate/scope-proposal-revision-v2.schema.json": {
+    "sha256": "def7127b3bc5644ce96428dc127a345d87faf8c875a7314fd8b8ac2e716ef7cd",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_candidate/scope-proposal-revision-v2.schema.json"
+  },
+  "scope_reopening_candidate/scope-reopening-command-v1.schema.json": {
+    "sha256": "312af5442338f406230c63f12a1752d7f0e0a0e3e2fba41a76836ef693ab5eb9",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_candidate/scope-reopening-command-v1.schema.json"
+  },
+  "scope_reopening_candidate/scope-reopening-event-v1.schema.json": {
+    "sha256": "e12b7a83111ecdab7608b7b4880051171f01b5b27ac496864cc058f81a201d5b",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_candidate/scope-reopening-event-v1.schema.json"
+  },
+  "scope_reopening_candidate/scope-reopening-receipt-v1.schema.json": {
+    "sha256": "84f75afe3baffa50927906abb9c088c9196b3db486688b53c8ff0adaa6d03f75",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_candidate/scope-reopening-receipt-v1.schema.json"
+  },
+  "scope_reopening_qualification.json": {
+    "sha256": "72bdb3b987ec1925754e6a14dee36cecec3c85706605c052d443628d84e7fb52",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_qualification.json"
+  },
+  "scope_reopening_read_candidate/manifest-v1.json": {
+    "sha256": "f272f465c5660eff2f8a4f95be1bbac69e162e3c50724c375629e71ab4fcc3de",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_read_candidate/manifest-v1.json"
+  },
+  "scope_reopening_read_candidate/policy-v1.json": {
+    "sha256": "bff7796e940087af1d1150f142800204fa9c26786ed911c9f449c44a0515916a",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_read_candidate/policy-v1.json"
+  },
+  "scope_reopening_read_candidate/scope-reopening-precondition-v1.schema.json": {
+    "sha256": "ae1ee3cd886156c83ca0c4f5e20b690fe7b67b34373c1cda4d6c29595b8b091e",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scope_reopening_read_candidate/scope-reopening-precondition-v1.schema.json"
+  },
+  "scoped_prd_candidate/manifest-v1.json": {
+    "sha256": "7543deddb9a56e29c3613b03823afb9cd5e9474dc8bb64016665657cee17b997",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/manifest-v1.json"
+  },
+  "scoped_prd_candidate/policy-v1.json": {
+    "sha256": "10ecfff684e02ad6d56a92ea94826ae1d880cc02e6baac052678fa183b8f79c7",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/policy-v1.json"
+  },
+  "scoped_prd_candidate/scoped-prd-approve-v1.schema.json": {
+    "sha256": "12036127a0f054997155a8595259215d0ffe9e81aaab51da31876aaa596c954c",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/scoped-prd-approve-v1.schema.json"
+  },
+  "scoped_prd_candidate/scoped-prd-decision-v1.schema.json": {
+    "sha256": "efd519114a4b8b0b90f557db6b509d3f26646620f5f9024ffcb31c23e851985f",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/scoped-prd-decision-v1.schema.json"
+  },
+  "scoped_prd_candidate/scoped-prd-observation-v1.schema.json": {
+    "sha256": "ab032ce3f151c03365248a58cd0f01b37acb0b1b9e8aa314da629d0518f49a6e",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/scoped-prd-observation-v1.schema.json"
+  },
+  "scoped_prd_candidate/scoped-prd-observe-v1.schema.json": {
+    "sha256": "b361521e38622ce4ec55bc9479c86cf14974ccc32f03277a8107a2b2d070bd09",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/scoped-prd-observe-v1.schema.json"
+  },
+  "scoped_prd_candidate/scoped-prd-observed-event-v1.schema.json": {
+    "sha256": "ab749093de5cb022f37bc5b6b3ce39ea5508db729e7ec372369cd21b252a6962",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/scoped-prd-observed-event-v1.schema.json"
+  },
+  "scoped_prd_candidate/scoped-prd-readiness-v1.schema.json": {
+    "sha256": "a90e8dd974be562f29317e4675618c11ecb15d9cf530a9d1ba8fd96a4ee2abad",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/scoped-prd-readiness-v1.schema.json"
+  },
+  "scoped_prd_candidate/scoped-prd-return-for-revision-v1.schema.json": {
+    "sha256": "8f96471cc042d9b1fa8d66fda3cb327bdb7506ce936f1be4985960884c993594",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/scoped-prd-return-for-revision-v1.schema.json"
+  },
+  "scoped_prd_candidate/scoped-prd-subject-v1.schema.json": {
+    "sha256": "9d363e0f040c75f2ed2daf738a2718abccd9becd33dcf527615a2291a58d7e2d",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/scoped-prd-subject-v1.schema.json"
+  },
+  "scoped_prd_candidate/scoped-prd-submit-v1.schema.json": {
+    "sha256": "a3c7d9d4c854cd006f17784c6f98d945f7a67e2d3d752f097ef3feb48cb37658",
+    "original_repository": "faocampo/plane",
+    "original_commit": "7d4225d594adf984de1451f16ad2c8ab741c58eb",
+    "original_path": "apps/api/plane/curve/scoped_prd_candidate/scoped-prd-submit-v1.schema.json"
+  }
+}

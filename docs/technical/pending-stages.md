@@ -1,5 +1,15 @@
 # Pending stages
 
+## Local reconstruction checkpoint — 2026-10-06
+
+The [local pilot delivery record](local-pilot-delivery-2026-10-06.md) (restored
+baseline, new implementation evidence and remaining acceptance) and
+[manual Gate 2 implementation](manual-gate2-reservation-candidate.md) (separate
+qualified successor, exclusive reservations and default-off UI) describe current
+local work. These tests and integration records provide no publication, merge, deployment
+or activation authority by themselves. The earlier roadmap and historical evidence below retain their original
+scope; local integration does not complete M3, the manual pilot or R1.
+
 This is the concise reading guide to the existing roadmap, not a replacement
 catalog or execution grant. Work-package IDs, FR/NFR/AC traces and detailed
 acceptance scenarios remain in the [development plan](development-plan.md)

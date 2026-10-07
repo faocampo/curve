@@ -29,13 +29,13 @@ historical packet into a coding context.
 ## Public-repository disclosure boundary
 
 This repository is public. AI coding agents working in this repository **MUST
-NOT disclose any information that is internal to X3M** in source code,
+NOT disclose any information that is internal to any adopting organization** in source code,
 documentation, tests, fixtures, examples, generated artifacts, screenshots,
 logs, command output, commit messages, branches, issues, pull requests, review
 comments, or release notes.
 
 An agent **MUST** treat information as internal unless it is already published
-in an approved public source or an authorized X3M reviewer explicitly approves
+in an approved public source or an authorized reviewer for the adopting organization explicitly approves
 that exact information for public disclosure. Uncertainty fails closed: the
 agent stops publication and asks an authorized reviewer for a sanitized value.
 
@@ -66,7 +66,7 @@ inspect the complete outbound diff and all attached/generated material for
 internal information. Automated secret scanning is additional evidence and
 does not replace this disclosure review. If internal information is found, the
 agent removes it from the public artifact and records environment-specific
-configuration only in an approved private X3M system.
+configuration only in an approved private system of the adopting organization.
 
 The normative handling rules are defined by
 [Curve Security and Operations](docs/technical/security-and-operations.md)

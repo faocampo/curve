@@ -1,0 +1,585 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.example.invalid/attention-candidate-v0.1.schema.json",
+  "title": "Synthetic attention extension candidate; not a production contract",
+  "description": "Independent proposed contract. Existing Curve bundles and approval pins are unchanged. JSON shape validation supplements domain invariants; it is not source access authorization.",
+  "$defs": {
+    "SourceEvidence": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "subjectId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "edition": {
+          "const": "attention-candidate-v0.1"
+        },
+        "connectionId": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "resourceKind": {
+          "enum": [
+            "work-item",
+            "message",
+            "history-event"
+          ]
+        },
+        "projectExternalId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "revision": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "dueAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "priority": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "signal": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "key",
+                "reason",
+                "confidence"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "sourceUpdatedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "access": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "readable",
+                "unavailable"
+              ]
+            },
+            "checkedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "state",
+            "checkedAt",
+            "expiresAt"
+          ],
+          "additionalProperties": false
+        },
+        "provenance": {
+          "const": "synthetic"
+        },
+        "sourceId": {
+          "type": "string"
+        },
+        "projectId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "materialKey": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspaceId",
+        "subjectId",
+        "id",
+        "edition",
+        "connectionId",
+        "provider",
+        "externalId",
+        "resourceKind",
+        "projectExternalId",
+        "revision",
+        "title",
+        "summary",
+        "state",
+        "dueAt",
+        "priority",
+        "signal",
+        "sourceUrl",
+        "sourceUpdatedAt",
+        "access",
+        "provenance",
+        "sourceId",
+        "projectId",
+        "observedAt",
+        "materialKey"
+      ],
+      "additionalProperties": false
+    },
+    "AttentionItem": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "subjectId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "edition": {
+          "const": "attention-candidate-v0.1"
+        },
+        "evidenceId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "projectId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "projectTitle": {
+          "type": "string"
+        },
+        "priority": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "sourceLabel": {
+          "type": "string"
+        },
+        "sourceUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "status": {
+          "enum": [
+            "open",
+            "snoozed",
+            "handled"
+          ]
+        },
+        "resurfaced": {
+          "type": "boolean"
+        },
+        "stale": {
+          "type": "boolean"
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "provenance": {
+          "const": "synthetic"
+        },
+        "materialKey": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspaceId",
+        "subjectId",
+        "id",
+        "edition",
+        "evidenceId",
+        "title",
+        "summary",
+        "projectId",
+        "projectTitle",
+        "priority",
+        "reasons",
+        "confidence",
+        "sourceLabel",
+        "sourceUrl",
+        "status",
+        "resurfaced",
+        "stale",
+        "observedAt",
+        "dueAt",
+        "provenance",
+        "materialKey"
+      ],
+      "additionalProperties": false
+    },
+    "ProjectBinding": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "subjectId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "edition": {
+          "const": "attention-candidate-v0.1"
+        },
+        "connectionId": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "sourceUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "historyCoverage": {
+          "enum": [
+            "complete",
+            "partial",
+            "unknown"
+          ]
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "externalId": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "occurredAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "sourceUrl": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "required": [
+              "externalId",
+              "title",
+              "occurredAt",
+              "sourceUrl"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "access": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "readable",
+                "unavailable"
+              ]
+            },
+            "checkedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "state",
+            "checkedAt",
+            "expiresAt"
+          ],
+          "additionalProperties": false
+        },
+        "governance": {
+          "const": "reference-only"
+        },
+        "retrospectiveApprovals": {
+          "const": false
+        },
+        "provenance": {
+          "const": "synthetic"
+        }
+      },
+      "required": [
+        "workspaceId",
+        "subjectId",
+        "id",
+        "edition",
+        "connectionId",
+        "externalId",
+        "title",
+        "sourceUrl",
+        "historyCoverage",
+        "history",
+        "access",
+        "governance",
+        "retrospectiveApprovals",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "ReviewDisposition": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "subjectId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "edition": {
+          "const": "attention-candidate-v0.1"
+        },
+        "itemId": {
+          "type": "string"
+        },
+        "action": {
+          "enum": [
+            "handled",
+            "snooze",
+            "reopen"
+          ]
+        },
+        "snoozeUntil": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "expectedEvidenceId": {
+          "type": "string"
+        },
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "materialKey": {
+          "type": "string"
+        },
+        "evidenceId": {
+          "type": "string"
+        },
+        "sourceEffect": {
+          "const": "none"
+        }
+      },
+      "required": [
+        "workspaceId",
+        "subjectId",
+        "id",
+        "edition",
+        "itemId",
+        "action",
+        "snoozeUntil",
+        "requestId",
+        "expectedEvidenceId",
+        "recordedAt",
+        "materialKey",
+        "evidenceId",
+        "sourceEffect"
+      ],
+      "additionalProperties": false
+    },
+    "RefreshRun": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string"
+        },
+        "subjectId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "edition": {
+          "const": "attention-candidate-v0.1"
+        },
+        "connectionId": {
+          "type": "string"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finishedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "coverage": {
+          "enum": [
+            "complete",
+            "partial",
+            "unknown",
+            "failed"
+          ]
+        },
+        "status": {
+          "enum": [
+            "finished",
+            "failed"
+          ]
+        },
+        "observedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "detail": {
+          "type": "string"
+        },
+        "provenance": {
+          "const": "synthetic"
+        }
+      },
+      "required": [
+        "workspaceId",
+        "subjectId",
+        "id",
+        "edition",
+        "connectionId",
+        "startedAt",
+        "finishedAt",
+        "coverage",
+        "status",
+        "observedCount",
+        "detail",
+        "provenance"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/SourceEvidence"
+    },
+    {
+      "$ref": "#/$defs/AttentionItem"
+    },
+    {
+      "$ref": "#/$defs/ProjectBinding"
+    },
+    {
+      "$ref": "#/$defs/ReviewDisposition"
+    },
+    {
+      "$ref": "#/$defs/RefreshRun"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.example.invalid/attention-local-command-v0.2.schema.json",
+  "title": "Synthetic local review command candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "requestId",
+    "expectedVersion",
+    "action"
+  ],
+  "properties": {
+    "requestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,100}$"
+    },
+    "expectedVersion": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "action": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "itemId"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "handled",
+                "snooze",
+                "reopen"
+              ]
+            },
+            "itemId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "refresh",
+                "material-change",
+                "advance-day",
+                "reset",
+                "partial-refresh",
+                "failed-refresh"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

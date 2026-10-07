@@ -1,0 +1,10 @@
+{
+  "schema_version": "curve.scope-editor-precondition/v2-candidate",
+  "policy_edition": "LOCAL_SCOPE_EDITOR_PRECONDITION_RECONSTRUCTION_V2",
+  "workspace_id": "30000000-0000-4000-8000-000000000001",
+  "product_id": "30000000-0000-4000-8000-000000000003",
+  "initiative_id": "30000000-0000-4000-8000-000000000002",
+  "initiative_version": 9,
+  "scope_status": "PRESENT",
+  "expected_scope_revision": 1
+}

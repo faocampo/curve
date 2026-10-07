@@ -4,6 +4,10 @@
 > Historical approvals apply only to their original bytes; see
 > [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
 
+The [implemented feature summary](implemented-features-2026-10-06.md) (new manual
+capabilities, recovered baseline, branches and remaining acceptance) records the
+2026-10-06 review cut.
+
 ## Purpose
 
 Start with [project status](project-status.md) (current milestone position,
@@ -17,6 +21,12 @@ implementation boundary and next task) and [pending stages](pending-stages.md)
 (concise stage outcomes, gates and exit evidence). This index is the complete
 reference library. Its commit-bound implementation entries describe their
 recorded checkpoints; they are not live deployment status.
+
+The [local reconstruction checkpoint](local-pilot-delivery-2026-10-06.md) (restored
+baseline, new manual implementation and outstanding pilot acceptance) and
+[manual Gate 2 successor](manual-gate2-reservation-candidate.md) (exact approval,
+exclusive task reservations, reconciled release and default-off UI) record the
+2026-10-06 local work separately from the historical implementation entries.
 
 This directory is the architecture and implementation handoff derived from the [Curve PRD v0.13](../curve-ai-native-sdlc-prd.md) (product vision, approved Product core, Curve-first shell invariant, requirements, acceptance criteria, rollout, decision register, and accepted local Temporal proof). Together, these documents define the logical system, data model, workflows, integration boundaries, security posture, engineering patterns, technology decisions, and dependency-ordered development plan needed by human engineers and AI coding agents.
 
