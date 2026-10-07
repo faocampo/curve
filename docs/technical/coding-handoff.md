@@ -1,5 +1,13 @@
 # Coding handoff
 
+## Current consolidation checkpoint — 2026-10-07
+
+Start with [project status](project-status.md) (verified integration position and
+next three tasks) and the [consolidation ledger](project-consolidation-2026-10-07.md)
+(branch dispositions, merge evidence and gates). Existing work is being reconciled
+before feature expansion. The September implementation boundary below is dated
+history; inspect October reconstruction source before repeating its next task.
+
 ## Authority and reading order
 
 Follow the approved [repository delivery policy](repository-delivery-policy.md)
