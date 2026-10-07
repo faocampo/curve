@@ -38,7 +38,7 @@ then read the named packet and relevant FR/NFR/AC requirements. The
 historical snapshots. The [review log](documentation-review.md) (audit findings,
 coverage and unresolved decisions) records this reconciliation.
 
-## Current implementation boundary
+## Historical implementation boundary — 2026-09-06
 
 Snapshot: 2026-09-06; recheck live Git state before using these references.
 
@@ -58,7 +58,13 @@ Snapshot: 2026-09-06; recheck live Git state before using these references.
 - Production storage, Google transport/identity, erasure/hold/backup operations,
   authenticated UI integration and full milestone qualification remain pending.
 
-## Next cohesive task: PRD command integration
+## Historical task definition — PRD command integration
+
+Resumption note: the [consolidation ledger](project-consolidation-2026-10-07.md)
+(current merge gate and preserved command-edition prototype) supersedes the
+historical branch order below. Its local prototype requires a collision-free
+migration and qualified runtime successor before reuse. Use the current project
+status to select the next task.
 
 **Integration gate:** the repository owner requires Initiative-shell UX review,
 including documents, reviewer responsibilities and simplified operational flow,

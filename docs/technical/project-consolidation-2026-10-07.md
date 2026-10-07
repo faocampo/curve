@@ -150,3 +150,8 @@ and R1 operational acceptance retain their own gates.
 Keep subsequent work to one cohesive outcome and at most two dependent PRs.
 Unfinished features remain in the roadmap; future work starts from the verified
 integration branch rather than historical recovery refs.
+
+GitHub reported `curve-integration` as unprotected at this audit. The approved
+delivery policy and explicit human gate were enforced during this work. Separate
+repository-protection hardening remains an administrative follow-up; no protection
+or approval was bypassed, and repository settings were left unchanged.
