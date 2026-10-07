@@ -2,7 +2,7 @@
 
 Scope: existing work and integration repairs. The [project status](project-status.md)
 (concise roadmap position and next actions) is the current handoff. Application
-integration remains gated by exact-candidate owner UX acceptance and CI.
+integration remains gated by exact-candidate owner UX acceptance. Final-head CI passed.
 
 ## Merge results
 
@@ -10,9 +10,9 @@ integration remains gated by exact-candidate owner UX acceptance and CI.
 | --- | --- |
 | Initial status baseline merged | [Curve PR #170](https://github.com/faocampo/curve/pull/170) (inventory and status entry point); integration `4dc0879606f72a4d97eab4a30a001b89e2dad77a`; required validation passed |
 | Reconstruction contracts merged | [Curve PR #171](https://github.com/faocampo/curve/pull/171) (manual planning, scope/Gate 2 contracts, recovered evidence and attention experiment); integration `e2428ae627c0022fda7a91d8e950b921b6a668c2`; required validation passed |
-| Application work consolidated | [Plane PR #17](https://github.com/faocampo/plane/pull/17) (single Initiative/PRD/manual-planning candidate); draft head `c2d5e85f536787fed3b358c7fec623603341736b`; base `9bedb74a77460c65ac681854b714a4607680398e` |
+| Application work consolidated | [Plane PR #17](https://github.com/faocampo/plane/pull/17) (single Initiative/PRD/manual-planning candidate); draft head `3add55216eaf826c7d73651cf2b377b1fbc1ef62`; base `9bedb74a77460c65ac681854b714a4607680398e` |
 | Intermediate PR stack reconciled | PR #20 became merged by containment in the updated root; PRs #21–#28 closed as superseded; PRs #29–#40 retain their earlier intermediate merge records |
-| Final handoff | This status PR records actual outcomes and remaining gates; its merge result is available in GitHub history |
+| Final handoff | [Curve PR #172](https://github.com/faocampo/curve/pull/172) (status, full branch inventory and merge ledger) records actual outcomes and remaining gates; its exact merge commit is available in the linked PR history |
 
 The Plane candidate preserves existing-project reconstruction
 `a6b0a8db15c42625712d083b8022cd4011eef892` and five formerly local pilot commits
@@ -90,20 +90,31 @@ Prunable registrations and historical refs are outside the active delivery queue
 | Final status / inventory working tree | 1,071 tests; 124 schemas; 186 fixtures; 124 Markdown files; 47 diagrams; no structural findings |
 | Separate attention experiment | 70 tests passed; seven sandbox loopback failures passed on permitted rerun without source changes |
 | Plane frontend | 392 tests across 34 files passed after final sorting fix; full web type check passed locally |
+| Final exact-head backend CI | 2,331 passed: core 1,907, manual planning 100, scope regression 186, host doubles 138; 12 Temporal cases skipped; all native groups reported no migration drift |
 | Native manual planning, scope reader and Gate 2 | 100 tests passed in isolated synthetic containers |
 | Native existing-project / scope / PRD / reopening regressions | 186 tests passed in isolated synthetic containers |
 | Migration drift | `makemigrations --check --dry-run`: no changes detected |
 | Recovery/persistence tooling | 25 focused unit tests passed |
 | Standalone Today prototype | 29 fresh headless-browser checks passed; fresh screenshots saved separately from historical evidence |
 | Contract integrity / workflow guards | 109-file integrity check, seven contract tests and nine workflow tests passed |
+| Backend partition coverage | Four guards passed: all 88 test files occur exactly once across core (61), native manual planning (11), scope regressions (5) and host doubles (11); new files enter core by default |
+| Isolated host doubles | 138 tests passed in separate processes; cross-language parity uses the canonical Curve contract reference |
+| Historical integrity / precondition regression | 65 tests passed after restoring successor migration isolation and exercising the current active seal |
+| Copyright-only qualification | 21 new closed-shape, unchanged-authority and source-tamper checks passed; historical qualification records preserved; Python and TypeScript copyright check passed locally |
 | Local formatting / lint | 16 format tasks and 16 lint tasks passed; API Ruff passed; lint budgets unchanged |
 
-The backend runtime module bytes and migrations remained unchanged during the
-final CI repairs; fixture changes only reformatted SQL construction. Tests used
+Initial CI repairs preserved backend runtime bytes and migrations; fixture changes
+only reformatted SQL construction. The subsequent copyright-only successor below
+preserves the complete original bodies and historical proofs. Tests used
 disposable synthetic databases. The test containers/network were removed afterward.
-The running review demo and its detached source at
-`8aede16b4aee1aa66eb0b9469c4c849b34250f6e` were preserved without restart,
-reseed or deployment. Its historical acceptance is separate from the new PR head.
+The review demo was left untouched: no restart, reseed or deployment. Its detached
+source at `8aede16b4aee1aa66eb0b9469c4c849b34250f6e` remains available. At the final
+environment check (18:18 UTC), the demo containers were absent from Docker's
+inventory; this consolidation did not recreate them or infer the cause. The original
+Curve checkout also moved to integrated `main` during the run; its original
+untracked files and three stashes remain, as do Plane's edit and stash. The restored
+reconstruction checkouts retain their original branches. Historical demo acceptance
+is separate from the new PR head.
 
 ### Remote CI repairs and exact-head runs
 
@@ -117,13 +128,58 @@ with the browser target; keep bounded stream reads sequential; make API lint
 read-only; preserve byte-pinned Django model-registration imports using a scoped
 lint exception; start the complete Curve test dependency set explicitly without
 the unrelated MinIO service. The full Curve suite and migration check remain enabled.
+The targeted native suites took about 34 minutes locally before the remaining
+legacy suite and setup, so CI now runs three disjoint native groups, each
+with an isolated database and a 40-minute bound, plus a separate host-double job.
+The host job uses pinned Curve contracts and preserves the existing separation
+between empty-app doubles and native Django models. Coverage guards prevent omissions;
+one group failing does not cancel the others. Earlier unpartitioned runs were
+superseded, rather than counted as passes.
+
+The first complete partitioned [core run](https://github.com/faocampo/plane/actions/runs/37654946325)
+(legacy regression evidence) exposed seven failures: an old forged-seal attack
+targeted a historical predecessor, and a historical migration test left its
+successors unapplied, contaminating subsequent precondition tests. The test-only
+repair targets the installed active seal and restores every installed migration
+leaf before checking current qualification. Runtime guards, migrations and their
+qualification pins remain unchanged. Twelve Temporal cases require an available
+verified time-skipping test server and are reported separately as skipped.
 
 Current candidate runs:
-[web CI](https://github.com/faocampo/plane/actions/runs/37649774910)
-(exact-head format, lint, build and types: all passed) and
-[API CI](https://github.com/faocampo/plane/actions/runs/37649779668)
+[web CI](https://github.com/faocampo/plane/actions/runs/37664543431)
+(exact-head format, lint, build and types) and
+[API CI](https://github.com/faocampo/plane/actions/runs/37664538155)
 (exact-head lint, full Curve backend suite and migration drift).
-Final outcomes are recorded before handoff; incomplete/failed checks remain gates.
+Both passed on `3add55216eaf826c7d73651cf2b377b1fbc1ef62`. Backend totals:
+2,331 passed and 12 Temporal skips; all three native groups reported no migration
+drift. API lint and host-double isolation also passed.
+The PR remains draft, so its ordinary build jobs are intentionally skipped by the
+existing gate. The linked explicit-dispatch runs validate the same exact head.
+
+### Copyright-only qualification repair
+
+The earlier [copyright check](https://github.com/faocampo/plane/actions/runs/37657813923)
+(repository-wide Python and TypeScript header validation) failed on 57 Python
+files from the reconstructed manual candidates and pilot tools. It stopped before
+the TypeScript step. The missing-header set includes runtime sources pinned by
+the manual-plan, scope-reader and Gate 2 qualification chain. Adding headers would
+change those source digests. The repair adds headers to 57 Python and 12 TypeScript
+files and an additive exact-header qualification record. Its trusted validator
+accepts only the fixed three-comment prefix on the 20 named reconstructed runtime
+modules, compares the remaining bytes with the historical digests, and preserves
+all writer, model, physical-catalog and migration authority. Old proof bytes remain
+unchanged. Unknown files, forged hashes, altered bodies, links and changed authority
+are rejected. No ignore rule or check bypass was introduced. A test-only loop was
+also made concurrent across independent cases to satisfy the existing commit lint.
+Final [copyright CI](https://github.com/faocampo/plane/actions/runs/37664553185)
+(both language checks) and [CodeQL](https://github.com/faocampo/plane/actions/runs/37664553014)
+(JavaScript and Python security analysis) both passed on the exact final head.
+The advisory [React Doctor run](https://github.com/faocampo/plane/actions/runs/37664553228)
+(frontend static review) completed successfully but reported 5 errors and 37
+warnings, including browser-dependent initialization, render-time refs and
+component complexity. These findings remain a triage item; workflow success
+does not establish their resolution. Preserve actor/workspace stale-response
+guards when addressing the ref findings.
 
 ## Tracking reconciled
 
@@ -142,7 +198,8 @@ Final outcomes are recorded before handoff; incomplete/failed checks remain gate
 ## Remaining delivery gate and resumption
 
 Owner: accept or return the exact Initiative document/reviewer/operational UX for
-PR #17. Development agent: satisfy current-head CI, then perform the authorized
+PR #17. Current-head CI has passed. Development agent: revalidate if the candidate
+or base changes, then after owner acceptance perform the authorized
 PR merge, verify `curve-integration`, refresh status and retire eligible remote
 heads. The separate Today screen contract, protected-storage/provider activation
 and R1 operational acceptance retain their own gates.

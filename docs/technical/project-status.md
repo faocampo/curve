@@ -2,20 +2,21 @@
 
 Updated: 2026-10-07. Existing work is consolidated into the canonical documentation
 branch and one application review candidate. The remaining application merge is
-held for the owner's exact-candidate UX acceptance and current-head validation.
+held for the owner's exact-candidate UX acceptance. Final-head CI passed.
 
 ## Baseline and merge position
 
 | Repository | Integration position | Remaining work |
 | --- | --- | --- |
-| Curve | `main`: PRs #170 and #171 merged; reconstruction integration commit `e2428ae627c0022fda7a91d8e950b921b6a668c2` | Final status reconciliation in this document's PR |
+| Curve | `main`: PRs #170 and #171 merged; reconstruction integration commit `e2428ae627c0022fda7a91d8e950b921b6a668c2`; final handoff delivered through [PR #172](https://github.com/faocampo/curve/pull/172) (consolidation results) | Application UX acceptance is the next delivery gate |
 | Plane fork | `curve-integration`: `9bedb74a77460c65ac681854b714a4607680398e` | Single draft PR #17: Initiative/PRD, existing-project, manual-planning/Gate 2 and local-pilot candidates |
 | Private governance | Canonical remote branch inspected; no local-only work | Actual policy, activation and operational evidence stay in the protected repository |
 
 Plane's 26 remote branches became **five**: integration, upstream `preview`, one
 recovery checkpoint, the draft PR and an actively used reconstruction branch.
 Twenty-one redundant remote heads were retired with exact-tip checks and recovery
-refs. Original local changes, stashes, branches and the running demo are preserved.
+refs. Original local changes, stashes and branches are preserved. The review
+demo was left untouched; its containers were absent at the final environment check.
 See the [consolidation ledger](project-consolidation-2026-10-07.md) (exact merges,
 checks, retained exceptions and recovery evidence) and [branch inventory](project-consolidation-branch-inventory-2026-10-07.md)
 (all original local branch dispositions).
@@ -49,12 +50,18 @@ reconstruction contracts), and [Plane PR #17](https://github.com/faocampo/plane/
 2. **Development agent: finish the gated application delivery loop.** After
    acceptance and passing current-head checks, merge PR #17 into
    `curve-integration`, verify its integration commit, update this handoff and
-   retire eligible source heads. Keep the existing demo until a separately
-   authorized, recoverable refresh is ready.
+   retire eligible source heads. Preserve the existing demo source and data until
+   a separately authorized, recoverable environment refresh is ready.
 3. **Development agent: select one remaining roadmap slice.** Use
-   [pending stages](pending-stages.md) (outcomes and gates), qualify its exact
-   prerequisites, then open one cohesive PR. Keep the Today prototype's human
-   acceptance and production storage/provider activation as separate gates.
+   [pending stages](pending-stages.md) (outcomes and gates), qualify its prerequisites,
+   then open one cohesive PR. Include advisory frontend findings in its triage.
+
+The Today prototype's human acceptance and production storage/provider activation
+retain separate gates. Twelve Temporal time-skipping cases remain unverified in
+the available test environment; their fresh proof belongs to qualification.
+Final application CI passed: 2,331 backend tests, with those 12 skips; web
+format/lint/build/types, copyright validation and CodeQL passed. See the ledger
+for exact-head evidence and the advisory frontend findings still requiring triage.
 
 Scope remains existing-work consolidation and integration repairs. Unfinished
 features stay in backlog. Apply the [delivery policy](repository-delivery-policy.md)
