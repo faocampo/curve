@@ -3,7 +3,7 @@
 Updated: 2026-10-08. Existing work is consolidated into the canonical documentation
 branch and one application review candidate. The remaining application merge is
 held for the owner's exact-candidate UX acceptance. Upstream synchronization is
-merged; the refreshed application candidate is undergoing exact-head CI.
+merged; the refreshed application candidate has passed exact-head CI.
 
 ## Baseline and merge position
 
@@ -30,8 +30,12 @@ React 19, security pins, uv and storage-image updates. The refreshed PR #17 pass
 Current candidate [API CI](https://github.com/faocampo/plane/actions/runs/37809745762)
 (partitioned native backend and host-double checks) and
 [web CI](https://github.com/faocampo/plane/actions/runs/37809749184)
-(full package format, lint, build and types) are running; earlier evidence retains
-its historical scope.
+(full package format, lint, build and types) passed for the exact candidate:
+2,331 backend/host-double tests plus 13 storage regressions, with 12 Temporal
+time-skipping skips. Migration-drift checks, API lint and full web checks passed.
+Earlier evidence retains its historical scope.
+The current [React Doctor report](https://github.com/faocampo/plane/actions/runs/37809756335)
+(advisory frontend findings) reports 5 errors and 120 warnings; triage remains open.
 
 ## Roadmap position
 
@@ -71,8 +75,7 @@ reconstruction contracts), and [Plane PR #17](https://github.com/faocampo/plane/
 The Today prototype's human acceptance and production storage/provider activation
 retain separate gates. Twelve Temporal time-skipping cases remain unverified in
 the available test environment; their fresh proof belongs to qualification.
-The October 7 application CI passed: 2,331 backend tests, with those 12 skips; web
-format/lint/build/types, copyright validation and CodeQL passed. See the ledger
+The October 8 application CI passed; copyright validation and CodeQL also passed. See the ledger
 for exact-head evidence and the advisory frontend findings still requiring triage.
 
 Scope remains existing-work consolidation and integration repairs. Unfinished

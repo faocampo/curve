@@ -17,8 +17,14 @@
 - Fresh full [API CI](https://github.com/faocampo/plane/actions/runs/37809745762)
   (native partitions and host doubles) and
   [web CI](https://github.com/faocampo/plane/actions/runs/37809749184)
-  (full workspace checks) are running. Historical checks below do not approve the
-  migrated candidate. The owner's exact-candidate UX gate remains open.
+  (full workspace checks) passed on this exact head. Native partitions passed
+  1,907 core, 186 scope-regression and 100 manual-planning tests; host doubles
+  passed 138 tests, totaling 2,331. A separate storage suite passed 13 tests.
+  Twelve Temporal time-skipping tests remain skipped. All three native partitions
+  passed migration-drift checks; API lint and full web checks passed. The
+  [React Doctor report](https://github.com/faocampo/plane/actions/runs/37809756335)
+  (advisory frontend findings) records 5 errors and 120 warnings requiring triage.
+  The owner's exact-candidate UX gate remains open.
 - The original upstream working branch also incorporates the three new commits
   at `f7b16dca42`, retaining its local formatter/documentation commits and existing
   package-manager edit. Hooks ran with the committed pnpm version selected for
@@ -33,6 +39,10 @@
   its local branch/worktree and recovery history remain available. Plane again
   has five remote heads and one open draft PR.
 - No deployment, protected-storage activation or product-contract change occurred.
+- [Curve PR #173](https://github.com/faocampo/curve/pull/173) (status refresh and
+  current coding handoff) records these results. Local full validation passed
+  1,071 tests, schema/fixture checks, Markdown, disclosure and structural checks;
+  the PR's exact-head validation is linked in its check history.
 
 ## Historical October 7 record
 

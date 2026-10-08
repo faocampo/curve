@@ -13,8 +13,10 @@ repeating its next task or reopening superseded PRs.
 Plane PR #47 (upstream synchronization) is merged into `curve-integration` at
 `0cc166bc48`. The fork's `preview` matches upstream `bab49bb978`. PR #17 now includes
 the source-layout, component and dependency migrations at `9b6ccc9903`; 392 local
-frontend tests pass and fresh full CI is running. Use the status links for final
-results before approving or merging this candidate.
+frontend tests pass and fresh full CI passed: 2,331 backend/host-double tests plus
+13 storage regressions, with 12 Temporal time-skipping skips. Full web checks and
+migration-drift checks passed. Use the status links for evidence and remaining
+advisory findings before approving or merging this candidate.
 
 ## Local reconstruction checkpoint — 2026-10-06
 
