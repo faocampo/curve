@@ -1,5 +1,41 @@
 # Project consolidation ledger — 2026-10-07
 
+## Upstream synchronization follow-up — 2026-10-08
+
+- Fork `preview` matches upstream `bab49bb978ccb56af1d78dec6c6d54dfe8d03c1c`.
+- [Plane PR #47](https://github.com/faocampo/plane/pull/47) (upstream synchronization)
+  merged at `0cc166bc480525a8301535eb392e1708b0c555e7`. All checks passed,
+  including 395 backend tests with 10 skips. Node hooks distinguish unchanged
+  parent imports from resolutions; repository lint remains mandatory, resolution
+  files retain strict formatting/warning checks, and ordinary commits retain the
+  original hook. Five isolated Git regression tests cover that policy.
+- [Plane PR #17](https://github.com/faocampo/plane/pull/17) (held application candidate)
+  advanced from `3add55216e` to `9b6ccc9903`. Thirty-six conflict paths were resolved
+  while preserving Curve UX behavior and backend partitions. Local checks passed:
+  392 frontend tests, 22 script regressions, dependency builds, web types, backend
+  Ruff, contract integrity, repository lint and strict resolution checks.
+- Fresh full [API CI](https://github.com/faocampo/plane/actions/runs/37809745762)
+  (native partitions and host doubles) and
+  [web CI](https://github.com/faocampo/plane/actions/runs/37809749184)
+  (full workspace checks) are running. Historical checks below do not approve the
+  migrated candidate. The owner's exact-candidate UX gate remains open.
+- The original upstream working branch also incorporates the three new commits
+  at `f7b16dca42`, retaining its local formatter/documentation commits and existing
+  package-manager edit. Hooks ran with the committed pnpm version selected for
+  that command; the user's package-manager preference was preserved.
+- The clean, actively used `feature/existing-project-association` working copy
+  fast-forwarded from `a6b0a8db1` to the same `9b6ccc9903` candidate. Its former tip
+  remains in `refs/archive/pre-preview-sync/existing-project-association-20261008`.
+  The remote was updated through the already authenticated fork connection after
+  the restored clone's HTTPS connection lacked push credentials. This active
+  alias remains retained; it adds no independent workstream or PR.
+- The merged synchronization remote branch was retired using its exact-tip lease;
+  its local branch/worktree and recovery history remain available. Plane again
+  has five remote heads and one open draft PR.
+- No deployment, protected-storage activation or product-contract change occurred.
+
+## Historical October 7 record
+
 Scope: existing work and integration repairs. The [project status](project-status.md)
 (concise roadmap position and next actions) is the current handoff. Application
 integration remains gated by exact-candidate owner UX acceptance. Final-head CI passed.

@@ -1,18 +1,19 @@
 # Curve project status
 
-Updated: 2026-10-07. Existing work is consolidated into the canonical documentation
+Updated: 2026-10-08. Existing work is consolidated into the canonical documentation
 branch and one application review candidate. The remaining application merge is
-held for the owner's exact-candidate UX acceptance. Final-head CI passed.
+held for the owner's exact-candidate UX acceptance. Upstream synchronization is
+merged; the refreshed application candidate is undergoing exact-head CI.
 
 ## Baseline and merge position
 
 | Repository | Integration position | Remaining work |
 | --- | --- | --- |
 | Curve | `main`: PRs #170 and #171 merged; reconstruction integration commit `e2428ae627c0022fda7a91d8e950b921b6a668c2`; final handoff delivered through [PR #172](https://github.com/faocampo/curve/pull/172) (consolidation results) | Application UX acceptance is the next delivery gate |
-| Plane fork | `curve-integration`: `9bedb74a77460c65ac681854b714a4607680398e` | Single draft PR #17: Initiative/PRD, existing-project, manual-planning/Gate 2 and local-pilot candidates |
+| Plane fork | `curve-integration`: `0cc166bc480525a8301535eb392e1708b0c555e7`; [PR #47](https://github.com/faocampo/plane/pull/47) (upstream synchronization) merged | Single draft PR #17 at `9b6ccc9903`: synchronized Initiative/PRD, existing-project, manual-planning/Gate 2 and local-pilot candidates |
 | Private governance | Canonical remote branch inspected; no local-only work | Actual policy, activation and operational evidence stay in the protected repository |
 
-Plane's 26 remote branches became **five**: integration, upstream `preview`, one
+The October 7 consolidation reduced Plane's 26 remote branches to **five**: integration, upstream `preview`, one
 recovery checkpoint, the draft PR and an actively used reconstruction branch.
 Twenty-one redundant remote heads were retired with exact-tip checks and recovery
 refs. Original local changes, stashes and branches are preserved. The review
@@ -20,6 +21,17 @@ demo was left untouched; its containers were absent at the final environment che
 See the [consolidation ledger](project-consolidation-2026-10-07.md) (exact merges,
 checks, retained exceptions and recovery evidence) and [branch inventory](project-consolidation-branch-inventory-2026-10-07.md)
 (all original local branch dispositions).
+
+The fork and upstream `preview` now match `bab49bb978`. PR #47 passed every CI
+check, including 395 backend tests (10 skips). Its integration preserves Curve
+contracts and Temporal 1.31.0 while adopting upstream source relocation, Propel,
+React 19, security pins, uv and storage-image updates. The refreshed PR #17 passes
+392 frontend tests, 22 script tests, types, lint and contract integrity locally.
+Current candidate [API CI](https://github.com/faocampo/plane/actions/runs/37809745762)
+(partitioned native backend and host-double checks) and
+[web CI](https://github.com/faocampo/plane/actions/runs/37809749184)
+(full package format, lint, build and types) are running; earlier evidence retains
+its historical scope.
 
 ## Roadmap position
 
@@ -59,7 +71,7 @@ reconstruction contracts), and [Plane PR #17](https://github.com/faocampo/plane/
 The Today prototype's human acceptance and production storage/provider activation
 retain separate gates. Twelve Temporal time-skipping cases remain unverified in
 the available test environment; their fresh proof belongs to qualification.
-Final application CI passed: 2,331 backend tests, with those 12 skips; web
+The October 7 application CI passed: 2,331 backend tests, with those 12 skips; web
 format/lint/build/types, copyright validation and CodeQL passed. See the ledger
 for exact-head evidence and the advisory frontend findings still requiring triage.
 
