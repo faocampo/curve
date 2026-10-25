@@ -7,6 +7,9 @@ This candidate starts M2-01 (roadmap planning domain). It consumes the
 (application UTC, format enforcement and immutable historical evidence) and the
 [product requirements](../../../docs/curve-ai-native-sdlc-prd.md)
 (roadmap cardinality, schedules, progress and movement history). The
+[domain model](../../../docs/technical/domain-model.md)
+(common attribution, protected bodies, canonical Milestone types and history)
+defines the logical record fields. The
 [task catalog](../../../docs/technical/m1-m7-task-packets.md)
 (M2 delivery boundaries) retains its other dependency and qualification gates.
 
@@ -29,14 +32,18 @@ records in one consistent transaction after authorization.
 
 | Entity | Identity and relationships | Candidate representation |
 | --- | --- | --- |
-| Roadmap | One Product; one active human Roadmap owner | Name, owner, common aggregate fields |
-| Milestone | One Roadmap in the same workspace/Product | Name, type, integer ordering position |
-| Feature | Reusable capability belonging to one Product | Name, common aggregate fields |
+| Roadmap | One Product; one active human Roadmap owner | Name, owner, optional horizon dates, common aggregate fields |
+| Milestone | One Roadmap in the same workspace/Product | Name, canonical type, optional target dates, integer ordering position |
+| Feature | Reusable capability belonging to one Product | Name, optional protected description reference, common aggregate fields |
 | Roadmap Item | One Roadmap, current Milestone, Feature and defining Initiative | Scope, owner, status, priority, confidence, health, dates, progress, approved PRD reference |
 
 All mutable records carry an immutable UUID, workspace/Product identity,
 application-owned `schema_version = 1.0`, positive aggregate version and
-application-generated UTC timestamps. Creation time is preserved on mutation.
+application-generated UTC timestamps, human creator/updater attribution, and
+nullable tombstone attribution. The existing wire name `version` represents the
+domain model's logical `aggregate_version`. Creation time and actor are preserved
+on mutation; a tombstone requires its actor and rationale. Tombstone record
+shape supplies no deletion-command authority.
 Clock rollback may make update time earlier than creation time; aggregate
 version establishes command order. Request schemas must omit caller-owned
 identity, edition and timestamp fields rather than reuse record schemas.
@@ -61,21 +68,31 @@ identity, edition and timestamp fields rather than reuse record schemas.
 
 ## Representation choices in this candidate
 
-The Milestone type labels are `RELEASE`, `CALENDAR_PERIOD`, `PRODUCT_OUTCOME`
-and `INTERNAL_PHASE`. Ordering uses non-negative integer positions unique
+The Milestone type labels are the domain model's `RELEASE_VERSION`,
+`CALENDAR_PERIOD`, `PRODUCT_OUTCOME` and `INTERNAL_DEVELOPMENT_PHASE`. Ordering uses non-negative integer positions unique
 within each Roadmap; gaps are permitted. Reordering must be atomic and use a
-Roadmap version precondition. These wire labels and ordering mechanics are
-candidate implementation choices derived from the PRD's four types and ordered
-Milestones. They do not change the product requirements.
+Roadmap version precondition. Integer ranking is a candidate implementation choice for the domain model's
+ordered scalar. Optional Roadmap horizons and Milestone target windows may have
+one date; when both are present, start cannot follow end.
 
-Name length is bounded at 255 characters; item scope and progress notes are
-bounded at 10,000 characters, following existing Product text limits. The
+Name length is bounded at 255 characters; progress notes are bounded at 10,000
+characters, following existing Product text limits. Item `scope_body` and optional
+Feature description use protected `RichTextRef` metadata, never inline prose.
+The reference binds object ID, digest, byte size, media type and editor schema
+version; the runtime separately checks workspace scope, accessibility and
+immutable object identity. `defining_initiative_id` and `approved_prd_version_id`
+retain the domain model's exact names. The
 complete runtime contract must define metadata editing, ownership transfer,
 archival, state transitions, command payloads and policy receipts before those
 commands become available. This candidate does not invent an active permission
 grant from the presence of an owner field.
 
 ## Persistence and movement requirements
+
+The [relational candidate](RELATIONAL.md) (tables, scoped constraints,
+reciprocal Initiative linkage, history and transaction protocol) specifies the
+database implementation boundary. Its migration and native runtime tests remain
+pending.
 
 Additive persistence must preserve the released migration sequence and historical
 catalog/source qualification. Use scoped uniqueness for aggregate identity,
@@ -97,10 +114,31 @@ the current Milestone. Failure at any event, outbox or history step rolls back
 the full command. Current membership and Roadmap authority must be reevaluated
 for every command; a valid conformance fixture cannot grant either.
 
+## Progress and movement delta conformance
+
+The schema also defines closed `PROGRESS_CHANGED` and `MILESTONE_MOVED`
+append-only history records. Each binds item identity, workspace/Product,
+per-item sequence, before/after aggregate versions, actor, UTC recording time
+and the exact changed fields. Movement additionally requires rationale and
+expected schedule impact. Progress includes previous/current percentage and note.
+
+`validateRoadmapItemChange` (pure state/history delta validation) compares two
+complete authorized graphs and one proposed history record. It requires one
+version and history-sequence increment, current Roadmap owner attribution,
+unchanged creation fields, exact before/after values and preservation of every
+unrelated field and aggregate. Both graphs must satisfy the relationship and
+schedule rules. Clock rollback is allowed; the sequence establishes order.
+
+These checks detect stale or mismatched proposed evidence. Native tests must
+still prove atomic history insertion, uniqueness under races, idempotent replay
+without a second append, rollback and fresh membership. Scope, schedule, status,
+owner, health and priority history types remain to define before those commands
+are exposed. This candidate never treats a valid transition as a persisted one.
+
 ## Remaining delivery
 
-1. Complete relational, command and policy contracts, including exact Initiative
-   linkage and retained movement/progress records.
+1. Validate the relational candidate and complete command and policy contracts,
+   including exact Initiative linkage and retained movement/progress records.
 2. Implement additive persistence and the narrow catalog/source qualification
    successor, then prove preservation with native database tests.
 3. Implement scoped services and routes, testing revoked membership, concurrent

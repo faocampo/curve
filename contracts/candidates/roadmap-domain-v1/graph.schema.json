@@ -63,7 +63,14 @@
         "created_at",
         "updated_at",
         "name",
-        "owner_user_id"
+        "created_by",
+        "updated_by",
+        "tombstoned_at",
+        "tombstoned_by",
+        "tombstone_reason",
+        "owner",
+        "horizon_start",
+        "horizon_end"
       ],
       "properties": {
         "schema_version": {
@@ -100,9 +107,54 @@
           "minLength": 1,
           "maxLength": 255
         },
-        "owner_user_id": {
-          "type": "string",
-          "format": "uuid"
+        "created_by": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "updated_by": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "tombstoned_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "tombstoned_by": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/humanActor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tombstone_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "owner": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "horizon_start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "horizon_end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
         }
       }
     },
@@ -119,8 +171,15 @@
         "updated_at",
         "roadmap_id",
         "name",
-        "kind",
-        "position"
+        "position",
+        "created_by",
+        "updated_by",
+        "tombstoned_at",
+        "tombstoned_by",
+        "tombstone_reason",
+        "type",
+        "target_start",
+        "target_end"
       ],
       "properties": {
         "schema_version": {
@@ -161,17 +220,63 @@
           "minLength": 1,
           "maxLength": 255
         },
-        "kind": {
-          "enum": [
-            "RELEASE",
-            "CALENDAR_PERIOD",
-            "PRODUCT_OUTCOME",
-            "INTERNAL_PHASE"
-          ]
-        },
         "position": {
           "type": "integer",
           "minimum": 0
+        },
+        "created_by": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "updated_by": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "tombstoned_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "tombstoned_by": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/humanActor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tombstone_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "type": {
+          "enum": [
+            "RELEASE_VERSION",
+            "CALENDAR_PERIOD",
+            "PRODUCT_OUTCOME",
+            "INTERNAL_DEVELOPMENT_PHASE"
+          ]
+        },
+        "target_start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "target_end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
         }
       }
     },
@@ -186,7 +291,13 @@
         "version",
         "created_at",
         "updated_at",
-        "name"
+        "name",
+        "created_by",
+        "updated_by",
+        "tombstoned_at",
+        "tombstoned_by",
+        "tombstone_reason",
+        "description"
       ],
       "properties": {
         "schema_version": {
@@ -222,6 +333,48 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 255
+        },
+        "created_by": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "updated_by": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "tombstoned_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "tombstoned_by": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/humanActor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tombstone_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "description": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/richTextRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       }
     },
@@ -239,9 +392,6 @@
         "roadmap_id",
         "milestone_id",
         "feature_id",
-        "initiative_id",
-        "owner_user_id",
-        "scope",
         "status",
         "priority",
         "confidence",
@@ -249,7 +399,16 @@
         "planned_start",
         "planned_end",
         "declared_progress",
-        "approved_prd_revision_id"
+        "created_by",
+        "updated_by",
+        "tombstoned_at",
+        "tombstoned_by",
+        "tombstone_reason",
+        "owner",
+        "defining_initiative_id",
+        "approved_prd_version_id",
+        "scope_body",
+        "progress_note"
       ],
       "properties": {
         "schema_version": {
@@ -292,19 +451,6 @@
         "feature_id": {
           "type": "string",
           "format": "uuid"
-        },
-        "initiative_id": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "owner_user_id": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "scope": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 10000
         },
         "status": {
           "enum": [
@@ -358,14 +504,318 @@
           "minimum": 0,
           "maximum": 100
         },
-        "approved_prd_revision_id": {
+        "created_by": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "updated_by": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "tombstoned_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "tombstoned_by": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/humanActor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tombstone_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "owner": {
+          "$ref": "#/$defs/humanActor"
+        },
+        "defining_initiative_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "approved_prd_version_id": {
           "type": [
             "string",
             "null"
           ],
           "format": "uuid"
+        },
+        "scope_body": {
+          "$ref": "#/$defs/richTextRef"
+        },
+        "progress_note": {
+          "type": "string",
+          "maxLength": 10000
         }
       }
+    },
+    "humanActor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor_type",
+        "actor_id"
+      ],
+      "properties": {
+        "actor_type": {
+          "const": "HUMAN"
+        },
+        "actor_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "richTextRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "object_id",
+        "digest",
+        "size_bytes",
+        "media_type",
+        "editor_schema_version"
+      ],
+      "properties": {
+        "object_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "editor_schema_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      }
+    },
+    "itemHistory": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "id",
+            "workspace_id",
+            "product_id",
+            "roadmap_item_id",
+            "sequence",
+            "before_version",
+            "after_version",
+            "recorded_at",
+            "recorded_by",
+            "change_type",
+            "before",
+            "after"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "1.0"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "workspace_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "product_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "roadmap_item_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "sequence": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "before_version": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "after_version": {
+              "type": "integer",
+              "minimum": 2
+            },
+            "recorded_at": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$|\\+00:00$"
+            },
+            "recorded_by": {
+              "$ref": "#/$defs/humanActor"
+            },
+            "change_type": {
+              "const": "PROGRESS_CHANGED"
+            },
+            "before": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "declared_progress",
+                "progress_note"
+              ],
+              "properties": {
+                "declared_progress": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "progress_note": {
+                  "type": "string",
+                  "maxLength": 10000
+                }
+              }
+            },
+            "after": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "declared_progress",
+                "progress_note"
+              ],
+              "properties": {
+                "declared_progress": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "progress_note": {
+                  "type": "string",
+                  "maxLength": 10000
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "id",
+            "workspace_id",
+            "product_id",
+            "roadmap_item_id",
+            "sequence",
+            "before_version",
+            "after_version",
+            "recorded_at",
+            "recorded_by",
+            "change_type",
+            "before",
+            "after",
+            "rationale",
+            "expected_schedule_impact"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "1.0"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "workspace_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "product_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "roadmap_item_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "sequence": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "before_version": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "after_version": {
+              "type": "integer",
+              "minimum": 2
+            },
+            "recorded_at": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$|\\+00:00$"
+            },
+            "recorded_by": {
+              "$ref": "#/$defs/humanActor"
+            },
+            "change_type": {
+              "const": "MILESTONE_MOVED"
+            },
+            "before": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "milestone_id"
+              ],
+              "properties": {
+                "milestone_id": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "after": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "milestone_id"
+              ],
+              "properties": {
+                "milestone_id": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "expected_schedule_impact": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            }
+          }
+        }
+      ]
     }
   }
 }
