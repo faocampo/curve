@@ -51,6 +51,46 @@ attack fixture forges the active coverage seal. Both original rejection assertio
 remain intact. Only those tests changed between the original candidate and the
 successful current-head run; runtime and migration bytes are identical.
 
+## Metadata history successor
+
+[Plane PR #50](https://github.com/faocampo/plane/pull/50) (priority, health,
+confidence and schedule history storage) merged at
+`d5c948786c46b4894d3819e4e34d800cfcc6510a`. Its complete fetched tree matches tested
+`86121a289e51ee8f37a2732aacf5125d9c154981`:
+`5cbf376cb8c0abec14284a4b9fb4266077b17023`. The integration base remained
+`6428c6a6146ea135ffdbd704dd3ecdb6514f821f`. The merged remote branch was retired;
+the local checkout was preserved.
+
+The additive migration expands supported history types, retains immutable history,
+and installs a narrowly qualified catalog/runtime successor. Original storage
+migration and qualification bytes remain unchanged. Reversal rejects metadata
+rows; legacy-only round trips preserve rows and restore the predecessor verifier.
+The [metadata candidate](../../contracts/candidates/roadmap-domain-v1/ITEM-METADATA-HISTORY.md)
+(closed metadata deltas) still requires command-side semantic enforcement.
+
+Validation at the tested head:
+
+| Evidence | Result |
+| --- | --- |
+| [Full API run](https://github.com/faocampo/plane/actions/runs/40158862225) (native, host and storage regression) | 2,895 native passed, 12 Temporal skipped; 156 host and 13 storage passed; migration drift checks passed |
+| Local Temporal follow-up (both files containing hosted skips) | 23 passed, zero skips |
+| Local qualification follow-up (three historical successor-chain modules) | 62 passed, zero skips |
+| [Web checks](https://github.com/faocampo/plane/actions/runs/40158863648) (format, types, lint and builds) | Success; existing warnings retain their scope |
+| [Migration check](https://github.com/faocampo/plane/actions/runs/40158865244) (migration validation) | Success |
+| [CodeQL](https://github.com/faocampo/plane/actions/runs/40158867001) (analysis workflow) | Success |
+| [Copyright check](https://github.com/faocampo/plane/actions/runs/40158868771) (source headers) | Success |
+| [React Doctor](https://github.com/faocampo/plane/actions/runs/40160478041) (PR frontend review) | Success |
+
+The original local full suite began at `796abc13c20d1ae94681a5a89662bf1839dc8156`
+and remains a separately scoped diagnostic run. It exposed historical qualification
+chains that stopped before the metadata successor. The repaired three modules
+explicitly apply that successor before comparing installed source bytes; existing
+historical assertions remain intact. Runtime, migration and proof bytes did not
+change during that repair. The completed current-head hosted suite and local
+Temporal follow-up establish the validation above; the original local run is not
+reported as passing. Duplicate PR-triggered workflows were not used as passing
+evidence for merge.
+
 ## Next implementation boundary
 
 The [command candidate](../../contracts/candidates/roadmap-domain-v1/COMMANDS.md)

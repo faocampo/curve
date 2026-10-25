@@ -97,7 +97,9 @@ The [relational candidate](RELATIONAL.md) (tables, scoped constraints,
 reciprocal Initiative linkage, history and transaction protocol) specifies the
 database implementation boundary. Its additive storage implementation is merged
 through [Plane PR #49](https://github.com/faocampo/plane/pull/49) (Roadmap storage
-and integrity qualification). The [integration record](../../../docs/technical/roadmap-storage-integration.md)
+and integrity qualification), followed by
+[Plane PR #50](https://github.com/faocampo/plane/pull/50) (metadata history storage
+successor). The [integration record](../../../docs/technical/roadmap-storage-integration.md)
 (exact validation and remaining gates) distinguishes storage from command acceptance.
 
 Additive persistence must preserve the released migration sequence and historical

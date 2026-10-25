@@ -1,6 +1,6 @@
 # Roadmap Item metadata history candidate
 
-Status: `CANDIDATE / DELTA_CONFORMANCE_ONLY / STORAGE_SUCCESSOR_PENDING`.
+Status: `CANDIDATE / STORAGE_INTEGRATED / COMMANDS_PENDING`.
 
 The [metadata schema](item-metadata-history.schema.json) (closed priority, health,
 confidence and schedule records) extends the [command candidate](COMMANDS.md)
@@ -42,12 +42,13 @@ their constraints without copying a second set of values.
 ## Native implementation prerequisite
 
 The merged [storage implementation](../../../docs/technical/roadmap-storage-integration.md)
-(exact tested persistence subject) deliberately permits only PROGRESS_CHANGED and
-MILESTONE_MOVED in its history constraint. These four new candidate types require
-an additive constraint migration and a narrowly qualified catalog/runtime
-successor before storage can accept them. Preserve released migration, schema,
-coverage and approval bytes. Never widen the existing seal or rewrite historical
-records to adopt this candidate.
+(exact tested persistence subjects and retained limitations) now accepts all four
+metadata types through [Plane PR #50](https://github.com/faocampo/plane/pull/50)
+(additive history constraint and qualified catalog/runtime successor). The original
+storage migration, schema and coverage bytes remain unchanged. The successor
+preserves existing history and refuses reversal when metadata rows would become
+unsupported. Storage acceptance alone does not enforce the closed semantic payload
+or authorize a command; those remain runtime service obligations.
 
 A runtime service must still check current membership, ownership, Product and
 parent availability, protected object access, exact expected version, replay,
