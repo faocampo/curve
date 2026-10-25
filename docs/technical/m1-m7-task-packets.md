@@ -17,6 +17,15 @@
 | Default owner and reviewer | Designated reviewer (`example-reviewer`) until explicitly reassigned |
 | Implementation repository | `git@github.com:faocampo/plane.git`, except an approved repository-specific delivery slice |
 
+## Current new-work approval convention
+
+Use the [two-stage direction](two-stage-new-work-direction.md) (Product and
+Technical reviews, historical-edition handling and the M5-09 delivery-readiness
+successor) when materializing new packets. Older three-assignment and Gate 3
+entries in this dated catalog retain historical scope. New packets must not
+introduce a Code Approver role. The separate draft-to-ready actor/action policy
+remains a required contract before that external command is implemented.
+
 ## Product persistence convention for successor packets
 
 M2-01 (roadmap planning domain) and later mutable Product-domain aggregates

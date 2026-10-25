@@ -1,6 +1,14 @@
 # Pending stages
 
-## Current consolidation checkpoint — 2026-10-07
+## Current implementation direction
+
+Use [coding handoff](coding-handoff.md) (merged two-stage interface, Product
+conformance and active roadmap work) for current delivery state. New packets
+follow the [two-stage direction](two-stage-new-work-direction.md) (Product and
+Technical reviews plus the delivery-readiness successor). The dated checkpoints
+below preserve their original evidence and do not reopen the former UX hold.
+
+## Historical consolidation checkpoint — 2026-10-07
 
 Start with [project status](project-status.md) (current integration, acceptance
 gates and next three actions). Curve reconstruction contracts are merged; Plane
@@ -101,15 +109,18 @@ before dispatch. Preserve completed historical evidence; recheck current state.
 
 ## M5 — Quality, VCS and delivery readiness
 
-- **Outcome:** exact-head quality evidence and human Code Readiness across a
+- **Outcome:** exact-head quality and delivery-readiness evidence across a
   coordinated PR set, with feature-delivery obligations visible.
 - **Remaining:** quality policy/executors/review, waivers, GitHub/GitLab controller,
-  CI projection/rework, Gate 3, delivery contracts and applicable documentation,
-  flags and observability evidence.
+  CI projection/rework, the M5-09 delivery-readiness successor, delivery contracts
+  and applicable documentation, flags and observability evidence.
 - **Gates:** D-008 VCS identity, D-010 quality/license policy; D-011 flags and
   D-012 Docusaurus only when applicable; model/data/budget profiles for AI review.
-- **Exit:** both VCS providers pass; new heads invalidate approval; non-waivable
-  failures block; human readiness remains separate from merge/deploy.
+  Draft-to-ready requires its exact provider actor/action policy before implementation.
+- **Exit:** both VCS providers pass; new heads invalidate readiness; non-waivable
+  failures block; repository actions retain explicit authority and exact-head
+  checks under the [two-stage direction](two-stage-new-work-direction.md)
+  (current review roles and M5-09 acceptance).
 - **Read:** [M5 plan](development-plan.md#m5-quality-vcs-code-readiness-and-feature-delivery-contract)
   (packages M5-01–M5-14), [delivery lifecycle](kanban-delivery-lifecycle.md)
   (board projection and evidence).

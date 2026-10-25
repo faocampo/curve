@@ -7,6 +7,8 @@
 `53109983aa90de1f6784008c55315e4bd3018f29`. New-work review uses Product approval
 of the PRD and Technical approval of the implementation plan. The new flow has
 no Code Approver assignment. Historical evidence retains its original scope.
+Use the [two-stage direction](two-stage-new-work-direction.md) (current requirements
+and M5-09 successor mapping) when an older packet still describes three gates.
 
 [Plane PR #48](https://github.com/faocampo/plane/pull/48)
 (Product format enforcement) is merged at
