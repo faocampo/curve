@@ -1,6 +1,6 @@
 # Roadmap domain candidate contract
 
-Status: `CANDIDATE / CONTRACT_VALIDATION_ONLY / RUNTIME_PENDING`.
+Status: `CANDIDATE / STORAGE_INTEGRATED / COMMANDS_PENDING`.
 
 This candidate starts M2-01 (roadmap planning domain). It consumes the
 [Product persistence successor](../../database/product-application-enforcement-successor.md)
@@ -95,8 +95,10 @@ grant from the presence of an owner field.
 
 The [relational candidate](RELATIONAL.md) (tables, scoped constraints,
 reciprocal Initiative linkage, history and transaction protocol) specifies the
-database implementation boundary. Its migration and native runtime tests remain
-pending.
+database implementation boundary. Its additive storage implementation is merged
+through [Plane PR #49](https://github.com/faocampo/plane/pull/49) (Roadmap storage
+and integrity qualification). The [integration record](../../../docs/technical/roadmap-storage-integration.md)
+(exact validation and remaining gates) distinguishes storage from command acceptance.
 
 Additive persistence must preserve the released migration sequence and historical
 catalog/source qualification. Use scoped uniqueness for aggregate identity,
@@ -143,8 +145,9 @@ are exposed. This candidate never treats a valid transition as a persisted one.
 
 1. Validate the relational candidate and complete command and policy contracts,
    including exact Initiative linkage and retained movement/progress records.
-2. Implement additive persistence and the narrow catalog/source qualification
-   successor, then prove preservation with native database tests.
+2. Consume the integrated additive persistence and narrow catalog/source
+   qualification successor; preserve its exact proof and historical migration bytes
+   when introducing command writers.
 3. Implement scoped services and routes, testing revoked membership, concurrent
    outcomes, replay, rollback and current approval linkage end to end.
 4. Deliver M2-02 (Feature Delivery linkage), M2-03 (Plane completion projection),

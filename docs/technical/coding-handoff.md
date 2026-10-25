@@ -27,8 +27,13 @@ separately scoped passing local coverage recorded in the
 Next is M2-01 (roadmap domain). Start with the
 [roadmap candidate](../../contracts/candidates/roadmap-domain-v1/README.md)
 (record shapes, cross-record rules and remaining command/persistence work).
-Its tests establish contract behavior only; database commands, exact policy,
-transactional linkage and runtime qualification remain to implement. Resolve
+[Plane PR #49](https://github.com/faocampo/plane/pull/49) (scoped Roadmap storage)
+is merged at `6428c6a6146ea135ffdbd704dd3ecdb6514f821f`; its tree matches tested
+`04206ff9acc3a1b29cc4f8d2b3108d36aa78a51e`. The
+[storage integration record](roadmap-storage-integration.md) (exact validation,
+retained failures and remaining service/UI gates) records the additive migration,
+reciprocal linkage and qualification. Scoped commands, exact ownership policy,
+protected references, approval supersession and UI acceptance remain pending. Resolve
 environment-specific D-013 (new-work adoption) authority from the private source;
 public examples do not establish environment approval. Material roadmap UI
 changes require the existing prototype and screen-acceptance gate.

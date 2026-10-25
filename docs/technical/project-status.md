@@ -10,6 +10,11 @@ interface and access-loss recovery) merged at
 successor and roadmap consumption guidance) merged at
 `69cb20258b2f31bf30faddfa4eeb040a5427c87d`; Product conformance issue #44 is closed.
 
+[Plane PR #49](https://github.com/faocampo/plane/pull/49) (Roadmap storage and
+integrity qualification) merged at `6428c6a6146ea135ffdbd704dd3ecdb6514f821f`.
+See the [storage integration record](roadmap-storage-integration.md) (tested
+commit, native regression and remaining command/UI acceptance).
+
 The former interface acceptance hold is satisfied. Current new work uses Product
 review of the PRD and Technical review of the implementation plan. Follow the
 [two-stage direction](two-stage-new-work-direction.md) (current review roles,
