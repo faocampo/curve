@@ -1,0 +1,388 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/item-metadata-history.schema.json",
+  "title": "Candidate Roadmap Item metadata history",
+  "description": "Closed metadata delta records; runtime writer and additive storage qualification remain pending.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "id",
+        "workspace_id",
+        "product_id",
+        "roadmap_item_id",
+        "sequence",
+        "before_version",
+        "after_version",
+        "recorded_at",
+        "recorded_by",
+        "change_type",
+        "before",
+        "after",
+        "rationale"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "roadmap_item_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "before_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "after_version": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "recorded_by": {
+          "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/humanActor"
+        },
+        "change_type": {
+          "const": "PRIORITY_CHANGED"
+        },
+        "before": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "priority"
+          ],
+          "properties": {
+            "priority": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/priority"
+            }
+          }
+        },
+        "after": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "priority"
+          ],
+          "properties": {
+            "priority": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/priority"
+            }
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "id",
+        "workspace_id",
+        "product_id",
+        "roadmap_item_id",
+        "sequence",
+        "before_version",
+        "after_version",
+        "recorded_at",
+        "recorded_by",
+        "change_type",
+        "before",
+        "after",
+        "rationale"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "roadmap_item_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "before_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "after_version": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "recorded_by": {
+          "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/humanActor"
+        },
+        "change_type": {
+          "const": "HEALTH_CHANGED"
+        },
+        "before": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "health"
+          ],
+          "properties": {
+            "health": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/health"
+            }
+          }
+        },
+        "after": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "health"
+          ],
+          "properties": {
+            "health": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/health"
+            }
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "id",
+        "workspace_id",
+        "product_id",
+        "roadmap_item_id",
+        "sequence",
+        "before_version",
+        "after_version",
+        "recorded_at",
+        "recorded_by",
+        "change_type",
+        "before",
+        "after",
+        "rationale"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "roadmap_item_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "before_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "after_version": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "recorded_by": {
+          "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/humanActor"
+        },
+        "change_type": {
+          "const": "CONFIDENCE_CHANGED"
+        },
+        "before": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "confidence"
+          ],
+          "properties": {
+            "confidence": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/confidence"
+            }
+          }
+        },
+        "after": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "confidence"
+          ],
+          "properties": {
+            "confidence": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/confidence"
+            }
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "id",
+        "workspace_id",
+        "product_id",
+        "roadmap_item_id",
+        "sequence",
+        "before_version",
+        "after_version",
+        "recorded_at",
+        "recorded_by",
+        "change_type",
+        "before",
+        "after",
+        "rationale"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "roadmap_item_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "before_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "after_version": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "recorded_by": {
+          "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/humanActor"
+        },
+        "change_type": {
+          "const": "SCHEDULE_CHANGED"
+        },
+        "before": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "planned_start",
+            "planned_end"
+          ],
+          "properties": {
+            "planned_start": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/planned_start"
+            },
+            "planned_end": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/planned_end"
+            }
+          }
+        },
+        "after": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "planned_start",
+            "planned_end"
+          ],
+          "properties": {
+            "planned_start": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/planned_start"
+            },
+            "planned_end": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/item/properties/planned_end"
+            }
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        }
+      }
+    }
+  ]
+}
