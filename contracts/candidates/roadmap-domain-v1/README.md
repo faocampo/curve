@@ -137,9 +137,10 @@ schedule rules. Clock rollback is allowed; the sequence establishes order.
 
 These checks detect stale or mismatched proposed evidence. Native tests must
 still prove atomic history insertion, uniqueness under races, idempotent replay
-without a second append, rollback and fresh membership. Scope, schedule, status,
-owner, health and priority history types remain to define before those commands
-are exposed. This candidate never treats a valid transition as a persisted one.
+without a second append, rollback and fresh membership. The separate [metadata history contract](ITEM-METADATA-HISTORY.md) (priority,
+health, confidence and schedule deltas) adds closed candidate records while
+preserving this graph schema. Scope, status and owner history and their approval
+supersession rules remain to define before those commands are exposed. This candidate never treats a valid transition as a persisted one.
 
 ## Remaining delivery
 

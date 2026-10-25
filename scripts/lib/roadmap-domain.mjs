@@ -9,6 +9,17 @@ const ajv = new Ajv2020({ strict: false, allErrors: true });
 addFormats(ajv);
 const validShape = ajv.compile(schema);
 const validHistory = ajv.compile({ $ref: `${schema.$id}#/$defs/itemHistory` });
+const metadataHistorySchema = JSON.parse(readFileSync(new URL(
+  "../../contracts/candidates/roadmap-domain-v1/item-metadata-history.schema.json", import.meta.url,
+), "utf8"));
+const validMetadataHistory = ajv.compile(metadataHistorySchema);
+const metadataFields = {
+  PRIORITY_CHANGED: ["priority"],
+  HEALTH_CHANGED: ["health"],
+  CONFIDENCE_CHANGED: ["confidence"],
+  SCHEDULE_CHANGED: ["planned_start", "planned_end"],
+};
+
 const commandSchema = JSON.parse(readFileSync(new URL(
   "../../contracts/candidates/roadmap-domain-v1/command.schema.json", import.meta.url,
 ), "utf8"));
@@ -110,10 +121,18 @@ function same(left, right) {
 
 // Validate one proposed atomic state/history delta. This neither writes history
 // nor implements the runtime idempotency, locking or authorization boundary.
-export function validateRoadmapItemChange({ before, after, history, previousSequence }) {
+export function validateRoadmapItemChange(input) {
+  return validateItemChange(input, validHistory);
+}
+
+export function validateRoadmapItemMetadataChange(input) {
+  return validateItemChange(input, validMetadataHistory);
+}
+
+function validateItemChange({ before, after, history, previousSequence }, validateHistory) {
   validateRoadmapDomainGraph(before);
   validateRoadmapDomainGraph(after);
-  requireRule(validHistory(history), "Invalid item history shape");
+  requireRule(validateHistory(history), "Invalid item history shape");
   requireRule(Number.isSafeInteger(previousSequence) && previousSequence >= 0
     && history.sequence === previousSequence + 1, "History sequence must advance once");
   requireRule(history.workspace_id === before.workspace_id && history.product_id === before.product_id,
@@ -139,13 +158,21 @@ export function validateRoadmapItemChange({ before, after, history, previousSequ
         "Progress history differs from the item delta");
     }
     Object.assign(expectedItem, { declared_progress: newItem.declared_progress, progress_note: newItem.progress_note });
-  } else {
+  } else if (history.change_type === "MILESTONE_MOVED") {
     requireRule(history.rationale.trim().length > 0 && history.expected_schedule_impact.trim().length > 0,
       "Movement requires rationale and expected schedule impact");
     requireRule(oldItem.milestone_id !== newItem.milestone_id, "Movement must change Milestone");
     requireRule(history.before.milestone_id === oldItem.milestone_id && history.after.milestone_id === newItem.milestone_id,
       "Movement history differs from the item delta");
     expectedItem.milestone_id = newItem.milestone_id;
+  } else {
+    const fields = metadataFields[history.change_type];
+    requireRule(fields && history.rationale.trim().length > 0, "Metadata change requires rationale");
+    for (const [side, item] of [["before", oldItem], ["after", newItem]]) {
+      requireRule(same(history[side], Object.fromEntries(fields.map((field) => [field, item[field]]))),
+        "Metadata history differs from the item delta");
+    }
+    for (const field of fields) expectedItem[field] = newItem[field];
   }
   requireRule(same(expected, after), "Item command changed unrelated fields or aggregates");
   return true;
