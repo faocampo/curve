@@ -1,0 +1,1184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/command.schema.json",
+  "title": "Candidate roadmap command input",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "CREATE_ROADMAP"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "null"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "horizon_start",
+            "horizon_end"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "horizon_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "horizon_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "UPDATE_ROADMAP"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "horizon_start",
+            "horizon_end"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "horizon_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "horizon_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "CREATE_MILESTONE"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "type",
+            "position",
+            "target_start",
+            "target_end"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "type": {
+              "enum": [
+                "RELEASE_VERSION",
+                "CALENDAR_PERIOD",
+                "PRODUCT_OUTCOME",
+                "INTERNAL_DEVELOPMENT_PHASE"
+              ]
+            },
+            "position": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "target_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "target_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "UPDATE_MILESTONE"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "type",
+            "target_start",
+            "target_end"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "type": {
+              "enum": [
+                "RELEASE_VERSION",
+                "CALENDAR_PERIOD",
+                "PRODUCT_OUTCOME",
+                "INTERNAL_DEVELOPMENT_PHASE"
+              ]
+            },
+            "target_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "target_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "REORDER_MILESTONES"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "milestone_ids"
+          ],
+          "properties": {
+            "milestone_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "CREATE_FEATURE"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "null"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "description"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "description": {
+              "anyOf": [
+                {
+                  "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/richTextRef"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "UPDATE_FEATURE"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "description"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "description": {
+              "anyOf": [
+                {
+                  "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/richTextRef"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "RECORD_PROGRESS"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "declared_progress",
+            "progress_note"
+          ],
+          "properties": {
+            "declared_progress": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "progress_note": {
+              "type": "string",
+              "maxLength": 10000
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "MOVE_ITEM"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "milestone_id",
+            "rationale",
+            "expected_schedule_impact"
+          ],
+          "properties": {
+            "milestone_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "expected_schedule_impact": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "UPDATE_ITEM_SCHEDULE"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "planned_start",
+            "planned_end",
+            "rationale"
+          ],
+          "properties": {
+            "planned_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "planned_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "UPDATE_ITEM_SCOPE"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope_body",
+            "rationale"
+          ],
+          "properties": {
+            "scope_body": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/richTextRef"
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "UPDATE_ITEM_PRIORITY"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "priority",
+            "rationale"
+          ],
+          "properties": {
+            "priority": {
+              "enum": [
+                "CRITICAL",
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "UPDATE_ITEM_HEALTH"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "health",
+            "rationale"
+          ],
+          "properties": {
+            "health": {
+              "enum": [
+                "ON_TRACK",
+                "AT_RISK",
+                "OFF_TRACK",
+                "UNKNOWN"
+              ]
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "UPDATE_ITEM_CONFIDENCE"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "confidence",
+            "rationale"
+          ],
+          "properties": {
+            "confidence": {
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "SET_ITEM_STATUS"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "approved_prd_version_id",
+            "rationale"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PROPOSED",
+                "COMMITTED",
+                "IN_PROGRESS",
+                "PAUSED",
+                "DELIVERED",
+                "CANCELLED"
+              ]
+            },
+            "approved_prd_version_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "uuid"
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "CREATE_ROADMAP_ITEM_INITIATIVE"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "initiative",
+            "milestone_id",
+            "feature_id",
+            "scope_body",
+            "priority",
+            "confidence",
+            "health",
+            "planned_start",
+            "planned_end"
+          ],
+          "properties": {
+            "initiative": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "keyword",
+                "title",
+                "description",
+                "risk_tier",
+                "business_intent",
+                "gate_assignments"
+              ],
+              "properties": {
+                "keyword": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,49}$",
+                  "maxLength": 50
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                "description": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "schema_version",
+                    "format",
+                    "body"
+                  ],
+                  "properties": {
+                    "schema_version": {
+                      "const": "1.0"
+                    },
+                    "format": {
+                      "const": "MARKDOWN"
+                    },
+                    "body": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 20000
+                    }
+                  }
+                },
+                "risk_tier": {
+                  "enum": [
+                    "LOW",
+                    "STANDARD",
+                    "HIGH"
+                  ]
+                },
+                "business_intent": {
+                  "enum": [
+                    "STRATEGIC",
+                    "CUSTOMER_COMMITMENT",
+                    "BUSINESS_IMPROVEMENT",
+                    "MANDATORY",
+                    null
+                  ]
+                },
+                "gate_assignments": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "gate_type",
+                      "approver_user_id"
+                    ],
+                    "properties": {
+                      "gate_type": {
+                        "enum": [
+                          "PRD_APPROVAL",
+                          "PLAN_APPROVAL"
+                        ]
+                      },
+                      "approver_user_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "contains": {
+                        "type": "object",
+                        "properties": {
+                          "gate_type": {
+                            "const": "PRD_APPROVAL"
+                          }
+                        },
+                        "required": [
+                          "gate_type"
+                        ]
+                      },
+                      "minContains": 1,
+                      "maxContains": 1
+                    },
+                    {
+                      "contains": {
+                        "type": "object",
+                        "properties": {
+                          "gate_type": {
+                            "const": "PLAN_APPROVAL"
+                          }
+                        },
+                        "required": [
+                          "gate_type"
+                        ]
+                      },
+                      "minContains": 1,
+                      "maxContains": 1
+                    }
+                  ]
+                }
+              }
+            },
+            "milestone_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "feature_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "scope_body": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/richTextRef"
+            },
+            "priority": {
+              "enum": [
+                "CRITICAL",
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            },
+            "confidence": {
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            },
+            "health": {
+              "enum": [
+                "ON_TRACK",
+                "AT_RISK",
+                "OFF_TRACK",
+                "UNKNOWN"
+              ]
+            },
+            "planned_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "planned_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

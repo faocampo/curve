@@ -10,10 +10,12 @@ capabilities, recovered baseline, branches and remaining acceptance) records the
 
 ## Purpose
 
-Start with [project status](project-status.md) (current milestone position,
-integration baseline and next actions) and the
-[consolidation ledger](project-consolidation-2026-10-07.md) (branch dispositions,
-validation and merge outcomes).
+Start with [coding handoff](coding-handoff.md) (current integration and next task),
+[project status](project-status.md) (current checkpoint and dated milestone evidence),
+and the [two-stage direction](two-stage-new-work-direction.md) (Product and
+Technical reviews and the delivery-readiness successor). The
+[consolidation ledger](project-consolidation-2026-10-07.md) (historical branch
+retirement and integration evidence) retains its recorded scope.
 
 Follow [repository delivery policy](repository-delivery-policy.md) (approved PR,
 integration and branch-cleanup rules). For current work, start with [coding handoff](coding-handoff.md) (authority,

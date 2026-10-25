@@ -4,6 +4,15 @@
 > Historical approvals apply only to their original bytes; see
 > [public contract edition](public-reference-sanitization.md) (sanitization, integrity and approval boundaries).
 
+## Current new-work review direction
+
+New implementation uses the [two-stage direction](two-stage-new-work-direction.md)
+(Product approval of the PRD, Technical approval of the plan, and the M5-09
+delivery-readiness successor). Its explicit mapping supersedes three-gate and
+Code Approver instructions in this dated plan for new work. Existing contract,
+policy and evidence editions retain their original scope; the draft-to-ready
+actor/action contract remains a prerequisite for that future external command.
+
 ## Document control
 
 | Field | Value |

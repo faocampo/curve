@@ -1,5 +1,25 @@
 # Curve project status
 
+## Current integration checkpoint
+
+[Plane PR #17](https://github.com/faocampo/plane/pull/17) (approved two-stage
+interface and access-loss recovery) merged at
+`53109983aa90de1f6784008c55315e4bd3018f29`. [Plane PR #48](https://github.com/faocampo/plane/pull/48)
+(Product format enforcement) merged at `e221b11664440ed455166af9f5ea6d4172a17b6c`.
+[Curve PR #174](https://github.com/faocampo/curve/pull/174) (Product persistence
+successor and roadmap consumption guidance) merged at
+`69cb20258b2f31bf30faddfa4eeb040a5427c87d`; Product conformance issue #44 is closed.
+
+The former interface acceptance hold is satisfied. Current new work uses Product
+review of the PRD and Technical review of the implementation plan. Follow the
+[two-stage direction](two-stage-new-work-direction.md) (current review roles,
+historical interpretation and M5-09 successor) and [coding handoff](coding-handoff.md)
+(active roadmap contract/persistence work and evidence limits). Roadmap services,
+permissions and UI acceptance remain pending. Provider/storage qualification and
+production rollout retain their separate gates.
+
+## Historical consolidation checkpoint
+
 Updated: 2026-10-08. Existing work is consolidated into the canonical documentation
 branch and one application review candidate. The remaining application merge is
 held for the owner's exact-candidate UX acceptance. Upstream synchronization is

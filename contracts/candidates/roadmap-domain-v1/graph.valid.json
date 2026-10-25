@@ -1,0 +1,158 @@
+{
+  "schema_version": "curve.roadmap-domain/v1-candidate",
+  "workspace_id": "92000000-0000-4000-8000-000000000001",
+  "product_id": "92000000-0000-4000-8000-000000000002",
+  "roadmaps": [
+    {
+      "schema_version": "1.0",
+      "id": "92000000-0000-4000-8000-000000000003",
+      "workspace_id": "92000000-0000-4000-8000-000000000001",
+      "product_id": "92000000-0000-4000-8000-000000000002",
+      "version": 1,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "name": "Example roadmap",
+      "created_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "updated_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "tombstoned_at": null,
+      "tombstoned_by": null,
+      "tombstone_reason": null,
+      "owner": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "horizon_start": null,
+      "horizon_end": null
+    }
+  ],
+  "milestones": [
+    {
+      "schema_version": "1.0",
+      "id": "92000000-0000-4000-8000-000000000005",
+      "workspace_id": "92000000-0000-4000-8000-000000000001",
+      "product_id": "92000000-0000-4000-8000-000000000002",
+      "version": 1,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "roadmap_id": "92000000-0000-4000-8000-000000000003",
+      "name": "First release",
+      "position": 0,
+      "created_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "updated_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "tombstoned_at": null,
+      "tombstoned_by": null,
+      "tombstone_reason": null,
+      "type": "RELEASE_VERSION",
+      "target_start": null,
+      "target_end": null
+    },
+    {
+      "schema_version": "1.0",
+      "id": "92000000-0000-4000-8000-000000000006",
+      "workspace_id": "92000000-0000-4000-8000-000000000001",
+      "product_id": "92000000-0000-4000-8000-000000000002",
+      "version": 1,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "roadmap_id": "92000000-0000-4000-8000-000000000003",
+      "name": "Later release",
+      "position": 1,
+      "created_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "updated_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "tombstoned_at": null,
+      "tombstoned_by": null,
+      "tombstone_reason": null,
+      "type": "RELEASE_VERSION",
+      "target_start": null,
+      "target_end": null
+    }
+  ],
+  "features": [
+    {
+      "schema_version": "1.0",
+      "id": "92000000-0000-4000-8000-000000000007",
+      "workspace_id": "92000000-0000-4000-8000-000000000001",
+      "product_id": "92000000-0000-4000-8000-000000000002",
+      "version": 1,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "name": "Example capability",
+      "created_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "updated_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "tombstoned_at": null,
+      "tombstoned_by": null,
+      "tombstone_reason": null,
+      "description": null
+    }
+  ],
+  "items": [
+    {
+      "schema_version": "1.0",
+      "id": "92000000-0000-4000-8000-000000000008",
+      "workspace_id": "92000000-0000-4000-8000-000000000001",
+      "product_id": "92000000-0000-4000-8000-000000000002",
+      "version": 1,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "roadmap_id": "92000000-0000-4000-8000-000000000003",
+      "milestone_id": "92000000-0000-4000-8000-000000000005",
+      "feature_id": "92000000-0000-4000-8000-000000000007",
+      "status": "PROPOSED",
+      "priority": "MEDIUM",
+      "confidence": "MEDIUM",
+      "health": "UNKNOWN",
+      "planned_start": null,
+      "planned_end": null,
+      "declared_progress": 0,
+      "created_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "updated_by": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "tombstoned_at": null,
+      "tombstoned_by": null,
+      "tombstone_reason": null,
+      "owner": {
+        "actor_type": "HUMAN",
+        "actor_id": "92000000-0000-4000-8000-000000000004"
+      },
+      "defining_initiative_id": "92000000-0000-4000-8000-000000000009",
+      "approved_prd_version_id": null,
+      "progress_note": "",
+      "scope_body": {
+        "object_id": "92000000-0000-4000-8000-000000000020",
+        "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "size_bytes": 128,
+        "media_type": "application/json",
+        "editor_schema_version": "example.richtext/v1"
+      }
+    }
+  ]
+}
