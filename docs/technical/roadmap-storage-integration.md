@@ -95,7 +95,9 @@ evidence for merge.
 
 The [command candidate](../../contracts/candidates/roadmap-domain-v1/COMMANDS.md)
 (scoped commands, concurrency and permission prerequisites) remains to implement.
-Initial ownership and contributor mapping require the pending product decision.
+Initial creator ownership follows the [approved defaults](roadmap-approved-defaults.md)
+(ownership and opening-screen purpose). Contributor mapping and runtime permission
+enforcement remain implementation work.
 No Roadmap route or permission-dependent service is enabled by this storage layer.
 
 Next work must qualify joint Initiative/Item creation, protected references,

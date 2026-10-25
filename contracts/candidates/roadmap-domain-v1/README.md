@@ -17,7 +17,9 @@ defines the logical record fields. The
 
 The [command candidate](COMMANDS.md) (closed action inputs, target versions,
 permission boundary and replay requirements) defines the next service boundary.
-Its ownership setup choice and runtime integration remain pending.
+The [approved defaults](../../../docs/technical/roadmap-approved-defaults.md)
+(initial creator ownership and opening-screen purpose) settle the owner choice;
+runtime permission and command integration remain pending.
 
 The [conformance graph schema](graph.schema.json) (closed candidate record shapes)
 contains Roadmaps, Milestones, Features and Roadmap Items in one complete

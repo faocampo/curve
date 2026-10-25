@@ -80,11 +80,13 @@ reads to members with object/source access. These are runtime-resolved roles;
 client role strings and synthetic fixture owners grant no authority. Agents
 and services cannot impersonate a human Roadmap owner or document approver.
 
-The exact setup policy for Roadmap creation, initial ownership, reassignment
-and mapping Product contributors into the current access system is a separate
-candidate decision. Its owner choice is pending; it is not inferred from the
-approved D-013 Product ownership decision. Commands requiring those mappings
-must remain unavailable until the selected policy and its tests are integrated.
+The [approved defaults](../../../docs/technical/roadmap-approved-defaults.md)
+(initial creator ownership and milestones-and-attention screen purpose) select
+the authenticated creator as the initial Roadmap owner. The service derives this
+identity after checking creation authority; no caller-owned owner field is added.
+Creation authorization, reassignment and Product-contributor mapping must still
+be enforced through the current access system before commands are exposed.
+
 Roadmap ownership supplies no Product/Technical document approval assignment.
 
 ## Roadmap-backed Initiative creation
