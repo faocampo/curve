@@ -36,6 +36,9 @@ the service/API boundary under the approved persistence convention.
 | `curve_roadmap_item` | `roadmap_id`, `milestone_id`, `feature_id`, `defining_initiative_id`, `owner_user_id` UUIDs; `scope_body jsonb`; status/priority/confidence/health codes; nullable planned dates and `approved_prd_version_id uuid`; `declared_progress integer`; `progress_note text` | Canonical enums; progress 0–100; paired dates ordered; only PROPOSED may be unscheduled; COMMITTED requires an approved-version reference; scoped Feature/Milestone and defining-Initiative uniqueness |
 
 Milestone references Roadmap through `(workspace_id, product_id, roadmap_id)`.
+Its scoped position uniqueness is deferrable so an atomic reorder can exchange
+occupied positions. Validate the final unique ordering before commit; temporary
+duplicate ranks within the transaction cannot escape as accepted state.
 It adds a unique key on `(workspace_id, product_id, roadmap_id, id)` so an Item's
 Milestone reference also binds its Roadmap. Item references Feature through
 `(workspace_id, product_id, feature_id)` and Milestone through
@@ -125,6 +128,27 @@ The pure delta validator covers proposed state/evidence consistency. Native
 transaction, membership, replay and constraint tests remain mandatory.
 
 ## Migration and rollout qualification
+
+The [relationship probe](relationship-probe.sql) (synthetic PostgreSQL constraint
+mechanism checks) creates a separate schema inside one transaction and rolls it
+back, including all test rows and functions. Run only in a disposable database:
+
+```sh
+psql -X -v ON_ERROR_STOP=1 "$TEST_DATABASE_URL" -f relationship-probe.sql
+```
+
+Its 21 checks cover both reciprocal insertion orders, a standalone Initiative,
+half-pair and mismatched-pair rejection, Feature/Initiative uniqueness,
+workspace/Product/Roadmap boundaries, retained linked rows, valid movement,
+atomic position swaps, duplicate final positions, history sequence uniqueness,
+foreign history scope and immutable UPDATE/DELETE/TRUNCATE behavior. It verifies
+retained row counts after rejected operations and reports whether all probe
+objects were rolled back. Unexpected acceptance causes an error exit.
+
+This probe uses minimal synthetic identity tables, not the installed Plane
+models, migration inventory or policy controller. It establishes the proposed
+PostgreSQL mechanisms only. Native application migration, permissions, replay,
+concurrency and full transaction qualification remain required.
 
 Choose the next migration number from the live integration head; preserve all
 released migration bytes. Introduce exact catalog/source qualification successors

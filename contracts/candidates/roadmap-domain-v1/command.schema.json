@@ -958,6 +958,227 @@
           }
         }
       }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "workspace_id",
+        "product_id",
+        "target_id",
+        "expected_version",
+        "payload"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "curve.roadmap-command/v1-candidate"
+        },
+        "action": {
+          "const": "CREATE_ROADMAP_ITEM_INITIATIVE"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "initiative",
+            "milestone_id",
+            "feature_id",
+            "scope_body",
+            "priority",
+            "confidence",
+            "health",
+            "planned_start",
+            "planned_end"
+          ],
+          "properties": {
+            "initiative": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "keyword",
+                "title",
+                "description",
+                "risk_tier",
+                "business_intent",
+                "gate_assignments"
+              ],
+              "properties": {
+                "keyword": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,49}$",
+                  "maxLength": 50
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                "description": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "schema_version",
+                    "format",
+                    "body"
+                  ],
+                  "properties": {
+                    "schema_version": {
+                      "const": "1.0"
+                    },
+                    "format": {
+                      "const": "MARKDOWN"
+                    },
+                    "body": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 20000
+                    }
+                  }
+                },
+                "risk_tier": {
+                  "enum": [
+                    "LOW",
+                    "STANDARD",
+                    "HIGH"
+                  ]
+                },
+                "business_intent": {
+                  "enum": [
+                    "STRATEGIC",
+                    "CUSTOMER_COMMITMENT",
+                    "BUSINESS_IMPROVEMENT",
+                    "MANDATORY",
+                    null
+                  ]
+                },
+                "gate_assignments": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "gate_type",
+                      "approver_user_id"
+                    ],
+                    "properties": {
+                      "gate_type": {
+                        "enum": [
+                          "PRD_APPROVAL",
+                          "PLAN_APPROVAL"
+                        ]
+                      },
+                      "approver_user_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "contains": {
+                        "type": "object",
+                        "properties": {
+                          "gate_type": {
+                            "const": "PRD_APPROVAL"
+                          }
+                        },
+                        "required": [
+                          "gate_type"
+                        ]
+                      },
+                      "minContains": 1,
+                      "maxContains": 1
+                    },
+                    {
+                      "contains": {
+                        "type": "object",
+                        "properties": {
+                          "gate_type": {
+                            "const": "PLAN_APPROVAL"
+                          }
+                        },
+                        "required": [
+                          "gate_type"
+                        ]
+                      },
+                      "minContains": 1,
+                      "maxContains": 1
+                    }
+                  ]
+                }
+              }
+            },
+            "milestone_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "feature_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "scope_body": {
+              "$ref": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json#/$defs/richTextRef"
+            },
+            "priority": {
+              "enum": [
+                "CRITICAL",
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            },
+            "confidence": {
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            },
+            "health": {
+              "enum": [
+                "ON_TRACK",
+                "AT_RISK",
+                "OFF_TRACK",
+                "UNKNOWN"
+              ]
+            },
+            "planned_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "planned_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            }
+          }
+        }
+      }
     }
   ]
 }

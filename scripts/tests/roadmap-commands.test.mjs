@@ -8,6 +8,16 @@ const original = JSON.parse(readFileSync(new URL(
 ), "utf8"));
 const id = (n) => `94000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
 const payloads = {
+  CREATE_ROADMAP_ITEM_INITIATIVE: {
+    initiative: { keyword: "example-roadmap-work", title: "Example roadmap work",
+      description: { schema_version: "1.0", format: "MARKDOWN", body: "Synthetic description" },
+      risk_tier: "STANDARD", business_intent: null,
+      gate_assignments: [{ gate_type: "PRD_APPROVAL", approver_user_id: id(50) },
+        { gate_type: "PLAN_APPROVAL", approver_user_id: id(51) }] },
+    milestone_id: original.milestones[1].id, feature_id: original.features[0].id,
+    scope_body: original.items[0].scope_body, priority: "MEDIUM", confidence: "MEDIUM", health: "UNKNOWN",
+    planned_start: null, planned_end: null,
+  },
   CREATE_ROADMAP: { name: "Planning horizon", horizon_start: null, horizon_end: null },
   UPDATE_ROADMAP: { name: "Planning horizon", horizon_start: "2026-01-01", horizon_end: null },
   CREATE_MILESTONE: { name: "Next phase", type: "INTERNAL_DEVELOPMENT_PHASE", position: 2, target_start: null, target_end: null },
@@ -27,7 +37,7 @@ const payloads = {
 function command(action) {
   const productTarget = ["CREATE_ROADMAP", "CREATE_FEATURE"].includes(action);
   const target = productTarget ? original.product_id
-    : ["UPDATE_ROADMAP", "CREATE_MILESTONE", "REORDER_MILESTONES"].includes(action) ? original.roadmaps[0].id
+    : ["UPDATE_ROADMAP", "CREATE_MILESTONE", "REORDER_MILESTONES", "CREATE_ROADMAP_ITEM_INITIATIVE"].includes(action) ? original.roadmaps[0].id
       : action === "UPDATE_MILESTONE" ? original.milestones[0].id
         : action === "UPDATE_FEATURE" ? original.features[0].id : original.items[0].id;
   return { schema_version: "curve.roadmap-command/v1-candidate", action,
@@ -84,4 +94,36 @@ test("commitment still needs an exact revision when dates exist", () => {
   input.payload.approved_prd_version_id = id(1);
   assert.equal(validateRoadmapCommand(input, graph), true);
   // The runtime must independently prove this reference is currently approved.
+});
+
+for (const [label, mutate, error] of [
+  ["third reviewer", (p) => { p.initiative.gate_assignments.push({ gate_type: "CODE_READINESS", approver_user_id: id(52) }); }, /Invalid roadmap command shape/],
+  ["Code reviewer substitution", (p) => { p.initiative.gate_assignments[1].gate_type = "CODE_READINESS"; }, /Invalid roadmap command shape/],
+  ["duplicate Product assignment", (p) => { p.initiative.gate_assignments[1].gate_type = "PRD_APPROVAL"; }, /Invalid roadmap command shape/],
+  ["missing Technical assignment", (p) => { p.initiative.gate_assignments.pop(); }, /Invalid roadmap command shape/],
+  ["same reviewer at standard risk", (p) => { p.initiative.gate_assignments[1].approver_user_id = id(50); }, /distinct Product and Technical/],
+  ["same reviewer at high risk", (p) => { p.initiative.risk_tier = "HIGH"; p.initiative.gate_assignments[1].approver_user_id = id(50); }, /distinct Product and Technical/],
+  ["caller-provided Initiative identity", (p) => { p.initiative.id = id(70); }, /Invalid roadmap command shape/],
+  ["caller-provided reciprocal link", (p) => { p.initiative.roadmap_item_id = id(71); }, /Invalid roadmap command shape/],
+  ["caller-provided item identity", (p) => { p.id = id(71); }, /Invalid roadmap command shape/],
+  ["pre-approved status", (p) => { p.status = "COMMITTED"; }, /Invalid roadmap command shape/],
+  ["occupied Feature placement", (p) => { p.milestone_id = original.milestones[0].id; }, /already contains this Feature/],
+  ["foreign Feature", (p) => { p.feature_id = id(70); }, /Feature unavailable/],
+  ["foreign Milestone", (p) => { p.milestone_id = id(70); }, /Milestone unavailable/],
+  ["partial schedule", (p) => { p.planned_start = "2026-01-01"; }, /Incomplete item schedule/],
+]) {
+  test(`joint creation rejects ${label}`, () => {
+    const input = command("CREATE_ROADMAP_ITEM_INITIATIVE"); mutate(input.payload);
+    assert.throws(() => validateRoadmapCommand(input, original), error);
+  });
+}
+test("joint creation preserves the existing low-risk same-human reviewer rule", () => {
+  const input = command("CREATE_ROADMAP_ITEM_INITIATIVE");
+  input.payload.initiative.risk_tier = "LOW";
+  input.payload.initiative.gate_assignments[1].approver_user_id = id(50);
+  assert.equal(validateRoadmapCommand(input, original), true);
+});
+test("reviewer assignment order does not change the two required responsibilities", () => {
+  const input = command("CREATE_ROADMAP_ITEM_INITIATIVE"); input.payload.initiative.gate_assignments.reverse();
+  assert.equal(validateRoadmapCommand(input, original), true);
 });

@@ -162,12 +162,25 @@ export function validateRoadmapCommand(command, graph) {
   if (["CREATE_ROADMAP", "CREATE_FEATURE"].includes(action)) {
     requireRule(command.target_id === graph.product_id, "Creation must target the scoped Product");
   } else {
-    const collection = ["UPDATE_ROADMAP", "CREATE_MILESTONE", "REORDER_MILESTONES"].includes(action)
+    const collection = ["UPDATE_ROADMAP", "CREATE_MILESTONE", "REORDER_MILESTONES", "CREATE_ROADMAP_ITEM_INITIATIVE"].includes(action)
       ? graph.roadmaps : action === "UPDATE_MILESTONE" ? graph.milestones
         : action === "UPDATE_FEATURE" ? graph.features : graph.items;
     const target = collection.find((record) => record.id === command.target_id);
     requireRule(target && target.tombstoned_at === null, "Command target unavailable");
     requireRule(target.version === command.expected_version, "Command expected version is stale");
+    if (action === "CREATE_ROADMAP_ITEM_INITIATIVE") {
+      const milestone = graph.milestones.find((record) => record.id === payload.milestone_id);
+      const feature = graph.features.find((record) => record.id === payload.feature_id);
+      requireRule(milestone && milestone.tombstoned_at === null && milestone.roadmap_id === target.id,
+        "Joint creation Milestone unavailable in the Roadmap");
+      requireRule(feature && feature.tombstoned_at === null, "Joint creation Feature unavailable");
+      requireRule(!graph.items.some((record) => record.milestone_id === milestone.id && record.feature_id === feature.id),
+        "Milestone already contains this Feature");
+      requireRule((payload.planned_start === null) === (payload.planned_end === null), "Incomplete item schedule");
+      const reviewers = payload.initiative.gate_assignments.map((value) => value.approver_user_id);
+      requireRule(payload.initiative.risk_tier === "LOW" || new Set(reviewers).size === 2,
+        "Standard and high risk require distinct Product and Technical reviewers");
+    }
     if (action === "REORDER_MILESTONES") {
       const expected = graph.milestones.filter((record) => record.roadmap_id === target.id
         && record.tombstoned_at === null).map((record) => record.id).sort();
