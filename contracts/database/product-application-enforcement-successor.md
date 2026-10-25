@@ -2,7 +2,7 @@
 
 ## Status and authority
 
-Status: `CANDIDATE / ARCHITECTURE_DIRECTION_SELECTED / INTEGRATION_PENDING`.
+Status: `ARCHITECTURE_DIRECTION_SELECTED / IMPLEMENTATION_INTEGRATED`.
 
 This successor addresses [R-027](https://github.com/faocampo/curve/issues/44)
 (Product timestamp authority and format-version enforcement). It records the
@@ -13,9 +13,10 @@ configuration. Public examples cannot authorize an environment.
 
 The [historical Product relational contract](m1-00a-product-core-relational-contract.md)
 (original database target and recorded variance) retains its original bytes and
-scope. This candidate does not close R-027 (Product conformance reconciliation)
-or establish production qualification. Closure requires reviewed integration
-and conformance evidence for this successor and its implementation.
+scope. R-027 (Product conformance reconciliation) can close after this successor
+contract is integrated. The implementation evidence below establishes the
+supported service/API boundary. Production qualification retains its separate
+acceptance requirements.
 
 ## Chosen convention
 
@@ -121,10 +122,12 @@ migration to reverse and no reason to delete or rewrite historical Product data.
 Operational activation, repair and deployment require their separately scoped
 authority; this contract supplies none.
 
-## Candidate implementation evidence
+## Implementation and integration evidence
 
 [Plane PR #48](https://github.com/faocampo/plane/pull/48)
-(Product guards and conformance tests) contains corrected candidate
+(Product guards and conformance tests) merged at
+`e221b11664440ed455166af9f5ea6d4172a17b6c`. Its integration tree exactly matches
+the tested head, which is an ancestor of the merge. The corrected candidate is
 `f290f8e82603d07a4ac5a21cb9c59536c72556a5`. Its complete local manual-planning
 partition passed 100 cases with zero skips; its qualification follow-up passed
 36 cases. All 56 repository check tasks and changed Python lint passed.
@@ -142,8 +145,13 @@ qualification JSON files remain byte-identical. Completed migration checks
 reported no drift; the failed job did not reach its migration check.
 
 [Current PR backend validation](https://github.com/faocampo/plane/actions/runs/40145712051)
-(full native partitions and host doubles) remains pending. [Corrected-head
+(full native partitions and host doubles) passed 2,823 native cases with 12
+Temporal skips, plus 156 host-double cases. The separately scoped 23-case local workflow follow-up above covers
+those skipped cases; runtime and workflow test bytes are unchanged. Storage
+regression passed 13 cases, all six migration checks reported no drift, and
+every PR check passed at the corrected head. [Corrected-head
 frontend validation](https://github.com/faocampo/plane/actions/runs/40145514161)
 (all-package build and checks) and [corrected-head CodeQL](https://github.com/faocampo/plane/actions/runs/40145516502)
-(exact-candidate security analysis) passed. Integration and issue closure remain
-pending; production readiness has separate acceptance requirements.
+(exact-candidate security analysis) passed. The Product implementation is integrated. Issue closure awaits integration of
+this contract and its M2-01 (roadmap planning domain) consumption guidance;
+production readiness has separate acceptance requirements.

@@ -17,6 +17,25 @@
 | Default owner and reviewer | Designated reviewer (`example-reviewer`) until explicitly reassigned |
 | Implementation repository | `git@github.com:faocampo/plane.git`, except an approved repository-specific delivery slice |
 
+## Product persistence convention for successor packets
+
+M2-01 (roadmap planning domain) and later mutable Product-domain aggregates
+consume the [Product application-enforcement successor](../../contracts/database/product-application-enforcement-successor.md)
+(application UTC, service-owned format editions, preservation and rollback).
+Each new aggregate contract must define its supported format edition, reject
+caller-owned timestamps and editions, preserve insertion time, and use aggregate
+versions for ordering when the application clock moves backward. Its supported
+service/API paths must enforce that edition and prove atomic no-effect failures,
+replay, authorization precedence and rollback. Released migrations and existing
+records remain preserved through additive changes.
+
+The dependency matrix below retains R-027 (Product timestamp/schema-version
+contract reconciliation) as an integration gate. The linked successor carries
+the current decision and exact integration evidence; its status must be checked
+before successor persistence begins. The historical database-clock target must
+not be inherited into a new packet. Production qualification remains a separate
+acceptance boundary.
+
 ## Dispatch contract
 
 This catalog prepares every M1-M6 work package for deterministic materialization
