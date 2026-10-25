@@ -15,6 +15,10 @@ defines the logical record fields. The
 
 ## Records and validation scope
 
+The [command candidate](COMMANDS.md) (closed action inputs, target versions,
+permission boundary and replay requirements) defines the next service boundary.
+Its ownership setup choice and runtime integration remain pending.
+
 The [conformance graph schema](graph.schema.json) (closed candidate record shapes)
 contains Roadmaps, Milestones, Features and Roadmap Items in one complete
 workspace/Product scope. It is a contract-test input, not a new API endpoint,

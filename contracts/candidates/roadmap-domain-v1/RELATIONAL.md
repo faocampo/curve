@@ -100,10 +100,15 @@ are available. General unvalidated JSON cannot substitute for that contract.
 2. Reuse the existing canonical command digest and idempotency kernel. The key
    binds operation/resource/payload; a key reused for another payload conflicts.
    Raw keys and protected body text stay out of ordinary logs and events.
-3. Lock affected rows in a consistent order: Product, Roadmap, then affected
-   Milestones/Items in UUID order. Re-resolve owner authority after locking.
-   Compare the declared aggregate versions before mutating. The native
-   implementation must reconcile this order with existing Initiative locks.
+3. Preserve the installed mutation boundary's workspace-row lock first. Existing
+   Initiative mutations then load/lock Initiative before their Product guard;
+   Product mutations load Product after the same workspace lock. New joint
+   creation and roadmap commands must acquire that workspace lock before any
+   aggregate lock, then use the established Initiative/Product order followed
+   by Roadmap and affected Milestones/Items in UUID order. Re-resolve owner
+   authority after locking and compare expected versions. Native concurrency
+   tests must verify this interaction; changing to Product-first locks while
+   bypassing the workspace boundary is not part of this candidate.
 4. Validate active scope, supported editions, reciprocal Initiative binding,
    exact approved PRD version when required, protected references, dates and
    destination Feature uniqueness. Current approval access is checked against

@@ -9,6 +9,10 @@ const ajv = new Ajv2020({ strict: false, allErrors: true });
 addFormats(ajv);
 const validShape = ajv.compile(schema);
 const validHistory = ajv.compile({ $ref: `${schema.$id}#/$defs/itemHistory` });
+const commandSchema = JSON.parse(readFileSync(new URL(
+  "../../contracts/candidates/roadmap-domain-v1/command.schema.json", import.meta.url,
+), "utf8"));
+const validCommand = ajv.compile(commandSchema);
 
 function requireRule(condition, message) {
   if (!condition) throw new Error(message);
@@ -80,6 +84,10 @@ export function validateRoadmapDomainGraph(graph) {
 export function validateDeclaredProgressChange({ before, after, roadmapOwnerId, actorId, note }) {
   requireRule(typeof roadmapOwnerId === "string" && roadmapOwnerId.length > 0 && actorId === roadmapOwnerId,
     "Declared progress requires the Roadmap owner");
+  return validateProgressValues({ before, after, note });
+}
+
+function validateProgressValues({ before, after, note }) {
   requireRule([before, after].every((value) => Number.isInteger(value) && value >= 0 && value <= 100),
     "Progress must be an integer from 0 through 100");
   requireRule(typeof note === "string" && note.length <= 10000, "Progress note must be bounded text");
@@ -140,5 +148,65 @@ export function validateRoadmapItemChange({ before, after, history, previousSequ
     expectedItem.milestone_id = newItem.milestone_id;
   }
   requireRule(same(expected, after), "Item command changed unrelated fields or aggregates");
+  return true;
+}
+
+// Validates a normalized command against an already-authorized current scope.
+// Actor, memberships, policy receipts and idempotency keys never come from it.
+export function validateRoadmapCommand(command, graph) {
+  validateRoadmapDomainGraph(graph);
+  requireRule(validCommand(command), "Invalid roadmap command shape");
+  requireRule(command.workspace_id === graph.workspace_id && command.product_id === graph.product_id,
+    "Command scope mismatch");
+  const { action, payload } = command;
+  if (["CREATE_ROADMAP", "CREATE_FEATURE"].includes(action)) {
+    requireRule(command.target_id === graph.product_id, "Creation must target the scoped Product");
+  } else {
+    const collection = ["UPDATE_ROADMAP", "CREATE_MILESTONE", "REORDER_MILESTONES"].includes(action)
+      ? graph.roadmaps : action === "UPDATE_MILESTONE" ? graph.milestones
+        : action === "UPDATE_FEATURE" ? graph.features : graph.items;
+    const target = collection.find((record) => record.id === command.target_id);
+    requireRule(target && target.tombstoned_at === null, "Command target unavailable");
+    requireRule(target.version === command.expected_version, "Command expected version is stale");
+    if (action === "REORDER_MILESTONES") {
+      const expected = graph.milestones.filter((record) => record.roadmap_id === target.id
+        && record.tombstoned_at === null).map((record) => record.id).sort();
+      requireRule(same(expected, [...payload.milestone_ids].sort()), "Reorder must contain every active Milestone exactly once");
+    }
+    if (action === "CREATE_MILESTONE") {
+      requireRule(!graph.milestones.some((record) => record.roadmap_id === target.id && record.position === payload.position),
+        "Milestone position already exists");
+    }
+    if (action === "RECORD_PROGRESS") {
+      validateProgressValues({ before: target.declared_progress, after: payload.declared_progress, note: payload.progress_note });
+    }
+    if (action === "MOVE_ITEM") {
+      const destination = graph.milestones.find((record) => record.id === payload.milestone_id);
+      requireRule(destination && destination.tombstoned_at === null && destination.roadmap_id === target.roadmap_id,
+        "Movement destination unavailable in the Roadmap");
+      requireRule(destination.id !== target.milestone_id, "Movement must change Milestone");
+      requireRule(!graph.items.some((record) => record.id !== target.id && record.milestone_id === destination.id
+        && record.feature_id === target.feature_id), "Destination already contains this Feature");
+    }
+    if (action === "UPDATE_ITEM_SCHEDULE") {
+      const empty = payload.planned_start === null && payload.planned_end === null;
+      requireRule(empty || (payload.planned_start !== null && payload.planned_end !== null), "Incomplete item schedule");
+      requireRule(!empty || target.status === "PROPOSED", "Only PROPOSED items may be unscheduled");
+    }
+    if (action === "SET_ITEM_STATUS") {
+      requireRule(payload.status === "PROPOSED" || (target.planned_start !== null && target.planned_end !== null),
+        "Requested status requires a complete schedule");
+      requireRule(payload.status !== "COMMITTED" || payload.approved_prd_version_id !== null,
+        "Commitment requires exact PRD reference");
+    }
+  }
+  for (const [start, end] of [["horizon_start", "horizon_end"], ["target_start", "target_end"], ["planned_start", "planned_end"]]) {
+    if (payload[start] != null && payload[end] != null) {
+      requireRule(payload[start] <= payload[end], "Command date window is reversed");
+    }
+  }
+  for (const field of ["name", "rationale", "expected_schedule_impact"]) {
+    if (Object.hasOwn(payload, field)) requireRule(payload[field].trim().length > 0, "Command text cannot be blank");
+  }
   return true;
 }
