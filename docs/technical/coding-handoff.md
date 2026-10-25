@@ -36,7 +36,10 @@ reciprocal linkage and qualification. [Plane PR #50](https://github.com/faocampo
 (metadata history storage successor) is merged at
 `d5c948786c46b4894d3819e4e34d800cfcc6510a`, with the complete tree matching tested
 `86121a289e51ee8f37a2732aacf5125d9c154981`. The same integration record preserves
-its current-head validation and original-run limitations. Scoped commands, exact ownership policy,
+its current-head validation and original-run limitations. The
+[approved defaults](roadmap-approved-defaults.md) (creator ownership and a
+milestones-and-attention opening screen) settle both outstanding product choices.
+Scoped commands, runtime permission mapping,
 protected references, approval supersession and UI acceptance remain pending. Resolve
 environment-specific D-013 (new-work adoption) authority from the private source;
 public examples do not establish environment approval. Material roadmap UI
