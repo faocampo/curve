@@ -123,16 +123,27 @@ authority; this contract supplies none.
 
 ## Candidate implementation evidence
 
-[Plane candidate 4f0e96e9](https://github.com/faocampo/plane/commit/4f0e96e92084177fb52275cef3aa8ad75641c3aa)
-(Product format guards, qualification successor and conformance tests) is the
-current implementation candidate. Its 106 focused cases passed, as did a
-separate 23-case Temporal workflow follow-up, both with zero skips. All 56
-repository check tasks passed; changed Python lint and migration drift checks
-passed; 19 historical qualification JSON files remained byte-identical.
+[Plane PR #48](https://github.com/faocampo/plane/pull/48)
+(Product guards and conformance tests) contains corrected candidate
+`f290f8e82603d07a4ac5a21cb9c59536c72556a5`. Its complete local manual-planning
+partition passed 100 cases with zero skips; its qualification follow-up passed
+36 cases. All 56 repository check tasks and changed Python lint passed.
 
-[Hosted backend validation](https://github.com/faocampo/plane/actions/runs/40143829468)
-(full native partitions and host doubles) remains pending. [Hosted frontend
-validation](https://github.com/faocampo/plane/actions/runs/40143831452)
-(package build and checks) and [CodeQL](https://github.com/faocampo/plane/actions/runs/40143833442)
+The preceding candidate `4f0e96e92084177fb52275cef3aa8ad75641c3aa` passed 106
+focused cases and a separate 23-case Temporal workflow follow-up, both with
+zero skips. Its hosted native run passed 2,822 cases, skipped 12 Temporal cases
+covered by that follow-up, and failed one manual qualification test. The
+corrected candidate adds the missing Product successor step to that test's
+installed-source comparison. All runtime, historical proof and other test
+bytes are identical between these candidates. The original failing run remains
+retained with its scope; a passing follow-up does not change its conclusion.
+Storage regression passed 13 cases; host doubles passed 156. Nineteen historical
+qualification JSON files remain byte-identical. Completed migration checks
+reported no drift; the failed job did not reach its migration check.
+
+[Current PR backend validation](https://github.com/faocampo/plane/actions/runs/40145712051)
+(full native partitions and host doubles) remains pending. [Corrected-head
+frontend validation](https://github.com/faocampo/plane/actions/runs/40145514161)
+(all-package build and checks) and [corrected-head CodeQL](https://github.com/faocampo/plane/actions/runs/40145516502)
 (exact-candidate security analysis) passed. Integration and issue closure remain
 pending; production readiness has separate acceptance requirements.
