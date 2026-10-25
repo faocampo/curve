@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://curve.example.invalid/contracts/candidates/roadmap-domain-v1/graph.schema.json",
+  "title": "Candidate roadmap domain conformance graph",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "workspace_id",
+    "product_id",
+    "roadmaps",
+    "milestones",
+    "features",
+    "items"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "curve.roadmap-domain/v1-candidate"
+    },
+    "workspace_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "product_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "roadmaps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/roadmap"
+      }
+    },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/milestone"
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/feature"
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    }
+  },
+  "$defs": {
+    "roadmap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "id",
+        "workspace_id",
+        "product_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "name",
+        "owner_user_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "owner_user_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "milestone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "id",
+        "workspace_id",
+        "product_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "roadmap_id",
+        "name",
+        "kind",
+        "position"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "roadmap_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "kind": {
+          "enum": [
+            "RELEASE",
+            "CALENDAR_PERIOD",
+            "PRODUCT_OUTCOME",
+            "INTERNAL_PHASE"
+          ]
+        },
+        "position": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "feature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "id",
+        "workspace_id",
+        "product_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "name"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "id",
+        "workspace_id",
+        "product_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "roadmap_id",
+        "milestone_id",
+        "feature_id",
+        "initiative_id",
+        "owner_user_id",
+        "scope",
+        "status",
+        "priority",
+        "confidence",
+        "health",
+        "planned_start",
+        "planned_end",
+        "declared_progress",
+        "approved_prd_revision_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$|\\+00:00$"
+        },
+        "roadmap_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "milestone_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "feature_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "initiative_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "owner_user_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "status": {
+          "enum": [
+            "PROPOSED",
+            "COMMITTED",
+            "IN_PROGRESS",
+            "PAUSED",
+            "DELIVERED",
+            "CANCELLED"
+          ]
+        },
+        "priority": {
+          "enum": [
+            "CRITICAL",
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ]
+        },
+        "health": {
+          "enum": [
+            "ON_TRACK",
+            "AT_RISK",
+            "OFF_TRACK",
+            "UNKNOWN"
+          ]
+        },
+        "planned_start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "planned_end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "declared_progress": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "approved_prd_revision_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid"
+        }
+      }
+    }
+  }
+}

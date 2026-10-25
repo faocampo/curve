@@ -1,5 +1,40 @@
 # Coding handoff
 
+## Current roadmap checkpoint — 2026-10-25
+
+[Plane PR #17](https://github.com/faocampo/plane/pull/17)
+(two-stage document review and access-loss recovery) is merged at
+`53109983aa90de1f6784008c55315e4bd3018f29`. New-work review uses Product approval
+of the PRD and Technical approval of the implementation plan. The new flow has
+no Code Approver assignment. Historical evidence retains its original scope.
+
+[Plane PR #48](https://github.com/faocampo/plane/pull/48)
+(Product format enforcement) is merged at
+`e221b11664440ed455166af9f5ea6d4172a17b6c`; its tree matches tested
+`f290f8e82603d07a4ac5a21cb9c59536c72556a5`. Full CI passed 2,823 native cases,
+156 host doubles and 13 storage cases. Twelve hosted workflow skips have the
+separately scoped passing local coverage recorded in the
+[Product successor](../../contracts/database/product-application-enforcement-successor.md)
+(application UTC, format enforcement and exact integration evidence).
+[Curve PR #174](https://github.com/faocampo/curve/pull/174)
+(successor contract and roadmap persistence guidance) merged at
+`69cb20258b2f31bf30faddfa4eeb040a5427c87d`, and
+[R-027](https://github.com/faocampo/curve/issues/44)
+(Product timestamp/format conformance) is closed.
+
+Next is M2-01 (roadmap domain). Start with the
+[roadmap candidate](../../contracts/candidates/roadmap-domain-v1/README.md)
+(record shapes, cross-record rules and remaining command/persistence work).
+Its tests establish contract behavior only; database commands, exact policy,
+transactional linkage and runtime qualification remain to implement. Resolve
+environment-specific D-013 (new-work adoption) authority from the private source;
+public examples do not establish environment approval. Material roadmap UI
+changes require the existing prototype and screen-acceptance gate.
+
+The following checkpoints remain dated history. Their former PR #17 hold and
+open R-027 references do not supersede the integrated evidence above. Production
+provider, storage and rollout acceptance retain their separate requirements.
+
 ## Current consolidation checkpoint — 2026-10-08
 
 Start with [project status](project-status.md) (verified integration position and
