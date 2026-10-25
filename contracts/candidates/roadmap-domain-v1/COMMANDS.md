@@ -131,8 +131,8 @@ Every accepted command binds its exact policy decision, actor, expected versions
 request digest, result identity/version, domain event, outbox and audit. Item
 mutations append exactly one typed history record. Progress and movement delta schemas are closed. The separate
 [metadata history contract](ITEM-METADATA-HISTORY.md) (priority, health,
-confidence and schedule deltas) defines four more candidate types; their native
-constraint and writer qualification remain pending. Scope, status and owner
+confidence and schedule deltas) defines four more candidate types. Their native
+constraint successor is integrated; command-writer qualification remains pending. Scope, status and owner
 history must be defined before their commands can execute. Hierarchy creation and metadata changes require
 their own exact event schemas.
 

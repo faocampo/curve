@@ -32,7 +32,11 @@ is merged at `6428c6a6146ea135ffdbd704dd3ecdb6514f821f`; its tree matches tested
 `04206ff9acc3a1b29cc4f8d2b3108d36aa78a51e`. The
 [storage integration record](roadmap-storage-integration.md) (exact validation,
 retained failures and remaining service/UI gates) records the additive migration,
-reciprocal linkage and qualification. Scoped commands, exact ownership policy,
+reciprocal linkage and qualification. [Plane PR #50](https://github.com/faocampo/plane/pull/50)
+(metadata history storage successor) is merged at
+`d5c948786c46b4894d3819e4e34d800cfcc6510a`, with the complete tree matching tested
+`86121a289e51ee8f37a2732aacf5125d9c154981`. The same integration record preserves
+its current-head validation and original-run limitations. Scoped commands, exact ownership policy,
 protected references, approval supersession and UI acceptance remain pending. Resolve
 environment-specific D-013 (new-work adoption) authority from the private source;
 public examples do not establish environment approval. Material roadmap UI
