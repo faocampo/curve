@@ -34,6 +34,47 @@ This approves purpose and initial ownership. The interactive Roadmap proposal
 still passes the [experience blueprint](curve-experience-blueprint.md) (prototype,
 screen states and task-based acceptance) before material application UI changes.
 
+## Feature editor authority — approved 2026-10-26
+
+The Product owner and workspace administrators may add and remove named Feature
+editors for that Product. Every editor must be an active human member of the
+same workspace. Creating or editing a Feature requires current Product ownership
+or an explicit current editor grant. Administrator authority to manage the editor
+list does not itself grant Feature editing authority.
+
+Grants are Product-scoped and retain grant/revocation history, actor, target,
+version and time. Membership removal disables the grant; membership restoration
+requires a fresh grant. Product ownership is resolved from the current record;
+former owners retain no implicit editing authority. Protected descriptions retain
+their independent object/source access requirements.
+
+Grant management uses exact versions, idempotency, policy decisions and audit
+events. Every mutation and successful-command replay rechecks current authority.
+Concurrent revocation and editing must have a serialized outcome. Rejected
+commands leave grants and Feature data unchanged. Runtime qualification must
+cover tenant isolation, ownership change, revocation/replay, membership removal
+and restoration, concurrent revoke/edit, rollback and retained history.
+
+This settles the contributor mapping prerequisite in the
+[command contract](../../contracts/candidates/roadmap-domain-v1/COMMANDS.md)
+(Feature authority and server-resolved permissions). Implementation and synthetic
+testing are authorized; actual editor assignments are explicit workspace actions.
+Roadmap hierarchy ownership and assigned document reviewers remain governed by
+their respective rules.
+
+## Milestone-focus composition — approved 2026-10-26
+
+The opening screen uses a milestone selector and the selected milestone's item
+list, with a clear path to items needing attention. Preserve the approved light
+interface, readable hierarchy, icons and text-backed status colors. Each item
+shows Product review of its PRD and Technical review of its plan, with a primary
+next action. Detailed evidence belongs in the item view.
+
+The selected composition authorizes the interactive prototype. Its complete
+flow, responsive states, keyboard access and recovery behavior still pass the
+[experience blueprint](curve-experience-blueprint.md) (task-based prototype and
+application-screen acceptance) before material application UI integration.
+
 ## Implementation acceptance
 
 - Creation derives the initial owner from the authenticated active human.
