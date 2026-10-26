@@ -45,9 +45,13 @@ commands, current-owner authorization and default-off API) merged at
 `91b9a226394cd954e22215de33df24b46e5df8be`. The
 [integration record](roadmap-storage-integration.md#hierarchy-command-successor)
 (exact validation, repaired integrity test and remaining scope) records the
-implemented hierarchy boundary. Feature-contributor mapping, Feature/Item
-commands, joint Initiative linkage, protected references, approval supersession
-and UI acceptance remain pending. Resolve
+implemented hierarchy boundary. The
+[approved defaults](roadmap-approved-defaults.md#feature-editor-authority--approved-2026-10-26)
+(Product owner/admin-managed Feature editors and milestone-focus composition)
+resolve the next permission and visual-direction choices. Implement explicit
+Product-scoped grants and Feature/Item commands, joint Initiative linkage,
+protected references and approval supersession. Build the selected interactive
+proposal and complete its separate UI acceptance. Resolve
 environment-specific D-013 (new-work adoption) authority from the private source;
 public examples do not establish environment approval. Material roadmap UI
 changes require the existing prototype and screen-acceptance gate.
