@@ -91,14 +91,67 @@ Temporal follow-up establish the validation above; the original local run is not
 reported as passing. Duplicate PR-triggered workflows were not used as passing
 evidence for merge.
 
+## Hierarchy command successor
+
+[Plane PR #51](https://github.com/faocampo/plane/pull/51) (authorized hierarchy
+commands and API) merged into `curve-integration` at
+`742a2f0040478006e8a7be4e944f9dd0854323d0`. Its complete fetched tree matches
+tested head `91b9a226394cd954e22215de33df24b46e5df8be` and CI merge candidate
+`ada3a0855c77b144d5148a3cb3f0b335698f0b09`:
+`5bde24c06d78e1743ee233cc486d01efc6e16f97`. The integration base was
+`d5c948786c46b4894d3819e4e34d800cfcc6510a`. The remote branch was retired using
+an exact-tip lease after verifying tree equivalence and no open dependents;
+the local checkout and history were preserved.
+
+The implementation creates and updates Roadmaps and Milestones and atomically
+reorders the complete Milestone set. Creation derives the Roadmap owner from
+the authenticated creator after checking Product-owner or workspace-administrator
+creation authority. Subsequent hierarchy changes require current Roadmap
+ownership and active human membership. Exact versions, idempotent replay and
+transactional events, outbox, audit and receipts protect command outcomes.
+Bounded reads return safe hierarchy metadata; Milestone pagination requires a
+refresh after reordering. Session writes require CSRF protection, responses
+disable caching, and the new hierarchy API is disabled by default.
+
+An additive qualification successor retains historical seals. Deferred hierarchy
+constraints are checked in a nested rollback-only savepoint so validation
+preserves the caller's transaction constraint modes. Released migration and
+qualification bytes remain unchanged.
+
+| Evidence | Result |
+| --- | --- |
+| [Full API CI](https://github.com/faocampo/plane/actions/runs/40243285550) (native, host and storage regression) | 2,962 native passed, 12 workflow cases skipped; 156 host and 13 storage passed; all migration-drift checks passed |
+| Local workflow coverage (both modules containing hosted skips) | All 23 cases passed with zero skips on unchanged implementation bytes |
+| Corrected integrity group (active and historical seal tampering) | 44 passed, zero skips; final CI also passed the complete group |
+| [Web checks](https://github.com/faocampo/plane/actions/runs/40243285568) (format, lint, types and package builds) | Success; existing warnings retain their scope |
+| [CodeQL](https://github.com/faocampo/plane/actions/runs/40243285480) (Python and JavaScript analysis) | Success |
+| [Copyright check](https://github.com/faocampo/plane/actions/runs/40243285478) (source headers) | Success |
+| [React Doctor](https://github.com/faocampo/plane/actions/runs/40243285458) (PR frontend review) | Success |
+
+The original local full run on `7c2662694bf03ae2a876af9f220104717630f876`
+completed with 2,985 passed, zero skips and one integrity-test failure. That test
+forged the historical metadata seal, which the new verifier correctly rejected
+before the intended application-level proof check. The final test-only commit
+targets the current command seal and adds explicit historical-seal rejection
+coverage. Strict rejection assertions remain intact. Runtime and migration
+bytes are identical between those commits; formatter-only test changes preserve
+the Python syntax tree. The original failed run remains diagnostic evidence;
+the final-head hosted suite establishes the passing full regression result.
+
+Final local API static, formatting, system and migration checks passed. All 56
+repository check tasks passed from cache, retaining 539 existing lint warnings
+and zero errors. The unchanged frontend tree retains its 555 passing local tests.
+
 ## Next implementation boundary
 
 The [command candidate](../../contracts/candidates/roadmap-domain-v1/COMMANDS.md)
-(scoped commands, concurrency and permission prerequisites) remains to implement.
+(scoped commands, concurrency and permission prerequisites) remains partially
+implemented: the hierarchy actions above are integrated; Feature and Item actions
+remain pending.
 Initial creator ownership follows the [approved defaults](roadmap-approved-defaults.md)
 (ownership and opening-screen purpose). Contributor mapping and runtime permission
-enforcement remain implementation work.
-No Roadmap route or permission-dependent service is enabled by this storage layer.
+enforcement for those remaining actions remain implementation work. The hierarchy
+API requires explicit enablement; storage integration alone enables no routes.
 
 Next work must qualify joint Initiative/Item creation, protected references,
 exact replay and history, scope/approval supersession, and current membership.
@@ -107,5 +160,5 @@ New work retains Product review of the PRD and Technical review of the plan unde
 historical-edition handling). The [experience blueprint](curve-experience-blueprint.md)
 (prototype and screen acceptance) remains the gate for material Roadmap UI work.
 
-This evidence establishes storage integration. Full M2-01 command/UI acceptance,
+This evidence establishes storage and hierarchy-command integration. Full M2-01 command/UI acceptance,
 later M2 packages, provider qualification and production rollout remain pending.
