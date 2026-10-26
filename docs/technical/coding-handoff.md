@@ -39,8 +39,15 @@ reciprocal linkage and qualification. [Plane PR #50](https://github.com/faocampo
 its current-head validation and original-run limitations. The
 [approved defaults](roadmap-approved-defaults.md) (creator ownership and a
 milestones-and-attention opening screen) settle both outstanding product choices.
-Scoped commands, runtime permission mapping,
-protected references, approval supersession and UI acceptance remain pending. Resolve
+[Plane PR #51](https://github.com/faocampo/plane/pull/51) (Roadmap and Milestone
+commands, current-owner authorization and default-off API) merged at
+`742a2f0040478006e8a7be4e944f9dd0854323d0`. Its complete tree matches tested head
+`91b9a226394cd954e22215de33df24b46e5df8be`. The
+[integration record](roadmap-storage-integration.md#hierarchy-command-successor)
+(exact validation, repaired integrity test and remaining scope) records the
+implemented hierarchy boundary. Feature-contributor mapping, Feature/Item
+commands, joint Initiative linkage, protected references, approval supersession
+and UI acceptance remain pending. Resolve
 environment-specific D-013 (new-work adoption) authority from the private source;
 public examples do not establish environment approval. Material roadmap UI
 changes require the existing prototype and screen-acceptance gate.
