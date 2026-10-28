@@ -48,8 +48,23 @@ commands, current-owner authorization and default-off API) merged at
 implemented hierarchy boundary. The
 [approved defaults](roadmap-approved-defaults.md#feature-editor-authority--approved-2026-10-26)
 (Product owner/admin-managed Feature editors and milestone-focus composition)
-resolve the next permission and visual-direction choices. Implement explicit
-Product-scoped grants and Feature/Item commands, joint Initiative linkage,
+resolve the next permission and visual-direction choices.
+[Plane PR #52](https://github.com/faocampo/plane/pull/52) (versioned Product Feature
+editor storage and membership lifetimes) merged at
+`0b2d3e07d49d697eb3439d23b652f82d293b8cac`; its complete tree matches tested head
+`c39751e93306a07d6c673d19d6bce3c906f5a26c`. The
+[storage evidence](roadmap-storage-integration.md#feature-editor-storage-successor)
+(exact CI results, historical failures and remaining commands) records this boundary.
+Qualified grant/revoke services merged in
+[Plane PR #53](https://github.com/faocampo/plane/pull/53) (editor-management
+commands and current-access checks) at `17ff5ebb64401656e49e78b00496f9abaaf9384b`.
+Its complete tree matches tested head `60b47a047b67fdb8945df2c7533801351c6474a0`.
+All 17 checks passed, including 3,145 native cases, 156 host doubles and 13 storage
+cases; twelve workflow skips have separately scoped passing SDK coverage.
+Use the
+[command checkpoint](roadmap-storage-integration.md#feature-editor-command-candidate--local-checkpoint)
+(source scope, retained failures and integration evidence), then implement
+Feature/Item commands, joint Initiative linkage,
 protected references and approval supersession. Build the selected interactive
 proposal and complete its separate UI acceptance. Resolve
 environment-specific D-013 (new-work adoption) authority from the private source;

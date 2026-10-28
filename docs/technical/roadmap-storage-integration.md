@@ -142,6 +142,111 @@ Final local API static, formatting, system and migration checks passed. All 56
 repository check tasks passed from cache, retaining 539 existing lint warnings
 and zero errors. The unchanged frontend tree retains its 555 passing local tests.
 
+## Feature editor storage successor
+
+[Plane PR #52](https://github.com/faocampo/plane/pull/52) (versioned Product-scoped
+editor grants and membership lifetimes) merged into `curve-integration` at
+`0b2d3e07d49d697eb3439d23b652f82d293b8cac`. Its complete tree
+`a2c5373d74506e0886849c20dd0f0a804aae7a5f` matches tested head
+`c39751e93306a07d6c673d19d6bce3c906f5a26c`, based on the hierarchy integration
+`742a2f0040478006e8a7be4e944f9dd0854323d0`.
+
+The additive storage preserves attribution, versioned revocation and historical
+grants. Membership removal and restoration cannot revive a prior grant. Current
+Product ownership and explicit grants follow the
+[approved authority](roadmap-approved-defaults.md#feature-editor-authority--approved-2026-10-26)
+(owner/admin management and explicit Feature edit rights). Grant/revoke commands
+and UI remain separate implementation work.
+
+All 17 current-head GitHub checks passed. Six native partitions passed 3,076
+cases (671, 728, 676, 715, 100 and 186), with 12 workflow skips; a separately
+scoped local SDK workflow run passed all 23 cases covering those modules.
+Hosted storage checks passed 13 cases, host doubles passed 156, and migration
+drift, API lint, frontend lint/format/types/build and security analysis passed.
+Local repository checks passed 56 cached tasks, with 539 existing warnings and
+zero errors. Focused versioned storage regressions passed 209 cases and installed
+backfill checks passed two cases.
+
+The prior local broad run retained 3,064 passes, five failures, six fixture errors
+and 12 skips. Three obsolete verification-structure tests were corrected with
+strict assertions preserved; their affected groups and unchanged failure/fixture
+rechecks passed. Transient fixture timing remains a hypothesis. Fresh complete
+CI on the published head establishes the final regression result; earlier failed
+evidence remains retained. Storage integration grants no runtime activation or
+actual editor assignments. The remote source branch was retired after verifying
+complete-tree equivalence, no dependent PRs and its exact unchanged tip; local
+history remains preserved.
+
+## Feature editor command candidate — local checkpoint
+
+Original Plane commit `685d36ba31df95bec75574efd0554faffc8cf232`, based on the
+storage integration above, implements session-authenticated grant, list, detail
+and revoke commands. The routes default to disabled. Commands atomically retain
+policy decisions, audit, domain events, outbox entries and idempotency receipts;
+successful replays recheck current authority. Membership restoration requires a
+fresh grant. [Plane PR #53](https://github.com/faocampo/plane/pull/53)
+(qualified editor-management commands) merged at
+`17ff5ebb64401656e49e78b00496f9abaaf9384b`. Its complete tree
+`d8894205d684f063a7e7cb22f7b4925f9578fe61` matches tested head
+`60b47a047b67fdb8945df2c7533801351c6474a0`. Its two successor commits correct
+tests only; application and migration bytes are unchanged from the original
+published candidate.
+
+All 17 final-head checks passed. The six native partitions passed 3,145 cases
+(729, 742, 658, 730, 100 and 186), with twelve workflow skips covered by the
+separately scoped 23-case SDK run below. Host doubles passed 156 cases and hosted
+storage checks passed thirteen. Migration-drift, API static, frontend and security
+checks passed. The retained earlier failures below do not supersede this final
+complete result. No editor assignments or runtime activation were included.
+After full-tree equivalence and no dependent PRs were verified, the remote source
+branch was retired using its exact tested tip; the local checkout remains preserved.
+
+The expanded permission and historical-qualification regression passed 211 cases
+before final JSON formatting. A focused concurrency/session/migration regression
+passed 44 cases after fixing a reproduced membership-restoration deadlock. The
+formatted editor regression passed 68 cases and failed one transaction-fixture
+test; correcting the fixture without weakening assertions passed the complete
+four-case receipt group. Separate SDK workflow coverage passed 23 cases; host
+doubles passed 156 and storage checks passed 13. Repository checks passed 56
+cached tasks, with 539 existing warnings and zero errors.
+
+A fresh complete editor regression on exact committed
+`685d36ba31df95bec75574efd0554faffc8cf232` passed all 69 cases in 464.81 seconds,
+including the corrected receipt fixture. Its ten modules cover commands, reads,
+session/CSRF transport, PostgreSQL concurrency, migration integrity, runtime
+qualification, normalized input, events and receipts. The four test files added
+after the frozen full-suite snapshot are all included. The original fixture
+failure remains retained; this result establishes the final editor-test scope.
+
+The full native regression completed on a frozen pre-format candidate with 3,120
+passes, one failure and 12 workflow skips. Manual planning passed 100 cases and
+scope regression passed 186 cases.
+Its first three partitions passed 727, 756 and 648 cases, with 12 workflow skips
+covered by the separately scoped workflow run. The fourth partition passed 703
+cases and failed one historical storage-reversal test: it reversed storage SQL
+while leaving the later command successor installed, then asserted the earlier
+catalog. A local test-only correction reverses the installed migration chain
+before making the same exact predecessor-catalog and retained-table assertions.
+The complete 19-case migration/integrity recheck passed in 200.42 seconds, with
+lint and formatting checks passing. The correction is published at
+`09c386430c79d745a6e340b9e1bfea685c3c678e`; all 33 implementation files from its
+parent remain byte-identical. The original failure remains retained.
+The manually started backend workflow on
+`685d36ba31df95bec75574efd0554faffc8cf232` completed all six partitions with
+3,135 passes, ten failures and 12 workflow skips, plus 156 passing host doubles
+and passing API lint. One failure repeats the corrected migration test above.
+The other nine endpoint failures depended on the main URL configuration being
+imported after Curve enablement. Explicit installed-route test configuration
+passed all 21 configuration/endpoint cases in 227.97 seconds; fresh-process
+probes also passed real application routing with Curve enabled and disabled at
+startup. This second test correction is included in PR #53's current head.
+
+JSON values and runtime behavior were preserved by formatting, but qualification
+hash literals changed and additional tests were added. That run must retain its
+original source scope. Final-head CI and integration are recorded above.
+Feature editing, joint Initiative/Item commands and native UI acceptance remain
+separate work.
+
 ## Next implementation boundary
 
 The [command candidate](../../contracts/candidates/roadmap-domain-v1/COMMANDS.md)
@@ -149,9 +254,22 @@ The [command candidate](../../contracts/candidates/roadmap-domain-v1/COMMANDS.md
 implemented: the hierarchy actions above are integrated; Feature and Item actions
 remain pending.
 Initial creator ownership follows the [approved defaults](roadmap-approved-defaults.md)
-(ownership and opening-screen purpose). Contributor mapping and runtime permission
-enforcement for those remaining actions remain implementation work. The hierarchy
+(ownership, Product Feature editor authority and milestone-focus composition).
+The approved contributor mapping is current Product ownership or an explicit
+current Product-scoped editor grant. Owner/admin grant management supplies no
+implicit Feature editing authority. Runtime enforcement for the remaining
+Feature and Item actions remains implementation work. The hierarchy
 API requires explicit enablement; storage integration alone enables no routes.
+
+Feature command preparation has twenty-three passing normalized-input, event and
+protected-reference requirement tests, plus nine passing native permission-fact
+resolver tests in an isolated candidate. It is not installed in the application. The next native
+adapter must reuse the installed editor rules, recheck current membership and
+grant generation under compatible locks, and authorize both retained and
+replacement protected descriptions before writes or successful replay.
+The existing local document authority is Initiative-scoped; byte storage alone
+does not establish Product Feature description access. Qualify a scoped protected
+description adapter before exposing the complete Feature command boundary.
 
 Next work must qualify joint Initiative/Item creation, protected references,
 exact replay and history, scope/approval supersession, and current membership.
